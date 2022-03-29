@@ -47,9 +47,9 @@ Twinkle.speedy.initDialog = function twinklespeedyInitDialog(callbackfunc) {
 	dialog.setTitle('Choose criteria for speedy deletion');
 	dialog.setScriptName('Twinkle');
 	dialog.addFooterLink('Speedy deletion policy', 'WP:CSD');
-	dialog.addFooterLink('CSD prefs', 'QW:TWPREFS#speedy');
-	dialog.addFooterLink('Twinkle help', 'WP:TW/DOC#speedy');
-	dialog.addFooterLink('Give feedback', 'WT:TW');
+	dialog.addFooterLink('CSD prefs', 'H:TW/PREF#speedy');
+	dialog.addFooterLink('Twinkle help', 'H:TW/DOC#speedy');
+	dialog.addFooterLink('Give feedback', 'HT:TW');
 
 	var form = new Morebits.quickForm(callbackfunc, Twinkle.getPref('speedySelectionStyle') === 'radioClick' ? 'change' : null);
 	if (Morebits.userIsSysop) {

@@ -62,9 +62,9 @@ Twinkle.warn.callback = function twinklewarnCallback() {
 	dialog.setTitle('Warn/notify user');
 	dialog.setScriptName('Twinkle');
 	dialog.addFooterLink('Choosing a warning level', 'WP:UWUL#Levels');
-	dialog.addFooterLink('Warn prefs', 'QW:TWPREFS#warn');
-	dialog.addFooterLink('Twinkle help', 'WP:TW/DOC#warn');
-	dialog.addFooterLink('Give feedback', 'WT:TW');
+	dialog.addFooterLink('Warn prefs', 'H:TW/PREF#warn');
+	dialog.addFooterLink('Twinkle help', 'H:TW/DOC#warn');
+	dialog.addFooterLink('Give feedback', 'HT:TW');
 
 	var form = new Morebits.quickForm(Twinkle.warn.callback.evaluate);
 	var main_select = form.append({
@@ -1196,7 +1196,7 @@ Twinkle.warn.callback.change_category = function twinklewarnCallbackChangeCatego
 		// scaled levels from singlenotice, singlewarn, and custom
 		var level = val.replace(/^\D+/g, '');
 		// due to an apparent iOS bug, we have to add an option-group to prevent truncation of text
-		// (search WT:TW archives for "Problem selecting warnings on an iPhone")
+		// (search HT:TW archives for "Problem selecting warnings on an iPhone")
 		if (wrapInOptgroup && $.client.profile().platform === 'iphone') {
 			var wrapperOptgroup = new Morebits.quickForm.element({
 				type: 'optgroup',

@@ -40,9 +40,9 @@ Twinkle.block.callback = function twinkleblockCallback() {
 	Window.setScriptName('Twinkle');
 	Window.addFooterLink('Block templates', 'Template:Uw-block/doc/Block_templates');
 	Window.addFooterLink('Block policy', 'WP:BLOCK');
-	Window.addFooterLink('Block prefs', 'QW:TWPREFS#block');
-	Window.addFooterLink('Twinkle help', 'WP:TW/DOC#block');
-	Window.addFooterLink('Give feedback', 'WT:TW');
+	Window.addFooterLink('Block prefs', 'H:TW/PREF#block');
+	Window.addFooterLink('Twinkle help', 'H:TW/DOC#block');
+	Window.addFooterLink('Give feedback', 'HT:TW');
 
 	// Always added, hidden later if actual user not blocked
 	Window.addFooterLink('Unblock this user', 'Special:Unblock/' + relevantUserName, true);

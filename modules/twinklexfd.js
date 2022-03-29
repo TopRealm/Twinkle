@@ -120,9 +120,9 @@ Twinkle.xfd.callback = function twinklexfdCallback() {
 	Window.setTitle('Start a deletion discussion (XfD)');
 	Window.setScriptName('Twinkle');
 	Window.addFooterLink('About deletion discussions', 'WP:XFD');
-	Window.addFooterLink('XfD prefs', 'QW:TWPREFS#xfd');
-	Window.addFooterLink('Twinkle help', 'WP:TW/DOC#xfd');
-	Window.addFooterLink('Give feedback', 'WT:TW');
+	Window.addFooterLink('XfD prefs', 'H:TW/PREF#xfd');
+	Window.addFooterLink('Twinkle help', 'H:TW/DOC#xfd');
+	Window.addFooterLink('Give feedback', 'HT:TW');
 
 	var form = new Morebits.quickForm(Twinkle.xfd.callback.evaluate);
 	var categories = form.append({

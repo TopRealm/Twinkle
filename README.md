@@ -16,7 +16,7 @@ If you'd like to start contributing, awesome!  Check out [CONTRIBUTING.md](CONTR
 
 * `morebits.js`: The central library used by Twinkle and many other scripts. Contains code to interact with the MediaWiki API, display forms and dialogs, generate status logs, and do various other useful things. The vast majority of code in here is not Twinkle-specific; see docs ([1](https://wikimedia-gadgets.github.io/twinkle/Morebits.html) and [2](https://github.com/wikimedia-gadgets/twinkle/wiki/morebits))
 * `twinkle.js`: General Twinkle-specific code, mostly related to preferences and exposing Twinkle in the UI. Significantly, it contains the default set of preferences of Twinkle.
-* `modules`: Contains the individual Twinkle modules. Descriptions for these can be found in header comments or in the [Twinkle documentation][]. The module `twinkleconfig.js` powers the [Twinkle preferences panel][QW:TWPREFS].
+* `modules`: Contains the individual Twinkle modules. Descriptions for these can be found in header comments or in the [Twinkle documentation][]. The module `twinkleconfig.js` powers the [Twinkle preferences panel][H:TW/PREF].
 
 [select2][] is added under the [MIT license][select2license].  The MediaWiki code used [for tests](./tests/mocking/mw_shim.js) is added under the [GPL2 license][mwlicense].
 
@@ -24,7 +24,7 @@ If you'd like to start contributing, awesome!  Check out [CONTRIBUTING.md](CONTR
 [AzaToth]: https://en.wikipedia.org/wiki/User:AzaToth
 [Wikipedia talk:Twinkle]: https://en.wikipedia.org/wiki/Wikipedia_talk:Twinkle
 [Twinkle documentation]: https://en.wikipedia.org/wiki/Wikipedia:Twinkle/doc
-[QW:TWPREFS]: https://en.wikipedia.org/wiki/Wikipedia:Twinkle/Preferences
+[H:TW/PREF]: https://en.wikipedia.org/wiki/Wikipedia:Twinkle/Preferences
 [select2]: https://github.com/select2/select2
 [select2license]: https://github.com/select2/select2/blob/develop/LICENSE.md
 [mwlicense]: https://gerrit.wikimedia.org/r/plugins/gitiles/mediawiki/core/+/master/COPYING

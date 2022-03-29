@@ -27,7 +27,7 @@
  * All the stuff here works on all browsers for which MediaWiki provides JavaScript support.
  *
  * This library is maintained by the maintainers of Twinkle.
- * For queries, suggestions, help, etc., head to [Wikipedia talk:Twinkle on English Wikipedia](http://en.wikipedia.org/wiki/WT:TW).
+ * For queries, suggestions, help, etc., head to [Help_talk:Twinkle](https://zhqw.qiuwen.wiki/wiki/Help_talk:Twinkle).
  * The latest development source is available at {@link https://github.com/wikimedia-gadgets/twinkle/blob/master/morebits.js|GitHub}.
  *
  * @namespace Morebits
@@ -2491,7 +2491,7 @@ Morebits.wiki.getCachedJson = function(title) {
 	});
 };
 
-var morebitsWikiApiUserAgent = 'morebits.js ([[w:WT:TW]])';
+var morebitsWikiApiUserAgent = 'morebits.js';
 /**
  * Set the custom user agent header, which is used for server-side logging.
  * Note that doing so will set the useragent for every `Morebits.wiki.api`
@@ -2501,12 +2501,12 @@ var morebitsWikiApiUserAgent = 'morebits.js ([[w:WT:TW]])';
  * for original announcement.
  *
  * @memberof Morebits.wiki.api
- * @param {string} [ua=morebits.js ([[w:WT:TW]])] - User agent.  The default
- * value of `morebits.js ([[w:WT:TW]])` will be appended to any provided
+ * @param {string} [ua=morebits.js] - User agent.  The default
+ * value of `morebits.js` will be appended to any provided
  * value.
  */
 Morebits.wiki.api.setApiUserAgent = function(ua) {
-	morebitsWikiApiUserAgent = (ua ? ua + ' ' : '') + 'morebits.js ([[w:WT:TW]])';
+	morebitsWikiApiUserAgent = (ua ? ua + ' ' : '') + 'morebits.js';
 };
 
 

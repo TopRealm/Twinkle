@@ -29,8 +29,8 @@ Twinkle.protect.callback = function twinkleprotectCallback() {
 	Window.setScriptName('Twinkle');
 	Window.addFooterLink('Protection templates', 'Template:Protection templates');
 	Window.addFooterLink('Protection policy', 'WP:PROT');
-	Window.addFooterLink('Twinkle help', 'WP:TW/DOC#protect');
-	Window.addFooterLink('Give feedback', 'WT:TW');
+	Window.addFooterLink('Twinkle help', 'H:TW/DOC#protect');
+	Window.addFooterLink('Give feedback', 'HT:TW');
 
 	var form = new Morebits.quickForm(Twinkle.protect.callback.evaluate);
 	var actionfield = form.append({

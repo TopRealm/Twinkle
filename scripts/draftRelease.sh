@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # draftRelease.sh by Amory Meltzer, 2020
 # Licensed under the WTFPL http://www.wtfpl.net/
-# Collect draft of items to announce at WT:TW
+# Collect draft of items to announce at HT:TW
 
 
 # When double quoted, * means IFS separation and @ means word
