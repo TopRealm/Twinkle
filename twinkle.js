@@ -2,7 +2,7 @@
  * +-------------------------------------------------------------------------+
  * |                  === WARNING: GLOBAL GADGET FILE ===                    |
  * |                Changes to this page affect many users.                  |
- * |           Please discuss changes at [[WT:TW]] before editing.           |
+ * |         Please discuss changes at [[Help talk:TW]] before editing.      |
  * +-------------------------------------------------------------------------+
  *
  * Imported from github [https://github.com/wikimedia-gadgets/twinkle].
@@ -11,7 +11,7 @@
  * ----------
  *
  * This is AzaToth's Twinkle, the popular script sidekick for newbies, admins, and
- * every Wikipedian in between. Visit [[WP:TW]] for more information.
+ * every Wikipedian in between. Visit [[QW:TW]] for more information.
  */
 // <nowiki>
 
@@ -94,15 +94,15 @@ Twinkle.defaultConfig = {
 
 	// CSD
 	speedySelectionStyle: 'buttonClick',
-	watchSpeedyPages: [ 'g3', 'g5', 'g10', 'g11', 'g12' ],
+	watchSpeedyPages: [ 'g1', 'g3', 'g4', 'g7', 'g8' ],
 	watchSpeedyExpiry: '1 month',
 	markSpeedyPagesAsPatrolled: false,
 	watchSpeedyUser: '1 month',
 
 	// these next two should probably be identical by default
-	welcomeUserOnSpeedyDeletionNotification: [ 'db', 'g1', 'g2', 'g3', 'g4', 'g6', 'g10', 'g11', 'g12', 'g13', 'g14', 'a1', 'a2', 'a3', 'a5', 'a7', 'a9', 'a10', 'a11', 'f1', 'f2', 'f3', 'f7', 'f9', 'f10', 'u5', 'p1', 'p2' ],
-	notifyUserOnSpeedyDeletionNomination: [ 'db', 'g1', 'g2', 'g3', 'g4', 'g6', 'g10', 'g11', 'g12', 'g13', 'g14', 'a1', 'a2', 'a3', 'a5', 'a7', 'a9', 'a10', 'a11', 'f1', 'f2', 'f3', 'f7', 'f9', 'f10', 'u5', 'p1', 'p2' ],
-	warnUserOnSpeedyDelete: [ 'db', 'g1', 'g2', 'g3', 'g4', 'g6', 'g10', 'g11', 'g12', 'g13', 'g14', 'a1', 'a2', 'a3', 'a5', 'a7', 'a9', 'a10', 'a11', 'f1', 'f2', 'f3', 'f7', 'f9', 'f10', 'u5', 'p1', 'p2' ],
+	welcomeUserOnSpeedyDeletionNotification: [ 'db', 'g1', 'g2', 'g3', 'g4', 'g5', 'g6', 'g7', 'g8', 'g9', 'a1', 'a2', 'a3', 'r1', 'r2', 'f1', 'f2', 'o1', 'o2', 'o3' ],
+	notifyUserOnSpeedyDeletionNomination: [ 'db', 'g1', 'g2', 'g3', 'g4', 'g5', 'g6', 'g7', 'g8', 'g9', 'a1', 'a2', 'a3', 'r1', 'r2', 'f1', 'f2', 'o1', 'o2', 'o3' ],
+	warnUserOnSpeedyDelete: [ 'db', 'g1', 'g2', 'g3', 'g4', 'g5', 'g6', 'g7', 'g8', 'g9', 'a1', 'a2', 'a3', 'r1', 'r2', 'f1', 'f2', 'o1', 'o2', 'o3' ],
 	promptForSpeedyDeletionSummary: [],
 	deleteTalkPageOnDelete: true,
 	deleteRedirectsOnDelete: true,
@@ -111,10 +111,10 @@ Twinkle.defaultConfig = {
 	speedyWindowWidth: 800,
 	logSpeedyNominations: false,
 	speedyLogPageName: 'CSD log',
-	noLogOnSpeedyNomination: [ 'u1' ],
+	noLogOnSpeedyNomination: [ 'o1' ],
 
 	// Unlink
-	unlinkNamespaces: [ '0', '10', '100', '118' ],
+	unlinkNamespaces: [ '0', '10', '118' ],
 
 	// Warn
 	defaultWarningGroup: '1',
@@ -142,9 +142,9 @@ Twinkle.defaultConfig = {
 	batchChunks: 50,
 
 	// Deprecated options, as a fallback for add-on scripts/modules
-	summaryAd: ' ([[WP:TW|TW]])',
-	deletionSummaryAd: ' ([[WP:TW|TW]])',
-	protectionSummaryAd: ' ([[WP:TW|TW]])',
+	summaryAd: ' ([[H:TW|Twinkle]])',
+	deletionSummaryAd: ' ([[H:TW|Twinkle]])',
+	protectionSummaryAd: ' ([[H:TW|Twinkle]])',
 
 	// Formerly defaultConfig.friendly:
 	// Tag
@@ -498,11 +498,11 @@ Twinkle.load = function () {
 Twinkle.changeTags = 'twinkle';
 // Available for actions that don't (yet) support tags
 // currently: FlaggedRevs and PageTriage
-Twinkle.summaryAd = ' ([[WP:TW|TW]])';
+Twinkle.summaryAd = ' ([[H:TW|Twinkle]])';
 
 // Various hatnote templates, used when tagging (csd/xfd/tag/prod/protect) to
 // ensure MOS:ORDER
-Twinkle.hatnoteRegex = 'short description|hatnote|main|correct title|dablink|distinguish|for|further|selfref|year dab|similar names|highway detail hatnote|broader|about(?:-distinguish| other people)?|other\\s?(?:hurricane(?: use)?s|people|persons|places|ships|uses(?: of)?)|redirect(?:-(?:distinguish|synonym|multi))?|see\\s?(?:wiktionary|also(?: if exists)?)';
+Twinkle.hatnoteRegex = 'short description|hatnote|main|correct title|dablink|distinguish|for|further|selfref|year dab|similar names|highway detail hatnote|broader|about(?:-distinguish| other people)?|other\\s?(?:hurricane(?: use)?s|people|persons|places|ships|uses(?: of)?)|redirect(?:-(?:distinguish|synonym|multi))?|see\\s?(also(?: if exists)?)';
 
 // Used in XFD and PROD
 Twinkle.makeFindSourcesDiv = function makeSourcesDiv(divID) {
@@ -511,7 +511,7 @@ Twinkle.makeFindSourcesDiv = function makeSourcesDiv(divID) {
 	}
 	if (!Twinkle.findSources) {
 		var parser = new Morebits.wiki.preview($(divID)[0]);
-		parser.beginRender('({{Find sources|' + Morebits.pageNameNorm + '}})', 'WP:AFD').then(function() {
+		parser.beginRender('({{Find sources|' + Morebits.pageNameNorm + '}})', 'QW:AFD').then(function() {
 			// Save for second-time around
 			Twinkle.findSources = parser.previewbox.innerHTML;
 			$(divID).removeClass('morebits-previewbox');

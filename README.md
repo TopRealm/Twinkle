@@ -1,4 +1,4 @@
-# Twinkle ![Linter](https://github.com/wikimedia-gadgets/twinkle/workflows/Linter/badge.svg)
+# Twinkle
 
 Twinkle is a JavaScript application that gives Wikipedians a quick way of performing common maintenance tasks, such as nominating pages for deletion and cleaning up vandalism.
 
