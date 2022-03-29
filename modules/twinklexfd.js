@@ -921,7 +921,7 @@ Twinkle.xfd.callbacks = {
 			rfd: 'Redirects for discussion'
 		};
 		var editSummary = 'Notification: [[' + params.discussionpage + '|listing]] of [[:' +
-			Morebits.pageNameNorm + ']] at [[WP:' + venueNames[params.venue] + ']].';
+			Morebits.pageNameNorm + ']] at [[QW:' + venueNames[params.venue] + ']].';
 
 		var usertalkpage = new Morebits.wiki.page(notifyTarget, actionName);
 		usertalkpage.setAppendText(notifytext);
@@ -960,9 +960,9 @@ Twinkle.xfd.callbacks = {
 		var usl = new Morebits.userspaceLogger(Twinkle.getPref('xfdLogPageName'));// , 'Adding entry to userspace log');
 
 		usl.initialText =
-			"This is a log of all [[WP:XFD|deletion discussion]] nominations made by this user using [[WP:TW|Twinkle]]'s XfD module.\n\n" +
-			'If you no longer wish to keep this log, you can turn it off using the [[Wikipedia:Twinkle/Preferences|preferences panel]], and ' +
-			'nominate this page for speedy deletion under [[WP:CSD#U1|CSD U1]].' +
+			"This is a log of all [[QW:XFD|deletion discussion]] nominations made by this user using [[QW:TW|Twinkle]]'s XfD module.\n\n" +
+			'If you no longer wish to keep this log, you can turn it off using the [[Qiuwen:Twinkle/Preferences|preferences panel]], and ' +
+			'nominate this page for speedy deletion under [[QW:CSD#U1|CSD U1]].' +
 			(Morebits.userIsSysop ? '\n\nThis log does not track XfD-related deletions made using Twinkle.' : '');
 
 		var editsummary = 'Logging ' + utils.toTLACase(params.venue) + ' nomination of [[:' + Morebits.pageNameNorm + ']].';
@@ -972,7 +972,7 @@ Twinkle.xfd.callbacks = {
 		// CFD/S and RM don't have canonical links
 		var nominatedLink = params.discussionpage ? '[[' + params.discussionpage + '|nominated]]' : 'nominated';
 
-		var appendText = '# [[:' + Morebits.pageNameNorm + ']]:' + fileLogLink + ' ' + nominatedLink + ' at [[WP:' + params.venue.toUpperCase() + '|' + utils.toTLACase(params.venue) + ']]';
+		var appendText = '# [[:' + Morebits.pageNameNorm + ']]:' + fileLogLink + ' ' + nominatedLink + ' at [[QW:' + params.venue.toUpperCase() + '|' + utils.toTLACase(params.venue) + ']]';
 
 		switch (params.venue) {
 			case 'tfd':
@@ -1153,9 +1153,7 @@ Twinkle.xfd.callbacks = {
 					params.number + '|help=off') + (params.noinclude ? '}}</noinclude>\n' : '}}\n');
 
 			if (pageobj.canEdit()) {
-			// Remove some tags that should always be removed on AfD.
-				text = text.replace(/\{\{\s*(dated prod|dated prod blp|Prod blp\/dated|Proposed deletion\/dated|prod2|Proposed deletion endorsed|Userspace draft)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/ig, '');
-				// Then, test if there are speedy deletion-related templates on the article.
+				// Test if there are speedy deletion-related templates on the article.
 				var textNoSd = text.replace(/\{\{\s*(db(-\w*)?|delete|(?:hang|hold)[- ]?on)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/ig, '');
 				if (text !== textNoSd && confirm('A speedy deletion tag was found on this page. Should it be removed?')) {
 					text = textNoSd;
@@ -1791,7 +1789,7 @@ Twinkle.xfd.callbacks = {
 			params.tagText = '{{subst:cfr-speedy|1=' + params.cfdstarget.replace(/^:?Category:/, '') + '}}\n';
 			if (pageobj.canEdit()) {
 				pageobj.setPageText(params.tagText + text);
-				pageobj.setEditSummary('Listed for speedy renaming; see [[WP:CFDS|Categories for discussion/Speedy]].');
+				pageobj.setEditSummary('Listed for speedy renaming; see [[QW:CFDS|Categories for discussion/Speedy]].');
 				pageobj.setChangeTags(Twinkle.changeTags);
 				pageobj.setWatchlist(Twinkle.getPref('xfdWatchPage'));
 				pageobj.setCreateOption('recreate');  // since categories can be populated without an actual page at that title

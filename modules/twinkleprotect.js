@@ -490,7 +490,7 @@ Twinkle.protect.callback.changeAction = function twinkleprotectCallbackChangeAct
 						label: 'RfPP request',
 						name: 'protectReason_notes_rfpp',
 						checked: false,
-						value: 'requested at [[WP:RfPP]]'
+						value: 'requested at [[QW:RfPP]]'
 					}
 				]
 			});
@@ -792,93 +792,93 @@ Twinkle.protect.protectionPresetsInfo = {
 	'pp-dispute': {
 		edit: 'sysop',
 		move: 'sysop',
-		reason: '[[WP:PP#Content disputes|Edit warring / content dispute]]'
+		reason: '[[QW:PP#Content disputes|Edit warring / content dispute]]'
 	},
 	'pp-vandalism': {
 		edit: 'sysop',
 		move: 'sysop',
-		reason: 'Persistent [[WP:Vandalism|vandalism]]'
+		reason: 'Persistent [[QW:Vandalism|vandalism]]'
 	},
 	'pp-usertalk': {
 		edit: 'sysop',
 		move: 'sysop',
 		expiry: 'infinity',
-		reason: '[[WP:PP#Talk-page protection|Inappropriate use of user talk page while blocked]]'
+		reason: '[[QW:PP#Talk-page protection|Inappropriate use of user talk page while blocked]]'
 	},
 	'pp-template': {
 		edit: 'templateeditor',
 		move: 'templateeditor',
 		expiry: 'infinity',
-		reason: '[[WP:High-risk templates|Highly visible template]]'
+		reason: '[[QW:High-risk templates|Highly visible template]]'
 	},
 	'pp-30-500-arb': {
 		edit: 'extendedconfirmed',
 		move: 'extendedconfirmed',
 		expiry: 'infinity',
-		reason: '[[WP:30/500|Arbitration enforcement]]',
+		reason: '[[QW:30/500|Arbitration enforcement]]',
 		template: 'pp-30-500'
 	},
 	'pp-30-500-vandalism': {
 		edit: 'extendedconfirmed',
 		move: 'extendedconfirmed',
-		reason: 'Persistent [[WP:Vandalism|vandalism]] from (auto)confirmed accounts',
+		reason: 'Persistent [[QW:Vandalism|vandalism]] from (auto)confirmed accounts',
 		template: 'pp-30-500'
 	},
 	'pp-30-500-disruptive': {
 		edit: 'extendedconfirmed',
 		move: 'extendedconfirmed',
-		reason: 'Persistent [[WP:Disruptive editing|disruptive editing]] from (auto)confirmed accounts',
+		reason: 'Persistent [[QW:Disruptive editing|disruptive editing]] from (auto)confirmed accounts',
 		template: 'pp-30-500'
 	},
 	'pp-30-500-blp': {
 		edit: 'extendedconfirmed',
 		move: 'extendedconfirmed',
-		reason: 'Persistent violations of the [[WP:BLP|biographies of living persons policy]] from (auto)confirmed accounts',
+		reason: 'Persistent violations of the [[QW:BLP|biographies of living persons policy]] from (auto)confirmed accounts',
 		template: 'pp-30-500'
 	},
 	'pp-30-500-sock': {
 		edit: 'extendedconfirmed',
 		move: 'extendedconfirmed',
-		reason: 'Persistent [[WP:Sock puppetry|sock puppetry]]',
+		reason: 'Persistent [[QW:Sock puppetry|sock puppetry]]',
 		template: 'pp-30-500'
 	},
 	'pp-semi-vandalism': {
 		edit: 'autoconfirmed',
-		reason: 'Persistent [[WP:Vandalism|vandalism]]',
+		reason: 'Persistent [[QW:Vandalism|vandalism]]',
 		template: 'pp-vandalism'
 	},
 	'pp-semi-disruptive': {
 		edit: 'autoconfirmed',
-		reason: 'Persistent [[WP:Disruptive editing|disruptive editing]]',
+		reason: 'Persistent [[QW:Disruptive editing|disruptive editing]]',
 		template: 'pp-protected'
 	},
 	'pp-semi-unsourced': {
 		edit: 'autoconfirmed',
-		reason: 'Persistent addition of [[WP:INTREF|unsourced or poorly sourced content]]',
+		reason: 'Persistent addition of [[QW:INTREF|unsourced or poorly sourced content]]',
 		template: 'pp-protected'
 	},
 	'pp-semi-blp': {
 		edit: 'autoconfirmed',
-		reason: 'Violations of the [[WP:BLP|biographies of living persons policy]]',
+		reason: 'Violations of the [[QW:BLP|biographies of living persons policy]]',
 		template: 'pp-blp'
 	},
 	'pp-semi-usertalk': {
 		edit: 'autoconfirmed',
 		move: 'autoconfirmed',
 		expiry: 'infinity',
-		reason: '[[WP:PP#Talk-page protection|Inappropriate use of user talk page while blocked]]',
+		reason: '[[QW:PP#Talk-page protection|Inappropriate use of user talk page while blocked]]',
 		template: 'pp-usertalk'
 	},
 	'pp-semi-template': {  // removed for now
 		edit: 'autoconfirmed',
 		move: 'autoconfirmed',
 		expiry: 'infinity',
-		reason: '[[WP:High-risk templates|Highly visible template]]',
+		reason: '[[QW:High-risk templates|Highly visible template]]',
 		template: 'pp-template'
 	},
 	'pp-semi-sock': {
 		edit: 'autoconfirmed',
-		reason: 'Persistent [[WP:Sock puppetry|sock puppetry]]',
+		reason: 'Persistent [[QW:Sock puppetry|sock puppetry]]',
 		template: 'pp-sock'
 	},
 	'pp-semi-protected': {
@@ -888,22 +888,22 @@ Twinkle.protect.protectionPresetsInfo = {
 	},
 	'pp-pc-vandalism': {
 		stabilize: 'autoconfirmed',  // stabilize = Pending Changes
-		reason: 'Persistent [[WP:Vandalism|vandalism]]',
+		reason: 'Persistent [[QW:Vandalism|vandalism]]',
 		template: 'pp-pc'
 	},
 	'pp-pc-disruptive': {
 		stabilize: 'autoconfirmed',
-		reason: 'Persistent [[WP:Disruptive editing|disruptive editing]]',
+		reason: 'Persistent [[QW:Disruptive editing|disruptive editing]]',
 		template: 'pp-pc'
 	},
 	'pp-pc-unsourced': {
 		stabilize: 'autoconfirmed',
-		reason: 'Persistent addition of [[WP:INTREF|unsourced or poorly sourced content]]',
+		reason: 'Persistent addition of [[QW:INTREF|unsourced or poorly sourced content]]',
 		template: 'pp-pc'
 	},
 	'pp-pc-blp': {
 		stabilize: 'autoconfirmed',
-		reason: 'Violations of the [[WP:BLP|biographies of living persons policy]]',
+		reason: 'Violations of the [[QW:BLP|biographies of living persons policy]]',
 		template: 'pp-pc'
 	},
 	'pp-pc-protected': {
@@ -917,16 +917,16 @@ Twinkle.protect.protectionPresetsInfo = {
 	},
 	'pp-move-dispute': {
 		move: 'sysop',
-		reason: '[[WP:MOVP|Move warring]]'
+		reason: '[[QW:MOVP|Move warring]]'
 	},
 	'pp-move-vandalism': {
 		move: 'sysop',
-		reason: '[[WP:MOVP|Page-move vandalism]]'
+		reason: '[[QW:MOVP|Page-move vandalism]]'
 	},
 	'pp-move-indef': {
 		move: 'sysop',
 		expiry: 'infinity',
-		reason: '[[WP:MOVP|Highly visible page]]'
+		reason: '[[QW:MOVP|Highly visible page]]'
 	},
 	'unprotect': {
 		edit: 'all',
@@ -938,15 +938,15 @@ Twinkle.protect.protectionPresetsInfo = {
 	},
 	'pp-create-offensive': {
 		create: 'sysop',
-		reason: '[[WP:SALT|Offensive name]]'
+		reason: '[[QW:SALT|Offensive name]]'
 	},
 	'pp-create-salt': {
 		create: 'extendedconfirmed',
-		reason: '[[WP:SALT|Repeatedly recreated]]'
+		reason: '[[QW:SALT|Repeatedly recreated]]'
 	},
 	'pp-create-blp': {
 		create: 'extendedconfirmed',
-		reason: '[[WP:BLPDEL|Recently deleted BLP]]'
+		reason: '[[QW:BLPDEL|Recently deleted BLP]]'
 	},
 	'pp-create': {
 		create: 'extendedconfirmed',
@@ -1297,22 +1297,22 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 				case 'pp-semi-vandalism':
 				case 'pp-pc-vandalism':
 				case 'pp-30-500-vandalism':
-					typereason = 'Persistent [[WP:VAND|vandalism]]';
+					typereason = 'Persistent [[QW:VAND|vandalism]]';
 					break;
 				case 'pp-semi-disruptive':
 				case 'pp-pc-disruptive':
 				case 'pp-30-500-disruptive':
-					typereason = 'Persistent [[Wikipedia:Disruptive editing|disruptive editing]]';
+					typereason = 'Persistent [[Qiuwen:Disruptive editing|disruptive editing]]';
 					break;
 				case 'pp-semi-unsourced':
 				case 'pp-pc-unsourced':
-					typereason = 'Persistent addition of [[WP:INTREF|unsourced or poorly sourced content]]';
+					typereason = 'Persistent addition of [[QW:INTREF|unsourced or poorly sourced content]]';
 					break;
 				case 'pp-template':
-					typereason = '[[WP:HIGHRISK|High-risk template]]';
+					typereason = '[[QW:HIGHRISK|High-risk template]]';
 					break;
 				case 'pp-30-500-arb':
-					typereason = '[[WP:30/500|Arbitration enforcement]]';
+					typereason = '[[QW:30/500|Arbitration enforcement]]';
 					break;
 				case 'pp-usertalk':
 				case 'pp-semi-usertalk':
@@ -1320,12 +1320,12 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 					break;
 				case 'pp-semi-sock':
 				case 'pp-30-500-sock':
-					typereason = 'Persistent [[WP:SOCK|sockpuppetry]]';
+					typereason = 'Persistent [[QW:SOCK|sockpuppetry]]';
 					break;
 				case 'pp-semi-blp':
 				case 'pp-pc-blp':
 				case 'pp-30-500-blp':
-					typereason = '[[WP:BLP|BLP]] policy violations';
+					typereason = '[[QW:BLP|BLP]] policy violations';
 					break;
 				case 'pp-move-dispute':
 					typereason = 'Page title dispute/move warring';
@@ -1340,7 +1340,7 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 					typereason = 'Offensive name';
 					break;
 				case 'pp-create-blp':
-					typereason = 'Recently deleted [[WP:BLP|BLP]]';
+					typereason = 'Recently deleted [[QW:BLP|BLP]]';
 					break;
 				case 'pp-create-salt':
 					typereason = 'Repeatedly recreated';

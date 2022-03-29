@@ -84,7 +84,7 @@ Twinkle.image.callback = function twinkleimageCallback() {
 			{
 				label: 'Replaceable fair use (CSD F7)',
 				value: 'replaceable fair use',
-				tooltip: 'Image or media may fail Wikipedia\'s first non-free content criterion ([[WP:NFCC#1]]) in that it illustrates a subject for which a free image might reasonably be found or created that adequately provides the same information'
+				tooltip: 'Image or media may fail Wikipedia\'s first non-free content criterion ([[QW:NFCC#1]]) in that it illustrates a subject for which a free image might reasonably be found or created that adequately provides the same information'
 			},
 			{
 				label: 'No evidence of permission (CSD F11)',
@@ -278,7 +278,7 @@ Twinkle.image.callbacks = {
 		tag += '|help=off}}\n';
 
 		pageobj.setPageText(tag + text);
-		pageobj.setEditSummary('This file is up for deletion, per [[WP:CSD#' + params.normalized + '|CSD ' + params.normalized + ']] (' + params.type + ').');
+		pageobj.setEditSummary('This file is up for deletion, per [[QW:CSD#' + params.normalized + '|CSD ' + params.normalized + ']] (' + params.type + ').');
 		pageobj.setChangeTags(Twinkle.changeTags);
 		pageobj.setWatchlist(Twinkle.getPref('deliWatchPage'));
 		pageobj.setCreateOption('nocreate');
@@ -315,9 +315,9 @@ Twinkle.image.callbacks = {
 	addToLog: function(params, initialContrib) {
 		var usl = new Morebits.userspaceLogger(Twinkle.getPref('speedyLogPageName'));
 		usl.initialText =
-			"This is a log of all [[WP:CSD|speedy deletion]] nominations made by this user using [[WP:TW|Twinkle]]'s CSD module.\n\n" +
-			'If you no longer wish to keep this log, you can turn it off using the [[Wikipedia:Twinkle/Preferences|preferences panel]], and ' +
-			'nominate this page for speedy deletion under [[WP:CSD#U1|CSD U1]].' +
+			"This is a log of all [[QW:CSD|speedy deletion]] nominations made by this user using [[QW:TW|Twinkle]]'s CSD module.\n\n" +
+			'If you no longer wish to keep this log, you can turn it off using the [[Qiuwen:Twinkle/Preferences|preferences panel]], and ' +
+			'nominate this page for speedy deletion under [[QW:CSD#U1|CSD U1]].' +
 			(Morebits.userIsSysop ? '\n\nThis log does not track outright speedy deletions made using Twinkle.' : '');
 
 		var formatParamLog = function(normalize, csdparam, input) {
@@ -332,7 +332,7 @@ Twinkle.image.callbacks = {
 		// If a logged file is deleted but exists on commons, the wikilink will be blue, so provide a link to the log
 		var fileLogLink = ' ([{{fullurl:Special:Log|page=' + mw.util.wikiUrlencode(mw.config.get('wgPageName')) + '}} log])';
 
-		var appendText = '# [[:' + Morebits.pageNameNorm + ']]' + fileLogLink + ': DI [[WP:CSD#' + params.normalized.toUpperCase() + '|CSD ' + params.normalized.toUpperCase() + ']] ({{tl|di-' + params.templatename + '}})';
+		var appendText = '# [[:' + Morebits.pageNameNorm + ']]' + fileLogLink + ': DI [[QW:CSD#' + params.normalized.toUpperCase() + '|CSD ' + params.normalized.toUpperCase() + ']] ({{tl|di-' + params.templatename + '}})';
 
 		['reason', 'replacement', 'source'].forEach(function(item) {
 			if (params[item]) {

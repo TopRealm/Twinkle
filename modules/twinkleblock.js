@@ -82,7 +82,7 @@ Twinkle.block.callback = function twinkleblockCallback() {
 
 	/*
 	  Add option for IPv6 ranges smaller than /64 to upgrade to the 64
-	  CIDR ([[WP:/64]]).  This is one of the few places where we want
+	  CIDR ([[QW:/64]]).  This is one of the few places where we want
 	  wgRelevantUserName since this depends entirely on the original user.
 	  In theory, we shouldn't use Morebits.ip.get64 here since since we want
 	  to exclude functionally-equivalent /64s.  That'd be:
@@ -943,8 +943,8 @@ Twinkle.block.blockPresetsInfo = {
 		expiry: '24 hours',
 		nocreate: true,
 		pageParam: true,
-		reason: 'Violation of the [[WP:Three-revert rule|three-revert rule]]',
-		summary: 'You have been blocked from editing for violation of the [[WP:3RR|three-revert rule]]'
+		reason: 'Violation of the [[QW:Three-revert rule|three-revert rule]]',
+		summary: 'You have been blocked from editing for violation of the [[QW:3RR|three-revert rule]]'
 	},
 	'uw-ablock': {
 		autoblock: true,
@@ -960,23 +960,23 @@ Twinkle.block.blockPresetsInfo = {
 		autoblock: true,
 		nocreate: true,
 		pageParam: true,
-		reason: 'Using Wikipedia for [[WP:Spam|spam]] or [[WP:NOTADVERTISING|advertising]] purposes',
-		summary: 'You have been blocked from editing for [[WP:SOAP|advertising or self-promotion]]'
+		reason: 'Using Wikipedia for [[QW:Spam|spam]] or [[QW:NOTADVERTISING|advertising]] purposes',
+		summary: 'You have been blocked from editing for [[QW:SOAP|advertising or self-promotion]]'
 	},
 	'uw-aeblock': {
 		autoblock: true,
 		nocreate: true,
 		pageParam: true,
-		reason: '[[WP:Arbitration enforcement|Arbitration enforcement]]',
+		reason: '[[QW:Arbitration enforcement|Arbitration enforcement]]',
 		reasonParam: true,
-		summary: 'You have been blocked from editing for violating an [[WP:Arbitration|arbitration decision]]'
+		summary: 'You have been blocked from editing for violating an [[QW:Arbitration|arbitration decision]]'
 	},
 	'uw-bioblock': {
 		autoblock: true,
 		nocreate: true,
 		pageParam: true,
-		reason: 'Violations of the [[WP:Biographies of living persons|biographies of living persons]] policy',
-		summary: 'You have been blocked from editing for violations of Wikipedia\'s [[WP:BLP|biographies of living persons policy]]'
+		reason: 'Violations of the [[QW:Biographies of living persons|biographies of living persons]] policy',
+		summary: 'You have been blocked from editing for violations of Wikipedia\'s [[QW:BLP|biographies of living persons policy]]'
 	},
 	'uw-block': {
 		autoblock: true,
@@ -1008,14 +1008,14 @@ Twinkle.block.blockPresetsInfo = {
 	'uw-botblock': {
 		forRegisteredOnly: true,
 		pageParam: true,
-		reason: 'Running a [[WP:BOT|bot script]] without [[WP:BRFA|approval]]',
-		summary: 'You have been blocked from editing because it appears you are running a [[WP:BOT|bot script]] without [[WP:BRFA|approval]]'
+		reason: 'Running a [[QW:BOT|bot script]] without [[QW:BRFA|approval]]',
+		summary: 'You have been blocked from editing because it appears you are running a [[QW:BOT|bot script]] without [[QW:BRFA|approval]]'
 	},
 	'uw-botublock': {
 		expiry: 'infinity',
 		forRegisteredOnly: true,
 		reason: '{{uw-botublock}} <!-- Username implies a bot, soft block -->',
-		summary: 'You have been indefinitely blocked from editing because your [[WP:U|username]] indicates this is a [[WP:BOT|bot]] account, which is currently not approved'
+		summary: 'You have been indefinitely blocked from editing because your [[QW:U|username]] indicates this is a [[QW:BOT|bot]] account, which is currently not approved'
 	},
 	'uw-botuhblock': {
 		autoblock: true,
@@ -1023,13 +1023,13 @@ Twinkle.block.blockPresetsInfo = {
 		forRegisteredOnly: true,
 		nocreate: true,
 		reason: '{{uw-botuhblock}} <!-- Username implies a bot, hard block -->',
-		summary: 'You have been indefinitely blocked from editing because your username is a blatant violation of the [[WP:U|username policy]].'
+		summary: 'You have been indefinitely blocked from editing because your username is a blatant violation of the [[QW:U|username policy]].'
 	},
 	'uw-causeblock': {
 		expiry: 'infinity',
 		forRegisteredOnly: true,
 		reason: '{{uw-causeblock}} <!-- Username represents a non-profit, soft block -->',
-		summary: 'You have been indefinitely blocked from editing because your [[WP:U|username]] gives the impression that the account represents a group, organization or website'
+		summary: 'You have been indefinitely blocked from editing because your [[QW:U|username]] gives the impression that the account represents a group, organization or website'
 	},
 	'uw-compblock': {
 		autoblock: true,
@@ -1037,90 +1037,90 @@ Twinkle.block.blockPresetsInfo = {
 		forRegisteredOnly: true,
 		nocreate: true,
 		reason: 'Compromised account',
-		summary: 'You have been indefinitely blocked from editing because it is believed that your [[WP:SECURE|account has been compromised]]'
+		summary: 'You have been indefinitely blocked from editing because it is believed that your [[QW:SECURE|account has been compromised]]'
 	},
 	'uw-copyrightblock': {
 		autoblock: true,
 		expiry: 'infinity',
 		nocreate: true,
 		pageParam: true,
-		reason: '[[WP:Copyright violations|Copyright violations]]',
-		summary: 'You have been blocked from editing for continued [[WP:COPYVIO|copyright infringement]]'
+		reason: '[[QW:Copyright violations|Copyright violations]]',
+		summary: 'You have been blocked from editing for continued [[QW:COPYVIO|copyright infringement]]'
 	},
 	'uw-dblock': {
 		autoblock: true,
 		nocreate: true,
 		reason: 'Persistent removal of content',
 		pageParam: true,
-		summary: 'You have been blocked from editing for continued [[WP:VAND|removal of material]]'
+		summary: 'You have been blocked from editing for continued [[QW:VAND|removal of material]]'
 	},
 	'uw-disruptblock': {
 		autoblock: true,
 		nocreate: true,
-		reason: '[[WP:Disruptive editing|Disruptive editing]]',
-		summary: 'You have been blocked from editing for [[WP:DE|disruptive editing]]'
+		reason: '[[QW:Disruptive editing|Disruptive editing]]',
+		summary: 'You have been blocked from editing for [[QW:DE|disruptive editing]]'
 	},
 	'uw-efblock': {
 		autoblock: true,
 		nocreate: true,
-		reason: 'Repeatedly triggering the [[WP:Edit filter|Edit filter]]',
-		summary: 'You have been blocked from editing for disruptive edits that repeatedly triggered the [[WP:EF|edit filter]]'
+		reason: 'Repeatedly triggering the [[QW:Edit filter|Edit filter]]',
+		summary: 'You have been blocked from editing for disruptive edits that repeatedly triggered the [[QW:EF|edit filter]]'
 	},
 	'uw-ewblock': {
 		autoblock: true,
 		expiry: '24 hours',
 		nocreate: true,
 		pageParam: true,
-		reason: '[[WP:Edit warring|Edit warring]]',
-		summary: 'You have been blocked from editing to prevent further [[WP:DE|disruption]] caused by your engagement in an [[WP:EW|edit war]]'
+		reason: '[[QW:Edit warring|Edit warring]]',
+		summary: 'You have been blocked from editing to prevent further [[QW:DE|disruption]] caused by your engagement in an [[QW:EW|edit war]]'
 	},
 	'uw-hblock': {
 		autoblock: true,
 		nocreate: true,
 		pageParam: true,
-		reason: '[[WP:No personal attacks|Personal attacks]] or [[WP:Harassment|harassment]]',
-		summary: 'You have been blocked from editing for attempting to [[WP:HARASS|harass]] other users'
+		reason: '[[QW:No personal attacks|Personal attacks]] or [[QW:Harassment|harassment]]',
+		summary: 'You have been blocked from editing for attempting to [[QW:HARASS|harass]] other users'
 	},
 	'uw-ipevadeblock': {
 		forAnonOnly: true,
 		nocreate: true,
-		reason: '[[WP:Blocking policy#Evasion of blocks|Block evasion]]',
-		summary: 'Your IP address has been blocked from editing because it has been used to [[WP:EVADE|evade a previous block]]'
+		reason: '[[QW:Blocking policy#Evasion of blocks|Block evasion]]',
+		summary: 'Your IP address has been blocked from editing because it has been used to [[QW:EVADE|evade a previous block]]'
 	},
 	'uw-lblock': {
 		autoblock: true,
 		expiry: 'infinity',
 		nocreate: true,
-		reason: 'Making [[WP:No legal threats|legal threats]]',
-		summary: 'You have been blocked from editing for making [[WP:NLT|legal threats or taking legal action]]'
+		reason: 'Making [[QW:No legal threats|legal threats]]',
+		summary: 'You have been blocked from editing for making [[QW:NLT|legal threats or taking legal action]]'
 	},
 	'uw-nothereblock': {
 		autoblock: true,
 		expiry: 'infinity',
 		nocreate: true,
-		reason: 'Clearly [[WP:NOTHERE|not here to build an encyclopedia]]',
+		reason: 'Clearly [[QW:NOTHERE|not here to build an encyclopedia]]',
 		forRegisteredOnly: true,
-		summary: 'You have been indefinitely blocked from editing because it appears that you are not here to [[WP:NOTHERE|build an encyclopedia]]'
+		summary: 'You have been indefinitely blocked from editing because it appears that you are not here to [[QW:NOTHERE|build an encyclopedia]]'
 	},
 	'uw-npblock': {
 		autoblock: true,
 		nocreate: true,
 		pageParam: true,
-		reason: 'Creating [[WP:Patent nonsense|patent nonsense]] or other inappropriate pages',
-		summary: 'You have been blocked from editing for creating [[WP:PN|nonsense pages]]'
+		reason: 'Creating [[QW:Patent nonsense|patent nonsense]] or other inappropriate pages',
+		summary: 'You have been blocked from editing for creating [[QW:PN|nonsense pages]]'
 	},
 	'uw-pablock': {
 		autoblock: true,
 		expiry: '31 hours',
 		nocreate: true,
-		reason: '[[WP:No personal attacks|Personal attacks]] or [[WP:Harassment|harassment]]',
-		summary: 'You have been blocked from editing for making [[WP:NPA|personal attacks]] toward other users'
+		reason: '[[QW:No personal attacks|Personal attacks]] or [[QW:Harassment|harassment]]',
+		summary: 'You have been blocked from editing for making [[QW:NPA|personal attacks]] toward other users'
 	},
 	'uw-sblock': {
 		autoblock: true,
 		nocreate: true,
-		reason: 'Using Wikipedia for [[WP:SPAM|spam]] purposes',
-		summary: 'You have been blocked from editing for using Wikipedia for [[WP:SPAM|spam]] purposes'
+		reason: 'Using Wikipedia for [[QW:SPAM|spam]] purposes',
+		summary: 'You have been blocked from editing for using Wikipedia for [[QW:SPAM|spam]] purposes'
 	},
 	'uw-soablock': {
 		autoblock: true,
@@ -1128,28 +1128,28 @@ Twinkle.block.blockPresetsInfo = {
 		forRegisteredOnly: true,
 		nocreate: true,
 		pageParam: true,
-		reason: '[[WP:Spam|Spam]] / [[WP:NOTADVERTISING|advertising]]-only account',
-		summary: 'You have been indefinitely blocked from editing because your account is being used only for [[WP:SPAM|spam, advertising, or promotion]]'
+		reason: '[[QW:Spam|Spam]] / [[QW:NOTADVERTISING|advertising]]-only account',
+		summary: 'You have been indefinitely blocked from editing because your account is being used only for [[QW:SPAM|spam, advertising, or promotion]]'
 	},
 	'uw-socialmediablock': {
 		autoblock: true,
 		nocreate: true,
 		pageParam: true,
-		reason: 'Using Wikipedia as a [[WP:NOTMYSPACE|blog, web host, social networking site or forum]]',
-		summary: 'You have been blocked from editing for using user and/or article pages as a [[WP:NOTMYSPACE|blog, web host, social networking site or forum]]'
+		reason: 'Using Wikipedia as a [[QW:NOTMYSPACE|blog, web host, social networking site or forum]]',
+		summary: 'You have been blocked from editing for using user and/or article pages as a [[QW:NOTMYSPACE|blog, web host, social networking site or forum]]'
 	},
 	'uw-sockblock': {
 		autoblock: true,
 		forRegisteredOnly: true,
 		nocreate: true,
-		reason: 'Abusing [[WP:Sock puppetry|multiple accounts]]',
-		summary: 'You have been blocked from editing for abusing [[WP:SOCK|multiple accounts]]'
+		reason: 'Abusing [[QW:Sock puppetry|multiple accounts]]',
+		summary: 'You have been blocked from editing for abusing [[QW:SOCK|multiple accounts]]'
 	},
 	'uw-softerblock': {
 		expiry: 'infinity',
 		forRegisteredOnly: true,
 		reason: '{{uw-softerblock}} <!-- Promotional username, soft block -->',
-		summary: 'You have been indefinitely blocked from editing because your [[WP:U|username]] gives the impression that the account represents a group, organization or website'
+		summary: 'You have been indefinitely blocked from editing because your [[QW:U|username]] gives the impression that the account represents a group, organization or website'
 	},
 	'uw-spamublock': {
 		autoblock: true,
@@ -1157,15 +1157,15 @@ Twinkle.block.blockPresetsInfo = {
 		forRegisteredOnly: true,
 		nocreate: true,
 		reason: '{{uw-spamublock}} <!-- Promotional username, promotional edits -->',
-		summary: 'You have been indefinitely blocked from editing because your account is being used only for [[WP:SPAM|spam or advertising]] and your username is a violation of the [[WP:U|username policy]]'
+		summary: 'You have been indefinitely blocked from editing because your account is being used only for [[QW:SPAM|spam or advertising]] and your username is a violation of the [[QW:U|username policy]]'
 	},
 	'uw-spoablock': {
 		autoblock: true,
 		expiry: 'infinity',
 		forRegisteredOnly: true,
 		nocreate: true,
-		reason: '[[WP:SOCK|Sock puppetry]]',
-		summary: 'This account has been blocked as a [[WP:SOCK|sock puppet]] created to violate Wikipedia policy'
+		reason: '[[QW:SOCK|Sock puppetry]]',
+		summary: 'This account has been blocked as a [[QW:SOCK|sock puppet]] created to violate Wikipedia policy'
 	},
 	'uw-talkrevoked': {
 		disabletalk: true,
@@ -1179,21 +1179,21 @@ Twinkle.block.blockPresetsInfo = {
 		forRegisteredOnly: true,
 		reason: '{{uw-ublock}} <!-- Username violation, soft block -->',
 		reasonParam: true,
-		summary: 'You have been indefinitely blocked from editing because your username is a violation of the [[WP:U|username policy]]'
+		summary: 'You have been indefinitely blocked from editing because your username is a violation of the [[QW:U|username policy]]'
 	},
 	'uw-ublock-double': {
 		expiry: 'infinity',
 		forRegisteredOnly: true,
 		reason: '{{uw-ublock-double}} <!-- Username closely resembles another user, soft block -->',
-		summary: 'You have been indefinitely blocked from editing because your [[WP:U|username]] is too similar to the username of another Wikipedia user'
+		summary: 'You have been indefinitely blocked from editing because your [[QW:U|username]] is too similar to the username of another Wikipedia user'
 	},
 	'uw-ucblock': {
 		autoblock: true,
 		expiry: '31 hours',
 		nocreate: true,
 		pageParam: true,
-		reason: 'Persistent addition of [[WP:INTREF|unsourced content]]',
-		summary: 'You have been blocked from editing for persistent addition of [[WP:INTREF|unsourced content]]'
+		reason: 'Persistent addition of [[QW:INTREF|unsourced content]]',
+		summary: 'You have been blocked from editing for persistent addition of [[QW:INTREF|unsourced content]]'
 	},
 	'uw-uhblock': {
 		autoblock: true,
@@ -1202,13 +1202,13 @@ Twinkle.block.blockPresetsInfo = {
 		nocreate: true,
 		reason: '{{uw-uhblock}} <!-- Username violation, hard block -->',
 		reasonParam: true,
-		summary: 'You have been indefinitely blocked from editing because your username is a blatant violation of the [[WP:U|username policy]]'
+		summary: 'You have been indefinitely blocked from editing because your username is a blatant violation of the [[QW:U|username policy]]'
 	},
 	'uw-ublock-wellknown': {
 		expiry: 'infinity',
 		forRegisteredOnly: true,
 		reason: '{{uw-ublock-wellknown}} <!-- Username represents a well-known person, soft block -->',
-		summary: 'You have been indefinitely blocked from editing because your [[WP:U|username]] matches the name of a well-known living individual'
+		summary: 'You have been indefinitely blocked from editing because your [[QW:U|username]] matches the name of a well-known living individual'
 	},
 	'uw-uhblock-double': {
 		autoblock: true,
@@ -1216,7 +1216,7 @@ Twinkle.block.blockPresetsInfo = {
 		forRegisteredOnly: true,
 		nocreate: true,
 		reason: '{{uw-uhblock-double}} <!-- Attempted impersonation of another user, hard block -->',
-		summary: 'You have been indefinitely blocked from editing because your [[WP:U|username]] appears to impersonate another established Wikipedia user'
+		summary: 'You have been indefinitely blocked from editing because your [[QW:U|username]] appears to impersonate another established Wikipedia user'
 	},
 	'uw-upeblock': {
 		autoblock: true,
@@ -1224,8 +1224,8 @@ Twinkle.block.blockPresetsInfo = {
 		forRegisteredOnly: true,
 		nocreate: true,
 		pageParam: true,
-		reason: '[[WP:PAID|Undisclosed paid editing]] in violation of the WMF [[WP:TOU|Terms of Use]]',
-		summary: 'You have been indefinitely blocked from editing because your account is being used in violation of [[WP:PAID|Wikipedia policy on undisclosed paid advocacy]]'
+		reason: '[[QW:PAID|Undisclosed paid editing]] in violation of the WMF [[QW:TOU|Terms of Use]]',
+		summary: 'You have been indefinitely blocked from editing because your account is being used in violation of [[QW:PAID|Wikipedia policy on undisclosed paid advocacy]]'
 	},
 	'uw-vaublock': {
 		autoblock: true,
@@ -1234,15 +1234,15 @@ Twinkle.block.blockPresetsInfo = {
 		nocreate: true,
 		pageParam: true,
 		reason: '{{uw-vaublock}} <!-- Username violation, vandalism-only account -->',
-		summary: 'You have been indefinitely blocked from editing because your account is being [[WP:VOA|used only for vandalism]] and your username is a blatant violation of the [[WP:U|username policy]]'
+		summary: 'You have been indefinitely blocked from editing because your account is being [[QW:VOA|used only for vandalism]] and your username is a blatant violation of the [[QW:U|username policy]]'
 	},
 	'uw-vblock': {
 		autoblock: true,
 		expiry: '31 hours',
 		nocreate: true,
 		pageParam: true,
-		reason: '[[WP:Vandalism|Vandalism]]',
-		summary: 'You have been blocked from editing to prevent further [[WP:VAND|vandalism]]'
+		reason: '[[QW:Vandalism|Vandalism]]',
+		summary: 'You have been blocked from editing to prevent further [[QW:VAND|vandalism]]'
 	},
 	'uw-voablock': {
 		autoblock: true,
@@ -1250,8 +1250,8 @@ Twinkle.block.blockPresetsInfo = {
 		forRegisteredOnly: true,
 		nocreate: true,
 		pageParam: true,
-		reason: '[[WP:Vandalism-only account|Vandalism-only account]]',
-		summary: 'You have been indefinitely blocked from editing because your account is being [[WP:VOA|used only for vandalism]]'
+		reason: '[[QW:Vandalism-only account|Vandalism-only account]]',
+		summary: 'You have been indefinitely blocked from editing because your account is being [[QW:VOA|used only for vandalism]]'
 	},
 	'zombie proxy': {
 		expiry: '1 month',
@@ -1269,8 +1269,8 @@ Twinkle.block.blockPresetsInfo = {
 		nocreate: true,
 		pageParam: false,
 		reasonParam: true,
-		reason: 'Misusing [[WP:Sock puppetry|multiple accounts]]',
-		summary: 'You have been [[WP:PB|blocked from creating accounts]] for misusing [[WP:SOCK|multiple accounts]]'
+		reason: 'Misusing [[QW:Sock puppetry|multiple accounts]]',
+		summary: 'You have been [[QW:PB|blocked from creating accounts]] for misusing [[QW:SOCK|multiple accounts]]'
 	},
 	'uw-acpblockindef': {
 		autoblock: true,
@@ -1279,16 +1279,16 @@ Twinkle.block.blockPresetsInfo = {
 		nocreate: true,
 		pageParam: false,
 		reasonParam: true,
-		reason: 'Misusing [[WP:Sock puppetry|multiple accounts]]',
-		summary: 'You have been indefinitely [[WP:PB|blocked from creating accounts]] for misusing [[WP:SOCK|multiple accounts]]'
+		reason: 'Misusing [[QW:Sock puppetry|multiple accounts]]',
+		summary: 'You have been indefinitely [[QW:PB|blocked from creating accounts]] for misusing [[QW:SOCK|multiple accounts]]'
 	},
 	'uw-aepblock': {
 		autoblock: true,
 		nocreate: false,
 		pageParam: false,
-		reason: '[[WP:Arbitration enforcement|Arbitration enforcement]]',
+		reason: '[[QW:Arbitration enforcement|Arbitration enforcement]]',
 		reasonParam: true,
-		summary: 'You have been [[WP:PB|partially blocked]] from editing for violating an [[WP:Arbitration|arbitration decision]]'
+		summary: 'You have been [[QW:PB|partially blocked]] from editing for violating an [[QW:Arbitration|arbitration decision]]'
 	},
 	'uw-epblock': {
 		autoblock: true,
@@ -1298,8 +1298,8 @@ Twinkle.block.blockPresetsInfo = {
 		noemail: true,
 		pageParam: false,
 		reasonParam: true,
-		reason: 'Email [[WP:Harassment|harassment]]',
-		summary: 'You have been [[WP:PB|blocked from emailing]] other editors for [[WP:Harassment|harassment]]'
+		reason: 'Email [[QW:Harassment|harassment]]',
+		summary: 'You have been [[QW:PB|blocked from emailing]] other editors for [[QW:Harassment|harassment]]'
 	},
 	'uw-ewpblock': {
 		autoblock: true,
@@ -1307,8 +1307,8 @@ Twinkle.block.blockPresetsInfo = {
 		nocreate: false,
 		pageParam: false,
 		reasonParam: true,
-		reason: '[[WP:Edit warring|Edit warring]]',
-		summary: 'You have been [[WP:PB|partially blocked]] from editing certain areas of the encyclopedia to prevent further [[WP:DE|disruption]] due to [[WP:EW|edit warring]]'
+		reason: '[[QW:Edit warring|Edit warring]]',
+		summary: 'You have been [[QW:PB|partially blocked]] from editing certain areas of the encyclopedia to prevent further [[QW:DE|disruption]] due to [[QW:EW|edit warring]]'
 	},
 	'uw-pblock': {
 		autoblock: true,
@@ -1316,7 +1316,7 @@ Twinkle.block.blockPresetsInfo = {
 		nocreate: false,
 		pageParam: false,
 		reasonParam: true,
-		summary: 'You have been [[WP:PB|partially blocked]] from certain areas of the encyclopedia'
+		summary: 'You have been [[QW:PB|partially blocked]] from certain areas of the encyclopedia'
 	},
 	'uw-pblockindef': {
 		autoblock: true,
@@ -1325,7 +1325,7 @@ Twinkle.block.blockPresetsInfo = {
 		nocreate: false,
 		pageParam: false,
 		reasonParam: true,
-		summary: 'You have been indefinitely [[WP:PB|partially blocked]] from certain areas of the encyclopedia'
+		summary: 'You have been indefinitely [[QW:PB|partially blocked]] from certain areas of the encyclopedia'
 	}
 };
 
@@ -1973,7 +1973,7 @@ Twinkle.block.callback.getBlockNoticeWikitext = function(params) {
 					var namespaceNames = params.namespacerestrictions.map(function(id) {
 						return menuFormattedNamespaces[id];
 					});
-					text += '[[Wikipedia:Namespace|namespaces]] (' + makeSentence(namespaceNames) + ')';
+					text += '[[Qiuwen:Namespace|namespaces]] (' + makeSentence(namespaceNames) + ')';
 				}
 			} else if (params.area) {
 				text += '|area=' + params.area;

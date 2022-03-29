@@ -156,7 +156,7 @@ Twinkle.unlink.callbacks = {
 					apiobj.params.form.append({
 						type: 'div',
 						label: 'Selected namespaces: ' + namespaces.join(', '),
-						tooltip: 'You can change this with your Twinkle preferences, at [[WP:TWPREFS]]'
+						tooltip: 'You can change this with your Twinkle preferences, at [[QW:TWPREFS]]'
 					});
 					if (response['query-continue'] && response['query-continue'].imageusage) {
 						apiobj.params.form.append({

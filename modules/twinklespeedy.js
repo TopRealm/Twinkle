@@ -1287,7 +1287,7 @@ Twinkle.speedy.callbacks = {
 					params.normalized !== 'f8' &&
 					!document.getElementById('ca-talk').classList.contains('new')) {
 				var talkpage = new Morebits.wiki.page(mw.config.get('wgFormattedNamespaces')[mw.config.get('wgNamespaceNumber') + 1] + ':' + mw.config.get('wgTitle'), 'Deleting talk page');
-				talkpage.setEditSummary('[[WP:CSD#G8|G8]]: Talk page of deleted page "' + Morebits.pageNameNorm + '"');
+				talkpage.setEditSummary('[[QW:CSD#G8|G8]]: Talk page of deleted page "' + Morebits.pageNameNorm + '"');
 				talkpage.setChangeTags(Twinkle.changeTags);
 				talkpage.deletePage();
 				// this is ugly, but because of the architecture of wiki.api, it is needed
@@ -1380,7 +1380,7 @@ Twinkle.speedy.callbacks = {
 			snapshot.forEach(function(value) {
 				var title = value.title;
 				var page = new Morebits.wiki.page(title, 'Deleting redirect "' + title + '"');
-				page.setEditSummary('[[WP:CSD#G8|G8]]: Redirect to deleted page "' + Morebits.pageNameNorm + '"');
+				page.setEditSummary('[[QW:CSD#G8|G8]]: Redirect to deleted page "' + Morebits.pageNameNorm + '"');
 				page.setChangeTags(Twinkle.changeTags);
 				page.deletePage(onsuccess);
 			});
@@ -1422,7 +1422,7 @@ Twinkle.speedy.callbacks = {
 					return;
 				}
 
-				var xfd = /\{\{((?:article for deletion|proposed deletion|prod blp|template for discussion)\/dated|[cfm]fd\b)/i.exec(text) || /#invoke:(RfD)/.exec(text);
+				var xfd = /(?:\{\{([rsaiftcmv]fd|proposed deletion)[^{}]*?\}\})/i.exec(text);
 				if (xfd && !confirm('The deletion-related template {{' + xfd[1] + '}} was found on the page. Do you still want to add a CSD template?')) {
 					return;
 				}
@@ -1440,10 +1440,6 @@ Twinkle.speedy.callbacks = {
 
 				// Remove tags that become superfluous with this action
 				text = text.replace(/\{\{\s*([Uu]serspace draft)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/g, '');
-				if (mw.config.get('wgNamespaceNumber') === 6) {
-					// remove "move to Commons" tag - deletion-tagged files cannot be moved to Commons
-					text = text.replace(/\{\{(mtc|(copy |move )?to ?commons|move to wikimedia commons|copy to wikimedia commons)[^}]*\}\}/gi, '');
-				}
 
 				if (params.requestsalt) {
 					if (params.normalizeds.indexOf('g10') === -1) {
@@ -1470,14 +1466,14 @@ Twinkle.speedy.callbacks = {
 				if (params.normalizeds.length > 1) {
 					editsummary = 'Requesting speedy deletion (';
 					$.each(params.normalizeds, function(index, norm) {
-						editsummary += '[[WP:CSD#' + norm.toUpperCase() + '|CSD ' + norm.toUpperCase() + ']], ';
+						editsummary += '[[QW:CSD#' + norm.toUpperCase() + '|CSD ' + norm.toUpperCase() + ']], ';
 					});
 					editsummary = editsummary.substr(0, editsummary.length - 2); // remove trailing comma
 					editsummary += ').';
 				} else if (params.normalizeds[0] === 'db') {
-					editsummary = 'Requesting [[WP:CSD|speedy deletion]] with rationale "' + params.templateParams[0]['1'] + '".';
+					editsummary = 'Requesting [[QW:CSD|speedy deletion]] with rationale "' + params.templateParams[0]['1'] + '".';
 				} else {
-					editsummary = 'Requesting speedy deletion ([[WP:CSD#' + params.normalizeds[0].toUpperCase() + '|CSD ' + params.normalizeds[0].toUpperCase() + ']]).';
+					editsummary = 'Requesting speedy deletion ([[QW:CSD#' + params.normalizeds[0].toUpperCase() + '|CSD ' + params.normalizeds[0].toUpperCase() + ']]).';
 				}
 
 				// Blank attack pages
@@ -1535,9 +1531,9 @@ Twinkle.speedy.callbacks = {
 		addToLog: function(params, initialContrib) {
 			var usl = new Morebits.userspaceLogger(Twinkle.getPref('speedyLogPageName'));
 			usl.initialText =
-				"This is a log of all [[WP:CSD|speedy deletion]] nominations made by this user using [[WP:TW|Twinkle]]'s CSD module.\n\n" +
-				'If you no longer wish to keep this log, you can turn it off using the [[Wikipedia:Twinkle/Preferences|preferences panel]], and ' +
-				'nominate this page for speedy deletion under [[WP:CSD#U1|CSD U1]].' +
+				"This is a log of all [[QW:CSD|speedy deletion]] nominations made by this user using [[QW:TW|Twinkle]]'s CSD module.\n\n" +
+				'If you no longer wish to keep this log, you can turn it off using the [[Qiuwen:Twinkle/Preferences|preferences panel]], and ' +
+				'nominate this page for speedy deletion under [[QW:CSD#U1|CSD U1]].' +
 				(Morebits.userIsSysop ? '\n\nThis log does not track outright speedy deletions made using Twinkle.' : '');
 
 			var formatParamLog = function(normalize, csdparam, input) {
@@ -1556,7 +1552,7 @@ Twinkle.speedy.callbacks = {
 				} else if (normalize === 'F8' && csdparam === 'filename') {
 					input = '[[commons:' + input + ']]';
 				} else if (normalize === 'P1' && csdparam === 'criterion') {
-					input = '[[WP:CSD#' + input + ']]';
+					input = '[[QW:CSD#' + input + ']]';
 				}
 				return ' {' + normalize + ' ' + csdparam + ': ' + input + '}';
 			};
@@ -1579,14 +1575,14 @@ Twinkle.speedy.callbacks = {
 			if (params.normalizeds.length > 1) {
 				appendText += 'multiple criteria (';
 				$.each(params.normalizeds, function(index, norm) {
-					appendText += '[[WP:CSD#' + norm.toUpperCase() + '|' + norm.toUpperCase() + ']], ';
+					appendText += '[[QW:CSD#' + norm.toUpperCase() + '|' + norm.toUpperCase() + ']], ';
 				});
 				appendText = appendText.substr(0, appendText.length - 2);  // remove trailing comma
 				appendText += ')';
 			} else if (params.normalizeds[0] === 'db') {
 				appendText += '{{tl|db-reason}}';
 			} else {
-				appendText += '[[WP:CSD#' + params.normalizeds[0].toUpperCase() + '|CSD ' + params.normalizeds[0].toUpperCase() + ']] ({{tl|db-' + params.values[0] + '}})';
+				appendText += '[[QW:CSD#' + params.normalizeds[0].toUpperCase() + '|CSD ' + params.normalizeds[0].toUpperCase() + ']] ({{tl|db-' + params.values[0] + '}})';
 			}
 
 			// If params is "empty" it will still be full of empty arrays, but ask anyway
@@ -1611,7 +1607,7 @@ Twinkle.speedy.callbacks = {
 			}
 
 			if (params.requestsalt) {
-				appendText += '; requested creation protection ([[WP:SALT|salting]])';
+				appendText += '; requested creation protection ([[QW:SALT|salting]])';
 			}
 			if (extraInfo) {
 				appendText += '; additional information:' + extraInfo;

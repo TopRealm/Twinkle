@@ -22,7 +22,7 @@ describe('Morebits.wikitext', () => {
 		var involved = {
 			name: 'Proposed deletion/dated',
 			parameters: {
-				concern: 'Text (paren) then [[piped|link]] and [[WP:WP/LINK]] {{{plural|with|a|template}}} then question?',
+				concern: 'Text (paren) then [[piped|link]] and [[QW:WP/LINK]] {{{plural|with|a|template}}} then question?',
 				timestamp: '20380119031407',
 				nom: 'Jimbo Wales',
 				help: 'off'
@@ -312,7 +312,7 @@ describe('Morebits.wikitext', () => {
 			{
 				name: 'AltCaps',
 				method: 'removeLink',
-				input: 'O, [[WP:Juliet]] she [[wp:juliet|doth]] {{plural|teach}} [[Romeo|the]] [[wikipedia:Juliet|torches]] [[Wikipedia:juliet]] to burn bright!',
+				input: 'O, [[QW:Juliet]] she [[QW:juliet|doth]] {{plural|teach}} [[Romeo|the]] [[Qiuwen:Juliet|torches]] [[Qiuwen:juliet]] to burn bright!',
 				expected: 'O, WP:Juliet she doth {{plural|teach}} [[Romeo|the]] torches Wikipedia:juliet to burn bright!',
 				params: ['wikipedia:juliet']
 			},

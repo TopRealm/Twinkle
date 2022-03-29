@@ -695,24 +695,6 @@ Twinkle.warn.messages = {
 					summary: 'Final warning: Removing {{afd}} templates'
 				}
 			},
-			'uw-blpprod': {
-				level1: {
-					label: 'Removing {{blp prod}} templates',
-					summary: 'General note: Removing {{blp prod}} templates'
-				},
-				level2: {
-					label: 'Removing {{blp prod}} templates',
-					summary: 'Caution: Removing {{blp prod}} templates'
-				},
-				level3: {
-					label: 'Removing {{blp prod}} templates',
-					summary: 'Warning: Removing {{blp prod}} templates'
-				},
-				level4: {
-					label: 'Removing {{blp prod}} templates',
-					summary: 'Final warning: Removing {{blp prod}} templates'
-				}
-			},
 			'uw-idt': {
 				level1: {
 					label: 'Removing file deletion tags',
@@ -1159,7 +1141,7 @@ Twinkle.warn.messages = {
 		},
 		'uw-socksuspect': {
 			label: 'Sockpuppetry',
-			summary: 'Warning: You are a suspected [[WP:SOCK|sockpuppet]]'  // of User:...
+			summary: 'Warning: You are a suspected [[QW:SOCK|sockpuppet]]'  // of User:...
 		},
 		'uw-upv': {
 			label: 'Userpage vandalism',

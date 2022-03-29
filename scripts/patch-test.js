@@ -69,11 +69,9 @@ function createTestLoader(changedFiles) {
 		${importLine('modules/twinklebatchundelete.js')}
 		${importLine('modules/twinkleblock.js')}
 		${importLine('modules/twinkleconfig.js')}
-		${importLine('modules/twinkledeprod.js')}
 		${importLine('modules/twinklediff.js')}
 		${importLine('modules/twinklefluff.js')}
 		${importLine('modules/twinkleimage.js')}
-		${importLine('modules/twinkleprod.js')}
 		${importLine('modules/twinkleprotect.js')}
 		${importLine('modules/twinklespeedy.js')}
 		${importLine('modules/twinkleunlink.js')}

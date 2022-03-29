@@ -14,7 +14,7 @@
  * Active on:              What I just said.  Yeah.
 
  I, [[User:This, that and the other]], originally wrote this.  If the code is misbehaving, or you have any
- questions, don't hesitate to ask me.  (This doesn't at all imply [[WP:OWN]]ership - it's just meant to
+ questions, don't hesitate to ask me.  (This doesn't at all imply [[QW:OWN]]ership - it's just meant to
  point you in the right direction.)  -- TTO
  */
 
@@ -33,73 +33,60 @@ Twinkle.config.watchlistEnums = {
 
 Twinkle.config.commonSets = {
 	csdCriteria: {
-		db: 'Custom rationale ({{db}})',
-		g1: 'G1', g2: 'G2', g3: 'G3', g4: 'G4', g5: 'G5', g6: 'G6', g7: 'G7', g8: 'G8', g10: 'G10', g11: 'G11', g12: 'G12', g13: 'G13', g14: 'G14',
-		a1: 'A1', a2: 'A2', a3: 'A3', a5: 'A5', a7: 'A7', a9: 'A9', a10: 'A10', a11: 'A11',
-		u1: 'U1', u2: 'U2', u5: 'U5',
-		f1: 'F1', f2: 'F2', f3: 'F3', f7: 'F7', f8: 'F8', f9: 'F9', f10: 'F10',
-		c1: 'C1',
-		r2: 'R2', r3: 'R3', r4: 'R4',
-		p1: 'P1', p2: 'P2'
+		db: '自定义理由（{{db}}）',
+		g1: 'G1', g2: 'G2', g3: 'G3', g4: 'G4', g5: 'G5', g6: 'G6', g7: 'G7', g8: 'G8', g9: 'G9',
+		a1: 'A1', a2: 'A2', a3: 'A3',
+		r1: 'R1', r2: 'R2',
+		f1: 'F1', f2: 'F2',
+		o1: 'O1', o2: 'O2', o3: 'O3'
 	},
 	csdCriteriaDisplayOrder: [
 		'db',
-		'g1', 'g2', 'g3', 'g4', 'g5', 'g6', 'g7', 'g8', 'g10', 'g11', 'g12', 'g13', 'g14',
-		'a1', 'a2', 'a3', 'a5', 'a7', 'a9', 'a10', 'a11',
-		'u1', 'u2', 'u5',
-		'f1', 'f2', 'f3', 'f7', 'f8', 'f9', 'f10',
-		'c1',
-		'r2', 'r3', 'r4',
-		'p1', 'p2'
+		'g1', 'g2', 'g3', 'g4', 'g5', 'g6', 'g7', 'g8', 'g9',
+		'a1', 'a2', 'a3',
+		'r1', 'r2',
+		'f1', 'f2',
+		'o1', 'o2', 'o3'
 	],
 	csdCriteriaNotification: {
-		db: 'Custom rationale ({{db}})',
-		g1: 'G1', g2: 'G2', g3: 'G3', g4: 'G4', g6: 'G6 ("copy-paste move" only)',
-		g10: 'G10', g11: 'G11', g12: 'G12', g13: 'G13', g14: 'G14',
-		a1: 'A1', a2: 'A2', a3: 'A3', a5: 'A5', a7: 'A7', a9: 'A9', a10: 'A10', a11: 'A11',
-		u5: 'U5',
-		f1: 'F1', f2: 'F2', f3: 'F3', f7: 'F7', f9: 'F9', f10: 'F10',
-		c1: 'C1',
-		r2: 'R2', r3: 'R3', r4: 'R4',
-		p1: 'P1', p2: 'P2'
+		db: '自定义理由（{{db}}）',
+		g1: 'G1', g2: 'G2', g3: 'G3', g4: 'G4', g5: 'G5', g6: 'G6', g7: 'G7', g8: 'G8', g9: 'G9',
+		a1: 'A1', a2: 'A2', a3: 'A3',
+		r1: 'R1', r2: 'R2',
+		f1: 'F1', f2: 'F2',
+		o1: 'O1', o2: 'O2', o3: 'O3'
 	},
 	csdCriteriaNotificationDisplayOrder: [
 		'db',
-		'g1', 'g2', 'g3', 'g4', 'g6', 'g10', 'g11', 'g12', 'g13', 'g14',
-		'a1', 'a2', 'a3', 'a5', 'a7', 'a9', 'a10', 'a11',
-		'u5',
-		'f1', 'f2', 'f3', 'f7', 'f9', 'f10',
-		'c1',
-		'r2', 'r3', 'r4',
-		'p1', 'p2'
+		'g1', 'g2', 'g3', 'g4', 'g5', 'g6', 'g7', 'g8', 'g9',
+		'a1', 'a2', 'a3',
+		'r1', 'r2',
+		'f1', 'f2',
+		'o1', 'o2', 'o3'
 	],
 	csdAndDICriteria: {
-		db: 'Custom rationale ({{db}})',
-		g1: 'G1', g2: 'G2', g3: 'G3', g4: 'G4', g5: 'G5', g6: 'G6', g7: 'G7', g8: 'G8', g10: 'G10', g11: 'G11', g12: 'G12', g13: 'G13', g14: 'G14',
-		a1: 'A1', a2: 'A2', a3: 'A3', a5: 'A5', a7: 'A7', a9: 'A9', a10: 'A10', a11: 'A11',
-		u1: 'U1', u2: 'U2', u5: 'U5',
-		f1: 'F1', f2: 'F2', f3: 'F3', f4: 'F4', f5: 'F5', f6: 'F6', f7: 'F7', f8: 'F8', f9: 'F9', f10: 'F10', f11: 'F11',
-		c1: 'C1',
-		r2: 'R2', r3: 'R3', r4: 'R4',
-		p1: 'P1', p2: 'P2'
+		db: '自定义理由（{{db}}）',
+		g1: 'G1', g2: 'G2', g3: 'G3', g4: 'G4', g5: 'G5', g6: 'G6', g7: 'G7', g8: 'G8', g9: 'G9',
+		a1: 'A1', a2: 'A2', a3: 'A3',
+		r1: 'R1', r2: 'R2',
+		f1: 'F1', f2: 'F2',
+		o1: 'O1', o2: 'O2', o3: 'O3'
 	},
 	csdAndDICriteriaDisplayOrder: [
 		'db',
-		'g1', 'g2', 'g3', 'g4', 'g5', 'g6', 'g7', 'g8', 'g10', 'g11', 'g12', 'g13', 'g14',
-		'a1', 'a2', 'a3', 'a5', 'a7', 'a9', 'a10', 'a11',
-		'u1', 'u2', 'u5',
-		'f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9', 'f10', 'f11',
-		'c1',
-		'r2', 'r3', 'r4',
-		'p1', 'p2'
+		'g1', 'g2', 'g3', 'g4', 'g5', 'g6', 'g7', 'g8', 'g9',
+		'a1', 'a2', 'a3',
+		'r1', 'r2',
+		'f1', 'f2',
+		'o1', 'o2', 'o3'
 	],
 	namespacesNoSpecial: {
 		0: 'Article',
 		1: 'Talk (article)',
 		2: 'User',
 		3: 'User talk',
-		4: 'Wikipedia',
-		5: 'Wikipedia talk',
+		4: 'Qiuwen',
+		5: 'Qiuwen talk',
 		6: 'File',
 		7: 'File talk',
 		8: 'MediaWiki',
@@ -110,14 +97,8 @@ Twinkle.config.commonSets = {
 		13: 'Help talk',
 		14: 'Category',
 		15: 'Category talk',
-		100: 'Portal',
-		101: 'Portal talk',
-		108: 'Book',
-		109: 'Book talk',
 		118: 'Draft',
 		119: 'Draft talk',
-		710: 'TimedText',
-		711: 'TimedText talk',
 		828: 'Module',
 		829: 'Module talk'
 	}
@@ -180,7 +161,7 @@ Twinkle.config.sections = [
 				label: 'Turn off the selected Twinkle modules',
 				helptip: 'Anything you select here will NOT be available for use, so act with care. Uncheck to reactivate.',
 				type: 'set',
-				setValues: { arv: 'ARV', warn: 'Warn', welcome: 'Welcome', shared: 'Shared IP', talkback: 'Talkback', speedy: 'CSD', prod: 'PROD', xfd: 'XfD', image: 'Image (DI)', protect: 'Protect (RPP)', tag: 'Tag', diff: 'Diff', unlink: 'Unlink', fluff: 'Revert and rollback' }
+				setValues: { arv: 'ARV', warn: 'Warn', welcome: 'Welcome', shared: 'Shared IP', talkback: 'Talkback', speedy: 'CSD', xfd: 'XfD', image: 'Image (DI)', protect: 'Protect (RPP)', tag: 'Tag', diff: 'Diff', unlink: 'Unlink', fluff: 'Revert and rollback' }
 			},
 
 			// Twinkle.config.disabledSysopModules (array)
@@ -190,7 +171,7 @@ Twinkle.config.sections = [
 				helptip: 'Anything you select here will NOT be available for use, so act with care. Uncheck to reactivate.',
 				adminOnly: true,
 				type: 'set',
-				setValues: { block: 'Block', deprod: 'DePROD', batchdelete: 'D-batch', batchprotect: 'P-batch', batchundelete: 'Und-batch' }
+				setValues: { block: 'Block', batchdelete: 'D-batch', batchprotect: 'P-batch', batchundelete: 'Und-batch' }
 			}
 		]
 	},
@@ -231,11 +212,11 @@ Twinkle.config.sections = [
 			},
 
 			// TwinkleConfig.blankTalkpageOnIndefBlock (boolean)
-			// if true, blank the talk page when issuing an indef block notice (per [[WP:UWUL#Indefinitely blocked users]])
+			// if true, blank the talk page when issuing an indef block notice (per [[QW:UWUL#Indefinitely blocked users]])
 			{
 				name: 'blankTalkpageOnIndefBlock',
 				label: 'Blank the talk page when indefinitely blocking users',
-				helptip: 'See <a href="' + mw.util.getUrl('Wikipedia:WikiProject_User_warnings/Usage_and_layout#Indefinitely_blocked_users') + '">WP:UWUL</a> for more information.',
+				helptip: 'See <a href="' + mw.util.getUrl('Qiuwen:WikiProject_User_warnings/Usage_and_layout#Indefinitely_blocked_users') + '">WP:UWUL</a> for more information.',
 				type: 'boolean'
 			}
 		]
@@ -296,51 +277,6 @@ Twinkle.config.sections = [
 				adminOnly: true,
 				type: 'enum',
 				enumValues: Twinkle.config.watchlistEnums
-			}
-		]
-	},
-
-	{
-		title: 'Proposed deletion (PROD)',
-		module: 'prod',
-		preferences: [
-			// TwinkleConfig.watchProdPages (string)
-			// Watchlist setting when applying prod template to page
-			{
-				name: 'watchProdPages',
-				label: 'Add article to watchlist when tagging',
-				type: 'enum',
-				enumValues: Twinkle.config.watchlistEnums
-			},
-
-			// TwinkleConfig.markProdPagesAsPatrolled (boolean)
-			// If, when applying prod template to page, to mark the page as curated/patrolled (if the page was reached from NewPages)
-			{
-				name: 'markProdPagesAsPatrolled',
-				label: 'Mark page as patrolled/reviewed when tagging (if possible)',
-				helptip: 'This should probably not be checked as doing so is against best practice consensus',
-				type: 'boolean'
-			},
-
-			// TwinkleConfig.prodReasonDefault (string)
-			// The prefilled PROD reason.
-			{
-				name: 'prodReasonDefault',
-				label: 'Prefilled PROD reason',
-				type: 'string'
-			},
-
-			{
-				name: 'logProdPages',
-				label: 'Keep a log in userspace of all pages you tag for PROD',
-				helptip: 'Since non-admins do not have access to their deleted contributions, the userspace log offers a good way to keep track of all pages you tag for PROD using Twinkle.',
-				type: 'boolean'
-			},
-			{
-				name: 'prodLogPageName',
-				label: 'Keep the PROD userspace log at this user subpage',
-				helptip: 'Enter a subpage name in this box. You will find your PROD log at User:<i>username</i>/<i>subpage name</i>. Only works if you turn on the PROD userspace log.',
-				type: 'string'
 			}
 		]
 	},
@@ -971,18 +907,6 @@ Twinkle.config.sections = [
 			{
 				name: 'autolevelStaleDays',
 				type: 'integer'
-			},
-			// How many pages should be queried by deprod and batchdelete/protect/undelete
-			{
-				name: 'batchMax',
-				type: 'integer',
-				adminOnly: true
-			},
-			// How many pages should be processed at a time by deprod and batchdelete/protect/undelete
-			{
-				name: 'batchChunks',
-				type: 'integer',
-				adminOnly: true
 			}
 		]
 	}

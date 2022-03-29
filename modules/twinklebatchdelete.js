@@ -584,7 +584,7 @@ Twinkle.batchdelete.callbacks = {
 		redirectDeleter.setPageList(pages);
 		redirectDeleter.run(function(pageName) {
 			var wikipedia_page = new Morebits.wiki.page(pageName, 'Deleting ' + pageName);
-			wikipedia_page.setEditSummary('[[WP:CSD#G8|G8]]: Redirect to deleted page "' + apiobj.params.page + '"');
+			wikipedia_page.setEditSummary('[[QW:CSD#G8|G8]]: Redirect to deleted page "' + apiobj.params.page + '"');
 			wikipedia_page.setChangeTags(Twinkle.changeTags);
 			wikipedia_page.deletePage(redirectDeleter.workerSuccess, redirectDeleter.workerFailure);
 		});
@@ -598,7 +598,7 @@ Twinkle.batchdelete.callbacks = {
 		}
 
 		var page = new Morebits.wiki.page(apiobj.params.talkPage, 'Deleting talk page of page ' + apiobj.params.page);
-		page.setEditSummary('[[WP:CSD#G8|G8]]: [[Help:Talk page|Talk page]] of deleted page "' + apiobj.params.page + '"');
+		page.setEditSummary('[[QW:CSD#G8|G8]]: [[Help:Talk page|Talk page]] of deleted page "' + apiobj.params.page + '"');
 		page.setChangeTags(Twinkle.changeTags);
 		page.deletePage();
 	},

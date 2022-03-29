@@ -5,13 +5,9 @@
  * |         Please discuss changes at [[Help talk:TW]] before editing.      |
  * +-------------------------------------------------------------------------+
  *
- * Imported from github [https://github.com/wikimedia-gadgets/twinkle].
+ * Imported from Qiuwen Development Centre [https://git.qiuwen.wiki/qiuwen/twinkle-new].
  * All changes should be made in the repository, otherwise they will be lost.
- *
- * ----------
- *
- * This is AzaToth's Twinkle, the popular script sidekick for newbies, admins, and
- * every Wikipedian in between. Visit [[QW:TW]] for more information.
+ * Visit [[QW:TW]] for more information.
  */
 // <nowiki>
 
@@ -84,13 +80,6 @@ Twinkle.defaultConfig = {
 	watchRequestedPages: 'yes',
 	watchPPTaggedPages: 'default',
 	watchProtectedPages: 'default',
-
-	// PROD
-	watchProdPages: '1 month',
-	markProdPagesAsPatrolled: false,
-	prodReasonDefault: '',
-	logProdPages: false,
-	prodLogPageName: 'PROD log',
 
 	// CSD
 	speedySelectionStyle: 'buttonClick',
@@ -500,11 +489,11 @@ Twinkle.changeTags = 'twinkle';
 // currently: FlaggedRevs and PageTriage
 Twinkle.summaryAd = ' ([[H:TW|Twinkle]])';
 
-// Various hatnote templates, used when tagging (csd/xfd/tag/prod/protect) to
+// Various hatnote templates, used when tagging (csd/xfd/tag/protect) to
 // ensure MOS:ORDER
 Twinkle.hatnoteRegex = 'short description|hatnote|main|correct title|dablink|distinguish|for|further|selfref|year dab|similar names|highway detail hatnote|broader|about(?:-distinguish| other people)?|other\\s?(?:hurricane(?: use)?s|people|persons|places|ships|uses(?: of)?)|redirect(?:-(?:distinguish|synonym|multi))?|see\\s?(also(?: if exists)?)';
 
-// Used in XFD and PROD
+// Used in XFD
 Twinkle.makeFindSourcesDiv = function makeSourcesDiv(divID) {
 	if (!$(divID).length) {
 		return;
@@ -522,7 +511,7 @@ Twinkle.makeFindSourcesDiv = function makeSourcesDiv(divID) {
 };
 
 /** Twinkle-specific utility functions shared by multiple modules */
-// Used in batch, unlink, and deprod to sort pages by namespace, as
+// Used in batch and unlink to sort pages by namespace, as
 // json formatversion=2 sorts by pageid instead (#1251)
 Twinkle.sortByNamespace = function(first, second) {
 	return first.ns - second.ns || (first.title > second.title ? 1 : -1);
@@ -537,7 +526,7 @@ Twinkle.generateArrowLinks = function (checkbox) {
 	checkbox.nextElementSibling.append(link);
 };
 
-// Used in deprod and unlink listings to link the page title
+// Used in unlink listings to link the page title
 Twinkle.generateBatchPageLinks = function (checkbox) {
 	var $checkbox = $(checkbox);
 	var link = Morebits.htmlNode('a', $checkbox.val());

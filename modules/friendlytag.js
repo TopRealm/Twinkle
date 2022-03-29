@@ -485,7 +485,7 @@ var translationSubgroups = [
 		parameter: '1',
 		type: 'input',
 		label: 'Language of article (if known):',
-		tooltip: 'Consider looking at [[WP:LRC]] for help. If listing the article at PNT, please try to avoid leaving this box blank, unless you are completely unsure.'
+		tooltip: 'Consider looking at [[QW:LRC]] for help. If listing the article at PNT, please try to avoid leaving this box blank, unless you are completely unsure.'
 	}
 ].concat(mw.config.get('wgNamespaceNumber') === 0 ? [
 	{
@@ -1134,7 +1134,7 @@ Twinkle.tag.fileList = {
 		{ label: '{{Opaque}}: opaque background should be transparent', value: 'Opaque' },
 		{ label: '{{Remove border}}: unneeded border, white space, etc.', value: 'Remove border' },
 		{
-			label: '{{Rename media}}: file should be renamed according to the criteria at [[WP:FMV]]',
+			label: '{{Rename media}}: file should be renamed according to the criteria at [[QW:FMV]]',
 			value: 'Rename media',
 			subgroup: [
 				{
@@ -1555,8 +1555,6 @@ Twinkle.tag.callbacks = {
 				'pp|pp-.*?|' +
 				// CSD
 				'db|delete|db-.*?|speedy deletion-.*?|' +
-				// PROD
-				'(?:proposed deletion|prod blp)\\/dated(?:\\s*\\|(?:concern|user|timestamp|help).*)+|' +
 				// not a hatnote, but sometimes under a CSD or AfD
 				'salt|proposed deletion endorsed';
 			// AfD is special, as the tag includes html comments before and after the actual template
