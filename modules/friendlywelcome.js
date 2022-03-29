@@ -121,7 +121,7 @@ Twinkle.welcome.callback = function friendlywelcomeCallback(uid) {
 	Window.setTitle('Welcome user');
 	Window.setScriptName('Twinkle');
 	Window.addFooterLink('Welcoming Committee', 'WP:WC');
-	Window.addFooterLink('Welcome prefs', 'WP:TW/PREF#welcome');
+	Window.addFooterLink('Welcome prefs', 'QW:TWPREFS#welcome');
 	Window.addFooterLink('Twinkle help', 'WP:TW/DOC#welcome');
 	Window.addFooterLink('Give feedback', 'WT:TW');
 

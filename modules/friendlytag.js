@@ -39,7 +39,7 @@ Twinkle.tag.callback = function friendlytagCallback() {
 	var Window = new Morebits.simpleWindow(630, Twinkle.tag.mode === 'article' ? 500 : 400);
 	Window.setScriptName('Twinkle');
 	// anyone got a good policy/guideline/info page/instructional page link??
-	Window.addFooterLink('Tag prefs', 'WP:TW/PREF#tag');
+	Window.addFooterLink('Tag prefs', 'QW:TWPREFS#tag');
 	Window.addFooterLink('Twinkle help', 'WP:TW/DOC#tag');
 	Window.addFooterLink('Give feedback', 'WT:TW');
 
@@ -117,7 +117,7 @@ Twinkle.tag.callback = function friendlytagCallback() {
 				type: 'select',
 				name: 'sortorder',
 				label: 'View this list:',
-				tooltip: 'You can change the default view order in your Twinkle preferences (WP:TWPREFS).',
+				tooltip: 'You can change the default view order in your Twinkle preferences (QW:TWPREFS).',
 				event: Twinkle.tag.updateSortOrder,
 				list: [
 					{ type: 'option', value: 'cat', label: 'By categories', selected: Twinkle.getPref('tagArticleSortOrder') === 'cat' },

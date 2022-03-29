@@ -120,7 +120,7 @@ Twinkle.xfd.callback = function twinklexfdCallback() {
 	Window.setTitle('Start a deletion discussion (XfD)');
 	Window.setScriptName('Twinkle');
 	Window.addFooterLink('About deletion discussions', 'WP:XFD');
-	Window.addFooterLink('XfD prefs', 'WP:TW/PREF#xfd');
+	Window.addFooterLink('XfD prefs', 'QW:TWPREFS#xfd');
 	Window.addFooterLink('Twinkle help', 'WP:TW/DOC#xfd');
 	Window.addFooterLink('Give feedback', 'WT:TW');
 

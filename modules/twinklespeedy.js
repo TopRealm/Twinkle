@@ -47,7 +47,7 @@ Twinkle.speedy.initDialog = function twinklespeedyInitDialog(callbackfunc) {
 	dialog.setTitle('Choose criteria for speedy deletion');
 	dialog.setScriptName('Twinkle');
 	dialog.addFooterLink('Speedy deletion policy', 'WP:CSD');
-	dialog.addFooterLink('CSD prefs', 'WP:TW/PREF#speedy');
+	dialog.addFooterLink('CSD prefs', 'QW:TWPREFS#speedy');
 	dialog.addFooterLink('Twinkle help', 'WP:TW/DOC#speedy');
 	dialog.addFooterLink('Give feedback', 'WT:TW');
 

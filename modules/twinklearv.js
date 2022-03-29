@@ -37,7 +37,7 @@ Twinkle.arv.callback = function (uid, isIP) {
 	Window.addFooterLink('AIV guide', 'WP:GAIV');
 	Window.addFooterLink('UAA guide', 'WP:UAAI');
 	Window.addFooterLink('SPI guide', 'Wikipedia:Sockpuppet investigations/SPI/Guide to filing cases');
-	Window.addFooterLink('ARV prefs', 'WP:TW/PREF#arv');
+	Window.addFooterLink('ARV prefs', 'QW:TWPREFS#arv');
 	Window.addFooterLink('Twinkle help', 'WP:TW/DOC#arv');
 	Window.addFooterLink('Give feedback', 'WT:TW');
 

@@ -23,7 +23,7 @@ Twinkle.image.callback = function twinkleimageCallback() {
 	Window.setTitle('File for dated speedy deletion');
 	Window.setScriptName('Twinkle');
 	Window.addFooterLink('Speedy deletion policy', 'WP:CSD#Files');
-	Window.addFooterLink('Image prefs', 'WP:TW/PREF#image');
+	Window.addFooterLink('Image prefs', 'QW:TWPREFS#image');
 	Window.addFooterLink('Twinkle help', 'WP:TW/DOC#image');
 	Window.addFooterLink('Give feedback', 'WT:TW');
 
