@@ -2,12 +2,14 @@
 /**
  * Twinkle.js
  * © 2011-2022 English Wikipedia Contributors
+ * © 2011-2021 Chinese Wikipedia Contributors
+ * © 2021-     Qiuwen Baike Contributors
  * This work is licensed under a Creative Commons
  * Attribution-ShareAlike 4.0 International License.
  * https://creativecommons.org/licenses/by-sa/4.0/
  */
 /**
- * A library full of lots of goodness for user scripts on MediaWiki wikis, including Wikipedia.
+ * A library full of lots of goodness for user scripts on MediaWiki wikis.
  *
  * The highlights include:
  * - {@link Morebits.wiki.api} - make calls to the MediaWiki API
@@ -55,7 +57,7 @@ Morebits.l10n = {
 	 * Local aliases for "redirect" magic word.
 	 * Check using api.php?action=query&format=json&meta=siteinfo&formatversion=2&siprop=magicwords
 	 */
-	redirectTagAliases: ['#REDIRECT'],
+	redirectTagAliases: ['#重定向', '#REDIRECT'],
 
 	/**
 	 * Takes a string as argument and checks if it is a timestamp or not
@@ -66,8 +68,8 @@ Morebits.l10n = {
 	 * @returns {number[] | null}
 	 */
 	signatureTimestampFormat: function (str) {
-		// HH:mm, DD Month YYYY (UTC)
-		var rgx = /(\d{2}):(\d{2}), (\d{1,2}) (\w+) (\d{4}) \(UTC\)/;
+		// YYYY年Month月DD日 (w) HH:mm (UTC)
+		var rgx = /(\d{4})年(\d{1,2})月(\d{1,2})日 \(.\) (\d{2}):(\d{2}) \(UTC\)/;
 		var match = rgx.exec(str);
 		if (!match) {
 			return null;
@@ -76,8 +78,8 @@ Morebits.l10n = {
 		if (month === -1) {
 			return null;
 		}
-		// ..... year ... month .. date ... hour .... minute
-		return [match[5], month, match[3], match[1], match[2]];
+		// ..... year .... month ... date .... hour ... minute
+		return [match[1], match[2] - 1, match[3], match[4], match[5]];
 	}
 };
 
@@ -122,7 +124,7 @@ Morebits.sanitizeIPv6 = function (address) {
  * @returns {boolean}
  */
 Morebits.isPageRedirect = function() {
-	return !!(mw.config.get('wgIsRedirect') || document.getElementById('softredirect') || $('.box-RfD').length);
+	return !!(mw.config.get('wgIsRedirect') || document.getElementById('softredirect') || $('.box-RfD').length || $('.box-Redirect_category_shell').length);
 };
 
 /**
@@ -670,7 +672,7 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
 
 			var more = this.compute({
 				type: 'button',
-				label: 'more',
+				label: '更多',
 				disabled: min >= max,
 				event: function(e) {
 					var new_node = new Morebits.quickForm.element(e.target.sublist);
@@ -738,7 +740,7 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
 			if (data.remove) {
 				var remove = this.compute({
 					type: 'button',
-					label: 'remove',
+					label: '移除',
 					event: function(e) {
 						var list = e.target.listnode;
 						var node = e.target.inputnode;
@@ -1507,6 +1509,54 @@ Morebits.string = {
 	 */
 	escapeRegExp: function(text) {
 		return mw.util.escapeRegExp(text).replace(/ |_/g, '[_ ]');
+	},
+	/**
+	 * @param {*} time The string to foramt
+	 * @returns {string}
+	 */
+	formatTime: function morebitsStringFormatTime(time) {
+		var m;
+		if ((m = time.match(/^\s*(\d+)\s*seconds?\s*$/)) !== null) {
+			return m[1] + '秒';
+		}
+		if ((m = time.match(/^\s*(\d+)\s*min(ute)?s?\s*$/)) !== null) {
+			return m[1] + '分';
+		}
+		if ((m = time.match(/^\s*(\d+)\s*hours?\s*$/)) !== null) {
+			return m[1] + '小时';
+		}
+		if ((m = time.match(/^\s*(\d+)\s*days?\s*$/)) !== null) {
+			return m[1] + '天';
+		}
+		if ((m = time.match(/^\s*(\d+)\s*weeks?\s*$/)) !== null) {
+			return m[1] + '周';
+		}
+		if ((m = time.match(/^\s*(\d+)\s*months?\s*$/)) !== null) {
+			return m[1] + '个月';
+		}
+		if ((m = time.match(/^\s*(\d+)\s*years?\s*$/)) !== null) {
+			return m[1] + '年';
+		}
+		if (Morebits.string.isInfinity(time.trim())) {
+			return '无限期';
+		}
+		return time;
+	},
+
+	/**
+	 * Append punctuation to a string when it's missing
+	 * @param {string} str
+	 * @param {string} punctuation
+	 * @returns {String}
+	 */
+	appendPunctuation: function(str, punctuation) {
+		if (punctuation === undefined) {
+			punctuation = '。';
+		}
+		if (str.search(/[.?!;。？！；]$/) === -1) {
+			str += punctuation;
+		}
+		return str;
 	}
 };
 
@@ -1797,28 +1847,32 @@ Morebits.date = function() {
  */
 Morebits.date.localeData = {
 	// message names here correspond to MediaWiki message names
-	months: ['January', 'February', 'March',
-		'April', 'May', 'June',
-		'July', 'August', 'September',
-		'October', 'November', 'December'],
-	monthsShort: ['Jan', 'Feb', 'Mar',
-		'Apr', 'May', 'Jun',
-		'Jul', 'Aug', 'Sep',
-		'Oct', 'Nov', 'Dec'],
-	days: ['Sunday', 'Monday', 'Tuesday',
-		'Wednesday', 'Thursday', 'Friday',
-		'Saturday'],
-	daysShort: ['Sun', 'Mon', 'Tue',
-		'Wed', 'Thu', 'Fri',
-		'Sat'],
+	months: ['1月', '2月', '3月',
+		'4月', '5月', '6月',
+		'7月', '8月', '9月',
+		'10月', '11月', '12月'],
+	monthsShort: ['1月', '2月', '3月',
+		'4月', '5月', '6月',
+		'7月', '8月', '9月',
+		'10月', '11月', '12月'],
+	days: ['周日', '周一', '周二',
+		'周三', '周四', '周五',
+		'周六'],
+	daysShort: ['周日', '周一', '周二',
+		'周三', '周四', '周五',
+		'周六'],
 
 	relativeTimes: {
-		thisDay: '[Today at] h:mm A',
-		prevDay: '[Yesterday at] h:mm A',
-		nextDay: '[Tomorrow at] h:mm A',
-		thisWeek: 'dddd [at] h:mm A',
-		pastWeek: '[Last] dddd [at] h:mm A',
+		thisDay: '今天 A h:mm',
+		prevDay: '昨天 A h:mm',
+		nextDay: '明天 A h:mm',
+		thisWeek: 'dddd A h:mm',
+		pastWeek: '上周 dddd A h:mm',
 		other: 'YYYY-MM-DD'
+	},
+	signatureTimestampFormat: function (str) {
+		console.warn('NOTE: Morebits.date.localedata.signatureTimestampFormat was renamed to Morebits.l10n.signatureTimestampFormat in March 2022, please use that instead'); // eslint-disable-line no-console
+		return Morebits.l10n.signatureTimestampFormat(str);
 	}
 };
 
@@ -2002,7 +2056,7 @@ Morebits.date.prototype = {
 		};
 		var h24 = udate.getHours(), m = udate.getMinutes(), s = udate.getSeconds(), ms = udate.getMilliseconds();
 		var D = udate.getDate(), M = udate.getMonth() + 1, Y = udate.getFullYear();
-		var h12 = h24 % 12 || 12, amOrPm = h24 >= 12 ? 'PM' : 'AM';
+		var h12 = h24 % 12 || 12, amOrPm = h24 >= 12 ? '下午' : '上午';
 		var replacementMap = {
 			HH: pad(h24), H: h24, hh: pad(h12), h: h12, A: amOrPm,
 			mm: pad(m), m: m,
@@ -2065,8 +2119,8 @@ Morebits.date.prototype = {
 	 * @returns {RegExp}
 	 */
 	monthHeaderRegex: function() {
-		return new RegExp('^(==+)\\s*(?:' + this.getUTCMonthName() + '|' + this.getUTCMonthNameAbbrev() +
-			')\\s+' + this.getUTCFullYear() + '\\s*\\1', 'mg');
+		return new RegExp('^(==+)\\s*' + this.getUTCFullYear() + '年(?:' + this.getUTCMonthName() + '|' +
+			this.getUTCMonthNameAbbrev() + ')\\s*\\1', 'mg');
 	},
 
 	/**
@@ -2082,7 +2136,7 @@ Morebits.date.prototype = {
 		level = isNaN(level) ? 2 : level;
 
 		var header = Array(level + 1).join('='); // String.prototype.repeat not supported in IE 11
-		var text = this.getUTCMonthName() + ' ' + this.getUTCFullYear();
+		var text = this.getUTCFullYear() + '年' + this.getUTCMonthName();
 
 		if (header.length) { // wikitext-formatted header
 			return header + ' ' + text + ' ' + header;
@@ -2119,7 +2173,7 @@ Morebits.wiki = {};
  * @memberof Morebits.wiki
  * @returns {boolean}
  */
-Morebits.wiki.isPageRedirect = function wikipediaIsPageRedirect() {
+Morebits.wiki.isPageRedirect = function IsPageRedirect() {
 	console.warn('NOTE: Morebits.wiki.isPageRedirect has been deprecated, use Morebits.isPageRedirect instead.'); // eslint-disable-line no-console
 	return Morebits.isPageRedirect();
 };
@@ -2361,7 +2415,7 @@ Morebits.wiki.api.prototype = {
 					// as the first argument to the callback (for legacy code)
 					this.onSuccess.call(this.parent, this);
 				} else {
-					this.statelem.info('done');
+					this.statelem.info('完成');
 				}
 
 				Morebits.wiki.actionCompleted();
@@ -2373,7 +2427,7 @@ Morebits.wiki.api.prototype = {
 			function onAPIfailure(jqXHR, statusText, errorThrown) {
 				this.statusText = statusText;
 				this.errorThrown = errorThrown; // frequently undefined
-				this.errorText = statusText, jqXHR.statusText, statusText + ' "' + jqXHR.statusText + '" occurred while contacting the API.';
+				this.errorText = statusText, jqXHR.statusText, statusText + '在调用API时发生了错误“' + jqXHR.statusText + '”';
 				return this.returnError();
 			}
 
@@ -2382,7 +2436,7 @@ Morebits.wiki.api.prototype = {
 
 	returnError: function(callerAjaxParameters) {
 		if (this.errorCode === 'badtoken' && !this.badtokenRetry) {
-			this.statelem.warn('Invalid token. Getting a new token and retrying...');
+			this.statelem.warn('无效令牌，获取新的令牌并重试……');
 			this.badtokenRetry = true;
 			// Get a new CSRF token and retry. If the original action needs a different
 			// type of action than CSRF, we do one pointless retry before bailing out
@@ -2392,7 +2446,7 @@ Morebits.wiki.api.prototype = {
 			}.bind(this));
 		}
 
-		this.statelem.error(this.errorText + ' (' + this.errorCode + ')');
+		this.statelem.error(this.errorText + '（' + this.errorCode + '）');
 
 		// invoke failure callback if one was supplied
 		if (this.onError) {
@@ -2448,7 +2502,7 @@ Morebits.wiki.getCachedJson = function(title) {
 	});
 };
 
-var morebitsWikiApiUserAgent = 'morebits.js';
+var morebitsWikiApiUserAgent = 'morebits.js (Qiuwen/1.0a)';
 /**
  * Set the custom user agent header, which is used for server-side logging.
  * Note that doing so will set the useragent for every `Morebits.wiki.api`
@@ -2463,7 +2517,7 @@ var morebitsWikiApiUserAgent = 'morebits.js';
  * value.
  */
 Morebits.wiki.api.setApiUserAgent = function(ua) {
-	morebitsWikiApiUserAgent = (ua ? ua + ' ' : '') + 'morebits.js';
+	morebitsWikiApiUserAgent = (ua ? ua + ' ' : '') + 'morebits.js (Qiuwen/1.0a)';
 };
 
 
@@ -2486,7 +2540,7 @@ var morebitsWikiChangeTag = '';
  * @returns {string} MediaWiki CSRF token.
  */
 Morebits.wiki.api.getToken = function() {
-	var tokenApi = new Morebits.wiki.api('Getting token', {
+	var tokenApi = new Morebits.wiki.api('获取令牌', {
 		action: 'query',
 		meta: 'tokens',
 		type: 'csrf',
@@ -2549,7 +2603,7 @@ Morebits.wiki.api.getToken = function() {
 Morebits.wiki.page = function(pageName, status) {
 
 	if (!status) {
-		status = 'Opening page "' + pageName + '"';
+		status = '打开页面“' + pageName + '”';
 	}
 
 	/**
@@ -2680,7 +2734,7 @@ Morebits.wiki.page = function(pageName, status) {
 
 		// Need to be able to do something after the page loads
 		if (!onSuccess) {
-			ctx.statusElement.error('Internal error: no onSuccess callback provided to load()!');
+			ctx.statusElement.error('内部错误：不存在提供给load()的onSuccess回调。'); // Internal error: no onSuccess callback provided to load()!
 			ctx.onLoadFailure(this);
 			return;
 		}
@@ -2716,13 +2770,13 @@ Morebits.wiki.page = function(pageName, status) {
 			ctx.loadQuery.inprop += '|protection';
 		}
 
-		ctx.loadApi = new Morebits.wiki.api('Retrieving page...', ctx.loadQuery, fnLoadSuccess, ctx.statusElement, ctx.onLoadFailure);
+		ctx.loadApi = new Morebits.wiki.api('抓取页面……', ctx.loadQuery, fnLoadSuccess, ctx.statusElement, ctx.onLoadFailure);
 		ctx.loadApi.setParent(this);
 		ctx.loadApi.post();
 	};
 
 	/**
-	 * Saves the text for the page to Wikipedia.
+	 * Saves the text for the page to MediaWiki.
 	 * Must be preceded by successfully calling `load()`.
 	 *
 	 * Warning: Calling `save()` can result in additional calls to the
@@ -2742,7 +2796,7 @@ Morebits.wiki.page = function(pageName, status) {
 		var canUseMwUserToken = fnCanUseMwUserToken('edit');
 
 		if (!ctx.pageLoaded && !canUseMwUserToken) {
-			ctx.statusElement.error('Internal error: attempt to save a page that has not been loaded!');
+			ctx.statusElement.error('内部错误：试图保存未加载完成的页面'); // Internal error: attempt to save a page that has not been loaded!
 			ctx.onSaveFailure(this);
 			return;
 		}
@@ -2753,7 +2807,7 @@ Morebits.wiki.page = function(pageName, status) {
 			if (ctx.editMode === 'new' && ctx.newSectionTitle) {
 				ctx.editSummary = '';
 			} else {
-				ctx.statusElement.error('Internal error: edit summary not set before save!');
+				ctx.statusElement.error('内部错误：保存页面前未设置编辑摘要。'); // Internal error: edit summary not set before save!
 				ctx.onSaveFailure(this);
 				return;
 			}
@@ -2763,12 +2817,12 @@ Morebits.wiki.page = function(pageName, status) {
 		if (ctx.fullyProtected && !ctx.suppressProtectWarning &&
 			!confirm(
 				ctx.fullyProtected === 'infinity'
-					? 'You are about to make an edit to the fully protected page "' + ctx.pageName + '" (protected indefinitely).  \n\nClick OK to proceed with the edit, or Cancel to skip this edit.'
+					? '您即将编辑全保护页面“' + ctx.pageName + '”（永久）。\n\n单击“确定”以确认操作，或单击“取消”以取消操作。'
 					: 'You are about to make an edit to the fully protected page "' + ctx.pageName +
-					'" (protection expiring ' + new Morebits.date(ctx.fullyProtected).calendar('utc') + ' (UTC)).  \n\nClick OK to proceed with the edit, or Cancel to skip this edit.'
+					'"（保护期至：' + new Morebits.date(ctx.fullyProtected).calendar('utc') + ' (UTC)）。\n\n单击“确定”以确认操作，或单击“取消”以取消操作。'
 			)
 		) {
-			ctx.statusElement.error('Edit to fully protected page was aborted.');
+			ctx.statusElement.error('已取消对全保护页面的编辑。');
 			ctx.onSaveFailure(this);
 			return;
 		}
@@ -2810,7 +2864,7 @@ Morebits.wiki.page = function(pageName, status) {
 		switch (ctx.editMode) {
 			case 'append':
 				if (ctx.appendText === null) {
-					ctx.statusElement.error('Internal error: append text not set before save!');
+					ctx.statusElement.error('内部错误：保存页面前未设置文后附加文字。'); // Internal error: append text not set before save!
 					ctx.onSaveFailure(this);
 					return;
 				}
@@ -2818,7 +2872,7 @@ Morebits.wiki.page = function(pageName, status) {
 				break;
 			case 'prepend':
 				if (ctx.prependText === null) {
-					ctx.statusElement.error('Internal error: prepend text not set before save!');
+					ctx.statusElement.error('内部错误：保存页面前未设置文前附加文字。'); // Internal error: prepend text not set before save!
 					ctx.onSaveFailure(this);
 					return;
 				}
@@ -2826,7 +2880,7 @@ Morebits.wiki.page = function(pageName, status) {
 				break;
 			case 'new':
 				if (!ctx.newSectionText) { // API doesn't allow empty new section text
-					ctx.statusElement.error('Internal error: new section text not set before save!');
+					ctx.statusElement.error('内部错误：保存页面前未设置新章节文字。'); // Internal error: new section text not set before save!
 					ctx.onSaveFailure(this);
 					return;
 				}
@@ -2859,7 +2913,7 @@ Morebits.wiki.page = function(pageName, status) {
 			query.redirect = true;
 		}
 
-		ctx.saveApi = new Morebits.wiki.api('Saving page...', query, fnSaveSuccess, ctx.statusElement, fnSaveError);
+		ctx.saveApi = new Morebits.wiki.api('保存页面……', query, fnSaveSuccess, ctx.statusElement, fnSaveError);
 		ctx.saveApi.setParent(this);
 		ctx.saveApi.post();
 	};
@@ -3177,7 +3231,7 @@ Morebits.wiki.page = function(pageName, status) {
 	 */
 	this.setFollowRedirect = function(followRedirect, followCrossNsRedirect) {
 		if (ctx.pageLoaded) {
-			ctx.statusElement.error('Internal error: cannot change redirect setting after the page has been loaded!');
+			ctx.statusElement.error('内部错误：页面已加载后，不能更改重定向设置'); // Internal error: cannot change redirect setting after the page has been loaded!
 			return;
 		}
 		ctx.followRedirect = followRedirect;
@@ -3394,7 +3448,7 @@ Morebits.wiki.page = function(pageName, status) {
 		ctx.onLookupCreationSuccess = onSuccess;
 		ctx.onLookupCreationFailure = onFailure || emptyFunction;
 		if (!onSuccess) {
-			ctx.statusElement.error('Internal error: no onSuccess callback provided to lookupCreation()!');
+			ctx.statusElement.error('内部错误：未向lookupCreation()提供onSuccess回调。'); // Internal error: no onSuccess callback provided to lookupCreation()!
 			ctx.onLookupCreationFailure(this);
 			return;
 		}
@@ -3423,7 +3477,7 @@ Morebits.wiki.page = function(pageName, status) {
 			query.redirects = '';  // follow all redirects
 		}
 
-		ctx.lookupCreationApi = new Morebits.wiki.api('Retrieving page creation information', query, fnLookupCreationSuccess, ctx.statusElement, ctx.onLookupCreationFailure);
+		ctx.lookupCreationApi = new Morebits.wiki.api('抓取页面创建者信息', query, fnLookupCreationSuccess, ctx.statusElement, ctx.onLookupCreationFailure);
 		ctx.lookupCreationApi.setParent(this);
 		ctx.lookupCreationApi.post();
 	};
@@ -3439,7 +3493,7 @@ Morebits.wiki.page = function(pageName, status) {
 		ctx.onSaveFailure = onFailure || emptyFunction;
 
 		if (!ctx.revertOldID) {
-			ctx.statusElement.error('Internal error: revision ID to revert to was not set before revert!');
+			ctx.statusElement.error('内部错误：撤销编辑前，未设置拟撤销版本ID。'); // Internal error: revision ID to revert to was not set before revert!
 			ctx.onSaveFailure(this);
 			return;
 		}
@@ -3463,7 +3517,7 @@ Morebits.wiki.page = function(pageName, status) {
 		}
 
 		if (!ctx.moveDestination) {
-			ctx.statusElement.error('Internal error: destination page name was not set before move!');
+			ctx.statusElement.error('内部错误：移动页面前，未设置目标页面名称。'); // Internal error: destination page name was not set before move!
 			ctx.onMoveFailure(this);
 			return;
 		}
@@ -3473,7 +3527,7 @@ Morebits.wiki.page = function(pageName, status) {
 		} else {
 			var query = fnNeedTokenInfoQuery('move');
 
-			ctx.moveApi = new Morebits.wiki.api('retrieving token...', query, fnProcessMove, ctx.statusElement, ctx.onMoveFailure);
+			ctx.moveApi = new Morebits.wiki.api('获取令牌……', query, fnProcessMove, ctx.statusElement, ctx.onMoveFailure);
 			ctx.moveApi.setParent(this);
 			ctx.moveApi.post();
 		}
@@ -3512,7 +3566,7 @@ Morebits.wiki.page = function(pageName, status) {
 				format: 'json'
 			};
 
-			ctx.patrolApi = new Morebits.wiki.api('retrieving token...', patrolQuery, fnProcessPatrol);
+			ctx.patrolApi = new Morebits.wiki.api('获取令牌……', patrolQuery, fnProcessPatrol);
 			ctx.patrolApi.setParent(this);
 			ctx.patrolApi.post();
 		}
@@ -3551,7 +3605,7 @@ Morebits.wiki.page = function(pageName, status) {
 			} else {
 				var query = fnNeedTokenInfoQuery('triage');
 
-				ctx.triageApi = new Morebits.wiki.api('retrieving token...', query, fnProcessTriageList);
+				ctx.triageApi = new Morebits.wiki.api('获取令牌……', query, fnProcessTriageList);
 				ctx.triageApi.setParent(this);
 				ctx.triageApi.post();
 			}
@@ -3578,7 +3632,7 @@ Morebits.wiki.page = function(pageName, status) {
 		} else {
 			var query = fnNeedTokenInfoQuery('delete');
 
-			ctx.deleteApi = new Morebits.wiki.api('retrieving token...', query, fnProcessDelete, ctx.statusElement, ctx.onDeleteFailure);
+			ctx.deleteApi = new Morebits.wiki.api('获取令牌……', query, fnProcessDelete, ctx.statusElement, ctx.onDeleteFailure);
 			ctx.deleteApi.setParent(this);
 			ctx.deleteApi.post();
 		}
@@ -3603,7 +3657,7 @@ Morebits.wiki.page = function(pageName, status) {
 		} else {
 			var query = fnNeedTokenInfoQuery('undelete');
 
-			ctx.undeleteApi = new Morebits.wiki.api('retrieving token...', query, fnProcessUndelete, ctx.statusElement, ctx.onUndeleteFailure);
+			ctx.undeleteApi = new Morebits.wiki.api('获取令牌……', query, fnProcessUndelete, ctx.statusElement, ctx.onUndeleteFailure);
 			ctx.undeleteApi.setParent(this);
 			ctx.undeleteApi.post();
 		}
@@ -3634,7 +3688,7 @@ Morebits.wiki.page = function(pageName, status) {
 		// protection levels from the server
 		var query = fnNeedTokenInfoQuery('protect');
 
-		ctx.protectApi = new Morebits.wiki.api('retrieving token...', query, fnProcessProtect, ctx.statusElement, ctx.onProtectFailure);
+		ctx.protectApi = new Morebits.wiki.api('获取令牌……', query, fnProcessProtect, ctx.statusElement, ctx.onProtectFailure);
 		ctx.protectApi.setParent(this);
 		ctx.protectApi.post();
 	};
@@ -3669,7 +3723,7 @@ Morebits.wiki.page = function(pageName, status) {
 		} else {
 			var query = fnNeedTokenInfoQuery('stabilize');
 
-			ctx.stabilizeApi = new Morebits.wiki.api('retrieving token...', query, fnProcessStabilize, ctx.statusElement, ctx.onStabilizeFailure);
+			ctx.stabilizeApi = new Morebits.wiki.api('获取令牌……', query, fnProcessStabilize, ctx.statusElement, ctx.onStabilizeFailure);
 			ctx.stabilizeApi.setParent(this);
 			ctx.stabilizeApi.post();
 		}
@@ -3792,13 +3846,13 @@ Morebits.wiki.page = function(pageName, status) {
 		}
 		ctx.csrfToken = response.tokens.csrftoken;
 		if (!ctx.csrfToken) {
-			ctx.statusElement.error('Failed to retrieve edit token.');
+			ctx.statusElement.error('未能获取编辑令牌。');
 			ctx.onLoadFailure(this);
 			return;
 		}
 		ctx.loadTime = ctx.loadApi.getResponse().curtimestamp;
 		if (!ctx.loadTime) {
-			ctx.statusElement.error('Failed to retrieve current timestamp.');
+			ctx.statusElement.error('未能获取当前时间戳。');
 			ctx.onLoadFailure(this);
 			return;
 		}
@@ -3839,15 +3893,15 @@ Morebits.wiki.page = function(pageName, status) {
 			ctx.revertUser = rev && rev.user;
 			if (!ctx.revertUser) {
 				if (rev && rev.userhidden) {  // username was RevDel'd or oversighted
-					ctx.revertUser = '<username hidden>';
+					ctx.revertUser = '（用户名已隐藏）';
 				} else {
-					ctx.statusElement.error('Failed to retrieve user who made the revision.');
+					ctx.statusElement.error('未能获取此修订版本的编辑者。');
 					ctx.onLoadFailure(this);
 					return;
 				}
 			}
 			// set revert edit summary
-			ctx.editSummary = '[[Help:Revert|Reverted]] to revision ' + ctx.revertOldID + ' by ' + ctx.revertUser + ': ' + ctx.editSummary;
+			ctx.editSummary = '[[QW:撤销|撤销]]由 ' + ctx.revertUser + ' 所做出的修订' + ctx.revertOldID + '：' + ctx.editSummary;
 		}
 
 		ctx.pageLoaded = true;
@@ -3866,7 +3920,7 @@ Morebits.wiki.page = function(pageName, status) {
 		if (page) {
 			// check for invalid titles
 			if (page.invalid) {
-				ctx.statusElement.error('The page title is invalid: ' + ctx.pageName);
+				ctx.statusElement.error('此标题不合法：' + ctx.pageName);
 				onFailure(this);
 				return false; // abort
 			}
@@ -3879,20 +3933,20 @@ Morebits.wiki.page = function(pageName, status) {
 				var origNs = new mw.Title(ctx.pageName).namespace;
 				var newNs = new mw.Title(resolvedName).namespace;
 				if (origNs !== newNs && !ctx.followCrossNsRedirect) {
-					ctx.statusElement.error(ctx.pageName + ' is a cross-namespace redirect to ' + resolvedName + ', aborted');
+					ctx.statusElement.error(ctx.pageName + '是跨命名空间重定向，目标为' + resolvedName + '；略过');
 					onFailure(this);
 					return false;
 				}
 
 				// only notify user for redirects, not normalization
-				new Morebits.status('Note', 'Redirected from ' + ctx.pageName + ' to ' + resolvedName);
+				new Morebits.status('信息', '由' + ctx.pageName + '重定向至' + resolvedName);
 			}
 
 			ctx.pageName = resolvedName; // update to redirect target or normalized name
 
 		} else {
 			// could be a circular redirect or other problem
-			ctx.statusElement.error('Could not resolve redirects for: ' + ctx.pageName);
+			ctx.statusElement.error('不能解析此页面的重定向：' + ctx.pageName);
 			onFailure(this);
 
 			// force error to stay on the screen
@@ -3957,7 +4011,7 @@ Morebits.wiki.page = function(pageName, status) {
 			var link = document.createElement('a');
 			link.setAttribute('href', mw.util.getUrl(ctx.pageName));
 			link.appendChild(document.createTextNode(ctx.pageName));
-			ctx.statusElement.info(['completed (', link, ')']);
+			ctx.statusElement.info(['完成（', link, '）']);
 			if (ctx.onSaveSuccess) {
 				ctx.onSaveSuccess(this);  // invoke callback
 			}
@@ -3967,9 +4021,9 @@ Morebits.wiki.page = function(pageName, status) {
 		// errors here are only generated by extensions which hook APIEditBeforeSave within MediaWiki,
 		// which as of 1.34.0-wmf.23 (Sept 2019) should only encompass captcha messages
 		if (response.edit.captcha) {
-			ctx.statusElement.error('Could not save the page because the wiki server wanted you to fill out a CAPTCHA.');
+			ctx.statusElement.error('不能保存页面，因服务器要求您输入验证码。');
 		} else {
-			ctx.statusElement.error('Unknown error received from API while saving page');
+			ctx.statusElement.error('保存页面时，API收到未知错误');
 		}
 
 		// force error to stay on the screen
@@ -3991,10 +4045,10 @@ Morebits.wiki.page = function(pageName, status) {
 				titles: ctx.pageName  // redirects are already resolved
 			};
 
-			var purgeApi = new Morebits.wiki.api('Edit conflict detected, purging server cache', purgeQuery, function() {
+			var purgeApi = new Morebits.wiki.api('检测到编辑冲突，正在更新服务器缓存', purgeQuery, function() {
 				--Morebits.wiki.numberOfActionsLeft;  // allow for normal completion if retry succeeds
 
-				ctx.statusElement.info('Edit conflict detected, reapplying edit');
+				ctx.statusElement.info('检测到编辑冲突，重试修改');
 				if (fnCanUseMwUserToken('edit')) {
 					ctx.saveApi.post(); // necessarily append, prepend, or newSection, so this should work as desired
 				} else {
@@ -4007,7 +4061,7 @@ Morebits.wiki.page = function(pageName, status) {
 		} else if ((errorCode === null || errorCode === undefined) && ctx.retries++ < ctx.maxRetries) {
 
 			// the error might be transient, so try again
-			ctx.statusElement.info('Save failed, retrying in 2 seconds ...');
+			ctx.statusElement.info('保存失败；2秒后重试……');
 			--Morebits.wiki.numberOfActionsLeft;  // allow for normal completion if retry succeeds
 
 			// wait for sometime for client to regain connectivity
@@ -4022,15 +4076,15 @@ Morebits.wiki.page = function(pageName, status) {
 
 				case 'protectedpage':
 					// non-admin attempting to edit a protected page - this gives a friendlier message than the default
-					ctx.statusElement.error('Failed to save edit: Page is protected');
+					ctx.statusElement.error('不能保存修改：页面被保护');
 					break;
 
 				case 'abusefilter-disallowed':
-					ctx.statusElement.error('The edit was disallowed by the edit filter: "' + ctx.saveApi.getResponse().error.abusefilter.description + '".');
+					ctx.statusElement.error('编辑被防滥用过滤器规则“' + ctx.saveApi.getResponse().error.abusefilter.description + '”阻止；如果您认为您的该次编辑是有意义的，请至“Qiuwen:防滥用过滤器”提报。');
 					break;
 
 				case 'abusefilter-warning':
-					ctx.statusElement.error([ 'A warning was returned by the edit filter: "', ctx.saveApi.getResponse().error.abusefilter.description, '". If you wish to proceed with the edit, please carry it out again. This warning will not appear a second time.' ]);
+					ctx.statusElement.error([ '编辑被防滥用过滤器规则“', ctx.saveApi.getResponse().error.abusefilter.description, '”警告；如果您仍希望做出该编辑，请尝试重新提交——根据过滤器的设置，您可能仍可以作出此编辑；如果您认为您的该次编辑是有意义的，请至“Qiuwen:防滥用过滤器”提报。' ]);
 					// We should provide the user with a way to automatically retry the action if they so choose -
 					// I can't see how to do this without creating a UI dependency on Morebits.wiki.page though -- TTO
 					break;
@@ -4038,11 +4092,11 @@ Morebits.wiki.page = function(pageName, status) {
 				case 'spamblacklist':
 					// If multiple items are blacklisted, we only return the first
 					var spam = ctx.saveApi.getResponse().error.spamblacklist.matches[0];
-					ctx.statusElement.error('Could not save the page because the URL ' + spam + ' is on the spam blacklist');
+					ctx.statusElement.error('不能保存页面，因URL ' + spam + ' 在垃圾链接黑名单中。');
 					break;
 
 				default:
-					ctx.statusElement.error('Failed to save edit: ' + ctx.saveApi.getErrorText());
+					ctx.statusElement.error('不能保存修改：' + ctx.saveApi.getErrorText());
 			}
 
 			ctx.editMode = 'all';  // cancel append/prepend/newSection/revert modes
@@ -4070,7 +4124,7 @@ Morebits.wiki.page = function(pageName, status) {
 
 		var rev = response.pages[0].revisions && response.pages[0].revisions[0];
 		if (!rev) {
-			ctx.statusElement.error('Could not find any revisions of ' + ctx.pageName);
+			ctx.statusElement.error('无法找到' + ctx.pageName + '的任何修订版本');
 			ctx.onLookupCreationFailure(this);
 			return;
 		}
@@ -4079,25 +4133,25 @@ Morebits.wiki.page = function(pageName, status) {
 
 			ctx.creator = rev.user;
 			if (!ctx.creator) {
-				ctx.statusElement.error('Could not find name of page creator');
+				ctx.statusElement.error('无法获取页面创建者的名字');
 				ctx.onLookupCreationFailure(this);
 				return;
 			}
 			ctx.timestamp = rev.timestamp;
 			if (!ctx.timestamp) {
-				ctx.statusElement.error('Could not find timestamp of page creation');
+				ctx.statusElement.error('无法获取页面创建时间');
 				ctx.onLookupCreationFailure(this);
 				return;
 			}
 
-			ctx.statusElement.info('retrieved page creation information');
+			ctx.statusElement.info('已获取页面创建信息');
 			ctx.onLookupCreationSuccess(this);
 
 		} else {
 			ctx.lookupCreationApi.query.rvlimit = 50; // modify previous query to fetch more revisions
 			ctx.lookupCreationApi.query.titles = ctx.pageName; // update pageName if redirect resolution took place in earlier query
 
-			ctx.lookupCreationApi = new Morebits.wiki.api('Retrieving page creation information', ctx.lookupCreationApi.query, fnLookupNonRedirectCreator, ctx.statusElement, ctx.onLookupCreationFailure);
+			ctx.lookupCreationApi = new Morebits.wiki.api('抓取页面创建者信息', ctx.lookupCreationApi.query, fnLookupNonRedirectCreator, ctx.statusElement, ctx.onLookupCreationFailure);
 			ctx.lookupCreationApi.setParent(this);
 			ctx.lookupCreationApi.post();
 		}
@@ -4122,19 +4176,19 @@ Morebits.wiki.page = function(pageName, status) {
 			ctx.creator = revs[0].user;
 			ctx.timestamp = revs[0].timestamp;
 			if (!ctx.creator) {
-				ctx.statusElement.error('Could not find name of page creator');
+				ctx.statusElement.error('无法获取页面创建者的名字');
 				ctx.onLookupCreationFailure(this);
 				return;
 			}
 
 		}
 		if (!ctx.timestamp) {
-			ctx.statusElement.error('Could not find timestamp of page creation');
+			ctx.statusElement.error('无法获取页面创建时间');
 			ctx.onLookupCreationFailure(this);
 			return;
 		}
 
-		ctx.statusElement.info('retrieved page creation information');
+		ctx.statusElement.info('已获取页面创建信息');
 		ctx.onLookupCreationSuccess(this);
 
 	};
@@ -4150,7 +4204,7 @@ Morebits.wiki.page = function(pageName, status) {
 	var fnPreflightChecks = function(action, onFailure) {
 		// if a non-admin tries to do this, don't bother
 		if (!Morebits.userIsSysop && action !== 'move') {
-			ctx.statusElement.error('Cannot ' + action + 'page : only admins can do that');
+			ctx.statusElement.error('无法对页面进行“' + action + '”操作：只有具备相应权限者可以进行此操作');
 			onFailure(this);
 			return false;
 		}
@@ -4181,7 +4235,7 @@ Morebits.wiki.page = function(pageName, status) {
 		var saltMissing = action === 'protect' && !missing && ctx.protectCreate;
 
 		if (actionMissing || protectMissing || saltMissing) {
-			ctx.statusElement.error('Cannot ' + action + ' the page because it ' + (missing ? 'no longer' : 'already') + ' exists');
+			ctx.statusElement.error('无法对页面进行“' + action + '”操作，因为页面' + (missing ? '已不' : '已经') + '存在');
 			onFailure(this);
 			return false;
 		}
