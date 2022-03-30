@@ -1,5 +1,11 @@
 // <nowiki>
-
+/**
+ * Twinkle.js
+ * © 2011-2022 English Wikipedia Contributors
+ * This work is licensed under a Creative Commons 
+ * Attribution-ShareAlike 3.0 Unported License.
+ * https://creativecommons.org/licenses/by-sa/3.0/
+ */
 
 (function($) {
 
@@ -1532,7 +1538,7 @@ Twinkle.speedy.callbacks = {
 			var usl = new Morebits.userspaceLogger(Twinkle.getPref('speedyLogPageName'));
 			usl.initialText =
 				"This is a log of all [[QW:CSD|speedy deletion]] nominations made by this user using [[QW:TW|Twinkle]]'s CSD module.\n\n" +
-				'If you no longer wish to keep this log, you can turn it off using the [[Qiuwen:Twinkle/Preferences|preferences panel]], and ' +
+				'If you no longer wish to keep this log, you can turn it off using the [[H:TW/PREF|preferences panel]], and ' +
 				'nominate this page for speedy deletion under [[QW:CSD#U1|CSD U1]].' +
 				(Morebits.userIsSysop ? '\n\nThis log does not track outright speedy deletions made using Twinkle.' : '');
 

@@ -1,5 +1,12 @@
 // <nowiki>
-
+/**
+ * Twinkle.js
+ * © 2011-2022 English Wikipedia Contributors
+ * © 2021-     Qiuwen Baike Contributors
+ * This work is licensed under a Creative Commons 
+ * Attribution-ShareAlike 4.0 International License.
+ * https://creativecommons.org/licenses/by-sa/4.0/
+ */
 
 (function($) {
 
@@ -12,10 +19,6 @@
                            and adds an ad box to the top of user subpages belonging to the
                            currently logged-in user which end in '.js'
  * Active on:              What I just said.  Yeah.
-
- I, [[User:This, that and the other]], originally wrote this.  If the code is misbehaving, or you have any
- questions, don't hesitate to ask me.  (This doesn't at all imply [[QW:OWN]]ership - it's just meant to
- point you in the right direction.)  -- TTO
  */
 
 

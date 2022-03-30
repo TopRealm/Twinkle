@@ -9,6 +9,14 @@
  * All changes should be made in the repository, otherwise they will be lost.
  * Visit [[QW:TW]] for more information.
  */
+/**
+ * Twinkle.js
+ * © 2011-2022 English Wikipedia Contributors
+ * © 2021-     Qiuwen Baike Contributors
+ * This work is licensed under a Creative Commons 
+ * Attribution-ShareAlike 4.0 International License.
+ * https://creativecommons.org/licenses/by-sa/4.0/
+ */
 // <nowiki>
 
 /* global Morebits */
