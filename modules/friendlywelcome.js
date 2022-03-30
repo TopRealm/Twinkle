@@ -128,7 +128,7 @@ Twinkle.welcome.callback = function friendlywelcomeCallback(uid) {
 	Window.setScriptName('Twinkle');
 	Window.addFooterLink('Welcome prefs', 'H:TW/PREF#welcome');
 	Window.addFooterLink('Twinkle help', 'H:TW/DOC#welcome');
-	Window.addFooterLink('Give feedback', 'HT:TW');
+	Window.addFooterLink('问题反馈', 'HT:TW');
 
 	var form = new Morebits.quickForm(Twinkle.welcome.callback.evaluate);
 

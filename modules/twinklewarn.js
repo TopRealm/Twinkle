@@ -70,7 +70,7 @@ Twinkle.warn.callback = function twinklewarnCallback() {
 	dialog.addFooterLink('Choosing a warning level', 'QW:UWUL#Levels');
 	dialog.addFooterLink('Warn prefs', 'H:TW/PREF#warn');
 	dialog.addFooterLink('Twinkle help', 'H:TW/DOC#warn');
-	dialog.addFooterLink('Give feedback', 'HT:TW');
+	dialog.addFooterLink('问题反馈', 'HT:TW');
 
 	var form = new Morebits.quickForm(Twinkle.warn.callback.evaluate);
 	var main_select = form.append({

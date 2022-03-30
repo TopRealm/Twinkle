@@ -128,7 +128,7 @@ Twinkle.xfd.callback = function twinklexfdCallback() {
 	Window.addFooterLink('About deletion discussions', 'QW:XFD');
 	Window.addFooterLink('XfD prefs', 'H:TW/PREF#xfd');
 	Window.addFooterLink('Twinkle help', 'H:TW/DOC#xfd');
-	Window.addFooterLink('Give feedback', 'HT:TW');
+	Window.addFooterLink('问题反馈', 'HT:TW');
 
 	var form = new Morebits.quickForm(Twinkle.xfd.callback.evaluate);
 	var categories = form.append({

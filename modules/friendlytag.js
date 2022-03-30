@@ -48,7 +48,7 @@ Twinkle.tag.callback = function friendlytagCallback() {
 	// anyone got a good policy/guideline/info page/instructional page link??
 	Window.addFooterLink('Tag prefs', 'H:TW/PREF#tag');
 	Window.addFooterLink('Twinkle help', 'H:TW/DOC#tag');
-	Window.addFooterLink('Give feedback', 'HT:TW');
+	Window.addFooterLink('问题反馈', 'HT:TW');
 
 	var form = new Morebits.quickForm(Twinkle.tag.callback.evaluate);
 

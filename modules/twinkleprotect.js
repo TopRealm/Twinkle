@@ -2,9 +2,11 @@
 /**
  * Twinkle.js
  * © 2011-2022 English Wikipedia Contributors
- * This work is licensed under a Creative Commons 
- * Attribution-ShareAlike 3.0 Unported License.
- * https://creativecommons.org/licenses/by-sa/3.0/
+ * © 2011-2021 Chinese Wikipedia Contributors
+ * © 2021-     Qiuwen Baike Contributors
+ * This work is licensed under a Creative Commons
+ * Attribution-ShareAlike 4.0 International License.
+ * https://creativecommons.org/licenses/by-sa/4.0/
  */
 
 (function($) {
@@ -25,23 +27,24 @@ Twinkle.protect = function twinkleprotect() {
 		return;
 	}
 
-	Twinkle.addPortletLink(Twinkle.protect.callback, Morebits.userIsSysop ? 'PP' : 'RPP', 'tw-rpp',
-		Morebits.userIsSysop ? 'Protect page' : 'Request page protection');
+	Twinkle.addPortletLink(Twinkle.protect.callback, '保护',
+		Morebits.userIsSysop ? '保护页面' : '请求保护页面');
 };
 
 Twinkle.protect.callback = function twinkleprotectCallback() {
 	var Window = new Morebits.simpleWindow(620, 530);
-	Window.setTitle(Morebits.userIsSysop ? 'Apply, request or tag page protection' : 'Request or tag page protection');
+	Window.setTitle(Morebits.userIsSysop ? '实施页面保护或请求保护页面' : '请求保护页面');
 	Window.setScriptName('Twinkle');
-	Window.addFooterLink('Protection templates', 'Template:Protection templates');
-	Window.addFooterLink('Protection policy', 'QW:PROT');
-	Window.addFooterLink('Twinkle help', 'H:TW/DOC#protect');
-	Window.addFooterLink('Give feedback', 'HT:TW');
+	Window.addFooterLink('保护模板', 'Template:Protection templates');
+	Window.addFooterLink('保护方针', 'QW:PROT');
+	Window.addFooterLink('保护设置', 'WP:TW/PREF#protect');
+	Window.addFooterLink('Twinkle帮助', 'H:TW/DOC#protect');
+	Window.addFooterLink('问题反馈', 'HT:TW');
 
 	var form = new Morebits.quickForm(Twinkle.protect.callback.evaluate);
 	var actionfield = form.append({
 		type: 'field',
-		label: 'Type of action'
+		label: '操作类型'
 	});
 	if (Morebits.userIsSysop) {
 		actionfield.append({
@@ -50,9 +53,9 @@ Twinkle.protect.callback = function twinkleprotectCallback() {
 			event: Twinkle.protect.callback.changeAction,
 			list: [
 				{
-					label: 'Protect page',
+					label: '保护页面',
 					value: 'protect',
-					tooltip: 'Apply actual protection to the page.',
+					tooltip: '实施页面保护',
 					checked: true
 				}
 			]
@@ -64,7 +67,7 @@ Twinkle.protect.callback = function twinkleprotectCallback() {
 		event: Twinkle.protect.callback.changeAction,
 		list: [
 			{
-				label: 'Request page protection',
+				label: '请求保护页面',
 				value: 'request',
 				tooltip: 'If you want to request protection via WP:RPP' + (Morebits.userIsSysop ? ' instead of doing the protection by yourself.' : '.'),
 				checked: !Morebits.userIsSysop
@@ -669,33 +672,28 @@ Twinkle.protect.doCustomExpiry = function twinkleprotectDoCustomExpiry(target) {
 
 // NOTE: This list is used by batchprotect as well
 Twinkle.protect.protectionLevels = [
-	{ label: 'All', value: 'all' },
-	{ label: 'Autoconfirmed', value: 'autoconfirmed' },
-	{ label: 'Extended confirmed', value: 'extendedconfirmed' },
-	{ label: 'Template editor', value: 'templateeditor' },
-	{ label: 'Sysop', value: 'sysop', selected: true }
+	{ label: '全部', value: 'all' },
+	{ label: '仅允许自动确认用户', value: 'autoconfirmed' },
+	{ label: '仅模板编辑员和管理员', value: 'templateeditor' },
+	{ label: '仅允许管理员', value: 'sysop', selected: true },
+	{ label: '仅允许资深用户', value: 'revisionprotected' },
+	{ label: '仅允许裁决委员', value: 'officialprotected' }
 ];
 
 // default expiry selection is conditionally set in Twinkle.protect.callback.changePreset
 // NOTE: This list is used by batchprotect as well
 Twinkle.protect.protectionLengths = [
-	{ label: '1 hour', value: '1 hour' },
-	{ label: '2 hours', value: '2 hours' },
-	{ label: '3 hours', value: '3 hours' },
-	{ label: '6 hours', value: '6 hours' },
-	{ label: '12 hours', value: '12 hours' },
-	{ label: '1 day', value: '1 day' },
-	{ label: '2 days', value: '2 days' },
-	{ label: '3 days', value: '3 days' },
-	{ label: '4 days', value: '4 days' },
-	{ label: '1 week', value: '1 week' },
-	{ label: '2 weeks', value: '2 weeks' },
-	{ label: '1 month', value: '1 month' },
-	{ label: '2 months', value: '2 months' },
-	{ label: '3 months', value: '3 months' },
-	{ label: '1 year', value: '1 year' },
-	{ label: 'indefinite', value: 'infinity' },
-	{ label: 'Custom...', value: 'custom' }
+	{ label: '1天', value: '1 day' },
+	{ label: '3天', value: '3 days' },
+	{ label: '1周', value: '1 week' },
+	{ label: '2周', value: '2 weeks' },
+	{ label: '1个月', value: '1 month' },
+	{ label: '3个月', value: '3 months' },
+	{ label: '6个月', value: '6 months' },
+	{ label: '1年', value: '1 year' },
+	{ label: '无限期', value: 'infinity' },
+	{ label: '自定义…', value: 'custom' }
+
 ];
 
 Twinkle.protect.protectionTypes = [

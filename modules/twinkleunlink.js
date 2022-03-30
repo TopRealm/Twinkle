@@ -36,7 +36,7 @@ Twinkle.unlink.callback = function(presetReason) {
 	Window.setScriptName('Twinkle');
 	Window.addFooterLink('Unlink prefs', 'H:TW/PREF#unlink');
 	Window.addFooterLink('Twinkle help', 'H:TW/DOC#unlink');
-	Window.addFooterLink('Give feedback', 'HT:TW');
+	Window.addFooterLink('问题反馈', 'HT:TW');
 
 	var form = new Morebits.quickForm(Twinkle.unlink.callback.evaluate);
 

@@ -35,7 +35,7 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 	Window.setScriptName('Twinkle');
 	Window.addFooterLink('Protection policy', 'QW:PROT');
 	Window.addFooterLink('Twinkle help', 'H:TW/DOC#protect');
-	Window.addFooterLink('Give feedback', 'HT:TW');
+	Window.addFooterLink('问题反馈', 'HT:TW');
 
 	var form = new Morebits.quickForm(Twinkle.batchprotect.callback.evaluate);
 	form.append({
