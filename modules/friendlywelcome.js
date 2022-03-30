@@ -112,10 +112,10 @@ Twinkle.welcome.welcomeUser = function welcomeUser() {
 	Morebits.wiki.actionCompleted.redirect = userTalkPage;
 	Morebits.wiki.actionCompleted.notice = 'Welcoming complete, reloading talk page in a few seconds';
 
-	var wikipedia_page = new Morebits.wiki.page(userTalkPage, 'User talk page modification');
-	wikipedia_page.setFollowRedirect(true);
-	wikipedia_page.setCallbackParameters(params);
-	wikipedia_page.load(Twinkle.welcome.callbacks.main);
+	var qiuwen_page = new Morebits.wiki.page(userTalkPage, 'User talk page modification');
+	qiuwen_page.setFollowRedirect(true);
+	qiuwen_page.setCallbackParameters(params);
+	qiuwen_page.load(Twinkle.welcome.callbacks.main);
 };
 
 Twinkle.welcome.callback = function friendlywelcomeCallback(uid) {
@@ -670,10 +670,10 @@ Twinkle.welcome.callback.evaluate = function friendlywelcomeCallbackEvaluate(e) 
 	Morebits.wiki.actionCompleted.redirect = userTalkPage;
 	Morebits.wiki.actionCompleted.notice = 'Welcoming complete, reloading talk page in a few seconds';
 
-	var wikipedia_page = new Morebits.wiki.page(userTalkPage, 'User talk page modification');
-	wikipedia_page.setFollowRedirect(true);
-	wikipedia_page.setCallbackParameters(params);
-	wikipedia_page.load(Twinkle.welcome.callbacks.main);
+	var qiuwen_page = new Morebits.wiki.page(userTalkPage, 'User talk page modification');
+	qiuwen_page.setFollowRedirect(true);
+	qiuwen_page.setCallbackParameters(params);
+	qiuwen_page.load(Twinkle.welcome.callbacks.main);
 };
 
 Twinkle.addInitCallback(Twinkle.welcome, 'welcome');

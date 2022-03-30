@@ -233,13 +233,13 @@ Twinkle.image.callback.evaluate = function twinkleimageCallbackEvaluate(event) {
 	Morebits.wiki.actionCompleted.notice = 'Tagging complete';
 
 	// Tagging image
-	var wikipedia_page = new Morebits.wiki.page(mw.config.get('wgPageName'), 'Tagging file with deletion tag');
-	wikipedia_page.setCallbackParameters(params);
-	wikipedia_page.load(Twinkle.image.callbacks.taggingImage);
+	var qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'), 'Tagging file with deletion tag');
+	qiuwen_page.setCallbackParameters(params);
+	qiuwen_page.load(Twinkle.image.callbacks.taggingImage);
 
 	// Notifying uploader
 	if (input.notify) {
-		wikipedia_page.lookupCreation(Twinkle.image.callbacks.userNotification);
+		qiuwen_page.lookupCreation(Twinkle.image.callbacks.userNotification);
 	} else {
 		// add to CSD log if desired
 		if (lognomination) {

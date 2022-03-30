@@ -1162,7 +1162,7 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 				}
 
 				if (input.protectReason_notes_rfppRevid && !/^\d+$/.test(input.protectReason_notes_rfppRevid)) {
-					alert('The provided revision ID is malformed. Please see https://en.wikipedia.org/wiki/Help:Permanent_link for information on how to find the correct ID (also called "oldid").');
+					alert('The provided revision ID is malformed. Please see https://enwp.org//Help:Permanent_link for information on how to find the correct ID (also called "oldid").');
 					return;
 				}
 

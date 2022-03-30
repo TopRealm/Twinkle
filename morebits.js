@@ -2520,7 +2520,7 @@ Morebits.wiki.api.setApiUserAgent = function(ua) {
 
 /**
  * Change/revision tag applied to Morebits actions when no other tags are specified.
- * Unused by default per {@link https://en.wikipedia.org/w/index.php?oldid=970618849#Adding_tags_to_Twinkle_edits_and_actions|EnWiki consensus}.
+ * Unused by default per EnWiki consensus.
  *
  * @constant
  * @memberof Morebits.wiki.api

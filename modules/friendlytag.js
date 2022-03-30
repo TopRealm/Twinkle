@@ -2050,10 +2050,10 @@ Twinkle.tag.callback.evaluate = function friendlytagCallbackEvaluate(e) {
 		Morebits.wiki.actionCompleted.followRedirect = false;
 	}
 
-	var wikipedia_page = new Morebits.wiki.page(Morebits.pageNameNorm, 'Tagging ' + Twinkle.tag.mode);
-	wikipedia_page.setCallbackParameters(params);
-	wikipedia_page.setChangeTags(Twinkle.changeTags); // Here to apply to triage
-	wikipedia_page.load(Twinkle.tag.callbacks[Twinkle.tag.mode]);
+	var qiuwen_page = new Morebits.wiki.page(Morebits.pageNameNorm, 'Tagging ' + Twinkle.tag.mode);
+	qiuwen_page.setCallbackParameters(params);
+	qiuwen_page.setChangeTags(Twinkle.changeTags); // Here to apply to triage
+	qiuwen_page.load(Twinkle.tag.callbacks[Twinkle.tag.mode]);
 
 };
 

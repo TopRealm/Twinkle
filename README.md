@@ -20,11 +20,11 @@ If you'd like to start contributing, awesome!  Check out [CONTRIBUTING.md](CONTR
 
 [select2][] is added under the [MIT license][select2license].  The MediaWiki code used [for tests](./tests/mocking/mw_shim.js) is added under the [GPL2 license][mwlicense].
 
-[Wikipedia:Twinkle]: https://en.wikipedia.org/wiki/Wikipedia:Twinkle
-[AzaToth]: https://en.wikipedia.org/wiki/User:AzaToth
-[Wikipedia talk:Twinkle]: https://en.wikipedia.org/wiki/Wikipedia_talk:Twinkle
-[Twinkle documentation]: https://en.wikipedia.org/wiki/Wikipedia:Twinkle/doc
-[H:TW/PREF]: https://en.wikipedia.org/wiki/Wikipedia:Twinkle/Preferences
+[Wikipedia:Twinkle]: https://enwp.org//Wikipedia:Twinkle
+[AzaToth]: https://enwp.org//User:AzaToth
+[Wikipedia talk:Twinkle]: https://enwp.org//Wikipedia_talk:Twinkle
+[Twinkle documentation]: https://enwp.org//Wikipedia:Twinkle/doc
+[H:TW/PREF]: https://enwp.org//Wikipedia:Twinkle/Preferences
 [select2]: https://github.com/select2/select2
 [select2license]: https://github.com/select2/select2/blob/develop/LICENSE.md
 [mwlicense]: https://gerrit.wikimedia.org/r/plugins/gitiles/mediawiki/core/+/master/COPYING

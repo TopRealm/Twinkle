@@ -399,9 +399,9 @@ Twinkle.fluff.revert = function revertPage(type, vandal, rev, page) {
 		type: 'csrf',
 		format: 'json'
 	};
-	var wikipedia_api = new Morebits.wiki.api('Grabbing data of earlier revisions', query, Twinkle.fluff.callbacks.main);
-	wikipedia_api.params = params;
-	wikipedia_api.post();
+	var qiuwen_api = new Morebits.wiki.api('Grabbing data of earlier revisions', query, Twinkle.fluff.callbacks.main);
+	qiuwen_api.params = params;
+	qiuwen_api.post();
 };
 
 Twinkle.fluff.revertToRevision = function revertToRevision(oldrev) {
@@ -421,9 +421,9 @@ Twinkle.fluff.revertToRevision = function revertToRevision(oldrev) {
 		type: 'csrf',
 		format: 'json'
 	};
-	var wikipedia_api = new Morebits.wiki.api('Grabbing data of the earlier revision', query, Twinkle.fluff.callbacks.toRevision);
-	wikipedia_api.params = { rev: oldrev };
-	wikipedia_api.post();
+	var qiuwen_api = new Morebits.wiki.api('Grabbing data of the earlier revision', query, Twinkle.fluff.callbacks.toRevision);
+	qiuwen_api.params = { rev: oldrev };
+	qiuwen_api.post();
 };
 
 Twinkle.fluff.callbacks = {
@@ -489,9 +489,9 @@ Twinkle.fluff.callbacks = {
 		Morebits.wiki.actionCompleted.redirect = mw.config.get('wgPageName');
 		Morebits.wiki.actionCompleted.notice = 'Reversion completed';
 
-		var wikipedia_api = new Morebits.wiki.api('Saving reverted contents', query, Twinkle.fluff.callbacks.complete, apiobj.statelem);
-		wikipedia_api.params = apiobj.params;
-		wikipedia_api.post();
+		var qiuwen_api = new Morebits.wiki.api('Saving reverted contents', query, Twinkle.fluff.callbacks.complete, apiobj.statelem);
+		qiuwen_api.params = apiobj.params;
+		qiuwen_api.post();
 	},
 	main: function(apiobj) {
 		var response = apiobj.getResponse();
@@ -736,9 +736,9 @@ Twinkle.fluff.callbacks = {
 		}
 		Morebits.wiki.actionCompleted.notice = 'Reversion completed';
 
-		var wikipedia_api = new Morebits.wiki.api('Saving reverted contents', query, Twinkle.fluff.callbacks.complete, statelem);
-		wikipedia_api.params = params;
-		wikipedia_api.post();
+		var qiuwen_api = new Morebits.wiki.api('Saving reverted contents', query, Twinkle.fluff.callbacks.complete, statelem);
+		qiuwen_api.params = params;
+		qiuwen_api.post();
 
 	},
 	complete: function (apiobj) {
@@ -797,8 +797,8 @@ Twinkle.fluff.callbacks = {
 					comment: 'Automatically reviewing reversion' + Twinkle.summaryAd // until the below
 					// 'tags': Twinkle.changeTags // flaggedrevs tag support: [[phab:T247721]]
 				};
-				var wikipedia_api = new Morebits.wiki.api('Automatically accepting your changes', query);
-				wikipedia_api.post();
+				var qiuwen_api = new Morebits.wiki.api('Automatically accepting your changes', query);
+				qiuwen_api.post();
 			}
 		}
 	}

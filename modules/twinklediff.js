@@ -62,9 +62,9 @@ Twinkle.diff.evaluate = function twinklediffEvaluate(me) {
 		format: 'json'
 	};
 	Morebits.status.init(document.getElementById('mw-content-text'));
-	var wikipedia_api = new Morebits.wiki.api('Grabbing data of initial contributor', query, Twinkle.diff.callbacks.main);
-	wikipedia_api.params = { user: user };
-	wikipedia_api.post();
+	var qiuwen_api = new Morebits.wiki.api('Grabbing data of initial contributor', query, Twinkle.diff.callbacks.main);
+	qiuwen_api.params = { user: user };
+	qiuwen_api.post();
 };
 
 Twinkle.diff.callbacks = {

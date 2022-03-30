@@ -184,7 +184,7 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 
 	var statelem = new Morebits.status('Grabbing list of pages');
 
-	var wikipedia_api = new Morebits.wiki.api('loading...', query, function(apiobj) {
+	var qiuwen_api = new Morebits.wiki.api('loading...', query, function(apiobj) {
 		var response = apiobj.getResponse();
 		var pages = (response.query && response.query.pages) || [];
 		var list = [];
@@ -257,7 +257,7 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 
 	}, statelem);
 
-	wikipedia_api.post();
+	qiuwen_api.post();
 };
 
 Twinkle.batchprotect.currentProtectCounter = 0;
@@ -299,13 +299,13 @@ Twinkle.batchprotect.callback.evaluate = function twinklebatchprotectCallbackEva
 			titles: pageName,
 			format: 'json'
 		};
-		var wikipedia_api = new Morebits.wiki.api('Checking if page ' + pageName + ' exists', query,
+		var qiuwen_api = new Morebits.wiki.api('Checking if page ' + pageName + ' exists', query,
 			Twinkle.batchprotect.callbacks.main, null, batchOperation.workerFailure);
-		wikipedia_api.params = $.extend({
+		qiuwen_api.params = $.extend({
 			page: pageName,
 			batchOperation: batchOperation
 		}, input);
-		wikipedia_api.post();
+		qiuwen_api.post();
 	});
 };
 

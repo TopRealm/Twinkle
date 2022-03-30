@@ -51,85 +51,39 @@ Each Twinkle module and dependency lives on the wiki as a separate file. The lis
 - `modules/friendlytalkback.js` &rarr; [MediaWiki:Gadget-friendlytalkback.js][]
 - `modules/twinkleblock.js` &rarr; [MediaWiki:Gadget-twinkleblock.js][]
 
-### Synchronization using `sync.pl`
-
-There is a synchronization script called `sync.pl`, which can be used to deploy updates to on-wiki gadgets, or update the repository based on on-wiki changes. For full details, run `perl sync.pl --help`.
-
-The program depends on a few Perl modules, namely [`MediaWiki::API`][MediaWiki::API], [`Git::Repository`][Git::Repository], [`File::Slurper`][File::Slurper], and [`Config::General`][Config::General]. These can be installed easily using [`App::cpanminus`][App::cpanminus]:
-
-    cpanm install MediaWiki::API Git::Repository File::Slurper Config::General
-
-You may prefer to install them through your operating system's packaing tool (e.g. `apt-get install libconfig-general-perl`) although you can install them through cpanm too.
-
-When running the program, you can enter your credentials on the command line using the `--username` and `--password` parameters, but it is recommended to save them in a `.twinklerc` file, either in this directory or in your `~` home, using the following format (also the defaults):
-
-    username = username
-    password = password
-    mode     = deploy|push|pull
-    lang     = en
-    family   = wikipedia
-    url      =
-    base     = User:AzaToth/
-
-`username`, `password`, and `mode` (one of `deploy`, `push`, or `pull`) are required, either through the command line or configuration file; lang and family default to `en.wikipedia`. Note that your working directory **must** be clean; if not, either `stash` or `commit` your changes. The script automatically handles the directory (e.g. `modules/`) from the file path when downloading/uploading. It can be run from any subdirectory of the repository.
-
-Using the `deploy` mode, [interface-admins][intadmin] can deploy Twinkle files live to their MediaWiki:Gadget locations. You will need to set up a bot password at [Special:BotPasswords][special_botpass].
-
-    sync.pl --mode=deploy twinkle.js morebits.js ...
-
-If no files are provided, it will just report the status of the gadget. You may also `deploy` **all** files via
-
-    sync.pl --mode=deploy --all
-
-Note that for syncing to a non-Enwiki project, you will also need to specify the --lang and/or --family parameters. For instance, to sync the files with `fr.wikiquote.org` you should specify `--lang=fr --family=wikiquote`, such as
-
-    sync.pl --mode=deploy --lang=fr --family=wikiquote --all
-
-When `deploy`ing or `push`ing, the script will attempt to parse the latest on-wiki edit summary for the commit of the last update, and will use that to create an edit summary using the changes committed since then. If it cannot find anything that looks like a commit hash, it will give you the most recent commits for each file and prompt you to enter an edit summary manually.
-
-To `pull` user Foobar's changes (i.e. `User:Foobar/morebits.js`) down from the wiki, do:
-
-    sync.pl --base User:Foobar/ --mode=pull twinkle.js morebits.js ...
-
-To `push` your changes to user Foobar's wiki page, do:
-
-    sync.pl --base User:Foobar/ --mode=push twinkle.js morebits.js ...
-
-The `--base` flag operates as a *prefix*; note the presence of the trailing `/`.
-
-[MediaWiki:Gadgets-definition]: https://en.wikipedia.org/wiki/MediaWiki:Gadgets-definition
-[MediaWiki:Gadget-Twinkle.js]: https://en.wikipedia.org/wiki/MediaWiki:Gadget-Twinkle.js
-[MediaWiki:Gadget-Twinkle.css]: https://en.wikipedia.org/wiki/MediaWiki:Gadget-Twinkle.css
-[MediaWiki:Gadget-Twinkle-pagestyles.css]: https://en.wikipedia.org/wiki/MediaWiki:Gadget-Twinkle-pagestyles.css
-[MediaWiki:Gadget-morebits.js]: https://en.wikipedia.org/wiki/MediaWiki:Gadget-morebits.js
-[MediaWiki:Gadget-morebits.css]: https://en.wikipedia.org/wiki/MediaWiki:Gadget-morebits.css
-[MediaWiki:Gadget-select2.min.js]: https://en.wikipedia.org/wiki/MediaWiki:Gadget-select2.min.js
-[MediaWiki:Gadget-select2.min.css]: https://en.wikipedia.org/wiki/MediaWiki:Gadget-select2.min.css
-[MediaWiki:Gadget-twinkleprod.js]: https://en.wikipedia.org/wiki/MediaWiki:Gadget-twinkleprod.js
-[MediaWiki:Gadget-twinkleimage.js]: https://en.wikipedia.org/wiki/MediaWiki:Gadget-twinkleimage.js
-[MediaWiki:Gadget-twinklebatchundelete.js]: https://en.wikipedia.org/wiki/MediaWiki:Gadget-twinklebatchundelete.js
-[MediaWiki:Gadget-twinklewarn.js]: https://en.wikipedia.org/wiki/MediaWiki:Gadget-twinklewarn.js
-[MediaWiki:Gadget-twinklespeedy.js]: https://en.wikipedia.org/wiki/MediaWiki:Gadget-twinklespeedy.js
-[MediaWiki:Gadget-friendlyshared.js]: https://en.wikipedia.org/wiki/MediaWiki:Gadget-friendlyshared.js
-[MediaWiki:Gadget-twinklediff.js]: https://en.wikipedia.org/wiki/MediaWiki:Gadget-twinklediff.js
-[MediaWiki:Gadget-twinkleunlink.js]: https://en.wikipedia.org/wiki/MediaWiki:Gadget-twinkleunlink.js
-[MediaWiki:Gadget-friendlytag.js]: https://en.wikipedia.org/wiki/MediaWiki:Gadget-friendlytag.js
-[MediaWiki:Gadget-twinkledeprod.js]: https://en.wikipedia.org/wiki/MediaWiki:Gadget-twinkledeprod.js
-[MediaWiki:Gadget-friendlywelcome.js]: https://en.wikipedia.org/wiki/MediaWiki:Gadget-friendlywelcome.js
-[MediaWiki:Gadget-twinklexfd.js]: https://en.wikipedia.org/wiki/MediaWiki:Gadget-twinklexfd.js
-[MediaWiki:Gadget-twinklebatchdelete.js]: https://en.wikipedia.org/wiki/MediaWiki:Gadget-twinklebatchdelete.js
-[MediaWiki:Gadget-twinklebatchprotect.js]: https://en.wikipedia.org/wiki/MediaWiki:Gadget-twinklebatchprotect.js
-[MediaWiki:Gadget-twinkleconfig.js]: https://en.wikipedia.org/wiki/MediaWiki:Gadget-twinkleconfig.js
-[MediaWiki:Gadget-twinklefluff.js]: https://en.wikipedia.org/wiki/MediaWiki:Gadget-twinklefluff.js
-[MediaWiki:Gadget-twinkleprotect.js]: https://en.wikipedia.org/wiki/MediaWiki:Gadget-twinkleprotect.js
-[MediaWiki:Gadget-twinklearv.js]: https://en.wikipedia.org/wiki/MediaWiki:Gadget-twinklearv.js
-[MediaWiki:Gadget-friendlytalkback.js]: https://en.wikipedia.org/wiki/MediaWiki:Gadget-friendlytalkback.js
-[MediaWiki:Gadget-twinkleblock.js]: https://en.wikipedia.org/wiki/MediaWiki:Gadget-twinkleblock.js
+[MediaWiki:Gadgets-definition]: https://enwp.org//MediaWiki:Gadgets-definition
+[MediaWiki:Gadget-Twinkle.js]: https://enwp.org//MediaWiki:Gadget-Twinkle.js
+[MediaWiki:Gadget-Twinkle.css]: https://enwp.org//MediaWiki:Gadget-Twinkle.css
+[MediaWiki:Gadget-Twinkle-pagestyles.css]: https://enwp.org//MediaWiki:Gadget-Twinkle-pagestyles.css
+[MediaWiki:Gadget-morebits.js]: https://enwp.org//MediaWiki:Gadget-morebits.js
+[MediaWiki:Gadget-morebits.css]: https://enwp.org//MediaWiki:Gadget-morebits.css
+[MediaWiki:Gadget-select2.min.js]: https://enwp.org//MediaWiki:Gadget-select2.min.js
+[MediaWiki:Gadget-select2.min.css]: https://enwp.org//MediaWiki:Gadget-select2.min.css
+[MediaWiki:Gadget-twinkleprod.js]: https://enwp.org//MediaWiki:Gadget-twinkleprod.js
+[MediaWiki:Gadget-twinkleimage.js]: https://enwp.org//MediaWiki:Gadget-twinkleimage.js
+[MediaWiki:Gadget-twinklebatchundelete.js]: https://enwp.org//MediaWiki:Gadget-twinklebatchundelete.js
+[MediaWiki:Gadget-twinklewarn.js]: https://enwp.org//MediaWiki:Gadget-twinklewarn.js
+[MediaWiki:Gadget-twinklespeedy.js]: https://enwp.org//MediaWiki:Gadget-twinklespeedy.js
+[MediaWiki:Gadget-friendlyshared.js]: https://enwp.org//MediaWiki:Gadget-friendlyshared.js
+[MediaWiki:Gadget-twinklediff.js]: https://enwp.org//MediaWiki:Gadget-twinklediff.js
+[MediaWiki:Gadget-twinkleunlink.js]: https://enwp.org//MediaWiki:Gadget-twinkleunlink.js
+[MediaWiki:Gadget-friendlytag.js]: https://enwp.org//MediaWiki:Gadget-friendlytag.js
+[MediaWiki:Gadget-twinkledeprod.js]: https://enwp.org//MediaWiki:Gadget-twinkledeprod.js
+[MediaWiki:Gadget-friendlywelcome.js]: https://enwp.org//MediaWiki:Gadget-friendlywelcome.js
+[MediaWiki:Gadget-twinklexfd.js]: https://enwp.org//MediaWiki:Gadget-twinklexfd.js
+[MediaWiki:Gadget-twinklebatchdelete.js]: https://enwp.org//MediaWiki:Gadget-twinklebatchdelete.js
+[MediaWiki:Gadget-twinklebatchprotect.js]: https://enwp.org//MediaWiki:Gadget-twinklebatchprotect.js
+[MediaWiki:Gadget-twinkleconfig.js]: https://enwp.org//MediaWiki:Gadget-twinkleconfig.js
+[MediaWiki:Gadget-twinklefluff.js]: https://enwp.org//MediaWiki:Gadget-twinklefluff.js
+[MediaWiki:Gadget-twinkleprotect.js]: https://enwp.org//MediaWiki:Gadget-twinkleprotect.js
+[MediaWiki:Gadget-twinklearv.js]: https://enwp.org//MediaWiki:Gadget-twinklearv.js
+[MediaWiki:Gadget-friendlytalkback.js]: https://enwp.org//MediaWiki:Gadget-friendlytalkback.js
+[MediaWiki:Gadget-twinkleblock.js]: https://enwp.org//MediaWiki:Gadget-twinkleblock.js
 [select2]: https://github.com/select2/select2
 [MediaWiki::API]: https://metacpan.org/pod/MediaWiki::API
 [Git::Repository]: https://metacpan.org/pod/Git::Repository
 [File::Slurper]: https://metacpan.org/pod/File::Slurper
 [Config::General]: https://metacpan.org/pod/Config::General
 [App::cpanminus]: https://metacpan.org/pod/App::cpanminus
-[intadmin]: https://en.wikipedia.org/wiki/Wikipedia:Interface_administrators
-[special_botpass]: https://en.wikipedia.org/wiki/Special:BotPasswords
+[intadmin]: https://enwp.org//Wikipedia:Interface_administrators
+[special_botpass]: https://enwp.org//Special:BotPasswords

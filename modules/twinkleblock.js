@@ -1919,9 +1919,9 @@ Twinkle.block.callback.issue_template = function twinkleblockCallbackIssueTempla
 	Morebits.wiki.actionCompleted.redirect = userTalkPage;
 	Morebits.wiki.actionCompleted.notice = 'Actions complete, loading user talk page in a few seconds';
 
-	var wikipedia_page = new Morebits.wiki.page(userTalkPage, 'User talk page modification');
-	wikipedia_page.setCallbackParameters(params);
-	wikipedia_page.load(Twinkle.block.callback.main);
+	var qiuwen_page = new Morebits.wiki.page(userTalkPage, 'User talk page modification');
+	qiuwen_page.setCallbackParameters(params);
+	qiuwen_page.load(Twinkle.block.callback.main);
 };
 
 Twinkle.block.callback.getBlockNoticeWikitext = function(params) {

@@ -89,14 +89,14 @@ Twinkle.unlink.callback = function(presetReason) {
 	} else {
 		query.blfilterredir = 'nonredirects';
 	}
-	var wikipedia_api = new Morebits.wiki.api('Grabbing backlinks', query, Twinkle.unlink.callbacks.display.backlinks);
-	wikipedia_api.params = { form: form, Window: Window, image: fileSpace };
-	wikipedia_api.post();
+	var qiuwen_api = new Morebits.wiki.api('Grabbing backlinks', query, Twinkle.unlink.callbacks.display.backlinks);
+	qiuwen_api.params = { form: form, Window: Window, image: fileSpace };
+	qiuwen_api.post();
 
 	var root = document.createElement('div');
 	root.style.padding = '15px';  // just so it doesn't look broken
 	Morebits.status.init(root);
-	wikipedia_api.statelem.status('loading...');
+	qiuwen_api.statelem.status('loading...');
 	Window.setContent(root);
 	Window.display();
 };
@@ -127,13 +127,13 @@ Twinkle.unlink.callback.evaluate = function twinkleunlinkCallbackEvaluate(event)
 	unlinker.setPageList(pages);
 	var params = { reason: input.reason, unlinker: unlinker };
 	unlinker.run(function(pageName) {
-		var wikipedia_page = new Morebits.wiki.page(pageName, 'Unlinking in page "' + pageName + '"');
-		wikipedia_page.setBotEdit(true);  // unlink considered a floody operation
-		wikipedia_page.setCallbackParameters($.extend({
+		var qiuwen_page = new Morebits.wiki.page(pageName, 'Unlinking in page "' + pageName + '"');
+		qiuwen_page.setBotEdit(true);  // unlink considered a floody operation
+		qiuwen_page.setCallbackParameters($.extend({
 			doBacklinks: input.backlinks.indexOf(pageName) !== -1,
 			doImageusage: input.imageusage.indexOf(pageName) !== -1
 		}, params));
-		wikipedia_page.load(Twinkle.unlink.callbacks.unlinkBacklinks);
+		qiuwen_page.load(Twinkle.unlink.callbacks.unlinkBacklinks);
 	});
 };
 

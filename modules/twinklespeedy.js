@@ -1315,10 +1315,10 @@ Twinkle.speedy.callbacks = {
 					rdlimit: 'max', // 500 is max for normal users, 5000 for bots and sysops
 					format: 'json'
 				};
-				var wikipedia_api = new Morebits.wiki.api('getting list of redirects...', query, Twinkle.speedy.callbacks.sysop.deleteRedirectsMain,
+				var qiuwen_api = new Morebits.wiki.api('getting list of redirects...', query, Twinkle.speedy.callbacks.sysop.deleteRedirectsMain,
 					new Morebits.status('Deleting redirects'));
-				wikipedia_api.params = params;
-				wikipedia_api.post();
+				qiuwen_api.params = params;
+				qiuwen_api.post();
 			}
 
 			// promote Unlink tool
@@ -2053,10 +2053,10 @@ Twinkle.speedy.callback.evaluateUser = function twinklespeedyCallbackEvaluateUse
 	Morebits.wiki.actionCompleted.redirect = mw.config.get('wgPageName');
 	Morebits.wiki.actionCompleted.notice = 'Tagging complete';
 
-	var wikipedia_page = new Morebits.wiki.page(mw.config.get('wgPageName'), 'Tagging page');
-	wikipedia_page.setChangeTags(Twinkle.changeTags); // Here to apply to triage
-	wikipedia_page.setCallbackParameters(params);
-	wikipedia_page.load(Twinkle.speedy.callbacks.user.main);
+	var qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'), 'Tagging page');
+	qiuwen_page.setChangeTags(Twinkle.changeTags); // Here to apply to triage
+	qiuwen_page.setCallbackParameters(params);
+	qiuwen_page.load(Twinkle.speedy.callbacks.user.main);
 };
 
 Twinkle.addInitCallback(Twinkle.speedy, 'speedy');
