@@ -255,25 +255,25 @@ Twinkle.config.sections = [
 	},
 
 	{
-		title: 'Page protection ' + (Morebits.userIsSysop ? '(PP)' : '(RPP)'),
+		title: '保护',
 		module: 'protect',
 		preferences: [
 			{
 				name: 'watchRequestedPages',
-				label: 'Add page to watchlist when requesting protection',
+				label: '请求保护页面时，将被保护页面加入到监视列表',
 				type: 'enum',
 				enumValues: Twinkle.config.watchlistEnums
 			},
 			{
 				name: 'watchPPTaggedPages',
-				label: 'Add page to watchlist when tagging with protection template',
+				label: '标记保护模板时，将被保护页面加入到监视列表',
 				type: 'enum',
 				enumValues: Twinkle.config.watchlistEnums
 			},
 			{
 				name: 'watchProtectedPages',
-				label: 'Add page to watchlist when protecting',
-				helptip: 'If also tagging the page after protection, that preference will be favored.',
+				label: '实施页面保护时，将被保护页面加入到监视列表',
+				helptip: '如果在保护后也标记页面，则使用标记页面的参数设置。',
 				adminOnly: true,
 				type: 'enum',
 				enumValues: Twinkle.config.watchlistEnums
@@ -282,15 +282,15 @@ Twinkle.config.sections = [
 	},
 
 	{
-		title: 'Revert and rollback',  // twinklefluff module
+		title: '撤销',  // twinklefluff module
 		module: 'fluff',
 		preferences: [
 			// TwinkleConfig.autoMenuAfterRollback (bool)
 			// Option to automatically open the warning menu if the user talk page is opened post-reversion
 			{
 				name: 'autoMenuAfterRollback',
-				label: 'Automatically open the Twinkle warn menu on a user talk page after Twinkle rollback',
-				helptip: 'Only operates if the relevant box is checked below.',
+				label: '使用Twinkle撤销编辑后，自动打开用户讨论页上的Twinkle警告菜单',
+				helptip: '仅在选取下方对应框时才执行',
 				type: 'boolean'
 			},
 
@@ -298,17 +298,17 @@ Twinkle.config.sections = [
 			// What types of actions that should result in opening of talk page
 			{
 				name: 'openTalkPage',
-				label: 'Open user talk page after these types of reversions',
+				label: '实施下列撤销后，跳转至用户讨论页',
 				type: 'set',
-				setValues: { agf: 'AGF rollback', norm: 'Normal rollback', vand: 'Vandalism rollback' }
+				setValues: { agf: '假定善意撤销', norm: '常规撤销', vand: '反破坏撤销' }
 			},
 
 			// TwinkleConfig.openTalkPageOnAutoRevert (bool)
 			// Defines if talk page should be opened when calling revert from contribs or recent changes pages. If set to true, openTalkPage defines then if talk page will be opened.
 			{
 				name: 'openTalkPageOnAutoRevert',
-				label: 'Open user talk page when invoking rollback from user contributions or recent changes',
-				helptip: 'When this is on, the desired options must be enabled in the previous setting for this to work.',
+				label: '在用户贡献、最近更改等发起撤销后，打开用户讨论页',
+				helptip: '本选项依赖前一设置，前一设置生效后，本选项方生效',
 				type: 'boolean'
 			},
 
@@ -316,8 +316,8 @@ Twinkle.config.sections = [
 			//
 			{
 				name: 'rollbackInPlace',
-				label: "Don't reload the page when rolling back from contributions or recent changes",
-				helptip: "When this is on, Twinkle won't reload the contributions or recent changes feed after reverting, allowing you to revert more than one edit at a time.",
+				label: '在用户贡献、最近更改等发起撤销后，不刷新页面',
+				helptip: '当它打开时，Twinkle将不会在从用户贡献及最近更改中发起撤销时刷新页面，允许您一次性撤销多个编辑。',
 				type: 'boolean'
 			},
 
@@ -325,24 +325,24 @@ Twinkle.config.sections = [
 			// What types of actions that should result in marking edit as minor
 			{
 				name: 'markRevertedPagesAsMinor',
-				label: 'Mark as minor edit for these types of reversions',
+				label: '实施下列撤销时，将其标记为小编辑',
 				type: 'set',
-				setValues: { agf: 'AGF rollback', norm: 'Normal rollback', vand: 'Vandalism rollback', torev: '"Restore this version"' }
+				setValues: { agf: '假定善意撤销', norm: '常规撤销', vand: '反破坏撤销', torev: '“恢复此版本”' }
 			},
 
 			// TwinkleConfig.watchRevertedPages (array)
 			// What types of actions that should result in forced addition to watchlist
 			{
 				name: 'watchRevertedPages',
-				label: 'Add pages to watchlist for these types of reversions',
+				label: '实施下列撤销时，将页面加入监视列表',
 				type: 'set',
-				setValues: { agf: 'AGF rollback', norm: 'Normal rollback', vand: 'Vandalism rollback', torev: '"Restore this version"' }
+				setValues: { agf: '假定善意撤销', norm: '常规撤销', vand: '反破坏撤销', torev: '“恢复此版本”' }
 			},
 			// TwinkleConfig.watchRevertedExpiry
 			// If any of the above items are selected, whether to expire the watch
 			{
 				name: 'watchRevertedExpiry',
-				label: 'When reverting a page, how long to watch it for',
+				label: '实施撤销时，页面的监视期限',
 				type: 'enum',
 				enumValues: Twinkle.config.watchlistEnums
 			},
@@ -351,22 +351,22 @@ Twinkle.config.sections = [
 			// If to offer a prompt for extra summary reason for normal reverts, default to true
 			{
 				name: 'offerReasonOnNormalRevert',
-				label: 'Prompt for reason for normal rollbacks',
-				helptip: '"Normal" rollbacks are the ones that are invoked from the middle [rollback] link.',
+				label: '常规撤销时，询问理由',
+				helptip: '“常规撤销”指点击页面中的“[撤销]”链接。',
 				type: 'boolean'
 			},
 
 			{
 				name: 'confirmOnFluff',
-				label: 'Require confirmation before reverting (all devices)',
-				helptip: 'For users of pen or touch devices, and chronically indecisive people.',
+				label: '撤销前，要求二次确认（所有设备）',
+				helptip: '对于移动设备用户；或者，容易冲动操作的用户',
 				type: 'boolean'
 			},
 
 			{
 				name: 'confirmOnMobileFluff',
-				label: 'Require confirmation before reverting (mobile devices only)',
-				helptip: 'Avoid accidental reversions when on mobile devices.',
+				label: '撤销前，要求二次确认（仅移动设备）',
+				helptip: '避免在移动设备意外点击“[撤销]”',
 				type: 'boolean'
 			},
 
@@ -376,29 +376,29 @@ Twinkle.config.sections = [
 			// Note from TTO: |contribs| seems to be equal to |others| + |mine|, i.e. redundant, so I left it out heres
 			{
 				name: 'showRollbackLinks',
-				label: 'Show rollback links on these pages',
+				label: '在这些页面上显示“撤销”链接',
 				type: 'set',
-				setValues: { diff: 'Diff pages', others: 'Contributions pages of other users', mine: 'My contributions page', recent: 'Recent changes and related changes special pages', history: 'History pages' }
+				setValues: { diff: '差异', others: '其他用户的贡献', mine: '我的贡献', recent: '最近更改', history: '历史记录' }
 			}
 		]
 	},
 
 	{
-		title: 'Speedy deletion (CSD)',
+		title: '快速删除',
 		module: 'speedy',
 		preferences: [
 			{
 				name: 'speedySelectionStyle',
-				label: 'When to go ahead and tag/delete the page',
+				label: '何时执行标记或删除',
 				type: 'enum',
-				enumValues: { buttonClick: 'When I click "Submit"', radioClick: 'As soon as I click an option' }
+				enumValues: { buttonClick: '当点击“提交”时', radioClick: '当我点击选项之一时' }
 			},
 
 			// TwinkleConfig.watchSpeedyPages (array)
 			// Whether to add speedy tagged or deleted pages to watchlist
 			{
 				name: 'watchSpeedyPages',
-				label: 'Add page to watchlist when using these criteria',
+				label: '使用下列理由时，将相关页面加入到监视列表',
 				type: 'set',
 				setValues: Twinkle.config.commonSets.csdCriteria,
 				setDisplayOrder: Twinkle.config.commonSets.csdCriteriaDisplayOrder
@@ -407,7 +407,7 @@ Twinkle.config.sections = [
 			// If any of the above items are selected, whether to expire the watch
 			{
 				name: 'watchSpeedyExpiry',
-				label: 'When tagging a page, how long to watch it for',
+				label: '当标记页面时，页面的监视期限',
 				type: 'enum',
 				enumValues: Twinkle.config.watchlistEnums
 			},
@@ -416,8 +416,8 @@ Twinkle.config.sections = [
 			// If, when applying speedy template to page, to mark the page as triaged/patrolled (if the page was reached from NewPages)
 			{
 				name: 'markSpeedyPagesAsPatrolled',
-				label: 'Mark page as patrolled/reviewed when tagging (if possible)',
-				helptip: 'This should probably not be checked as doing so is against best practice consensus',
+				label: '当标记页面时，标记页面为已巡查（若可能）',
+				helptip: '建议不勾选，这可能有违页面巡查功能的初衷',
 				type: 'boolean'
 			},
 
@@ -425,7 +425,7 @@ Twinkle.config.sections = [
 			// The watchlist setting of the user talk page if they receive a notification.
 			{
 				name: 'watchSpeedyUser',
-				label: 'Add user talk page of initial contributor to watchlist (when notifying)',
+				label: '当标记页面时，创建者用户讨论页的监视期限',
 				type: 'enum',
 				enumValues: Twinkle.config.watchlistEnums
 			},
@@ -446,8 +446,8 @@ Twinkle.config.sections = [
 			// What types of actions should result in the author of the page being notified of nomination
 			{
 				name: 'notifyUserOnSpeedyDeletionNomination',
-				label: 'Notify page creator when tagging with these criteria',
-				helptip: 'Even if you choose to notify from the CSD screen, the notification will only take place for those criteria selected here.',
+				label: '使用下列理由标记页面后，通知页面创建者',
+				helptip: '尽管您在对话框中选择通知，通知仍只会在使用这些理由时发出。',
 				type: 'set',
 				setValues: Twinkle.config.commonSets.csdCriteriaNotification,
 				setDisplayOrder: Twinkle.config.commonSets.csdCriteriaNotificationDisplayOrder
@@ -457,8 +457,8 @@ Twinkle.config.sections = [
 			// What types of actions should result in the author of the page being notified of speedy deletion (admin only)
 			{
 				name: 'warnUserOnSpeedyDelete',
-				label: 'Notify page creator when deleting under these criteria',
-				helptip: 'Even if you choose to notify from the CSD screen, the notification will only take place for those criteria selected here.',
+				label: '使用下列理由标记页面后，警告页面创建者',
+				helptip: '尽管您在对话框中选择通知，通知仍只会在使用这些理由时发出。',
 				adminOnly: true,
 				type: 'set',
 				setValues: Twinkle.config.commonSets.csdCriteriaNotification,
@@ -468,7 +468,7 @@ Twinkle.config.sections = [
 			// TwinkleConfig.promptForSpeedyDeletionSummary (array of strings)
 			{
 				name: 'promptForSpeedyDeletionSummary',
-				label: 'Allow editing of deletion summary when deleting under these criteria',
+				label: '使用下列理由标记页面时，允许编辑删除理由',
 				adminOnly: true,
 				type: 'set',
 				setValues: Twinkle.config.commonSets.csdAndDICriteria,
@@ -479,14 +479,14 @@ Twinkle.config.sections = [
 			// If talk page if exists should also be deleted (CSD G8) when spedying a page (admin only)
 			{
 				name: 'deleteTalkPageOnDelete',
-				label: 'Check the "also delete talk page" box by default',
+				label: '默认勾选“删除讨论页”',
 				adminOnly: true,
 				type: 'boolean'
 			},
 
 			{
 				name: 'deleteRedirectsOnDelete',
-				label: 'Check the "also delete redirects" box by default',
+				label: '默认勾选“删除重定向”',
 				adminOnly: true,
 				type: 'boolean'
 			},
@@ -495,8 +495,8 @@ Twinkle.config.sections = [
 			// Make the CSD screen default to "delete" instead of "tag" (admin only)
 			{
 				name: 'deleteSysopDefaultToDelete',
-				label: 'Default to outright deletion instead of speedy tagging',
-				helptip: 'If there is a CSD tag already present, Twinkle will always default to "delete" mode',
+				label: '默认为直接删除而不是标记',
+				helptip: '若页面已有快速删除标记，则默认为直接删除，而非标记。',
 				adminOnly: true,
 				type: 'boolean'
 			},
@@ -505,7 +505,7 @@ Twinkle.config.sections = [
 			// Defines the width of the Twinkle SD window in pixels
 			{
 				name: 'speedyWindowWidth',
-				label: 'Width of speedy deletion window (pixels)',
+				label: '快速删除对话框宽度（像素）',
 				type: 'integer'
 			},
 
@@ -513,26 +513,26 @@ Twinkle.config.sections = [
 			// Defines the width of the Twinkle SD window in pixels
 			{
 				name: 'speedyWindowHeight',
-				label: 'Height of speedy deletion window (pixels)',
-				helptip: 'If you have a big monitor, you might like to increase this.',
+				label: '快速删除对话框高度（像素）',
+				helptip: '如果您的屏幕很大，您可以将此调高。',
 				type: 'integer'
 			},
 
 			{
 				name: 'logSpeedyNominations',
-				label: 'Keep a log in userspace of all CSD nominations',
-				helptip: 'Since non-admins do not have access to their deleted contributions, the userspace log offers a good way to keep track of all pages you nominate for CSD using Twinkle. Files tagged using DI are also added to this log.',
+				label: '在用户空间中记录所有快速删除提名',
+				helptip: '非管理员无法访问到已删除的贡献，用户空间日志可以予以记录。',
 				type: 'boolean'
 			},
 			{
 				name: 'speedyLogPageName',
-				label: 'Keep the CSD userspace log at this user subpage',
-				helptip: 'Enter a subpage name in this box. You will find your CSD log at User:<i>username</i>/<i>subpage name</i>. Only works if you turn on the CSD userspace log.',
+				label: '在此页保留日志',
+				helptip: '在此框中输入子页面名称，您将在User:<i>用户名</i>/<i>子页面</i>找到CSD日志。仅在启用日志时工作。',
 				type: 'string'
 			},
 			{
 				name: 'noLogOnSpeedyNomination',
-				label: 'Do not create a userspace log entry when tagging with these criteria',
+				label: '使用下列理由标记页面时，不作日志记录',
 				type: 'set',
 				setValues: Twinkle.config.commonSets.csdAndDICriteria,
 				setDisplayOrder: Twinkle.config.commonSets.csdAndDICriteriaDisplayOrder
@@ -541,63 +541,63 @@ Twinkle.config.sections = [
 	},
 
 	{
-		title: 'Tag',
+		title: '标记',
 		module: 'tag',
 		preferences: [
 			{
 				name: 'watchTaggedVenues',
-				label: 'Add page to watchlist when tagging these type of pages',
+				label: '当标记下列各类页面时，加入监视列表',
 				type: 'set',
-				setValues: { articles: 'Articles', drafts: 'Drafts', redirects: 'Redirects', files: 'Files' }
+				setValues: { articles: '条目', drafts: '草稿', redirects: '重定向', files: '文件' }
 			},
 			{
 				name: 'watchTaggedPages',
-				label: 'When tagging a page, how long to watch it for',
+				label: '当标记页面时，页面的监视期限',
 				type: 'enum',
 				enumValues: Twinkle.config.watchlistEnums
 			},
 			{
 				name: 'watchMergeDiscussions',
-				label: 'Add talk pages to watchlist when starting merge discussions',
+				label: '当请求合并页面时，页面的监视期限',
 				type: 'enum',
 				enumValues: Twinkle.config.watchlistEnums
 			},
 			{
 				name: 'markTaggedPagesAsMinor',
-				label: 'Mark addition of tags as a minor edit',
+				label: '将标记页面的编辑设为小修改',
 				type: 'boolean'
 			},
 			{
 				name: 'markTaggedPagesAsPatrolled',
-				label: 'Check the "mark page as patrolled/reviewed" box by default',
+				label: '默认勾选“标记页面为已巡查”框',
 				type: 'boolean'
 			},
 			{
 				name: 'groupByDefault',
-				label: 'Check the "group into {{multiple issues}}" box by default',
+				label: '默认勾选“合并到{{multiple issues}}”复选框',
 				type: 'boolean'
 			},
 			{
 				name: 'tagArticleSortOrder',
-				label: 'Default view order for article tags',
+				label: '条目标记的默认查看方式',
 				type: 'enum',
-				enumValues: { cat: 'By categories', alpha: 'In alphabetical order' }
+				enumValues: { cat: '按类别', alpha: '按字母序' }
 			},
 			{
 				name: 'customTagList',
-				label: 'Custom article/draft maintenance tags to display',
-				helptip: "These appear as additional options at the bottom of the list of tags. For example, you could add new maintenance tags which have not yet been added to Twinkle's defaults.",
+				label: '自定义条目维护标记',
+				helptip: "这些标记会出现在列表的末尾。",
 				type: 'customList',
-				customListValueTitle: 'Template name (no curly brackets)',
-				customListLabelTitle: 'Text to show in Tag dialog'
+				customListValueTitle: '模板名（不含大括号）',
+				customListLabelTitle: '显示的文字'
 			},
 			{
 				name: 'customFileTagList',
-				label: 'Custom file maintenance tags to display',
-				helptip: 'Additional tags that you wish to add for files.',
+				label: '自定义文件维护标记',
+				helptip: '这些会出现在列表的末尾。',
 				type: 'customList',
-				customListValueTitle: 'Template name (no curly brackets)',
-				customListLabelTitle: 'Text to show in Tag dialog'
+				customListValueTitle: '模板名（不含大括号）',
+				customListLabelTitle: '显示的文字''
 			},
 			{
 				name: 'customRedirectTagList',
