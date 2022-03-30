@@ -15,7 +15,7 @@
  ****************************************
  *** twinkleconfig.js: Preferences module
  ****************************************
- * Mode of invocation:     Adds configuration form to Wikipedia:Twinkle/Preferences,
+ * Mode of invocation:     Adds configuration form to Help:Twinkle/参数设置,
                            and adds an ad box to the top of user subpages belonging to the
                            currently logged-in user which end in '.js'
  * Active on:              What I just said.  Yeah.
@@ -910,7 +910,7 @@ Twinkle.config.sections = [
 Twinkle.config.init = function twinkleconfigInit() {
 
 	// create the config page at Wikipedia:Twinkle/Preferences
-	if ((mw.config.get('wgNamespaceNumber') === mw.config.get('wgNamespaceIds').project && mw.config.get('wgTitle') === 'Twinkle/Preferences') &&
+	if ((mw.config.get('wgNamespaceNumber') === mw.config.get('wgNamespaceIds').help && mw.config.get('wgTitle') === 'Twinkle/参数设置') &&
 			mw.config.get('wgAction') === 'view') {
 
 		if (!document.getElementById('twinkle-config')) {
@@ -1255,7 +1255,7 @@ Twinkle.config.init = function twinkleconfigInit() {
 				box.appendChild(document.createTextNode('您可配置您的Twinkle，通过使用'));
 			}
 			link = document.createElement('a');
-			link.setAttribute('href', mw.util.getUrl(mw.config.get('wgFormattedNamespaces')[mw.config.get('wgNamespaceIds').project] + ':Twinkle/参数设置'));
+			link.setAttribute('href', 'Help:Twinkle/参数设置');
 			link.appendChild(document.createTextNode('Twinkle参数设置面板'));
 			box.appendChild(link);
 			box.appendChild(document.createTextNode('，或直接编辑本页。'));
@@ -1267,7 +1267,7 @@ Twinkle.config.init = function twinkleconfigInit() {
 
 			box.appendChild(document.createTextNode('If you want to set Twinkle preferences, you can use the '));
 			link = document.createElement('a');
-			link.setAttribute('href', mw.util.getUrl(mw.config.get('wgFormattedNamespaces')[mw.config.get('wgNamespaceIds').project] + ':Twinkle/Preferences'));
+			link.setAttribute('href', 'Help:Twinkle/参数设置');
 			link.appendChild(document.createTextNode('Twinkle preferences panel'));
 			box.appendChild(link);
 			box.appendChild(document.createTextNode('.'));
