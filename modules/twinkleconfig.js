@@ -22,13 +22,13 @@
 Twinkle.config = {};
 
 Twinkle.config.watchlistEnums = {
-	'yes': 'Add to watchlist (indefinitely)',
-	'no': "Don't add to watchlist",
-	'default': 'Follow your site preferences',
-	'1 week': 'Watch for 1 week',
-	'1 month': 'Watch for 1 month',
-	'3 months': 'Watch for 3 months',
-	'6 months': 'Watch for 6 months'
+	'yes': '加入监视列表，长期监视',
+	'no': '不加入监视列表',
+	'default': '遵守站点设置',
+	'1 week': '加入监视列表，监视7日',
+	'1 month': '加入监视列表，监视1个月',
+	'3 months': '加入监视列表，监视3个月',
+	'6 months': '加入监视列表，监视6个月'
 };
 
 Twinkle.config.commonSets = {
@@ -36,53 +36,53 @@ Twinkle.config.commonSets = {
 		db: '自定义理由（{{db}}）',
 		g1: 'G1', g2: 'G2', g3: 'G3', g4: 'G4', g5: 'G5', g6: 'G6', g7: 'G7', g8: 'G8', g9: 'G9',
 		a1: 'A1', a2: 'A2', a3: 'A3',
-		r1: 'R1', r2: 'R2',
+		o1: 'O1', o2: 'O2', o3: 'O3',
 		f1: 'F1', f2: 'F2',
-		o1: 'O1', o2: 'O2', o3: 'O3'
+		r1: 'R1', r2: 'R2'
 	},
 	csdCriteriaDisplayOrder: [
 		'db',
 		'g1', 'g2', 'g3', 'g4', 'g5', 'g6', 'g7', 'g8', 'g9',
 		'a1', 'a2', 'a3',
-		'r1', 'r2',
+		'o1', 'o2', 'o3',
 		'f1', 'f2',
-		'o1', 'o2', 'o3'
+		'r1', 'r2'
 	],
 	csdCriteriaNotification: {
 		db: '自定义理由（{{db}}）',
 		g1: 'G1', g2: 'G2', g3: 'G3', g4: 'G4', g5: 'G5', g6: 'G6', g7: 'G7', g8: 'G8', g9: 'G9',
 		a1: 'A1', a2: 'A2', a3: 'A3',
-		r1: 'R1', r2: 'R2',
+		o1: 'O1', o2: 'O2', o3: 'O3',
 		f1: 'F1', f2: 'F2',
-		o1: 'O1', o2: 'O2', o3: 'O3'
+		r1: 'R1', r2: 'R2'
 	},
 	csdCriteriaNotificationDisplayOrder: [
 		'db',
 		'g1', 'g2', 'g3', 'g4', 'g5', 'g6', 'g7', 'g8', 'g9',
 		'a1', 'a2', 'a3',
-		'r1', 'r2',
+		'o1', 'o2', 'o3',
 		'f1', 'f2',
-		'o1', 'o2', 'o3'
+		'r1', 'r2'
 	],
 	csdAndDICriteria: {
 		db: '自定义理由（{{db}}）',
 		g1: 'G1', g2: 'G2', g3: 'G3', g4: 'G4', g5: 'G5', g6: 'G6', g7: 'G7', g8: 'G8', g9: 'G9',
 		a1: 'A1', a2: 'A2', a3: 'A3',
-		r1: 'R1', r2: 'R2',
+		o1: 'O1', o2: 'O2', o3: 'O3',
 		f1: 'F1', f2: 'F2',
-		o1: 'O1', o2: 'O2', o3: 'O3'
+		r1: 'R1', r2: 'R2'
 	},
 	csdAndDICriteriaDisplayOrder: [
 		'db',
 		'g1', 'g2', 'g3', 'g4', 'g5', 'g6', 'g7', 'g8', 'g9',
 		'a1', 'a2', 'a3',
-		'r1', 'r2',
+		'o1', 'o2', 'o3',
 		'f1', 'f2',
-		'o1', 'o2', 'o3'
+		'r1', 'r2'
 	],
 	namespacesNoSpecial: {
-		0: 'Article',
-		1: 'Talk (article)',
+		0: '（条目）',
+		1: 'Talk',
 		2: 'User',
 		3: 'User talk',
 		4: 'Qiuwen',
@@ -134,7 +134,7 @@ Twinkle.config.commonSets = {
 
 Twinkle.config.sections = [
 	{
-		title: 'General',
+		title: '常规',
 		module: 'general',
 		preferences: [
 			// TwinkleConfig.userTalkPageMode may take arguments:
@@ -143,54 +143,55 @@ Twinkle.config.sections = [
 			// 'blank': force open in a new window, even if such a window exists
 			{
 				name: 'userTalkPageMode',
-				label: 'When opening a user talk page, open it',
+				label: '当要打开用户讨论页时',
 				type: 'enum',
-				enumValues: { window: 'In a window, replacing other user talks', tab: 'In a new tab', blank: 'In a totally new window' }
+				enumValues: { window: '在窗口中，替换成其它用户对话页', tab: '在新标签页中', blank: '在新窗口中' }
 			},
 
 			// TwinkleConfig.dialogLargeFont (boolean)
 			{
 				name: 'dialogLargeFont',
-				label: 'Use larger text in Twinkle dialogs',
+				label: '在Twinkle对话框中使用大号字体',
 				type: 'boolean'
 			},
 
 			// Twinkle.config.disabledModules (array)
 			{
 				name: 'disabledModules',
-				label: 'Turn off the selected Twinkle modules',
-				helptip: 'Anything you select here will NOT be available for use, so act with care. Uncheck to reactivate.',
+				label: '关闭指定的Twinkle模块',
+				helptip: '您在此勾选的功能将无法使用；取消勾选即可重新启用功能',
 				type: 'set',
-				setValues: { arv: 'ARV', warn: 'Warn', welcome: 'Welcome', shared: 'Shared IP', talkback: 'Talkback', speedy: 'CSD', xfd: 'XfD', image: 'Image (DI)', protect: 'Protect (RPP)', tag: 'Tag', diff: 'Diff', unlink: 'Unlink', fluff: 'Revert and rollback' }
+				setValues: { arv: '告状', warn: '警告', welcome: '欢迎', talkback: '通知', speedy: '速删', xfd: '提删', image: '文件', protect: '保护', tag: '标记', diff: '差异', unlink: '链入', fluff: '撤销' }
 			},
 
 			// Twinkle.config.disabledSysopModules (array)
 			{
-				name: 'disabledSysopModules',
+				name: '关闭指定的Twinkle管理员模块',
 				label: 'Turn off the selected admin-only modules',
-				helptip: 'Anything you select here will NOT be available for use, so act with care. Uncheck to reactivate.',
+				helptip: '您在此勾选的功能将无法使用；取消勾选即可重新启用功能',
 				adminOnly: true,
 				type: 'set',
-				setValues: { block: 'Block', batchdelete: 'D-batch', batchprotect: 'P-batch', batchundelete: 'Und-batch' }
+				setValues: { block: '封禁', batchdelete: '批删', batchprotect: '批保', batchundelete: '批复' }
 			}
 		]
 	},
 
-	{
-		title: 'ARV',
-		module: 'arv',
-		preferences: [
-			{
-				name: 'spiWatchReport',
-				label: 'Add sockpuppet report pages to watchlist',
-				type: 'enum',
-				enumValues: Twinkle.config.watchlistEnums
-			}
-		]
-	},
+	// Preserve for future use.
+	// {
+	// 	title: 'ARV',
+	// 	module: 'arv',
+	// 	preferences: [
+	// 		{
+	// 			name: 'spiWatchReport',
+	// 			label: 'Add sockpuppet report pages to watchlist',
+	// 			type: 'enum',
+	// 			enumValues: Twinkle.config.watchlistEnums
+	// 		}
+	// 	]
+	// },
 
 	{
-		title: 'Block user',
+		title: '封禁',
 		module: 'block',
 		adminOnly: true,
 		preferences: [
@@ -198,7 +199,7 @@ Twinkle.config.sections = [
 			// Whether to default to just blocking the /64 on or off
 			{
 				name: 'defaultToBlock64',
-				label: 'For IPv6 addresses, select the option to block the /64 range by default',
+				label: '对于IPv6地址，点击此选项，将默认封禁/64地址块',
 				type: 'boolean'
 			},
 
@@ -206,8 +207,8 @@ Twinkle.config.sections = [
 			// Whether to default partial blocks on or off
 			{
 				name: 'defaultToPartialBlocks',
-				label: 'Select partial blocks by default when opening the block menu',
-				helptip: 'If the user is already blocked, this will be overridden by in favor of defaulting to the current block type',
+				label: '打开封禁菜单时默认选择部分封禁',
+				helptip: '若该用户已封禁，该选项将被覆盖为对应现有封禁类型的默认选项',
 				type: 'boolean'
 			},
 
@@ -215,22 +216,21 @@ Twinkle.config.sections = [
 			// if true, blank the talk page when issuing an indef block notice (per [[QW:UWUL#Indefinitely blocked users]])
 			{
 				name: 'blankTalkpageOnIndefBlock',
-				label: 'Blank the talk page when indefinitely blocking users',
-				helptip: 'See <a href="' + mw.util.getUrl('Qiuwen:WikiProject_User_warnings/Usage_and_layout#Indefinitely_blocked_users') + '">WP:UWUL</a> for more information.',
+				label: '当永封用户时，清空其用户讨论页',
 				type: 'boolean'
 			}
 		]
 	},
 
 	{
-		title: 'Image deletion (DI)',
+		title: '文件（图权）',
 		module: 'image',
 		preferences: [
 			// TwinkleConfig.notifyUserOnDeli (boolean)
 			// If the user should be notified after placing a file deletion tag
 			{
 				name: 'notifyUserOnDeli',
-				label: 'Check the "notify initial uploader" box by default',
+				label: '默认勾选“通知创建者”',
 				type: 'boolean'
 			},
 
@@ -238,7 +238,7 @@ Twinkle.config.sections = [
 			// The watchlist setting of the page tagged for deletion.
 			{
 				name: 'deliWatchPage',
-				label: 'Add image page to watchlist when tagging',
+				label: '标记图片时加入到监视列表',
 				type: 'enum',
 				enumValues: Twinkle.config.watchlistEnums
 			},
@@ -247,7 +247,7 @@ Twinkle.config.sections = [
 			// The watchlist setting of the user talk page if a notification is placed.
 			{
 				name: 'deliWatchUser',
-				label: 'Add user talk page of initial uploader to watchlist when notifying',
+				label: '标记图片时，将文件上传者讨论页添加到监视列表',
 				type: 'enum',
 				enumValues: Twinkle.config.watchlistEnums
 			}
@@ -379,18 +379,6 @@ Twinkle.config.sections = [
 				label: 'Show rollback links on these pages',
 				type: 'set',
 				setValues: { diff: 'Diff pages', others: 'Contributions pages of other users', mine: 'My contributions page', recent: 'Recent changes and related changes special pages', history: 'History pages' }
-			}
-		]
-	},
-
-	{
-		title: 'Shared IP tagging',
-		module: 'shared',
-		preferences: [
-			{
-				name: 'markSharedIPAsMinor',
-				label: 'Mark shared IP tagging as a minor edit',
-				type: 'boolean'
 			}
 		]
 	},
@@ -698,16 +686,6 @@ Twinkle.config.sections = [
 				name: 'combinedSingletMenus',
 				label: 'Replace the two separate single-issue menus into one combined menu',
 				helptip: 'Selecting either single-issue notices or single-issue warnings as your default will make this your default if enabled.',
-				type: 'boolean'
-			},
-
-			// TwinkleConfig.showSharedIPNotice may take arguments:
-			// true: to show shared ip notice if an IP address
-			// false: to not print the notice
-			{
-				name: 'showSharedIPNotice',
-				label: 'Add extra notice on shared IP talk pages',
-				helptip: 'Notice used is {{Shared IP advice}}',
 				type: 'boolean'
 			},
 
