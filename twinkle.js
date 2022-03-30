@@ -98,8 +98,8 @@ Twinkle.defaultConfig = {
 	deleteSysopDefaultToDelete: false,
 	speedyWindowHeight: 500,
 	speedyWindowWidth: 800,
-	logSpeedyNominations: false,
-	speedyLogPageName: 'CSD log',
+	logSpeedyNominations: true,
+	speedyLogPageName: 'CSD日志',
 	noLogOnSpeedyNomination: [ 'o1' ],
 
 	// Unlink
@@ -114,8 +114,8 @@ Twinkle.defaultConfig = {
 	customWarningList: [],
 
 	// XfD
-	logXfdNominations: false,
-	xfdLogPageName: 'XfD log',
+	logXfdNominations: true,
+	xfdLogPageName: 'XfD日志',
 	noLogOnXfdNomination: [],
 	xfdWatchDiscussion: 'default',
 	xfdWatchList: 'no',
@@ -131,9 +131,9 @@ Twinkle.defaultConfig = {
 	batchChunks: 50,
 
 	// Deprecated options, as a fallback for add-on scripts/modules
-	summaryAd: ' ([[H:TW|Twinkle]])',
-	deletionSummaryAd: ' ([[H:TW|Twinkle]])',
-	protectionSummaryAd: ' ([[H:TW|Twinkle]])',
+	summaryAd: '（[[H:TW|Twinkle]]）',
+	deletionSummaryAd: '（[[H:TW|Twinkle]]）',
+	protectionSummaryAd: '（[[H:TW|Twinkle]]）',
 
 	// Formerly defaultConfig.friendly:
 	// Tag
@@ -160,8 +160,8 @@ Twinkle.defaultConfig = {
 	// Talkback
 	markTalkbackAsMinor: true,
 	insertTalkbackSignature: true,  // always sign talkback templates
-	talkbackHeading: 'New message from ' + mw.config.get('wgUserName'),
-	mailHeading: "You've got mail!",
+	talkbackHeading: '来自' + mw.config.get('wgUserName') + '的新邮件',
+	mailHeading: '您收到了一封邮件！',
 
 	// Shared
 	markSharedIPAsMinor: true
@@ -487,7 +487,7 @@ Twinkle.load = function () {
 Twinkle.changeTags = 'twinkle';
 // Available for actions that don't (yet) support tags
 // currently: FlaggedRevs and PageTriage
-Twinkle.summaryAd = ' ([[H:TW|Twinkle]])';
+Twinkle.summaryAd = '（[[H:TW|Twinkle]]）';
 
 // Various hatnote templates, used when tagging (csd/xfd/tag/protect) to
 // ensure MOS:ORDER

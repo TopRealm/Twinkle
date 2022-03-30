@@ -119,7 +119,7 @@ Twinkle.xfd.callback = function twinklexfdCallback() {
 	var Window = new Morebits.simpleWindow(700, 400);
 	Window.setTitle('Start a deletion discussion (XfD)');
 	Window.setScriptName('Twinkle');
-	Window.addFooterLink('About deletion discussions', 'WP:XFD');
+	Window.addFooterLink('About deletion discussions', 'QW:XFD');
 	Window.addFooterLink('XfD prefs', 'H:TW/PREF#xfd');
 	Window.addFooterLink('Twinkle help', 'H:TW/DOC#xfd');
 	Window.addFooterLink('Give feedback', 'HT:TW');
@@ -819,7 +819,7 @@ Twinkle.xfd.callbacks = {
 		if (venue === 'rm') { // RM templates are sensitive to page title
 			form.previewer.beginRender(templatetext, params.rmtr ? 'Wikipedia:Requested moves/Technical requests' : new mw.Title(Morebits.pageNameNorm).getTalkPage().toText());
 		} else {
-			form.previewer.beginRender(templatetext, 'WP:TW'); // Force wikitext
+			form.previewer.beginRender(templatetext, 'QW:TW'); // Force wikitext
 		}
 	},
 	preview: function(form) {

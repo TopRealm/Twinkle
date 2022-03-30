@@ -34,8 +34,8 @@ Twinkle.arv.callback = function (uid, isIP) {
 	var Window = new Morebits.simpleWindow(600, 500);
 	Window.setTitle('Advance Reporting and Vetting'); // Backronym
 	Window.setScriptName('Twinkle');
-	Window.addFooterLink('AIV guide', 'WP:GAIV');
-	Window.addFooterLink('UAA guide', 'WP:UAAI');
+	Window.addFooterLink('AIV guide', 'QW:GAIV');
+	Window.addFooterLink('UAA guide', 'QW:UAAI');
 	Window.addFooterLink('SPI guide', 'Wikipedia:Sockpuppet investigations/SPI/Guide to filing cases');
 	Window.addFooterLink('ARV prefs', 'H:TW/PREF#arv');
 	Window.addFooterLink('Twinkle help', 'H:TW/DOC#arv');

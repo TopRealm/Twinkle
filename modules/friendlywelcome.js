@@ -120,7 +120,6 @@ Twinkle.welcome.callback = function friendlywelcomeCallback(uid) {
 	var Window = new Morebits.simpleWindow(600, 420);
 	Window.setTitle('Welcome user');
 	Window.setScriptName('Twinkle');
-	Window.addFooterLink('Welcoming Committee', 'WP:WC');
 	Window.addFooterLink('Welcome prefs', 'H:TW/PREF#welcome');
 	Window.addFooterLink('Twinkle help', 'H:TW/DOC#welcome');
 	Window.addFooterLink('Give feedback', 'HT:TW');

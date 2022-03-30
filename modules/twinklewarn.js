@@ -61,7 +61,7 @@ Twinkle.warn.callback = function twinklewarnCallback() {
 	dialog = Twinkle.warn.dialog;
 	dialog.setTitle('Warn/notify user');
 	dialog.setScriptName('Twinkle');
-	dialog.addFooterLink('Choosing a warning level', 'WP:UWUL#Levels');
+	dialog.addFooterLink('Choosing a warning level', 'QW:UWUL#Levels');
 	dialog.addFooterLink('Warn prefs', 'H:TW/PREF#warn');
 	dialog.addFooterLink('Twinkle help', 'H:TW/DOC#warn');
 	dialog.addFooterLink('Give feedback', 'HT:TW');

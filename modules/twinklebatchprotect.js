@@ -27,7 +27,7 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 	var Window = new Morebits.simpleWindow(600, 400);
 	Window.setTitle('Batch protection');
 	Window.setScriptName('Twinkle');
-	Window.addFooterLink('Protection policy', 'WP:PROT');
+	Window.addFooterLink('Protection policy', 'QW:PROT');
 	Window.addFooterLink('Twinkle help', 'H:TW/DOC#protect');
 	Window.addFooterLink('Give feedback', 'HT:TW');
 

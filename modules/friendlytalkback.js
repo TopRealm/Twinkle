@@ -240,67 +240,67 @@ Twinkle.talkback.noticeboards = {
 	},
 	// let's keep AN and its cousins at the top
 	afchd: {
-		label: 'WP:AFCHD (Articles for creation/Help desk)',
+		label: 'QW:AFCHD (Articles for creation/Help desk)',
 		text: '{{subst:AFCHD/u|$SECTION}} ~~~~',
 		editSummary: 'You have replies at the [[Qiuwen:AFCHD|Articles for Creation Help Desk]]'
 	},
 	blpn: {
-		label: 'WP:BLPN (Biographies of living persons noticeboard)',
+		label: 'QW:BLPN (Biographies of living persons noticeboard)',
 		text: '{{subst:BLPN-notice|thread=$SECTION}} ~~~~',
 		editSummary: 'Notice of discussion at [[Qiuwen:Biographies of living persons/Noticeboard]]'
 	},
 	coin: {
-		label: 'WP:COIN (Conflict of interest noticeboard)',
+		label: 'QW:COIN (Conflict of interest noticeboard)',
 		text: '{{subst:Coin-notice|thread=$SECTION}} ~~~~',
 		editSummary: 'Notice of discussion at [[Qiuwen:Conflict of interest/Noticeboard]]'
 	},
 	drn: {
-		label: 'WP:DRN (Dispute resolution noticeboard)',
+		label: 'QW:DRN (Dispute resolution noticeboard)',
 		text: '{{subst:DRN-notice|thread=$SECTION}} ~~~~',
 		editSummary: 'Notice of discussion at [[Qiuwen:Dispute resolution noticeboard]]'
 	},
 	effp: {
-		label: 'WP:EFFP/R (Edit filter false positive report)',
+		label: 'QW:EFFP/R (Edit filter false positive report)',
 		text: '{{EFFPReply|1=$SECTION|2=~~~~}}',
 		editSummary: 'You have replies to your [[Qiuwen:Edit filter/False positives/Reports|edit filter false positive report]]'
 	},
 	eln: {
-		label: 'WP:ELN (External links noticeboard)',
+		label: 'QW:ELN (External links noticeboard)',
 		text: '{{subst:ELN-notice|thread=$SECTION}} ~~~~',
 		editSummary: 'Notice of discussion at [[Qiuwen:External links/Noticeboard]]'
 	},
 	ftn: {
-		label: 'WP:FTN (Fringe theories noticeboard)',
+		label: 'QW:FTN (Fringe theories noticeboard)',
 		text: '{{subst:Ftn-notice|thread=$SECTION}} ~~~~',
 		editSummary: 'Notice of discussion at [[Qiuwen:Fringe theories/Noticeboard]]'
 	},
 	hd: {
-		label: 'WP:HD (Help desk)',
+		label: 'QW:HD (Help desk)',
 		text: '== Your question at the Help desk ==\n' + '{{helpdeskreply|1=$SECTION|ts=~~~~~}}',
 		editSummary: 'You have replies at the [[Qiuwen:Help desk|Wikipedia help desk]]'
 	},
 	norn: {
-		label: 'WP:NORN (No original research noticeboard)',
+		label: 'QW:NORN (No original research noticeboard)',
 		text: '{{subst:Norn-notice|thread=$SECTION}} ~~~~',
 		editSummary: 'Notice of discussion at [[Qiuwen:No original research/Noticeboard]]'
 	},
 	npovn: {
-		label: 'WP:NPOVN (Neutral point of view noticeboard)',
+		label: 'QW:NPOVN (Neutral point of view noticeboard)',
 		text: '{{subst:NPOVN-notice|thread=$SECTION}} ~~~~',
 		editSummary: 'Notice of discussion at [[Qiuwen:Neutral point of view/Noticeboard]]'
 	},
 	rsn: {
-		label: 'WP:RSN (Reliable sources noticeboard)',
+		label: 'QW:RSN (Reliable sources noticeboard)',
 		text: '{{subst:RSN-notice|thread=$SECTION}} ~~~~',
 		editSummary: 'Notice of discussion at [[Qiuwen:Reliable sources/Noticeboard]]'
 	},
 	th: {
-		label: 'WP:THQ (Teahouse question forum)',
+		label: 'QW:THQ (Teahouse question forum)',
 		text: "== Teahouse talkback: you've got messages! ==\n{{WP:Teahouse/Teahouse talkback|WP:Teahouse/Questions|$SECTION|ts=~~~~}}",
 		editSummary: 'You have replies at the [[Qiuwen:Teahouse/Questions|Teahouse question board]]'
 	},
 	vrt: {
-		label: 'WP:VRTN (VRT noticeboard)',
+		label: 'QW:VRTN (VRT noticeboard)',
 		text: '{{subst:VRTreply|1=$SECTION}}\n~~~~',
 		editSummary: 'You have replies at the [[Qiuwen:VRT noticeboard|VRT noticeboard]]'
 	}

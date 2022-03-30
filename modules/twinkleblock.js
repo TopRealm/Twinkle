@@ -39,7 +39,7 @@ Twinkle.block.callback = function twinkleblockCallback() {
 	Window.setTitle('Block or issue block template to ' + relevantUserName);
 	Window.setScriptName('Twinkle');
 	Window.addFooterLink('Block templates', 'Template:Uw-block/doc/Block_templates');
-	Window.addFooterLink('Block policy', 'WP:BLOCK');
+	Window.addFooterLink('Block policy', 'QW:BLOCK');
 	Window.addFooterLink('Block prefs', 'H:TW/PREF#block');
 	Window.addFooterLink('Twinkle help', 'H:TW/DOC#block');
 	Window.addFooterLink('Give feedback', 'HT:TW');
@@ -102,7 +102,7 @@ Twinkle.block.callback = function twinkleblockCallback() {
 		block64field.append({
 			type: 'div',
 			style: 'margin-bottom: 0.5em',
-			label: ['It\'s usually fine, if not better, to ', $.parseHTML('<a target="_blank" href="' + mw.util.getUrl('WP:/64') + '">just block the /64</a>')[0], ' range (',
+			label: ['It\'s usually fine, if not better, to ', $.parseHTML('<a target="_blank" href="' + mw.util.getUrl('QW:/64') + '">just block the /64</a>')[0], ' range (',
 				$.parseHTML('<a target="_blank" href="' + mw.util.getUrl('Special:Contributions/' + sixtyFour) + '">' + sixtyFour + '</a>)')[0], ').']
 		});
 		block64field.append({

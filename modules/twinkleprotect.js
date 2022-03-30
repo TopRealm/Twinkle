@@ -28,7 +28,7 @@ Twinkle.protect.callback = function twinkleprotectCallback() {
 	Window.setTitle(Morebits.userIsSysop ? 'Apply, request or tag page protection' : 'Request or tag page protection');
 	Window.setScriptName('Twinkle');
 	Window.addFooterLink('Protection templates', 'Template:Protection templates');
-	Window.addFooterLink('Protection policy', 'WP:PROT');
+	Window.addFooterLink('Protection policy', 'QW:PROT');
 	Window.addFooterLink('Twinkle help', 'H:TW/DOC#protect');
 	Window.addFooterLink('Give feedback', 'HT:TW');
 
