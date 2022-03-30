@@ -1250,15 +1250,15 @@ Twinkle.config.init = function twinkleconfigInit() {
 			box.setAttribute('class', 'config-twopt-box');
 
 			if (mw.config.get('wgArticleId') > 0) {  // page exists
-				box.appendChild(document.createTextNode('This page contains your Twinkle preferences. You can change them using the '));
+				box.appendChild(document.createTextNode('本页包含您的Twinkle参数设置，您可使用'));
 			} else {  // page does not exist
-				box.appendChild(document.createTextNode('You can customize Twinkle to suit your preferences by using the '));
+				box.appendChild(document.createTextNode('您可配置您的Twinkle，通过使用'));
 			}
 			link = document.createElement('a');
-			link.setAttribute('href', mw.util.getUrl(mw.config.get('wgFormattedNamespaces')[mw.config.get('wgNamespaceIds').project] + ':Twinkle/Preferences'));
-			link.appendChild(document.createTextNode('Twinkle preferences panel'));
+			link.setAttribute('href', mw.util.getUrl(mw.config.get('wgFormattedNamespaces')[mw.config.get('wgNamespaceIds').project] + ':Twinkle/参数设置'));
+			link.appendChild(document.createTextNode('Twinkle参数设置面板'));
 			box.appendChild(link);
-			box.appendChild(document.createTextNode(', or by editing this page.'));
+			box.appendChild(document.createTextNode('，或直接编辑本页。'));
 			$(box).insertAfter($('#contentSub'));
 
 		} else if (['monobook', 'vector', 'vector-2022', 'cologneblue', 'modern', 'timeless', 'minerva', 'common'].indexOf(scriptPageName) !== -1) {
