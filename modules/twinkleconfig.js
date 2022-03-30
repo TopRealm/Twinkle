@@ -589,7 +589,7 @@ Twinkle.config.sections = [
 			{
 				name: 'customTagList',
 				label: '自定义条目维护标记',
-				helptip: "这些标记会出现在列表的末尾。",
+				helptip: '这些标记会出现在列表的末尾。',
 				type: 'customList',
 				customListValueTitle: '模板名（不含大括号）',
 				customListLabelTitle: '显示的文字'
@@ -600,7 +600,7 @@ Twinkle.config.sections = [
 				helptip: '这些会出现在列表的末尾。',
 				type: 'customList',
 				customListValueTitle: '模板名（不含大括号）',
-				customListLabelTitle: '显示的文字''
+				customListLabelTitle: '显示的文字'
 			},
 			{
 				name: 'customRedirectTagList',
@@ -882,6 +882,18 @@ Twinkle.config.sections = [
 				name: 'revertMaxRevisions',
 				type: 'integer'
 			},
+			// twinklebatchdelete.js: How many pages should be processed maximum
+			{
+				name: 'batchMax',
+				type: 'integer',
+				adminOnly: true
+			},
+			// How many pages should be processed at a time by deprod and batchdelete/protect/undelete
+			{
+				name: 'batchChunks',
+				type: 'integer',
+				adminOnly: true
+			},
 			// twinklewarn.js: When using the autolevel select option, how many days makes a prior warning stale
 			// Huggle is three days ([[Special:Diff/918980316]] and [[Special:Diff/919417999]]) while ClueBotNG is two:
 			// https://github.com/DamianZaremba/cluebotng/blob/4958e25d6874cba01c75f11debd2e511fd5a2ce5/bot/action_functions.php#L62
@@ -915,13 +927,7 @@ Twinkle.config.init = function twinkleconfigInit() {
 		// (settings in that file will still work, but they will be overwritten by twinkleoptions.js settings)
 		if (window.TwinkleConfig || window.FriendlyConfig) {
 			var contentnotice = document.createElement('p');
-			contentnotice.innerHTML = '<table class="plainlinks ombox ombox-content"><tr><td class="mbox-image">' +
-				'<img alt="" src="https://upload.wikimedia.org/wikipedia/commons/3/38/Imbox_content.png" /></td>' +
-				'<td class="mbox-text"><p><big><b>Before modifying your settings here,</b> you must remove your old Twinkle and Friendly settings from your personal skin JavaScript.</big></p>' +
-				'<p>To do this, you can <a href="' + mw.util.getUrl('User:' + mw.config.get('wgUserName') + '/' + mw.config.get('skin') +
-				'.js', { action: 'edit' }) + '" target="_blank"><b>edit your personal skin javascript file</b></a> or <a href="' +
-				mw.util.getUrl('User:' + mw.config.get('wgUserName') + '/common.js', { action: 'edit'}) + '" target="_blank"><b>your common.js file</b></a>, removing all lines of code that refer to <code>TwinkleConfig</code> and <code>FriendlyConfig</code>.</p>' +
-				'</td></tr></table>';
+			contentnotice.innerHTML = '<b>在这里修改您的参数设置之前，</b>确认您已移除了<a href="' + mw.util.getUrl('Special:MyPage/skin.js') + '" title="Special:MyPage/skin.js">用户JavaScript文件</a>中任何旧的<code>FriendlyConfig</code>设置。';
 			contentdiv.appendChild(contentnotice);
 		}
 
@@ -933,7 +939,7 @@ Twinkle.config.init = function twinkleconfigInit() {
 		var toctitle = document.createElement('div');
 		toctitle.id = 'toctitle';
 		var toch2 = document.createElement('h2');
-		toch2.textContent = 'Contents ';
+		toch2.textContent = '目录 ';
 		toctitle.appendChild(toch2);
 		// add TOC show/hide link
 		var toctoggle = document.createElement('span');
@@ -942,7 +948,7 @@ Twinkle.config.init = function twinkleconfigInit() {
 		var toctogglelink = document.createElement('a');
 		toctogglelink.className = 'internal';
 		toctogglelink.setAttribute('href', '#tw-tocshowhide');
-		toctogglelink.textContent = 'hide';
+		toctogglelink.textContent = '隐藏';
 		toctoggle.appendChild(toctogglelink);
 		toctoggle.appendChild(document.createTextNode(']'));
 		toctitle.appendChild(toctoggle);
@@ -953,9 +959,9 @@ Twinkle.config.init = function twinkleconfigInit() {
 			var $tocul = $(tocul);
 			$tocul.toggle();
 			if ($tocul.find(':visible').length) {
-				toctogglelink.textContent = 'hide';
+				toctogglelink.textContent = '隐藏';
 			} else {
-				toctogglelink.textContent = 'show';
+				toctogglelink.textContent = '显示';
 			}
 		}, false);
 		toctable.appendChild(tocul);
@@ -1159,7 +1165,7 @@ Twinkle.config.init = function twinkleconfigInit() {
 							value: gotPref,
 							pref: pref
 						});
-						button.appendChild(document.createTextNode('Edit items'));
+						button.appendChild(document.createTextNode('编辑项目'));
 						cell.appendChild(button);
 						break;
 
@@ -1187,7 +1193,7 @@ Twinkle.config.init = function twinkleconfigInit() {
 					resetlink.addEventListener('click', Twinkle.config.resetPrefLink, false);
 					resetlink.style.cssFloat = 'right';
 					resetlink.style.margin = '0 0.6em';
-					resetlink.appendChild(document.createTextNode('Reset'));
+					resetlink.appendChild(document.createTextNode('重置'));
 					cell.appendChild(resetlink);
 				}
 				row.appendChild(cell);
@@ -1205,7 +1211,7 @@ Twinkle.config.init = function twinkleconfigInit() {
 		var button = document.createElement('button');
 		button.setAttribute('id', 'twinkle-config-submit');
 		button.setAttribute('type', 'submit');
-		button.appendChild(document.createTextNode('Save changes'));
+		button.appendChild(document.createTextNode('保存更改'));
 		footerbox.appendChild(button);
 		var footerspan = document.createElement('span');
 		footerspan.className = 'plainlinks';
@@ -1215,7 +1221,7 @@ Twinkle.config.init = function twinkleconfigInit() {
 		footera.setAttribute('href', '#tw-reset-all');
 		footera.setAttribute('id', 'twinkle-config-resetall');
 		footera.addEventListener('click', Twinkle.config.resetAllPrefs, false);
-		footera.appendChild(document.createTextNode('Restore defaults'));
+		footera.appendChild(document.createTextNode('恢复默认'));
 		footerspan.appendChild(footera);
 		footerbox.appendChild(footerspan);
 		contentform.appendChild(footerbox);
@@ -1285,7 +1291,7 @@ Twinkle.config.listDialog.addRow = function twinkleconfigListDialogAddRow($dlgta
 					.on('click', function () {
 						$contenttr.remove();
 					})
-					.text('Remove')
+					.text('移除')
 			),
 			$('<td>').append(
 				$valueInput = $('<input>')
@@ -1318,7 +1324,7 @@ Twinkle.config.listDialog.display = function twinkleconfigListDialogDisplay(e) {
 
 	var dialog = new Morebits.simpleWindow(720, 400);
 	dialog.setTitle(curpref.label);
-	dialog.setScriptName('Twinkle preferences');
+	dialog.setScriptName('Twinkle参数设置');
 
 	var $dlgtbody;
 
@@ -1338,10 +1344,10 @@ Twinkle.config.listDialog.display = function twinkleconfigListDialogDisplay(e) {
 								.css('width', '5%'),
 							$('<th>') // value column header
 								.css('width', '35%')
-								.text(curpref.customListValueTitle ? curpref.customListValueTitle : 'Value'),
+								.text(curpref.customListValueTitle ? curpref.customListValueTitle : '数值'),
 							$('<th>') // label column header
 								.css('width', '60%')
-								.text(curpref.customListLabelTitle ? curpref.customListLabelTitle : 'Label')
+								.text(curpref.customListLabelTitle ? curpref.customListLabelTitle : '标签')
 						)
 					),
 					$('<tfoot>').append(
@@ -1350,7 +1356,7 @@ Twinkle.config.listDialog.display = function twinkleconfigListDialogDisplay(e) {
 								.attr('colspan', '3')
 								.append(
 									$('<button>')
-										.text('Add')
+										.text('添加')
 										.css('min-width', '8em')
 										.attr('type', 'button')
 										.on('click', function () {
@@ -1361,20 +1367,20 @@ Twinkle.config.listDialog.display = function twinkleconfigListDialogDisplay(e) {
 					)
 				),
 			$('<button>')
-				.text('Save changes')
+				.text('保存修改')
 				.attr('type', 'submit') // so Morebits.simpleWindow puts the button in the button pane
 				.on('click', function () {
 					Twinkle.config.listDialog.save($prefbutton, $dlgtbody);
 					dialog.close();
 				}),
 			$('<button>')
-				.text('Reset')
+				.text('重置')
 				.attr('type', 'submit')
 				.on('click', function () {
 					Twinkle.config.listDialog.reset($prefbutton, $dlgtbody);
 				}),
 			$('<button>')
-				.text('Cancel')
+				.text('取消')
 				.attr('type', 'submit')
 				.on('click', function () {
 					dialog.close();
@@ -1638,11 +1644,11 @@ Twinkle.config.writePrefs = function twinkleconfigWritePrefs(pageobj) {
 		'\n' +
 		'\n' +
 		'window.Twinkle.prefs = ';
-		text += JSON.stringify(newConfig, null, 2);
-		text +=
+	text += JSON.stringify(newConfig, null, 2);
+	text +=
 		';\n' +
 		'\n' +
-		'// twinkleoptions.js到此为止\n' + 
+		'// twinkleoptions.js到此为止\n' +
 		'// </no' + 'wiki>\n';
 
 	pageobj.setPageText(text);
