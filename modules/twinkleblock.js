@@ -46,8 +46,8 @@ Twinkle.block.callback = function twinkleblockCallback() {
 	Window.setScriptName('Twinkle');
 	Window.addFooterLink('Block templates', 'Template:Uw-block/doc/Block_templates');
 	Window.addFooterLink('Block policy', 'QW:BLOCK');
-	Window.addFooterLink('Block prefs', 'H:TW/PREF#block');
-	Window.addFooterLink('Twinkle help', 'H:TW/DOC#block');
+	Window.addFooterLink('参数设置', 'H:TW/PREF#block');
+	Window.addFooterLink('帮助文档', 'H:TW/DOC#block');
 	Window.addFooterLink('问题反馈', 'HT:TW');
 
 	// Always added, hidden later if actual user not blocked

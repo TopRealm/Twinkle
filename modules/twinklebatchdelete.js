@@ -39,7 +39,7 @@ Twinkle.batchdelete.callback = function twinklebatchdeleteCallback() {
 	var Window = new Morebits.simpleWindow(600, 400);
 	Window.setTitle('Batch deletion');
 	Window.setScriptName('Twinkle');
-	Window.addFooterLink('Twinkle help', 'H:TW/DOC#batchdelete');
+	Window.addFooterLink('帮助文档', 'H:TW/DOC#batchdelete');
 	Window.addFooterLink('问题反馈', 'HT:TW');
 
 	var form = new Morebits.quickForm(Twinkle.batchdelete.callback.evaluate);

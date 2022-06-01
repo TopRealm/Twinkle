@@ -43,8 +43,8 @@ Twinkle.arv.callback = function (uid, isIP) {
 	Window.addFooterLink('AIV guide', 'QW:GAIV');
 	Window.addFooterLink('UAA guide', 'QW:UAAI');
 	Window.addFooterLink('SPI guide', 'Wikipedia:Sockpuppet investigations/SPI/Guide to filing cases');
-	Window.addFooterLink('ARV prefs', 'H:TW/PREF#arv');
-	Window.addFooterLink('Twinkle help', 'H:TW/DOC#arv');
+	Window.addFooterLink('参数设置', 'H:TW/PREF#arv');
+	Window.addFooterLink('帮助文档', 'H:TW/DOC#arv');
 	Window.addFooterLink('问题反馈', 'HT:TW');
 
 	var form = new Morebits.quickForm(Twinkle.arv.callback.evaluate);

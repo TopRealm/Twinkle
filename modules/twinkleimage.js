@@ -29,8 +29,8 @@ Twinkle.image.callback = function twinkleimageCallback() {
 	Window.setTitle('File for dated speedy deletion');
 	Window.setScriptName('Twinkle');
 	Window.addFooterLink('Speedy deletion policy', 'QW:CSD#Files');
-	Window.addFooterLink('Image prefs', 'H:TW/PREF#image');
-	Window.addFooterLink('Twinkle help', 'H:TW/DOC#image');
+	Window.addFooterLink('参数设置', 'H:TW/PREF#image');
+	Window.addFooterLink('帮助文档', 'H:TW/DOC#image');
 	Window.addFooterLink('问题反馈', 'HT:TW');
 
 	var form = new Morebits.quickForm(Twinkle.image.callback.evaluate);

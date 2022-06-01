@@ -34,8 +34,8 @@ Twinkle.unlink.callback = function(presetReason) {
 	var Window = new Morebits.simpleWindow(600, 440);
 	Window.setTitle('Unlink backlinks' + (fileSpace ? ' and file usages' : ''));
 	Window.setScriptName('Twinkle');
-	Window.addFooterLink('Unlink prefs', 'H:TW/PREF#unlink');
-	Window.addFooterLink('Twinkle help', 'H:TW/DOC#unlink');
+	Window.addFooterLink('参数设置', 'H:TW/PREF#unlink');
+	Window.addFooterLink('帮助文档', 'H:TW/DOC#unlink');
 	Window.addFooterLink('问题反馈', 'HT:TW');
 
 	var form = new Morebits.quickForm(Twinkle.unlink.callback.evaluate);

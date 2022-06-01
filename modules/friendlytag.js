@@ -23,11 +23,11 @@ Twinkle.tag = function friendlytag() {
 	// redirect tagging
 	if (Morebits.isPageRedirect()) {
 		Twinkle.tag.mode = 'redirect';
-		Twinkle.addPortletLink(Twinkle.tag.callback, 'Tag', 'friendly-tag', 'Tag redirect');
+		Twinkle.addPortletLink(Twinkle.tag.callback, '标记', 'friendly-tag', '标记重定向');
 	// file tagging
 	} else if (mw.config.get('wgNamespaceNumber') === 6 && !document.getElementById('mw-sharedupload') && document.getElementById('mw-imagepage-section-filehistory')) {
 		Twinkle.tag.mode = 'file';
-		Twinkle.addPortletLink(Twinkle.tag.callback, 'Tag', 'friendly-tag', 'Add maintenance tags to file');
+		Twinkle.addPortletLink(Twinkle.tag.callback, '标记', 'friendly-tag', '为文件添加或移除标记');
 	// article/draft article tagging
 	} else if ([0, 118].indexOf(mw.config.get('wgNamespaceNumber')) !== -1 && mw.config.get('wgCurRevisionId')) {
 		Twinkle.tag.mode = 'article';
@@ -36,7 +36,7 @@ Twinkle.tag = function friendlytag() {
 			// Disabled on latest diff because the diff slider could be used to slide
 			// away from the latest diff without causing the script to reload
 			!mw.config.get('wgDiffNewId');
-		Twinkle.addPortletLink(Twinkle.tag.callback, 'Tag', 'friendly-tag', 'Add or remove article maintenance tags');
+		Twinkle.addPortletLink(Twinkle.tag.callback, '标记', 'friendly-tag', '为条目或移除添加标记');
 	}
 };
 
@@ -46,8 +46,8 @@ Twinkle.tag.callback = function friendlytagCallback() {
 	var Window = new Morebits.simpleWindow(630, Twinkle.tag.mode === 'article' ? 500 : 400);
 	Window.setScriptName('Twinkle');
 	// anyone got a good policy/guideline/info page/instructional page link??
-	Window.addFooterLink('Tag prefs', 'H:TW/PREF#tag');
-	Window.addFooterLink('Twinkle help', 'H:TW/DOC#tag');
+	Window.addFooterLink('参数设置', 'H:TW/PREF#tag');
+	Window.addFooterLink('帮助文档', 'H:TW/DOC#tag');
 	Window.addFooterLink('问题反馈', 'HT:TW');
 
 	var form = new Morebits.quickForm(Twinkle.tag.callback.evaluate);

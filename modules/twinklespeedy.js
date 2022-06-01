@@ -53,8 +53,8 @@ Twinkle.speedy.initDialog = function twinklespeedyInitDialog(callbackfunc) {
 	dialog.setTitle('Choose criteria for speedy deletion');
 	dialog.setScriptName('Twinkle');
 	dialog.addFooterLink('Speedy deletion policy', 'QW:CSD');
-	dialog.addFooterLink('CSD prefs', 'H:TW/PREF#speedy');
-	dialog.addFooterLink('Twinkle help', 'H:TW/DOC#speedy');
+	dialog.addFooterLink('参数设置', 'H:TW/PREF#speedy');
+	dialog.addFooterLink('帮助文档', 'H:TW/DOC#speedy');
 	dialog.addFooterLink('问题反馈', 'HT:TW');
 
 	var form = new Morebits.quickForm(callbackfunc, Twinkle.getPref('speedySelectionStyle') === 'radioClick' ? 'change' : null);
