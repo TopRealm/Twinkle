@@ -125,7 +125,7 @@ Twinkle.tag.callback = function friendlytagCallback() {
 				type: 'select',
 				name: 'sortorder',
 				label: '查看列表：',
-				tooltip: wgULS('您可以在Twinkle参数设置（H:TW/PREF）中更改此项。', '您可以在Twinkle偏好設定（H:TW/PREF）中更改此項。'),
+				tooltip: '您可以在Twinkle参数设置（H:TW/PREF）中更改此项。',
 				event: Twinkle.tag.updateSortOrder,
 				list: [
 					{ type: 'option', value: 'cat', label: '按类别', selected: Twinkle.getPref('tagArticleSortOrder') === 'cat' },
