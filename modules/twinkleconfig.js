@@ -1267,7 +1267,7 @@ Twinkle.config.init = function twinkleconfigInit() {
 
 			box.appendChild(document.createTextNode('If you want to set Twinkle preferences, you can use the '));
 			link = document.createElement('a');
-			link.setAttribute('href', 'Help:Twinkle/参数设置');
+			link.setAttribute('href', '/wiki/Help:Twinkle/参数设置');
 			link.appendChild(document.createTextNode('Twinkle preferences panel'));
 			box.appendChild(link);
 			box.appendChild(document.createTextNode('.'));
