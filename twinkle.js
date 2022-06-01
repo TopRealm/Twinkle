@@ -24,7 +24,7 @@
 (function (window, document, $) { // Wrap with anonymous function
 
 // Check if account is experienced enough to use Twinkle
-if (!Morebits.userIsInGroup('autoconfirmed') && !Morebits.userIsInGroup('confirmed')) {
+if (!Morebits.userIsInGroup('autoconfirmed') && !Morebits.userIsInGroup('confirmed') && !Morebits.userIsInGroup('senioreditor') && !Morebits.userIsInGroup('sysop') && !Morebits.userIsInGroup('steward')) {
 	return;
 }
 
@@ -55,7 +55,7 @@ Twinkle.defaultConfig = {
 	// General
 	userTalkPageMode: 'tab',
 	dialogLargeFont: false,
-	disabledModules: [],
+	disabledModules: Morebits.userIsSysop ? [] : ['block'], // default to disable block for non-sysop, if enable manually, they can only use it to tag userpage
 	disabledSysopModules: [],
 
 	// ARV
@@ -65,6 +65,7 @@ Twinkle.defaultConfig = {
 	defaultToBlock64: false,
 	defaultToPartialBlocks: false,
 	blankTalkpageOnIndefBlock: false,
+	customBlockReasonList: [],
 
 	// Fluff (revert and rollback)
 	autoMenuAfterRollback: false,
@@ -131,12 +132,24 @@ Twinkle.defaultConfig = {
 	xfdWatchUser: '1 month',
 	xfdWatchRelated: '1 month',
 	markXfdPagesAsPatrolled: true,
+	FwdCsdToXfd: Morebits.userIsSysop,
+	afdDefaultCategory: 'delete',
+	afdFameDefaultReason: '没有足够的可靠来源证明此条目符合[[Qiuwen:收录标准|收录标准]]',
+	afdSubstubDefaultReason: '過期小小作品',
+	XfdClose: Morebits.userIsSysop ? 'all' : 'hide',
 
+	// Copyvio
+	copyvioWatchPage: 'yes',
+	copyvioWatchUser: 'yes',
+	markCopyvioPagesAsPatrolled: true,
 	// Hidden preferences
 	autolevelStaleDays: 3, // Huggle is 3, CBNG is 2
 	revertMaxRevisions: 50, // intentionally limited
 	batchMax: 5000,
 	batchChunks: 50,
+	configPage: 'Help:Twinkle/参数设置',
+	projectNamespaceName: mw.config.get('wgFormattedNamespaces')[4],
+	sandboxPage: 'Qiuwen:沙盒',
 
 	// Deprecated options, as a fallback for add-on scripts/modules
 	summaryAd: '（[[H:TW|Twinkle]]）',
@@ -156,10 +169,19 @@ Twinkle.defaultConfig = {
 	customFileTagList: [],
 	customRedirectTagList: [],
 
+	// Stub
+	watchStubbedPages: false,
+	markStubbedPagesAsMinor: false,
+	markStubbedPagesAsPatrolled: true,
+	stubArticleSortOrder: 'cat',
+	customStubList: [],
+
 	// Welcome
 	topWelcomes: false,
 	watchWelcomes: '3 months',
+	welcomeHeading: '欢迎',
 	insertUsername: true,
+	insertSignature: true,
 	quickWelcomeMode: 'norm',
 	quickWelcomeTemplate: 'welcome',
 	customWelcomeList: [],
@@ -428,7 +450,7 @@ $.ajax({
 				Twinkle.prefs.optionsVersion = Twinkle.prefs.optionsVersion || 1;
 			}
 		} catch (e) {
-			mw.notify('Could not parse your Twinkle preferences', {type: 'error'});
+			mw.notify('未能解析您的Twinkle参数设置', {type: 'error'});
 		}
 	})
 	.always(function () {
@@ -441,9 +463,9 @@ $.ajax({
 Twinkle.load = function () {
 	// Don't activate on special pages other than those listed here, so
 	// that others load faster, especially the watchlist.
-	var activeSpecialPageList = [ 'Block', 'Contributions', 'Recentchanges', 'Recentchangeslinked' ]; // wgRelevantUserName defined for non-sysops on Special:Block
+	var activeSpecialPageList = [ 'AbuseLog', 'Block', 'Contributions', 'Recentchanges', 'Recentchangeslinked' ]; // wgRelevantUserName defined for non-sysops on Special:Block
 	if (Morebits.userIsSysop) {
-		activeSpecialPageList = activeSpecialPageList.concat([ 'DeletedContributions', 'Prefixindex' ]);
+		activeSpecialPageList = activeSpecialPageList.concat([ 'DeletedContributions', 'Prefixindex', 'BrokenRedirects' ]);
 	}
 	if (mw.config.get('wgNamespaceNumber') === -1 &&
 		activeSpecialPageList.indexOf(mw.config.get('wgCanonicalSpecialPageName')) === -1) {
@@ -456,7 +478,7 @@ Twinkle.load = function () {
 	}
 
 	// Set custom Api-User-Agent header, for server-side logging purposes
-	Morebits.wiki.api.setApiUserAgent('Twinkle (' + mw.config.get('wgWikiID') + ')');
+	Morebits.wiki.api.setApiUserAgent('Twinkle (Qiuwen/' + mw.config.get('wgWikiID') + ')');
 
 	Twinkle.disabledModules = Twinkle.getPref('disabledModules').concat(Twinkle.getPref('disabledSysopModules'));
 
@@ -499,7 +521,7 @@ Twinkle.summaryAd = '（[[H:TW|Twinkle]]）';
 
 // Various hatnote templates, used when tagging (csd/xfd/tag/protect) to
 // ensure MOS:ORDER
-Twinkle.hatnoteRegex = 'short description|hatnote|main|correct title|dablink|distinguish|for|further|selfref|year dab|similar names|highway detail hatnote|broader|about(?:-distinguish| other people)?|other\\s?(?:hurricane(?: use)?s|people|persons|places|ships|uses(?: of)?)|redirect(?:-(?:distinguish|synonym|multi))?|see\\s?(also(?: if exists)?)';
+Twinkle.hatnoteRegex = '(?:Short[ _]description)|(?:Rellink|Hatnote|HAT)|(?:Main|细节|細節|Main[ _]articles|主条目|主條目|Hurricane[ _]main|条目|條目|主|頁面|页面|主頁面|主页面|主頁|主页|主題目|主题目|Main[ _]article|AP)|(?:Wrongtitle|Correct[ _]title)|(?:主条目消歧义|主條目消歧義|消歧义链接|消歧義鏈接|消歧義連結|消连|消連|消歧义连结|DisambLink|Noteref|Dablink)|(?:Distinguish|不是|Not|提示|混淆|分別|分别|區別|区别|本条目的主题不是|本條目的主題不是|本条目主题不是|本條目主題不是|条目主题不是|條目主題不是|主题不是|主題不是|Confused|区分|區分|Confusion|Confuse|RedirectNOT|Misspelling)|(?:Distinguish2|SelfDistinguish|Not2|不是2)|(?:For)|(?:Details|Further|See|另见|另見|More|相關條目|相关条目|Detail|见|見|更多资料|更多資料|Further[ _]information|更多资讯|更多資訊|More[ _]information|更多信息)|(?:Selfref)|(?:About|Otheruses4|关于|關於)|(?:Other[ _]uses|Otheruse|条目消歧义|條目消歧義|他用|Otheruses)|(?:Other[ _]uses list|Otheruselist|主條目消歧義列表|主条目消歧义列表|Otheruseslist|Aboutlist|About[ _]list|Otheruses[ _]list)|(?:Redirect|重定向至此|Redirects[ _]here|Redirect[ _]to)|(?:Redirect2|主條目消歧義2|主条目消歧义2|Redir|重定向至此2)|(?:Redirect3)|(?:Redirect4)|(?:Redirect-distinguish)|(?:Redirect-synonym)|(?:Redirect-multi)|(?:See[ _]Wiktionary|Seewikt)|(?:Seealso|参看|參看|See[ _]also|参见|參見|Also)|(?:See[ _]also2|Seealso2|不轉換參見|不转换参见)|(?:Other[ _]places)|(?:Contrast|對比|对比)';
 
 // Used in XFD
 Twinkle.makeFindSourcesDiv = function makeSourcesDiv(divID) {
