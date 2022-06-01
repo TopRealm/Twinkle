@@ -97,7 +97,7 @@ Morebits.userIsInGroup = function (group) {
  *
  * @type {boolean}
  */
-Morebits.userIsSysop = Morebits.userIsInGroup('sysop');
+Morebits.userIsSysop = Morebits.userIsInGroup('sysop') || Morebits.userIsInGroup('steward');
 
 /**
  * Deprecated as of February 2021, use {@link Morebits.ip.sanitizeIPv6}.
