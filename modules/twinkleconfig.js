@@ -3,7 +3,7 @@
  * Twinkle.js
  * © 2011-2022 English Wikipedia Contributors
  * © 2021-     Qiuwen Baike Contributors
- * This work is licensed under a Creative Commons 
+ * This work is licensed under a Creative Commons
  * Attribution-ShareAlike 4.0 International License.
  * https://creativecommons.org/licenses/by-sa/4.0/
  */
@@ -178,20 +178,6 @@ Twinkle.config.sections = [
 			}
 		]
 	},
-
-	// Preserve for future use.
-	// {
-	// 	title: 'ARV',
-	// 	module: 'arv',
-	// 	preferences: [
-	// 		{
-	// 			name: 'spiWatchReport',
-	// 			label: 'Add sockpuppet report pages to watchlist',
-	// 			type: 'enum',
-	// 			enumValues: Twinkle.config.watchlistEnums
-	// 		}
-	// 	]
-	// },
 
 	{
 		title: '封禁',
