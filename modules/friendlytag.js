@@ -2,6 +2,7 @@
 /**
  * Twinkle.js
  * © 2011-2022 English Wikipedia Contributors
+ * © 2021-     Qiuwen Baike Contributors
  * This work is licensed under a Creative Commons
  * Attribution-ShareAlike 3.0 Unported License.
  * https://creativecommons.org/licenses/by-sa/3.0/
@@ -54,7 +55,7 @@ Twinkle.tag.callback = function friendlytagCallback() {
 
 	form.append({
 		type: 'input',
-		label: 'Filter tag list:',
+		label: '筛选标记列表：',
 		name: 'quickfilter',
 		size: '30px',
 		event: function twinkletagquickfilter() {
@@ -95,7 +96,7 @@ Twinkle.tag.callback = function friendlytagCallback() {
 
 	switch (Twinkle.tag.mode) {
 		case 'article':
-			Window.setTitle('Article maintenance tagging');
+			Window.setTitle('条目维护标记');
 
 			// Object.values is unavailable in IE 11
 			var obj_values = Object.values || function (obj) {
@@ -123,19 +124,19 @@ Twinkle.tag.callback = function friendlytagCallback() {
 			form.append({
 				type: 'select',
 				name: 'sortorder',
-				label: 'View this list:',
-				tooltip: 'You can change the default view order in your Twinkle preferences (H:TW/PREF).',
+				label: '查看列表：',
+				tooltip: wgULS('您可以在Twinkle参数设置（H:TW/PREF）中更改此项。', '您可以在Twinkle偏好設定（H:TW/PREF）中更改此項。'),
 				event: Twinkle.tag.updateSortOrder,
 				list: [
-					{ type: 'option', value: 'cat', label: 'By categories', selected: Twinkle.getPref('tagArticleSortOrder') === 'cat' },
-					{ type: 'option', value: 'alpha', label: 'In alphabetical order', selected: Twinkle.getPref('tagArticleSortOrder') === 'alpha' }
+					{ type: 'option', value: 'cat', label: '按类别', selected: Twinkle.getPref('tagArticleSortOrder') === 'cat' },
+					{ type: 'option', value: 'alpha', label: '按字母顺序', selected: Twinkle.getPref('tagArticleSortOrder') === 'alpha' }
 				]
 			});
 
 
 			if (!Twinkle.tag.canRemove) {
 				var divElement = document.createElement('div');
-				divElement.innerHTML = 'For removal of existing tags, please open Tag menu from the current version of article';
+				divElement.innerHTML = '要移除现有维护标记，请从当前条目版本中打开“标记”菜单';
 				form.append({
 					type: 'div',
 					name: 'untagnotice',
@@ -154,10 +155,10 @@ Twinkle.tag.callback = function friendlytagCallback() {
 				type: 'checkbox',
 				list: [
 					{
-						label: 'Group inside {{multiple issues}} if possible',
+						label: '如可能，合并入{{multiple issues}}',
 						value: 'group',
 						name: 'group',
-						tooltip: 'If applying two or more templates supported by {{multiple issues}} and this box is checked, all supported templates will be grouped inside a {{multiple issues}} template.',
+						tooltip: '如果加入{{multiple issues}}支持的三个以上的模板，所有支持的模板都会被合并入{{multiple issues}}模板中。',
 						checked: Twinkle.getPref('groupByDefault')
 					}
 				]
@@ -165,16 +166,16 @@ Twinkle.tag.callback = function friendlytagCallback() {
 
 			form.append({
 				type: 'input',
-				label: 'Reason',
+				label: '理由：',
 				name: 'reason',
-				tooltip: 'Optional reason to be appended in edit summary. Recommended when removing tags.',
+				tooltip: '附加于编辑摘要的可选理由，例如指出条目内容的哪些部分有问题或移除模板的理由，但如果理由很长则应该发表在讨论页。',
 				size: '60px'
 			});
 
 			break;
 
 		case 'file':
-			Window.setTitle('File maintenance tagging');
+			Window.setTitle('文件维护标记');
 
 			$.each(Twinkle.tag.fileList, function(groupName, group) {
 				form.append({ type: 'header', label: groupName });
@@ -182,13 +183,13 @@ Twinkle.tag.callback = function friendlytagCallback() {
 			});
 
 			if (Twinkle.getPref('customFileTagList').length) {
-				form.append({ type: 'header', label: 'Custom tags' });
+				form.append({ type: 'header', label: '自定义模板' });
 				form.append({ type: 'checkbox', name: 'tags', list: Twinkle.getPref('customFileTagList') });
 			}
 			break;
 
 		case 'redirect':
-			Window.setTitle('Redirect tagging');
+			Window.setTitle('重定向标记');
 
 			var i = 1;
 			$.each(Twinkle.tag.redirectList, function(groupName, group) {
@@ -207,13 +208,13 @@ Twinkle.tag.callback = function friendlytagCallback() {
 			});
 
 			if (Twinkle.getPref('customRedirectTagList').length) {
-				form.append({ type: 'header', label: 'Custom tags' });
+				form.append({ type: 'header', label: '自定义模板' });
 				form.append({ type: 'checkbox', name: 'tags', list: Twinkle.getPref('customRedirectTagList') });
 			}
 			break;
 
 		default:
-			alert('Twinkle.tag: unknown mode ' + Twinkle.tag.mode);
+			alert('Twinkle.tag：未知模式' + Twinkle.tag.mode);
 			break;
 	}
 
@@ -222,7 +223,7 @@ Twinkle.tag.callback = function friendlytagCallback() {
 			type: 'checkbox',
 			list: [
 				{
-					label: 'Mark the page as patrolled/reviewed',
+					label: '标记页面为已巡查',
 					value: 'patrol',
 					name: 'patrol',
 					checked: Twinkle.getPref('markTaggedPagesAsPatrolled')
@@ -342,7 +343,7 @@ Twinkle.tag.updateSortOrder = function(e) {
 	};
 
 	var makeCheckboxesForAlreadyPresentTags = function() {
-		container.append({ type: 'header', id: 'tagHeader0', label: 'Tags already present' });
+		container.append({ type: 'header', id: 'tagHeader0', label: '已放置的维护标记' });
 		var subdiv = container.append({ type: 'div', id: 'tagSubdiv0' });
 		var checkboxes = [];
 		var unCheckedTags = e.target.form.getUnchecked('existingTags');
@@ -401,7 +402,7 @@ Twinkle.tag.updateSortOrder = function(e) {
 	} else { // alphabetical sort order
 		if (Twinkle.tag.alreadyPresentTags.length > 0) {
 			makeCheckboxesForAlreadyPresentTags();
-			container.append({ type: 'header', id: 'tagHeader1', label: 'Available tags' });
+			container.append({ type: 'header', id: 'tagHeader1', label: '可用的维护标记' });
 		}
 
 		// Avoid repeatedly resorting
@@ -421,7 +422,7 @@ Twinkle.tag.updateSortOrder = function(e) {
 
 	// append any custom tags
 	if (Twinkle.getPref('customTagList').length) {
-		container.append({ type: 'header', label: 'Custom tags' });
+		container.append({ type: 'header', label: '自定义模板' });
 		container.append({ type: 'checkbox', name: 'tags',
 			list: Twinkle.getPref('customTagList').map(function(el) {
 				el.checked = Twinkle.tag.checkedTags.indexOf(el.value) !== -1;
@@ -457,8 +458,8 @@ Twinkle.tag.updateSortOrder = function(e) {
 			Twinkle.tag.status.numRemoved += this.checked ? -1 : 1;
 		}
 
-		var firstPart = 'Adding ' + Twinkle.tag.status.numAdded + ' tag' + (Twinkle.tag.status.numAdded > 1 ? 's' : '');
-		var secondPart = 'Removing ' + Twinkle.tag.status.numRemoved + ' tag' + (Twinkle.tag.status.numRemoved > 1 ? 's' : '');
+		var firstPart = '加入' + Twinkle.tag.status.numAdded + '个标记';
+		var secondPart = '移除' + Twinkle.tag.status.numRemoved + '个标记';
 		statusNode.textContent =
 			(Twinkle.tag.status.numAdded ? '  ' + firstPart : '') +
 			(Twinkle.tag.status.numRemoved ? (Twinkle.tag.status.numAdded ? '; ' : '  ') + secondPart : '');
@@ -513,13 +514,13 @@ var translationSubgroups = [
 
 // Subgroups for {{merge}}, {{merge-to}} and {{merge-from}}
 var getMergeSubgroups = function(tag) {
-	var otherTagName = 'Merge';
+	var otherTagName = '合并';
 	switch (tag) {
 		case 'Merge from':
-			otherTagName = 'Merge to';
+			otherTagName = '合并自';
 			break;
 		case 'Merge to':
-			otherTagName = 'Merge from';
+			otherTagName = '合并至';
 			break;
 		// no default
 	}
@@ -527,8 +528,8 @@ var getMergeSubgroups = function(tag) {
 		{
 			name: 'mergeTarget',
 			type: 'input',
-			label: 'Other article(s):',
-			tooltip: 'If specifying multiple articles, separate them with pipe characters: Article one|Article two',
+			label: '其他条目：:',
+			tooltip: '如果指定多个条目，请使用“|”符号将其分开，例如：条目1|条目2',
 			required: true
 		},
 		{
@@ -536,7 +537,7 @@ var getMergeSubgroups = function(tag) {
 			list: [
 				{
 					name: 'mergeTagOther',
-					label: 'Tag the other article with a {{' + otherTagName + '}} tag',
+					label: '将其他条目以{{' + otherTagName + '}}模板进行标记',
 					checked: true,
 					tooltip: 'Only available if a single article name is entered.'
 				}
@@ -1609,7 +1610,7 @@ Twinkle.tag.callbacks = {
 		var miTest = /\{\{(multiple ?issues|article ?issues|mi)(?!\s*\|\s*section\s*=)[^}]+\{/im.exec(pageText);
 
 		if (miTest && groupableTags.length > 0) {
-			Morebits.status.info('Info', 'Adding supported tags inside existing {{multiple issues}} tag');
+			Morebits.status.info('Info', '加入supported tags inside existing {{multiple issues}} tag');
 
 			tagText = '';
 			$.each(groupableTags, addTag);
@@ -1788,7 +1789,7 @@ Twinkle.tag.callbacks = {
 	file: function friendlytagCallbacksFile(pageobj) {
 		var text = pageobj.getPageText();
 		var params = pageobj.getCallbackParameters();
-		var summary = 'Adding ';
+		var summary = '加入';
 
 		// Add maintenance tags
 		if (params.tags.length) {
