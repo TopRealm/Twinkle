@@ -27,7 +27,7 @@ Twinkle.protect = function twinkleprotect() {
 		return;
 	}
 
-	Twinkle.addPortletLink(Twinkle.protect.callback, '页保',
+	Twinkle.addPortletLink(Twinkle.protect.callback, '保护', 'tw-rpp',
 		Morebits.userIsSysop ? '保护页面' : '请求保护页面');
 };
 
@@ -69,19 +69,19 @@ Twinkle.protect.callback = function twinkleprotectCallback() {
 			{
 				label: '请求保护页面',
 				value: 'request',
-				tooltip: 'If you want to request protection via QW:RPP' + (Morebits.userIsSysop ? ' instead of doing the protection by yourself.' : '.'),
+				tooltip: '如果您想在管理员通告版请求保护此页' + (Morebits.userIsSysop ? '而不是自行完成。' : '。'),
 				checked: !Morebits.userIsSysop
 			},
 			{
-				label: 'Tag page with protection template',
+				label: '用保护模板标记此页',
 				value: 'tag',
-				tooltip: 'If the protecting admin forgot to apply a protection template, or you have just protected the page without tagging, you can use this to apply the appropriate protection tag.',
+				tooltip: '可以用此为页面加上合适的保护模板。',
 				disabled: mw.config.get('wgArticleId') === 0 || mw.config.get('wgPageContentModel') === 'Scribunto'
 			}
 		]
 	});
 
-	form.append({ type: 'field', label: 'Preset', name: 'field_preset' });
+	form.append({ type: 'field', label: '默认', name: 'field_preset' });
 	form.append({ type: 'field', label: '1', name: 'field1' });
 	form.append({ type: 'field', label: '2', name: 'field2' });
 
@@ -103,19 +103,12 @@ Twinkle.protect.callback = function twinkleprotectCallback() {
 
 // A list of bots who may be the protecting sysop, for whom we shouldn't
 // remind the user contact before requesting unprotection (evaluate)
-Twinkle.protect.trustedBots = ['MusikBot II', 'TFA Protector Bot'];
+Twinkle.protect.trustedBots = [ ];
 
 // Customizable namespace and FlaggedRevs settings
 // In theory it'd be nice to have restrictionlevels defined here,
 // but those are only available via a siteinfo query
 
-// mw.loader.getState('ext.flaggedRevs.review') returns null if the
-// FlaggedRevs extension is not registered.  Previously, this was done with
-// wgFlaggedRevsParams, but after 1.34-wmf4 it is no longer exported if empty
-// (https://gerrit.wikimedia.org/r/c/mediawiki/extensions/FlaggedRevs/+/508427)
-var hasFlaggedRevs = mw.loader.getState('ext.flaggedRevs.review') &&
-// FlaggedRevs only valid in some namespaces, hardcoded until [[phab:T218479]]
-(mw.config.get('wgNamespaceNumber') === 0 || mw.config.get('wgNamespaceNumber') === 4);
 // Limit template editor; a Twinkle restriction, not a site setting
 var isTemplate = mw.config.get('wgNamespaceNumber') === 10 || mw.config.get('wgNamespaceNumber') === 828;
 
@@ -161,22 +154,12 @@ Twinkle.protect.fetchProtectionLevel = function twinkleprotectFetchProtectionLev
 		list: 'logevents',
 		letype: 'protect',
 		letitle: mw.config.get('wgPageName'),
-		prop: hasFlaggedRevs ? 'info|flagged' : 'info',
+		prop: 'info',
 		inprop: 'protection|watched',
 		titles: mw.config.get('wgPageName')
 	});
-	var stableDeferred = api.get({
-		format: 'json',
-		action: 'query',
-		list: 'logevents',
-		letype: 'stable',
-		letitle: mw.config.get('wgPageName')
-	});
 
 	var earlyDecision = [protectDeferred];
-	if (hasFlaggedRevs) {
-		earlyDecision.push(stableDeferred);
-	}
 
 	$.when.apply($, earlyDecision).done(function(protectData, stableData) {
 		// $.when.apply is supposed to take an unknown number of promises
@@ -226,7 +209,7 @@ Twinkle.protect.fetchProtectionLevel = function twinkleprotectFetchProtectionLev
 		// show the protection level and log info
 		Twinkle.protect.hasProtectLog = !!protectData[0].query.logevents.length;
 		Twinkle.protect.protectLog = Twinkle.protect.hasProtectLog && protectData[0].query.logevents;
-		Twinkle.protect.hasStableLog = hasFlaggedRevs ? !!stableData[0].query.logevents.length : false;
+		Twinkle.protect.hasStableLog = false;
 		Twinkle.protect.stableLog = Twinkle.protect.hasStableLog && stableData[0].query.logevents;
 		Twinkle.protect.currentProtectionLevels = current;
 
@@ -418,42 +401,6 @@ Twinkle.protect.callback.changeAction = function twinkleprotectCallbackChangeAct
 					// default expiry selection (2 days) is conditionally set in Twinkle.protect.callback.changePreset
 					list: Twinkle.protect.protectionLengths
 				});
-				if (hasFlaggedRevs) {
-					field2.append({
-						type: 'checkbox',
-						event: Twinkle.protect.formevents.pcmodify,
-						list: [
-							{
-								label: 'Modify pending changes protection',
-								name: 'pcmodify',
-								tooltip: 'If this is turned off, the pending changes level, and expiry time, will be left as is.',
-								checked: true
-							}
-						]
-					});
-					field2.append({
-						type: 'select',
-						name: 'pclevel',
-						label: 'Pending changes:',
-						event: Twinkle.protect.formevents.pclevel,
-						list: [
-							{ label: 'None', value: 'none' },
-							{ label: 'Pending change', value: 'autoconfirmed', selected: true }
-						]
-					});
-					field2.append({
-						type: 'select',
-						name: 'pcexpiry',
-						label: 'Expires:',
-						event: function(e) {
-							if (e.target.value === 'custom') {
-								Twinkle.protect.doCustomExpiry(e.target);
-							}
-						},
-						// default expiry selection (1 month) is conditionally set in Twinkle.protect.callback.changePreset
-						list: Twinkle.protect.protectionLengths
-					});
-				}
 			} else {  // for non-existing pages
 				field2.append({
 					type: 'select',
@@ -756,7 +703,7 @@ Twinkle.protect.protectionTypes = [
 	}
 ].filter(function(type) {
 	// Filter for templates and flaggedrevs
-	return (isTemplate || type.label !== 'Template protection') && (hasFlaggedRevs || type.label !== 'Pending changes');
+	return isTemplate || type.label !== 'Template protection';
 });
 
 Twinkle.protect.protectionTypesCreate = [
@@ -996,10 +943,7 @@ Twinkle.protect.protectionTags = [
 			{ label: '{{pp-move}}: other', value: 'pp-move' }
 		]
 	}
-].filter(function(type) {
-	// Filter FlaggedRevs
-	return hasFlaggedRevs || type.label !== 'Pending changes templates';
-});
+];
 
 Twinkle.protect.callback.changePreset = function twinkleprotectCallbackChangePreset(e) {
 	var form = e.target.form;
