@@ -583,7 +583,7 @@ Twinkle.speedy.fileList = [
 	{
 		label: 'F9: Unambiguous copyright infringement',
 		value: 'imgcopyvio',
-		tooltip: 'The file was copied from a website or other source that does not have a license compatible with Wikipedia, and the uploader neither claims fair use nor makes a credible assertion of permission of free use. Sources that do not have a license compatible with Wikipedia include stock photo libraries such as Getty Images or Corbis. Non-blatant copyright infringements should be discussed at Wikipedia:Files for deletion',
+		tooltip: 'The file was copied from a website or other source that does not have a license compatible with Wikipedia, and the uploader neither claims fair use nor makes a credible assertion of permission of free use. Sources that do not have a license compatible with Wikipedia include stock photo libraries such as Getty Images or Corbis. Non-blatant copyright infringements should be discussed at Qiuwen:Files for deletion',
 		subgroup: [
 			{
 				name: 'imgcopyvio_url',
@@ -749,7 +749,7 @@ Twinkle.speedy.userList = [
 	{
 		label: 'U1: User request',
 		value: 'userreq',
-		tooltip: 'Personal subpages, upon request by their user. In some rare cases there may be administrative need to retain the page. Also, sometimes, main user pages may be deleted as well. See Wikipedia:User page for full instructions and guidelines',
+		tooltip: 'Personal subpages, upon request by their user. In some rare cases there may be administrative need to retain the page. Also, sometimes, main user pages may be deleted as well. See Qiuwen:User page for full instructions and guidelines',
 		subgroup: mw.config.get('wgNamespaceNumber') === 3 && mw.config.get('wgTitle').indexOf('/') === -1 ? {
 			name: 'userreq_rationale',
 			type: 'input',
@@ -836,7 +836,7 @@ Twinkle.speedy.generalList = [
 			name: 'repost_xfd',
 			type: 'input',
 			label: 'Page where the deletion discussion took place:',
-			tooltip: 'Must start with "Wikipedia:"',
+			tooltip: 'Must start with "Qiuwen:"',
 			size: 60
 		}
 	},
@@ -878,7 +878,7 @@ Twinkle.speedy.generalList = [
 			name: 'xfd_fullvotepage',
 			type: 'input',
 			label: 'Page where the deletion discussion was held:',
-			tooltip: 'Must start with "Wikipedia:"',
+			tooltip: 'Must start with "Qiuwen:"',
 			size: 40
 		},
 		hideWhenMultiple: true
@@ -997,7 +997,7 @@ Twinkle.speedy.generalList = [
 
 Twinkle.speedy.redirectList = [
 	{
-		label: 'R2: Redirect from mainspace to any other namespace except the Category:, Template:, Wikipedia:, Help: and Portal: namespaces',
+		label: 'R2: Redirect from mainspace to any other namespace except the Category:, Template:, Qiuwen:, Help: and Portal: namespaces',
 		value: 'rediruser',
 		tooltip: 'This does not include the pseudo-namespace shortcuts. If this was the result of a page move, consider waiting a day or two before deleting the redirect',
 		showInNamespaces: [ 0 ]
@@ -1666,7 +1666,7 @@ Twinkle.speedy.getParameters = function twinklespeedyGetParameters(form, values)
 					var deldisc = form['csd.repost_xfd'].value;
 					if (deldisc) {
 						if (!new RegExp('^:?' + Morebits.namespaceRegex(4) + ':', 'i').test(deldisc)) {
-							alert('CSD G4:  The deletion discussion page name, if provided, must start with "Wikipedia:".');
+							alert('CSD G4:  The deletion discussion page name, if provided, must start with "Qiuwen:".');
 							parameters = null;
 							return false;
 						}
@@ -1705,7 +1705,7 @@ Twinkle.speedy.getParameters = function twinklespeedyGetParameters(form, values)
 					var xfd = form['csd.xfd_fullvotepage'].value;
 					if (xfd) {
 						if (!new RegExp('^:?' + Morebits.namespaceRegex(4) + ':', 'i').test(xfd)) {
-							alert('CSD G6 (XFD):  The deletion discussion page name, if provided, must start with "Wikipedia:".');
+							alert('CSD G6 (XFD):  The deletion discussion page name, if provided, must start with "Qiuwen:".');
 							parameters = null;
 							return false;
 						}

@@ -501,7 +501,7 @@ var translationSubgroups = [
 		type: 'checkbox',
 		list: [ {
 			name: 'translationPostAtPNT',
-			label: 'List this article at Wikipedia:Pages needing translation into English (PNT)',
+			label: 'List this article at Qiuwen:Pages needing translation into English (PNT)',
 			checked: true
 		} ]
 	},
@@ -931,7 +931,7 @@ Twinkle.tag.redirectList = {
 					{
 						name: 'altLangInfo',
 						type: 'div',
-						label: $.parseHTML('<p>For a list of language codes, see <a href="/wiki/QW:Template_messages/Redirect_language_codes">Wikipedia:Template messages/Redirect language codes</a></p>')
+						label: $.parseHTML('<p>For a list of language codes, see <a href="/wiki/QW:Template_messages/Redirect_language_codes">Qiuwen:Template messages/Redirect language codes</a></p>')
 					}
 				]
 			},
@@ -1019,7 +1019,7 @@ Twinkle.tag.redirectList = {
 			{ tag: 'R to help namespace', description: 'redirect from any page inside or outside of help namespace to a page in that namespace' },
 			{ tag: 'R to main namespace', description: 'redirect from a page outside the main-article namespace to an article in mainspace' },
 			{ tag: 'R to portal namespace', description: 'redirect from any page inside or outside of portal space to a page in that namespace' },
-			{ tag: 'R to project namespace', description: 'redirect from any page inside or outside of project (Wikipedia: or QW:) space to any page in the project namespace' },
+			{ tag: 'R to project namespace', description: 'redirect from any page inside or outside of project (Qiuwen: or QW:) space to any page in the project namespace' },
 			{ tag: 'R to user namespace', description: 'redirect from a page outside the user namespace to a user page (not to a user talk page)' }
 		]
 	},
@@ -1342,8 +1342,8 @@ Twinkle.tag.callbacks = {
 				// Special functions for {{not English}} and {{rough translation}}
 				// Post at QW:PNT (mainspace only)
 				if (params.translationPostAtPNT) {
-					var pntPage = new Morebits.wiki.page('Wikipedia:Pages needing translation into English',
-						'Listing article at Wikipedia:Pages needing translation into English');
+					var pntPage = new Morebits.wiki.page('Qiuwen:Pages needing translation into English',
+						'Listing article at Qiuwen:Pages needing translation into English');
 					pntPage.setFollowRedirect(true);
 					pntPage.load(function friendlytagCallbacksTranslationListPage(pageobj) {
 						var old_text = pageobj.getPageText();

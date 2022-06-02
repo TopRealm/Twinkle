@@ -895,7 +895,7 @@ Twinkle.config.sections = [
 
 Twinkle.config.init = function twinkleconfigInit() {
 
-	// create the config page at Wikipedia:Twinkle/Preferences
+	// create the config page at Qiuwen:Twinkle/Preferences
 	if ((mw.config.get('wgNamespaceNumber') === mw.config.get('wgNamespaceIds').help && mw.config.get('wgTitle') === 'Twinkle/参数设置') &&
 			mw.config.get('wgAction') === 'view') {
 

@@ -363,7 +363,7 @@ Twinkle.xfd.callback.change_category = function twinklexfdCallbackChangeCategory
 			});
 
 			// grab deletion sort categories from en-wiki
-			Morebits.wiki.getCachedJson('Wikipedia:WikiProject_Deletion_sorting/Computer-readable.json').then(function(delsortCategories) {
+			Morebits.wiki.getCachedJson('Qiuwen:WikiProject_Deletion_sorting/Computer-readable.json').then(function(delsortCategories) {
 				var $select = $('[name="delsortCats"]');
 				$.each(delsortCategories, function(groupname, list) {
 					var $optgroup = $('<optgroup>').attr('label', groupname);
@@ -393,7 +393,7 @@ Twinkle.xfd.callback.change_category = function twinklexfdCallbackChangeCategory
 					// Link text to the page itself
 					templateSelection: function(choice) {
 						return $('<a>').text(choice.text).attr({
-							href: mw.util.getUrl('Wikipedia:WikiProject_Deletion_sorting/' + choice.text),
+							href: mw.util.getUrl('Qiuwen:WikiProject_Deletion_sorting/' + choice.text),
 							target: '_blank'
 						});
 					}
@@ -823,7 +823,7 @@ Twinkle.xfd.callbacks = {
 	showPreview: function(form, venue, params) {
 		var templatetext = Twinkle.xfd.callbacks.getDiscussionWikitext(venue, params);
 		if (venue === 'rm') { // RM templates are sensitive to page title
-			form.previewer.beginRender(templatetext, params.rmtr ? 'Wikipedia:Requested moves/Technical requests' : new mw.Title(Morebits.pageNameNorm).getTalkPage().toText());
+			form.previewer.beginRender(templatetext, params.rmtr ? 'Qiuwen:Requested moves/Technical requests' : new mw.Title(Morebits.pageNameNorm).getTalkPage().toText());
 		} else {
 			form.previewer.beginRender(templatetext, 'QW:TW'); // Force wikitext
 		}
@@ -1063,18 +1063,18 @@ Twinkle.xfd.callbacks = {
 					var title = titles[i].title;
 
 					// First, simple test, is there an instance with this exact name?
-					if (title === 'Wikipedia:Articles for deletion/' + Morebits.pageNameNorm) {
+					if (title === 'Qiuwen:Articles for deletion/' + Morebits.pageNameNorm) {
 						number = Math.max(number, 1);
 						continue;
 					}
 
 					var order_re = new RegExp('^' +
-						Morebits.string.escapeRegExp('Wikipedia:Articles for deletion/' + Morebits.pageNameNorm) +
+						Morebits.string.escapeRegExp('Qiuwen:Articles for deletion/' + Morebits.pageNameNorm) +
 						'\\s*\\(\\s*(\\d+)(?:(?:th|nd|rd|st) nom(?:ination)?)?\\s*\\)\\s*$');
 					var match = order_re.exec(title);
 
 					// No match; A non-good value
-					// Or the match is an unrealistically high number. Avoid false positives such as Wikipedia:Articles for deletion/The Basement (2014), by ignoring matches greater than 100
+					// Or the match is an unrealistically high number. Avoid false positives such as Qiuwen:Articles for deletion/The Basement (2014), by ignoring matches greater than 100
 					if (!match || match[1] > 100) {
 						continue;
 					}
@@ -1085,7 +1085,7 @@ Twinkle.xfd.callbacks = {
 				apiobj.params.number = utils.num2order(parseInt(number, 10) + 1);
 				apiobj.params.numbering = number > 0 ? ' (' + apiobj.params.number + ' nomination)' : '';
 			}
-			apiobj.params.discussionpage = 'Wikipedia:Articles for deletion/' + Morebits.pageNameNorm + apiobj.params.numbering;
+			apiobj.params.discussionpage = 'Qiuwen:Articles for deletion/' + Morebits.pageNameNorm + apiobj.params.numbering;
 
 			Morebits.status.info('Next discussion page', '[[' + apiobj.params.discussionpage + ']]');
 
@@ -1137,7 +1137,7 @@ Twinkle.xfd.callbacks = {
 
 			// Today's list
 			var date = new Morebits.date(pageobj.getLoadTime());
-			qiuwen_page = new Morebits.wiki.page('Wikipedia:Articles for deletion/Log/' +
+			qiuwen_page = new Morebits.wiki.page('Qiuwen:Articles for deletion/Log/' +
 				date.format('YYYY MMMM D', 'utc'), "Adding discussion to today's list");
 			qiuwen_page.setFollowRedirect(true);
 			qiuwen_page.setCallbackParameters(params);
@@ -1194,7 +1194,7 @@ Twinkle.xfd.callbacks = {
 				// List at deletion sorting pages
 				if (params.delsortCats) {
 					params.delsortCats.forEach(function (cat) {
-						var delsortPage = new Morebits.wiki.page('Wikipedia:WikiProject Deletion sorting/' + cat, 'Adding to list of ' + cat + '-related deletion discussions');
+						var delsortPage = new Morebits.wiki.page('Qiuwen:WikiProject Deletion sorting/' + cat, 'Adding to list of ' + cat + '-related deletion discussions');
 						delsortPage.setFollowRedirect(true); // In case a category gets renamed
 						delsortPage.setCallbackParameters({discussionPage: params.discussionpage});
 						delsortPage.load(Twinkle.xfd.callbacks.afd.delsortListing);
@@ -1218,7 +1218,7 @@ Twinkle.xfd.callbacks = {
 				text = old_text.replace(/(<!-- Add new entries to the TOP of the following list -->\n+)/, '$1' + added_data);
 				if (text === old_text) {
 					var linknode = document.createElement('a');
-					linknode.setAttribute('href', mw.util.getUrl('Wikipedia:Twinkle/Fixing AFD') + '?action=purge');
+					linknode.setAttribute('href', mw.util.getUrl('Qiuwen:Twinkle/Fixing AFD') + '?action=purge');
 					linknode.appendChild(document.createTextNode('How to fix AFD'));
 					statelem.error([ 'Could not find the target spot for the discussion. To fix this problem, please see ', linknode, '.' ]);
 					return;
@@ -1249,7 +1249,7 @@ Twinkle.xfd.callbacks = {
 			var params = pageobj.getCallbackParameters();
 
 			var date = new Morebits.date(pageobj.getLoadTime());
-			params.logpage = 'Wikipedia:Templates for discussion/Log/' + date.format('YYYY MMMM D', 'utc'),
+			params.logpage = 'Qiuwen:Templates for discussion/Log/' + date.format('YYYY MMMM D', 'utc'),
 			params.discussionpage = params.logpage + '#' + Morebits.pageNameNorm;
 			// Add log/discussion page params to the already-loaded page object
 			pageobj.setCallbackParameters(params);
@@ -1461,13 +1461,13 @@ Twinkle.xfd.callbacks = {
 					var title = titles[i].title;
 
 					// First, simple test, is there an instance with this exact name?
-					if (title === 'Wikipedia:Miscellany for deletion/' + Morebits.pageNameNorm) {
+					if (title === 'Qiuwen:Miscellany for deletion/' + Morebits.pageNameNorm) {
 						number = Math.max(number, 1);
 						continue;
 					}
 
 					var order_re = new RegExp('^' +
-							Morebits.string.escapeRegExp('Wikipedia:Miscellany for deletion/' + Morebits.pageNameNorm) +
+							Morebits.string.escapeRegExp('Qiuwen:Miscellany for deletion/' + Morebits.pageNameNorm) +
 							'\\s*\\(\\s*(\\d+)(?:(?:th|nd|rd|st) nom(?:ination)?)?\\s*\\)\\s*$');
 					var match = order_re.exec(title);
 
@@ -1482,7 +1482,7 @@ Twinkle.xfd.callbacks = {
 				apiobj.params.number = utils.num2order(parseInt(number, 10) + 1);
 				apiobj.params.numbering = number > 0 ? ' (' + apiobj.params.number + ' nomination)' : '';
 			}
-			apiobj.params.discussionpage = 'Wikipedia:Miscellany for deletion/' + Morebits.pageNameNorm + apiobj.params.numbering;
+			apiobj.params.discussionpage = 'Qiuwen:Miscellany for deletion/' + Morebits.pageNameNorm + apiobj.params.numbering;
 
 			apiobj.statelem.info('next in order is [[' + apiobj.params.discussionpage + ']]');
 
@@ -1502,7 +1502,7 @@ Twinkle.xfd.callbacks = {
 			qiuwen_page.load(Twinkle.xfd.callbacks.mfd.discussionPage);
 
 			// Today's list
-			qiuwen_page = new Morebits.wiki.page('Wikipedia:Miscellany for deletion', "Adding discussion to today's list");
+			qiuwen_page = new Morebits.wiki.page('Qiuwen:Miscellany for deletion', "Adding discussion to today's list");
 			qiuwen_page.setPageSection(2);
 			qiuwen_page.setFollowRedirect(true);
 			qiuwen_page.setCallbackParameters(apiobj.params);
@@ -1613,7 +1613,7 @@ Twinkle.xfd.callbacks = {
 			var params = pageobj.getCallbackParameters();
 
 			var date = new Morebits.date(pageobj.getLoadTime()).format('YYYY MMMM D', 'utc');
-			params.logpage = 'Wikipedia:Files for discussion/' + date;
+			params.logpage = 'Qiuwen:Files for discussion/' + date;
 			params.discussionpage = params.logpage + '#' + Morebits.pageNameNorm;
 
 			params.tagText = '{{ffd|log=' + date + '|help=off}}\n';
@@ -1685,7 +1685,7 @@ Twinkle.xfd.callbacks = {
 			var params = pageobj.getCallbackParameters();
 
 			var date = new Morebits.date(pageobj.getLoadTime());
-			params.logpage = 'Wikipedia:Categories for discussion/Log/' + date.format('YYYY MMMM D', 'utc');
+			params.logpage = 'Qiuwen:Categories for discussion/Log/' + date.format('YYYY MMMM D', 'utc');
 			params.discussionpage = params.logpage + '#' + Morebits.pageNameNorm;
 			// Add log/discussion page params to the already-loaded page object
 			pageobj.setCallbackParameters(params);
@@ -1880,7 +1880,7 @@ Twinkle.xfd.callbacks = {
 		},
 		main: function(params) {
 			var date = new Morebits.date(params.curtimestamp);
-			params.logpage = 'Wikipedia:Redirects for discussion/Log/' + date.format('YYYY MMMM D', 'utc');
+			params.logpage = 'Qiuwen:Redirects for discussion/Log/' + date.format('YYYY MMMM D', 'utc');
 			params.discussionpage = params.logpage + '#' + Morebits.pageNameNorm;
 
 			// Tagging redirect
@@ -2149,7 +2149,7 @@ Twinkle.xfd.callback.evaluate = function(e) {
 			// add namespace name if missing
 			params.cfdstarget = utils.addNs(params.cfdstarget, 14);
 
-			var logpage = 'Wikipedia:Categories for discussion/Speedy';
+			var logpage = 'Qiuwen:Categories for discussion/Speedy';
 
 			// Updating data for the action completed event
 			Morebits.wiki.actionCompleted.redirect = logpage;
@@ -2176,7 +2176,7 @@ Twinkle.xfd.callback.evaluate = function(e) {
 
 		case 'rm':
 			var nomPageName = params.rmtr ?
-				'Wikipedia:Requested moves/Technical requests' :
+				'Qiuwen:Requested moves/Technical requests' :
 				new mw.Title(Morebits.pageNameNorm).getTalkPage().toText();
 
 			Morebits.wiki.actionCompleted.redirect = nomPageName;

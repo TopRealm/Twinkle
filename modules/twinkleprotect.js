@@ -1375,10 +1375,10 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 			Morebits.simpleWindow.setButtonsEnabled(false);
 			Morebits.status.init(form);
 
-			var rppName = 'Wikipedia:Requests for page protection/Increase';
+			var rppName = 'Qiuwen:Requests for page protection/Increase';
 
 			// Updating data for the action completed event
-			Morebits.wiki.actionCompleted.redirect = 'Wikipedia: Requests for page protection';
+			Morebits.wiki.actionCompleted.redirect = 'Qiuwen: Requests for page protection';
 			Morebits.wiki.actionCompleted.notice = 'Nomination completed, redirecting now to the discussion page';
 
 			var rppPage = new Morebits.wiki.page(rppName, 'Requesting protection of page');
@@ -1491,7 +1491,7 @@ Twinkle.protect.callbacks = {
 
 	fileRequest: function(rppPage) {
 
-		var rppPage2 = new Morebits.wiki.page('Wikipedia:Requests for page protection/Decrease', 'Loading requests pages');
+		var rppPage2 = new Morebits.wiki.page('Qiuwen:Requests for page protection/Decrease', 'Loading requests pages');
 		rppPage2.load(function() {
 			var params = rppPage.getCallbackParameters();
 			var text = rppPage.getPageText();
@@ -1502,8 +1502,8 @@ Twinkle.protect.callbacks = {
 			var tag = rppRe.exec(text) || rppRe.exec(text2);
 
 			var rppLink = document.createElement('a');
-			rppLink.setAttribute('href', mw.util.getUrl('Wikipedia:Requests for page protection'));
-			rppLink.appendChild(document.createTextNode('Wikipedia:Requests for page protection'));
+			rppLink.setAttribute('href', mw.util.getUrl('Qiuwen:Requests for page protection'));
+			rppLink.appendChild(document.createTextNode('Qiuwen:Requests for page protection'));
 
 			if (tag) {
 				statusElement.error([ 'There is already a protection request for this page at ', rppLink, ', aborting.' ]);
@@ -1573,7 +1573,7 @@ Twinkle.protect.callbacks = {
 				text += '\n' + newtag;
 				if (text.length === originalTextLength) {
 					var linknode = document.createElement('a');
-					linknode.setAttribute('href', mw.util.getUrl('Wikipedia:Twinkle/Fixing RPP'));
+					linknode.setAttribute('href', mw.util.getUrl('Qiuwen:Twinkle/Fixing RPP'));
 					linknode.appendChild(document.createTextNode('How to fix RPP'));
 					statusElement.error([ 'Could not find relevant heading on QW:RPP. To fix this problem, please see ', linknode, '.' ]);
 					return;
@@ -1609,7 +1609,7 @@ Twinkle.protect.callbacks = {
 				text2 += '\n' + newtag;
 				if (text2.length === originalTextLength2) {
 					var linknode2 = document.createElement('a');
-					linknode2.setAttribute('href', mw.util.getUrl('Wikipedia:Twinkle/Fixing RPP'));
+					linknode2.setAttribute('href', mw.util.getUrl('Qiuwen:Twinkle/Fixing RPP'));
 					linknode2.appendChild(document.createTextNode('How to fix RPP'));
 					statusElement.error([ 'Could not find relevant heading on QW:RPP. To fix this problem, please see ', linknode2, '.' ]);
 					return;

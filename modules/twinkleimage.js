@@ -75,7 +75,7 @@ Twinkle.image.callback = function twinkleimageCallback() {
 			{
 				label: 'Orphaned fair use (CSD F5)',
 				value: 'orphaned fair use',
-				tooltip: 'Image or media is unlicensed for use on Wikipedia and allowed only under a claim of fair use per Wikipedia:Non-free content, but it is not used in any articles'
+				tooltip: 'Image or media is unlicensed for use on Wikipedia and allowed only under a claim of fair use per Qiuwen:Non-free content, but it is not used in any articles'
 			},
 			{
 				label: 'No fair use rationale (CSD F6)',

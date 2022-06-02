@@ -42,7 +42,7 @@ Twinkle.arv.callback = function (uid, isIP) {
 	Window.setScriptName('Twinkle');
 	Window.addFooterLink('AIV guide', 'QW:GAIV');
 	Window.addFooterLink('UAA guide', 'QW:UAAI');
-	Window.addFooterLink('SPI guide', 'Wikipedia:Sockpuppet investigations/SPI/Guide to filing cases');
+	Window.addFooterLink('SPI guide', 'Qiuwen:Sockpuppet investigations/SPI/Guide to filing cases');
 	Window.addFooterLink('参数设置', 'H:TW/PREF#arv');
 	Window.addFooterLink('帮助文档', 'H:TW/DOC#arv');
 	Window.addFooterLink('问题反馈', 'HT:TW');
@@ -547,10 +547,10 @@ Twinkle.arv.callback.evaluate = function(e) {
 			Morebits.simpleWindow.setButtonsEnabled(false);
 			Morebits.status.init(form);
 
-			Morebits.wiki.actionCompleted.redirect = 'Wikipedia:Administrator intervention against vandalism';
+			Morebits.wiki.actionCompleted.redirect = 'Qiuwen:Administrator intervention against vandalism';
 			Morebits.wiki.actionCompleted.notice = 'Reporting complete';
 
-			var aivPage = new Morebits.wiki.page('Wikipedia:Administrator intervention against vandalism', 'Processing AIV request');
+			var aivPage = new Morebits.wiki.page('Qiuwen:Administrator intervention against vandalism', 'Processing AIV request');
 			aivPage.setPageSection(1);
 			aivPage.setFollowRedirect(true);
 
@@ -566,7 +566,7 @@ Twinkle.arv.callback.evaluate = function(e) {
 				}
 
 				// then check for any bot reports
-				var tb2Page = new Morebits.wiki.page('Wikipedia:Administrator intervention against vandalism/TB2', 'Checking bot reports');
+				var tb2Page = new Morebits.wiki.page('Qiuwen:Administrator intervention against vandalism/TB2', 'Checking bot reports');
 				tb2Page.load(function() {
 					var tb2Text = tb2Page.getPageText();
 					var tb2statelem = tb2Page.getStatusElement();
@@ -624,10 +624,10 @@ Twinkle.arv.callback.evaluate = function(e) {
 			Morebits.simpleWindow.setButtonsEnabled(false);
 			Morebits.status.init(form);
 
-			Morebits.wiki.actionCompleted.redirect = 'Wikipedia:Usernames for administrator attention';
+			Morebits.wiki.actionCompleted.redirect = 'Qiuwen:Usernames for administrator attention';
 			Morebits.wiki.actionCompleted.notice = 'Reporting complete';
 
-			var uaaPage = new Morebits.wiki.page('Wikipedia:Usernames for administrator attention', 'Processing UAA request');
+			var uaaPage = new Morebits.wiki.page('Qiuwen:Usernames for administrator attention', 'Processing UAA request');
 			uaaPage.setFollowRedirect(true);
 
 			uaaPage.load(function() {
@@ -826,7 +826,7 @@ Twinkle.arv.processSock = function(params) {
 	}
 	text += '}}';
 
-	var reportpage = 'Wikipedia:Sockpuppet investigations/' + params.uid;
+	var reportpage = 'Qiuwen:Sockpuppet investigations/' + params.uid;
 
 	Morebits.wiki.actionCompleted.redirect = reportpage;
 	Morebits.wiki.actionCompleted.notice = 'Reporting complete';
@@ -953,7 +953,7 @@ Twinkle.arv.processAN3 = function(params) {
 
 		var text = '\n\n' + '{{subst:AN3 report|diffs=' + difftext + '|warnings=' + warningtext + '|resolves=' + resolvetext + '|pagename=' + params.page + '|orig=' + origtext + '|comment=' + comment + '|uid=' + params.uid + '}}';
 
-		var reportpage = 'Wikipedia:Administrators\' noticeboard/Edit warring';
+		var reportpage = 'Qiuwen:Administrators\' noticeboard/Edit warring';
 
 		Morebits.wiki.actionCompleted.redirect = reportpage;
 		Morebits.wiki.actionCompleted.notice = 'Reporting complete';

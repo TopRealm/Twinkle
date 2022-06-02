@@ -15,11 +15,11 @@
  *** twinkleunlink.js: Unlink module
  ****************************************
  * Mode of invocation:     Tab ("Unlink")
- * Active on:              Non-special pages, except Wikipedia:Sandbox
+ * Active on:              Non-special pages, except Qiuwen:Sandbox
  */
 
 Twinkle.unlink = function twinkleunlink() {
-	if (mw.config.get('wgNamespaceNumber') < 0 || mw.config.get('wgPageName') === 'Wikipedia:Sandbox' ||
+	if (mw.config.get('wgNamespaceNumber') < 0 || mw.config.get('wgPageName') === 'Qiuwen:Sandbox' ||
 		// Restrict to extended confirmed users (see #428)
 		(!Morebits.userIsInGroup('extendedconfirmed') && !Morebits.userIsSysop)) {
 		return;
