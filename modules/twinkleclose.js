@@ -444,9 +444,9 @@ Twinkle.close.callback.evaluate = function twinklecloseCallbackEvaluate(e) {
 				Twinkle.close.callbacks.del(params);
 				break;
 			case 'keep':
-				var wikipedia_page = new Morebits.wiki.page(params.title, '移除存废讨论模板');
-				wikipedia_page.setCallbackParameters(params);
-				wikipedia_page.load(Twinkle.close.callbacks.keep);
+				var qiuwen_page = new Morebits.wiki.page(params.title, '移除存废讨论模板');
+				qiuwen_page.setCallbackParameters(params);
+				qiuwen_page.load(Twinkle.close.callbacks.keep);
 				break;
 			default:
 				alert('Twinkle.close：未定义 ' + code);
@@ -457,7 +457,7 @@ Twinkle.close.callback.evaluate = function twinklecloseCallbackEvaluate(e) {
 
 Twinkle.close.callbacks = {
 	del: function (params) {
-		var query, wikipedia_api;
+		var query, qiuwen_api;
 		Morebits.wiki.addCheckpoint();
 
 		var page = new Morebits.wiki.page(params.title, '删除页面');
@@ -492,9 +492,9 @@ Twinkle.close.callbacks = {
 				prop: 'redirects',
 				rdlimit: 'max' // 500 is max for normal users, 5000 for bots and sysops
 			};
-			wikipedia_api = new Morebits.wiki.api('正在获取重定向', query, Twinkle.close.callbacks.deleteRedirectsMain);
-			wikipedia_api.params = params;
-			wikipedia_api.post();
+			qiuwen_api = new Morebits.wiki.api('正在获取重定向', query, Twinkle.close.callbacks.deleteRedirectsMain);
+			qiuwen_api.params = params;
+			qiuwen_api.post();
 		}
 		if (params.talkpage) {
 			var pageTitle = mw.Title.newFromText(params.title);
@@ -504,10 +504,10 @@ Twinkle.close.callbacks = {
 					action: 'query',
 					titles: pageTitle.toText()
 				};
-				wikipedia_api = new Morebits.wiki.api('正在检查讨论页面是否存在', query, Twinkle.close.callbacks.deleteTalk);
-				wikipedia_api.params = params;
-				wikipedia_api.params.talkPage = pageTitle.toText();
-				wikipedia_api.post();
+				qiuwen_api = new Morebits.wiki.api('正在检查讨论页面是否存在', query, Twinkle.close.callbacks.deleteTalk);
+				qiuwen_api.params = params;
+				qiuwen_api.params.talkPage = pageTitle.toText();
+				qiuwen_api.post();
 			}
 		}
 
@@ -526,10 +526,10 @@ Twinkle.close.callbacks = {
 		redirectDeleter.setOption('chunkSize', Twinkle.getPref('batchdeleteChunks'));
 		redirectDeleter.setPageList(pages);
 		redirectDeleter.run(function(pageName) {
-			var wikipedia_page = new Morebits.wiki.page(pageName, '正在删除 ' + pageName);
-			wikipedia_page.setEditSummary('[[QW:CSD#G15|G15]]: ' + '指向已删页面“' + apiobj.params.title + '”的重定向');
-			wikipedia_page.setChangeTags(Twinkle.changeTags);
-			wikipedia_page.deletePage(redirectDeleter.workerSuccess, redirectDeleter.workerFailure);
+			var qiuwen_page = new Morebits.wiki.page(pageName, '正在删除 ' + pageName);
+			qiuwen_page.setEditSummary('[[QW:CSD#G15|G15]]: ' + '指向已删页面“' + apiobj.params.title + '”的重定向');
+			qiuwen_page.setChangeTags(Twinkle.changeTags);
+			qiuwen_page.deletePage(redirectDeleter.workerSuccess, redirectDeleter.workerFailure);
 		});
 	},
 	deleteTalk: function(apiobj) {
@@ -601,10 +601,10 @@ Twinkle.close.callbacks = {
 	},
 
 	talkend: function (params) {
-		var wikipedia_page = new Morebits.wiki.page(mw.config.get('wgPageName'), '关闭讨论');
-		wikipedia_page.setCallbackParameters(params);
-		wikipedia_page.setPageSection(params.section);
-		wikipedia_page.load(Twinkle.close.callbacks.saveTalk);
+		var qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'), '关闭讨论');
+		qiuwen_page.setCallbackParameters(params);
+		qiuwen_page.setPageSection(params.section);
+		qiuwen_page.load(Twinkle.close.callbacks.saveTalk);
 	},
 	saveTalk: function (pageobj) {
 		var statelem = pageobj.getStatusElement();
