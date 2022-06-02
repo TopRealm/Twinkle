@@ -56,28 +56,28 @@ Twinkle.arv.callback = function (uid, isIP) {
 	});
 	categories.append({
 		type: 'option',
-		label: 'Vandalism (WP:AIV)',
+		label: 'Vandalism (QW:AIV)',
 		value: 'aiv'
 	});
 	categories.append({
 		type: 'option',
-		label: 'Username (WP:UAA)',
+		label: 'Username (QW:UAA)',
 		value: 'username',
 		disabled: isIP
 	});
 	categories.append({
 		type: 'option',
-		label: 'Sockpuppeteer (WP:SPI)',
+		label: 'Sockpuppeteer (QW:SPI)',
 		value: 'sock'
 	});
 	categories.append({
 		type: 'option',
-		label: 'Sockpuppet (WP:SPI)',
+		label: 'Sockpuppet (QW:SPI)',
 		value: 'puppet'
 	});
 	categories.append({
 		type: 'option',
-		label: 'Edit warring (WP:AN3)',
+		label: 'Edit warring (QW:AN3)',
 		value: 'an3',
 		disabled: Morebits.ip.isRange(uid) // rvuser template doesn't support ranges
 	});
@@ -556,7 +556,7 @@ Twinkle.arv.callback.evaluate = function(e) {
 
 			aivPage.load(function() {
 				var text = aivPage.getPageText();
-				var $aivLink = '<a target="_blank" href="/wiki/WP:AIV">WP:AIV</a>';
+				var $aivLink = '<a target="_blank" href="/wiki/QW:AIV">QW:AIV</a>';
 
 				// check if user has already been reported
 				if (new RegExp('\\{\\{\\s*(?:(?:[Ii][Pp])?[Vv]andal|[Uu]serlinks)\\s*\\|\\s*(?:1=)?\\s*' + Morebits.string.escapeRegExp(uid) + '\\s*\\}\\}').test(text)) {
@@ -636,7 +636,7 @@ Twinkle.arv.callback.evaluate = function(e) {
 				// check if user has already been reported
 				if (new RegExp('\\{\\{\\s*user-uaa\\s*\\|\\s*(1\\s*=\\s*)?' + Morebits.string.escapeRegExp(uid) + '\\s*(\\||\\})').test(text)) {
 					uaaPage.getStatusElement().error('User is already listed.');
-					var $uaaLink = '<a target="_blank" href="/wiki/WP:UAA">WP:UAA</a>';
+					var $uaaLink = '<a target="_blank" href="/wiki/QW:UAA">QW:UAA</a>';
 					Morebits.status.printUserText(reason, 'The comments you typed are provided below, in case you wish to manually post them under the existing report for this user at ' + $uaaLink + ':');
 					return;
 				}
@@ -650,7 +650,7 @@ Twinkle.arv.callback.evaluate = function(e) {
 			});
 			break;
 
-		// WP:SPI
+		// QW:SPI
 		case 'sock':
 			/* falls through */
 		case 'puppet':

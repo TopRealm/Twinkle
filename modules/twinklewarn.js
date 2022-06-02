@@ -1627,7 +1627,7 @@ Twinkle.warn.callbacks = {
 		var template = params.sub_group.replace(/(.*)\d$/, '$1');
 		// Validate warning level, falling back to the uw-generic series.
 		// Only a few items are missing a level, and in all but a handful
-		// of cases, the uw-generic series is explicitly used elsewhere per WP:UTM.
+		// of cases, the uw-generic series is explicitly used elsewhere per QW:UTM.
 		if (params.messageData && !params.messageData['level' + level]) {
 			template = 'uw-generic';
 		}

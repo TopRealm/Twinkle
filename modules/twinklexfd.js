@@ -628,7 +628,7 @@ Twinkle.xfd.callback.change_category = function twinklexfdCallbackChangeCategory
 				type: 'select',
 				label: 'C2 sub-criterion:',
 				name: 'xfdcat',
-				tooltip: 'See WP:CFDS for full explanations.',
+				tooltip: 'See QW:CFDS for full explanations.',
 				list: [
 					{ type: 'option', label: 'C2A: Typographic and spelling fixes', value: 'C2A', selected: true },
 					{ type: 'option', label: 'C2B: Naming conventions and disambiguation', value: 'C2B' },
@@ -2182,7 +2182,7 @@ Twinkle.xfd.callback.evaluate = function(e) {
 			Morebits.wiki.actionCompleted.redirect = nomPageName;
 			Morebits.wiki.actionCompleted.notice = 'Nomination completed, now redirecting to the discussion page';
 
-			qiuwen_page = new Morebits.wiki.page(nomPageName, params.rmtr ? 'Adding entry at WP:RM/TR' : 'Adding entry on talk page');
+			qiuwen_page = new Morebits.wiki.page(nomPageName, params.rmtr ? 'Adding entry at QW:RM/TR' : 'Adding entry on talk page');
 			qiuwen_page.setFollowRedirect(true);
 			qiuwen_page.setCallbackParameters(params);
 

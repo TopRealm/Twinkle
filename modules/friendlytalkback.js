@@ -2,6 +2,8 @@
 /**
  * Twinkle.js
  * © 2011-2022 English Wikipedia Contributors
+ * © 2011-2021 Chinese Wikipedia Contributors
+ * © 2021-     Qiuwen Baike Contributors
  * This work is licensed under a Creative Commons
  * Attribution-ShareAlike 3.0 Unported License.
  * https://creativecommons.org/licenses/by-sa/3.0/
@@ -23,16 +25,16 @@ Twinkle.talkback = function() {
 	if (!mw.config.exists('wgRelevantUserName') || Morebits.ip.isRange(mw.config.get('wgRelevantUserName'))) {
 		return;
 	}
-	Twinkle.addPortletLink(Twinkle.talkback.callback, 'TB', 'friendly-talkback', 'Easy talkback');
+	Twinkle.addPortletLink(Twinkle.talkback.callback, '通知', 'friendly-talkback', '回复通知');
 };
 
 Twinkle.talkback.callback = function() {
-	if (mw.config.get('wgRelevantUserName') === mw.config.get('wgUserName') && !confirm("Is it really so bad that you're talking back to yourself?")) {
+	if (mw.config.get('wgRelevantUserName') === mw.config.get('wgUserName') && !confirm('您寂寞到了要自己回复自己的程度么？')) {
 		return;
 	}
 
 	var Window = new Morebits.simpleWindow(600, 350);
-	Window.setTitle('Talkback');
+	Window.setTitle('通知');
 	Window.setScriptName('Twinkle');
 	Window.addFooterLink('参数设置', 'H:TW/PREF#talkback');
 	Window.addFooterLink('帮助文档', 'H:TW/DOC#talkback');
@@ -228,17 +230,17 @@ Twinkle.talkback.changeTarget = function(e) {
 
 Twinkle.talkback.noticeboards = {
 	an: {
-		label: "WP:AN (Administrators' noticeboard)",
+		label: "QW:AN (Administrators' noticeboard)",
 		text: '{{subst:AN-notice|thread=$SECTION}} ~~~~',
 		editSummary: 'Notice of discussion at [[Qiuwen:Administrators\' noticeboard]]'
 	},
 	an3: {
-		label: "WP:AN3 (Administrators' noticeboard/Edit warring)",
+		label: "QW:AN3 (Administrators' noticeboard/Edit warring)",
 		text: '{{subst:An3-notice|$SECTION}} ~~~~',
 		editSummary: "Notice of discussion at [[Qiuwen:Administrators' noticeboard/Edit warring]]"
 	},
 	ani: {
-		label: "WP:ANI (Administrators' noticeboard/Incidents)",
+		label: "QW:ANI (Administrators' noticeboard/Incidents)",
 		text: "== Notice of Administrators' noticeboard/Incidents discussion ==\n" +
 		'{{subst:ANI-notice|thread=$SECTION}} ~~~~',
 		editSummary: 'Notice of discussion at [[Qiuwen:Administrators\' noticeboard/Incidents]]',
@@ -302,7 +304,7 @@ Twinkle.talkback.noticeboards = {
 	},
 	th: {
 		label: 'QW:THQ (Teahouse question forum)',
-		text: "== Teahouse talkback: you've got messages! ==\n{{WP:Teahouse/Teahouse talkback|WP:Teahouse/Questions|$SECTION|ts=~~~~}}",
+		text: "== Teahouse talkback: you've got messages! ==\n{{QW:Teahouse/Teahouse talkback|QW:Teahouse/Questions|$SECTION|ts=~~~~}}",
 		editSummary: 'You have replies at the [[Qiuwen:Teahouse/Questions|Teahouse question board]]'
 	},
 	vrt: {

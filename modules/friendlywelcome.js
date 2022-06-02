@@ -482,7 +482,7 @@ Twinkle.welcome.templates = {
 			},
 			'TWA invite': {
 				description: 'invite the user to The Wikipedia Adventure (not a welcome template)',
-				syntax: '{{subst:WP:TWA/InviteTW|signature=~~~~}}'
+				syntax: '{{subst:QW:TWA/InviteTW|signature=~~~~}}'
 			}
 		}
 	},

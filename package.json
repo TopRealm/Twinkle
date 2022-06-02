@@ -2,7 +2,10 @@
 	"title": "Twinkle",
 	"name": "twinkle",
 	"private": true,
-	"repository": "wikimedia-gadgets/twinkle",
+	"repository": {
+		"type": "git",
+		"url": "https://git.qiuwen.wiki/qiuwen/twinkle-new"
+	},
 	"scripts": {
 	  	"start": "node scripts/dev-server.js",
 		"lint": "eslint .",

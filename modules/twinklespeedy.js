@@ -32,7 +32,7 @@ Twinkle.speedy = function twinklespeedy() {
 		return;
 	}
 
-	Twinkle.addPortletLink(Twinkle.speedy.callback, 'CSD', 'tw-csd', Morebits.userIsSysop ? 'Delete page according to WP:CSD' : 'Request speedy deletion according to WP:CSD');
+	Twinkle.addPortletLink(Twinkle.speedy.callback, 'CSD', 'tw-csd', Morebits.userIsSysop ? 'Delete page according to QW:CSD' : 'Request speedy deletion according to QW:CSD');
 };
 
 // This function is run when the CSD tab/header link is clicked
@@ -558,7 +558,7 @@ Twinkle.speedy.fileList = [
 	{
 		label: 'F7: Fair-use media from a commercial image agency which is not the subject of sourced commentary',
 		value: 'badfairuse',
-		tooltip: 'Non-free images or media from a commercial source (e.g., Associated Press, Getty), where the file itself is not the subject of sourced commentary, are considered an invalid claim of fair use and fail the strict requirements of WP:NFCC. For cases that require a waiting period (invalid or otherwise disputed rationales or replaceable images), use the options on Twinkle\'s DI tab.',
+		tooltip: 'Non-free images or media from a commercial source (e.g., Associated Press, Getty), where the file itself is not the subject of sourced commentary, are considered an invalid claim of fair use and fail the strict requirements of QW:NFCC. For cases that require a waiting period (invalid or otherwise disputed rationales or replaceable images), use the options on Twinkle\'s DI tab.',
 		subgroup: {
 			name: 'badfairuse_rationale',
 			type: 'input',
@@ -724,7 +724,7 @@ Twinkle.speedy.categoryList = [
 	{
 		label: 'C1: Empty categories',
 		value: 'catempty',
-		tooltip: 'Categories that have been unpopulated for at least seven days. This does not apply to categories being discussed at WP:CFD, disambiguation categories, and certain other exceptions. If the category isn\'t relatively new, it possibly contained articles earlier, and deeper investigation is needed'
+		tooltip: 'Categories that have been unpopulated for at least seven days. This does not apply to categories being discussed at QW:CFD, disambiguation categories, and certain other exceptions. If the category isn\'t relatively new, it possibly contained articles earlier, and deeper investigation is needed'
 	},
 	{
 		label: 'G8: Categories populated by a deleted or retargeted template',
@@ -754,7 +754,7 @@ Twinkle.speedy.userList = [
 			name: 'userreq_rationale',
 			type: 'input',
 			label: 'A mandatory rationale to explain why this user talk page should be deleted:',
-			tooltip: 'User talk pages are deleted only in highly exceptional circumstances. See WP:DELTALK.',
+			tooltip: 'User talk pages are deleted only in highly exceptional circumstances. See QW:DELTALK.',
 			size: 60
 		} : null,
 		hideSubgroupWhenMultiple: true
@@ -765,9 +765,9 @@ Twinkle.speedy.userList = [
 		tooltip: 'User pages of users that do not exist (Check Special:Listusers)'
 	},
 	{
-		label: 'U5: Blatant WP:NOTWEBHOST violations',
+		label: 'U5: Blatant QW:NOTWEBHOST violations',
 		value: 'notwebhost',
-		tooltip: 'Pages in userspace consisting of writings, information, discussions, and/or activities not closely related to Wikipedia\'s goals, where the owner has made few or no edits outside of userspace, with the exception of plausible drafts and pages adhering to WP:UPYES.',
+		tooltip: 'Pages in userspace consisting of writings, information, discussions, and/or activities not closely related to Wikipedia\'s goals, where the owner has made few or no edits outside of userspace, with the exception of plausible drafts and pages adhering to QW:UPYES.',
 		hideWhenRedirect: true
 	},
 	{

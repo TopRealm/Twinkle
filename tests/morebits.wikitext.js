@@ -313,7 +313,7 @@ describe('Morebits.wikitext', () => {
 				name: 'AltCaps',
 				method: 'removeLink',
 				input: 'O, [[QW:Juliet]] she [[QW:juliet|doth]] {{plural|teach}} [[Romeo|the]] [[Qiuwen:Juliet|torches]] [[Qiuwen:juliet]] to burn bright!',
-				expected: 'O, WP:Juliet she doth {{plural|teach}} [[Romeo|the]] torches Wikipedia:juliet to burn bright!',
+				expected: 'O, QW:Juliet she doth {{plural|teach}} [[Romeo|the]] torches Wikipedia:juliet to burn bright!',
 				params: ['wikipedia:juliet']
 			},
 			{

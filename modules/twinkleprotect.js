@@ -27,7 +27,7 @@ Twinkle.protect = function twinkleprotect() {
 		return;
 	}
 
-	Twinkle.addPortletLink(Twinkle.protect.callback, '保护',
+	Twinkle.addPortletLink(Twinkle.protect.callback, '页保',
 		Morebits.userIsSysop ? '保护页面' : '请求保护页面');
 };
 
@@ -37,7 +37,7 @@ Twinkle.protect.callback = function twinkleprotectCallback() {
 	Window.setScriptName('Twinkle');
 	Window.addFooterLink('保护模板', 'Template:Protection templates');
 	Window.addFooterLink('保护方针', 'QW:PROT');
-	Window.addFooterLink('保护设置', 'WP:TW/PREF#protect');
+	Window.addFooterLink('保护设置', 'QW:TW/PREF#protect');
 	Window.addFooterLink('Twinkle帮助', 'H:TW/DOC#protect');
 	Window.addFooterLink('问题反馈', 'HT:TW');
 
@@ -69,7 +69,7 @@ Twinkle.protect.callback = function twinkleprotectCallback() {
 			{
 				label: '请求保护页面',
 				value: 'request',
-				tooltip: 'If you want to request protection via WP:RPP' + (Morebits.userIsSysop ? ' instead of doing the protection by yourself.' : '.'),
+				tooltip: 'If you want to request protection via QW:RPP' + (Morebits.userIsSysop ? ' instead of doing the protection by yourself.' : '.'),
 				checked: !Morebits.userIsSysop
 			},
 			{
@@ -461,7 +461,7 @@ Twinkle.protect.callback.changeAction = function twinkleprotectCallbackChangeAct
 					label: 'Create protection:',
 					event: Twinkle.protect.formevents.createlevel,
 					list: Twinkle.protect.protectionLevels.filter(function(level) {
-						// Filter TE always, and autoconfirmed in mainspace, redundant since WP:ACPERM
+						// Filter TE always, and autoconfirmed in mainspace, redundant since QW:ACPERM
 						return level.value !== 'templateeditor' && (mw.config.get('wgNamespaceNumber') !== 0 || level.value !== 'autoconfirmed');
 					})
 				});
@@ -1575,7 +1575,7 @@ Twinkle.protect.callbacks = {
 					var linknode = document.createElement('a');
 					linknode.setAttribute('href', mw.util.getUrl('Wikipedia:Twinkle/Fixing RPP'));
 					linknode.appendChild(document.createTextNode('How to fix RPP'));
-					statusElement.error([ 'Could not find relevant heading on WP:RPP. To fix this problem, please see ', linknode, '.' ]);
+					statusElement.error([ 'Could not find relevant heading on QW:RPP. To fix this problem, please see ', linknode, '.' ]);
 					return;
 				}
 				statusElement.status('Adding new request...');
@@ -1611,7 +1611,7 @@ Twinkle.protect.callbacks = {
 					var linknode2 = document.createElement('a');
 					linknode2.setAttribute('href', mw.util.getUrl('Wikipedia:Twinkle/Fixing RPP'));
 					linknode2.appendChild(document.createTextNode('How to fix RPP'));
-					statusElement.error([ 'Could not find relevant heading on WP:RPP. To fix this problem, please see ', linknode2, '.' ]);
+					statusElement.error([ 'Could not find relevant heading on QW:RPP. To fix this problem, please see ', linknode2, '.' ]);
 					return;
 				}
 				statusElement.status('Adding new request...');
