@@ -22,10 +22,11 @@ Twinkle.batchdelete = function twinklebatchdelete() {
 	if (
 		Morebits.userIsSysop && (
 			(mw.config.get('wgCurRevisionId') && mw.config.get('wgNamespaceNumber') > 0) ||
-			mw.config.get('wgCanonicalSpecialPageName') === 'Prefixindex'
+			mw.config.get('wgCanonicalSpecialPageName') === 'Prefixindex' ||
+			mw.config.get('wgCanonicalSpecialPageName') === 'BrokenRedirects'
 		)
 	) {
-		Twinkle.addPortletLink(Twinkle.batchdelete.callback, 'D-batch', 'tw-batch', 'Delete pages found in this category/on this page');
+		Twinkle.addPortletLink(Twinkle.batchdelete.callback, '批删', 'tw-batch', '删除此分类或页面中的所有链接');
 	}
 };
 
@@ -37,7 +38,7 @@ var subpagesLoaded;
 Twinkle.batchdelete.callback = function twinklebatchdeleteCallback() {
 	subpagesLoaded = false;
 	var Window = new Morebits.simpleWindow(600, 400);
-	Window.setTitle('Batch deletion');
+	Window.setTitle('批量删除');
 	Window.setScriptName('Twinkle');
 	Window.addFooterLink('帮助文档', 'H:TW/DOC#batchdelete');
 	Window.addFooterLink('问题反馈', 'HT:TW');
@@ -47,7 +48,7 @@ Twinkle.batchdelete.callback = function twinklebatchdeleteCallback() {
 		type: 'checkbox',
 		list: [
 			{
-				label: 'Delete pages',
+				label: '删除页面',
 				name: 'delete_page',
 				value: 'delete',
 				checked: true,
@@ -55,19 +56,19 @@ Twinkle.batchdelete.callback = function twinklebatchdeleteCallback() {
 					type: 'checkbox',
 					list: [
 						{
-							label: 'Delete associated talk pages (except user talk pages)',
+							label: '删除关联的讨论页（用户讨论页除外）',
 							name: 'delete_talk',
 							value: 'delete_talk',
 							checked: true
 						},
 						{
-							label: 'Delete redirects to deleted pages',
+							label: '删除到已删页面的重定向页',
 							name: 'delete_redirects',
 							value: 'delete_redirects',
 							checked: true
 						},
 						{
-							label: 'Delete subpages of deleted pages',
+							label: '删除已删页面的子页面',
 							name: 'delete_subpages',
 							value: 'delete_subpages',
 							checked: false,
@@ -76,17 +77,17 @@ Twinkle.batchdelete.callback = function twinklebatchdeleteCallback() {
 								type: 'checkbox',
 								list: [
 									{
-										label: 'Delete talk pages of deleted subpages',
+										label: '删除已删子页面的讨论页',
 										name: 'delete_subpage_talks',
 										value: 'delete_subpage_talks'
 									},
 									{
-										label: 'Delete redirects to deleted subpages',
+										label: '删除到已删子页面的重定向页',
 										name: 'delete_subpage_redirects',
 										value: 'delete_subpage_redirects'
 									},
 									{
-										label: 'Unlink backlinks to each deleted subpage (in Main and Portal namespaces only)',
+										label: '取消所有已删页面的链入（仅处理条目）',
 										name: 'unlink_subpages',
 										value: 'unlink_subpages'
 									}
@@ -97,13 +98,13 @@ Twinkle.batchdelete.callback = function twinklebatchdeleteCallback() {
 				}
 			},
 			{
-				label: 'Unlink backlinks to each page (in Main and Portal namespaces only)',
+				label: '取消链入（仅处理条目）',
 				name: 'unlink_page',
 				value: 'unlink',
 				checked: false
 			},
 			{
-				label: 'Remove usages of each file (in all namespaces)',
+				label: '移除文件使用（所有命名空间）',
 				name: 'unlink_file',
 				value: 'unlink_file',
 				checked: true
@@ -111,9 +112,16 @@ Twinkle.batchdelete.callback = function twinklebatchdeleteCallback() {
 		]
 	});
 	form.append({
+		type: 'select',
+		name: 'common_reason',
+		label: '常用理由：',
+		list: Twinkle.batchdelete.deletereasonlist,
+		event: Twinkle.batchdelete.callback.change_common_reason
+	});
+	form.append({
 		type: 'input',
 		name: 'reason',
-		label: 'Reason:',
+		label: '理由：',
 		size: 60
 	});
 
@@ -141,7 +149,7 @@ Twinkle.batchdelete.callback = function twinklebatchdeleteCallback() {
 			query.gapprefix = mw.util.getParamValue('prefix');
 		} else {
 			var pathSplit = decodeURIComponent(location.pathname).split('/');
-			if (pathSplit.length < 3 || pathSplit[2] !== 'Special:PrefixIndex') {
+			if (pathSplit.length < 3 || pathSplit[2] !== 'Special:前缀索引') {
 				return;
 			}
 			var titleSplit = pathSplit[3].split(':');
@@ -171,8 +179,8 @@ Twinkle.batchdelete.callback = function twinklebatchdeleteCallback() {
 
 	Twinkle.batchdelete.pages = {};
 
-	var statelem = new Morebits.status('Grabbing list of pages');
-	var qiuwen_api = new Morebits.wiki.api('loading...', query, function(apiobj) {
+	var statelem = new Morebits.status('抓取页面列表');
+	var qiuwen_api = new Morebits.wiki.api('加载中…', query, function(apiobj) {
 		var response = apiobj.getResponse();
 		var pages = (response.query && response.query.pages) || [];
 		pages = pages.filter(function(page) {
@@ -182,22 +190,22 @@ Twinkle.batchdelete.callback = function twinklebatchdeleteCallback() {
 		pages.forEach(function(page) {
 			var metadata = [];
 			if (page.redirect) {
-				metadata.push('redirect');
+				metadata.push('重定向');
 			}
 
 			var editProt = page.protection.filter(function(pr) {
 				return pr.type === 'edit' && pr.level === 'sysop';
 			}).pop();
 			if (editProt) {
-				metadata.push('fully protected' +
-				(editProt.expiry === 'infinity' ? ' indefinitely' : ', expires ' + new Morebits.date(editProt.expiry).calendar('utc') + ' (UTC)'));
+				metadata.push('全保护' +
+				(editProt.expiry === 'infinity' ? ' 无限期' : new Morebits.date(editProt.expiry).calendar('utc') + ' (UTC)' + '过期'));
 			}
 
 			if (page.ns === 6) {
-				metadata.push('uploader: ' + page.imageinfo[0].user);
-				metadata.push('last edit from: ' + page.revisions[0].user);
+				metadata.push('上传者：' + page.imageinfo[0].user);
+				metadata.push('最后编辑：' + page.revisions[0].user);
 			} else {
-				metadata.push(mw.language.convertNumber(page.revisions[0].size) + ' bytes');
+				metadata.push(mw.language.convertNumber(page.revisions[0].size) + '字节');
 			}
 
 			var title = page.title;
@@ -210,10 +218,10 @@ Twinkle.batchdelete.callback = function twinklebatchdeleteCallback() {
 		});
 
 		var form = apiobj.params.form;
-		form.append({ type: 'header', label: 'Pages to delete' });
+		form.append({ type: 'header', label: '待删除页面' });
 		form.append({
 			type: 'button',
-			label: 'Select All',
+			label: '全选',
 			event: function dBatchSelectAll() {
 				$(result).find('input[name=pages]:not(:checked)').each(function(_, e) {
 					e.click(); // check it, and invoke click event so that subgroup can be shown
@@ -225,7 +233,7 @@ Twinkle.batchdelete.callback = function twinklebatchdeleteCallback() {
 		});
 		form.append({
 			type: 'button',
-			label: 'Deselect All',
+			label: '全不选',
 			event: function dBatchDeselectAll() {
 				$(result).find('input[name=pages]:checked').each(function(_, e) {
 					e.click(); // uncheck it, and invoke click event so that subgroup can be hidden
@@ -277,6 +285,61 @@ Twinkle.batchdelete.generateNewPageList = function(form) {
 	}).render();
 };
 
+Twinkle.batchdelete.deletereasonlist = [
+	{
+		label: '请选择',
+		value: ''
+	},
+	{
+		label: 'G1：明显违反法律法规或违背公序良俗的页面',
+		value: '[[QW:G1|G1]]：明显违反法律法规或违背公序良俗的页面'
+	},
+	{
+		label: 'G2：没有实际内容的页面',
+		value: '[[QW:G2|G2]]：没有实际内容的页面'
+	},
+	{
+		label: 'G3：纯粹破坏',
+		value: '[[QW:G3|G3]]：纯粹[[QW:VAN|破坏]]'
+	},
+	{
+		label: 'G5：因技术原因删除页面',
+		value: '[[QW:G5|G5]]：因技术原因删除页面'
+	},
+	{
+		label: 'G6：原作者提请删除或清空页面，且页面原作者仅有一人',
+		value: '[[QW:G6|G6]]：原作者提请删除或清空页面，且页面原作者仅有一人'
+	},
+	{
+		label: 'G9：孤立页面',
+		value: '[[QW:G9|G9]]：孤立页面'
+	},
+	{
+		label: 'R1：不能发挥实际作用的重定向',
+		value: '[[QW:R1|R1]]：不能发挥实际作用的重定向'
+	},
+	{
+		label: 'R2：名称与导向目标代表事物不一致或不完全一致的重定向',
+		value: '[[QW:R2|R2]]：名称与导向目标代表事物不一致或不完全一致的重定向'
+	},
+	{
+		label: 'F1：不符合本站著作权方针的文件',
+		value: '[[QW:F1|F1]]：不符合本站著作权方针的文件'
+	},
+	{
+		label: 'O1：用户请求删除自己的用户页',
+		value: '[[QW:O1|O1]]：用户请求删除自己的用户页'
+	},
+	{
+		label: 'O2：空分类',
+		value: '[[QW:O2|O2]]：空分类'
+	},
+	{
+		label: 'O3：废弃草稿',
+		value: '[[QW:O3|O3]]：废弃草稿'
+	}
+];
+
 Twinkle.batchdelete.callback.toggleSubpages = function twDbatchToggleSubpages(e) {
 
 	var form = e.target.form;
@@ -309,7 +372,7 @@ Twinkle.batchdelete.callback.toggleSubpages = function twDbatchToggleSubpages(e)
 		}
 
 		// Proceed with API calls to get list of subpages
-		var loadingText = '<strong id="dbatch-subpage-loading">Loading... </strong>';
+		var loadingText = '<strong id="dbatch-subpage-loading">加载中...</strong>';
 		$(e.target).after(loadingText);
 
 		var pages = $(form.pages).map(function(i, el) {
@@ -328,7 +391,7 @@ Twinkle.batchdelete.callback.toggleSubpages = function twDbatchToggleSubpages(e)
 				return;
 			}
 
-			var qiuwen_api = new Morebits.wiki.api('Getting list of subpages of ' + pageName, {
+			var qiuwen_api = new Morebits.wiki.api('正在获取“' + pageName + '”的子页面', {
 				action: 'query',
 				prop: 'revisions|info|imageinfo',
 				generator: 'allpages',
@@ -354,13 +417,13 @@ Twinkle.batchdelete.callback.toggleSubpages = function twDbatchToggleSubpages(e)
 					}).pop();
 					if (editProt) {
 						metadata.push('fully protected' +
-						(editProt.expiry === 'infinity' ? ' indefinitely' : ', expires ' + new Morebits.date(editProt.expiry).calendar('utc') + ' (UTC)'));
+						(editProt.expiry === 'infinity' ? '全保护' : new Morebits.date(editProt.expiry).calendar('utc') + ' (UTC)' + '过期'));
 					}
 					if (page.ns === 6) {
-						metadata.push('uploader: ' + page.imageinfo[0].user);
-						metadata.push('last edit from: ' + page.revisions[0].user);
+						metadata.push('上传者：' + page.imageinfo[0].user);
+						metadata.push('最后编辑：' + page.revisions[0].user);
 					} else {
-						metadata.push(mw.language.convertNumber(page.revisions[0].size) + ' bytes');
+						metadata.push(mw.language.convertNumber(page.revisions[0].size) + '字节');
 					}
 
 					var title = page.title;
@@ -424,31 +487,31 @@ Twinkle.batchdelete.callback.toggleSubpages = function twDbatchToggleSubpages(e)
 };
 
 Twinkle.batchdelete.callback.evaluate = function twinklebatchdeleteCallbackEvaluate(event) {
-	Morebits.wiki.actionCompleted.notice = 'Batch deletion is now complete';
+	Morebits.wiki.actionCompleted.notice = '批量删除已完成';
 
 	var form = event.target;
 
 	var numProtected = $(Morebits.quickForm.getElements(form, 'pages')).filter(function(index, element) {
 		return element.checked && element.nextElementSibling.style.color === 'red';
 	}).length;
-	if (numProtected > 0 && !confirm('You are about to delete ' + mw.language.convertNumber(numProtected) + ' fully protected page(s). Are you sure?')) {
+	if (numProtected > 0 && !confirm('您将删除' + mw.language.convertNumber(numProtected) + '个全保护页面，您确定吗？')) {
 		return;
 	}
 
 	var input = Morebits.quickForm.getInputData(form);
 
 	if (!input.reason) {
-		alert('You need to give a reason, you cabal crony!');
+		alert('您需要给出一个理由');
 		return;
 	}
 	Morebits.simpleWindow.setButtonsEnabled(false);
 	Morebits.status.init(form);
 	if (input.pages.length === 0) {
-		Morebits.status.error('Error', 'nothing to delete, aborting');
+		Morebits.status.error('错误', '没有要删除的内容，中止');
 		return;
 	}
 
-	var pageDeleter = new Morebits.batchOperation(input.delete_page ? 'Deleting pages' : 'Initiating requested tasks');
+	var pageDeleter = new Morebits.batchOperation(input.delete_page ? '正在删除页面' : '正在启动要求的任务');
 	pageDeleter.setOption('chunkSize', Twinkle.getPref('batchChunks'));
 	// we only need the initial status lines if we're deleting the pages in the pages array
 	pageDeleter.setOption('preserveIndividualStatusLines', input.delete_page);
@@ -465,10 +528,10 @@ Twinkle.batchdelete.callback.evaluate = function twinklebatchdeleteCallbackEvalu
 			pageDeleter: pageDeleter
 		};
 
-		var qiuwen_page = new Morebits.wiki.page(pageName, 'Deleting page ' + pageName);
+		var qiuwen_page = new Morebits.wiki.page(pageName, '正在删除页面' + pageName);
 		qiuwen_page.setCallbackParameters(params);
 		if (input.delete_page) {
-			qiuwen_page.setEditSummary(input.reason);
+			qiuwen_page.setEditSummary(input.reason + '（批量）');
 			qiuwen_page.setChangeTags(Twinkle.changeTags);
 			qiuwen_page.suppressProtectWarning();
 			qiuwen_page.deletePage(Twinkle.batchdelete.callbacks.doExtras, pageDeleter.workerFailure);
@@ -477,7 +540,7 @@ Twinkle.batchdelete.callback.evaluate = function twinklebatchdeleteCallbackEvalu
 		}
 	}, function postFinish() {
 		if (input.delete_subpages && input.subpages) {
-			var subpageDeleter = new Morebits.batchOperation('Deleting subpages');
+			var subpageDeleter = new Morebits.batchOperation('正在删除子页面');
 			subpageDeleter.setOption('chunkSize', Twinkle.getPref('batchChunks'));
 			subpageDeleter.setOption('preserveIndividualStatusLines', true);
 			subpageDeleter.setPageList(input.subpages);
@@ -493,9 +556,9 @@ Twinkle.batchdelete.callback.evaluate = function twinklebatchdeleteCallbackEvalu
 					pageDeleter: subpageDeleter
 				};
 
-				var qiuwen_page = new Morebits.wiki.page(pageName, 'Deleting subpage ' + pageName);
+				var qiuwen_page = new Morebits.wiki.page(pageName, '正在删除子页面' + pageName);
 				qiuwen_page.setCallbackParameters(params);
-				qiuwen_page.setEditSummary(input.reason);
+				qiuwen_page.setEditSummary(input.reason + '（批量）');
 				qiuwen_page.setChangeTags(Twinkle.changeTags);
 				qiuwen_page.suppressProtectWarning();
 				qiuwen_page.deletePage(Twinkle.batchdelete.callbacks.doExtras, pageDeleter.workerFailure);
@@ -522,12 +585,12 @@ Twinkle.batchdelete.callbacks = {
 				action: 'query',
 				list: 'backlinks',
 				blfilterredir: 'nonredirects',
-				blnamespace: [0, 100], // main space and portal space only
+				blnamespace: [0], // main space only
 				bltitle: params.page,
 				bllimit: 'max', // 500 is max for normal users, 5000 for bots and sysops
 				format: 'json'
 			};
-			qiuwen_api = new Morebits.wiki.api('Grabbing backlinks', query, Twinkle.batchdelete.callbacks.unlinkBacklinksMain);
+			qiuwen_api = new Morebits.wiki.api('正在获取链入页面', query, Twinkle.batchdelete.callbacks.unlinkBacklinksMain);
 			qiuwen_api.params = params;
 			qiuwen_api.post();
 		}
@@ -540,7 +603,7 @@ Twinkle.batchdelete.callbacks = {
 				iulimit: 'max', // 500 is max for normal users, 5000 for bots and sysops
 				format: 'json'
 			};
-			qiuwen_api = new Morebits.wiki.api('Grabbing file links', query, Twinkle.batchdelete.callbacks.unlinkImageInstancesMain);
+			qiuwen_api = new Morebits.wiki.api('正在获取文件链入', query, Twinkle.batchdelete.callbacks.unlinkImageInstancesMain);
 			qiuwen_api.params = params;
 			qiuwen_api.post();
 		}
@@ -554,7 +617,7 @@ Twinkle.batchdelete.callbacks = {
 					rdlimit: 'max', // 500 is max for normal users, 5000 for bots and sysops
 					format: 'json'
 				};
-				qiuwen_api = new Morebits.wiki.api('Grabbing redirects', query, Twinkle.batchdelete.callbacks.deleteRedirectsMain);
+				qiuwen_api = new Morebits.wiki.api('正在获取重定向', query, Twinkle.batchdelete.callbacks.deleteRedirectsMain);
 				qiuwen_api.params = params;
 				qiuwen_api.post();
 			}
@@ -567,7 +630,7 @@ Twinkle.batchdelete.callbacks = {
 						titles: pageTitle.toText(),
 						format: 'json'
 					};
-					qiuwen_api = new Morebits.wiki.api('Checking whether talk page exists', query, Twinkle.batchdelete.callbacks.deleteTalk);
+					qiuwen_api = new Morebits.wiki.api('正在检查讨论页是否存在', query, Twinkle.batchdelete.callbacks.deleteTalk);
 					qiuwen_api.params = params;
 					qiuwen_api.params.talkPage = pageTitle.toText();
 					qiuwen_api.post();
@@ -585,12 +648,12 @@ Twinkle.batchdelete.callbacks = {
 			return;
 		}
 
-		var redirectDeleter = new Morebits.batchOperation('Deleting redirects to ' + apiobj.params.page);
+		var redirectDeleter = new Morebits.batchOperation('正在删除到' + apiobj.params.page + '的重定向');
 		redirectDeleter.setOption('chunkSize', Twinkle.getPref('batchChunks'));
 		redirectDeleter.setPageList(pages);
 		redirectDeleter.run(function(pageName) {
-			var qiuwen_page = new Morebits.wiki.page(pageName, 'Deleting ' + pageName);
-			qiuwen_page.setEditSummary('[[QW:CSD#G8|G8]]: Redirect to deleted page "' + apiobj.params.page + '"');
+			var qiuwen_page = new Morebits.wiki.page(pageName, '正在删除 ' + pageName);
+			qiuwen_page.setEditSummary('[[QW:G9|G9]]：孤立页面（已删页面“' + apiobj.params.page + '”的讨论页）');
 			qiuwen_page.setChangeTags(Twinkle.changeTags);
 			qiuwen_page.deletePage(redirectDeleter.workerSuccess, redirectDeleter.workerFailure);
 		});
@@ -603,8 +666,8 @@ Twinkle.batchdelete.callbacks = {
 			return;
 		}
 
-		var page = new Morebits.wiki.page(apiobj.params.talkPage, 'Deleting talk page of page ' + apiobj.params.page);
-		page.setEditSummary('[[QW:CSD#G8|G8]]: [[Help:Talk page|Talk page]] of deleted page "' + apiobj.params.page + '"');
+		var page = new Morebits.wiki.page(apiobj.params.talkPage, '正在取消到' + apiobj.params.page + '的链入');
+		page.setEditSummary('[[QW:G9|G9]]：孤立页面（已删页面“' + apiobj.params.page + '”的讨论页）');
 		page.setChangeTags(Twinkle.changeTags);
 		page.deletePage();
 	},
@@ -618,11 +681,11 @@ Twinkle.batchdelete.callbacks = {
 			return;
 		}
 
-		var unlinker = new Morebits.batchOperation('Unlinking backlinks to ' + apiobj.params.page);
+		var unlinker = new Morebits.batchOperation('正在取消到' + apiobj.params.page + '的链入');
 		unlinker.setOption('chunkSize', Twinkle.getPref('batchChunks'));
 		unlinker.setPageList(pages);
 		unlinker.run(function(pageName) {
-			var qiuwen_page = new Morebits.wiki.page(pageName, 'Unlinking on ' + pageName);
+			var qiuwen_page = new Morebits.wiki.page(pageName, '正在取消' + pageName + '上的链入');
 			var params = $.extend({}, apiobj.params);
 			params.title = pageName;
 			params.unlinker = unlinker;
@@ -654,7 +717,7 @@ Twinkle.batchdelete.callbacks = {
 			params.unlinker.workerSuccess(pageobj);
 			return;
 		}
-		pageobj.setEditSummary('Removing link(s) to deleted page ' + params.page);
+		pageobj.setEditSummary('取消到已删页面' + params.page + '的链入');
 		pageobj.setChangeTags(Twinkle.changeTags);
 		pageobj.setPageText(text);
 		pageobj.setCreateOption('nocreate');
@@ -671,11 +734,11 @@ Twinkle.batchdelete.callbacks = {
 			return;
 		}
 
-		var unlinker = new Morebits.batchOperation('Unlinking backlinks to ' + apiobj.params.page);
+		var unlinker = new Morebits.batchOperation('正在取消到' + apiobj.params.page + '的链入');
 		unlinker.setOption('chunkSize', Twinkle.getPref('batchChunks'));
 		unlinker.setPageList(pages);
 		unlinker.run(function(pageName) {
-			var qiuwen_page = new Morebits.wiki.page(pageName, 'Removing file usages on ' + pageName);
+			var qiuwen_page = new Morebits.wiki.page(pageName, '取消' + pageName + '的文件使用');
 			var params = $.extend({}, apiobj.params);
 			params.title = pageName;
 			params.unlinker = unlinker;
@@ -700,15 +763,15 @@ Twinkle.batchdelete.callbacks = {
 		}
 		var old_text = text;
 		var wikiPage = new Morebits.wikitext.page(text);
-		text = wikiPage.commentOutImage(image, 'Commented out because image was deleted').getText();
+		text = wikiPage.commentOutImage(image, '因文件已删，故注释之').getText();
 
 		Twinkle.batchdelete.unlinkCache[params.title] = text;
 		if (text === old_text) {
-			pageobj.getStatusElement().error('failed to unlink image ' + image + ' from ' + pageobj.getPageName());
+			pageobj.getStatusElement().error('在 ' + pageobj.getPageName() + ' 上取消 ' + image + ' 的文件使用失败');
 			params.unlinker.workerFailure(pageobj);
 			return;
 		}
-		pageobj.setEditSummary('Removing instance of file ' + image + ' that has been deleted because "' + params.reason + '")');
+		pageobj.setEditSummary('取消使用已被删除文件' + image + '，因为：' + params.reason);
 		pageobj.setChangeTags(Twinkle.changeTags);
 		pageobj.setPageText(text);
 		pageobj.setCreateOption('nocreate');
