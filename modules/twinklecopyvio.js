@@ -41,8 +41,8 @@ Twinkle.copyvio.callback = function twinklecopyvioCallback() {
 	Window.setTitle('提报侵权页面');
 	Window.setScriptName('Twinkle');
 	Window.addFooterLink('常见错误', 'Qiuwen:管理员错误自查表/侵权处理');
-	Window.addFooterLink('参数设置', 'H:TW/PREF#talkback');
-	Window.addFooterLink('帮助文档', 'H:TW/DOC#talkback');
+	Window.addFooterLink('参数设置', 'H:TW/PREF#copyvio');
+	Window.addFooterLink('帮助文档', 'H:TW/DOC#copyvio');
 	Window.addFooterLink('问题反馈', 'HT:TW');
 
 	var form = new Morebits.quickForm(Twinkle.copyvio.callback.evaluate);
