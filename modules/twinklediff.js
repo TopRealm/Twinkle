@@ -2,6 +2,8 @@
 /**
  * Twinkle.js
  * © 2011-2022 English Wikipedia Contributors
+ * © 2011-2021 Chinese Wikipedia Contributors
+ * © 2021-     Qiuwen Baike Contributors
  * This work is licensed under a Creative Commons
  * Attribution-ShareAlike 3.0 Unported License.
  * https://creativecommons.org/licenses/by-sa/3.0/
@@ -22,19 +24,19 @@ Twinkle.diff = function twinklediff() {
 	if (mw.config.get('wgNamespaceNumber') < 0 || !mw.config.get('wgArticleId')) {
 		return;
 	}
-	Twinkle.addPortletLink(mw.util.getUrl(mw.config.get('wgPageName'), {diff: 'cur', oldid: 'prev'}), 'Last', 'tw-lastdiff', 'Show most recent diff');
+	Twinkle.addPortletLink(mw.util.getUrl(mw.config.get('wgPageName'), {diff: 'cur', oldid: 'prev'}), '最后', 'tw-lastdiff', '显示最后修改');
 
 	// Show additional tabs only on diff pages
 	if (mw.util.getParamValue('diff')) {
 		Twinkle.addPortletLink(function() {
 			Twinkle.diff.evaluate(false);
-		}, 'Since', 'tw-since', 'Show difference between last diff and the revision made by previous user');
+		}, '自上', 'tw-since', '显示与上一修订版本间的差异');
 		Twinkle.addPortletLink(function() {
 			Twinkle.diff.evaluate(true);
-		}, 'Since mine', 'tw-sincemine', 'Show difference between last diff and my last revision');
+		}, '自我', 'tw-sincemine', '显示与我做出的修订版本的差异');
 
 		var oldid = /oldid=(.+)/.exec($('#mw-diff-ntitle1').find('strong a').first().attr('href'))[1];
-		Twinkle.addPortletLink(mw.util.getUrl(mw.config.get('wgPageName'), {diff: 'cur', oldid: oldid}), 'Current', 'tw-curdiff', 'Show difference to current revision');
+		Twinkle.addPortletLink(mw.util.getUrl(mw.config.get('wgPageName'), {diff: 'cur', oldid: oldid}), '当前', 'tw-curdiff', '显示与当前版本间的差异');
 	}
 };
 
@@ -62,7 +64,7 @@ Twinkle.diff.evaluate = function twinklediffEvaluate(me) {
 		format: 'json'
 	};
 	Morebits.status.init(document.getElementById('mw-content-text'));
-	var qiuwen_api = new Morebits.wiki.api('Grabbing data of initial contributor', query, Twinkle.diff.callbacks.main);
+	var qiuwen_api = new Morebits.wiki.api('抓取最初贡献者信息', query, Twinkle.diff.callbacks.main);
 	qiuwen_api.params = { user: user };
 	qiuwen_api.post();
 };
@@ -73,7 +75,7 @@ Twinkle.diff.callbacks = {
 		var revid = rev && rev[0].revid;
 
 		if (!revid) {
-			self.statelem.error('no suitable earlier revision found, or ' + self.params.user + ' is the only contributor. Aborting.');
+			self.statelem.error('未找到合适的早期版本，或 ' + self.params.user + ' 是唯一贡献者。取消。');
 			return;
 		}
 		window.location = mw.util.getUrl(mw.config.get('wgPageName'), {
