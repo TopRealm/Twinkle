@@ -87,7 +87,9 @@ Twinkle.batchundelete.callback = function twinklebatchundeleteCallback() {
 
 			var title = page.title;
 			list.push({
-				label: title + (isProtected ? '（' + '全保护，' + ($editprot.attr('expiry') === 'infinity' ? '无限期' : new Morebits.date($editprot.attr('expiry')).calendar('utc') + ' (UTC)' + '过期') + '）' : ''),
+				label: title + (editProt ? '（全保护' +
+					(editProt.expiry === 'infinity' ? '无限期' : '，' + new Morebits.date(editProt.expiry).calendar('utc') + ' (UTC) 过期') + ')' : ''),
+				value: title,
 				checked: true,
 				style: editProt ? 'color:red' : ''
 			});
@@ -163,7 +165,7 @@ Twinkle.batchundelete.callback.evaluate = function(event) {
 
 		var qiuwen_page = new Morebits.wiki.page(pageName, '反删除页面' + pageName);
 		qiuwen_page.setCallbackParameters(params);
-		qiuwen_pagesetEditSummary(reason + ' (批量)');
+		qiuwen_page.setEditSummary(input.reason + ' (批量)');
 		qiuwen_page.setChangeTags(Twinkle.changeTags);
 		qiuwen_page.suppressProtectWarning();
 		qiuwen_page.setMaxRetries(3); // temporary increase from 2 to make batchundelete more likely to succeed [[phab:T222402]] #613
