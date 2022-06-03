@@ -2,6 +2,8 @@
 /**
  * Twinkle.js
  * © 2011-2022 English Wikipedia Contributors
+ * © 2011-2021 Chinese Wikipedia Contributors
+ * © 2021-     Qiuwen Baike Contributors
  * This work is licensed under a Creative Commons
  * Attribution-ShareAlike 3.0 Unported License.
  * https://creativecommons.org/licenses/by-sa/3.0/
@@ -11,7 +13,7 @@
 
 var api = new mw.Api(), relevantUserName, blockedUserName;
 var menuFormattedNamespaces = $.extend({}, mw.config.get('wgFormattedNamespaces'));
-menuFormattedNamespaces[0] = '(Article)';
+menuFormattedNamespaces[0] = '（条目）';
 
 /*
  ****************************************
@@ -26,13 +28,13 @@ Twinkle.block = function twinkleblock() {
 	// should show on Contributions or Block pages, anywhere there's a relevant user
 	// Ignore ranges wider than the CIDR limit
 	if (Morebits.userIsSysop && relevantUserName && (!Morebits.ip.isRange(relevantUserName) || Morebits.ip.validCIDR(relevantUserName))) {
-		Twinkle.addPortletLink(Twinkle.block.callback, 'Block', 'tw-block', 'Block relevant user');
+		Twinkle.addPortletLink(Twinkle.block.callback, '封禁', 'tw-block', '封禁相关用户');
 	}
 };
 
 Twinkle.block.callback = function twinkleblockCallback() {
 	if (relevantUserName === mw.config.get('wgUserName') &&
-			!confirm('You are about to block yourself! Are you sure you want to proceed?')) {
+			!confirm('您即将对自己执行封禁相关操作！确认要继续吗？')) {
 		return;
 	}
 
@@ -42,21 +44,20 @@ Twinkle.block.callback = function twinkleblockCallback() {
 
 	var Window = new Morebits.simpleWindow(650, 530);
 	// need to be verbose about who we're blocking
-	Window.setTitle('Block or issue block template to ' + relevantUserName);
+	Window.setTitle('封禁或向' + Morebits.wiki.flow.relevantUserName(true) + '发出封禁模板');
 	Window.setScriptName('Twinkle');
-	Window.addFooterLink('Block templates', 'Template:Uw-block/doc/Block_templates');
-	Window.addFooterLink('Block policy', 'QW:BLOCK');
+	Window.addFooterLink('封禁方针', 'QW:BLOCK');
 	Window.addFooterLink('参数设置', 'H:TW/PREF#block');
 	Window.addFooterLink('帮助文档', 'H:TW/DOC#block');
 	Window.addFooterLink('问题反馈', 'HT:TW');
 
 	// Always added, hidden later if actual user not blocked
-	Window.addFooterLink('Unblock this user', 'Special:Unblock/' + relevantUserName, true);
+	Window.addFooterLink('解封此用户', 'Special:Unblock/' + relevantUserName, true);
 
 	var form = new Morebits.quickForm(Twinkle.block.callback.evaluate);
 	var actionfield = form.append({
 		type: 'field',
-		label: 'Type of action'
+		label: '操作类型'
 	});
 	actionfield.append({
 		type: 'checkbox',
@@ -64,71 +65,55 @@ Twinkle.block.callback = function twinkleblockCallback() {
 		event: Twinkle.block.callback.change_action,
 		list: [
 			{
-				label: 'Block user',
+				label: '封禁用户',
 				value: 'block',
-				tooltip: 'Block the relevant user with the given options. If partial block is unchecked, this will be a sitewide block.',
-				checked: true
+				tooltip: '用选择的选项全站封禁相关用户，如果未勾选部分封禁则为全站封禁。',
+				hidden: !Morebits.userIsSysop,
+				checked: Morebits.userIsSysop
 			},
 			{
-				label: 'Partial block',
+				label: '部分封禁',
 				value: 'partial',
-				tooltip: 'Enable partial blocks and partial block templates.',
-				checked: Twinkle.getPref('defaultToPartialBlocks') // Overridden if already blocked
+				tooltip: '启用部分封禁及部分封禁模板。',
+				hidden: !Morebits.userIsSysop,
+				checked: Twinkle.getPref('defaultToPartialBlocks')
 			},
 			{
-				label: 'Add block template to user talk page',
+				label: '加入封禁模板到用户讨论页',
 				value: 'template',
-				tooltip: 'If the blocking admin forgot to issue a block template, or you have just blocked the user without templating them, you can use this to issue the appropriate template. Check the partial block box for partial block templates.',
-				// Disallow when viewing the block dialog on an IP range
-				checked: !Morebits.ip.isRange(relevantUserName),
-				disabled: Morebits.ip.isRange(relevantUserName)
+				tooltip: '如果执行封禁的管理员忘记发出封禁模板，或你封禁了用户而没有给其发出模板，则你可以用此来发出合适的模板。勾选部分封禁以使用部分封禁模板。',
+				hidden: !Morebits.userIsSysop,
+				checked: Morebits.userIsSysop
+			},
+			{
+				label: '标记用户页',
+				value: 'tag',
+				tooltip: '将用户页替换成相关的标记模板，仅限永久封禁使用。',
+				hidden: true,
+				checked: !Morebits.userIsSysop
+			},
+			{
+				label: '保护用户页',
+				value: 'protect',
+				tooltip: '全保护用户页，仅限永久封禁使用。',
+				hidden: true
+			},
+			{
+				label: '解除封禁用户',
+				value: 'unblock',
+				tooltip: '解除封禁相关用户。',
+				hidden: !Morebits.userIsSysop
 			}
 		]
 	});
 
-	/*
-	  Add option for IPv6 ranges smaller than /64 to upgrade to the 64
-	  CIDR ([[QW:/64]]).  This is one of the few places where we want
-	  wgRelevantUserName since this depends entirely on the original user.
-	  In theory, we shouldn't use Morebits.ip.get64 here since since we want
-	  to exclude functionally-equivalent /64s.  That'd be:
-	  // if (mw.util.isIPv6Address(mw.config.get('wgRelevantUserName'), true) &&
-	  // (mw.util.isIPv6Address(mw.config.get('wgRelevantUserName')) || parseInt(mw.config.get('wgRelevantUserName').replace(/^(.+?)\/?(\d{1,3})?$/, '$2'), 10) > 64)) {
-	  In practice, though, since functionally-equivalent ranges are
-	  (mis)treated as separate by MediaWiki's logging ([[phab:T146628]]),
-	  using Morebits.ip.get64 provides a modicum of relief in thise case.
-	*/
-	var sixtyFour = Morebits.ip.get64(mw.config.get('wgRelevantUserName'));
-	if (sixtyFour && sixtyFour !== mw.config.get('wgRelevantUserName')) {
-		var block64field = form.append({
-			type: 'field',
-			label: 'Convert to /64 rangeblock',
-			name: 'field_64'
-		});
-		block64field.append({
-			type: 'div',
-			style: 'margin-bottom: 0.5em',
-			label: ['It\'s usually fine, if not better, to ', $.parseHTML('<a target="_blank" href="' + mw.util.getUrl('QW:/64') + '">just block the /64</a>')[0], ' range (',
-				$.parseHTML('<a target="_blank" href="' + mw.util.getUrl('Special:Contributions/' + sixtyFour) + '">' + sixtyFour + '</a>)')[0], ').']
-		});
-		block64field.append({
-			type: 'checkbox',
-			name: 'block64',
-			event: Twinkle.block.callback.change_block64,
-			list: [{
-				checked: Twinkle.getPref('defaultToBlock64'),
-				label: 'Block the /64 instead',
-				value: 'block64',
-				tooltip: Morebits.ip.isRange(mw.config.get('wgRelevantUserName')) ? 'Will eschew leaving a template.' : 'Any template issued will go to the original IP: ' + mw.config.get('wgRelevantUserName')
-			}]
-		});
-	}
+	form.append({ type: 'field', label: '默认', name: 'field_preset' });
+	form.append({ type: 'field', label: '模板选项', name: 'field_template_options' });
+	form.append({ type: 'field', label: '封禁选项', name: 'field_block_options' });
+	form.append({ type: 'field', label: '标记用户页', name: 'field_tag_options' });
+	form.append({ type: 'field', label: '解除封禁选项', name: 'field_unblock_options' });
 
-	form.append({ type: 'field', label: 'Preset', name: 'field_preset' });
-	form.append({ type: 'field', label: 'Template options', name: 'field_template_options' });
-	form.append({ type: 'field', label: 'Block options', name: 'field_block_options' });
-
-	form.append({ type: 'submit' });
+	form.append({ type: 'submit', label: '提交' });
 
 	var result = form.render();
 	Window.setContent(result);
@@ -242,7 +227,7 @@ Twinkle.block.fetchUserInfo = function twinkleblockFetchUserInfo(fn) {
 		Twinkle.block.processUserInfo(data, fn);
 	}, function(msg) {
 		Morebits.status.init($('div[name="currentblock"] span').last()[0]);
-		Morebits.status.warn('Error fetching user info', msg);
+		Morebits.status.warn('抓取用户信息出错', msg);
 	});
 };
 
@@ -253,53 +238,6 @@ Twinkle.block.callback.saveFieldset = function twinkleblockCallbacksaveFieldset(
 		// here, but we're handling them elsewhere so that's fine
 		Twinkle.block[$(fieldset).prop('name')][el.name] = el.value;
 	});
-};
-
-Twinkle.block.callback.change_block64 = function twinkleblockCallbackChangeBlock64(e) {
-	var $form = $(e.target.form), $block64 = $form.find('[name=block64]');
-
-	// Show/hide block64 button
-	// Single IPv6, or IPv6 range smaller than a /64
-	var priorName = relevantUserName;
-	if ($block64.is(':checked')) {
-		relevantUserName = Morebits.ip.get64(mw.config.get('wgRelevantUserName'));
-	} else {
-		relevantUserName = mw.config.get('wgRelevantUserName');
-	}
-	// No templates for ranges, but if the original user is a single IP, offer the option
-	// (done separately in Twinkle.block.callback.issue_template)
-	var originalIsRange = Morebits.ip.isRange(mw.config.get('wgRelevantUserName'));
-	$form.find('[name=actiontype][value=template]').prop('disabled', originalIsRange).prop('checked', !originalIsRange);
-
-	// Refetch/reprocess user info then regenerate the main content
-	var regenerateForm = function() {
-		// Tweak titlebar text.  In theory, we could save the dialog
-		// at initialization and then use `.setTitle` or
-		// `dialog('option', 'title')`, but in practice that swallows
-		// the scriptName and requires `.display`ing, which jumps the
-		// window.  It's just a line of text, so this is fine.
-		var titleBar = document.querySelector('.ui-dialog-title').firstChild.nextSibling;
-		titleBar.nodeValue = titleBar.nodeValue.replace(priorName, relevantUserName);
-		// Tweak unblock link
-		var unblockLink = document.querySelector('.morebits-dialog-footerlinks a');
-		unblockLink.href = unblockLink.href.replace(priorName, relevantUserName);
-		unblockLink.title = unblockLink.title.replace(priorName, relevantUserName);
-
-		// Correct partial state
-		$form.find('[name=actiontype][value=partial]').prop('checked', Twinkle.getPref('defaultToPartialBlocks'));
-		if (blockedUserName === relevantUserName) {
-			$form.find('[name=actiontype][value=partial]').prop('checked', Twinkle.block.currentBlockInfo.partial === '');
-		}
-
-		// Set content appropriately
-		Twinkle.block.callback.change_action(e);
-	};
-
-	if (Twinkle.block.fetchedData[relevantUserName]) {
-		Twinkle.block.processUserInfo(Twinkle.block.fetchedData[relevantUserName], regenerateForm);
-	} else {
-		Twinkle.block.fetchUserInfo(regenerateForm);
-	}
 };
 
 Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction(e) {
@@ -314,11 +252,11 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 	$partial.prop('disabled', !blockBox && !templateBox);
 
 	// Add current block parameters as default preset
-	var prior = { label: 'Prior block' };
+	var prior = { label: '先前的封禁' };
 	if (blockedUserName === relevantUserName) {
 		Twinkle.block.blockPresetsInfo.prior = Twinkle.block.currentBlockInfo;
 		// value not a valid template selection, chosen below by setting templateName
-		prior.list = [{ label: 'Prior block settings', value: 'prior', selected: true }];
+		prior.list = [{ label: '先前的封禁设置', value: 'prior', selected: true }];
 
 		// Arrays of objects are annoying to check
 		if (!blockGroup.some(function(bg) {
@@ -353,16 +291,16 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 	Twinkle.block.callback.saveFieldset($('[name=field_template_options]'));
 
 	if (blockBox) {
-		field_preset = new Morebits.quickForm.element({ type: 'field', label: 'Preset', name: 'field_preset' });
+		field_preset = new Morebits.quickForm.element({ type: 'field', label: '默认', name: 'field_preset' });
 		field_preset.append({
 			type: 'select',
 			name: 'preset',
-			label: 'Choose a preset:',
+			label: '选择默认：',
 			event: Twinkle.block.callback.change_preset,
 			list: Twinkle.block.callback.filtered_block_groups(blockGroup)
 		});
 
-		field_block_options = new Morebits.quickForm.element({ type: 'field', label: 'Block options', name: 'field_block_options' });
+		field_block_options = new Morebits.quickForm.element({ type: 'field', label: '封禁选项', name: 'field_block_options' });
 		field_block_options.append({ type: 'div', name: 'currentblock', label: ' ' });
 		field_block_options.append({ type: 'div', name: 'hasblocklog', label: ' ' });
 		field_block_options.append({
@@ -371,31 +309,29 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 			label: 'Expiry:',
 			event: Twinkle.block.callback.change_expiry,
 			list: [
-				{ label: 'custom', value: 'custom', selected: true },
-				{ label: 'indefinite', value: 'infinity' },
-				{ label: '3 hours', value: '3 hours' },
-				{ label: '12 hours', value: '12 hours' },
-				{ label: '24 hours', value: '24 hours' },
-				{ label: '31 hours', value: '31 hours' },
-				{ label: '36 hours', value: '36 hours' },
-				{ label: '48 hours', value: '48 hours' },
-				{ label: '60 hours', value: '60 hours' },
-				{ label: '72 hours', value: '72 hours' },
-				{ label: '1 week', value: '1 week' },
-				{ label: '2 weeks', value: '2 weeks' },
-				{ label: '1 month', value: '1 month' },
-				{ label: '3 months', value: '3 months' },
-				{ label: '6 months', value: '6 months' },
-				{ label: '1 year', value: '1 year' },
-				{ label: '2 years', value: '2 years' },
-				{ label: '3 years', value: '3 years' }
+				{ label: '自定义', value: 'custom', selected: true },
+				{ label: '无限期', value: 'infinity' },
+				{ label: '3小时', value: '3 hours' },
+				{ label: '12小时', value: '12 hours' },
+				{ label: '1天', value: '1 day' },
+				{ label: '31小时', value: '31 hours' },
+				{ label: '2天', value: '2 days' },
+				{ label: '3天', value: '3 days' },
+				{ label: '1周', value: '1 week' },
+				{ label: '2周', value: '2 weeks' },
+				{ label: '1个月', value: '1 month' },
+				{ label: '3个月', value: '3 months' },
+				{ label: '6个月', value: '6 months' },
+				{ label: '1年', value: '1 year' },
+				{ label: '2年', value: '2 years' },
+				{ label: '3年', value: '3 years' }
 			]
 		});
 		field_block_options.append({
 			type: 'input',
 			name: 'expiry',
-			label: 'Custom expiry',
-			tooltip: 'You can use relative times, like "1 minute" or "19 days", or absolute timestamps, "yyyymmddhhmm" (e.g. "200602011405" is Feb 1, 2006, at 14:05 UTC).',
+			label: '自定义过期时间',
+			tooltip: '您可以使用相对时间，如“1 minute”或“19 days”；或绝对时间，“yyyymmddhhmm”（如“200602011405”是2006年2月1日14:05 UTC。）',
 			value: Twinkle.block.field_block_options.expiry || Twinkle.block.field_template_options.template_expiry
 		});
 
@@ -404,17 +340,17 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 				type: 'select',
 				multiple: true,
 				name: 'pagerestrictions',
-				label: 'Specific pages to block from editing',
+				label: '页面封禁',
 				value: '',
-				tooltip: '10 page max.'
+				tooltip: '最多10页面。'
 			});
 			var ns = field_block_options.append({
 				type: 'select',
 				multiple: true,
 				name: 'namespacerestrictions',
-				label: 'Namespace blocks',
+				label: '命名空间封禁',
 				value: '',
-				tooltip: 'Block from editing these namespaces.'
+				tooltip: '指定封禁的命名空间。'
 			});
 			$.each(menuFormattedNamespaces, function(number, name) {
 				// Ignore -1: Special; -2: Media; and 2300-2303: Gadget (talk) and Gadget definition (talk)
@@ -427,36 +363,36 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 		var blockoptions = [
 			{
 				checked: Twinkle.block.field_block_options.nocreate,
-				label: 'Block account creation',
+				label: '禁止创建账户',
 				name: 'nocreate',
 				value: '1'
 			},
 			{
 				checked: Twinkle.block.field_block_options.noemail,
-				label: 'Block user from sending email',
+				label: '电子邮件停用',
 				name: 'noemail',
 				value: '1'
 			},
 			{
 				checked: Twinkle.block.field_block_options.disabletalk,
-				label: 'Prevent this user from editing their own talk page while blocked',
+				label: '不能编辑自己的讨论页',
 				name: 'disabletalk',
 				value: '1',
-				tooltip: partialBox ? 'If issuing a partial block, this MUST remain unchecked unless you are also preventing them from editing User talk space' : ''
+				tooltip: partialBox ? '如果使用部分封禁，不应选择此项，除非您也想要禁止编辑用户讨论页。' : ''
 			}
 		];
 
 		if (Twinkle.block.isRegistered) {
 			blockoptions.push({
 				checked: Twinkle.block.field_block_options.autoblock,
-				label: 'Autoblock any IP addresses used (hardblock)',
+				label: '自动封禁',
 				name: 'autoblock',
 				value: '1'
 			});
 		} else {
 			blockoptions.push({
 				checked: Twinkle.block.field_block_options.hardblock,
-				label: 'Block logged-in users from using this IP address (hardblock)',
+				label: '阻止登录用户使用该IP地址编辑',
 				name: 'hardblock',
 				value: '1'
 			});
@@ -464,7 +400,7 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 
 		blockoptions.push({
 			checked: Twinkle.block.field_block_options.watchuser,
-			label: 'Watch user and user talk pages',
+			label: '监视该用户的用户页和讨论页',
 			name: 'watchuser',
 			value: '1'
 		});
@@ -476,18 +412,17 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 		});
 		field_block_options.append({
 			type: 'textarea',
-			label: 'Reason (for block log):',
+			label: '理由（用于封禁日志）：',
 			name: 'reason',
-			tooltip: 'Consider adding helpful details to the default message.',
 			value: Twinkle.block.field_block_options.reason
 		});
 
 		field_block_options.append({
 			type: 'div',
 			name: 'filerlog_label',
-			label: 'See also:',
+			label: '“参见”：',
 			style: 'display:inline-block;font-style:normal !important',
-			tooltip: 'Insert a "see also" message to indicate whether the filter log or deleted contributions played a role in the decision to block.'
+			tooltip: '在封禁理由中标清特殊情况以供其他管理员参考'
 		});
 		field_block_options.append({
 			type: 'checkbox',
@@ -496,9 +431,9 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 			style: 'display:inline-block; margin-right:5px',
 			list: [
 				{
-					label: 'Filter log',
+					label: '过滤器日志',
 					checked: false,
-					value: 'filter log'
+					value: '过滤器日志'
 				}
 			]
 		});
@@ -509,13 +444,38 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 			style: 'display:inline-block',
 			list: [
 				{
-					label: 'Deleted contribs',
+					label: '已删除的编辑',
 					checked: false,
-					value: 'deleted contribs'
+					value: '已删除的编辑'
 				}
 			]
 		});
-
+		field_block_options.append({
+			type: 'checkbox',
+			name: 'filter_see_also',
+			event: Twinkle.block.callback.toggle_see_alsos,
+			style: 'display:inline-block; margin-right:5px',
+			list: [
+				{
+					label: '用户讨论页',
+					checked: false,
+					value: '用户讨论页'
+				}
+			]
+		});
+		field_block_options.append({
+			type: 'checkbox',
+			name: 'filter_see_also',
+			event: Twinkle.block.callback.toggle_see_alsos,
+			style: 'display:inline-block; margin-right:5px',
+			list: [
+				{
+					label: '过去的封禁记录',
+					checked: false,
+					value: '过去的封禁记录'
+				}
+			]
+		});
 		// Yet-another-logevents-doesn't-handle-ranges-well
 		if (blockedUserName === relevantUserName) {
 			field_block_options.append({ type: 'hidden', name: 'reblock', value: '1' });
