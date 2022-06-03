@@ -54,7 +54,7 @@ Twinkle.unlink.callback = function(presetReason) {
 
 	form.append({
 		type: 'div',
-		style: 'margin-bottom: 0.5em',
+		style: 'margin-bottom: 0.5em; font-style: normal;',
 		label: [
 			'这个工具可以取消所有指向该页的链接（“链入”）' +
 				(fileSpace ? '，或通过加入<!-- -->注释标记隐藏所有对此文件的使用' : '') +
