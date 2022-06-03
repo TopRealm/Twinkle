@@ -55,7 +55,6 @@ const deployTargets = [
 	{ file: 'twinkle-pagestyles.css', target: 'MediaWiki:Gadget-Twinkle-pagestyles.css'	},
 	{ file: 'modules/friendlytag.js', target: 'MediaWiki:Gadget-friendlytag.js' },
 	{ file: 'modules/friendlytalkback.js', target: 'MediaWiki:Gadget-friendlytalkback.js' },
-	{ file: 'modules/friendlywelcome.js', target: 'MediaWiki:Gadget-friendlywelcome.js' },
 	{ file: 'modules/twinklearv.js', target: 'MediaWiki:Gadget-twinklearv.js' },
 	{ file: 'modules/twinklebatchdelete.js', target: 'MediaWiki:Gadget-twinklebatchdelete.js' },
 	{ file: 'modules/twinklebatchundelete.js', target: 'MediaWiki:Gadget-twinklebatchundelete.js' },
