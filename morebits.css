@@ -84,7 +84,8 @@ form.quickform input[type=radio] {
 }
 
 form.quickform div {
-	line-height: 13px;
+	font-size: 97.5%;
+	line-height: 18px;
 }
 
 form.quickform h5
