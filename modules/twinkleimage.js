@@ -2,6 +2,8 @@
 /**
  * Twinkle.js
  * © 2011-2022 English Wikipedia Contributors
+ * © 2011-2021 Chinese Wikipedia Contributors
+ * © 2021-     Qiuwen Baike Contributors
  * This work is licensed under a Creative Commons
  * Attribution-ShareAlike 3.0 Unported License.
  * https://creativecommons.org/licenses/by-sa/3.0/
@@ -18,17 +20,20 @@
  * Active on:              Local nonredirect file pages (not on Commons)
  */
 
-Twinkle.image = function twinkleimage() {
-	if (mw.config.get('wgNamespaceNumber') === 6 && mw.config.get('wgArticleId') && !document.getElementById('mw-sharedupload') && !Morebits.isPageRedirect()) {
-		Twinkle.addPortletLink(Twinkle.image.callback, 'DI', 'tw-di', 'Nominate file for delayed speedy deletion');
+ Twinkle.image = function twinkleimage() {
+	if (mw.config.get('wgNamespaceNumber') === 6 &&
+			!document.getElementById('mw-sharedupload') &&
+			document.getElementById('mw-imagepage-section-filehistory')) {
+
+		Twinkle.addPortletLink(Twinkle.image.callback, '图权', 'tw-di', '提交文件快速删除');
 	}
 };
 
 Twinkle.image.callback = function twinkleimageCallback() {
 	var Window = new Morebits.simpleWindow(600, 330);
-	Window.setTitle('File for dated speedy deletion');
+	Window.setTitle('文件快速删除候选');
 	Window.setScriptName('Twinkle');
-	Window.addFooterLink('Speedy deletion policy', 'QW:CSD#Files');
+	Window.addFooterLink('快速删除方针', 'QW:CSD');
 	Window.addFooterLink('参数设置', 'H:TW/PREF#image');
 	Window.addFooterLink('帮助文档', 'H:TW/DOC#image');
 	Window.addFooterLink('问题反馈', 'HT:TW');
@@ -38,10 +43,10 @@ Twinkle.image.callback = function twinkleimageCallback() {
 		type: 'checkbox',
 		list: [
 			{
-				label: 'Notify original uploader',
+				label: '通知上传者',
 				value: 'notify',
 				name: 'notify',
-				tooltip: "Uncheck this if you are planning to make multiple nominations from the same user, and don't want to overload their talk page with too many notifications.",
+				tooltip: '如果您在标记同一用户的很多文件，请取消此复选框以避免发送过多消息。',
 				checked: Twinkle.getPref('notifyUserOnDeli')
 			}
 		]
@@ -49,7 +54,7 @@ Twinkle.image.callback = function twinkleimageCallback() {
 	);
 	var field = form.append({
 		type: 'field',
-		label: 'Type of action wanted'
+		label: '需要的动作'
 	});
 	field.append({
 		type: 'radio',
