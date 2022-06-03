@@ -2,6 +2,8 @@
 /**
  * Twinkle.js
  * © 2011-2022 English Wikipedia Contributors
+ * © 2011-2021 Chinese Wikipedia Contributors
+ * © 2021-     Qiuwen Baike Contributors
  * This work is licensed under a Creative Commons
  * Attribution-ShareAlike 3.0 Unported License.
  * https://creativecommons.org/licenses/by-sa/3.0/
@@ -25,13 +27,13 @@ Twinkle.batchundelete = function twinklebatchundelete() {
 		mw.config.get('wgNamespaceNumber') !== mw.config.get('wgNamespaceIds').project)) {
 		return;
 	}
-	Twinkle.addPortletLink(Twinkle.batchundelete.callback, 'Und-batch', 'tw-batch-undel', "Undelete 'em all");
+	Twinkle.addPortletLink(Twinkle.batchundelete.callback, '批复', 'tw-batch-undel', '反删除页面');
 };
 
 Twinkle.batchundelete.callback = function twinklebatchundeleteCallback() {
 	var Window = new Morebits.simpleWindow(600, 400);
 	Window.setScriptName('Twinkle');
-	Window.setTitle('Batch undelete');
+	Window.setTitle('批量反删除');
 	Window.addFooterLink('帮助文档', 'H:TW/DOC#batchundelete');
 	Window.addFooterLink('问题反馈', 'HT:TW');
 
@@ -40,7 +42,7 @@ Twinkle.batchundelete.callback = function twinklebatchundeleteCallback() {
 		type: 'checkbox',
 		list: [
 			{
-				label: 'Restore talk pages of undeleted pages if they existed',
+				label: '如果存在已删除的讨论页，也恢复',
 				name: 'undel_talk',
 				value: 'undel_talk',
 				checked: true
@@ -50,7 +52,7 @@ Twinkle.batchundelete.callback = function twinklebatchundeleteCallback() {
 	form.append({
 		type: 'input',
 		name: 'reason',
-		label: 'Reason:',
+		label: '理由：',
 		size: 60
 	});
 
@@ -69,8 +71,8 @@ Twinkle.batchundelete.callback = function twinklebatchundeleteCallback() {
 		gpllimit: Twinkle.getPref('batchMax'),
 		format: 'json'
 	};
-	var statelem = new Morebits.status('Grabbing list of pages');
-	var qiuwen_api = new Morebits.wiki.api('loading...', query, function(apiobj) {
+	var statelem = new Morebits.status('抓取页面列表');
+	var qiuwen_api = new Morebits.wiki.api('加载中…', query, function(apiobj) {
 		var response = apiobj.getResponse();
 		var pages = (response.query && response.query.pages) || [];
 		pages = pages.filter(function(page) {
@@ -85,24 +87,22 @@ Twinkle.batchundelete.callback = function twinklebatchundeleteCallback() {
 
 			var title = page.title;
 			list.push({
-				label: title + (editProt ? ' (fully create protected' +
-					(editProt.expiry === 'infinity' ? ' indefinitely' : ', expires ' + new Morebits.date(editProt.expiry).calendar('utc') + ' (UTC)') + ')' : ''),
-				value: title,
+				label: title + (isProtected ? '（' + '全保护，' + ($editprot.attr('expiry') === 'infinity' ? '无限期' : new Morebits.date($editprot.attr('expiry')).calendar('utc') + ' (UTC)' + '过期') + '）' : ''),
 				checked: true,
 				style: editProt ? 'color:red' : ''
 			});
 		});
-		apiobj.params.form.append({ type: 'header', label: 'Pages to undelete' });
+		apiobj.params.form.append({ type: 'header', label: '待恢复页面' });
 		apiobj.params.form.append({
 			type: 'button',
-			label: 'Select All',
+			label: '全选',
 			event: function(e) {
 				$(Morebits.quickForm.getElements(e.target.form, 'pages')).prop('checked', true);
 			}
 		});
 		apiobj.params.form.append({
 			type: 'button',
-			label: 'Deselect All',
+			label: '全不选',
 			event: function(e) {
 				$(Morebits.quickForm.getElements(e.target.form, 'pages')).prop('checked', false);
 			}
@@ -126,30 +126,30 @@ Twinkle.batchundelete.callback = function twinklebatchundeleteCallback() {
 };
 
 Twinkle.batchundelete.callback.evaluate = function(event) {
-	Morebits.wiki.actionCompleted.notice = 'Batch undeletion is now complete';
+	Morebits.wiki.actionCompleted.notice = '反删除已完成';
 
 	var numProtected = Morebits.quickForm.getElements(event.target, 'pages').filter(function(element) {
 		return element.checked && element.nextElementSibling.style.color === 'red';
 	}).length;
-	if (numProtected > 0 && !confirm('You are about to undelete ' + numProtected + ' fully create protected page(s). Are you sure?')) {
+	if (numProtected > 0 && !confirm('您正要反删除 ' + numProtected + ' 个全保护页面，您确定吗？')) {
 		return;
 	}
 
 	var input = Morebits.quickForm.getInputData(event.target);
 
 	if (!input.reason) {
-		alert('You need to give a reason, you cabal crony!');
+		alert('您需要指定理由。');
 		return;
 	}
 	Morebits.simpleWindow.setButtonsEnabled(false);
 	Morebits.status.init(event.target);
 
 	if (!input.pages || !input.pages.length) {
-		Morebits.status.error('Error', 'nothing to undelete, aborting');
+		Morebits.status.error('错误', '没什么要反删除的，取消操作');
 		return;
 	}
 
-	var pageUndeleter = new Morebits.batchOperation('Undeleting pages');
+	var pageUndeleter = new Morebits.batchOperation('反删除页面');
 	pageUndeleter.setOption('chunkSize', Twinkle.getPref('batchChunks'));
 	pageUndeleter.setOption('preserveIndividualStatusLines', true);
 	pageUndeleter.setPageList(input.pages);
@@ -161,9 +161,9 @@ Twinkle.batchundelete.callback.evaluate = function(event) {
 			pageUndeleter: pageUndeleter
 		};
 
-		var qiuwen_page = new Morebits.wiki.page(pageName, 'Undeleting page ' + pageName);
+		var qiuwen_page = new Morebits.wiki.page(pageName, '反删除页面' + pageName);
 		qiuwen_page.setCallbackParameters(params);
-		qiuwen_page.setEditSummary(input.reason);
+		qiuwen_pagesetEditSummary(reason + ' (批量)');
 		qiuwen_page.setChangeTags(Twinkle.changeTags);
 		qiuwen_page.suppressProtectWarning();
 		qiuwen_page.setMaxRetries(3); // temporary increase from 2 to make batchundelete more likely to succeed [[phab:T222402]] #613
@@ -194,7 +194,7 @@ Twinkle.batchundelete.callbacks = {
 					titles: talkpagename,
 					format: 'json'
 				};
-				qiuwen_api = new Morebits.wiki.api('Checking talk page for deleted revisions', query, Twinkle.batchundelete.callbacks.undeleteTalk);
+				qiuwen_api = new Morebits.wiki.api('检查讨论页的已删版本', query, Twinkle.batchundelete.callbacks.undeleteTalk);
 				qiuwen_api.params = params;
 				qiuwen_api.params.talkPage = talkpagename;
 				qiuwen_api.post();
@@ -211,8 +211,9 @@ Twinkle.batchundelete.callbacks = {
 			return;
 		}
 
-		var talkpage = new Morebits.wiki.page(apiobj.params.talkPage, 'Undeleting talk page of ' + apiobj.params.page);
-		talkpage.setEditSummary('Undeleting [[Help:Talk page|talk page]] of "' + apiobj.params.page + '"');
+		var talkpage = new Morebits.wiki.page(apiobj.params.talkPage, '正在反删除' + apiobj.params.page + '的讨论页');
+		talkpage.setEditSummary('反删除“' + apiobj.params.page + '”的[[Help:讨论页|讨论页]]');
+		page.setChangeTags(Twinkle.changeTags);
 		talkpage.setChangeTags(Twinkle.changeTags);
 		talkpage.undeletePage();
 	}
