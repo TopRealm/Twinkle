@@ -45,20 +45,28 @@ Twinkle.talkback.callback = function() {
 	form.append({ type: 'radio', name: 'tbtarget',
 		list: [
 			{
-				label: 'Talkback',
-				value: 'talkback',
+				label: '回复：我的讨论页',
+				value: 'mytalk',
 				checked: 'true'
 			},
 			{
-				label: 'Please see',
+				label: '回复：其他用户的讨论页',
+				value: 'usertalk'
+			},
+			{
+				label: '回复：其它页面',
+				value: 'other'
+			},
+			{
+				label: '邀请讨论',
 				value: 'see'
 			},
 			{
-				label: 'Noticeboard notification',
+				label: '通告板通知',
 				value: 'notice'
 			},
 			{
-				label: "You've got mail",
+				label: '“有新邮件”',
 				value: 'mail'
 			}
 		],
@@ -67,7 +75,7 @@ Twinkle.talkback.callback = function() {
 
 	form.append({
 		type: 'field',
-		label: 'Work area',
+		label: '工作区',
 		name: 'work_area'
 	});
 
@@ -76,7 +84,7 @@ Twinkle.talkback.callback = function() {
 		Twinkle.talkback.callbacks.preview(result);  // |result| is defined below
 	});
 	previewlink.style.cursor = 'pointer';
-	previewlink.textContent = 'Preview';
+	previewlink.textContent = '预览';
 	form.append({ type: 'div', id: 'talkbackpreview', label: [ previewlink ] });
 	form.append({ type: 'div', id: 'friendlytalkback-previewbox', style: 'display: none' });
 
@@ -101,8 +109,8 @@ Twinkle.talkback.callback = function() {
 		ellimit: '1',
 		format: 'json'
 	};
-	var wpapi = new Morebits.wiki.api('Fetching talkback opt-out status', query, Twinkle.talkback.callback.optoutStatus);
-	wpapi.post();
+	var qwapi = new Morebits.wiki.api('抓取退出通告信息', query, Twinkle.talkback.callback.optoutStatus);
+	qwapi.post();
 };
 
 Twinkle.talkback.optout = '';
@@ -110,7 +118,7 @@ Twinkle.talkback.optout = '';
 Twinkle.talkback.callback.optoutStatus = function(apiobj) {
 	var el = apiobj.getResponse().query.pages[0].extlinks;
 	if (el && el.length) {
-		Twinkle.talkback.optout = mw.config.get('wgRelevantUserName') + ' prefers not to receive talkbacks';
+		Twinkle.talkback.optout = Morebits.wiki.flow.relevantUserName() + '不希望收到回复通告';
 		var url = el[0].url;
 		var reason = mw.util.getParamValue('reason', url);
 		Twinkle.talkback.optout += reason ? ': ' + reason : '.';
@@ -140,7 +148,7 @@ Twinkle.talkback.changeTarget = function(e) {
 
 	var work_area = new Morebits.quickForm.element({
 		type: 'field',
-		label: 'Talkback information',
+		label: '回复通告信息',
 		name: 'work_area'
 	});
 
@@ -160,15 +168,15 @@ Twinkle.talkback.changeTarget = function(e) {
 			work_area.append({
 				type: 'input',
 				name: 'page',
-				label: 'Page name of the discussion',
-				tooltip: "The page name where the discussion is being held. For example: 'User talk:Jimbo Wales' or Wikipedia talk:Twinkle'. Limited to all talks, Wikipedia-space, and Template-space.",
+				label: '讨论页面名称',
+				tooltip: '正在进行讨论的页面名称。例如：“User talk:QiuWen”或“Qiuwen talk:首页”。仅限于所有对话页面、项目和模板命名空间。',
 				value: prev_page || 'User talk:' + mw.config.get('wgUserName')
 			});
 			work_area.append({
 				type: 'input',
 				name: 'section',
-				label: 'Linked section (optional)',
-				tooltip: "The section heading where the discussion is being held. For example: 'Merge proposal'.",
+				label: '章节（可选）',
+				tooltip: '您留言的章节标题，留空则不会产生章节链接。',
 				value: prev_section
 			});
 			break;
@@ -176,10 +184,10 @@ Twinkle.talkback.changeTarget = function(e) {
 			var noticeboard = work_area.append({
 				type: 'select',
 				name: 'noticeboard',
-				label: 'Noticeboard:',
+				label: '通告板：',
 				event: function(e) {
 					if (e.target.value === 'afchd') {
-						Morebits.quickForm.overrideElementLabel(root.section, 'Title of draft (excluding the prefix): ');
+						Morebits.quickForm.overrideElementLabel(root.section, '标题或草稿名称（去除Draft前缀）：');
 						Morebits.quickForm.setElementTooltipVisibility(root.section, false);
 					} else {
 						Morebits.quickForm.resetElementLabel(root.section);
@@ -200,23 +208,69 @@ Twinkle.talkback.changeTarget = function(e) {
 			work_area.append({
 				type: 'input',
 				name: 'section',
-				label: 'Linked thread',
-				tooltip: 'The heading of the relevant thread on the noticeboard page.',
+				label: '章节（可选）',
+				tooltip: '章节标题，留空则不会产生章节链接。',
 				value: prev_section
 			});
 			break;
+
+		case 'other':
+			work_area.append({
+				type: 'div',
+				label: '',
+				style: 'color: red',
+				id: 'twinkle-talkback-optout-message'
+			});
+
+			work_area.append({
+				type: 'input',
+				name: 'page',
+				label: '完整页面名',
+				tooltip: '您留下消息的完整页面名，例如“Qiuwen talk:首页”。',
+				value: prev_page,
+				required: true
+			});
+
+			work_area.append({
+				type: 'input',
+				name: 'section',
+				label: '章节（可选）',
+				tooltip: '您留言的章节标题，留空则不会产生章节链接。',
+				value: prev_section
+			});
+			break;
+
 		case 'mail':
 			work_area.append({
 				type: 'input',
 				name: 'section',
-				label: 'Subject of email (optional)',
-				tooltip: 'The subject line of the email you sent.'
+				label: '电子邮件主题（可选）',
+				tooltip: '您发出的电子邮件的主题。'
+			});
+			break;
+
+		case 'see':
+			work_area.append({
+				type: 'input',
+				name: 'page',
+				label: '完整页面名',
+				tooltip: '您留下消息的完整页面名，例如“Qiuwen talk:首页”。',
+				value: prev_page,
+				required: true
+			});
+
+			work_area.append({
+				type: 'input',
+				name: 'section',
+				label: '章节（可选）',
+				tooltip: '您留言的章节标题，留空则不会产生章节链接。',
+				value: prev_section
 			});
 			break;
 	}
 
 	if (value !== 'notice') {
-		work_area.append({ type: 'textarea', label: 'Additional message (optional):', name: 'message', tooltip: 'An additional message that you would like to leave below the talkback template. Your signature will be added to the end of the message if you leave one.' });
+		work_area.append({ type: 'textarea', label: '附加信息（可选）：', name: 'message', tooltip: '会在回复通告模板下出现的消息，您的签名会被加在最后。' });
 	}
 
 	work_area = work_area.render();
@@ -229,88 +283,18 @@ Twinkle.talkback.changeTarget = function(e) {
 };
 
 Twinkle.talkback.noticeboards = {
-	an: {
-		label: "QW:AN (Administrators' noticeboard)",
-		text: '{{subst:AN-notice|thread=$SECTION}} ~~~~',
-		editSummary: 'Notice of discussion at [[Qiuwen:Administrators\' noticeboard]]'
-	},
-	an3: {
-		label: "QW:AN3 (Administrators' noticeboard/Edit warring)",
-		text: '{{subst:An3-notice|$SECTION}} ~~~~',
-		editSummary: "Notice of discussion at [[Qiuwen:Administrators' noticeboard/Edit warring]]"
-	},
-	ani: {
-		label: "QW:ANI (Administrators' noticeboard/Incidents)",
-		text: "== Notice of Administrators' noticeboard/Incidents discussion ==\n" +
-		'{{subst:ANI-notice|thread=$SECTION}} ~~~~',
-		editSummary: 'Notice of discussion at [[Qiuwen:Administrators\' noticeboard/Incidents]]',
+	affp: {
+		label: 'QW:AF/FP（防滥用过滤器/错误报告）',
+		title: '防滥用过滤器错误报告通知',
+		content: '您的[[Qiuwen:防滥用过滤器/错误报告|防滥用过滤器错误报告]]已有处理结果，请前往查看。--~~~~',
+		editSummary: '有关[[Qiuwen:防滥用过滤器/错误报告|防滥用过滤器错误报告]]的通知',
 		defaultSelected: true
 	},
 	// let's keep AN and its cousins at the top
 	afchd: {
-		label: 'QW:AFCHD (Articles for creation/Help desk)',
-		text: '{{subst:AFCHD/u|$SECTION}} ~~~~',
-		editSummary: 'You have replies at the [[Qiuwen:AFCHD|Articles for Creation Help Desk]]'
-	},
-	blpn: {
-		label: 'QW:BLPN (Biographies of living persons noticeboard)',
-		text: '{{subst:BLPN-notice|thread=$SECTION}} ~~~~',
-		editSummary: 'Notice of discussion at [[Qiuwen:Biographies of living persons/Noticeboard]]'
-	},
-	coin: {
-		label: 'QW:COIN (Conflict of interest noticeboard)',
-		text: '{{subst:Coin-notice|thread=$SECTION}} ~~~~',
-		editSummary: 'Notice of discussion at [[Qiuwen:Conflict of interest/Noticeboard]]'
-	},
-	drn: {
-		label: 'QW:DRN (Dispute resolution noticeboard)',
-		text: '{{subst:DRN-notice|thread=$SECTION}} ~~~~',
-		editSummary: 'Notice of discussion at [[Qiuwen:Dispute resolution noticeboard]]'
-	},
-	effp: {
-		label: 'QW:EFFP/R (Edit filter false positive report)',
-		text: '{{EFFPReply|1=$SECTION|2=~~~~}}',
-		editSummary: 'You have replies to your [[Qiuwen:Edit filter/False positives/Reports|edit filter false positive report]]'
-	},
-	eln: {
-		label: 'QW:ELN (External links noticeboard)',
-		text: '{{subst:ELN-notice|thread=$SECTION}} ~~~~',
-		editSummary: 'Notice of discussion at [[Qiuwen:External links/Noticeboard]]'
-	},
-	ftn: {
-		label: 'QW:FTN (Fringe theories noticeboard)',
-		text: '{{subst:Ftn-notice|thread=$SECTION}} ~~~~',
-		editSummary: 'Notice of discussion at [[Qiuwen:Fringe theories/Noticeboard]]'
-	},
-	hd: {
-		label: 'QW:HD (Help desk)',
-		text: '== Your question at the Help desk ==\n' + '{{helpdeskreply|1=$SECTION|ts=~~~~~}}',
-		editSummary: 'You have replies at the [[Qiuwen:Help desk|Wikipedia help desk]]'
-	},
-	norn: {
-		label: 'QW:NORN (No original research noticeboard)',
-		text: '{{subst:Norn-notice|thread=$SECTION}} ~~~~',
-		editSummary: 'Notice of discussion at [[Qiuwen:No original research/Noticeboard]]'
-	},
-	npovn: {
-		label: 'QW:NPOVN (Neutral point of view noticeboard)',
-		text: '{{subst:NPOVN-notice|thread=$SECTION}} ~~~~',
-		editSummary: 'Notice of discussion at [[Qiuwen:Neutral point of view/Noticeboard]]'
-	},
-	rsn: {
-		label: 'QW:RSN (Reliable sources noticeboard)',
-		text: '{{subst:RSN-notice|thread=$SECTION}} ~~~~',
-		editSummary: 'Notice of discussion at [[Qiuwen:Reliable sources/Noticeboard]]'
-	},
-	th: {
-		label: 'QW:THQ (Teahouse question forum)',
-		text: "== Teahouse talkback: you've got messages! ==\n{{QW:Teahouse/Teahouse talkback|QW:Teahouse/Questions|$SECTION|ts=~~~~}}",
-		editSummary: 'You have replies at the [[Qiuwen:Teahouse/Questions|Teahouse question board]]'
-	},
-	vrt: {
-		label: 'QW:VRTN (VRT noticeboard)',
-		text: '{{subst:VRTreply|1=$SECTION}}\n~~~~',
-		editSummary: 'You have replies at the [[Qiuwen:VRT noticeboard|VRT noticeboard]]'
+		label: 'QW:AFCHD（条目创建帮助）',
+		text: '您在[[Qiuwen:AFCHD|条目创建帮助]]页面的提问已有回复，请前往查看。--~~~~',
+		editSummary: '您在[[Qiuwen:AFCHD|条目创建帮助]]页面的提问已有回复，请前往查看。'
 	}
 };
 
@@ -324,23 +308,23 @@ Twinkle.talkback.evaluate = function(e) {
 	Morebits.status.init(e.target);
 
 	Morebits.wiki.actionCompleted.redirect = fullUserTalkPageName;
-	Morebits.wiki.actionCompleted.notice = 'Talkback complete; reloading talk page in a few seconds';
+	Morebits.wiki.actionCompleted.notice = '回复通告完成，将在几秒内刷新页面';
 
 	switch (input.tbtarget) {
 		case 'notice':
 			talkpage.setEditSummary(Twinkle.talkback.noticeboards[input.noticeboard].editSummary);
 			break;
 		case 'mail':
-			talkpage.setEditSummary("Notification: You've got mail");
+			talkpage.setEditSummary('通知：有新邮件');
 			break;
 		case 'see':
 			input.page = Twinkle.talkback.callbacks.normalizeTalkbackPage(input.page);
-			talkpage.setEditSummary('Please check the discussion at [[:' + input.page +
-			(input.section ? '#' + input.section : '') + ']]');
+			talkpage.setEditSummary('请看看[[:' + input.page +
+			(input.section ? '#' + input.section : '') + ']]上的讨论');
 			break;
 		default:  // talkback
 			input.page = Twinkle.talkback.callbacks.normalizeTalkbackPage(input.page);
-			talkpage.setEditSummary('Talkback ([[:' + input.page +
+			talkpage.setEditSummary('回复通告：[[:' + input.page +
 			(input.section ? '#' + input.section : '') + ']])');
 			break;
 	}
