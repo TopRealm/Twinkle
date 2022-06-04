@@ -342,6 +342,14 @@ Twinkle.batchdelete.deletereasonlist = [
 	}
 ];
 
+Twinkle.batchdelete.callback.change_common_reason = function twinklebatchdeleteCallbackChangeCustomReason(e) {
+	if (e.target.form.reason.value !== '') {
+		e.target.form.reason.value = Morebits.string.appendPunctuation(e.target.form.reason.value);
+	}
+	e.target.form.reason.value += e.target.value;
+	e.target.value = '';
+};
+
 Twinkle.batchdelete.callback.toggleSubpages = function twDbatchToggleSubpages(e) {
 
 	var form = e.target.form;
