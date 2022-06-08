@@ -1,7 +1,8 @@
 // <nowiki>
 /**
- * Twinkle.js
+ * Twinkle.js - twinkleconfig.js
  * © 2011-2022 English Wikipedia Contributors
+ * © 2011-2022 Chinese Wikipedia Contributors
  * © 2021-     Qiuwen Baike Contributors
  * This work is licensed under a Creative Commons
  * Attribution-ShareAlike 4.0 International License.

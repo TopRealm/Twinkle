@@ -12,7 +12,7 @@
  * Visit [[H:TW]] for more information.
  */
 /**
- * Twinkle.js
+ * Twinkle.js - twinkle.js
  * © 2011-2022 English Wikipedia Contributors
  * © 2011-2022 Chinese Wikipedia Contributors
  * © 2021-     Qiuwen Baike Contributors
