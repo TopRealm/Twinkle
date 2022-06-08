@@ -785,20 +785,6 @@ Twinkle.fluff.callbacks = {
 						break;
 				}
 			}
-
-
-			// review the revert, if needed
-			if (apiobj.params.reviewRevert) {
-				var query = {
-					action: 'review',
-					revid: edit.newrevid,
-					token: apiobj.params.csrftoken,
-					comment: 'Automatically reviewing reversion' + Twinkle.summaryAd // until the below
-					// 'tags': Twinkle.changeTags // flaggedrevs tag support: [[phab:T247721]]
-				};
-				var qiuwen_api = new Morebits.wiki.api('Automatically accepting your changes', query);
-				qiuwen_api.post();
-			}
 		}
 	}
 };
