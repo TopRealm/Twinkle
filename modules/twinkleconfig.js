@@ -578,54 +578,53 @@ Twinkle.config.sections = [
 			},
 			{
 				name: 'customRedirectTagList',
-				label: 'Custom redirect category tags to display',
-				helptip: 'Additional tags that you wish to add for redirects.',
+				label: '自定义重定向维护标记',
+				helptip: '这些会出现在列表的末尾。',
 				type: 'customList',
-				customListValueTitle: 'Template name (no curly brackets)',
-				customListLabelTitle: 'Text to show in Tag dialog'
+				customListValueTitle: '模板名（不含大括号）',
+				customListLabelTitle: '显示的文字'
 			}
 		]
 	},
 
 	{
-		title: 'Talkback',
+		title: '回复',
 		module: 'talkback',
 		preferences: [
 			{
 				name: 'markTalkbackAsMinor',
-				label: 'Mark talkbacks as minor edits',
+				label: '将回复标记为小修改',
 				type: 'boolean'
 			},
 			{
 				name: 'insertTalkbackSignature',
-				label: 'Insert signature within talkbacks',
+				label: '回复时加入签名',
+				helptip: 'Flow页除外。',
 				type: 'boolean'
 			},
 			{
 				name: 'talkbackHeading',
-				label: 'Section heading to use for talkback and please see',
-				tooltip: 'Should NOT include the equals signs ("==") used for wikitext formatting',
+				label: '回复所用的小节标题',
 				type: 'string'
 			},
 			{
 				name: 'mailHeading',
-				label: "Section heading to use for \"you've got mail\" notices",
-				tooltip: 'Should NOT include the equals signs ("==") used for wikitext formatting',
+				label: '“有新邮件”所用的小节标题',
 				type: 'string'
 			}
 		]
 	},
 
 	{
-		title: 'Unlink',
+		title: '取消链入',
 		module: 'unlink',
 		preferences: [
-			// TwinkleConfig.unlinkNamespaces (array)
-			// In what namespaces unlink should happen, default in 0 (article), 10 (template), 100 (portal), and 118 (draft)
+		// TwinkleConfig.unlinkNamespaces (array)
+		// In what namespaces unlink should happen, default in 0 (article)
 			{
 				name: 'unlinkNamespaces',
-				label: 'Remove links from pages in these namespaces',
-				helptip: 'Avoid selecting any talk namespaces, as Twinkle might end up unlinking on talk archives (a big no-no).',
+				label: '取消以下命名空间中的反向链接',
+				helptip: '请避免选择讨论页，因这样会导致Twinkle试图修改讨论存档。',
 				type: 'set',
 				setValues: Twinkle.config.commonSets.namespacesNoSpecial
 			}
@@ -633,27 +632,27 @@ Twinkle.config.sections = [
 	},
 
 	{
-		title: 'Warn user',
+		title: '警告用户',
 		module: 'warn',
 		preferences: [
-			// TwinkleConfig.defaultWarningGroup (int)
-			// Which level warning should be the default selected group, default is 1
+		// TwinkleConfig.defaultWarningGroup (int)
+		// if true, watch the page which has been dispatched an warning or notice, if false, default applies
 			{
 				name: 'defaultWarningGroup',
-				label: 'Default warning level',
+				label: '默认警告级别',
 				type: 'enum',
 				enumValues: {
-					1: 'Level 1',
-					2: 'Level 2',
-					3: 'Level 3',
-					4: 'Level 4',
-					5: 'Level 4im',
-					6: 'Single-issue notices',
-					7: 'Single-issue warnings',
+					1: '1：提醒',
+					2: '2：注意',
+					3: '3：警告',
+					4: '4：最后警告',
+					5: '4im：唯一警告',
+					6: '单层级提醒',
+					7: '单层级警告',
 					// 8 was used for block templates before #260
-					9: 'Custom warnings',
-					10: 'All warning templates',
-					11: 'Auto-select level (1-4)'
+					9: '自定义警告',
+					10: '所有警告模板',
+					11: '自动选择层级（1-4）'
 				}
 			},
 
@@ -661,8 +660,8 @@ Twinkle.config.sections = [
 			// if true, show one menu with both single-issue notices and warnings instead of two separately
 			{
 				name: 'combinedSingletMenus',
-				label: 'Replace the two separate single-issue menus into one combined menu',
-				helptip: 'Selecting either single-issue notices or single-issue warnings as your default will make this your default if enabled.',
+				label: '将两个单层级菜单合并成一个',
+				helptip: '当启用此选项时，无论默认警告级别选择单层级通知或单层级警告皆属于此项。',
 				type: 'boolean'
 			},
 
@@ -670,26 +669,27 @@ Twinkle.config.sections = [
 			// Watchlist setting for the page which has been dispatched an warning or notice
 			{
 				name: 'watchWarnings',
-				label: 'Add user talk page to watchlist when notifying',
+				label: '警告时加入用户讨论页到监视列表',
+				helptip: '注意：如果对方使用Flow，对应讨论串总会加到监视列表中。',
 				type: 'enum',
 				enumValues: Twinkle.config.watchlistEnums
 			},
 
 			// TwinkleConfig.oldSelect (boolean)
-			// if true, use the native select menu rather the select2-based one
+			// if true, use the native select menu rather the jquery chosen-based one
 			{
 				name: 'oldSelect',
-				label: 'Use the non-searchable classic select menu',
+				label: '使用不可搜索的经典菜单',
 				type: 'boolean'
 			},
 
 			{
 				name: 'customWarningList',
-				label: 'Custom warning templates to display',
-				helptip: 'You can add individual templates or user subpages. Custom warnings appear in the "Custom warnings" category within the warning dialog box.',
+				label: '自定义警告模板',
+				helptip: '您可以加入模板或用户子页面。自定义警告会出现在警告对话框中“自定义警告”一节。',
 				type: 'customList',
-				customListValueTitle: 'Template name (no curly brackets)',
-				customListLabelTitle: 'Text to show in warning list (also used as edit summary)'
+				customListValueTitle: '模板名（不含大括号）',
+				customListLabelTitle: '显示的文字（和编辑摘要）'
 			}
 		]
 	},
@@ -775,7 +775,7 @@ Twinkle.config.sections = [
 	},
 
 	{
-		title: 'Hidden',
+		title: '隐藏',
 		hidden: true,
 		preferences: [
 			// twinkle.js: portlet setup
