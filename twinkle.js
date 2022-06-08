@@ -5,7 +5,9 @@
  * |         Please discuss changes at [[Help talk:TW]] before editing.      |
  * +-------------------------------------------------------------------------+
  *
- * Imported from Qiuwen Development Centre [https://git.qiuwen.wiki/qiuwen/twinkle-new].
+ * Scripts imported from Qiuwen Development Centre [https://git.qiuwen.wiki/qiuwen/twinkle-new].
+ * Orginally imported from Github [https://github.com/wikimedia-gadgets/twinkle].
+ * Translaton imported from Chinese Wikipedia.
  * All changes should be made in the repository, otherwise they will be lost.
  * Visit [[H:TW]] for more information.
  */
