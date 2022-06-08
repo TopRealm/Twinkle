@@ -62,7 +62,6 @@ function createTestLoader(changedFiles) {
 		${importLine('modules/friendlyshared.js')}
 		${importLine('modules/friendlytag.js')}
 		${importLine('modules/friendlytalkback.js')}
-		${importLine('modules/friendlywelcome.js')}
 		${importLine('modules/twinklearv.js')}
 		${importLine('modules/twinklebatchdelete.js')}
 		${importLine('modules/twinklebatchprotect.js')}

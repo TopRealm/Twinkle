@@ -1118,7 +1118,7 @@ Twinkle.speedy.callbacks = {
 								notifytext;
 
 							notifytext = '\n{{subst:db-notice|target=' + Morebits.pageNameNorm;
-							notifytext += (params.welcomeuser ? '' : '|nowelcome=yes') + '}}--~~~~';
+							notifytext += '--~~~~';
 
 							var editsummary = '通知：';
 							if (params.normalizeds.indexOf('g12') === -1) {  // no article name in summary for G10 deletions
@@ -1388,7 +1388,7 @@ Twinkle.speedy.callback.evaluateUser = function twinklespeedyCallbackEvaluateUse
 		return Twinkle.getPref('watchSpeedyPages').indexOf(norm) !== -1 && Twinkle.getPref('watchSpeedyExpiry');
 	});
 	var notifyuser = form.notify.checked && normalizeds.some(function(norm) {
-		return Twinkle.getPref('welcomeUserOnSpeedyDeletionNotification').indexOf(norm) !== -1;
+		return Twinkle.getPref('notifyUserOnSpeedyDeletionNomination').indexOf(norm) !== -1;
 	});
 	var csdlog = Twinkle.getPref('logSpeedyNominations') && normalizeds.some(function(norm) {
 		return Twinkle.getPref('noLogOnSpeedyNomination').indexOf(norm) === -1;

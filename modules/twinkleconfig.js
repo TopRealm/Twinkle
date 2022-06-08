@@ -164,7 +164,7 @@ Twinkle.config.sections = [
 				label: '关闭指定的Twinkle模块',
 				helptip: '您在此勾选的功能将无法使用；取消勾选即可重新启用功能',
 				type: 'set',
-				setValues: { arv: '告状', warn: '警告', welcome: '欢迎', talkback: '通知', speedy: '速删', xfd: '提删', image: '文件', protect: '保护', tag: '标记', diff: '差异', unlink: '链入', fluff: '撤销' }
+				setValues: { arv: '告状', warn: '警告', talkback: '通知', speedy: '速删', xfd: '提删', image: '文件', protect: '保护', tag: '标记', diff: '差异', unlink: '链入', fluff: '撤销' }
 			},
 
 			// Twinkle.config.disabledSysopModules (array)
@@ -417,18 +417,6 @@ Twinkle.config.sections = [
 				label: '当标记页面时，创建者用户讨论页的监视期限',
 				type: 'enum',
 				enumValues: Twinkle.config.watchlistEnums
-			},
-
-			// TwinkleConfig.welcomeUserOnSpeedyDeletionNotification (array of strings)
-			// On what types of speedy deletion notifications shall the user be welcomed
-			// with a "firstarticle" notice if their talk page has not yet been created.
-			{
-				name: 'welcomeUserOnSpeedyDeletionNotification',
-				label: 'Welcome page creator when notifying with these criteria',
-				helptip: 'The welcome is issued only if the user is notified about the deletion, and only if their talk page does not already exist. The template used is {{firstarticle}}.',
-				type: 'set',
-				setValues: Twinkle.config.commonSets.csdCriteriaNotification,
-				setDisplayOrder: Twinkle.config.commonSets.csdCriteriaNotificationDisplayOrder
 			},
 
 			// TwinkleConfig.notifyUserOnSpeedyDeletionNomination (array)
@@ -702,58 +690,6 @@ Twinkle.config.sections = [
 				type: 'customList',
 				customListValueTitle: 'Template name (no curly brackets)',
 				customListLabelTitle: 'Text to show in warning list (also used as edit summary)'
-			}
-		]
-	},
-
-	{
-		title: 'Welcome user',
-		module: 'welcome',
-		preferences: [
-			{
-				name: 'topWelcomes',
-				label: 'Place welcomes above existing content on user talk pages',
-				type: 'boolean'
-			},
-			{
-				name: 'watchWelcomes',
-				label: 'Add user talk pages to watchlist when welcoming',
-				helptip: 'Doing so adds to the personal element of welcoming a user - you will be able to see how they are coping as a newbie, and possibly help them.',
-				type: 'enum',
-				enumValues: Twinkle.config.watchlistEnums
-			},
-			{
-				name: 'insertUsername',
-				label: 'Add your username to the template (where applicable)',
-				helptip: "Some welcome templates have an opening sentence like \"Hi, I'm &lt;username&gt;. Welcome\" etc. If you turn off this option, these templates will not display your username in that way.",
-				type: 'boolean'
-			},
-			{
-				name: 'quickWelcomeMode',
-				label: 'Clicking the "welcome" link on a diff page will',
-				helptip: 'If you choose to welcome automatically, the template you specify below will be used.',
-				type: 'enum',
-				enumValues: { auto: 'welcome automatically', norm: 'prompt you to select a template' }
-			},
-			{
-				name: 'quickWelcomeTemplate',
-				label: 'Template to use when welcoming automatically',
-				helptip: 'Enter the name of a welcome template, without the curly brackets. A link to the given article will be added.',
-				type: 'string'
-			},
-			{
-				name: 'customWelcomeList',
-				label: 'Custom welcome templates to display',
-				helptip: "You can add other welcome templates, or user subpages that are welcome templates (prefixed with \"User:\"). Don't forget that these templates are substituted onto user talk pages.",
-				type: 'customList',
-				customListValueTitle: 'Template name (no curly brackets)',
-				customListLabelTitle: 'Text to show in Welcome dialog'
-			},
-			{
-				name: 'customWelcomeSignature',
-				label: 'Automatically sign custom welcome templates',
-				helptip: 'If your custom welcome templates contain a built-in signature within the template, turn off this option.',
-				type: 'boolean'
 			}
 		]
 	},
