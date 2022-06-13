@@ -3675,42 +3675,6 @@ Morebits.wiki.page = function(pageName, status) {
 		ctx.protectApi.post();
 	};
 
-	/**
-	 * Apply FlaggedRevs protection settings.  Only works on wikis where
-	 * the extension is installed (`$wgFlaggedRevsProtection = true`
-	 * i.e. where FlaggedRevs settings appear on the "protect" tab).
-	 *
-	 * @see {@link https://www.mediawiki.org/wiki/Extension:FlaggedRevs}
-	 * Referred to as "pending changes" on-wiki.
-	 *
-	 * @param {Function} [onSuccess]
-	 * @param {Function} [onFailure]
-	 */
-	this.stabilize = function(onSuccess, onFailure) {
-		ctx.onStabilizeSuccess = onSuccess;
-		ctx.onStabilizeFailure = onFailure || emptyFunction;
-
-		if (!fnPreflightChecks.call(this, 'FlaggedRevs', ctx.onStabilizeFailure)) {
-			return; // abort
-		}
-
-		if (!ctx.flaggedRevs) {
-			ctx.statusElement.error('Internal error: you must set flaggedRevs before calling stabilize()!');
-			ctx.onStabilizeFailure(this);
-			return;
-		}
-
-		if (fnCanUseMwUserToken('stabilize')) {
-			fnProcessStabilize.call(this, this);
-		} else {
-			var query = fnNeedTokenInfoQuery('stabilize');
-
-			ctx.stabilizeApi = new Morebits.wiki.api('获取令牌……', query, fnProcessStabilize, ctx.statusElement, ctx.onStabilizeFailure);
-			ctx.stabilizeApi.setParent(this);
-			ctx.stabilizeApi.post();
-		}
-	};
-
 	/*
 	 * Private member functions
 	 * These are not exposed outside
@@ -5572,7 +5536,7 @@ Morebits.batchOperation = function(currentAction) {
 				if (arg.getPageName || arg.pageName || (arg.query && arg.query.title)) {
 					// we know the page title - display a relevant message
 					var pageName = arg.getPageName ? arg.getPageName() : arg.pageName || arg.query.title;
-					statelem.info(['完成（', createPageLink(pageName), '）']);
+					statelem.info(['完成（[[', pageName, ']]）']);
 				} else {
 					// we don't know the page title - just display a generic message
 					statelem.info('完成');
@@ -5583,7 +5547,7 @@ Morebits.batchOperation = function(currentAction) {
 			}
 
 		} else if (typeof arg === 'string' && ctx.options.preserveIndividualStatusLines) {
-			new Morebits.status(arg, ['完成（', createPageLink(arg), '）']);
+			new Morebits.status(arg, ['完成（[[', arg, ']]）']);
 		}
 
 		ctx.countFinishedSuccess++;
