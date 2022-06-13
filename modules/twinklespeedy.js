@@ -107,7 +107,7 @@ Twinkle.speedy.initDialog = function twinklespeedyInitDialog(callbackfunc) {
 					value: 'tag_only',
 					name: 'tag_only',
 					tooltip: '如果您只想标记此页面而不是将其删除',
-					checked: !(Twinkle.speedy.hasCSD || Twinkle.getPref('deleteSysopDefaultToDelete')),
+					checked: !Twinkle.getPref('deleteSysopDefaultToDelete'),
 					event: function(event) {
 						var cForm = event.target.form;
 						var cChecked = event.target.checked;
@@ -230,7 +230,7 @@ Twinkle.speedy.initDialog = function twinklespeedyInitDialog(callbackfunc) {
 				value: 'notify',
 				name: 'notify',
 				tooltip: '一个通知模板将会被加入创建者的讨论页，如果您启用了该理据的通知。',
-				checked: !Morebits.userIsSysop || !(Twinkle.speedy.hasCSD || Twinkle.getPref('deleteSysopDefaultToDelete')),
+				checked: !Morebits.userIsSysop || !Twinkle.getPref('deleteSysopDefaultToDelete'),
 				event: function(event) {
 					event.stopPropagation();
 				}
