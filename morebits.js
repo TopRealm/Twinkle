@@ -5536,7 +5536,7 @@ Morebits.batchOperation = function(currentAction) {
 				if (arg.getPageName || arg.pageName || (arg.query && arg.query.title)) {
 					// we know the page title - display a relevant message
 					var pageName = arg.getPageName ? arg.getPageName() : arg.pageName || arg.query.title;
-					statelem.info(['完成（[[', pageName, ']]）']);
+					statelem.info('完成（[[' + pageName + ']]）');
 				} else {
 					// we don't know the page title - just display a generic message
 					statelem.info('完成');
@@ -5547,7 +5547,7 @@ Morebits.batchOperation = function(currentAction) {
 			}
 
 		} else if (typeof arg === 'string' && ctx.options.preserveIndividualStatusLines) {
-			new Morebits.status(arg, ['完成（[[', arg, ']]）']);
+			new Morebits.status(arg, '完成（[[' + arg + ']]）');
 		}
 
 		ctx.countFinishedSuccess++;
