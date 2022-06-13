@@ -1846,7 +1846,7 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate(e) {
 			blockoptions.tags = Twinkle.changeTags;
 			blockoptions.token = mw.user.tokens.get('csrfToken');
 			var mbApi = new Morebits.wiki.api('Executing block', blockoptions, function() {
-				statusElement.info('Completed');
+				statusElement.info('已完成');
 				if (toWarn) {
 					Twinkle.block.callback.issue_template(templateoptions);
 				}
