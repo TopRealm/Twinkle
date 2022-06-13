@@ -4208,7 +4208,7 @@ Morebits.wiki.page = function(pageName, status) {
 	 * @param {string} response - The response document from the API call.
 	 * @returns {boolean}
 	 */
-	var fnProcessChecks = function(action, onFailure, response) {
+	 var fnProcessChecks = function(action, onFailure, response) {
 		var missing = response.pages[0].missing;
 
 		// No undelete as an existing page could have deleted revisions
@@ -4235,16 +4235,17 @@ Morebits.wiki.page = function(pageName, status) {
 			}).pop();
 		}
 		if (editprot && !ctx.suppressProtectWarning &&
-			!confirm('You are about to ' + action + ' the fully protected page "' + ctx.pageName +
-			(editprot.expiry === 'infinity' ? '" (protected indefinitely)' : '" (protection expiring ' + new Morebits.date(editprot.expiry).calendar('utc') + ' (UTC))') +
-			'.  \n\nClick OK to proceed with ' + action + ', or Cancel to skip.')) {
-			ctx.statusElement.error('Aborted ' + action + ' on fully protected page.');
+			!confirm('您即将对全保护页面“' + ctx.pageName +
+			(editprot.expiry === 'infinity' ? '”（永久）' : '”（到期：' + new Morebits.date(editprot.expiry).calendar('utc') + ' (UTC)）') +
+			'”进行“' + action + '”操作' +
+			'。\n\n单击确定以继续操作，或单击取消以取消操作。')) {
+			ctx.statusElement.error('已取消对全保护页面的操作。');
 			onFailure(this);
 			return false;
 		}
 
 		if (!response.tokens.csrftoken) {
-			ctx.statusElement.error('Failed to retrieve token.');
+			ctx.statusElement.error('无法获取令牌。');
 			onFailure(this);
 			return false;
 		}
@@ -4265,9 +4266,8 @@ Morebits.wiki.page = function(pageName, status) {
 			}
 
 			token = response.tokens.csrftoken;
-			var page = response.pages[0];
-			pageTitle = page.title;
-			ctx.watched = page.watchlistexpiry || page.watched;
+			pageTitle = response.pages[0].title;
+			ctx.watched = response.pages[0].watched;
 		}
 
 		var query = {
@@ -4296,7 +4296,7 @@ Morebits.wiki.page = function(pageName, status) {
 			query.noredirect = 'true';
 		}
 
-		ctx.moveProcessApi = new Morebits.wiki.api('moving page...', query, ctx.onMoveSuccess, ctx.statusElement, ctx.onMoveFailure);
+		ctx.moveProcessApi = new Morebits.wiki.api('移动页面…', query, ctx.onMoveSuccess, ctx.statusElement, ctx.onMoveFailure);
 		ctx.moveProcessApi.setParent(this);
 		ctx.moveProcessApi.post();
 	};
@@ -4335,9 +4335,9 @@ Morebits.wiki.page = function(pageName, status) {
 			query.tags = ctx.changeTags;
 		}
 
-		var patrolStat = new Morebits.status('Marking page as patrolled');
+		var patrolStat = new Morebits.status('标记页面为已巡查');
 
-		ctx.patrolProcessApi = new Morebits.wiki.api('patrolling page...', query, null, patrolStat);
+		ctx.patrolProcessApi = new Morebits.wiki.api('巡查页面…', query, null, patrolStat);
 		ctx.patrolProcessApi.setParent(this);
 		ctx.patrolProcessApi.post();
 	};
@@ -4412,9 +4412,8 @@ Morebits.wiki.page = function(pageName, status) {
 			}
 
 			token = response.tokens.csrftoken;
-			var page = response.pages[0];
-			pageTitle = page.title;
-			ctx.watched = page.watchlistexpiry || page.watched;
+			pageTitle = response.pages[0].title;
+			ctx.watched = response.pages[0].watched;
 		}
 
 		var query = {
@@ -4433,10 +4432,11 @@ Morebits.wiki.page = function(pageName, status) {
 			query.watchlistexpiry = ctx.watchlistExpiry;
 		}
 
-		ctx.deleteProcessApi = new Morebits.wiki.api('deleting page...', query, ctx.onDeleteSuccess, ctx.statusElement, fnProcessDeleteError);
+		ctx.deleteProcessApi = new Morebits.wiki.api('删除页面…', query, ctx.onDeleteSuccess, ctx.statusElement, fnProcessDeleteError);
 		ctx.deleteProcessApi.setParent(this);
 		ctx.deleteProcessApi.post();
 	};
+
 
 	// callback from deleteProcessApi.post()
 	var fnProcessDeleteError = function() {
@@ -4445,18 +4445,18 @@ Morebits.wiki.page = function(pageName, status) {
 
 		// check for "Database query error"
 		if (errorCode === 'internal_api_error_DBQueryError' && ctx.retries++ < ctx.maxRetries) {
-			ctx.statusElement.info('Database query error, retrying');
+			ctx.statusElement.info('数据库查询错误，重试');
 			--Morebits.wiki.numberOfActionsLeft;  // allow for normal completion if retry succeeds
 			ctx.deleteProcessApi.post(); // give it another go!
 
 		} else if (errorCode === 'missingtitle') {
-			ctx.statusElement.error('Cannot delete the page, because it no longer exists');
+			ctx.statusElement.error('不能删除页面，因其已不存在');
 			if (ctx.onDeleteFailure) {
 				ctx.onDeleteFailure.call(this, ctx.deleteProcessApi);  // invoke callback
 			}
 		// hard error, give up
 		} else {
-			ctx.statusElement.error('Failed to delete the page: ' + ctx.deleteProcessApi.getErrorText());
+			ctx.statusElement.error('无法删除页面：' + ctx.deleteProcessApi.getErrorText());
 			if (ctx.onDeleteFailure) {
 				ctx.onDeleteFailure.call(this, ctx.deleteProcessApi);  // invoke callback
 			}
@@ -4477,9 +4477,8 @@ Morebits.wiki.page = function(pageName, status) {
 			}
 
 			token = response.tokens.csrftoken;
-			var page = response.pages[0];
-			pageTitle = page.title;
-			ctx.watched = page.watchlistexpiry || page.watched;
+			pageTitle = response.pages[0].title;
+			ctx.watched = response.pages[0].watched;
 		}
 
 		var query = {
@@ -4498,7 +4497,7 @@ Morebits.wiki.page = function(pageName, status) {
 			query.watchlistexpiry = ctx.watchlistExpiry;
 		}
 
-		ctx.undeleteProcessApi = new Morebits.wiki.api('undeleting page...', query, ctx.onUndeleteSuccess, ctx.statusElement, fnProcessUndeleteError);
+		ctx.undeleteProcessApi = new Morebits.wiki.api('还原页面…', query, ctx.onUndeleteSuccess, ctx.statusElement, fnProcessUndeleteError);
 		ctx.undeleteProcessApi.setParent(this);
 		ctx.undeleteProcessApi.post();
 	};
@@ -4511,23 +4510,23 @@ Morebits.wiki.page = function(pageName, status) {
 		// check for "Database query error"
 		if (errorCode === 'internal_api_error_DBQueryError') {
 			if (ctx.retries++ < ctx.maxRetries) {
-				ctx.statusElement.info('Database query error, retrying');
+				ctx.statusElement.info('数据库查询错误，重试');
 				--Morebits.wiki.numberOfActionsLeft;  // allow for normal completion if retry succeeds
 				ctx.undeleteProcessApi.post(); // give it another go!
 			} else {
-				ctx.statusElement.error('Repeated database query error, please try again');
+				ctx.statusElement.error('持续的数据库查询错误，重新加载页面并重试');
 				if (ctx.onUndeleteFailure) {
 					ctx.onUndeleteFailure.call(this, ctx.undeleteProcessApi);  // invoke callback
 				}
 			}
 		} else if (errorCode === 'cantundelete') {
-			ctx.statusElement.error('Cannot undelete the page, either because there are no revisions to undelete or because it has already been undeleted');
+			ctx.statusElement.error('无法还原删除页面，因没有版本供还原或已被还原');
 			if (ctx.onUndeleteFailure) {
 				ctx.onUndeleteFailure.call(this, ctx.undeleteProcessApi);  // invoke callback
 			}
 		// hard error, give up
 		} else {
-			ctx.statusElement.error('Failed to undelete the page: ' + ctx.undeleteProcessApi.getErrorText());
+			ctx.statusElement.error('无法还原页面：' + ctx.undeleteProcessApi.getErrorText());
 			if (ctx.onUndeleteFailure) {
 				ctx.onUndeleteFailure.call(this, ctx.undeleteProcessApi);  // invoke callback
 			}
@@ -4580,22 +4579,25 @@ Morebits.wiki.page = function(pageName, status) {
 		}
 		// Warn if cascading protection being applied with an invalid protection level,
 		// which for edit protection will cause cascading to be silently stripped
+		if (ctx.protectCascade === null) {
+			ctx.protectCascade = !!prs.filter(function(pr) {
+				return pr.cascade;
+			}).length;
+		}
+		// Warn if cascading protection being applied with an invalid protection level,
+		// which for edit protection will cause cascading to be silently stripped
 		if (ctx.protectCascade) {
 			// On move protection, this is technically stricter than the MW API,
 			// but seems reasonable to avoid dumb values and misleading log entries (T265626)
 			if (((!ctx.protectEdit || ctx.protectEdit.level !== 'sysop') ||
 				(!ctx.protectMove || ctx.protectMove.level !== 'sysop')) &&
-				!confirm('You have cascading protection enabled on "' + ctx.pageName +
-				'" but have not selected uniform sysop-level protection.\n\n' +
-				'Click OK to adjust and proceed with sysop-level cascading protection, or Cancel to skip this action.')) {
-				ctx.statusElement.error('Cascading protection was aborted.');
+				!confirm('您已对“' + ctx.pageName + '”启用了连锁保护' +
+				'，但没有设置仅管理员的保护级别。\n\n' +
+				'单击确认以自动调整并继续连锁全保护，单击取消以跳过此操作')) {
+				ctx.statusElement.error('连锁保护已取消。');
 				ctx.onProtectFailure(this);
 				return;
 			}
-
-			ctx.protectEdit.level = 'sysop';
-			ctx.protectMove.level = 'sysop';
-		}
 
 		// Build protection levels and expirys (expiries?) for query
 		var protections = [], expirys = [];
@@ -4636,53 +4638,9 @@ Morebits.wiki.page = function(pageName, status) {
 			query.cascade = 'true';
 		}
 
-		ctx.protectProcessApi = new Morebits.wiki.api('protecting page...', query, ctx.onProtectSuccess, ctx.statusElement, ctx.onProtectFailure);
+		ctx.protectProcessApi = new Morebits.wiki.api('保护页面…', query, ctx.onProtectSuccess, ctx.statusElement, ctx.onProtectFailure);
 		ctx.protectProcessApi.setParent(this);
 		ctx.protectProcessApi.post();
-	};
-
-	var fnProcessStabilize = function() {
-		var pageTitle, token;
-
-		if (fnCanUseMwUserToken('stabilize')) {
-			token = mw.user.tokens.get('csrfToken');
-			pageTitle = ctx.pageName;
-		} else {
-			var response = ctx.stabilizeApi.getResponse().query;
-
-			// 'stabilize' as a verb not necessarily well understood
-			if (!fnProcessChecks('stabilize', ctx.onStabilizeFailure, response)) {
-				return; // abort
-			}
-
-			token = response.tokens.csrftoken;
-			var page = response.pages[0];
-			pageTitle = page.title;
-			// Doesn't support watchlist expiry [[phab:T263336]]
-			// ctx.watched = page.watchlistexpiry || page.watched;
-		}
-
-		var query = {
-			action: 'stabilize',
-			title: pageTitle,
-			token: token,
-			protectlevel: ctx.flaggedRevs.level,
-			expiry: ctx.flaggedRevs.expiry,
-			// tags: ctx.changeTags, // flaggedrevs tag support: [[phab:T247721]]
-			reason: ctx.editSummary,
-			watchlist: ctx.watchlistOption,
-			format: 'json'
-		};
-
-		/* Doesn't support watchlist expiry [[phab:T263336]]
-		if (fnApplyWatchlistExpiry()) {
-			query.watchlistexpiry = ctx.watchlistExpiry;
-		}
-		*/
-
-		ctx.stabilizeProcessApi = new Morebits.wiki.api('configuring stabilization settings...', query, ctx.onStabilizeSuccess, ctx.statusElement, ctx.onStabilizeFailure);
-		ctx.stabilizeProcessApi.setParent(this);
-		ctx.stabilizeProcessApi.post();
 	};
 
 	var sleep = function(milliseconds) {
@@ -4749,14 +4707,14 @@ Morebits.wiki.preview = function(previewbox) {
 			query.section = 'new';
 			query.sectiontitle = sectionTitle;
 		}
-		var renderApi = new Morebits.wiki.api('loading...', query, fnRenderSuccess, new Morebits.status('Preview'));
+		var renderApi = new Morebits.wiki.api('加载中…', query, fnRenderSuccess, new Morebits.status('预览'));
 		return renderApi.post();
 	};
 
 	var fnRenderSuccess = function(apiobj) {
 		var html = apiobj.getResponse().parse.text;
 		if (!html) {
-			apiobj.statelem.error('failed to retrieve preview, or template was blanked');
+			apiobj.statelem.error('加载预览失败，或模板为空');
 			return;
 		}
 		previewbox.innerHTML = html;
@@ -5143,7 +5101,7 @@ Morebits.userspaceLogger = function(logPageName) {
 			return def.reject();
 		}
 		var page = new Morebits.wiki.page('User:' + mw.config.get('wgUserName') + '/' + logPageName,
-			'Adding entry to userspace log'); // make this '... to ' + logPageName ?
+			'将项目加入到用户空间日志'); // make this '... to ' + logPageName ?
 		page.load(function(pageobj) {
 			// add blurb if log page doesn't exist or is blank
 			var text = pageobj.getPageText() || this.initialText;
@@ -5561,7 +5519,7 @@ Morebits.batchOperation = function(currentAction) {
 	 */
 	this.run = function(worker, postFinish) {
 		if (ctx.running) {
-			ctx.statusElement.error('Batch operation is already running');
+			ctx.statusElement.error('批量操作已在运行');
 			return;
 		}
 		ctx.running = true;
@@ -5576,7 +5534,7 @@ Morebits.batchOperation = function(currentAction) {
 
 		var total = ctx.pageList.length;
 		if (!total) {
-			ctx.statusElement.info('no pages specified');
+			ctx.statusElement.info('没有指定页面');
 			ctx.running = false;
 			if (ctx.postFinish) {
 				ctx.postFinish();
@@ -5611,10 +5569,10 @@ Morebits.batchOperation = function(currentAction) {
 				if (arg.getPageName || arg.pageName || (arg.query && arg.query.title)) {
 					// we know the page title - display a relevant message
 					var pageName = arg.getPageName ? arg.getPageName() : arg.pageName || arg.query.title;
-					statelem.info('已完成 ([[' + pageName + ']])');
+					statelem.info(['完成（', createPageLink(pageName), '）']);
 				} else {
 					// we don't know the page title - just display a generic message
-					statelem.info('已完成');
+					statelem.info('完成');
 				}
 			} else {
 				// remove the status line automatically produced by Morebits.wiki.*
@@ -5622,7 +5580,7 @@ Morebits.batchOperation = function(currentAction) {
 			}
 
 		} else if (typeof arg === 'string' && ctx.options.preserveIndividualStatusLines) {
-			new Morebits.status(arg, '已完成 ([[' + arg + ']])');
+			new Morebits.status(arg, ['完成（', createPageLink(arg), '）']);
 		}
 
 		ctx.countFinishedSuccess++;
@@ -5666,8 +5624,8 @@ Morebits.batchOperation = function(currentAction) {
 				fnStartNewChunk();
 			}
 		} else if (ctx.countFinished === total) {
-			var statusString = '已完成（' + ctx.countFinishedSuccess +
-				'/' + ctx.countFinished + ' 个操作成功完成）';
+			var statusString = '完成（' + ctx.countFinishedSuccess +
+				'/' + ctx.countFinished + '操作成功完成）';
 			if (ctx.countFinishedSuccess < ctx.countFinished) {
 				ctx.statusElement.warn(statusString);
 			} else {
@@ -5681,7 +5639,7 @@ Morebits.batchOperation = function(currentAction) {
 		} else {
 			// ctx.countFinished > total
 			// just for giggles! (well, serious debugging, actually)
-			ctx.statusElement.warn('Done (overshot by ' + (ctx.countFinished - total) + ')');
+			ctx.statusElement.warn('完成（多执行了' + (ctx.countFinished - total) + '次）');
 			Morebits.wiki.removeCheckpoint();
 			ctx.running = false;
 		}
