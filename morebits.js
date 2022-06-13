@@ -4208,7 +4208,7 @@ Morebits.wiki.page = function(pageName, status) {
 	 * @param {string} response - The response document from the API call.
 	 * @returns {boolean}
 	 */
-	 var fnProcessChecks = function(action, onFailure, response) {
+	var fnProcessChecks = function(action, onFailure, response) {
 		var missing = response.pages[0].missing;
 
 		// No undelete as an existing page could have deleted revisions
@@ -4412,8 +4412,9 @@ Morebits.wiki.page = function(pageName, status) {
 			}
 
 			token = response.tokens.csrftoken;
-			pageTitle = response.pages[0].title;
-			ctx.watched = response.pages[0].watched;
+			var page = response.pages[0];
+			pageTitle = page.title;
+			ctx.watched = page.watchlistexpiry || page.watched;
 		}
 
 		var query = {
@@ -4436,7 +4437,6 @@ Morebits.wiki.page = function(pageName, status) {
 		ctx.deleteProcessApi.setParent(this);
 		ctx.deleteProcessApi.post();
 	};
-
 
 	// callback from deleteProcessApi.post()
 	var fnProcessDeleteError = function() {
@@ -4584,20 +4584,23 @@ Morebits.wiki.page = function(pageName, status) {
 				return pr.cascade;
 			}).length;
 		}
-		// Warn if cascading protection being applied with an invalid protection level,
-		// which for edit protection will cause cascading to be silently stripped
+
 		if (ctx.protectCascade) {
 			// On move protection, this is technically stricter than the MW API,
 			// but seems reasonable to avoid dumb values and misleading log entries (T265626)
 			if (((!ctx.protectEdit || ctx.protectEdit.level !== 'sysop') ||
 				(!ctx.protectMove || ctx.protectMove.level !== 'sysop')) &&
-				!confirm('您已对“' + ctx.pageName + '”启用了连锁保护' +
-				'，但没有设置仅管理员的保护级别。\n\n' +
-				'单击确认以自动调整并继续连锁全保护，单击取消以跳过此操作')) {
+			!confirm('您已对“' + ctx.pageName + '”启用了连锁保护' +
+			'，但没有设置仅管理员的保护级别。\n\n' +
+			'单击确认以自动调整并继续连锁全保护，单击取消以跳过此操作')) {
 				ctx.statusElement.error('连锁保护已取消。');
 				ctx.onProtectFailure(this);
 				return;
 			}
+
+			ctx.protectEdit.level = 'sysop';
+			ctx.protectMove.level = 'sysop';
+		}
 
 		// Build protection levels and expirys (expiries?) for query
 		var protections = [], expirys = [];
