@@ -83,7 +83,6 @@ Morebits.l10n = {
 	}
 };
 
-
 /**
  * Simple helper function to see what groups a user might belong.
  *
@@ -98,23 +97,6 @@ Morebits.userIsInGroup = function (group) {
  * @type {boolean}
  */
 Morebits.userIsSysop = Morebits.userIsInGroup('sysop') || Morebits.userIsInGroup('steward');
-
-/**
- * Deprecated as of February 2021, use {@link Morebits.ip.sanitizeIPv6}.
- *
- * @deprecated Use {@link Morebits.ip.sanitizeIPv6}.
- * Converts an IPv6 address to the canonical form stored and used by MediaWiki.
- * JavaScript translation of the {@link https://gerrit.wikimedia.org/r/plugins/gitiles/mediawiki/core/+/8eb6ac3e84ea3312d391ca96c12c49e3ad0753bb/includes/utils/IP.php#131|`IP::sanitizeIP()`}
- * function from the IPUtils library.  Addresses are verbose, uppercase,
- * normalized, and expanded to 8 words.
- *
- * @param {string} address - The IPv6 address, with or without CIDR.
- * @returns {string}
- */
-Morebits.sanitizeIPv6 = function (address) {
-	console.warn('NOTE: Morebits.sanitizeIPv6 was renamed to Morebits.ip.sanitizeIPv6 in February 2021, please use that instead'); // eslint-disable-line no-console
-	return Morebits.ip.sanitizeIPv6(address);
-};
 
 /**
  * Determines whether the current page is a redirect or soft redirect. Fails
@@ -5629,10 +5611,10 @@ Morebits.batchOperation = function(currentAction) {
 				if (arg.getPageName || arg.pageName || (arg.query && arg.query.title)) {
 					// we know the page title - display a relevant message
 					var pageName = arg.getPageName ? arg.getPageName() : arg.pageName || arg.query.title;
-					statelem.info('completed ([[' + pageName + ']])');
+					statelem.info('已完成 ([[' + pageName + ']])');
 				} else {
 					// we don't know the page title - just display a generic message
-					statelem.info('done');
+					statelem.info('已完成');
 				}
 			} else {
 				// remove the status line automatically produced by Morebits.wiki.*
@@ -5640,7 +5622,7 @@ Morebits.batchOperation = function(currentAction) {
 			}
 
 		} else if (typeof arg === 'string' && ctx.options.preserveIndividualStatusLines) {
-			new Morebits.status(arg, 'completed ([[' + arg + ']])');
+			new Morebits.status(arg, '已完成 ([[' + arg + ']])');
 		}
 
 		ctx.countFinishedSuccess++;
@@ -5684,8 +5666,8 @@ Morebits.batchOperation = function(currentAction) {
 				fnStartNewChunk();
 			}
 		} else if (ctx.countFinished === total) {
-			var statusString = 'Done (' + ctx.countFinishedSuccess +
-				'/' + ctx.countFinished + ' actions completed successfully)';
+			var statusString = '已完成（' + ctx.countFinishedSuccess +
+				'/' + ctx.countFinished + ' 个操作成功完成）';
 			if (ctx.countFinishedSuccess < ctx.countFinished) {
 				ctx.statusElement.warn(statusString);
 			} else {
