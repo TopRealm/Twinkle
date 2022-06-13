@@ -22,7 +22,7 @@
  */
 
 Twinkle.talkback = function() {
-	if (!mw.config.exists('wgRelevantUserName') || Morebits.ip.isRange(mw.config.get('wgRelevantUserName'))) {
+	if (!mw.config.exists('wgRelevantUserName')) {
 		return;
 	}
 	Twinkle.addPortletLink(Twinkle.talkback.callback, '通知', 'friendly-talkback', '回复通知');
