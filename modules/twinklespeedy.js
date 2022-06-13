@@ -1,6 +1,6 @@
 // <nowiki>
 /**
- * Twinkle.js
+ * Twinkle.js - twinklespeedy.js
  * © 2011-2022 English Wikipedia Contributors
  * © 2011-2021 Chinese Wikipedia Contributors
  * © 2021-     Qiuwen Baike Contributors
@@ -48,6 +48,43 @@ Twinkle.speedy.dialog = null;
 // Used throughout
 Twinkle.speedy.hasCSD = !!$('#delete-reason').length;
 
+// The speedy criteria list can be in one of several modes
+Twinkle.speedy.mode = {
+	sysopSingleSubmit: 1,  // radio buttons, no subgroups, submit when "Submit" button is clicked
+	sysopRadioClick: 2,  // radio buttons, no subgroups, submit when a radio button is clicked
+	sysopMultipleSubmit: 3, // check boxes, subgroups, "Submit" button already present
+	sysopMultipleRadioClick: 4, // check boxes, subgroups, need to add a "Submit" button
+	userMultipleSubmit: 5,  // check boxes, subgroups, "Submit" button already pressent
+	userMultipleRadioClick: 6,  // check boxes, subgroups, need to add a "Submit" button
+	userSingleSubmit: 7,  // radio buttons, subgroups, submit when "Submit" button is clicked
+	userSingleRadioClick: 8,  // radio buttons, subgroups, submit when a radio button is clicked
+
+	// are we in "delete page" mode?
+	// (sysops can access both "delete page" [sysop] and "tag page only" [user] modes)
+	isSysop: function twinklespeedyModeIsSysop(mode) {
+		return mode === Twinkle.speedy.mode.sysopSingleSubmit ||
+			mode === Twinkle.speedy.mode.sysopMultipleSubmit ||
+			mode === Twinkle.speedy.mode.sysopRadioClick ||
+			mode === Twinkle.speedy.mode.sysopMultipleRadioClick;
+	},
+	// do we have a "Submit" button once the form is created?
+	hasSubmitButton: function twinklespeedyModeHasSubmitButton(mode) {
+		return mode === Twinkle.speedy.mode.sysopSingleSubmit ||
+			mode === Twinkle.speedy.mode.sysopMultipleSubmit ||
+			mode === Twinkle.speedy.mode.sysopMultipleRadioClick ||
+			mode === Twinkle.speedy.mode.userMultipleSubmit ||
+			mode === Twinkle.speedy.mode.userMultipleRadioClick ||
+			mode === Twinkle.speedy.mode.userSingleSubmit;
+	},
+	// is db-multiple the outcome here?
+	isMultiple: function twinklespeedyModeIsMultiple(mode) {
+		return mode === Twinkle.speedy.mode.userMultipleSubmit ||
+			mode === Twinkle.speedy.mode.sysopMultipleSubmit ||
+			mode === Twinkle.speedy.mode.userMultipleRadioClick ||
+			mode === Twinkle.speedy.mode.sysopMultipleRadioClick;
+	}
+};
+
 // Prepares the speedy deletion dialog and displays it
 Twinkle.speedy.initDialog = function twinklespeedyInitDialog(callbackfunc) {
 	var dialog;
@@ -74,22 +111,27 @@ Twinkle.speedy.initDialog = function twinklespeedyInitDialog(callbackfunc) {
 					event: function(event) {
 						var cForm = event.target.form;
 						var cChecked = event.target.checked;
-						// enable talk page checkbox
+						// enable/disable talk page checkbox
 						if (cForm.talkpage) {
+							cForm.talkpage.disabled = cChecked;
 							cForm.talkpage.checked = !cChecked && Twinkle.getPref('deleteTalkPageOnDelete');
 						}
-						// enable redirects checkbox
+						// enable/disable redirects checkbox
+						cForm.redirects.disabled = cChecked;
 						cForm.redirects.checked = !cChecked;
-						// enable delete multiple
+						// enable/disable delete multiple
+						cForm.delmultiple.disabled = cChecked;
 						cForm.delmultiple.checked = false;
-						// enable notify checkbox
+						// enable/disable open talk page checkbox
+						cForm.openusertalk.disabled = cChecked;
+						cForm.openusertalk.checked = false;
+
+						// enable/disable notify checkbox
+						cForm.notify.disabled = !cChecked;
 						cForm.notify.checked = cChecked;
-						// enable deletion notification checkbox
-						cForm.warnusertalk.checked = !cChecked && !Twinkle.speedy.hasCSD;
-						// enable multiple
+						// enable/disable multiple
+						cForm.multiple.disabled = !cChecked;
 						cForm.multiple.checked = false;
-						// enable requesting creation protection
-						cForm.salting.checked = false;
 
 						Twinkle.speedy.callback.modeChanged(cForm);
 
@@ -105,7 +147,7 @@ Twinkle.speedy.initDialog = function twinklespeedyInitDialog(callbackfunc) {
 		});
 		deleteOptions.append({
 			type: 'header',
-			label: 'Delete-related options'
+			label: '删除相关选项'
 		});
 		if (mw.config.get('wgNamespaceNumber') % 2 === 0 && (mw.config.get('wgNamespaceNumber') !== 2 || (/\//).test(mw.config.get('wgTitle')))) {  // hide option for user pages, to avoid accidentally deleting user talk page
 			deleteOptions.append({
@@ -133,10 +175,15 @@ Twinkle.speedy.initDialog = function twinklespeedyInitDialog(callbackfunc) {
 					name: 'redirects',
 					tooltip: '删除到此页的重定向。',
 					checked: Twinkle.getPref('deleteRedirectsOnDelete'),
-					event: function (event) {
+					event: function(event) {
 						event.stopPropagation();
 					}
-				},
+				}
+			]
+		});
+		deleteOptions.append({
+			type: 'checkbox',
+			list: [
 				{
 					label: '应用多个理由删除',
 					value: 'delmultiple',
@@ -146,16 +193,18 @@ Twinkle.speedy.initDialog = function twinklespeedyInitDialog(callbackfunc) {
 						Twinkle.speedy.callback.modeChanged(event.target.form);
 						event.stopPropagation();
 					}
-				},
+				}
+			]
+		});
+		deleteOptions.append({
+			type: 'checkbox',
+			list: [
 				{
 					label: '开启用户讨论页',
 					value: 'openusertalk',
 					name: 'openusertalk',
 					tooltip: '此项的默认值为您的开启讨论页设置。在您选择应用多条理由删除时此项将保持不变。',
-					checked: !Morebits.userIsSysop || !(Twinkle.speedy.hasCSD || Twinkle.getPref('deleteSysopDefaultToDelete')),
-					event: function(event) {
-						event.stopPropagation();
-					}
+					checked: false
 				}
 			]
 		});
@@ -185,14 +234,12 @@ Twinkle.speedy.initDialog = function twinklespeedyInitDialog(callbackfunc) {
 				event: function(event) {
 					event.stopPropagation();
 				}
-			},
-			// {
-			// label: 'Tag for creation protection (salting) as well',
-			// value: 'salting',
-			// name: 'salting',
-			// tooltip: 'When selected, the speedy deletion tag will be accompanied by a {{salt}} tag requesting that the deleting administrator apply creation protection. Only select if this page has been repeatedly recreated.',
-			// event: function(event) {event.stopPropagation()}
-			// },
+			}
+		]
+	});
+	tagOptions.append({
+		type: 'checkbox',
+		list: [
 			{
 				label: '应用多个理由',
 				value: 'multiple',
@@ -202,7 +249,12 @@ Twinkle.speedy.initDialog = function twinklespeedyInitDialog(callbackfunc) {
 					Twinkle.speedy.callback.modeChanged(event.target.form);
 					event.stopPropagation();
 				}
-			},
+			}
+		]
+	});
+	tagOptions.append({
+		type: 'checkbox',
+		list: [
 			{
 				label: '清空页面',
 				value: 'blank',
@@ -297,17 +349,14 @@ Twinkle.speedy.callback.modeChanged = function twinklespeedyCallbackModeChanged(
 	if (!Morebits.isPageRedirect()) {
 		switch (namespace) {
 			case 0:  // article
-			case 1:  // talk
 				appendList('条目', Twinkle.speedy.articleList);
 				break;
 
 			case 2:  // user
-			case 3: // user talk
 				appendList('用户页', Twinkle.speedy.userList);
 				break;
 
 			case 6:  // file
-			case 7:  // file talk
 				appendList('文件', Twinkle.speedy.fileList);
 				if (!mode.isSysop) {
 					work_area.append({ type: 'div', label: '标记快速删除F1（明显不符合本站著作权方针的文件）、F2（重复且不再被使用的文件），请使用Twinkle的“图权”功能。' });
@@ -315,12 +364,10 @@ Twinkle.speedy.callback.modeChanged = function twinklespeedyCallbackModeChanged(
 				break;
 
 			case 14:  // category
-			case 15:  // category talk
 				appendList('分类', Twinkle.speedy.categoryList);
 				break;
 
 			case 118:  // draft
-			case 119:  // draft talk
 				appendList('草稿', Twinkle.speedy.draftList);
 				break;
 
@@ -353,6 +400,12 @@ Twinkle.speedy.callback.modeChanged = function twinklespeedyCallbackModeChanged(
 			}
 			customOption.subgroup.querySelector('input').value = decodeURIComponent($('#delete-reason').text()).replace(/\+/g, ' ');
 		}
+	}
+
+	// enlarge G1 radio/checkbox and its label
+	if (document.querySelector('input[value="g1"]') && Twinkle.getPref('enlargeG1Input')) {
+		document.querySelector('input[value="g1"]').style = 'height: 2em; width: 2em; height: -moz-initial; width: -moz-initial; -moz-transform: scale(2); -o-transform: scale(2);';
+		document.querySelector('input[value="g1"]').labels[0].style = 'font-size: 1.5em; line-height: 1.5em;';
 	}
 };
 
@@ -718,7 +771,7 @@ Twinkle.speedy.callbacks = {
 			code += '}}';
 		} else {
 			parameters = params.templateParams[0] || [];
-			code = '{{delete' + params.values[0];
+			code = '{{delete';
 			if (params.values[0] !== 'reason') {
 				code += '|' + params.values[0];
 			}
@@ -770,7 +823,7 @@ Twinkle.speedy.callbacks = {
 				var code = Twinkle.speedy.callbacks.getTemplateCodeAndParams(params)[0];
 				Twinkle.speedy.callbacks.parseWikitext(mw.config.get('wgPageName'), code, function(reason) {
 					if (params.promptForSummary) {
-						reason = prompt('输入删除理由，或单击确定以接受自动生成的：', reason);
+						reason = prompt('输入删除理由，或单击“确定”以使用自动生成的理由：', reason);
 					}
 					Twinkle.speedy.callbacks.sysop.deletePage(reason, params);
 				});
@@ -782,7 +835,7 @@ Twinkle.speedy.callbacks = {
 			if (reason === null) {
 				return Morebits.status.error('询问理由', '用户取消操作。');
 			} else if (!reason || !reason.replace(/^\s*/, '').replace(/\s*$/, '')) {
-				return Morebits.status.error('询问理由', '你不给我理由…我就…不管了…');
+				return Morebits.status.error('询问理由', '用户未给出理由。');
 			}
 
 			var deleteMain = function() {
