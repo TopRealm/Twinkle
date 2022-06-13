@@ -1448,7 +1448,6 @@ Twinkle.speedy.callback.evaluateUser = function twinklespeedyCallbackEvaluateUse
 		watch: watchPage,
 		usertalk: notifyuser,
 		lognomination: csdlog,
-		requestsalt: form.salting.checked,
 		templateParams: templateParams,
 		blank: blank
 	};
