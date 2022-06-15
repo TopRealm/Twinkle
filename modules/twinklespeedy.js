@@ -881,10 +881,10 @@ Twinkle.speedy.callbacks = {
 					prop: 'redirects',
 					rdlimit: 5000  // 500 is max for normal users, 5000 for bots and sysops
 				};
-				var wikipedia_api = new Morebits.wiki.api('获取重定向列表…', query, Twinkle.speedy.callbacks.sysop.deleteRedirectsMain,
+				var qiuwen_api = new Morebits.wiki.api('获取重定向列表…', query, Twinkle.speedy.callbacks.sysop.deleteRedirectsMain,
 					new Morebits.status('删除重定向'));
-				wikipedia_api.params = params;
-				wikipedia_api.post();
+				qiuwen_api.params = params;
+				qiuwen_api.post();
 			}
 
 			// prompt for protect on G1
@@ -1456,9 +1456,9 @@ Twinkle.speedy.callback.evaluateUser = function twinklespeedyCallbackEvaluateUse
 	Morebits.status.init(form);
 
 	Morebits.wiki.actionCompleted.redirect = mw.config.get('wgPageName');
-	Morebits.wiki.actionCompleted.notice = 'Tagging complete';
+	Morebits.wiki.actionCompleted.notice = '标记完成';
 
-	var qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'), 'Tagging page');
+	var qiuwen_page = params.scribunto ? new Morebits.wiki.page(mw.config.get('wgPageName') + '/doc', '标记模块文件页') : new Morebits.wiki.page(mw.config.get('wgPageName'), '标记页面');
 	qiuwen_page.setChangeTags(Twinkle.changeTags); // Here to apply to triage
 	qiuwen_page.setCallbackParameters(params);
 	qiuwen_page.load(Twinkle.speedy.callbacks.user.main);
