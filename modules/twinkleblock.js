@@ -44,7 +44,7 @@ Twinkle.block.callback = function twinkleblockCallback() {
 
 	var Window = new Morebits.simpleWindow(650, 530);
 	// need to be verbose about who we're blocking
-	Window.setTitle('封禁或向' + Morebits.wiki.flow.relevantUserName(true) + '发出封禁模板');
+	Window.setTitle('封禁或向' + relevantUserName + '发出封禁模板');
 	Window.setScriptName('Twinkle');
 	Window.addFooterLink('封禁方针', 'QW:BLOCK');
 	Window.addFooterLink('参数设置', 'H:TW/PREF#block');

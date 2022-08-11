@@ -25,7 +25,6 @@
 Twinkle.xfd = function twinklexfd() {
 	// Disable on:
 	// * special pages
-	// * Flow pages
 	// * non-existent pages
 	// * files on Commons, whether there is a local page or not (unneeded local pages of files on Commons are eligible for CSD F2)
 	// * file pages without actual files (these are eligible for CSD G8)
@@ -279,22 +278,15 @@ Twinkle.xfd.callbacks = {
 					initialContrib = null;
 				} else {
 					var talkPageName = 'User talk:' + initialContrib;
-					Morebits.wiki.flow.check(talkPageName, function () {
-						var flowpage = new Morebits.wiki.flow(talkPageName, '通知页面创建者（' + initialContrib + '）');
-						flowpage.setTopic('页面[[:' + Morebits.pageNameNorm + ']]存废讨论通知');
-						flowpage.setContent('{{subst:AFDNote|' + Morebits.pageNameNorm + '|flow=yes}}');
-						flowpage.newTopic();
-					}, function () {
-						var usertalkpage = new Morebits.wiki.page(talkPageName, '通知页面创建者（' + initialContrib + '）');
-						var notifytext = '\n{{subst:AFDNote|' + Morebits.pageNameNorm + '}}--~~~~';
-						usertalkpage.setAppendText(notifytext);
-						usertalkpage.setEditSummary('通知：页面[[' + Morebits.pageNameNorm + ']]存废讨论提名');
-						usertalkpage.setChangeTags(Twinkle.changeTags);
-						usertalkpage.setCreateOption('recreate');
-						usertalkpage.setWatchlist(Twinkle.getPref('xfdWatchUser'));
-						usertalkpage.setFollowRedirect(true, false);
-						usertalkpage.append();
-					});
+					var usertalkpage = new Morebits.wiki.page(talkPageName, '通知页面创建者（' + initialContrib + '）');
+					var notifytext = '\n{{subst:AFDNote|' + Morebits.pageNameNorm + '}}--~~~~';
+					usertalkpage.setAppendText(notifytext);
+					usertalkpage.setEditSummary('通知：页面[[' + Morebits.pageNameNorm + ']]存废讨论提名');
+					usertalkpage.setChangeTags(Twinkle.changeTags);
+					usertalkpage.setCreateOption('recreate');
+					usertalkpage.setWatchlist(Twinkle.getPref('xfdWatchUser'));
+					usertalkpage.setFollowRedirect(true, false);
+					usertalkpage.append();
 				}
 				// add this nomination to the user's userspace log, if the user has enabled it
 				if (params.lognomination) {
@@ -477,22 +469,16 @@ Twinkle.xfd.callbacks = {
 
 				var talkPageName = 'User talk:' + initialContrib;
 
-				Morebits.wiki.flow.check(talkPageName, function () {
-					var flowpage = new Morebits.wiki.flow(talkPageName, '通知页面创建者（' + initialContrib + '）');
-					flowpage.setTopic('文件[[:File:' + mw.config.get('wgTitle') + ']]存废讨论通知');
-					flowpage.setContent('{{subst:idw|File:' + mw.config.get('wgTitle') + '|flow=yes}}');
-					flowpage.newTopic();
-				}, function () {
-					var usertalkpage = new Morebits.wiki.page(talkPageName, '通知页面创建者（' + initialContrib + '）');
-					var notifytext = '\n{{subst:idw|File:' + mw.config.get('wgTitle') + '}}--~~~~';
-					usertalkpage.setAppendText(notifytext);
-					usertalkpage.setEditSummary('通知：文件[[' + Morebits.pageNameNorm + ']]存废讨论提名');
-					usertalkpage.setChangeTags(Twinkle.changeTags);
-					usertalkpage.setCreateOption('recreate');
-					usertalkpage.setWatchlist(Twinkle.getPref('xfdWatchUser'));
-					usertalkpage.setFollowRedirect(true, false);
-					usertalkpage.append();
-				});
+				var usertalkpage = new Morebits.wiki.page(talkPageName, '通知页面创建者（' + initialContrib + '）');
+				var notifytext = '\n{{subst:idw|File:' + mw.config.get('wgTitle') + '}}--~~~~';
+				usertalkpage.setAppendText(notifytext);
+				usertalkpage.setEditSummary('通知：文件[[' + Morebits.pageNameNorm + ']]存废讨论提名');
+				usertalkpage.setChangeTags(Twinkle.changeTags);
+				usertalkpage.setCreateOption('recreate');
+				usertalkpage.setWatchlist(Twinkle.getPref('xfdWatchUser'));
+				usertalkpage.setFollowRedirect(true, false);
+				usertalkpage.append();
+
 				// add this nomination to the user's userspace log, if the user has enabled it
 				if (params.lognomination) {
 					Twinkle.xfd.callbacks.addToLog(params, initialContrib);

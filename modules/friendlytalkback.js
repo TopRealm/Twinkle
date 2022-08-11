@@ -118,7 +118,7 @@ Twinkle.talkback.optout = '';
 Twinkle.talkback.callback.optoutStatus = function(apiobj) {
 	var el = apiobj.getResponse().query.pages[0].extlinks;
 	if (el && el.length) {
-		Twinkle.talkback.optout = Morebits.wiki.flow.relevantUserName() + '不希望收到回复通告';
+		Twinkle.talkback.optout = mw.config.get('wgRelevantUserName') + '不希望收到回复通告';
 		var url = el[0].url;
 		var reason = mw.util.getParamValue('reason', url);
 		Twinkle.talkback.optout += reason ? ': ' + reason : '.';
