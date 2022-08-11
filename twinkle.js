@@ -3,7 +3,7 @@
  * |          === WARNING: GLOBAL GADGET FILE ===          |
  * |        Changes to this page affect many users.        |
  * |  Please discuss changes at Talk page before editing.  |
- * +----------------------------------------------------------------+
+ * +-------------------------------------------------------+
  *
  * Scripts imported from Qiuwen Development Centre [https://git.qiuwen.wiki/qiuwen/twinkle-new].
  * Orginally imported from Github [https://github.com/wikimedia-gadgets/twinkle].
