@@ -2,10 +2,14 @@
 /**
  * Twinkle.js
  * © 2011-2022 English Wikipedia Contributors
+ * © 2011-2021 Chinese Wikipedia Contributors
+ * © 2021-     Qiuwen Baike Contributors
  * This work is licensed under a Creative Commons
  * Attribution-ShareAlike 3.0 Unported License.
  * https://creativecommons.org/licenses/by-sa/3.0/
  */
+// <nowiki>
+
 
 (function($) {
 
@@ -21,93 +25,14 @@
 Twinkle.xfd = function twinklexfd() {
 	// Disable on:
 	// * special pages
+	// * Flow pages
 	// * non-existent pages
-	// * files on Commons, whether there is a local page or not (unneeded local pages of files on Commons are eligible for CSD F2, or R4 if it's a redirect)
-	if (mw.config.get('wgNamespaceNumber') < 0 || !mw.config.get('wgArticleId') || (mw.config.get('wgNamespaceNumber') === 6 && document.getElementById('mw-sharedupload'))) {
+	// * files on Commons, whether there is a local page or not (unneeded local pages of files on Commons are eligible for CSD F2)
+	// * file pages without actual files (these are eligible for CSD G8)
+	if (mw.config.get('wgNamespaceNumber') < 0 || !mw.config.get('wgArticleId') || (mw.config.get('wgNamespaceNumber') === 6 && (document.getElementById('mw-sharedupload') || (!document.getElementById('mw-imagepage-section-filehistory') && !Morebits.isPageRedirect())))) {
 		return;
 	}
-
-	var tooltip = 'Start a discussion for deleting';
-	if (mw.config.get('wgIsRedirect')) {
-		tooltip += ' or retargeting this redirect';
-	} else {
-		switch (mw.config.get('wgNamespaceNumber')) {
-			case 0:
-				tooltip += ' or moving this article';
-				break;
-			case 10:
-				tooltip += ' or merging this template';
-				break;
-			case 828:
-				tooltip += ' or merging this module';
-				break;
-			case 6:
-				tooltip += ' this file';
-				break;
-			case 14:
-				tooltip += ', merging or renaming this category';
-				break;
-			default:
-				tooltip += ' this page';
-				break;
-		}
-	}
-	Twinkle.addPortletLink(Twinkle.xfd.callback, 'XFD', 'tw-xfd', tooltip);
-};
-
-
-var utils = {
-	/** Get ordinal number figure */
-	num2order: function(num) {
-		switch (num) {
-			case 1: return '';
-			case 2: return '2nd';
-			case 3: return '3rd';
-			default: return num + 'th';
-		}
-	},
-
-	/**
-	 * Remove namespace name from title if present
-	 * Exception-safe wrapper around mw.Title
-	 * @param {string} title
-	 */
-	stripNs: function(title) {
-		var title_obj = mw.Title.newFromUserInput(title);
-		if (!title_obj) {
-			return title; // user entered invalid input; do nothing
-		}
-		return title_obj.getNameText();
-	},
-
-	/**
-	 * Add namespace name to page title if not already given
-	 * CAUTION: namespace name won't be added if a namespace (*not* necessarily
-	 * the same as the one given) already is there in the title
-	 * @param {string} title
-	 * @param {number} namespaceNumber
-	 */
-	addNs: function(title, namespaceNumber) {
-		var title_obj = mw.Title.newFromUserInput(title, namespaceNumber);
-		if (!title_obj) {
-			return title;  // user entered invalid input; do nothing
-		}
-		return title_obj.toText();
-	},
-
-	/**
-	 * Provide Wikipedian TLA style: AfD, RfD, CfDS, RM, SfD, etc.
-	 * @param {string} venue
-	 * @returns {string}
-	 */
-	toTLACase: function(venue) {
-		return venue
-			.toString()
-			// Everybody up, inclduing rm and the terminal s in cfds
-			.toUpperCase()
-			// Lowercase the central f in a given TLA and normalize sfd-t and sfr-t
-			.replace(/(.)F(.)(?:-.)?/, '$1f$2');
-	}
+	Twinkle.addPortletLink(Twinkle.xfd.callback, '提删', 'tw-xfd', '提交删除讨论');
 };
 
 Twinkle.xfd.currentRationale = null;
@@ -115,174 +40,67 @@ Twinkle.xfd.currentRationale = null;
 // error callback on Morebits.status.object
 Twinkle.xfd.printRationale = function twinklexfdPrintRationale() {
 	if (Twinkle.xfd.currentRationale) {
-		Morebits.status.printUserText(Twinkle.xfd.currentRationale, 'Your deletion rationale is provided below, which you can copy and paste into a new XFD dialog if you wish to try again:');
+		Morebits.status.printUserText(Twinkle.xfd.currentRationale, '您的理由已在下方提供，如果您想重新提交，请将其复制到一新窗口中：');
 		// only need to print the rationale once
 		Twinkle.xfd.currentRationale = null;
 	}
 };
 
 Twinkle.xfd.callback = function twinklexfdCallback() {
-	var Window = new Morebits.simpleWindow(700, 400);
-	Window.setTitle('Start a deletion discussion (XfD)');
+	var Window = new Morebits.simpleWindow(600, 350);
+	Window.setTitle('提交存废讨论');
 	Window.setScriptName('Twinkle');
-	Window.addFooterLink('About deletion discussions', 'QW:XFD');
-	Window.addFooterLink('参数设置', 'H:TW/PREF#xfd');
-	Window.addFooterLink('帮助文档', 'H:TW/DOC#xfd');
-	Window.addFooterLink('问题反馈', 'HT:TW');
+	Window.addFooterLink('关于存废讨论', 'QW:XFD');
+	Window.addFooterLink('提删设置', 'QW:TW/PREF#xfd');
+	Window.addFooterLink('Twinkle帮助', 'QW:TW/DOC#xfd');
 
 	var form = new Morebits.quickForm(Twinkle.xfd.callback.evaluate);
 	var categories = form.append({
 		type: 'select',
-		name: 'venue',
-		label: 'Deletion discussion venue:',
-		tooltip: 'When activated, a default choice is made, based on what namespace you are in. This default should be the most appropriate.',
+		name: 'category',
+		label: '提交类型：',
 		event: Twinkle.xfd.callback.change_category
 	});
-	var namespace = mw.config.get('wgNamespaceNumber');
-
 	categories.append({
 		type: 'option',
-		label: 'AfD (Articles for deletion)',
-		selected: namespace === 0,  // Main namespace
+		label: '页面存废讨论',
+		selected: mw.config.get('wgNamespaceNumber') === 0,  // Main namespace
 		value: 'afd'
 	});
 	categories.append({
 		type: 'option',
-		label: 'TfD (Templates for discussion)',
-		selected: [ 10, 828 ].indexOf(namespace) !== -1,  // Template and module namespaces
-		value: 'tfd'
-	});
-	categories.append({
-		type: 'option',
-		label: 'FfD (Files for discussion)',
-		selected: namespace === 6,  // File namespace
+		label: '文件存废讨论',
+		selected: mw.config.get('wgNamespaceNumber') === 6,  // File namespace
 		value: 'ffd'
 	});
-	categories.append({
-		type: 'option',
-		label: 'CfD (Categories for discussion)',
-		selected: namespace === 14 || (namespace === 10 && /-stub$/.test(Morebits.pageNameNorm)),  // Category namespace and stub templates
-		value: 'cfd'
-	});
-	categories.append({
-		type: 'option',
-		label: 'CfD/S (Categories for speedy renaming)',
-		value: 'cfds'
-	});
-	categories.append({
-		type: 'option',
-		label: 'MfD (Miscellany for deletion)',
-		selected: [ 0, 6, 10, 14, 828 ].indexOf(namespace) === -1 || Morebits.pageNameNorm.indexOf('Template:User ', 0) === 0,
-		// Other namespaces, and userboxes in template namespace
-		value: 'mfd'
-	});
-	categories.append({
-		type: 'option',
-		label: 'RfD (Redirects for discussion)',
-		selected: mw.config.get('wgIsRedirect'),
-		value: 'rfd'
-	});
-	categories.append({
-		type: 'option',
-		label: 'RM (Requested moves)',
-		selected: false,
-		value: 'rm'
-	});
-
-	form.append({
-		type: 'div',
-		id: 'wrong-venue-warn',
-		style: 'color: red; font-style: italic'
-	});
-
 	form.append({
 		type: 'checkbox',
 		list: [
 			{
-				label: 'Notify page creator if possible',
+				label: '如可能，通知页面创建者',
 				value: 'notify',
-				name: 'notifycreator',
-				tooltip: "A notification template will be placed on the creator's talk page if this is true.",
+				name: 'notify',
+				tooltip: '在页面创建者讨论页上放置一通知模板。',
 				checked: true
 			}
 		]
-	});
+	}
+	);
 	form.append({
 		type: 'field',
-		label: 'Work area',
+		label: '工作区',
 		name: 'work_area'
 	});
-
-	var previewlink = document.createElement('a');
-	$(previewlink).click(function() {
-		Twinkle.xfd.callbacks.preview(result);  // |result| is defined below
-	});
-	previewlink.style.cursor = 'pointer';
-	previewlink.textContent = 'Preview';
-	form.append({ type: 'div', id: 'xfdpreview', label: [ previewlink ] });
-	form.append({ type: 'div', id: 'twinklexfd-previewbox', style: 'display: none' });
-
 	form.append({ type: 'submit' });
 
 	var result = form.render();
 	Window.setContent(result);
 	Window.display();
-	result.previewer = new Morebits.wiki.preview($(result).find('div#twinklexfd-previewbox').last()[0]);
 
 	// We must init the controls
 	var evt = document.createEvent('Event');
 	evt.initEvent('change', true, true);
-	result.venue.dispatchEvent(evt);
-};
-
-Twinkle.xfd.callback.wrongVenueWarning = function twinklexfdWrongVenueWarning(venue) {
-	var text = '';
-	var namespace = mw.config.get('wgNamespaceNumber');
-
-	switch (venue) {
-		case 'afd':
-			if (namespace !== 0) {
-				text = 'AfD is generally appropriate only for articles.';
-			} else if (mw.config.get('wgIsRedirect')) {
-				text = 'Please use RfD for redirects.';
-			}
-			break;
-		case 'tfd':
-			if (namespace === 10 && /-stub$/.test(Morebits.pageNameNorm)) {
-				text = 'Use CfD for stub templates.';
-			} else if (Morebits.pageNameNorm.indexOf('Template:User ') === 0) {
-				text = 'Please use MfD for userboxes';
-			}
-			break;
-		case 'cfd':
-			if ([ 10, 14 ].indexOf(namespace) === -1) {
-				text = 'CfD is only for categories and stub templates.';
-			}
-			break;
-		case 'cfds':
-			if (namespace !== 14) {
-				text = 'CfDS is only for categories.';
-			}
-			break;
-		case 'ffd':
-			if (namespace !== 6) {
-				text = 'FFD is selected but this page doesn\'t look like a file!';
-			}
-			break;
-		case 'rm':
-			if (namespace === 14) { // category
-				text = 'Please use CfD or CfDS for category renames.';
-			} else if ([118, 119, 2, 3].indexOf(namespace) > -1) { // draft, draft talk, user, user talk
-				text = 'RMs are not permitted in draft and userspace, unless they are uncontroversial technical requests.';
-			}
-			break;
-
-		default: // mfd or rfd
-			break;
-	}
-
-	$('#wrong-venue-warn').text(text);
-
+	result.category.dispatchEvent(evt);
 };
 
 Twinkle.xfd.callback.change_category = function twinklexfdCallbackChangeCategory(e) {
@@ -294,436 +112,112 @@ Twinkle.xfd.callback.change_category = function twinklexfdCallbackChangeCategory
 	var oldreasontextbox = form.getElementsByTagName('textarea')[0];
 	var oldreason = oldreasontextbox ? oldreasontextbox.value : '';
 
-	var appendReasonBox = function twinklexfdAppendReasonBox() {
+	var appendReasonBox = function twinklexfdAppendReasonBox(xfd_cat) {
+		switch (xfd_cat) {
+			case 'fwdcsd':
+				oldreason = decodeURIComponent($('#delete-reason').text()).replace(/\+/g, ' ');
+				break;
+			case 'fame':
+				oldreason = Twinkle.getPref('afdFameDefaultReason');
+				break;
+			case 'substub':
+				oldreason = Twinkle.getPref('afdSubstubDefaultReason');
+				break;
+			default:
+				break;
+		}
 		work_area.append({
 			type: 'textarea',
-			name: 'reason',
-			label: 'Reason:',
+			name: 'xfdreason',
+			label: '提删理由：',
 			value: oldreason,
-			tooltip: 'You can use wikimarkup in your reason. Twinkle will automatically sign your post.'
+			tooltip: '您可以使用Wikitext，Twinkle将自动为您加入签名。如果您使用批量提删功能，存废讨论页只会使用第一次提交的理由，但之后您仍需提供以用于删除通告模板的参数。',
+			placeholder: '此值亦显示于页面的删除通告模板内，故务必提供此值，避免使用“同上”等用语。'
 		});
+		// TODO possible future "preview" link here
 	};
-
-	Twinkle.xfd.callback.wrongVenueWarning(value);
-
-	form.previewer.closePreview();
 
 	switch (value) {
 		case 'afd':
 			work_area = new Morebits.quickForm.element({
 				type: 'field',
-				label: 'Articles for deletion',
+				label: '页面存废讨论',
 				name: 'work_area'
 			});
-
-			work_area.append({
-				type: 'div',
-				label: '', // Added later by Twinkle.makeFindSourcesDiv()
-				id: 'twinkle-xfd-findsources',
-				style: 'margin-bottom: 5px; margin-top: -5px;'
-			});
-
 			work_area.append({
 				type: 'checkbox',
 				list: [
 					{
-						label: 'Wrap deletion tag with &lt;noinclude&gt;',
+						label: '使用&lt;noinclude&gt;包裹模板',
 						value: 'noinclude',
 						name: 'noinclude',
-						tooltip: 'Will wrap the deletion tag in &lt;noinclude&gt; tags, so that it won\'t transclude. This option is not normally required.'
+						checked: mw.config.get('wgNamespaceNumber') === 10 && mw.config.get('wgPageContentModel') !== 'Scribunto', // Template namespace
+						tooltip: '使其不会在被包含时出现。',
+						disabled: mw.config.get('wgPageContentModel') === 'Scribunto'
 					}
 				]
 			});
-			work_area.append({
+			var afd_category = work_area.append({
 				type: 'select',
 				name: 'xfdcat',
-				label: 'Choose what category this nomination belongs in:',
-				list: [
-					{ type: 'option', label: 'Unknown', value: '?', selected: true },
-					{ type: 'option', label: 'Media and music', value: 'M' },
-					{ type: 'option', label: 'Organisation, corporation, or product', value: 'O' },
-					{ type: 'option', label: 'Biographical', value: 'B' },
-					{ type: 'option', label: 'Society topics', value: 'S' },
-					{ type: 'option', label: 'Web or internet', value: 'W' },
-					{ type: 'option', label: 'Games or sports', value: 'G' },
-					{ type: 'option', label: 'Science and technology', value: 'T' },
-					{ type: 'option', label: 'Fiction and the arts', value: 'F' },
-					{ type: 'option', label: 'Places and transportation', value: 'P' },
-					{ type: 'option', label: 'Indiscernible or unclassifiable topic', value: 'I' },
-					{ type: 'option', label: 'Debate not yet sorted', value: 'U' }
-				]
+				label: '选择提删类型：',
+				event: Twinkle.xfd.callback.change_afd_category
 			});
 
-			work_area.append({
-				type: 'select',
-				multiple: true,
-				name: 'delsortCats',
-				label: 'Choose deletion sorting categories:',
-				tooltip: 'Select a few categories that are specifically relevant to the subject of the article. Be as precise as possible; categories like People and USA should only be used when no other categories apply.'
-			});
-
-			// grab deletion sort categories from en-wiki
-			Morebits.wiki.getCachedJson('Qiuwen:WikiProject_Deletion_sorting/Computer-readable.json').then(function(delsortCategories) {
-				var $select = $('[name="delsortCats"]');
-				$.each(delsortCategories, function(groupname, list) {
-					var $optgroup = $('<optgroup>').attr('label', groupname);
-					var $delsortCat = $select.append($optgroup);
-					list.forEach(function(item) {
-						var $option = $('<option>').val(item).text(item);
-						$delsortCat.append($option);
-					});
-				});
-			});
-
-			appendReasonBox();
-			work_area = work_area.render();
-			old_area.parentNode.replaceChild(work_area, old_area);
-
-			Twinkle.makeFindSourcesDiv('#twinkle-xfd-findsources');
-
-			$(work_area).find('[name=delsortCats]')
-				.attr('data-placeholder', 'Select delsort pages')
-				.select2({
-					width: '100%',
-					matcher: Morebits.select2.matcher,
-					templateResult: Morebits.select2.highlightSearchMatches,
-					language: {
-						searching: Morebits.select2.queryInterceptor
-					},
-					// Link text to the page itself
-					templateSelection: function(choice) {
-						return $('<a>').text(choice.text).attr({
-							href: mw.util.getUrl('Qiuwen:WikiProject_Deletion_sorting/' + choice.text),
-							target: '_blank'
-						});
-					}
-				});
-
-			mw.util.addCSS(
-				// Remove black border
-				'.select2-container--default.select2-container--focus .select2-selection--multiple { border: 1px solid #aaa; }' +
-
-				// Reduce padding
-				'.select2-results .select2-results__option { padding-top: 1px; padding-bottom: 1px; }' +
-				'.select2-results .select2-results__group { padding-top: 1px; padding-bottom: 1px; } ' +
-
-				// Adjust font size
-				'.select2-container .select2-dropdown .select2-results { font-size: 13px; }' +
-				'.select2-container .selection .select2-selection__rendered { font-size: 13px; }' +
-
-				// Make the tiny cross larger
-				'.select2-selection__choice__remove { font-size: 130%; }'
-			);
-			break;
-
-		case 'tfd':
-			work_area = new Morebits.quickForm.element({
-				type: 'field',
-				label: 'Templates for discussion',
-				name: 'work_area'
-			});
-
-			var templateOrModule = mw.config.get('wgPageContentModel') === 'Scribunto' ? 'module' : 'template';
-			work_area.append({
-				type: 'select',
-				label: 'Choose type of action wanted:',
-				name: 'xfdcat',
-				event: function(e) {
-					var target = e.target,
-						tfdtarget = target.form.tfdtarget;
-					// add/remove extra input box
-					if (target.value === 'tfm' && !tfdtarget) {
-						tfdtarget = new Morebits.quickForm.element({
-							name: 'tfdtarget',
-							type: 'input',
-							label: 'Other ' + templateOrModule + ' to be merged:',
-							tooltip: 'Required. Should not include the ' + Morebits.string.toUpperCaseFirstChar(templateOrModule) + ': namespace prefix.',
-							required: true
-						});
-						target.parentNode.appendChild(tfdtarget.render());
-					} else {
-						$(Morebits.quickForm.getElementContainer(tfdtarget)).remove();
-						tfdtarget = null;
-					}
-				},
-				list: [
-					{ type: 'option', label: 'Deletion', value: 'tfd', selected: true },
-					{ type: 'option', label: 'Merge', value: 'tfm' }
-				]
-			});
-			work_area.append({
-				type: 'select',
-				name: 'templatetype',
-				label: 'Deletion tag display style:',
-				tooltip: 'Which <code>type=</code> parameter to pass to the TfD tag template.',
-				list: templateOrModule === 'module' ? [
-					{ type: 'option', value: 'module', label: 'Module', selected: true }
-				] : [
-					{ type: 'option', value: 'standard', label: 'Standard', selected: true },
-					{ type: 'option', value: 'sidebar', label: 'Sidebar/infobox', selected: $('.infobox').length },
-					{ type: 'option', value: 'inline', label: 'Inline template', selected: $('.mw-parser-output > p .Inline-Template').length },
-					{ type: 'option', value: 'tiny', label: 'Tiny inline' },
-					{ type: 'option', value: 'disabled', label: 'Disabled' }
-				]
-			});
-
-			work_area.append({
-				type: 'checkbox',
-				list: [
-					{
-						label: 'Wrap deletion tag with &lt;noinclude&gt; (for substituted templates only)',
-						value: 'noinclude',
-						name: 'noinclude',
-						tooltip: 'Will wrap the deletion tag in &lt;noinclude&gt; tags, so that it won\'t get substituted along with the template.',
-						disabled: templateOrModule === 'module',
-						checked: !!$('.box-Subst_only').length // Default to checked if page carries {{subst only}}
-					}
-				]
-			});
-
-			work_area.append({
-				type: 'checkbox',
-				list: [
-					{
-						label: 'Notify users of the template',
-						value: 'devpages',
-						name: 'devpages',
-						tooltip: 'A notification template will be sent to Twinkle, AWB, and RedWarn if this is true.',
-						checked: true
-					}
-				]
-			});
-
-			appendReasonBox();
-			work_area = work_area.render();
-			old_area.parentNode.replaceChild(work_area, old_area);
-			break;
-
-		case 'mfd':
-			work_area = new Morebits.quickForm.element({
-				type: 'field',
-				label: 'Miscellany for deletion',
-				name: 'work_area'
-			});
-			work_area.append({
-				type: 'checkbox',
-				list: [
-					{
-						label: 'Wrap deletion tag with &lt;noinclude&gt;',
-						value: 'noinclude',
-						name: 'noinclude',
-						tooltip: 'Will wrap the deletion tag in &lt;noinclude&gt; tags, so that it won\'t transclude. Select this option for userboxes.'
-					}
-				]
-			});
-			if ((mw.config.get('wgNamespaceNumber') === 2 /* User: */ || mw.config.get('wgNamespaceNumber') === 3 /* User talk: */) && mw.config.exists('wgRelevantUserName')) {
-				work_area.append({
-					type: 'checkbox',
-					list: [
-						{
-							label: 'Notify owner of userspace (if they are not the page creator)',
-							value: 'notifyuserspace',
-							name: 'notifyuserspace',
-							tooltip: 'If the user in whose userspace this page is located is not the page creator (for example, the page is a rescued article stored as a userspace draft), notify the userspace owner as well.',
-							checked: true
-						}
-					]
-				});
+			var afd_cat = 'delete';
+			if (Twinkle.getPref('afdDefaultCategory') === 'same') {
+				if (localStorage.Twinkle_afdCategory === undefined) {
+					localStorage.Twinkle_afdCategory = 'delete';
+				} else {
+					afd_cat = localStorage.Twinkle_afdCategory;
+				}
 			}
-			appendReasonBox();
+			afd_category.append({ type: 'option', label: '删除', value: 'delete', selected: afd_cat === 'delete' });
+			afd_category.append({ type: 'option', label: '合并', value: 'merge', selected: afd_cat === 'merge' });
+			if (Twinkle.getPref('FwdCsdToXfd')) {
+				afd_category.append({ type: 'option', label: '转交自快速删除候选', value: 'fwdcsd', selected: afd_cat === 'fwdcsd' });
+			}
+			afd_category.append({ type: 'option', label: '批量关注度提删', value: 'fame', selected: afd_cat === 'fame' });
+			afd_category.append({ type: 'option', label: '批量小小作品提删', value: 'substub', selected: afd_cat === 'substub' });
+			afd_category.append({ type: 'option', label: '批量其他提删', value: 'batch', selected: afd_cat === 'batch' });
+
+
+			work_area.append({
+				type: 'input',
+				name: 'mergeinto',
+				label: '合并到：',
+				hidden: true
+			});
+			appendReasonBox(afd_cat);
+			work_area.append({
+				type: 'textarea',
+				name: 'fwdcsdreason',
+				label: '转交理由：',
+				tooltip: '您可以使用Wikitext，Twinkle将自动为您加入签名。',
+				hidden: true
+			});
+
 			work_area = work_area.render();
 			old_area.parentNode.replaceChild(work_area, old_area);
+
+			var evt = document.createEvent('Event');
+			evt.initEvent('change', true, true);
+			form.xfdcat.dispatchEvent(evt);
 			break;
 		case 'ffd':
 			work_area = new Morebits.quickForm.element({
 				type: 'field',
-				label: 'Discussion venues for files',
+				label: '文件存废讨论',
 				name: 'work_area'
 			});
-			appendReasonBox();
+			appendReasonBox('ffd');
 			work_area = work_area.render();
 			old_area.parentNode.replaceChild(work_area, old_area);
 			break;
-
-		case 'cfd':
-			work_area = new Morebits.quickForm.element({
-				type: 'field',
-				label: 'Categories for discussion',
-				name: 'work_area'
-			});
-			var isCategory = mw.config.get('wgNamespaceNumber') === 14;
-			work_area.append({
-				type: 'select',
-				label: 'Choose type of action wanted:',
-				name: 'xfdcat',
-				event: function(e) {
-					var value = e.target.value,
-						cfdtarget = e.target.form.cfdtarget,
-						cfdtarget2 = e.target.form.cfdtarget2;
-
-					// update enabled status
-					cfdtarget.disabled = value === 'cfd' || value === 'sfd-t';
-
-					if (isCategory) {
-						// update label
-						if (value === 'cfs') {
-							Morebits.quickForm.setElementLabel(cfdtarget, 'Target categories: ');
-						} else if (value === 'cfc') {
-							Morebits.quickForm.setElementLabel(cfdtarget, 'Target article: ');
-						} else {
-							Morebits.quickForm.setElementLabel(cfdtarget, 'Target category: ');
-						}
-						// add/remove extra input box
-						if (value === 'cfs') {
-							if (cfdtarget2) {
-								cfdtarget2.disabled = false;
-								$(cfdtarget2).show();
-							} else {
-								cfdtarget2 = document.createElement('input');
-								cfdtarget2.setAttribute('name', 'cfdtarget2');
-								cfdtarget2.setAttribute('type', 'text');
-								cfdtarget2.setAttribute('required', 'true');
-								cfdtarget.parentNode.appendChild(cfdtarget2);
-							}
-						} else {
-							$(cfdtarget2).prop('disabled', true);
-							$(cfdtarget2).hide();
-						}
-					} else { // Update stub template label
-						Morebits.quickForm.setElementLabel(cfdtarget, 'Target stub template: ');
-					}
-				},
-				list: isCategory ? [
-					{ type: 'option', label: 'Deletion', value: 'cfd', selected: true },
-					{ type: 'option', label: 'Merge', value: 'cfm' },
-					{ type: 'option', label: 'Renaming', value: 'cfr' },
-					{ type: 'option', label: 'Split', value: 'cfs' },
-					{ type: 'option', label: 'Convert into article', value: 'cfc' }
-				] : [
-					{ type: 'option', label: 'Stub Deletion', value: 'sfd-t', selected: true },
-					{ type: 'option', label: 'Stub Renaming', value: 'sfr-t' }
-				]
-			});
-
-			work_area.append({
-				type: 'input',
-				name: 'cfdtarget',
-				label: 'Target category:', // default, changed above
-				disabled: true,
-				required: true, // only when enabled
-				value: ''
-			});
-			appendReasonBox();
-			work_area = work_area.render();
-			old_area.parentNode.replaceChild(work_area, old_area);
-			break;
-
-		case 'cfds':
-			work_area = new Morebits.quickForm.element({
-				type: 'field',
-				label: 'Categories for speedy renaming',
-				name: 'work_area'
-			});
-			work_area.append({
-				type: 'select',
-				label: 'C2 sub-criterion:',
-				name: 'xfdcat',
-				tooltip: 'See QW:CFDS for full explanations.',
-				list: [
-					{ type: 'option', label: 'C2A: Typographic and spelling fixes', value: 'C2A', selected: true },
-					{ type: 'option', label: 'C2B: Naming conventions and disambiguation', value: 'C2B' },
-					{ type: 'option', label: 'C2C: Consistency with names of similar categories', value: 'C2C' },
-					{ type: 'option', label: 'C2D: Rename to match article name', value: 'C2D' },
-					{ type: 'option', label: 'C2E: Author request', value: 'C2E' },
-					{ type: 'option', label: 'C2F: One eponymous article', value: 'C2F' }
-				]
-			});
-
-			work_area.append({
-				type: 'input',
-				name: 'cfdstarget',
-				label: 'New name:',
-				value: '',
-				required: true
-			});
-			appendReasonBox();
-			work_area = work_area.render();
-			old_area.parentNode.replaceChild(work_area, old_area);
-			break;
-
-		case 'rfd':
-			work_area = new Morebits.quickForm.element({
-				type: 'field',
-				label: 'Redirects for discussion',
-				name: 'work_area'
-			});
-
-			work_area.append({
-				type: 'checkbox',
-				list: [
-					{
-						label: 'Notify target page if possible',
-						value: 'relatedpage',
-						name: 'relatedpage',
-						tooltip: "A notification template will be placed on the talk page of this redirect's target if this is true.",
-						checked: true
-					}
-				]
-			});
-			appendReasonBox();
-			work_area = work_area.render();
-			old_area.parentNode.replaceChild(work_area, old_area);
-			break;
-
-		case 'rm':
-			work_area = new Morebits.quickForm.element({
-				type: 'field',
-				label: 'Requested moves',
-				name: 'work_area'
-			});
-			work_area.append({
-				type: 'checkbox',
-				list: [
-					{
-						label: 'Uncontroversial technical request',
-						value: 'rmtr',
-						name: 'rmtr',
-						tooltip: 'Use this option when you are unable to perform this uncontroversial move yourself because of a technical reason (e.g. a page already exists at the new title, or the page is protected)',
-						checked: false,
-						event: function() {
-							form.newname.required = this.checked;
-						},
-						subgroup: {
-							type: 'checkbox',
-							list: [
-								{
-									label: 'Opt out of discussion if the request is contested',
-									value: 'rmtr-discuss',
-									name: 'rmtr-discuss',
-									tooltip: 'Use this option if you prefer to withdraw the request if contested, rather than discuss it. This suppresses the "discuss" link, which may be used to convert your request to a discussion on the talk page.',
-									checked: false
-								}
-							]
-						}
-					}
-				]
-			});
-			work_area.append({
-				type: 'input',
-				name: 'newname',
-				label: 'New title:',
-				tooltip: 'Required for technical requests. Otherwise, if unsure of the appropriate title, you may leave it blank.'
-			});
-
-			appendReasonBox();
-			work_area = work_area.render();
-			old_area.parentNode.replaceChild(work_area, old_area);
-			break;
-
 		default:
 			work_area = new Morebits.quickForm.element({
 				type: 'field',
-				label: 'Nothing for anything',
+				label: '未定义',
 				name: 'work_area'
 			});
 			work_area = work_area.render();
@@ -731,914 +225,236 @@ Twinkle.xfd.callback.change_category = function twinklexfdCallbackChangeCategory
 			break;
 	}
 
-	// Return to checked state when switching, but no creator notification for CFDS or RM
-	form.notifycreator.disabled = value === 'cfds' || value === 'rm';
-	form.notifycreator.checked = !form.notifycreator.disabled;
+	// Return to checked state when switching
+	form.notify.checked = true;
+	form.notify.disabled = false;
 };
 
+Twinkle.xfd.callback.change_afd_category = function twinklexfdCallbackChangeAfdCategory(e) {
+	if (e.target.value === 'merge') {
+		e.target.form.mergeinto.parentElement.removeAttribute('hidden');
+		e.target.form.fwdcsdreason.parentElement.setAttribute('hidden', '');
+		e.target.form.mergeinto.previousElementSibling.innerHTML = '合并到：';
+	} else if (e.target.value === 'fwdcsd') {
+		e.target.form.mergeinto.parentElement.removeAttribute('hidden');
+		e.target.form.fwdcsdreason.parentElement.removeAttribute('hidden');
+		e.target.form.mergeinto.previousElementSibling.innerHTML = '提交人：';
+		e.target.form.xfdreason.value = decodeURIComponent($('#delete-reason').text()).replace(/\+/g, ' ');
+	} else if (e.target.value === 'fame') {
+		e.target.form.mergeinto.parentElement.setAttribute('hidden', '');
+		e.target.form.fwdcsdreason.parentElement.setAttribute('hidden', '');
+		e.target.form.xfdreason.value = Twinkle.getPref('afdFameDefaultReason');
+	} else if (e.target.value === 'substub') {
+		e.target.form.mergeinto.parentElement.setAttribute('hidden', '');
+		e.target.form.fwdcsdreason.parentElement.setAttribute('hidden', '');
+		e.target.form.xfdreason.value = Twinkle.getPref('afdSubstubDefaultReason');
+	} else {
+		e.target.form.mergeinto.parentElement.setAttribute('hidden', '');
+		e.target.form.fwdcsdreason.parentElement.setAttribute('hidden', '');
+	}
+	if (Twinkle.getPref('afdDefaultCategory') === 'same') {
+		localStorage.Twinkle_afdCategory = e.target.value;
+	}
+};
 
 Twinkle.xfd.callbacks = {
-	// Requires having the tag text (params.tagText) set ahead of time
-	autoEditRequest: function(pageobj, params) {
-		var talkName = new mw.Title(pageobj.getPageName()).getTalkPage().toText();
-		if (talkName === pageobj.getPageName()) {
-			pageobj.getStatusElement().error('Page protected and nowhere to add an edit request, aborting');
-		} else {
-			pageobj.getStatusElement().warn('Page protected, requesting edit');
-
-			var editRequest = '{{subst:Xfd edit protected|page=' + pageobj.getPageName() +
-				'|discussion=' + params.discussionpage + (params.venue === 'rfd' ? '|rfd=yes' : '') +
-				'|tag=<nowiki>' + params.tagText + '\u003C/nowiki>}}'; // U+003C: <
-
-			var talk_page = new Morebits.wiki.page(talkName, 'Automatically posting edit request on talk page');
-			talk_page.setNewSectionTitle('Edit request to complete ' + utils.toTLACase(params.venue) + ' nomination');
-			talk_page.setNewSectionText(editRequest);
-			talk_page.setCreateOption('recreate');
-			talk_page.setWatchlist(Twinkle.getPref('xfdWatchPage'));
-			talk_page.setFollowRedirect(true);  // should never be needed, but if the article is moved, we would want to follow the redirect
-			talk_page.setChangeTags(Twinkle.changeTags);
-			talk_page.setCallbackParameters(params);
-			talk_page.newSection(null, function() {
-				talk_page.getStatusElement().warn('Unable to add edit request, the talk page may be protected');
-			});
-		}
-	},
-	getDiscussionWikitext: function(venue, params) {
-		if (venue === 'cfds') { // CfD/S takes a completely different style
-			return '* [[:' + Morebits.pageNameNorm + ']] to [[:' + params.cfdstarget + ']]\u00A0\u2013 ' +
-				params.xfdcat + (params.reason ? ': ' + Morebits.string.formatReasonText(params.reason) : '.') + ' ~~~~';
-			// U+00A0 NO-BREAK SPACE; U+2013 EN RULE
-		}
-		if (venue === 'rm') {
-			// even if invoked from talk page, propose the subject page for move
-			var pageName = new mw.Title(Morebits.pageNameNorm).getSubjectPage().toText();
-			var rmtrDiscuss = params['rmtr-discuss'] ? '|discuss=no' : '';
-			var rmtr = '{{subst:RMassist|1=' + pageName + '|2=' + params.newname + rmtrDiscuss + '|reason=' + params.reason + '}}';
-			var requestedMove = '{{subst:Requested move|current1=' + pageName + '|new1=' + params.newname + '|reason=' + params.reason + '}}';
-			return params.rmtr ? rmtr : requestedMove;
-		}
-
-		var text = '{{subst:' + venue + '2';
-		var reasonKey = venue === 'ffd' ? 'Reason' : 'text';
-		// Add a reason unconditionally, so that at least a signature is added
-		text += '|' + reasonKey + '=' + Morebits.string.formatReasonText(params.reason, true);
-
-		if (venue === 'afd' || venue === 'mfd') {
-			text += '|pg=' + Morebits.pageNameNorm;
-			if (venue === 'afd') {
-				text += '|cat=' + params.xfdcat;
-			}
-		} else if (venue === 'rfd') {
-			text += '|redirect=' + Morebits.pageNameNorm;
-		} else {
-			text += '|1=' + mw.config.get('wgTitle');
-			if (mw.config.get('wgPageContentModel') === 'Scribunto') {
-				text += '|module=Module:';
-			}
-		}
-
-		if (params.rfdtarget) {
-			text += '|target=' + params.rfdtarget + (params.section ? '#' + params.section : '');
-		} else if (params.tfdtarget) {
-			text += '|2=' + params.tfdtarget;
-		} else if (params.cfdtarget) {
-			text += '|2=' + params.cfdtarget;
-			if (params.cfdtarget2) {
-				text += '|3=' + params.cfdtarget2;
-			}
-		} else if (params.uploader) {
-			text += '|Uploader=' + params.uploader;
-		}
-
-		text += '}}';
-
-		if (params.delsortCats) { // Only for AFDs
-			params.delsortCats.forEach(function (cat) {
-				text += '\n{{subst:delsort|' + cat + '|~~~~}}';
-			});
-		}
-
-		return text;
-	},
-	showPreview: function(form, venue, params) {
-		var templatetext = Twinkle.xfd.callbacks.getDiscussionWikitext(venue, params);
-		if (venue === 'rm') { // RM templates are sensitive to page title
-			form.previewer.beginRender(templatetext, params.rmtr ? 'Qiuwen:Requested moves/Technical requests' : new mw.Title(Morebits.pageNameNorm).getTalkPage().toText());
-		} else {
-			form.previewer.beginRender(templatetext, 'QW:TW'); // Force wikitext
-		}
-	},
-	preview: function(form) {
-		// venue, reason, xfdcat, tfdtarget, cfdtarget, cfdtarget2, cfdstarget, delsortCats, newname
-		var params = Morebits.quickForm.getInputData(form);
-
-		var venue = params.venue;
-
-		// Remove CfD or TfD namespace prefixes if given
-		if (params.tfdtarget) {
-			params.tfdtarget = utils.stripNs(params.tfdtarget);
-		} else if (params.cfdtarget) {
-			params.cfdtarget = utils.stripNs(params.cfdtarget);
-			if (params.cfdtarget2) {
-				params.cfdtarget2 = utils.stripNs(params.cfdtarget2);
-			}
-		} else if (params.cfdstarget) { // Add namespace if not given (CFDS)
-			params.cfdstarget = utils.addNs(params.cfdstarget, 14);
-		}
-
-		if (venue === 'ffd') {
-			// Fetch the uploader
-			var page = new Morebits.wiki.page(mw.config.get('wgPageName'));
-			page.lookupCreation(function() {
-				params.uploader = page.getCreator();
-				Twinkle.xfd.callbacks.showPreview(form, venue, params);
-			});
-		} else if (venue === 'rfd') { // Find the target
-			Twinkle.xfd.callbacks.rfd.findTarget(params, function(params) {
-				Twinkle.xfd.callbacks.showPreview(form, venue, params);
-			});
-		} else if (venue === 'cfd') { // Swap in CfD subactions
-			Twinkle.xfd.callbacks.showPreview(form, params.xfdcat, params);
-		} else {
-			Twinkle.xfd.callbacks.showPreview(form, venue, params);
-		}
-	},
-	/**
-	 * Unified handler for sending {{Xfd notice}} notifications
-	 * Also handles userspace logging
-	 * @param {object} params
-	 * @param {string} notifyTarget The user or page being notified
-	 * @param {boolean} [noLog=false] Whether to skip logging to userspace
-	 * XfD log, especially useful in cases in where multiple notifications
-	 * may be sent out (MfD, TfM, RfD)
-	 * @param {string} [actionName] Alternative description of the action
-	 * being undertaken. Required if not notifying a user talk page.
-	 */
-	notifyUser: function(params, notifyTarget, noLog, actionName) {
-		// Ensure items with User talk or no namespace prefix both end
-		// up at user talkspace as expected, but retain the
-		// prefix-less username for addToLog
-		notifyTarget = mw.Title.newFromText(notifyTarget, 3);
-		var targetNS = notifyTarget.getNamespaceId();
-		var usernameOrTarget = notifyTarget.getRelativeText(3);
-		notifyTarget = notifyTarget.toText();
-		if (targetNS === 3) {
-			// Disallow warning yourself
-			if (usernameOrTarget === mw.config.get('wgUserName')) {
-				Morebits.status.warn('You (' + usernameOrTarget + ') created this page; skipping user notification');
-
-				// if we thought we would notify someone but didn't,
-				// then jump to logging.
-				Twinkle.xfd.callbacks.addToLog(params, null);
-				return;
-			}
-			// Default is notifying the initial contributor, but MfD also
-			// notifies userspace page owner
-			actionName = actionName || 'Notifying initial contributor (' + usernameOrTarget + ')';
-		}
-
-		var notifytext = '\n{{subst:' + params.venue + ' notice';
-		// Venue-specific parameters
-		switch (params.venue) {
-			case 'afd':
-			case 'mfd':
-				notifytext += params.numbering !== '' ? '|order=&#32;' + params.numbering : '';
-				break;
-			case 'tfd':
-				if (params.xfdcat === 'tfm') {
-					notifytext = '\n{{subst:Tfm notice|2=' + params.tfdtarget;
-				}
-				break;
-			case 'cfd':
-				notifytext += '|action=' + params.action + (mw.config.get('wgNamespaceNumber') === 10 ? '|stub=yes' : '');
-				break;
-			default: // ffd, rfd
-				break;
-		}
-		notifytext += '|1=' + Morebits.pageNameNorm + '}} ~~~~';
-
-		// Link to the venue; object used here rather than repetitive items in switch
-		var venueNames = {
-			afd: 'Articles for deletion',
-			tfd: 'Templates for discussion',
-			mfd: 'Miscellany for deletion',
-			cfd: 'Categories for discussion',
-			ffd: 'Files for discussion',
-			rfd: 'Redirects for discussion'
-		};
-		var editSummary = 'Notification: [[' + params.discussionpage + '|listing]] of [[:' +
-			Morebits.pageNameNorm + ']] at [[QW:' + venueNames[params.venue] + ']].';
-
-		var usertalkpage = new Morebits.wiki.page(notifyTarget, actionName);
-		usertalkpage.setAppendText(notifytext);
-		usertalkpage.setEditSummary(editSummary);
-		usertalkpage.setChangeTags(Twinkle.changeTags);
-		usertalkpage.setCreateOption('recreate');
-		// Different pref for RfD target notifications
-		if (params.venue === 'rfd' && targetNS !== 3) {
-			usertalkpage.setWatchlist(Twinkle.getPref('xfdWatchRelated'));
-		} else {
-			usertalkpage.setWatchlist(Twinkle.getPref('xfdWatchUser'));
-		}
-		usertalkpage.setFollowRedirect(true, false);
-
-		if (noLog) {
-			usertalkpage.append();
-		} else {
-			usertalkpage.append(function onNotifySuccess() {
-				// Don't treat RfD target or MfD userspace owner as initialContrib in log
-				if (!params.notifycreator) {
-					notifyTarget = null;
-				}
-				// add this nomination to the user's userspace log
-				Twinkle.xfd.callbacks.addToLog(params, usernameOrTarget);
-			}, function onNotifyError() {
-				// if user could not be notified, log nomination without mentioning that notification was sent
-				Twinkle.xfd.callbacks.addToLog(params, null);
-			});
-		}
-	},
-	addToLog: function(params, initialContrib) {
-		if (!Twinkle.getPref('logXfdNominations') || Twinkle.getPref('noLogOnXfdNomination').indexOf(params.venue) !== -1) {
-			return;
-		}
-
-		var usl = new Morebits.userspaceLogger(Twinkle.getPref('xfdLogPageName'));// , 'Adding entry to userspace log');
-
-		usl.initialText =
-			"This is a log of all [[QW:XFD|deletion discussion]] nominations made by this user using [[QW:TW|Twinkle]]'s XfD module.\n\n" +
-			'If you no longer wish to keep this log, you can turn it off using the [[H:TW/PREF|preferences panel]], and ' +
-			'nominate this page for speedy deletion under [[QW:CSD#U1|CSD U1]].' +
-			(Morebits.userIsSysop ? '\n\nThis log does not track XfD-related deletions made using Twinkle.' : '');
-
-		var editsummary = 'Logging ' + utils.toTLACase(params.venue) + ' nomination of [[:' + Morebits.pageNameNorm + ']].';
-
-		// If a logged file is deleted but exists on commons, the wikilink will be blue, so provide a link to the log
-		var fileLogLink = mw.config.get('wgNamespaceNumber') === 6 ? ' ([{{fullurl:Special:Log|page=' + mw.util.wikiUrlencode(mw.config.get('wgPageName')) + '}} log])' : '';
-		// CFD/S and RM don't have canonical links
-		var nominatedLink = params.discussionpage ? '[[' + params.discussionpage + '|nominated]]' : 'nominated';
-
-		var appendText = '# [[:' + Morebits.pageNameNorm + ']]:' + fileLogLink + ' ' + nominatedLink + ' at [[QW:' + params.venue.toUpperCase() + '|' + utils.toTLACase(params.venue) + ']]';
-
-		switch (params.venue) {
-			case 'tfd':
-				if (params.xfdcat === 'tfm') {
-					appendText += ' (merge)';
-					if (params.tfdtarget) {
-						var contentModel = mw.config.get('wgPageContentModel') === 'Scribunto' ? 'Module:' : 'Template:';
-						appendText += '; Other ' + contentModel.toLowerCase() + ' [[';
-						if (!new RegExp('^:?' + Morebits.namespaceRegex([10, 828]) + ':', 'i').test(params.tfdtarget)) {
-							appendText += contentModel;
-						}
-						appendText += params.tfdtarget + ']]';
-					}
-				}
-				break;
-			case 'mfd':
-				if (params.notifyuserspace && params.userspaceOwner && params.userspaceOwner !== initialContrib) {
-					appendText += '; notified {{user|1=' + params.userspaceOwner + '}}';
-				}
-				break;
-			case 'cfd':
-				appendText += ' (' + utils.toTLACase(params.xfdcat) + ')';
-				if (params.cfdtarget) {
-					var categoryOrTemplate = params.xfdcat.charAt(0) === 's' ? 'Template:' : ':Category:';
-					appendText += '; ' + params.action + ' to [[' + categoryOrTemplate + params.cfdtarget + ']]';
-					if (params.xfdcat === 'cfs' && params.cfdtarget2) {
-						appendText += ', [[' + categoryOrTemplate + params.cfdtarget2 + ']]';
-					}
-				}
-				break;
-			case 'cfds':
-				appendText += ' (' + utils.toTLACase(params.xfdcat) + ')';
-				// Ensure there's more than just 'Category:'
-				if (params.cfdstarget && params.cfdstarget.length > 9) {
-					appendText += '; New name: [[:' + params.cfdstarget + ']]';
-				}
-				break;
-			case 'rfd':
-				if (params.rfdtarget) {
-					appendText += '; Target: [[:' + params.rfdtarget + ']]';
-					if (params.relatedpage) {
-						appendText += ' (notified)';
-					}
-				}
-				break;
-			case 'rm':
-				if (params.rmtr) {
-					appendText += ' (technical)';
-				}
-				if (params.newname) {
-					appendText += '; New name: [[:' + params.newname + ']]';
-				}
-				break;
-
-			default: // afd or ffd
-				break;
-		}
-
-		if (initialContrib && params.notifycreator) {
-			appendText += '; notified {{user|1=' + initialContrib + '}}';
-		}
-		appendText += ' ~~~~~';
-		if (params.reason) {
-			appendText += "\n#* '''Reason''': " + Morebits.string.formatReasonForLog(params.reason);
-		}
-
-		usl.changeTags = Twinkle.changeTags;
-		usl.log(appendText, editsummary);
-	},
-
 	afd: {
-		main: function(apiobj) {
-			var response = apiobj.getResponse();
-			var titles = response.query.allpages;
-
-			// There has been no earlier entries with this prefix, just go on.
-			if (titles.length <= 0) {
-				apiobj.params.numbering = apiobj.params.number = '';
-			} else {
-				var number = 0;
-				for (var i = 0; i < titles.length; ++i) {
-					var title = titles[i].title;
-
-					// First, simple test, is there an instance with this exact name?
-					if (title === 'Qiuwen:Articles for deletion/' + Morebits.pageNameNorm) {
-						number = Math.max(number, 1);
-						continue;
-					}
-
-					var order_re = new RegExp('^' +
-						Morebits.string.escapeRegExp('Qiuwen:Articles for deletion/' + Morebits.pageNameNorm) +
-						'\\s*\\(\\s*(\\d+)(?:(?:th|nd|rd|st) nom(?:ination)?)?\\s*\\)\\s*$');
-					var match = order_re.exec(title);
-
-					// No match; A non-good value
-					// Or the match is an unrealistically high number. Avoid false positives such as Qiuwen:Articles for deletion/The Basement (2014), by ignoring matches greater than 100
-					if (!match || match[1] > 100) {
-						continue;
-					}
-
-					// A match, set number to the max of current
-					number = Math.max(number, Number(match[1]));
-				}
-				apiobj.params.number = utils.num2order(parseInt(number, 10) + 1);
-				apiobj.params.numbering = number > 0 ? ' (' + apiobj.params.number + ' nomination)' : '';
-			}
-			apiobj.params.discussionpage = 'Qiuwen:Articles for deletion/' + Morebits.pageNameNorm + apiobj.params.numbering;
-
-			Morebits.status.info('Next discussion page', '[[' + apiobj.params.discussionpage + ']]');
-
-			// Updating data for the action completed event
-			Morebits.wiki.actionCompleted.redirect = apiobj.params.discussionpage;
-			Morebits.wiki.actionCompleted.notice = 'Nomination completed, now redirecting to the discussion page';
-
-			// Tagging article
-			var qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'), 'Adding deletion tag to article');
-			qiuwen_page.setFollowRedirect(true);  // should never be needed, but if the article is moved, we would want to follow the redirect
-			qiuwen_page.setChangeTags(Twinkle.changeTags); // Here to apply to triage
-			qiuwen_page.setCallbackParameters(apiobj.params);
-			qiuwen_page.load(Twinkle.xfd.callbacks.afd.taggingArticle);
-		},
-		// Tagging needs to happen before everything else: this means we can check if there is an AfD tag already on the page
-		taggingArticle: function(pageobj) {
-			var text = pageobj.getPageText();
+		main: function(pageobj) {
+			// this is coming in from lookupCreation...!
 			var params = pageobj.getCallbackParameters();
-			var statelem = pageobj.getStatusElement();
 
-			if (!pageobj.exists()) {
-				statelem.error("It seems that the page doesn't exist; perhaps it has already been deleted");
-				return;
-			}
-
-			// Check for existing AfD tag, for the benefit of new page patrollers
-			var textNoAfd = text.replace(/<!--.*AfD.*\n\{\{(?:Article for deletion\/dated|AfDM).*\}\}\n<!--.*(?:\n<!--.*)?AfD.*(?:\s*\n)?/g, '');
-			if (text !== textNoAfd) {
-				if (confirm('An AfD tag was found on this article. Maybe someone beat you to it.  \nClick OK to replace the current AfD tag (not recommended), or Cancel to abandon your nomination.')) {
-					text = textNoAfd;
-				} else {
-					statelem.error('Article already tagged with AfD tag, and you chose to abort');
-					window.location.reload();
-					return;
-				}
-			}
-
-			// Now we know we want to go ahead with it, trigger the other AJAX requests
-
-			// Mark the page as curated/patrolled, if wanted
-			if (Twinkle.getPref('markXfdPagesAsPatrolled')) {
-				new Morebits.wiki.page(Morebits.pageNameNorm).triage();
-			}
-
-			// Start discussion page, will also handle pagetriage and delsort listings
-			var qiuwen_page = new Morebits.wiki.page(params.discussionpage, 'Creating article deletion discussion page');
-			qiuwen_page.setCallbackParameters(params);
-			qiuwen_page.load(Twinkle.xfd.callbacks.afd.discussionPage);
-
-			// Today's list
-			var date = new Morebits.date(pageobj.getLoadTime());
-			qiuwen_page = new Morebits.wiki.page('Qiuwen:Articles for deletion/Log/' +
-				date.format('YYYY MMMM D', 'utc'), "Adding discussion to today's list");
+			// Adding discussion
+			var qiuwen_page = new Morebits.wiki.page(params.logpage, '加入讨论到当日列表');
 			qiuwen_page.setFollowRedirect(true);
 			qiuwen_page.setCallbackParameters(params);
 			qiuwen_page.load(Twinkle.xfd.callbacks.afd.todaysList);
+
 			// Notification to first contributor
-			if (params.notifycreator) {
-				var thispage = new Morebits.wiki.page(mw.config.get('wgPageName'));
-				thispage.setCallbackParameters(params);
-				thispage.setLookupNonRedirectCreator(true); // Look for author of first non-redirect revision
-				thispage.lookupCreation(function(pageobj) {
-					Twinkle.xfd.callbacks.notifyUser(pageobj.getCallbackParameters(), pageobj.getCreator());
-				});
-			// or, if not notifying, add this nomination to the user's userspace log without the initial contributor's name
-			} else {
-				Twinkle.xfd.callbacks.addToLog(params, null);
-			}
+			if (params.usertalk) {
+				var initialContrib = pageobj.getCreator();
 
-			params.tagText = (params.noinclude ? '<noinclude>{{' : '{{') + (params.number === '' ? 'subst:afd|help=off' : 'subst:afdx|' +
-					params.number + '|help=off') + (params.noinclude ? '}}</noinclude>\n' : '}}\n');
-
-			if (pageobj.canEdit()) {
-				// Test if there are speedy deletion-related templates on the article.
-				var textNoSd = text.replace(/\{\{\s*(db(-\w*)?|delete|(?:hang|hold)[- ]?on)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/ig, '');
-				if (text !== textNoSd && confirm('A speedy deletion tag was found on this page. Should it be removed?')) {
-					text = textNoSd;
-				}
-
-				// Insert tag after short description or any hatnotes
-				var wikipage = new Morebits.wikitext.page(text);
-				text = wikipage.insertAfterTemplates(params.tagText, Twinkle.hatnoteRegex).getText();
-
-				pageobj.setPageText(text);
-				pageobj.setEditSummary('Nominated for deletion; see [[:' + params.discussionpage + ']].');
-				pageobj.setWatchlist(Twinkle.getPref('xfdWatchPage'));
-				pageobj.setCreateOption('nocreate');
-				pageobj.save();
-			} else {
-				Twinkle.xfd.callbacks.autoEditRequest(pageobj, params);
-			}
-		},
-		discussionPage: function(pageobj) {
-			var params = pageobj.getCallbackParameters();
-
-			pageobj.setPageText(Twinkle.xfd.callbacks.getDiscussionWikitext('afd', params));
-			pageobj.setEditSummary('Creating deletion discussion page for [[:' + Morebits.pageNameNorm + ']].');
-			pageobj.setChangeTags(Twinkle.changeTags);
-			pageobj.setWatchlist(Twinkle.getPref('xfdWatchDiscussion'));
-			pageobj.setCreateOption('createonly');
-			pageobj.save(function() {
-				Twinkle.xfd.currentRationale = null;  // any errors from now on do not need to print the rationale, as it is safely saved on-wiki
-
-				// Actions that should wait on the discussion page actually being created
-				// and whose errors shouldn't output the user rationale
-				// List at deletion sorting pages
-				if (params.delsortCats) {
-					params.delsortCats.forEach(function (cat) {
-						var delsortPage = new Morebits.wiki.page('Qiuwen:WikiProject Deletion sorting/' + cat, 'Adding to list of ' + cat + '-related deletion discussions');
-						delsortPage.setFollowRedirect(true); // In case a category gets renamed
-						delsortPage.setCallbackParameters({discussionPage: params.discussionpage});
-						delsortPage.load(Twinkle.xfd.callbacks.afd.delsortListing);
-					});
-				}
-			});
-		},
-		todaysList: function(pageobj) {
-			var params = pageobj.getCallbackParameters();
-			var statelem = pageobj.getStatusElement();
-
-			var added_data = '{{subst:afd3|pg=' + Morebits.pageNameNorm + params.numbering + '}}\n';
-			var text;
-
-			// add date header if the log is found to be empty (a bot should do this automatically)
-			if (!pageobj.exists()) {
-				text = '{{subst:AfD log}}\n' + added_data;
-			} else {
-				var old_text = pageobj.getPageText() + '\n';  // MW strips trailing blanks, but we like them, so we add a fake one
-
-				text = old_text.replace(/(<!-- Add new entries to the TOP of the following list -->\n+)/, '$1' + added_data);
-				if (text === old_text) {
-					var linknode = document.createElement('a');
-					linknode.setAttribute('href', mw.util.getUrl('Qiuwen:Twinkle/Fixing AFD') + '?action=purge');
-					linknode.appendChild(document.createTextNode('How to fix AFD'));
-					statelem.error([ 'Could not find the target spot for the discussion. To fix this problem, please see ', linknode, '.' ]);
-					return;
-				}
-			}
-
-			pageobj.setPageText(text);
-			pageobj.setEditSummary('Adding [[:' + params.discussionpage + ']].');
-			pageobj.setChangeTags(Twinkle.changeTags);
-			pageobj.setWatchlist(Twinkle.getPref('xfdWatchList'));
-			pageobj.setCreateOption('recreate');
-			pageobj.save();
-		},
-		delsortListing: function(pageobj) {
-			var discussionPage = pageobj.getCallbackParameters().discussionPage;
-			var text = pageobj.getPageText().replace('directly below this line -->', 'directly below this line -->\n{{' + discussionPage + '}}');
-			pageobj.setPageText(text);
-			pageobj.setEditSummary('Listing [[:' + discussionPage + ']].');
-			pageobj.setChangeTags(Twinkle.changeTags);
-			pageobj.setCreateOption('nocreate');
-			pageobj.save();
-		}
-	},
-
-
-	tfd: {
-		main: function(pageobj) {
-			var params = pageobj.getCallbackParameters();
-
-			var date = new Morebits.date(pageobj.getLoadTime());
-			params.logpage = 'Qiuwen:Templates for discussion/Log/' + date.format('YYYY MMMM D', 'utc'),
-			params.discussionpage = params.logpage + '#' + Morebits.pageNameNorm;
-			// Add log/discussion page params to the already-loaded page object
-			pageobj.setCallbackParameters(params);
-
-			// Defined here rather than below to reduce duplication
-			var watchModule, watch_query;
-			if (params.scribunto) {
-				var watchPref = Twinkle.getPref('xfdWatchPage');
-				// action=watch has no way to rely on user
-				// preferences (T262912), so we do it manually.
-				// The watchdefault pref appears to reliably return '1' (string),
-				// but that's not consistent among prefs so might as well be "correct"
-				watchModule = watchPref !== 'no' && (watchPref !== 'default' || !!parseInt(mw.user.options.get('watchdefault'), 10));
-				if (watchModule) {
-					watch_query = {
-						action: 'watch',
-						titles: [ mw.config.get('wgPageName') ],
-						token: mw.user.tokens.get('watchToken')
-					};
-					// Only add the expiry if page is unwatched or already temporarily watched
-					if (pageobj.getWatched() !== true && watchPref !== 'default' && watchPref !== 'yes') {
-						watch_query.expiry = watchPref;
-					}
-				}
-			}
-
-			// Tagging template(s)/module(s)
-			if (params.xfdcat === 'tfm') { // Merge
-				var qiuwen_otherpage;
-				if (params.scribunto) {
-					qiuwen_otherpage = new Morebits.wiki.page(params.otherTemplateName + '/doc', 'Tagging other module documentation with merge tag');
-
-					// Watch tagged module pages as well
-					if (watchModule) {
-						watch_query.titles.push(params.otherTemplateName);
-						new Morebits.wiki.api('Adding Modules to watchlist', watch_query).post();
-					}
+				// Disallow warning yourself
+				if (initialContrib === mw.config.get('wgUserName')) {
+					pageobj.getStatusElement().warn('您（' + initialContrib + '）创建了该页，跳过通知');
+					initialContrib = null;
 				} else {
-					qiuwen_otherpage = new Morebits.wiki.page(params.otherTemplateName, 'Tagging other template with merge tag');
-				}
-				// Tag this template/module
-				Twinkle.xfd.callbacks.tfd.taggingTemplateForMerge(pageobj);
-
-				// Tag other template/module
-				qiuwen_otherpage.setFollowRedirect(true);
-				var otherParams = $.extend({}, params);
-				otherParams.otherTemplateName = Morebits.pageNameNorm;
-				qiuwen_otherpage.setCallbackParameters(otherParams);
-				qiuwen_otherpage.load(Twinkle.xfd.callbacks.tfd.taggingTemplateForMerge);
-			} else { // delete
-				if (params.scribunto && Twinkle.getPref('xfdWatchPage') !== 'no') {
-					// Watch tagged module page as well
-					if (watchModule) {
-						new Morebits.wiki.api('Adding Module to watchlist', watch_query).post();
-					}
-				}
-				Twinkle.xfd.callbacks.tfd.taggingTemplate(pageobj);
-			}
-
-
-			// Updating data for the action completed event
-			Morebits.wiki.actionCompleted.redirect = params.logpage;
-			Morebits.wiki.actionCompleted.notice = "Nomination completed, now redirecting to today's log";
-
-			// Adding discussion
-			var qiuwen_page = new Morebits.wiki.page(params.logpage, "Adding discussion to today's log");
-			qiuwen_page.setFollowRedirect(true);
-			qiuwen_page.setCallbackParameters(params);
-			qiuwen_page.load(Twinkle.xfd.callbacks.tfd.todaysList);
-
-			// Notification to first contributors
-			if (params.notifycreator) {
-				var involvedpages = [];
-				var seenusers = [];
-				involvedpages.push(new Morebits.wiki.page(mw.config.get('wgPageName')));
-				if (params.xfdcat === 'tfm') {
-					if (params.scribunto) {
-						involvedpages.push(new Morebits.wiki.page('Module:' + params.tfdtarget));
-					} else {
-						involvedpages.push(new Morebits.wiki.page('Template:' + params.tfdtarget));
-					}
-				}
-				involvedpages.forEach(function(page) {
-					page.setCallbackParameters(params);
-					page.lookupCreation(function(innerpage) {
-						var username = innerpage.getCreator();
-						if (seenusers.indexOf(username) === -1) {
-							seenusers.push(username);
-							// Only log once on merge nominations, for the initial template
-							Twinkle.xfd.callbacks.notifyUser(innerpage.getCallbackParameters(), username,
-								params.xfdcat === 'tfm' && innerpage.getPageName() !== Morebits.pageNameNorm);
-						}
+					var talkPageName = 'User talk:' + initialContrib;
+					Morebits.wiki.flow.check(talkPageName, function () {
+						var flowpage = new Morebits.wiki.flow(talkPageName, '通知页面创建者（' + initialContrib + '）');
+						flowpage.setTopic('页面[[:' + Morebits.pageNameNorm + ']]存废讨论通知');
+						flowpage.setContent('{{subst:AFDNote|' + Morebits.pageNameNorm + '|flow=yes}}');
+						flowpage.newTopic();
+					}, function () {
+						var usertalkpage = new Morebits.wiki.page(talkPageName, '通知页面创建者（' + initialContrib + '）');
+						var notifytext = '\n{{subst:AFDNote|' + Morebits.pageNameNorm + '}}--~~~~';
+						usertalkpage.setAppendText(notifytext);
+						usertalkpage.setEditSummary('通知：页面[[' + Morebits.pageNameNorm + ']]存废讨论提名');
+						usertalkpage.setChangeTags(Twinkle.changeTags);
+						usertalkpage.setCreateOption('recreate');
+						usertalkpage.setWatchlist(Twinkle.getPref('xfdWatchUser'));
+						usertalkpage.setFollowRedirect(true, false);
+						usertalkpage.append();
 					});
-				});
-			// or, if not notifying, add this nomination to the user's userspace log without the initial contributor's name
-			} else {
-				Twinkle.xfd.callbacks.addToLog(params, null);
-			}
-
-			// Notify developer(s) of script(s) that use(s) the nominated template
-			if (params.devpages) {
-				var inCategories = mw.config.get('wgCategories');
-				var categoryNotificationPageMap = {
-					'Templates used by Twinkle': 'Wikipedia talk:Twinkle',
-					'Templates used by AutoWikiBrowser': 'Wikipedia talk:AutoWikiBrowser',
-					'Templates used by RedWarn': 'Wikipedia talk:RedWarn'
-				};
-				$.each(categoryNotificationPageMap, function(category, page) {
-					if (inCategories.indexOf(category) !== -1) {
-						Twinkle.xfd.callbacks.notifyUser(params, page, true, 'Notifying ' + page + ' of template nomination');
-					}
-				});
-			}
-
-		},
-		taggingTemplate: function(pageobj) {
-			var text = pageobj.getPageText();
-			var params = pageobj.getCallbackParameters();
-
-			params.tagText = '{{subst:template for discussion|help=off' + (params.templatetype !== 'standard' ? '|type=' + params.templatetype : '') + '}}';
-
-			if (pageobj.getContentModel() === 'sanitized-css') {
-				params.tagText = '/* ' + params.tagText + ' */';
-			} else {
-				if (params.noinclude) {
-					params.tagText = '<noinclude>' + params.tagText + '</noinclude>';
 				}
-				params.tagText += params.templatetype === 'standard' || params.templatetype === 'sidebar' || params.templatetype === 'disabled' ? '\n' : ''; // No newline for inline
-			}
-
-			if (pageobj.canEdit() && ['wikitext', 'sanitized-css'].indexOf(pageobj.getContentModel()) !== -1) {
-				pageobj.setPageText(params.tagText + text);
-				pageobj.setEditSummary('Nominated for deletion; see [[:' + params.discussionpage + ']].');
-				pageobj.setChangeTags(Twinkle.changeTags);
-				pageobj.setWatchlist(Twinkle.getPref('xfdWatchPage'));
-				if (params.scribunto) {
-					pageobj.setCreateOption('recreate'); // Module /doc might not exist
-				}
-				pageobj.save();
-			} else {
-				Twinkle.xfd.callbacks.autoEditRequest(pageobj, params);
-			}
-		},
-		taggingTemplateForMerge: function(pageobj) {
-			var text = pageobj.getPageText();
-			var params = pageobj.getCallbackParameters();
-
-			params.tagText = '{{subst:tfm|help=off|' + (params.templatetype !== 'standard' ? 'type=' + params.templatetype + '|' : '') +
-				'1=' + params.otherTemplateName.replace(new RegExp('^' + Morebits.namespaceRegex([10, 828]) + ':'), '') + '}}';
-
-			if (pageobj.getContentModel() === 'sanitized-css') {
-				params.tagText = '/* ' + params.tagText + ' */';
-			} else {
-				if (params.noinclude) {
-					params.tagText = '<noinclude>' + params.tagText + '</noinclude>';
-				}
-				params.tagText += params.templatetype === 'standard' || params.templatetype === 'sidebar' || params.templatetype === 'disabled' ? '\n' : ''; // No newline for inline
-			}
-
-			if (pageobj.canEdit() && ['wikitext', 'sanitized-css'].indexOf(pageobj.getContentModel()) !== -1) {
-				pageobj.setPageText(params.tagText + text);
-				pageobj.setEditSummary('Listed for merging with [[:' + params.otherTemplateName + ']]; see [[:' + params.discussionpage + ']].');
-				pageobj.setChangeTags(Twinkle.changeTags);
-				pageobj.setWatchlist(Twinkle.getPref('xfdWatchPage'));
-				if (params.scribunto) {
-					pageobj.setCreateOption('recreate'); // Module /doc might not exist
-				}
-				pageobj.save();
-			} else {
-				Twinkle.xfd.callbacks.autoEditRequest(pageobj, params);
-			}
-		},
-		todaysList: function(pageobj) {
-			var params = pageobj.getCallbackParameters();
-			var added_data = Twinkle.xfd.callbacks.getDiscussionWikitext(params.xfdcat, params);
-			var text;
-
-			// add date header if the log is found to be empty (a bot should do this automatically)
-			if (!pageobj.exists()) {
-				text = '{{subst:TfD log}}\n' + added_data;
-			} else {
-				var old_text = pageobj.getPageText();
-				text = old_text + '\n\n' + added_data;
-			}
-
-			pageobj.setPageText(text);
-			pageobj.setEditSummary('Adding ' + (params.xfdcat === 'tfd' ? 'deletion nomination' : 'merge listing') + ' of [[:' + Morebits.pageNameNorm + ']].');
-			pageobj.setChangeTags(Twinkle.changeTags);
-			pageobj.setWatchlist(Twinkle.getPref('xfdWatchDiscussion'));
-			pageobj.setCreateOption('recreate');
-			pageobj.save(function() {
-				Twinkle.xfd.currentRationale = null;  // any errors from now on do not need to print the rationale, as it is safely saved on-wiki
-			});
-		}
-	},
-
-
-	mfd: {
-		main: function(apiobj) {
-			var response = apiobj.getResponse();
-			var titles = response.query.allpages;
-
-			// There has been no earlier entries with this prefix, just go on.
-			if (titles.length <= 0) {
-				apiobj.params.numbering = apiobj.params.number = '';
-			} else {
-				var number = 0;
-				for (var i = 0; i < titles.length; ++i) {
-					var title = titles[i].title;
-
-					// First, simple test, is there an instance with this exact name?
-					if (title === 'Qiuwen:Miscellany for deletion/' + Morebits.pageNameNorm) {
-						number = Math.max(number, 1);
-						continue;
-					}
-
-					var order_re = new RegExp('^' +
-							Morebits.string.escapeRegExp('Qiuwen:Miscellany for deletion/' + Morebits.pageNameNorm) +
-							'\\s*\\(\\s*(\\d+)(?:(?:th|nd|rd|st) nom(?:ination)?)?\\s*\\)\\s*$');
-					var match = order_re.exec(title);
-
-					// No match; A non-good value
-					if (!match) {
-						continue;
-					}
-
-					// A match, set number to the max of current
-					number = Math.max(number, Number(match[1]));
-				}
-				apiobj.params.number = utils.num2order(parseInt(number, 10) + 1);
-				apiobj.params.numbering = number > 0 ? ' (' + apiobj.params.number + ' nomination)' : '';
-			}
-			apiobj.params.discussionpage = 'Qiuwen:Miscellany for deletion/' + Morebits.pageNameNorm + apiobj.params.numbering;
-
-			apiobj.statelem.info('next in order is [[' + apiobj.params.discussionpage + ']]');
-
-			// Tagging page
-			var qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'), 'Tagging page with deletion tag');
-			qiuwen_page.setFollowRedirect(true);  // should never be needed, but if the page is moved, we would want to follow the redirect
-			qiuwen_page.setCallbackParameters(apiobj.params);
-			qiuwen_page.load(Twinkle.xfd.callbacks.mfd.taggingPage);
-
-			// Updating data for the action completed event
-			Morebits.wiki.actionCompleted.redirect = apiobj.params.discussionpage;
-			Morebits.wiki.actionCompleted.notice = 'Nomination completed, now redirecting to the discussion page';
-
-			// Discussion page
-			qiuwen_page = new Morebits.wiki.page(apiobj.params.discussionpage, 'Creating deletion discussion page');
-			qiuwen_page.setCallbackParameters(apiobj.params);
-			qiuwen_page.load(Twinkle.xfd.callbacks.mfd.discussionPage);
-
-			// Today's list
-			qiuwen_page = new Morebits.wiki.page('Qiuwen:Miscellany for deletion', "Adding discussion to today's list");
-			qiuwen_page.setPageSection(2);
-			qiuwen_page.setFollowRedirect(true);
-			qiuwen_page.setCallbackParameters(apiobj.params);
-			qiuwen_page.load(Twinkle.xfd.callbacks.mfd.todaysList);
-
-			// Notification to first contributor and/or notification to owner of userspace
-			if (apiobj.params.notifycreator || apiobj.params.notifyuserspace) {
-				var thispage = new Morebits.wiki.page(mw.config.get('wgPageName'));
-				thispage.setCallbackParameters(apiobj.params);
-				thispage.lookupCreation(Twinkle.xfd.callbacks.mfd.sendNotifications);
-			// or, if not notifying, add this nomination to the user's userspace log without the initial contributor's name
-			} else {
-				Twinkle.xfd.callbacks.addToLog(apiobj.params, null);
-			}
-		},
-		taggingPage: function(pageobj) {
-			var text = pageobj.getPageText();
-			var params = pageobj.getCallbackParameters();
-
-			params.tagText = '{{' + (params.number === '' ? 'mfd' : 'mfdx|' + params.number) + '|help=off}}';
-
-			if (['javascript', 'css', 'sanitized-css'].indexOf(mw.config.get('wgPageContentModel')) !== -1) {
-				params.tagText = '/* ' + params.tagText + ' */\n';
-			} else {
-				params.tagText += '\n';
-				if (params.noinclude) {
-					params.tagText = '<noinclude>' + params.tagText + '</noinclude>';
-				}
-			}
-
-			if (pageobj.canEdit() && ['wikitext', 'javascript', 'css', 'sanitized-css'].indexOf(pageobj.getContentModel()) !== -1) {
-				pageobj.setPageText(params.tagText + text);
-				pageobj.setEditSummary('Nominated for deletion; see [[:' + params.discussionpage + ']].');
-				pageobj.setChangeTags(Twinkle.changeTags);
-				pageobj.setWatchlist(Twinkle.getPref('xfdWatchPage'));
-				pageobj.setCreateOption('nocreate');
-				pageobj.save();
-			} else {
-				Twinkle.xfd.callbacks.autoEditRequest(pageobj, params);
-			}
-		},
-		discussionPage: function(pageobj) {
-			var params = pageobj.getCallbackParameters();
-
-			pageobj.setPageText(Twinkle.xfd.callbacks.getDiscussionWikitext('mfd', params));
-			pageobj.setEditSummary('Creating deletion discussion page for [[:' + Morebits.pageNameNorm + ']].');
-			pageobj.setChangeTags(Twinkle.changeTags);
-			pageobj.setWatchlist(Twinkle.getPref('xfdWatchDiscussion'));
-			pageobj.setCreateOption('createonly');
-			pageobj.save(function() {
-				Twinkle.xfd.currentRationale = null;  // any errors from now on do not need to print the rationale, as it is safely saved on-wiki
-			});
-		},
-		todaysList: function(pageobj) {
-			var text = pageobj.getPageText();
-			var params = pageobj.getCallbackParameters();
-			var statelem = pageobj.getStatusElement();
-
-			var date = new Morebits.date(pageobj.getLoadTime());
-			var date_header = date.format('===MMMM D, YYYY===\n', 'utc');
-			var date_header_regex = new RegExp(date.format('(===[\\s]*MMMM[\\s]+D,[\\s]+YYYY[\\s]*===)', 'utc'));
-			var added_data = '{{subst:mfd3|pg=' + Morebits.pageNameNorm + params.numbering + '}}';
-
-			if (date_header_regex.test(text)) { // we have a section already
-				statelem.info('Found today\'s section, proceeding to add new entry');
-				text = text.replace(date_header_regex, '$1\n' + added_data);
-			} else { // we need to create a new section
-				statelem.info('No section for today found, proceeding to create one');
-				text = text.replace('===', date_header + added_data + '\n\n===');
-			}
-
-			pageobj.setPageText(text);
-			pageobj.setEditSummary('Adding [[:' + params.discussionpage + ']].');
-			pageobj.setChangeTags(Twinkle.changeTags);
-			pageobj.setWatchlist(Twinkle.getPref('xfdWatchList'));
-			pageobj.setCreateOption('recreate');
-			pageobj.save();
-		},
-		sendNotifications: function(pageobj) {
-			var initialContrib = pageobj.getCreator();
-			var params = pageobj.getCallbackParameters();
-
-			// Notify the creator
-			if (params.notifycreator) {
-				Twinkle.xfd.callbacks.notifyUser(params, initialContrib);
-			}
-
-			// Notify the user who owns the subpage if they are not the creator
-			params.userspaceOwner = mw.config.get('wgRelevantUserName');
-			if (params.notifyuserspace) {
-				if (params.userspaceOwner !== initialContrib) {
-					// Don't log if notifying creator above, will log then
-					Twinkle.xfd.callbacks.notifyUser(params, params.userspaceOwner, params.notifycreator, 'Notifying owner of userspace (' + params.userspaceOwner + ')');
-				} else if (!params.notifycreator) {
-					// If we thought we would notify the owner but didn't,
-					// then we need to log if we didn't notify the creator
-					// Twinkle.xfd.callbacks.addToLog(params, null);
+				// add this nomination to the user's userspace log, if the user has enabled it
+				if (params.lognomination) {
 					Twinkle.xfd.callbacks.addToLog(params, initialContrib);
 				}
+
+			// or, if not notifying, add this nomination to the user's userspace log without the initial contributor's name
+			} else if (params.lognomination) {
+				Twinkle.xfd.callbacks.addToLog(params, null);
 			}
-		}
-	},
 
-
-	ffd: {
-		taggingImage: function(pageobj) {
+		},
+		taggingArticle: function(pageobj) {
 			var text = pageobj.getPageText();
 			var params = pageobj.getCallbackParameters();
 
-			var date = new Morebits.date(pageobj.getLoadTime()).format('YYYY MMMM D', 'utc');
-			params.logpage = 'Qiuwen:Files for discussion/' + date;
-			params.discussionpage = params.logpage + '#' + Morebits.pageNameNorm;
+			var tag = '{{vfd|' + Morebits.string.formatReasonText(params.reason);
 
-			params.tagText = '{{ffd|log=' + date + '|help=off}}\n';
-			if (pageobj.canEdit()) {
-				text = text.replace(/\{\{(mtc|(copy |move )?to ?commons|move to wikimedia commons|copy to wikimedia commons)[^}]*\}\}/gi, '');
+			if (Morebits.isPageRedirect()) {
+				tag += '|r';
+			}
+			tag += '|date={{subst:#time:Y/m/d}}}}';
+			if (params.noinclude) {
+				tag = '<noinclude>' + tag + '</noinclude>';
 
-				pageobj.setPageText(params.tagText + text);
-				pageobj.setEditSummary('Listed for discussion at [[:' + params.discussionpage + ']].');
-				pageobj.setChangeTags(Twinkle.changeTags);
-				pageobj.setWatchlist(Twinkle.getPref('xfdWatchPage'));
-				pageobj.setCreateOption('recreate');  // it might be possible for a file to exist without a description page
-				pageobj.save();
+				// 只有表格需要单独加回车，其他情况加回车会破坏模板。
+				if (text.indexOf('{|') === 0) {
+					tag += '\n';
+				}
 			} else {
-				Twinkle.xfd.callbacks.autoEditRequest(pageobj, params);
+				tag += '\n';
 			}
 
-			// Updating data for the action completed event
-			Morebits.wiki.actionCompleted.redirect = params.logpage;
-			Morebits.wiki.actionCompleted.notice = 'Nomination completed, now redirecting to the discussion page';
+			// Then, test if there are speedy deletion-related templates on the article.
+			var textNoSd = text.replace(/\{\{\s*(db(-\w*)?|d|delete|(?:hang|hold)[- ]?on)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/ig, '');
+			if (text !== textNoSd && confirm('在页面上找到快速删除模板，要移除吗？')) {
+				text = textNoSd;
+			}
 
-			// Contributor specific edits
-			var qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'));
-			qiuwen_page.setCallbackParameters(params);
-			qiuwen_page.lookupCreation(Twinkle.xfd.callbacks.ffd.main);
+			var textNoNotMandarin = text.replace(/\{\{\s*(NotMandarin|Notchinese|非中文|非現代漢語|非现代汉语|非現代標準漢語|非现代标准汉语)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/ig, '');
+			if (text !== textNoNotMandarin && confirm('在页面上找到非现代标准汉语模板，要移除吗？')) {
+				text = textNoNotMandarin;
+			}
+
+			// Mark the page as patrolled, if wanted
+			if (Twinkle.getPref('markXfdPagesAsPatrolled')) {
+				pageobj.patrol();
+			}
+
+			// Insert tag after short description or any hatnotes
+			var wikipage = new Morebits.wikitext.page(text);
+			text = wikipage.insertAfterTemplates(tag, Twinkle.hatnoteRegex).getText();
+
+			pageobj.setPageText(text);
+			pageobj.setEditSummary('页面存废讨论：[[' + params.logpage + '#' + Morebits.pageNameNorm + ']]');
+			pageobj.setChangeTags(Twinkle.changeTags);
+			pageobj.setWatchlist(Twinkle.getPref('xfdWatchPage'));
+			pageobj.save();
 		},
+		todaysList: function(pageobj) {
+			var text = pageobj.getPageText();
+			var params = pageobj.getCallbackParameters();
+			var type = '';
+			var to = '';
+
+			switch (params.xfdcat) {
+				case 'fwdcsd':
+				case 'merge':
+					to = params.mergeinto;
+					/* Fall through */
+				default:
+					type = params.xfdcat;
+					break;
+			}
+
+			var append = true;
+			switch (type) {
+				case 'fame':
+				case 'substub':
+				case 'batch':
+					var commentText = '<!-- Twinkle: User:' + mw.config.get('wgUserName') + ' 的 ' + type + ' 提刪插入點，請勿變更或移除此行，除非不再於此頁提刪 -->';
+					var newText = '===[[:' + Morebits.pageNameNorm + ']]===';
+					if (type === 'fame') {
+						newText += '\n{{Findsources|' + Morebits.pageNameNorm + '}}';
+					}
+					if (text.indexOf(commentText) !== -1) {
+						text = text.replace(commentText, newText + '\n\n' + commentText);
+						pageobj.setPageText(text);
+						append = false;
+					} else {
+						var appendText = '\n{{safesubst:SafeAfdHead}}\n' +
+							{
+								fame: '==30天后仍掛有{{tl|notability}}模板的條目==\n' +
+									'<span style="font-size:smaller;">(已掛[[template:notability|關注度模板]]30天)</span>',
+								substub: '==到期篩選的小小作品==',
+								batch: '==批量提刪=='
+							}[type] + '\n' +
+							newText + '\n\n' +
+							commentText + '\n' +
+							'----\n' +
+							':{{删除}}理據：' + Morebits.string.formatReasonText(params.reason) + '\n' +
+							'提报以上' + {
+							fame: '<u>关注度不足</u>条目',
+							substub: '<u>小小作品</u>',
+							batch: '頁面'
+						}[type] + '的維基人及時間：<br id="no-new-title" />~~~~';
+						pageobj.setAppendText(appendText);
+					}
+					break;
+				default:
+					pageobj.setAppendText('\n{{subst:DRItem|Type=' + type + '|DRarticles=' + Morebits.pageNameNorm + '|Reason=' + Morebits.string.formatReasonText(params.reason) + (params.fwdcsdreason.trim() !== '' ? '<br>\n轉交理由：' + params.fwdcsdreason : '') + '|To=' + to + '}}~~~~');
+					break;
+			}
+
+			pageobj.setEditSummary('加入[[' + Morebits.pageNameNorm + ']]');
+			pageobj.setChangeTags(Twinkle.changeTags);
+			pageobj.setWatchlist(Twinkle.getPref('xfdWatchDiscussion'));
+			pageobj.setCreateOption('recreate');
+			if (append) {
+				pageobj.append();
+			} else {
+				pageobj.save();
+			}
+			Twinkle.xfd.currentRationale = null;  // any errors from now on do not need to print the rationale, as it is safely saved on-wiki
+		},
+		tryTagging: function (pageobj) {
+			var statelem = pageobj.getStatusElement();
+			// defaults to /doc for lua modules, which may not exist
+			if (!pageobj.exists() && mw.config.get('wgPageContentModel') !== 'Scribunto') {
+				statelem.error('页面不存在，可能已被删除');
+				return;
+			}
+
+			var text = pageobj.getPageText();
+
+			var xfd = /(?:\{\{([rsaiftcmv]fd|md1|proposed deletion)[^{}]*?\}\})/i.exec(text);
+			if (xfd && !confirm('删除相关模板{{' + xfd[1] + '}}已被置于页面中，您是否仍想继续提报？')) {
+				statelem.error('页面已被提交至存废讨论。');
+				return;
+			}
+
+			var copyvio = /(?:\{\{\s*(copyvio)[^{}]*?\}\})/i.exec(text);
+			if (copyvio) {
+				statelem.error('页面中已有著作权验证模板。');
+				return;
+			}
+
+			Twinkle.xfd.callbacks.afd.taggingArticle(pageobj);
+
+			// Notification to first contributor
+			var qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'));
+			qiuwen_page.setCallbackParameters(pageobj.getCallbackParameters());
+			if (mw.config.get('wgPageContentModel') === 'wikitext') {
+				qiuwen_page.setLookupNonRedirectCreator(true); // Look for author of first non-redirect revision
+			}
+			qiuwen_page.lookupCreation(Twinkle.xfd.callbacks.afd.main);
+		}
+	},
+
+	ffd: {
 		main: function(pageobj) {
 			// this is coming in from lookupCreation...!
 			var params = pageobj.getCallbackParameters();
@@ -1646,557 +462,229 @@ Twinkle.xfd.callbacks = {
 			params.uploader = initialContrib;
 
 			// Adding discussion
-			var qiuwen_page = new Morebits.wiki.page(params.logpage, "Adding discussion to today's list");
+			var qiuwen_page = new Morebits.wiki.page(params.logpage, '加入讨论到当日列表');
 			qiuwen_page.setFollowRedirect(true);
 			qiuwen_page.setCallbackParameters(params);
 			qiuwen_page.load(Twinkle.xfd.callbacks.ffd.todaysList);
 
 			// Notification to first contributor
-			if (params.notifycreator) {
-				Twinkle.xfd.callbacks.notifyUser(params, initialContrib);
-			// or, if not notifying, add this nomination to the user's userspace log without the initial contributor's name
-			} else {
-				Twinkle.xfd.callbacks.addToLog(params, null);
-			}
-		},
-		todaysList: function(pageobj) {
-			var text = pageobj.getPageText();
-			var params = pageobj.getCallbackParameters();
+			if (params.usertalk) {
+				// Disallow warning yourself
+				if (initialContrib === mw.config.get('wgUserName')) {
+					pageobj.getStatusElement().warn('您（' + initialContrib + '）创建了该页，跳过通知');
+					return;
+				}
 
-			// add date header if the log is found to be empty (a bot should do this automatically)
-			if (!pageobj.exists()) {
-				text = '{{subst:FfD log}}';
-			}
+				var talkPageName = 'User talk:' + initialContrib;
 
-			pageobj.setPageText(text + '\n\n' + Twinkle.xfd.callbacks.getDiscussionWikitext('ffd', params));
-			pageobj.setEditSummary('Adding [[:' + Morebits.pageNameNorm + ']].');
-			pageobj.setChangeTags(Twinkle.changeTags);
-			pageobj.setWatchlist(Twinkle.getPref('xfdWatchDiscussion'));
-			pageobj.setCreateOption('recreate');
-			pageobj.save(function() {
-				Twinkle.xfd.currentRationale = null;  // any errors from now on do not need to print the rationale, as it is safely saved on-wiki
-			});
-		}
-	},
-
-
-	cfd: {
-		main: function(pageobj) {
-			var params = pageobj.getCallbackParameters();
-
-			var date = new Morebits.date(pageobj.getLoadTime());
-			params.logpage = 'Qiuwen:Categories for discussion/Log/' + date.format('YYYY MMMM D', 'utc');
-			params.discussionpage = params.logpage + '#' + Morebits.pageNameNorm;
-			// Add log/discussion page params to the already-loaded page object
-			pageobj.setCallbackParameters(params);
-
-			// Tagging category
-			Twinkle.xfd.callbacks.cfd.taggingCategory(pageobj);
-
-			// Updating data for the action completed event
-			Morebits.wiki.actionCompleted.redirect = params.logpage;
-			Morebits.wiki.actionCompleted.notice = "Nomination completed, now redirecting to today's log";
-
-			// Adding discussion to list
-			var qiuwen_page = new Morebits.wiki.page(params.logpage, "Adding discussion to today's list");
-			qiuwen_page.setFollowRedirect(true);
-			qiuwen_page.setCallbackParameters(params);
-			qiuwen_page.load(Twinkle.xfd.callbacks.cfd.todaysList);
-
-			// Notification to first contributor
-			if (params.notifycreator) {
-				qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'));
-				qiuwen_page.setCallbackParameters(params);
-				qiuwen_page.lookupCreation(function(pageobj) {
-					Twinkle.xfd.callbacks.notifyUser(pageobj.getCallbackParameters(), pageobj.getCreator());
+				Morebits.wiki.flow.check(talkPageName, function () {
+					var flowpage = new Morebits.wiki.flow(talkPageName, '通知页面创建者（' + initialContrib + '）');
+					flowpage.setTopic('文件[[:File:' + mw.config.get('wgTitle') + ']]存废讨论通知');
+					flowpage.setContent('{{subst:idw|File:' + mw.config.get('wgTitle') + '|flow=yes}}');
+					flowpage.newTopic();
+				}, function () {
+					var usertalkpage = new Morebits.wiki.page(talkPageName, '通知页面创建者（' + initialContrib + '）');
+					var notifytext = '\n{{subst:idw|File:' + mw.config.get('wgTitle') + '}}--~~~~';
+					usertalkpage.setAppendText(notifytext);
+					usertalkpage.setEditSummary('通知：文件[[' + Morebits.pageNameNorm + ']]存废讨论提名');
+					usertalkpage.setChangeTags(Twinkle.changeTags);
+					usertalkpage.setCreateOption('recreate');
+					usertalkpage.setWatchlist(Twinkle.getPref('xfdWatchUser'));
+					usertalkpage.setFollowRedirect(true, false);
+					usertalkpage.append();
 				});
+				// add this nomination to the user's userspace log, if the user has enabled it
+				if (params.lognomination) {
+					Twinkle.xfd.callbacks.addToLog(params, initialContrib);
+				}
 			// or, if not notifying, add this nomination to the user's userspace log without the initial contributor's name
-			} else {
+			} else if (params.lognomination) {
 				Twinkle.xfd.callbacks.addToLog(params, null);
 			}
 		},
-		taggingCategory: function(pageobj) {
+		taggingImage: function(pageobj) {
 			var text = pageobj.getPageText();
 			var params = pageobj.getCallbackParameters();
 
-			params.tagText = '{{subst:' + params.xfdcat;
-			var editsummary = (mw.config.get('wgNamespaceNumber') === 14 ? 'Category' : 'Stub template') +
-				' being considered for ' + params.action;
-			switch (params.xfdcat) {
-				case 'cfd':
-				case 'sfd-t':
-					break;
-				case 'cfc':
-					editsummary += ' to an article';
-					// falls through
-				case 'cfm':
-				case 'cfr':
-				case 'sfr-t':
-					params.tagText += '|' + params.cfdtarget;
-					break;
-				case 'cfs':
-					params.tagText += '|' + params.cfdtarget + '|' + params.cfdtarget2;
-					break;
-				default:
-					alert('twinklexfd in taggingCategory(): unknown CFD action');
-					break;
-			}
-			params.tagText += '}}\n';
-			editsummary += '; see [[:' + params.discussionpage + ']].';
-
-			if (pageobj.canEdit()) {
-				pageobj.setPageText(params.tagText + text);
-				pageobj.setEditSummary(editsummary);
-				pageobj.setChangeTags(Twinkle.changeTags);
-				pageobj.setWatchlist(Twinkle.getPref('xfdWatchPage'));
-				pageobj.setCreateOption('recreate');  // since categories can be populated without an actual page at that title
-				pageobj.save();
-			} else {
-				Twinkle.xfd.callbacks.autoEditRequest(pageobj, params);
-			}
+			pageobj.setPageText('{{ifd|' + Morebits.string.formatReasonText(params.reason) + '|date={{subst:#time:c}}}}\n' + text);
+			pageobj.setEditSummary('文件存废讨论：[[' + params.logpage + '#' + Morebits.pageNameNorm + ']]');
+			pageobj.setChangeTags(Twinkle.changeTags);
+			pageobj.setWatchlist(Twinkle.getPref('xfdWatchPage'));
+			pageobj.setCreateOption('recreate');  // it might be possible for a file to exist without a description page
+			pageobj.save();
 		},
 		todaysList: function(pageobj) {
+			// var text = pageobj.getPageText();
 			var params = pageobj.getCallbackParameters();
-			var statelem = pageobj.getStatusElement();
 
-			var added_data = Twinkle.xfd.callbacks.getDiscussionWikitext(params.xfdcat, params);
-			var text;
-
-			// add date header if the log is found to be empty (a bot should do this automatically)
-			if (!pageobj.exists()) {
-				text = '{{subst:CfD log}}\n' + added_data;
-			} else {
-				var old_text = pageobj.getPageText();
-
-				text = old_text.replace('below this line -->', 'below this line -->\n' + added_data);
-				if (text === old_text) {
-					statelem.error('failed to find target spot for the discussion');
-					return;
-				}
-			}
-
-			pageobj.setPageText(text);
-			pageobj.setEditSummary('Adding ' + params.action + ' nomination of [[:' + Morebits.pageNameNorm + ']].');
+			pageobj.setAppendText('\n{{subst:IfdItem|Filename=' + mw.config.get('wgTitle') + '|Uploader=' + params.uploader + '|Reason=' + Morebits.string.formatReasonText(params.reason) + '}}--~~~~');
+			pageobj.setEditSummary('加入[[' + Morebits.pageNameNorm + ']]');
 			pageobj.setChangeTags(Twinkle.changeTags);
 			pageobj.setWatchlist(Twinkle.getPref('xfdWatchDiscussion'));
 			pageobj.setCreateOption('recreate');
-			pageobj.save(function() {
-				Twinkle.xfd.currentRationale = null;  // any errors from now on do not need to print the rationale, as it is safely saved on-wiki
-			});
-		}
-	},
-
-
-	cfds: {
-		taggingCategory: function(pageobj) {
-			var text = pageobj.getPageText();
-			var params = pageobj.getCallbackParameters();
-
-			params.tagText = '{{subst:cfr-speedy|1=' + params.cfdstarget.replace(/^:?Category:/, '') + '}}\n';
-			if (pageobj.canEdit()) {
-				pageobj.setPageText(params.tagText + text);
-				pageobj.setEditSummary('Listed for speedy renaming; see [[QW:CFDS|Categories for discussion/Speedy]].');
-				pageobj.setChangeTags(Twinkle.changeTags);
-				pageobj.setWatchlist(Twinkle.getPref('xfdWatchPage'));
-				pageobj.setCreateOption('recreate');  // since categories can be populated without an actual page at that title
-				pageobj.save(function() {
-					// No user notification for CfDS, so just add this nomination to the user's userspace log
-					Twinkle.xfd.callbacks.addToLog(params, null);
-				});
-			} else {
-				Twinkle.xfd.callbacks.autoEditRequest(pageobj, params);
-				// No user notification for CfDS, so just add this nomination to the user's userspace log
-				Twinkle.xfd.callbacks.addToLog(params, null);
-			}
-		},
-		addToList: function(pageobj) {
-			var old_text = pageobj.getPageText();
-			var params = pageobj.getCallbackParameters();
-			var statelem = pageobj.getStatusElement();
-
-			var text = old_text.replace('BELOW THIS LINE -->', 'BELOW THIS LINE -->\n' + Twinkle.xfd.callbacks.getDiscussionWikitext('cfds', params));
-			if (text === old_text) {
-				statelem.error('failed to find target spot for the discussion');
-				return;
-			}
-
-			pageobj.setPageText(text);
-			pageobj.setEditSummary('Adding [[:' + Morebits.pageNameNorm + ']].');
-			pageobj.setChangeTags(Twinkle.changeTags);
-			pageobj.setWatchlist(Twinkle.getPref('xfdWatchDiscussion'));
-			pageobj.setCreateOption('recreate');
-			pageobj.save(function() {
-				Twinkle.xfd.currentRationale = null;  // any errors from now on do not need to print the rationale, as it is safely saved on-wiki
-			});
-		}
-	},
-
-
-	rfd: {
-		// This gets called both on submit and preview to determine the redirect target
-		findTarget: function(params, callback) {
-			// Used by regular redirects to find the target, but for all redirects,
-			// avoid relying on the client clock to build the log page
-			var query = {
-				action: 'query',
-				curtimestamp: true,
-				format: 'json'
-			};
-			if (document.getElementById('softredirect')) {
-				// For soft redirects, define the target early
-				// to skip target checks in findTargetCallback
-				params.rfdtarget = document.getElementById('softredirect').textContent.replace(/^:+/, '');
-			} else {
-				// Find current target of redirect
-				query.titles = mw.config.get('wgPageName');
-				query.redirects = true;
-			}
-			var qiuwen_api = new Morebits.wiki.api('Finding target of redirect', query, Twinkle.xfd.callbacks.rfd.findTargetCallback(callback));
-			qiuwen_api.params = params;
-			qiuwen_api.post();
-		},
-		// This is a closure for the callback from the above API request, which gets the target of the redirect
-		findTargetCallback: function(callback) {
-			return function(apiobj) {
-				var response = apiobj.getResponse();
-				apiobj.params.curtimestamp = response.curtimestamp;
-
-				if (!apiobj.params.rfdtarget) { // Not a softredirect
-					var target = response.query.redirects && response.query.redirects[0].to;
-					if (!target) {
-						var message = 'No target found. this page does not appear to be a redirect, aborting';
-						if (mw.config.get('wgAction') === 'history') {
-							message += '. If this is a soft redirect, try again from the content page, not the page history.';
-						}
-						apiobj.statelem.error(message);
-						return;
-					}
-					apiobj.params.rfdtarget = target;
-					var section = response.query.redirects[0].tofragment;
-					apiobj.params.section = section;
-				}
-				callback(apiobj.params);
-			};
-		},
-		main: function(params) {
-			var date = new Morebits.date(params.curtimestamp);
-			params.logpage = 'Qiuwen:Redirects for discussion/Log/' + date.format('YYYY MMMM D', 'utc');
-			params.discussionpage = params.logpage + '#' + Morebits.pageNameNorm;
-
-			// Tagging redirect
-			var qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'), 'Adding deletion tag to redirect');
-			qiuwen_page.setFollowRedirect(false);
-			qiuwen_page.setCallbackParameters(params);
-			qiuwen_page.load(Twinkle.xfd.callbacks.rfd.taggingRedirect);
-
-			// Updating data for the action completed event
-			Morebits.wiki.actionCompleted.redirect = params.logpage;
-			Morebits.wiki.actionCompleted.notice = "Nomination completed, now redirecting to today's log";
-
-			// Adding discussion
-			qiuwen_page = new Morebits.wiki.page(params.logpage, "Adding discussion to today's log");
-			qiuwen_page.setFollowRedirect(true);
-			qiuwen_page.setCallbackParameters(params);
-			qiuwen_page.load(Twinkle.xfd.callbacks.rfd.todaysList);
-
-			// Notifications
-			if (params.notifycreator || params.relatedpage) {
-				var thispage = new Morebits.wiki.page(mw.config.get('wgPageName'));
-				thispage.setCallbackParameters(params);
-				thispage.lookupCreation(Twinkle.xfd.callbacks.rfd.sendNotifications);
-			// or, if not notifying, add this nomination to the user's userspace log without the initial contributor's name
-			} else {
-				Twinkle.xfd.callbacks.addToLog(params, null);
-			}
-		},
-		taggingRedirect: function(pageobj) {
-			var text = pageobj.getPageText();
-			var params = pageobj.getCallbackParameters();
-			// Imperfect for edit request but so be it
-			params.tagText = '{{subst:rfd|' + (mw.config.get('wgNamespaceNumber') === 10 ? 'showontransclusion=1|' : '') + 'content=\n';
-
-			if (pageobj.canEdit()) {
-				pageobj.setPageText(params.tagText + text + '\n}}');
-				pageobj.setEditSummary('Listed for discussion at [[:' + params.discussionpage + ']].');
-				pageobj.setChangeTags(Twinkle.changeTags);
-				pageobj.setWatchlist(Twinkle.getPref('xfdWatchPage'));
-				pageobj.setCreateOption('nocreate');
-				pageobj.save();
-			} else {
-				Twinkle.xfd.callbacks.autoEditRequest(pageobj, params);
-			}
-		},
-		todaysList: function(pageobj) {
-			var params = pageobj.getCallbackParameters();
-			var statelem = pageobj.getStatusElement();
-
-			var added_data = Twinkle.xfd.callbacks.getDiscussionWikitext('rfd', params);
-			var text;
-
-			// add date header if the log is found to be empty (a bot should do this automatically)
-			if (!pageobj.exists()) {
-				text = '{{subst:RfD log}}' + added_data;
-			} else {
-				var old_text = pageobj.getPageText();
-				text = old_text.replace(/(<!-- Add new entries directly below this line\.? -->)/, '$1\n' + added_data);
-				if (text === old_text) {
-					statelem.error('failed to find target spot for the discussion');
-					return;
-				}
-			}
-
-			pageobj.setPageText(text);
-			pageobj.setEditSummary('Adding [[:' + Morebits.pageNameNorm + ']].');
-			pageobj.setChangeTags(Twinkle.changeTags);
-			pageobj.setWatchlist(Twinkle.getPref('xfdWatchDiscussion'));
-			pageobj.setCreateOption('recreate');
-			pageobj.save(function() {
-				Twinkle.xfd.currentRationale = null;  // any errors from now on do not need to print the rationale, as it is safely saved on-wiki
-			});
-		},
-		sendNotifications: function(pageobj) {
-			var initialContrib = pageobj.getCreator();
-			var params = pageobj.getCallbackParameters();
-			var statelem = pageobj.getStatusElement();
-
-			// Notifying initial contributor
-			if (params.notifycreator) {
-				Twinkle.xfd.callbacks.notifyUser(params, initialContrib);
-			}
-
-			// Notifying target page's watchers, if not a soft redirect
-			if (params.relatedpage) {
-				var targetTalk = new mw.Title(params.rfdtarget).getTalkPage();
-
-				// On the offchance it's a circular redirect
-				if (params.rfdtarget === mw.config.get('wgPageName')) {
-					statelem.warn('Circular redirect; skipping target page notification');
-				} else if (document.getElementById('softredirect')) {
-					statelem.warn('Soft redirect; skipping target page notification');
-				// Don't issue if target talk is the initial contributor's talk or your own
-				} else if (targetTalk.getNamespaceId() === 3 && targetTalk.getNameText() === initialContrib) {
-					statelem.warn('Target is initial contributor; skipping target page notification');
-				} else if (targetTalk.getNamespaceId() === 3 && targetTalk.getNameText() === mw.config.get('wgUserName')) {
-					statelem.warn('You (' + mw.config.get('wgUserName') + ') are the target; skipping target page notification');
-				} else {
-					// Don't log if notifying creator above, will log then
-					Twinkle.xfd.callbacks.notifyUser(params, targetTalk.toText(), params.notifycreator, 'Notifying redirect target of the discussion');
-					return;
-				}
-				// If we thought we would notify the target but didn't,
-				// we need to log if we didn't notify the creator
-				if (!params.notifycreator) {
-					Twinkle.xfd.callbacks.addToLog(params, null);
-				}
-			}
-		}
-	},
-
-	rm: {
-		listAtTalk: function(pageobj) {
-			var params = pageobj.getCallbackParameters();
-
-			pageobj.setAppendText('\n\n' + Twinkle.xfd.callbacks.getDiscussionWikitext('rm', params));
-			pageobj.setEditSummary('Proposing move' + (params.newname ? ' to [[:' + params.newname + ']]' : ''));
-			pageobj.setChangeTags(Twinkle.changeTags);
-			pageobj.setCreateOption('recreate'); // since the talk page need not exist
-			pageobj.setWatchlist(Twinkle.getPref('xfdWatchDiscussion'));
 			pageobj.append(function() {
 				Twinkle.xfd.currentRationale = null;  // any errors from now on do not need to print the rationale, as it is safely saved on-wiki
-				// add this nomination to the user's userspace log
-				Twinkle.xfd.callbacks.addToLog(params, null);
 			});
 		},
-
-		listAtRMTR: function(pageobj) {
-			var text = pageobj.getPageText();
-			var params = pageobj.getCallbackParameters();
+		tryTagging: function (pageobj) {
 			var statelem = pageobj.getStatusElement();
-
-			var hiddenCommentRE = /---- and enter on a new line.* -->/;
-			var newtext = text.replace(hiddenCommentRE, '$&\n' + Twinkle.xfd.callbacks.getDiscussionWikitext('rm', params));
-			if (text === newtext) {
-				statelem.error('failed to find target spot for the entry');
+			if (!pageobj.exists()) {
+				statelem.error('页面不存在，可能已被删除');
 				return;
 			}
-			pageobj.setPageText(newtext);
-			pageobj.setEditSummary('Adding [[:' + Morebits.pageNameNorm + ']].');
-			pageobj.setChangeTags(Twinkle.changeTags);
-			pageobj.save(function() {
-				Twinkle.xfd.currentRationale = null;  // any errors from now on do not need to print the rationale, as it is safely saved on-wiki
-				// add this nomination to the user's userspace log
-				Twinkle.xfd.callbacks.addToLog(params, null);
-			});
+
+			var text = pageobj.getPageText();
+
+			var xfd = /(?:\{\{([rsaiftcmv]fd|md1|proposed deletion)[^{}]*?\}\})/i.exec(text);
+			if (xfd && !confirm('删除相关模板{{' + xfd[1] + '}}已被置于页面中，您是否仍想继续提报？')) {
+				statelem.error('页面已被提交至存废讨论。');
+				return;
+			}
+
+			Twinkle.xfd.callbacks.ffd.taggingImage(pageobj);
+
+			// Contributor specific edits
+			var qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'));
+			qiuwen_page.setCallbackParameters(pageobj.getCallbackParameters());
+			qiuwen_page.setLookupNonRedirectCreator(true); // Look for author of first non-redirect revision
+			qiuwen_page.lookupCreation(Twinkle.xfd.callbacks.ffd.main);
 		}
+	},
+	addToLog: function(params, initialContrib) {
+		var editsummary = '记录对[[' + Morebits.pageNameNorm + ']]的存废讨论提名';
+		var usl = new Morebits.userspaceLogger(Twinkle.getPref('xfdLogPageName'));
+		usl.initialText =
+			'这是该用户使用[[QW:TW|Twinkle]]的提删模块做出的[[QW:XFD|存废讨论]]提名列表。\n\n' +
+			'如果您不再想保留此日志，请在[[' + Twinkle.getPref('configPage') + '|参数设置]]中关掉，并' +
+			'使用[[QW:CSD#O1|CSD O1]]提交快速删除。';
+		var xfdCatName;
+		switch (params.xfdcat) {
+			case 'delete':
+				xfdCatName = '删除';
+				break;
+			case 'merge':
+				xfdCatName = '合并到';
+				break;
+			case 'fwdcsd':
+				xfdCatName = '转交自快速删除候选';
+				break;
+			case 'fame':
+				xfdCatName = '批量关注度提删';
+				break;
+			case 'substub':
+				xfdCatName = '批量小小作品提删';
+				break;
+			case 'batch':
+				xfdCatName = '批量其他提删';
+				break;
+			default:
+				xfdCatName = '文件存废讨论';
+				break;
+		}
+
+		// If a logged file is deleted but exists on commons, the wikilink will be blue, so provide a link to the log
+		var appendText = '# [[:' + Morebits.pageNameNorm + ']]';
+		if (mw.config.get('wgNamespaceNumber') === 6) {
+			appendText += '（[{{fullurl:Special:Log|page=' + mw.util.wikiUrlencode(mw.config.get('wgPageName')) + '}} ' + '日志' + ']）';
+		}
+		appendText += '：' + xfdCatName;
+		if (params.xfdcat === 'merge') {
+			appendText += '[[:' + params.mergeinto + ']]';
+		}
+		appendText += '。';
+
+		if (params.reason) {
+			appendText += "'''" + (params.xfdcat === 'fwdcsd' ? '原删除理据' : '理据') + "'''：" + Morebits.string.formatReasonForLog(params.reason);
+			appendText = Morebits.string.appendPunctuation(appendText);
+		}
+		if (params.fwdcsdreason) {
+			appendText += "'''" + (params.xfdcat === 'fwdcsd' ? '转交理据' : '理据') + "'''：" + Morebits.string.formatReasonForLog(params.fwdcsdreason);
+			appendText = Morebits.string.appendPunctuation(appendText);
+		}
+
+		if (initialContrib) {
+			appendText += '；通知{{user|' + initialContrib + '}}';
+		}
+		appendText += ' ~~~~~\n';
+		usl.changeTags = Twinkle.changeTags;
+		usl.log(appendText, editsummary);
 	}
 };
 
 
 
 Twinkle.xfd.callback.evaluate = function(e) {
-	var form = e.target;
-
-	var params = Morebits.quickForm.getInputData(form);
+	var type = e.target.category.value;
+	var usertalk = e.target.notify.checked;
+	var reason = e.target.xfdreason.value;
+	var fwdcsdreason, xfdcat, mergeinto, noinclude;
+	if (type === 'afd') {
+		fwdcsdreason = e.target.fwdcsdreason.value;
+		noinclude = e.target.noinclude.checked;
+		xfdcat = e.target.xfdcat.value;
+		mergeinto = e.target.mergeinto.value;
+	}
+	if (xfdcat === 'merge' && mergeinto.trim() === '') {
+		alert('请提供合并目标！');
+		return;
+	}
 
 	Morebits.simpleWindow.setButtonsEnabled(false);
-	Morebits.status.init(form);
+	Morebits.status.init(e.target);
 
-	Twinkle.xfd.currentRationale = params.reason;
+	Twinkle.xfd.currentRationale = reason;
 	Morebits.status.onError(Twinkle.xfd.printRationale);
 
-	var query, qiuwen_page, qiuwen_api;
-	switch (params.venue) {
+	if (!type) {
+		Morebits.status.error('错误', '未定义的动作');
+		return;
+	}
+
+	var qiuwen_page, logpage, lognomination, params;
+	var date = new Morebits.date(); // XXX: avoid use of client clock, still used by TfD, FfD and CfD
+	switch (type) {
 
 		case 'afd': // AFD
-			query = {
-				action: 'query',
-				list: 'allpages',
-				apprefix: 'Articles for deletion/' + Morebits.pageNameNorm,
-				apnamespace: 4,
-				apfilterredir: 'nonredirects',
-				aplimit: 'max', // 500 is max for normal users, 5000 for bots and sysops
-				format: 'json'
-			};
-			qiuwen_api = new Morebits.wiki.api('Tagging article with deletion tag', query, Twinkle.xfd.callbacks.afd.main);
-			qiuwen_api.params = params;
-			qiuwen_api.post();
-			break;
+			logpage = 'Qiuwen:存废讨论/记录/' + date.format('YYYY/MM/DD', 'utc');
+			lognomination = Twinkle.getPref('logXfdNominations') && Twinkle.getPref('noLogOnXfdNomination').indexOf(xfdcat) === -1;
+			params = { usertalk: usertalk, xfdcat: xfdcat, mergeinto: mergeinto, noinclude: noinclude, reason: reason, fwdcsdreason: fwdcsdreason, logpage: logpage, lognomination: lognomination};
 
-		case 'tfd': // TFD
-			if (params.tfdtarget) { // remove namespace name
-				params.tfdtarget = utils.stripNs(params.tfdtarget);
-			}
+			Morebits.wiki.addCheckpoint();
+			// Updating data for the action completed event
+			Morebits.wiki.actionCompleted.redirect = logpage;
+			Morebits.wiki.actionCompleted.notice = '提名完成，重定向到讨论页';
 
-			// Modules can't be tagged, TfD instructions are to place on /doc subpage
-			params.scribunto = mw.config.get('wgPageContentModel') === 'Scribunto';
-			if (params.xfdcat === 'tfm') { // Merge
-				// Tag this template/module
-				if (params.scribunto) {
-					qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName') + '/doc', 'Tagging this module documentation with merge tag');
-					params.otherTemplateName = 'Module:' + params.tfdtarget;
-				} else {
-					qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'), 'Tagging this template with merge tag');
-					params.otherTemplateName = 'Template:' + params.tfdtarget;
-				}
-			} else { // delete
-				if (params.scribunto) {
-					qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName') + '/doc', 'Tagging module documentation with deletion tag');
-				} else {
-					qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'), 'Tagging template with deletion tag');
-				}
-			}
-			qiuwen_page.setFollowRedirect(true);  // should never be needed, but if the page is moved, we would want to follow the redirect
+			// Tagging page
+			var isScribunto = mw.config.get('wgPageContentModel') === 'Scribunto';
+			qiuwen_page = isScribunto ? new Morebits.wiki.page(mw.config.get('wgPageName') + '/doc', '加入存废讨论模板到模块文件页') : new Morebits.wiki.page(mw.config.get('wgPageName'), '加入存废讨论模板到页面');
+			qiuwen_page.setFollowRedirect(false);
 			qiuwen_page.setCallbackParameters(params);
-			qiuwen_page.load(Twinkle.xfd.callbacks.tfd.main);
-			break;
+			qiuwen_page.load(Twinkle.xfd.callbacks.afd.tryTagging);
 
-		case 'mfd': // MFD
-			query = {
-				action: 'query',
-				list: 'allpages',
-				apprefix: 'Miscellany for deletion/' + Morebits.pageNameNorm,
-				apnamespace: 4,
-				apfilterredir: 'nonredirects',
-				aplimit: 'max', // 500 is max for normal users, 5000 for bots and sysops
-				format: 'json'
-			};
-			qiuwen_api = new Morebits.wiki.api('Looking for prior nominations of this page', query, Twinkle.xfd.callbacks.mfd.main);
-			qiuwen_api.params = params;
-			qiuwen_api.post();
+			Morebits.wiki.removeCheckpoint();
 			break;
 
 		case 'ffd': // FFD
-			// Tagging file
-			// A little out of order with this coming before 'main',
-			// but tagging doesn't need the uploader parameter,
-			// while everything else does, so tag then get the uploader
-			qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'), 'Adding deletion tag to file page');
-			qiuwen_page.setFollowRedirect(true);
-			qiuwen_page.setCallbackParameters(params);
-			qiuwen_page.load(Twinkle.xfd.callbacks.ffd.taggingImage);
-			break;
+			logpage = 'Qiuwen:存废讨论/记录/' + date.format('YYYY/MM/DD', 'utc');
+			lognomination = Twinkle.getPref('logXfdNominations') && Twinkle.getPref('noLogOnXfdNomination').indexOf('ffd') === -1;
+			params = { usertalk: usertalk, reason: reason, logpage: logpage, lognomination: lognomination};
 
-		case 'cfd':
-			if (params.cfdtarget) {
-				params.cfdtarget = utils.stripNs(params.cfdtarget);
-			} else {
-				params.cfdtarget = ''; // delete
-			}
-			if (params.cfdtarget2) { // split
-				params.cfdtarget2 = utils.stripNs(params.cfdtarget2);
-			}
-
-			// Used for customized actions in edit summaries and the notification template
-			var summaryActions = {
-				'cfd': 'deletion',
-				'sfd-t': 'deletion',
-				'cfm': 'merging',
-				'cfr': 'renaming',
-				'sfr-t': 'renaming',
-				'cfs': 'splitting',
-				'cfc': 'conversion'
-			};
-			params.action = summaryActions[params.xfdcat];
-
-			// Tagging category
-			qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'), 'Tagging category with ' + params.action + ' tag');
-			qiuwen_page.setFollowRedirect(true); // should never be needed, but if the page is moved, we would want to follow the redirect
-			qiuwen_page.setCallbackParameters(params);
-			qiuwen_page.load(Twinkle.xfd.callbacks.cfd.main);
-			break;
-
-		case 'cfds':
-			// add namespace name if missing
-			params.cfdstarget = utils.addNs(params.cfdstarget, 14);
-
-			var logpage = 'Qiuwen:Categories for discussion/Speedy';
-
+			Morebits.wiki.addCheckpoint();
 			// Updating data for the action completed event
 			Morebits.wiki.actionCompleted.redirect = logpage;
-			Morebits.wiki.actionCompleted.notice = 'Nomination completed, now redirecting to the discussion page';
+			Morebits.wiki.actionCompleted.notice = '提名完成，重定向到讨论页';
 
-			// Tagging category
-			qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'), 'Tagging category with rename tag');
-			qiuwen_page.setFollowRedirect(true);
+			// Tagging file
+			qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'), '加入存废讨论模板到文件描述页');
+			qiuwen_page.setFollowRedirect(false);
 			qiuwen_page.setCallbackParameters(params);
-			qiuwen_page.load(Twinkle.xfd.callbacks.cfds.taggingCategory);
+			qiuwen_page.load(Twinkle.xfd.callbacks.ffd.tryTagging);
 
-			// Adding discussion to list
-			qiuwen_page = new Morebits.wiki.page(logpage, 'Adding discussion to the list');
-			qiuwen_page.setFollowRedirect(true);
-			qiuwen_page.setCallbackParameters(params);
-			qiuwen_page.load(Twinkle.xfd.callbacks.cfds.addToList);
-
-			break;
-
-		case 'rfd':
-			// find target and pass main as the callback
-			Twinkle.xfd.callbacks.rfd.findTarget(params, Twinkle.xfd.callbacks.rfd.main);
-			break;
-
-		case 'rm':
-			var nomPageName = params.rmtr ?
-				'Qiuwen:Requested moves/Technical requests' :
-				new mw.Title(Morebits.pageNameNorm).getTalkPage().toText();
-
-			Morebits.wiki.actionCompleted.redirect = nomPageName;
-			Morebits.wiki.actionCompleted.notice = 'Nomination completed, now redirecting to the discussion page';
-
-			qiuwen_page = new Morebits.wiki.page(nomPageName, params.rmtr ? 'Adding entry at QW:RM/TR' : 'Adding entry on talk page');
-			qiuwen_page.setFollowRedirect(true);
-			qiuwen_page.setCallbackParameters(params);
-
-			if (params.rmtr) {
-				qiuwen_page.setPageSection(2);
-				qiuwen_page.load(Twinkle.xfd.callbacks.rm.listAtRMTR);
-			} else {
-				// listAtTalk uses .append(), so no need to load the page
-				Twinkle.xfd.callbacks.rm.listAtTalk(qiuwen_page);
-			}
+			Morebits.wiki.removeCheckpoint();
 			break;
 
 		default:
-			alert('twinklexfd: unknown XFD discussion venue');
+			alert('twinklexfd：未定义的类别');
 			break;
 	}
 };
