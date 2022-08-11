@@ -1463,7 +1463,7 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate(e) {
 					Twinkle.block.callback.issue_template(templateoptions);
 				}
 				if (toClosevip) {
-					var vipPage = new Morebits.wiki.page('Wikipedia:当前的破坏', '关闭请求');
+					var vipPage = new Morebits.wiki.page('Qiuwen:当前的破坏', '关闭请求');
 					vipPage.setFollowRedirect(true);
 					vipPage.setCallbackParameters(blockoptions);
 					vipPage.load(Twinkle.block.callback.closeRequest);
@@ -1730,7 +1730,7 @@ Twinkle.block.callback.getBlockNoticeWikitext = function(params, nosign) {
 					var namespaceNames = params.namespacerestrictions.map(function(id) {
 						return menuFormattedNamespaces[id];
 					});
-					text += '[[Wikipedia:命名空间|命名空间]]（' + makeSentence(namespaceNames) + '）';
+					text += '[[Qiuwen:命名空间|命名空间]]（' + makeSentence(namespaceNames) + '）';
 				}
 			} else if (params.area) {
 				text += '|area=' + params.area;
