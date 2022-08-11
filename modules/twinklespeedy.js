@@ -107,7 +107,7 @@ Twinkle.speedy.initDialog = function twinklespeedyInitDialog(callbackfunc) {
 					value: 'tag_only',
 					name: 'tag_only',
 					tooltip: '如果您只想标记此页面而不是将其删除',
-					checked: !Twinkle.getPref('deleteSysopDefaultToDelete'),
+					checked: !(Twinkle.speedy.hasCSD || Twinkle.getPref('deleteSysopDefaultToDelete')),
 					event: function(event) {
 						var cForm = event.target.form;
 						var cChecked = event.target.checked;
@@ -127,7 +127,9 @@ Twinkle.speedy.initDialog = function twinklespeedyInitDialog(callbackfunc) {
 						cForm.multiple.checked = false;
 						// enable requesting creation protection
 						cForm.salting.checked = false;
+
 						Twinkle.speedy.callback.modeChanged(cForm);
+
 						event.stopPropagation();
 					}
 				}
