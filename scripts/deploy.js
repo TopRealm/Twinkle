@@ -26,7 +26,7 @@
  *    Usage:
  * --------------------------------------------------------------------------
  * Ensure the pre-deployment steps above are completed, unless you are only
- * deploying to the testwiki (test.wikipedia.org). Then, run this script:
+ * deploying to the testwiki (test.qiuwen.org). Then, run this script:
  * In the terminal, enter
  *     node deploy.js
  * and supply the requested details.
@@ -114,7 +114,7 @@ class Deploy {
 				if (Object.keys(config).length) {
 					log('yellow', 'Tip: you can avoid this prompt by setting the apiUrl as well in credentials.json');
 				}
-				const site = await input('> Enter sitename (eg. en.wikipedia.org)');
+				const site = await input('> Enter sitename (eg. test.qiuwen.org)');
 				config.apiUrl = `https://${site}/api.php`;
 			}
 		}

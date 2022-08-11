@@ -55,7 +55,7 @@ server.listen(port, hostname, async () => {
 	}
 	try {
 		user = await mwn.init({
-			"apiUrl": "https://en.wikipedia.org/w/api.php",
+			"apiUrl": "https://test.qiuwen.org/w/api.php",
 			"username": process.env.MW_USERNAME,
 			"password": process.env.MW_PASSWORD,
 			"silent": true
