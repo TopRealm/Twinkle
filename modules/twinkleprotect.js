@@ -37,7 +37,7 @@ Twinkle.protect.callback = function twinkleprotectCallback() {
 	Window.setScriptName('Twinkle');
 	Window.addFooterLink('保护模板', 'Template:Protection templates');
 	Window.addFooterLink('保护方针', 'QW:PROT');
-	Window.addFooterLink('保护设置', 'QW:TW/PREF#protect');
+	Window.addFooterLink('保护设置', 'H:TW/PREF#protect');
 	Window.addFooterLink('Twinkle帮助', 'H:TW/DOC#protect');
 	Window.addFooterLink('问题反馈', 'HT:TW');
 

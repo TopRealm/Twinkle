@@ -50,8 +50,8 @@ Twinkle.xfd.callback = function twinklexfdCallback() {
 	Window.setTitle('提交存废讨论');
 	Window.setScriptName('Twinkle');
 	Window.addFooterLink('关于存废讨论', 'QW:XFD');
-	Window.addFooterLink('提删设置', 'QW:TW/PREF#xfd');
-	Window.addFooterLink('Twinkle帮助', 'QW:TW/DOC#xfd');
+	Window.addFooterLink('提删设置', 'H:TW/PREF#xfd');
+	Window.addFooterLink('Twinkle帮助', 'H:TW/DOC#xfd');
 
 	var form = new Morebits.quickForm(Twinkle.xfd.callback.evaluate);
 	var categories = form.append({
@@ -540,7 +540,7 @@ Twinkle.xfd.callbacks = {
 		var editsummary = '记录对[[' + Morebits.pageNameNorm + ']]的存废讨论提名';
 		var usl = new Morebits.userspaceLogger(Twinkle.getPref('xfdLogPageName'));
 		usl.initialText =
-			'这是该用户使用[[QW:TW|Twinkle]]的提删模块做出的[[QW:XFD|存废讨论]]提名列表。\n\n' +
+			'这是该用户使用[[H:TW|Twinkle]]的提删模块做出的[[QW:XFD|存废讨论]]提名列表。\n\n' +
 			'如果您不再想保留此日志，请在[[' + Twinkle.getPref('configPage') + '|参数设置]]中关掉，并' +
 			'使用[[QW:CSD#O1|CSD O1]]提交快速删除。';
 		var xfdCatName;

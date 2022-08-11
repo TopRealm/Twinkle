@@ -65,7 +65,7 @@ Twinkle.stub.callback = function friendlytagCallback() {
 				type: 'select',
 				name: 'sortorder',
 				label: '查看列表：',
-				tooltip: '您可以在Twinkle参数设置（WP:TWPREFS）中更改此项。',
+				tooltip: '您可以在Twinkle参数设置（H:TW/PREF）中更改此项。',
 				event: Twinkle.stub.updateSortOrder,
 				list: [
 					{ type: 'option', value: 'cat', label: '按类型', selected: Twinkle.getPref('stubArticleSortOrder') === 'cat' },

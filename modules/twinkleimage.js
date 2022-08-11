@@ -326,7 +326,7 @@ Twinkle.image.callbacks = {
 	addToLog: function(params, initialContrib) {
 		var usl = new Morebits.userspaceLogger(Twinkle.getPref('speedyLogPageName'));
 		usl.initialText =
-			"This is a log of all [[QW:CSD|speedy deletion]] nominations made by this user using [[QW:TW|Twinkle]]'s CSD module.\n\n" +
+			"This is a log of all [[QW:CSD|speedy deletion]] nominations made by this user using [[H:TW|Twinkle]]'s CSD module.\n\n" +
 			'If you no longer wish to keep this log, you can turn it off using the [[H:TW/PREF|preferences panel]], and ' +
 			'nominate this page for speedy deletion under [[QW:CSD#U1|CSD U1]].' +
 			(Morebits.userIsSysop ? '\n\nThis log does not track outright speedy deletions made using Twinkle.' : '');
