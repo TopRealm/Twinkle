@@ -170,8 +170,8 @@ Twinkle.config.sections = [
 
 			// Twinkle.config.disabledSysopModules (array)
 			{
-				name: '关闭指定的Twinkle管理员模块',
-				label: 'Turn off the selected admin-only modules',
+				name: 'disabledSysopModules',
+				label: '关闭指定的Twinkle管理员模块',
 				helptip: '您在此勾选的功能将无法使用；取消勾选即可重新启用功能',
 				adminOnly: true,
 				type: 'set',
