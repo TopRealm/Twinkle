@@ -36,7 +36,7 @@
  * All the stuff here works on all browsers for which MediaWiki provides JavaScript support.
  *
  * This library is maintained by the maintainers of Twinkle.
- * For queries, suggestions, help, etc., head to [Help_talk:Twinkle](https://zhqw.qiuwen.wiki/wiki/Help_talk:Twinkle).
+ * For queries, suggestions, help, etc., head to [Help:Twinkle](https://www.qiuwen.wiki/wiki/H:TW).
  * The latest development source is available at {@link https://github.com/wikimedia-gadgets/twinkle/blob/master/morebits.js|GitHub}.
  *
  * @namespace Morebits
