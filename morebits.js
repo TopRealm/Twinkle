@@ -2484,7 +2484,7 @@ Morebits.wiki.getCachedJson = function(title) {
 	});
 };
 
-var morebitsWikiApiUserAgent = 'morebits.js (Qiuwen/1.0a)';
+var morebitsWikiApiUserAgent = 'Qiuwen/1.1 (morebits.js)';
 /**
  * Set the custom user agent header, which is used for server-side logging.
  * Note that doing so will set the useragent for every `Morebits.wiki.api`
@@ -2499,7 +2499,7 @@ var morebitsWikiApiUserAgent = 'morebits.js (Qiuwen/1.0a)';
  * value.
  */
 Morebits.wiki.api.setApiUserAgent = function(ua) {
-	morebitsWikiApiUserAgent = (ua ? ua + ' ' : '') + 'morebits.js (Qiuwen/1.0a)';
+	morebitsWikiApiUserAgent = 'Qiuwen/1.1 (morebits.js' + (ua ? '; ' + ua : '') + ')';
 };
 
 
