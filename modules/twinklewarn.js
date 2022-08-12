@@ -75,7 +75,6 @@ Twinkle.warn.callback = function twinklewarnCallback() {
 	}
 
 	var Window = new Morebits.simpleWindow(600, 440);
-	Window.setScriptName('Twinkle');
 	Window.setTitle('警告或提醒用户');
 	Window.setScriptName('Twinkle');
 	Window.addFooterLink('警告设置', 'H:TW/PREF#warn');
@@ -1512,7 +1511,7 @@ Twinkle.warn.callbacks = {
 		var template = params.sub_group.replace(/(.*)\d$/, '$1');
 		// Validate warning level, falling back to the uw-generic series.
 		// Only a few items are missing a level, and in all but a handful
-		// of cases, the uw-generic series is explicitly used elsewhere per WP:UTM.
+		// of cases, the uw-generic series is explicitly used elsewhere.
 		if (params.messageData && !params.messageData['level' + level]) {
 			template = 'uw-generic';
 		}
