@@ -6008,7 +6008,6 @@ if (typeof arguments === 'undefined') {  // typeof is here for a reason...
 	/* global Morebits */
 	window.SimpleWindow = Morebits.simpleWindow;
 	window.QuickForm = Morebits.quickForm;
-	window.Wikipedia = Morebits.wiki;
 	window.Status = Morebits.status;
 }
 
