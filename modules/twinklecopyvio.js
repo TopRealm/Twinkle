@@ -8,7 +8,6 @@
  * Attribution-ShareAlike 3.0 Unported License.
  * https://creativecommons.org/licenses/by-sa/3.0/
  */
-
 (function($) { // eslint-disable-line no-unused-vars
 
 
@@ -167,7 +166,7 @@ Twinkle.copyvio.callback.evaluate = function(e) {
 	}
 
 	var query, qiuwen_page, qiuwen_api, logpage, params; // eslint-disable-line no-unused-vars
-	logpage = 'Qiuwen:頁面存廢討論/疑似侵權';
+	logpage = 'Qiuwen:侵权提报';
 	params = { source: source, logpage: logpage, usertalk: usertalk };
 
 	Morebits.wiki.addCheckpoint();
