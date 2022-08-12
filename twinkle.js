@@ -1,3 +1,13 @@
+// <nowiki>
+/**
+ * Twinkle.js - twinkle.js
+ * © 2011-2022 English Wikipedia Contributors
+ * © 2011-2021 Chinese Wikipedia Contributors
+ * © 2021-     Qiuwen Baike Contributors
+ * This work is licensed under a Creative Commons
+ * Attribution-ShareAlike 3.0 Unported License.
+ * https://creativecommons.org/licenses/by-sa/3.0/
+ */
 /**
  * +-------------------------------------------------------+
  * |          === WARNING: GLOBAL GADGET FILE ===          |
@@ -13,16 +23,6 @@
  * All changes should be made in the repository, otherwise they will be lost.
  * Visit [[H:TW]] for more information.
  */
-/**
- * Twinkle.js - twinkle.js
- * © 2011-2022 English Wikipedia Contributors
- * © 2011-2022 Chinese Wikipedia Contributors
- * © 2021-     Qiuwen Baike Contributors
- * This work is licensed under a Creative Commons
- * Attribution-ShareAlike 4.0 International License.
- * https://creativecommons.org/licenses/by-sa/4.0/
- */
-// <nowiki>
 
 /* global Morebits */
 

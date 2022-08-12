@@ -607,7 +607,7 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 		field_tag_options.append({
 			type: 'input',
 			name: 'category',
-			label: 'Category:……的維基用戶分身' + '（主账户用户名）', // no wgULS for category name
+			label: 'Category:……的用户分身' + '（主账户用户名）',
 			tooltip: '您通常应该使用{{Blocked sockpuppet}}的主账户参数来产生分类，只有单独使用{{Locked global account}}才需填写此项。'
 		});
 	}
@@ -935,7 +935,7 @@ Twinkle.block.blockPresetsInfo = {
 		nocreate: false,
 		pageParam: false,
 		reasonParam: true,
-		summary: '您已被禁止編輯維基百科的部分區域'
+		summary: '您已被禁止编辑求闻百科的部分内容'
 	}
 };
 
@@ -1551,7 +1551,7 @@ Twinkle.block.callback.taguserpage = function twinkleblockCallbackTagUserpage(pa
 		var text = tags.join('\n');
 
 		if (params.category) {
-			text += '\n[[Category:' + params.category.trim() + '的維基用戶分身]]';
+			text += '\n[[Category:' + params.category.trim() + '的用户分身]]';
 		}
 
 		pageobj.setPageText(text);

@@ -87,15 +87,14 @@ Twinkle.speedy.mode = {
 
 // Prepares the speedy deletion dialog and displays it
 Twinkle.speedy.initDialog = function twinklespeedyInitDialog(callbackfunc) {
-	var dialog;
-	Twinkle.speedy.dialog = new Morebits.simpleWindow(Twinkle.getPref('speedyWindowWidth'), Twinkle.getPref('speedyWindowHeight'));
-	dialog = Twinkle.speedy.dialog;
-	dialog.setTitle('选择快速删除理由');
-	dialog.setScriptName('Twinkle');
-	dialog.addFooterLink('快速删除方针', 'QW:SD');
-	dialog.addFooterLink('参数设置', 'H:TW/PREF#speedy');
-	dialog.addFooterLink('帮助文档', 'H:TW/DOC#speedy');
-	dialog.addFooterLink('问题反馈', 'HT:TW');
+	var Window = new Morebits.simpleWindow(Twinkle.getPref('speedyWindowWidth'), Twinkle.getPref('speedyWindowHeight'));
+	Window.setScriptName('Twinkle');
+	Window.setTitle('选择快速删除理由');
+	Window.setScriptName('Twinkle');
+	Window.addFooterLink('快速删除方针', 'QW:SD');
+	Window.addFooterLink('参数设置', 'H:TW/PREF#speedy');
+	Window.addFooterLink('帮助文档', 'H:TW/DOC#speedy');
+	Window.addFooterLink('问题反馈', 'HT:TW');
 
 	var form = new Morebits.quickForm(callbackfunc, Twinkle.getPref('speedySelectionStyle') === 'radioClick' ? 'change' : null);
 	if (Morebits.userIsSysop) {
@@ -275,8 +274,8 @@ Twinkle.speedy.initDialog = function twinklespeedyInitDialog(callbackfunc) {
 	}
 
 	var result = form.render();
-	dialog.setContent(result);
-	dialog.display();
+	Window.setContent(result);
+	Window.display();
 
 	Twinkle.speedy.callback.modeChanged(result);
 

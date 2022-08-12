@@ -1,6 +1,6 @@
 // <nowiki>
 /**
- * Twinkle.js
+ * Twinkle.js - twinkleblock.js
  * © 2011-2022 English Wikipedia Contributors
  * © 2011-2021 Chinese Wikipedia Contributors
  * © 2021-     Qiuwen Baike Contributors
@@ -8,9 +8,6 @@
  * Attribution-ShareAlike 3.0 Unported License.
  * https://creativecommons.org/licenses/by-sa/3.0/
  */
-// <nowiki>
-
-
 (function($) {
 
 
@@ -392,7 +389,7 @@ Twinkle.xfd.callbacks = {
 							fame: '<u>关注度不足</u>条目',
 							substub: '<u>小小作品</u>',
 							batch: '頁面'
-						}[type] + '的維基人及時間：<br id="no-new-title" />~~~~';
+						}[type] + '的用户及时间：<br id="no-new-title" />~~~~';
 						pageobj.setAppendText(appendText);
 					}
 					break;
