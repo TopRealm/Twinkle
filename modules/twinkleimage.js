@@ -1,6 +1,6 @@
 // <nowiki>
 /**
- * Twinkle.js
+ * Twinkle.js - twinkleimage.js
  * © 2011-2022 English Wikipedia Contributors
  * © 2011-2021 Chinese Wikipedia Contributors
  * © 2021-     Qiuwen Baike Contributors
@@ -8,7 +8,6 @@
  * Attribution-ShareAlike 3.0 Unported License.
  * https://creativecommons.org/licenses/by-sa/3.0/
  */
-
 (function($) {
 
 
@@ -31,7 +30,7 @@ Twinkle.image = function twinkleimage() {
 
 Twinkle.image.callback = function twinkleimageCallback() {
 	var Window = new Morebits.simpleWindow(600, 330);
-	Window.setTitle('文件快速删除候选');
+	Window.setTitle('文件快速删除');
 	Window.setScriptName('Twinkle');
 	Window.addFooterLink('快速删除方针', 'QW:CSD');
 	Window.addFooterLink('参数设置', 'H:TW/PREF#image');
@@ -62,51 +61,46 @@ Twinkle.image.callback = function twinkleimageCallback() {
 		event: Twinkle.image.callback.choice,
 		list: [
 			{
-				label: 'No source (CSD F4)',
+				label: '来源不明（CSD F1）',
 				value: 'no source',
 				checked: true,
-				tooltip: 'Image or media has no source information'
+				tooltip: '上传后3天内仍然来源不明、著作权不明'
 			},
 			{
-				label: 'No license (CSD F4)',
+				label: '著作权不明（CSD F1）',
 				value: 'no license',
-				tooltip: 'Image or media does not have information on its copyright status'
+				tooltip: '上传后3天内仍著作权情况不明'
 			},
 			{
-				label: 'No source and no license (CSD F4)',
+				label: '来源、著作权均不明（CSD F1）',
 				value: 'no source no license',
-				tooltip: 'Image or media has neither information on source nor its copyright status'
+				tooltip: '上传后3天内仍然来源不明、著作权不明'
 			},
 			{
-				label: 'Orphaned fair use (CSD F5)',
-				value: 'orphaned fair use',
-				tooltip: 'Image or media is unlicensed for use on Wikipedia and allowed only under a claim of fair use per Qiuwen:Non-free content, but it is not used in any articles'
-			},
-			{
-				label: 'No fair use rationale (CSD F6)',
-				value: 'no fair use rationale',
-				tooltip: 'Image or media is claimed to be used under Wikipedia\'s fair use policy but has no explanation as to why it is permitted under the policy'
-			},
-			{
-				label: 'Disputed fair use rationale (CSD F7)',
-				value: 'disputed fair use rationale',
-				tooltip: 'Image or media has a fair use rationale that is disputed or invalid, such as a {{Non-free logo}} tag on a photograph of a mascot'
-			},
-			{
-				label: 'Replaceable fair use (CSD F7)',
-				value: 'replaceable fair use',
-				tooltip: 'Image or media may fail Wikipedia\'s first non-free content criterion ([[QW:NFCC#1]]) in that it illustrates a subject for which a free image might reasonably be found or created that adequately provides the same information'
-			},
-			{
-				label: 'No evidence of permission (CSD F11)',
+				label: '其他来源找到的文件（CSD F1）',
 				value: 'no permission',
-				tooltip: 'Image or media does not have proof that the author agreed to licence the file'
+				tooltip: '上传者宣称拥有，而在其他来源找到的文件'
+			},
+			{
+				label: '无法找到作者授权的文件（CSD F1）',
+				value: 'no permission',
+				tooltip: '文件宣称由某作者依据某自由著作权协议发布，但找不到该自由协议的声明'
+			},
+			{
+				label: '其他明显侵权的文件（CSD F1）',
+				value: 'no permission',
+				tooltip: '其他明显侵权的文件'
+			},
+			{
+				label: '重复且不再使用的文件（CSD F2）',
+				value: 'duplicate',
+				tooltip: '包括以下情况：与现有文件完全相同（或与现有文件内容一致但尺寸较小），且没有客观需要（如某些场合需使用小尺寸图片）的文件；被更加清晰的文件、SVG格式文件所取代的文件。'
 			}
 		]
 	});
 	form.append({
 		type: 'div',
-		label: 'Work area',
+		label: '工作区',
 		name: 'work_area'
 	});
 	form.append({ type: 'submit' });
