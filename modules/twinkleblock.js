@@ -10,7 +10,7 @@
  */
 (function($) {
 
-var api = new mw.Api(), relevantUserName;
+var api = new mw.Api(), relevantUserName = mw.config.get('wgRelevantUserName');
 var menuFormattedNamespaces = $.extend({}, mw.config.get('wgFormattedNamespaces'));
 menuFormattedNamespaces[0] = '（条目）';
 var blockActionText = {
@@ -1609,16 +1609,10 @@ Twinkle.block.callback.issue_template = function twinkleblockCallbackIssueTempla
 	Morebits.wiki.actionCompleted.redirect = userTalkPage;
 	Morebits.wiki.actionCompleted.notice = '完成，将在几秒后加载用户讨论页';
 
-	Morebits.wiki.flow.check(userTalkPage, function () {
-		var flowpage = new Morebits.wiki.flow(userTalkPage, '用户Flow讨论页留言');
-		flowpage.setCallbackParameters(params);
-		Twinkle.block.callback.main_flow(flowpage);
-	}, function () {
-		var qiuwen_page = new Morebits.wiki.page(userTalkPage, '用户讨论页修改');
-		qiuwen_page.setCallbackParameters(params);
-		qiuwen_page.setFollowRedirect(true);
-		qiuwen_page.load(Twinkle.block.callback.main);
-	});
+	var qiuwen_page = new Morebits.wiki.page(userTalkPage, '用户讨论页修改');
+	qiuwen_page.setCallbackParameters(params);
+	qiuwen_page.setFollowRedirect(true);
+	qiuwen_page.load(Twinkle.block.callback.main);
 
 };
 

@@ -20,9 +20,10 @@
  *                         etc.), as well as the rollback success page
  */
 
-Twinkle.warn = function twinklewarn() {
+var relevantUserName = mw.config.get('wgRelevantUserName');
 
-	if (Morebits.wiki.flow.relevantUserName()) {
+Twinkle.warn = function twinklewarn() {
+	if (relevantUserName) {
 		Twinkle.addPortletLink(Twinkle.warn.callback, '警告', 'tw-warn', '警告或提醒用户');
 		if (Twinkle.getPref('autoMenuAfterRollback') &&
 			mw.config.get('wgNamespaceNumber') === 3 &&
@@ -69,7 +70,7 @@ Twinkle.warn.makeVandalTalkLink = function($vandalTalkLink, pagename) {
 Twinkle.warn.dialog = null;
 
 Twinkle.warn.callback = function twinklewarnCallback() {
-	if (Morebits.wiki.flow.relevantUserName() === mw.config.get('wgUserName') &&
+	if (relevantUserName === mw.config.get('wgUserName') &&
 		!confirm('您将要警告自己！您确定要继续吗？')) {
 		return;
 	}
@@ -207,14 +208,14 @@ Twinkle.warn.callback = function twinklewarnCallback() {
 		}
 	}
 
-	if (mw.util.isIPAddress(Morebits.wiki.flow.relevantUserName())) {
+	if (mw.util.isIPAddress(relevantUserName)) {
 		query = {
 			format: 'json',
 			action: 'query',
 			list: 'usercontribs',
 			uclimit: 1,
 			ucend: new Morebits.date().subtract(30, 'days').format('YYYY-MM-DDTHH:MM:ssZ', 'utc'),
-			ucuser: Morebits.wiki.flow.relevantUserName()
+			ucuser: relevantUserName
 		};
 		new Morebits.wiki.api('检查该IP用户上一笔贡献时间', query, function(apiobj) {
 			if (apiobj.getResponse().query.usercontribs.length === 0) {
@@ -1206,7 +1207,7 @@ Twinkle.warn.callback.change_category = function twinklewarnCallbackChangeCatego
 			if (Twinkle.warn.talkpageObj) {
 				autolevelProc();
 			} else {
-				var usertalk_page = new Morebits.wiki.page('User_talk:' + Morebits.wiki.flow.relevantUserName(), '加载上次警告');
+				var usertalk_page = new Morebits.wiki.page('User_talk:' + relevantUserName, '加载上次警告');
 				usertalk_page.setFollowRedirect(true, false);
 				usertalk_page.load(function(pageobj) {
 					Twinkle.warn.talkpageObj = pageobj; // Update talkpageObj
@@ -1358,13 +1359,13 @@ Twinkle.warn.callbacks = {
 		templatetext = Twinkle.warn.callbacks.getWarningWikitext(templatename, linkedarticle,
 			input.reason, input.main_group === 'custom');
 
-		form.previewer.beginRender(templatetext, 'User_talk:' + Morebits.wiki.flow.relevantUserName() + (Twinkle.warn.isFlow ? '/Wikitext' : '')); // Force wikitext/correct username
+		form.previewer.beginRender(templatetext, 'User_talk:' + relevantUserName + (Twinkle.warn.isFlow ? '/Wikitext' : '')); // Force wikitext/correct username
 	},
 	// Just a pass-through unless the autolevel option was selected
 	preview: function(form) {
 		if (form.main_group.value === 'autolevel') {
 			// Always get a new, updated talkpage for autolevel processing
-			var usertalk_page = new Morebits.wiki.page('User_talk:' + Morebits.wiki.flow.relevantUserName(), '加载上次警告');
+			var usertalk_page = new Morebits.wiki.page('User_talk:' + relevantUserName, '加载上次警告');
 			usertalk_page.setFollowRedirect(true, false);
 			// Will fail silently if the talk page is a cross-ns redirect,
 			// removal of the preview box handled when loading the menu
@@ -1483,13 +1484,13 @@ Twinkle.warn.callbacks = {
 							click: function() {
 								Morebits.wiki.actionCompleted.redirect = null;
 								Twinkle.warn.dialog.close();
-								Twinkle.arv.callback(Morebits.wiki.flow.relevantUserName());
+								Twinkle.arv.callback(relevantUserName);
 								$('input[name=page]').val(params.article); // Target page
 								$('input[value=final]').prop('checked', true); // Vandalism after final
 							}
 						});
 						var statusNode = $('<div/>', {
-							text: Morebits.wiki.flow.relevantUserName() + '最后收到了一个层级4警告（' + latest.type + '），所以将其报告给管理人员会比较好；',
+							text: relevantUserName + '最后收到了一个层级4警告（' + latest.type + '），所以将其报告给管理人员会比较好；',
 							css: {color: 'red' }
 						});
 						statusNode.append($link[0]);
@@ -1738,7 +1739,7 @@ Twinkle.warn.callbacks = {
 };
 
 Twinkle.warn.callback.evaluate = function twinklewarnCallbackEvaluate(e) {
-	var userTalkPage = 'User_talk:' + Morebits.wiki.flow.relevantUserName();
+	var userTalkPage = 'User_talk:' + relevantUserName;
 
 	// reason, main_group, sub_group, article
 	var params = Morebits.quickForm.getInputData(e.target);
