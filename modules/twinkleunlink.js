@@ -32,7 +32,7 @@ Twinkle.unlink.callback = function(presetReason) {
 	var fileSpace = mw.config.get('wgNamespaceNumber') === 6;
 
 	var Window = new Morebits.simpleWindow(600, 440);
-	Window.setTitle('Unlink backlinks' + (fileSpace ? ' and file usages' : ''));
+	Window.setTitle('取消页面链入' + (fileSpace ? '及文件使用' : ''));
 	Window.setScriptName('Twinkle');
 	Window.addFooterLink('参数设置', 'H:TW/PREF#unlink');
 	Window.addFooterLink('帮助文档', 'H:TW/DOC#unlink');
