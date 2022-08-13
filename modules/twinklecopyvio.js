@@ -5,8 +5,8 @@
  * © 2011-2021 Chinese Wikipedia Contributors
  * © 2021-     Qiuwen Baike Contributors
  * This work is licensed under a Creative Commons
- * Attribution-ShareAlike 3.0 Unported License.
- * https://creativecommons.org/licenses/by-sa/3.0/
+ * Attribution-ShareAlike 4.0 International License.
+ * https://creativecommons.org/licenses/by-sa/4.0/
  */
 (function($) { // eslint-disable-line no-unused-vars
 
