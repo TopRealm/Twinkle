@@ -384,7 +384,7 @@ Twinkle.xfd.callbacks = {
 							newText + '\n\n' +
 							commentText + '\n' +
 							'----\n' +
-							':{{删除}}理據：' + Morebits.string.formatReasonText(params.reason) + '\n' +
+							':建议删除，理由：' + Morebits.string.formatReasonText(params.reason) + '\n' +
 							'提报以上' + {
 							fame: '<u>关注度不足</u>条目',
 							substub: '<u>小小作品</u>',
