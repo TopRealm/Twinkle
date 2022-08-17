@@ -73,7 +73,7 @@ Twinkle.xfd.callback = function twinklexfdCallback() {
 		type: 'checkbox',
 		list: [
 			{
-				label: '如可能，通知页面创建者',
+				label: '如可能，通知页面创建者或文件最初上传者',
 				value: 'notify',
 				name: 'notify',
 				tooltip: '在页面创建者讨论页上放置一通知模板。',
@@ -364,7 +364,7 @@ Twinkle.xfd.callbacks = {
 				case 'fame':
 				case 'substub':
 				case 'batch':
-					var commentText = '<!-- Twinkle: User:' + mw.config.get('wgUserName') + ' 的 ' + type + ' 提刪插入點，請勿變更或移除此行，除非不再於此頁提刪 -->';
+					var commentText = '<!-- Twinkle: User:' + mw.config.get('wgUserName') + ' 的 ' + type + ' 提删插入点，请勿变更或移除此行，除非不再于本页面提删 -->';
 					var newText = '===[[:' + Morebits.pageNameNorm + ']]===';
 					if (type === 'fame') {
 						newText += '\n{{Findsources|' + Morebits.pageNameNorm + '}}';
@@ -376,25 +376,26 @@ Twinkle.xfd.callbacks = {
 					} else {
 						var appendText = '\n{{safesubst:SafeAfdHead}}\n' +
 							{
-								fame: '==30天后仍掛有{{tl|notability}}模板的條目==\n' +
-									'<span style="font-size:smaller;">(已掛[[template:notability|關注度模板]]30天)</span>',
-								substub: '==到期篩選的小小作品==',
-								batch: '==批量提刪=='
+								fame: '== 30天后仍挂有{{tl|notability}}模板的条目 ==\n' +
+									'<span style="font-size:smaller;">（已挂[[Template:notability|不符收录标准模板]]30天）</span>',
+								substub: '== 30天后仍挂有{{tl|substub}}模板的条目 ==\n' +
+								'<span style="font-size:smaller;">（已挂[[Template:substub|小小条目模板]]30天）</span>',
+								batch: '== 批量提删 =='
 							}[type] + '\n' +
 							newText + '\n\n' +
 							commentText + '\n' +
 							'----\n' +
-							':{{删除}}理據：' + Morebits.string.formatReasonText(params.reason) + '\n' +
+							':建议：删除前述页面；理由：' + Morebits.string.formatReasonText(params.reason) + '\n' +
 							'提报以上' + {
-							fame: '<u>关注度不足</u>条目',
-							substub: '<u>小小作品</u>',
-							batch: '頁面'
+							fame: '<u>不符合收录标准</u>条目',
+							substub: '<u>长度过短</u>条目',
+							batch: '页面'
 						}[type] + '的用户及时间：<br id="no-new-title" />~~~~';
 						pageobj.setAppendText(appendText);
 					}
 					break;
 				default:
-					pageobj.setAppendText('\n{{subst:DRItem|Type=' + type + '|DRarticles=' + Morebits.pageNameNorm + '|Reason=' + Morebits.string.formatReasonText(params.reason) + (params.fwdcsdreason.trim() !== '' ? '<br>\n轉交理由：' + params.fwdcsdreason : '') + '|To=' + to + '}}~~~~');
+					pageobj.setAppendText('\n{{subst:DRItem|Type=' + type + '|DRarticles=' + Morebits.pageNameNorm + '|Reason=' + Morebits.string.formatReasonText(params.reason) + (params.fwdcsdreason.trim() !== '' ? '<br>\n转交理由：' + params.fwdcsdreason : '') + '|To=' + to + '}}~~~~');
 					break;
 			}
 
