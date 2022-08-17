@@ -1158,15 +1158,10 @@ Twinkle.speedy.callbacks = {
 							notifytext;
 
 						notifytext = '\n{{subst:db-notice|target=' + Morebits.pageNameNorm;
-						notifytext += '--~~~~';
+						notifytext += '}} --~~~~';
 
 						var editsummary = '通知：';
-						if (params.normalizeds.indexOf('g12') === -1) {  // no article name in summary for G10 deletions
-							editsummary += '页面[[' + Morebits.pageNameNorm + ']]';
-						} else {
-							editsummary += '一攻击性页面';
-						}
-						editsummary += '快速删除提名';
+						editsummary += '页面[[' + Morebits.pageNameNorm + ']]的快速删除提名';
 
 						usertalkpage.setAppendText(notifytext);
 						usertalkpage.setEditSummary(editsummary);
