@@ -643,9 +643,9 @@ Twinkle.protect.protectionLengths = [
 ];
 
 Twinkle.protect.protectionTypes = [
-	{ label: 'Unprotection', value: 'unprotect' },
+	{ label: '解除保护', value: 'unprotect' },
 	{
-		label: 'Full protection',
+		label: '全保护',
 		list: [
 			{ label: 'Generic (full)', value: 'pp-protected' },
 			{ label: 'Content dispute/edit warring (full)', value: 'pp-dispute' },

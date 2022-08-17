@@ -427,7 +427,7 @@ Twinkle.fluff.revertToRevision = function revertToRevision(oldrev) {
 		type: 'csrf',
 		format: 'json'
 	};
-	var qiuwen_api = new Morebits.wiki.api('Grabbing data of the earlier revision', query, Twinkle.fluff.callbacks.toRevision);
+	var qiuwen_api = new Morebits.wiki.api('抓取该较早版本', query, Twinkle.fluff.callbacks.toRevision);
 	qiuwen_api.params = { rev: oldrev };
 	qiuwen_api.post();
 };
