@@ -118,7 +118,7 @@ var isTemplate = mw.config.get('wgNamespaceNumber') === 10 || mw.config.get('wgN
 Twinkle.protect.currentProtectionLevels = {};
 
 // returns a jQuery Deferred object, usage:
-//   Twinkle.protect.fetchProtectingAdmin(apiObject, pageName, protect/stable).done(function(admin_username) { ...code... });
+//   Twinkle.protect.fetchProtectingAdmin(apiObject, pageName, protect).done(function(admin_username) { ...code... });
 Twinkle.protect.fetchProtectingAdmin = function twinkleprotectFetchProtectingAdmin(api, pageName, protType, logIds) {
 	logIds = logIds || [];
 
@@ -136,7 +136,7 @@ Twinkle.protect.fetchProtectingAdmin = function twinkleprotectFetchProtectingAdm
 		if (!event) {
 			// fail gracefully
 			return null;
-		} else if (event.action === 'move_prot' || event.action === 'move_stable') {
+		} else if (event.action === 'move_prot') {
 			return twinkleprotectFetchProtectingAdmin(api, protType === 'protect' ? event.params.oldtitle_title : event.params.oldtitle, protType, logIds.concat(event.logid));
 		}
 		return event.user;
@@ -160,7 +160,7 @@ Twinkle.protect.fetchProtectionLevel = function twinkleprotectFetchProtectionLev
 
 	var earlyDecision = [protectDeferred];
 
-	$.when.apply($, earlyDecision).done(function(protectData, stableData) {
+	$.when.apply($, earlyDecision).done(function(protectData) {
 		// $.when.apply is supposed to take an unknown number of promises
 		// via an array, which it does, but the type of data returned varies.
 		// If there are two or more deferreds, it returns an array (of objects),
@@ -197,25 +197,16 @@ Twinkle.protect.fetchProtectionLevel = function twinkleprotectFetchProtectionLev
 			}
 		});
 
-		if (page.flagged) {
-			current.stabilize = {
-				level: page.flagged.protection_level,
-				expiry: page.flagged.protection_expiry
-			};
-			adminEditDeferred = Twinkle.protect.fetchProtectingAdmin(api, mw.config.get('wgPageName'), 'stable');
-		}
-
 		// show the protection level and log info
 		Twinkle.protect.hasProtectLog = !!protectData[0].query.logevents.length;
 		Twinkle.protect.protectLog = Twinkle.protect.hasProtectLog && protectData[0].query.logevents;
 		Twinkle.protect.hasStableLog = false;
-		Twinkle.protect.stableLog = Twinkle.protect.hasStableLog && stableData[0].query.logevents;
 		Twinkle.protect.currentProtectionLevels = current;
 
 		if (adminEditDeferred) {
 			adminEditDeferred.done(function(admin) {
 				if (admin) {
-					$.each(['edit', 'move', 'create', 'stabilize', 'cascading'], function(i, type) {
+					$.each(['edit', 'move', 'create', 'cascading'], function(i, type) {
 						if (Twinkle.protect.currentProtectionLevels[type]) {
 							Twinkle.protect.currentProtectionLevels[type].admin = admin;
 						}
@@ -237,7 +228,7 @@ Twinkle.protect.callback.showLogAndCurrentProtectInfo = function twinkleprotectC
 
 		if (Twinkle.protect.hasProtectLog) {
 			$linkMarkup.append(
-				$('<a target="_blank" href="' + mw.util.getUrl('Special:Log', {action: 'view', page: mw.config.get('wgPageName'), type: 'protect'}) + '">protection log</a>'));
+				$('<a target="_blank" href="' + mw.util.getUrl('Special:Log', {action: 'view', page: mw.config.get('wgPageName'), type: 'protect'}) + '">保护日志</a>'));
 			if (!currentlyProtected || (!Twinkle.protect.currentProtectionLevels.edit && !Twinkle.protect.currentProtectionLevels.move)) {
 				var lastProtectAction = Twinkle.protect.protectLog[0];
 				if (lastProtectAction.action === 'unprotect') {
@@ -246,24 +237,11 @@ Twinkle.protect.callback.showLogAndCurrentProtectInfo = function twinkleprotectC
 					$linkMarkup.append(' (expired ' + new Morebits.date(lastProtectAction.params.details[0].expiry).calendar('utc') + ')');
 				}
 			}
-			$linkMarkup.append(Twinkle.protect.hasStableLog ? $('<span> &bull; </span>') : null);
-		}
-
-		if (Twinkle.protect.hasStableLog) {
-			$linkMarkup.append($('<a target="_blank" href="' + mw.util.getUrl('Special:Log', {action: 'view', page: mw.config.get('wgPageName'), type: 'stable'}) + '">pending changes log</a>)'));
-			if (!currentlyProtected || !Twinkle.protect.currentProtectionLevels.stabilize) {
-				var lastStabilizeAction = Twinkle.protect.stableLog[0];
-				if (lastStabilizeAction.action === 'reset') {
-					$linkMarkup.append(' (reset ' + new Morebits.date(lastStabilizeAction.timestamp).calendar('utc') + ')');
-				} else { // config or modify
-					$linkMarkup.append(' (expired ' + new Morebits.date(lastStabilizeAction.params.expiry).calendar('utc') + ')');
-				}
-			}
 		}
 
 		Morebits.status.init($('div[name="hasprotectlog"] span')[0]);
 		Morebits.status.warn(
-			currentlyProtected ? 'Previous protections' : 'This page has been protected in the past',
+			currentlyProtected ? '先前保护' : '此页面过去曾被保护',
 			$linkMarkup[0]
 		);
 	}
@@ -273,7 +251,7 @@ Twinkle.protect.callback.showLogAndCurrentProtectInfo = function twinkleprotectC
 
 	if (currentlyProtected) {
 		$.each(Twinkle.protect.currentProtectionLevels, function(type, settings) {
-			var label = type === 'stabilize' ? 'Pending Changes' : Morebits.string.toUpperCaseFirstChar(type);
+			var label = Morebits.string.toUpperCaseFirstChar(type);
 
 			if (type === 'cascading') { // Covered by another page
 				label = 'Cascading protection ';
@@ -587,14 +565,6 @@ Twinkle.protect.formevents = {
 	movelevel: function twinkleprotectFormMovelevelEvent(e) {
 		e.target.form.moveexpiry.disabled = e.target.value === 'all';
 	},
-	pcmodify: function twinkleprotectFormPcmodifyEvent(e) {
-		e.target.form.pclevel.disabled = !e.target.checked;
-		e.target.form.pcexpiry.disabled = !e.target.checked || (e.target.form.pclevel.value === 'none');
-		e.target.form.pclevel.style.color = e.target.form.pcexpiry.style.color = e.target.checked ? '' : 'transparent';
-	},
-	pclevel: function twinkleprotectFormPclevelEvent(e) {
-		e.target.form.pcexpiry.disabled = e.target.value === 'none';
-	},
 	createlevel: function twinkleprotectFormCreatelevelEvent(e) {
 		e.target.form.createexpiry.disabled = e.target.value === 'all';
 	},
@@ -682,16 +652,6 @@ Twinkle.protect.protectionTypes = [
 		]
 	},
 	{
-		label: 'Pending changes',
-		list: [
-			{ label: 'Generic (PC)', value: 'pp-pc-protected' },
-			{ label: 'Persistent vandalism (PC)', value: 'pp-pc-vandalism' },
-			{ label: 'Disruptive editing (PC)', value: 'pp-pc-disruptive' },
-			{ label: 'Adding unsourced content (PC)', value: 'pp-pc-unsourced' },
-			{ label: 'BLP policy violations (PC)', value: 'pp-pc-blp' }
-		]
-	},
-	{
 		label: 'Move protection',
 		list: [
 			{ label: 'Generic (move)', value: 'pp-move' },
@@ -701,7 +661,7 @@ Twinkle.protect.protectionTypes = [
 		]
 	}
 ].filter(function(type) {
-	// Filter for templates and flaggedrevs
+	// Filter for templates
 	return isTemplate || type.label !== 'Template protection';
 });
 
@@ -718,20 +678,18 @@ Twinkle.protect.protectionTypesCreate = [
 	}
 ];
 
-// A page with both regular and PC protection will be assigned its regular
+// A page with regular protection will be assigned its regular
 // protection weight plus 2
 Twinkle.protect.protectionWeight = {
-	sysop: 40,
-	templateeditor: 30,
-	extendedconfirmed: 20,
+	officialprotected: 40,
+	revisionprotected: 40,
+	sysop: 30,
+	templateeditor: 20,
 	autoconfirmed: 10,
-	flaggedrevs_autoconfirmed: 5,  // Pending Changes protection alone
-	all: 0,
-	flaggedrevs_none: 0  // just in case
+	all: 0
 };
 
 // NOTICE: keep this synched with [[MediaWiki:Protect-dropdown]]
-// Also note: stabilize = Pending Changes level
 // expiry will override any defaults
 Twinkle.protect.protectionPresetsInfo = {
 	'pp-protected': {
@@ -836,31 +794,6 @@ Twinkle.protect.protectionPresetsInfo = {
 		reason: null,
 		template: 'pp-protected'
 	},
-	'pp-pc-vandalism': {
-		stabilize: 'autoconfirmed',  // stabilize = Pending Changes
-		reason: 'Persistent [[QW:Vandalism|vandalism]]',
-		template: 'pp-pc'
-	},
-	'pp-pc-disruptive': {
-		stabilize: 'autoconfirmed',
-		reason: 'Persistent [[QW:Disruptive editing|disruptive editing]]',
-		template: 'pp-pc'
-	},
-	'pp-pc-unsourced': {
-		stabilize: 'autoconfirmed',
-		reason: 'Persistent addition of [[QW:INTREF|unsourced or poorly sourced content]]',
-		template: 'pp-pc'
-	},
-	'pp-pc-blp': {
-		stabilize: 'autoconfirmed',
-		reason: 'Violations of the [[QW:BLP|biographies of living persons policy]]',
-		template: 'pp-pc'
-	},
-	'pp-pc-protected': {
-		stabilize: 'autoconfirmed',
-		reason: null,
-		template: 'pp-pc'
-	},
 	'pp-move': {
 		move: 'sysop',
 		reason: null
@@ -881,7 +814,6 @@ Twinkle.protect.protectionPresetsInfo = {
 	'unprotect': {
 		edit: 'all',
 		move: 'all',
-		stabilize: 'none',
 		create: 'all',
 		reason: null,
 		template: 'none'
@@ -925,12 +857,6 @@ Twinkle.protect.protectionTags = [
 			{ label: '{{pp-protected}}: general protection', value: 'pp-protected' },
 			{ label: '{{pp-semi-indef}}: general long-term semi-protection', value: 'pp-semi-indef' },
 			{ label: '{{pp-30-500}}: extended confirmed protection', value: 'pp-30-500' }
-		]
-	},
-	{
-		label: 'Pending changes templates',
-		list: [
-			{ label: '{{pp-pc}}: pending changes', value: 'pp-pc' }
 		]
 	},
 	{
@@ -982,20 +908,6 @@ Twinkle.protect.callback.changePreset = function twinkleprotectCallbackChangePre
 			}
 
 			form.editexpiry.value = form.moveexpiry.value = item.expiry || '2 days';
-
-
-			if (form.pcmodify) {
-				if (item.stabilize) {
-					form.pcmodify.checked = true;
-					Twinkle.protect.formevents.pcmodify({ target: form.pcmodify });
-					form.pclevel.value = item.stabilize;
-					Twinkle.protect.formevents.pclevel({ target: form.pclevel });
-				} else {
-					form.pcmodify.checked = false;
-					Twinkle.protect.formevents.pcmodify({ target: form.pcmodify });
-				}
-				form.pcexpiry.value = item.expiry || '1 month';
-			}
 		} else {
 			if (item.create) {
 				form.createlevel.value = item.create;
@@ -1117,43 +1029,8 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 				thispage.protect(next);
 			};
 
-			var stabilizeIt = function twinkleprotectCallbackStabilizeIt() {
-				if (thispage) {
-					thispage.getStatusElement().info('done');
-				}
-
-				thispage = new Morebits.wiki.page(mw.config.get('wgPageName'), 'Applying pending changes protection');
-				thispage.setFlaggedRevs(input.pclevel, input.pcexpiry);
-
-				if (input.protectReason) {
-					thispage.setEditSummary(input.protectReason + Twinkle.summaryAd); // flaggedrevs tag support: [[phab:T247721]]
-				} else {
-					alert('You must enter a protect reason, which will be inscribed into the protection log.');
-					return;
-				}
-
-				if (!statusInited) {
-					Morebits.simpleWindow.setButtonsEnabled(false);
-					Morebits.status.init(form);
-					statusInited = true;
-				}
-
-				thispage.setWatchlist(Twinkle.getPref('watchProtectedPages'));
-				thispage.stabilize(allDone, function(error) {
-					if (error.errorCode === 'stabilize_denied') { // [[phab:T234743]]
-						thispage.getStatusElement().error('Failed trying to modify pending changes settings, likely due to a mediawiki bug. Other actions (tagging or regular protection) may have taken place. Please reload the page and try again.');
-					}
-				});
-			};
-
 			if (input.editmodify || input.movemodify || !mw.config.get('wgArticleId')) {
-				if (input.pcmodify) {
-					protectIt(stabilizeIt);
-				} else {
-					protectIt(allDone);
-				}
-			} else if (input.pcmodify) {
-				stabilizeIt();
+				protectIt(allDone);
 			} else {
 				alert("Please give Twinkle something to do! \nIf you just want to tag the page, you can choose the 'Tag page with protection template' option at the top.");
 			}
@@ -1202,13 +1079,6 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 				case 'pp-semi-protected':
 					typename = 'semi-protection';
 					break;
-				case 'pp-pc-vandalism':
-				case 'pp-pc-blp':
-				case 'pp-pc-protected':
-				case 'pp-pc-unsourced':
-				case 'pp-pc-disruptive':
-					typename = 'pending changes';
-					break;
 				case 'pp-move':
 				case 'pp-move-dispute':
 				case 'pp-move-indef':
@@ -1242,17 +1112,14 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 					break;
 				case 'pp-vandalism':
 				case 'pp-semi-vandalism':
-				case 'pp-pc-vandalism':
 				case 'pp-30-500-vandalism':
 					typereason = 'Persistent [[QW:VAND|vandalism]]';
 					break;
 				case 'pp-semi-disruptive':
-				case 'pp-pc-disruptive':
 				case 'pp-30-500-disruptive':
 					typereason = 'Persistent [[Qiuwen:Disruptive editing|disruptive editing]]';
 					break;
 				case 'pp-semi-unsourced':
-				case 'pp-pc-unsourced':
 					typereason = 'Persistent addition of [[QW:INTREF|unsourced or poorly sourced content]]';
 					break;
 				case 'pp-template':
@@ -1270,7 +1137,6 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 					typereason = 'Persistent [[QW:SOCK|sockpuppetry]]';
 					break;
 				case 'pp-semi-blp':
-				case 'pp-pc-blp':
 				case 'pp-30-500-blp':
 					typereason = '[[QW:BLP|BLP]] policy violations';
 					break;
@@ -1484,26 +1350,15 @@ Twinkle.protect.callbacks = {
 			var protInfo = Twinkle.protect.protectionPresetsInfo[params.category];
 
 			// function to compute protection weights (see comment at Twinkle.protect.protectionWeight)
-			var computeWeight = function(mainLevel, stabilizeLevel) {
+			var computeWeight = function(mainLevel) {
 				var result = Twinkle.protect.protectionWeight[mainLevel || 'all'];
-				if (stabilizeLevel) {
-					if (result) {
-						if (stabilizeLevel.level === 'autoconfirmed') {
-							result += 2;
-						}
-					} else {
-						result = Twinkle.protect.protectionWeight['flaggedrevs_' + stabilizeLevel];
-					}
-				}
 				return result;
 			};
 
 			// compare the page's current protection weights with the protection we are requesting
 			var editWeight = computeWeight(Twinkle.protect.currentProtectionLevels.edit &&
-				Twinkle.protect.currentProtectionLevels.edit.level,
-			Twinkle.protect.currentProtectionLevels.stabilize &&
-				Twinkle.protect.currentProtectionLevels.stabilize.level);
-			if (computeWeight(protInfo.edit, protInfo.stabilize) > editWeight ||
+				Twinkle.protect.currentProtectionLevels.edit.level);
+			if (computeWeight(protInfo.edit) > editWeight ||
 				computeWeight(protInfo.move) > computeWeight(Twinkle.protect.currentProtectionLevels.move &&
 				Twinkle.protect.currentProtectionLevels.move.level) ||
 				computeWeight(protInfo.create) > computeWeight(Twinkle.protect.currentProtectionLevels.create &&
@@ -1522,7 +1377,7 @@ Twinkle.protect.callbacks = {
 					return;
 				}
 				statusElement.status('Adding new request...');
-				rppPage.setEditSummary('/* ' + Morebits.pageNameNorm + ' */ Requesting ' + params.typename + (params.typename === 'pending changes' ? ' on [[:' : ' of [[:') +
+				rppPage.setEditSummary('/* ' + Morebits.pageNameNorm + ' */ Requesting ' + params.typename + ' of [[:' +
 					Morebits.pageNameNorm + ']].');
 				rppPage.setChangeTags(Twinkle.changeTags);
 				rppPage.setPageText(text);
@@ -1558,7 +1413,7 @@ Twinkle.protect.callbacks = {
 					return;
 				}
 				statusElement.status('Adding new request...');
-				rppPage2.setEditSummary('/* ' + Morebits.pageNameNorm + ' */ Requesting ' + params.typename + (params.typename === 'pending changes' ? ' on [[:' : ' of [[:') +
+				rppPage2.setEditSummary('/* ' + Morebits.pageNameNorm + ' */ Requesting ' + params.typename + ' of [[:' +
 					Morebits.pageNameNorm + ']].');
 				rppPage2.setChangeTags(Twinkle.changeTags);
 				rppPage2.setPageText(text2);
