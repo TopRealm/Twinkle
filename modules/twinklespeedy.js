@@ -89,7 +89,6 @@ Twinkle.speedy.initDialog = function twinklespeedyInitDialog(callbackfunc) {
 	var Window = new Morebits.simpleWindow(Twinkle.getPref('speedyWindowWidth'), Twinkle.getPref('speedyWindowHeight'));
 	Window.setScriptName('Twinkle');
 	Window.setTitle('选择快速删除理由');
-	Window.setScriptName('Twinkle');
 	Window.addFooterLink('快速删除方针', 'QW:SD');
 	Window.addFooterLink('参数设置', 'H:TW/PREF#speedy');
 	Window.addFooterLink('帮助文档', 'H:TW/DOC#speedy');
