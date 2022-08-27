@@ -630,16 +630,6 @@ Twinkle.protect.protectionTypes = [
 		]
 	},
 	{
-		label: 'Extended confirmed protection',
-		list: [
-			{ label: 'Arbitration enforcement (ECP)', selected: true, value: 'pp-30-500-arb' },
-			{ label: 'Persistent vandalism (ECP)', value: 'pp-30-500-vandalism' },
-			{ label: 'Disruptive editing (ECP)', value: 'pp-30-500-disruptive' },
-			{ label: 'BLP policy violations (ECP)', value: 'pp-30-500-blp' },
-			{ label: 'Sockpuppetry (ECP)', value: 'pp-30-500-sock' }
-		]
-	},
-	{
 		label: 'Semi-protection',
 		list: [
 			{ label: 'Generic (semi)', value: 'pp-semi-protected' },
@@ -719,37 +709,6 @@ Twinkle.protect.protectionPresetsInfo = {
 		expiry: 'infinity',
 		reason: '[[QW:High-risk templates|Highly visible template]]'
 	},
-	'pp-30-500-arb': {
-		edit: 'extendedconfirmed',
-		move: 'extendedconfirmed',
-		expiry: 'infinity',
-		reason: '[[QW:30/500|Arbitration enforcement]]',
-		template: 'pp-30-500'
-	},
-	'pp-30-500-vandalism': {
-		edit: 'extendedconfirmed',
-		move: 'extendedconfirmed',
-		reason: 'Persistent [[QW:Vandalism|vandalism]] from (auto)confirmed accounts',
-		template: 'pp-30-500'
-	},
-	'pp-30-500-disruptive': {
-		edit: 'extendedconfirmed',
-		move: 'extendedconfirmed',
-		reason: 'Persistent [[QW:Disruptive editing|disruptive editing]] from (auto)confirmed accounts',
-		template: 'pp-30-500'
-	},
-	'pp-30-500-blp': {
-		edit: 'extendedconfirmed',
-		move: 'extendedconfirmed',
-		reason: 'Persistent violations of the [[QW:BLP|biographies of living persons policy]] from (auto)confirmed accounts',
-		template: 'pp-30-500'
-	},
-	'pp-30-500-sock': {
-		edit: 'extendedconfirmed',
-		move: 'extendedconfirmed',
-		reason: 'Persistent [[QW:Sock puppetry|sock puppetry]]',
-		template: 'pp-30-500'
-	},
 	'pp-semi-vandalism': {
 		edit: 'autoconfirmed',
 		reason: 'Persistent [[QW:Vandalism|vandalism]]',
@@ -823,15 +782,15 @@ Twinkle.protect.protectionPresetsInfo = {
 		reason: '[[QW:SALT|Offensive name]]'
 	},
 	'pp-create-salt': {
-		create: 'extendedconfirmed',
+		create: 'autoconfirmed',
 		reason: '[[QW:SALT|Repeatedly recreated]]'
 	},
 	'pp-create-blp': {
-		create: 'extendedconfirmed',
+		create: 'autoconfirmed',
 		reason: '[[QW:BLPDEL|Recently deleted BLP]]'
 	},
 	'pp-create': {
-		create: 'extendedconfirmed',
+		create: 'autoconfirmed',
 		reason: '{{pp-create}}'
 	}
 };
@@ -855,8 +814,7 @@ Twinkle.protect.protectionTags = [
 			{ label: '{{pp-template}}: high-risk template', value: 'pp-template' },
 			{ label: '{{pp-usertalk}}: blocked user talk', value: 'pp-usertalk' },
 			{ label: '{{pp-protected}}: general protection', value: 'pp-protected' },
-			{ label: '{{pp-semi-indef}}: general long-term semi-protection', value: 'pp-semi-indef' },
-			{ label: '{{pp-30-500}}: extended confirmed protection', value: 'pp-30-500' }
+			{ label: '{{pp-semi-indef}}: general long-term semi-protection', value: 'pp-semi-indef' }
 		]
 	},
 	{
@@ -1063,13 +1021,6 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 				case 'pp-template':
 					typename = 'template protection';
 					break;
-				case 'pp-30-500-arb':
-				case 'pp-30-500-vandalism':
-				case 'pp-30-500-disruptive':
-				case 'pp-30-500-blp':
-				case 'pp-30-500-sock':
-					typename = 'extended confirmed protection';
-					break;
 				case 'pp-semi-vandalism':
 				case 'pp-semi-disruptive':
 				case 'pp-semi-unsourced':
@@ -1112,11 +1063,9 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 					break;
 				case 'pp-vandalism':
 				case 'pp-semi-vandalism':
-				case 'pp-30-500-vandalism':
 					typereason = 'Persistent [[QW:VAND|vandalism]]';
 					break;
 				case 'pp-semi-disruptive':
-				case 'pp-30-500-disruptive':
 					typereason = 'Persistent [[Qiuwen:Disruptive editing|disruptive editing]]';
 					break;
 				case 'pp-semi-unsourced':
@@ -1125,19 +1074,14 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 				case 'pp-template':
 					typereason = '[[QW:HIGHRISK|High-risk template]]';
 					break;
-				case 'pp-30-500-arb':
-					typereason = '[[QW:30/500|Arbitration enforcement]]';
-					break;
 				case 'pp-usertalk':
 				case 'pp-semi-usertalk':
 					typereason = 'Inappropriate use of user talk page while blocked';
 					break;
 				case 'pp-semi-sock':
-				case 'pp-30-500-sock':
 					typereason = 'Persistent [[QW:SOCK|sockpuppetry]]';
 					break;
 				case 'pp-semi-blp':
-				case 'pp-30-500-blp':
 					typereason = '[[QW:BLP|BLP]] policy violations';
 					break;
 				case 'pp-move-dispute':
