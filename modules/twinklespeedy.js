@@ -113,18 +113,22 @@ Twinkle.speedy.initDialog = function twinklespeedyInitDialog(callbackfunc) {
 						if (cForm.talkpage) {
 							cForm.talkpage.checked = !cChecked && Twinkle.getPref('deleteTalkPageOnDelete');
 						}
-						// enable redirects checkbox
+						// enable/disable redirects checkbox
+						cForm.redirects.disabled = cChecked;
 						cForm.redirects.checked = !cChecked;
-						// enable delete multiple
+						// enable/disable delete multiple
+						cForm.delmultiple.disabled = cChecked;
 						cForm.delmultiple.checked = false;
-						// enable notify checkbox
+						// enable/disable open talk page checkbox
+						cForm.openusertalk.disabled = cChecked;
+						cForm.openusertalk.checked = false;
+
+						// enable/disable notify checkbox
+						cForm.notify.disabled = !cChecked;
 						cForm.notify.checked = cChecked;
-						// enable deletion notification checkbox
-						cForm.warnusertalk.checked = !cChecked && !Twinkle.speedy.hasCSD;
-						// enable multiple
+						// enable/disable multiple
+						cForm.multiple.disabled = !cChecked;
 						cForm.multiple.checked = false;
-						// enable requesting creation protection
-						cForm.salting.checked = false;
 
 						Twinkle.speedy.callback.modeChanged(cForm);
 
