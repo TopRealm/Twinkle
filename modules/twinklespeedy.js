@@ -467,9 +467,6 @@ Twinkle.speedy.generateCsdList = function twinklespeedyGenerateCsdList(list, mod
 		var criterion = $.extend({}, critElement);
 
 		if (mode.isMultiple) {
-			if (criterion.hideWhenMultiple) {
-				return null;
-			}
 			if (criterion.hideSubgroupWhenMultiple) {
 				criterion.subgroup = null;
 			}
@@ -546,8 +543,7 @@ Twinkle.speedy.customRationale = [
 			type: 'input',
 			label: '理由：',
 			size: 60
-		},
-		hideWhenMultiple: false
+		}
 	}
 ];
 
