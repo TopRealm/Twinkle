@@ -50,8 +50,8 @@ Twinkle.block.callback = function twinkleblockCallback() {
 	Window.setTitle('封禁或向' + relevantUserName + '发出封禁模板');
 	Window.setScriptName('Twinkle');
 	Window.addFooterLink('封禁方针', 'QW:BLOCK');
-	Window.addFooterLink('封禁设置', 'H:TW/PREF#block');
-	Window.addFooterLink('Twinkle帮助', 'H:TW/DOC#block');
+	Window.addFooterLink('封禁设置', 'H:TW/PREF#封禁');
+	Window.addFooterLink('Twinkle帮助', 'H:TW/DOC#封禁');
 
 	var form = new Morebits.quickForm(Twinkle.block.callback.evaluate);
 	var actionfield = form.append({
@@ -1442,7 +1442,7 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate(e) {
 						logExpiry += '到' + expiryDate.calendar();
 					}
 				} else { // no duration, action=unblock, just show timestamp
-					logExpiry = '於' + new Morebits.date(logevents.timestamp).calendar();
+					logExpiry = '于' + new Morebits.date(logevents.timestamp).calendar();
 				}
 				message += '由' + logevents.user + '以“' + logevents.comment + '”' +
 					blockActionText[logevents.action] + logExpiry + '，你想要以你的设置变更封禁吗？';
@@ -1504,7 +1504,7 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate(e) {
 		unblockMbApi.post();
 	}
 	if (!toBlock && !toWarn && !toTag && !toProtect && !toUnblock) {
-		return alert('请给Twinkle点事做！');
+		return alert('Twinkle没有要执行的任务！');
 	}
 };
 
@@ -1762,7 +1762,7 @@ Twinkle.block.callback.main = function twinkleblockcallbackMain(pageobj) {
 	params.indefinite = Morebits.string.isInfinity(params.expiry);
 
 	if (Twinkle.getPref('blankTalkpageOnIndefBlock') && params.template !== 'uw-lblock' && params.indefinite) {
-		Morebits.status.info('信息', '根据参数设置清空讨论页并为日期创建新2级标题');
+		Morebits.status.info('信息', '根据参数设置清空讨论页并为日期创建新二级标题');
 		text = date.monthHeader() + '\n';
 	} else {
 		text = pageobj.getPageText();

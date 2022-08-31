@@ -301,7 +301,7 @@ Twinkle.talkback.evaluate = function(e) {
 	var input = Morebits.quickForm.getInputData(e.target);
 
 	var fullUserTalkPageName = new mw.Title(mw.config.get('wgRelevantUserName'), 3).toText();
-	var talkpage = new Morebits.wiki.page(fullUserTalkPageName, 'Adding talkback');
+	var talkpage = new Morebits.wiki.page(fullUserTalkPageName, '加入回复通告');
 
 	Morebits.simpleWindow.setButtonsEnabled(false);
 	Morebits.status.init(e.target);
@@ -374,7 +374,7 @@ Twinkle.talkback.callbacks = {
 				break;
 			case 'mail':
 				text = '==' + Twinkle.getPref('mailHeading') + '==\n' +
-					"{{You've got mail|subject=" + input.section + '|ts=~~~~~}}';
+					"{{YGM|subject=" + input.section + '|ts=~~~~~}}';
 
 				if (input.message) {
 					text += '\n' + input.message + '  ~~~~';

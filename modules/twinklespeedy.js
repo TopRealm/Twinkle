@@ -89,10 +89,9 @@ Twinkle.speedy.initDialog = function twinklespeedyInitDialog(callbackfunc) {
 	var Window = new Morebits.simpleWindow(Twinkle.getPref('speedyWindowWidth'), Twinkle.getPref('speedyWindowHeight'));
 	Window.setScriptName('Twinkle');
 	Window.setTitle('选择快速删除理由');
-	Window.setScriptName('Twinkle');
 	Window.addFooterLink('快速删除方针', 'QW:SD');
-	Window.addFooterLink('参数设置', 'H:TW/PREF#speedy');
-	Window.addFooterLink('帮助文档', 'H:TW/DOC#speedy');
+	Window.addFooterLink('参数设置', 'H:TW/PREF#速删');
+	Window.addFooterLink('帮助文档', 'H:TW/DOC#速删');
 	Window.addFooterLink('问题反馈', 'HT:TW');
 
 	var form = new Morebits.quickForm(callbackfunc, Twinkle.getPref('speedySelectionStyle') === 'radioClick' ? 'change' : null);
@@ -113,18 +112,22 @@ Twinkle.speedy.initDialog = function twinklespeedyInitDialog(callbackfunc) {
 						if (cForm.talkpage) {
 							cForm.talkpage.checked = !cChecked && Twinkle.getPref('deleteTalkPageOnDelete');
 						}
-						// enable redirects checkbox
+						// enable/disable redirects checkbox
+						cForm.redirects.disabled = cChecked;
 						cForm.redirects.checked = !cChecked;
-						// enable delete multiple
+						// enable/disable delete multiple
+						cForm.delmultiple.disabled = cChecked;
 						cForm.delmultiple.checked = false;
-						// enable notify checkbox
+						// enable/disable open talk page checkbox
+						cForm.openusertalk.disabled = cChecked;
+						cForm.openusertalk.checked = false;
+
+						// enable/disable notify checkbox
+						cForm.notify.disabled = !cChecked;
 						cForm.notify.checked = cChecked;
-						// enable deletion notification checkbox
-						cForm.warnusertalk.checked = !cChecked && !Twinkle.speedy.hasCSD;
-						// enable multiple
+						// enable/disable multiple
+						cForm.multiple.disabled = !cChecked;
 						cForm.multiple.checked = false;
-						// enable requesting creation protection
-						cForm.salting.checked = false;
 
 						Twinkle.speedy.callback.modeChanged(cForm);
 
@@ -463,9 +466,6 @@ Twinkle.speedy.generateCsdList = function twinklespeedyGenerateCsdList(list, mod
 		var criterion = $.extend({}, critElement);
 
 		if (mode.isMultiple) {
-			if (criterion.hideWhenMultiple) {
-				return null;
-			}
 			if (criterion.hideSubgroupWhenMultiple) {
 				criterion.subgroup = null;
 			}
@@ -542,8 +542,7 @@ Twinkle.speedy.customRationale = [
 			type: 'input',
 			label: '理由：',
 			size: 60
-		},
-		hideWhenMultiple: false
+		}
 	}
 ];
 
@@ -977,7 +976,7 @@ Twinkle.speedy.callbacks = {
 				Morebits.status.info($bigtext[0], $link[0]);
 			} else {
 				// open the initial contributor's talk page
-				var statusIndicator = new Morebits.status('打开用户', '打开中…');
+				var statusIndicator = new Morebits.status('打开用户讨论页', '打开中…');
 
 				switch (Twinkle.getPref('userTalkPageMode')) {
 					case 'tab':

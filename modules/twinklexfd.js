@@ -47,8 +47,8 @@ Twinkle.xfd.callback = function twinklexfdCallback() {
 	Window.setTitle('提交存废讨论');
 	Window.setScriptName('Twinkle');
 	Window.addFooterLink('关于存废讨论', 'QW:XFD');
-	Window.addFooterLink('提删设置', 'H:TW/PREF#xfd');
-	Window.addFooterLink('Twinkle帮助', 'H:TW/DOC#xfd');
+	Window.addFooterLink('提删设置', 'H:TW/PREF#提删');
+	Window.addFooterLink('Twinkle帮助', 'H:TW/DOC#提删');
 
 	var form = new Morebits.quickForm(Twinkle.xfd.callback.evaluate);
 	var categories = form.append({

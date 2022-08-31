@@ -39,9 +39,9 @@ Twinkle.arv.callback = function (uid) {
 	var Window = new Morebits.simpleWindow(600, 500);
 	Window.setTitle('报告用户给管理员'); // Backronym
 	Window.setScriptName('Twinkle');
-	Window.addFooterLink('AIV guide', 'QW:GAIV');
-	Window.addFooterLink('UAA guide', 'QW:UAAI');
-	Window.addFooterLink('SPI guide', 'Qiuwen:Sockpuppet investigations/SPI/Guide to filing cases');
+	Window.addFooterLink('AIV指引', 'QW:GAIV');
+	Window.addFooterLink('UAA指引', 'QW:UAAI');
+	Window.addFooterLink('SPI指引', 'Qiuwen:傀儡调查');
 	Window.addFooterLink('参数设置', 'H:TW/PREF#arv');
 	Window.addFooterLink('帮助文档', 'H:TW/DOC#arv');
 	Window.addFooterLink('问题反馈', 'HT:TW');
@@ -99,7 +99,7 @@ Twinkle.arv.callback = function (uid) {
 		format: 'json'
 	};
 	query.bkusers = uid;
-	new Morebits.wiki.api("检查用户的风景状态", query, function(apiobj) {
+	new Morebits.wiki.api("检查用户的封禁状态", query, function(apiobj) {
 		var blocklist = apiobj.getResponse().query.blocks;
 		if (blocklist.length) {
 			// If an IP is blocked *and* rangeblocked, only use whichever is more recent
@@ -307,14 +307,14 @@ Twinkle.arv.callback.changeCategory = function (e) {
 				});
 			work_area.append({
 				type: 'textarea',
-				label: 'Evidence:',
+				label: '证据：',
 				name: 'evidence',
 				tooltip: '输入能够用来体现这些用户可能滥用多重账户的证据，这通常包括互助客栈发言、页面历史或其他有关的信息。请避免在此处提供非与傀儡或滥用多重账户相关的其他讨论。'
 			});
 			work_area.append({
 				type: 'checkbox',
 				list: [ {
-					label: 'Request CheckUser',
+					label: '请求用户查核',
 					name: 'checkuser',
 					tooltip: '用户查核是一种用于获取傀儡指控相关技术证据的工具，若没有正当理由则不会使用，您必须在证据字段充分解释为什么需要使用该工具。用户查核不会用于公开连接用户账户使用的IP地址。',
 				} ]
@@ -420,7 +420,7 @@ Twinkle.arv.callback.evaluate = function(e) {
 			break;
 
 		// Report inappropriate username
-		// not i18n to Chinese as we pre-verify usernames
+		// **not** i18n to Chinese as we pre-verify usernames
 		case 'username':
 			types = form.getChecked('arvtype').map(Morebits.string.toLowerCaseFirstChar);
 
@@ -671,7 +671,7 @@ Twinkle.arv.processSock = function(params) {
 	Morebits.wiki.removeCheckpoint();  // all page updates have been started
 };
 
-// no need to call this func as no an3 now
+// no need to call this func as no an3 now, hence not i18n
 Twinkle.arv.processAN3 = function(params) {
 	// prepare the AN3 report
 	var minid;

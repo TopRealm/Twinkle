@@ -78,8 +78,8 @@ Twinkle.warn.callback = function twinklewarnCallback() {
 	var Window = new Morebits.simpleWindow(600, 440);
 	Window.setTitle('警告或提醒用户');
 	Window.setScriptName('Twinkle');
-	Window.addFooterLink('警告设置', 'H:TW/PREF#warn');
-	Window.addFooterLink('Twinkle帮助', 'H:TW/DOC#warn');
+	Window.addFooterLink('警告设置', 'H:TW/PREF#警告');
+	Window.addFooterLink('Twinkle帮助', 'H:TW/DOC#警告');
 
 	var form = new Morebits.quickForm(Twinkle.warn.callback.evaluate);
 	var main_select = form.append({
@@ -240,7 +240,6 @@ Twinkle.warn.callback = function twinklewarnCallback() {
 //   label (required): A short description displayed in the dialog
 //   summary (required): The edit summary used. If an article name is entered, the summary is postfixed with "on [[article]]", and it is always postfixed with ". $summaryAd"
 //   suppressArticleInSummary (optional): Set to true to suppress showing the article name in the edit summary. Useful if the warning relates to attack pages, or some such.
-// 警告：警告消息有简体和繁体两个版本，请注意同时维护！
 Twinkle.warn.messages = {
 	levels: {
 		'不同类型的非建设编辑': {
@@ -1229,7 +1228,7 @@ Twinkle.warn.callback.change_category = function twinklewarnCallbackChangeCatego
 			}
 			break;
 		default:
-			alert('twinklewarn中未知的警告组');
+			alert('twinklewarn：未知的警告组');
 			break;
 	}
 
