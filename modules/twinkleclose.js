@@ -228,8 +228,8 @@ Twinkle.close.callback = function twinklecloseCallback(title, section, noop) {
 	var Window = new Morebits.simpleWindow(410, 200);
 	Window.setTitle('关闭存废讨论' + ' \u00B7 ' + title);
 	Window.setScriptName('Twinkle');
-	Window.addFooterLink('存废讨论设置', 'H:TW/PREF#close');
-	Window.addFooterLink('Twinkle帮助', 'H:TW/DOC#close');
+	Window.addFooterLink('存废讨论设置', 'H:TW/PREF#关闭存废讨论');
+	Window.addFooterLink('Twinkle帮助', 'H:TW/DOC#关闭存废讨论');
 
 	var form = new Morebits.quickForm(Twinkle.close.callback.evaluate);
 
@@ -448,7 +448,7 @@ Twinkle.close.callback.evaluate = function twinklecloseCallbackEvaluate(e) {
 				qiuwen_page.load(Twinkle.close.callbacks.keep);
 				break;
 			default:
-				alert('Twinkle.close：未定义 ' + code);
+				alert('关闭存废讨论：未定义 ' + code);
 
 		}
 	}
@@ -541,7 +541,7 @@ Twinkle.close.callbacks = {
 		}
 
 		var page = new Morebits.wiki.page(apiobj.params.talkPage, '正在删除页面 ' + apiobj.params.title + ' 的讨论页');
-		page.setEditSummary('[[QW:CSD#G5|G5]]: ' + '已删页面“' + apiobj.params.title + '”的[[Qiuwen讨论页|讨论页]]');
+		page.setEditSummary('[[QW:CSD#G5|G5]]: ' + '已删页面“' + apiobj.params.title + '”的[[Qiuwen:讨论页|讨论页]]');
 		page.setChangeTags(Twinkle.changeTags);
 		page.deletePage();
 	},

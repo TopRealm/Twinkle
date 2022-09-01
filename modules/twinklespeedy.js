@@ -90,8 +90,8 @@ Twinkle.speedy.initDialog = function twinklespeedyInitDialog(callbackfunc) {
 	Window.setScriptName('Twinkle');
 	Window.setTitle('选择快速删除理由');
 	Window.addFooterLink('快速删除方针', 'QW:SD');
-	Window.addFooterLink('参数设置', 'H:TW/PREF#speedy');
-	Window.addFooterLink('帮助文档', 'H:TW/DOC#speedy');
+	Window.addFooterLink('参数设置', 'H:TW/PREF#速删');
+	Window.addFooterLink('帮助文档', 'H:TW/DOC#速删');
 	Window.addFooterLink('问题反馈', 'HT:TW');
 
 	var form = new Morebits.quickForm(callbackfunc, Twinkle.getPref('speedySelectionStyle') === 'radioClick' ? 'change' : null);
@@ -976,7 +976,7 @@ Twinkle.speedy.callbacks = {
 				Morebits.status.info($bigtext[0], $link[0]);
 			} else {
 				// open the initial contributor's talk page
-				var statusIndicator = new Morebits.status('打开用户', '打开中…');
+				var statusIndicator = new Morebits.status('打开用户讨论页', '打开中…');
 
 				switch (Twinkle.getPref('userTalkPageMode')) {
 					case 'tab':

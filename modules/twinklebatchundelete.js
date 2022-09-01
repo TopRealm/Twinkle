@@ -26,14 +26,14 @@ Twinkle.batchundelete = function twinklebatchundelete() {
 		mw.config.get('wgNamespaceNumber') !== mw.config.get('wgNamespaceIds').project)) {
 		return;
 	}
-	Twinkle.addPortletLink(Twinkle.batchundelete.callback, '批复', 'tw-batch-undel', '反删除页面');
+	Twinkle.addPortletLink(Twinkle.batchundelete.callback, '批复', 'tw-batch-undel', '恢复页面');
 };
 
 Twinkle.batchundelete.callback = function twinklebatchundeleteCallback() {
 	var Window = new Morebits.simpleWindow(600, 400);
 	Window.setScriptName('Twinkle');
-	Window.setTitle('批量反删除');
-	Window.addFooterLink('帮助文档', 'H:TW/DOC#batchundelete');
+	Window.setTitle('批量恢复');
+	Window.addFooterLink('帮助文档', 'H:TW/DOC#批量恢复');
 	Window.addFooterLink('问题反馈', 'HT:TW');
 
 	var form = new Morebits.quickForm(Twinkle.batchundelete.callback.evaluate);
@@ -127,12 +127,12 @@ Twinkle.batchundelete.callback = function twinklebatchundeleteCallback() {
 };
 
 Twinkle.batchundelete.callback.evaluate = function(event) {
-	Morebits.wiki.actionCompleted.notice = '反删除已完成';
+	Morebits.wiki.actionCompleted.notice = '恢复已完成';
 
 	var numProtected = Morebits.quickForm.getElements(event.target, 'pages').filter(function(element) {
 		return element.checked && element.nextElementSibling.style.color === 'red';
 	}).length;
-	if (numProtected > 0 && !confirm('您正要反删除 ' + numProtected + ' 个全保护页面，您确定吗？')) {
+	if (numProtected > 0 && !confirm('您正要恢复 ' + numProtected + ' 个全保护页面，您确定吗？')) {
 		return;
 	}
 
@@ -146,11 +146,11 @@ Twinkle.batchundelete.callback.evaluate = function(event) {
 	Morebits.status.init(event.target);
 
 	if (!input.pages || !input.pages.length) {
-		Morebits.status.error('错误', '没什么要反删除的，取消操作');
+		Morebits.status.error('错误', '没什么要恢复的，取消操作');
 		return;
 	}
 
-	var pageUndeleter = new Morebits.batchOperation('反删除页面');
+	var pageUndeleter = new Morebits.batchOperation('恢复页面');
 	pageUndeleter.setOption('chunkSize', Twinkle.getPref('batchChunks'));
 	pageUndeleter.setOption('preserveIndividualStatusLines', true);
 	pageUndeleter.setPageList(input.pages);
@@ -162,7 +162,7 @@ Twinkle.batchundelete.callback.evaluate = function(event) {
 			pageUndeleter: pageUndeleter
 		};
 
-		var qiuwen_page = new Morebits.wiki.page(pageName, '反删除页面' + pageName);
+		var qiuwen_page = new Morebits.wiki.page(pageName, '恢复页面' + pageName);
 		qiuwen_page.setCallbackParameters(params);
 		qiuwen_page.setEditSummary(input.reason + ' (批量)');
 		qiuwen_page.setChangeTags(Twinkle.changeTags);
@@ -212,8 +212,8 @@ Twinkle.batchundelete.callbacks = {
 			return;
 		}
 
-		var talkpage = new Morebits.wiki.page(apiobj.params.talkPage, '正在反删除' + apiobj.params.page + '的讨论页');
-		talkpage.setEditSummary('反删除“' + apiobj.params.page + '”的[[Help:讨论页|讨论页]]');
+		var talkpage = new Morebits.wiki.page(apiobj.params.talkPage, '正在恢复' + apiobj.params.page + '的讨论页');
+		talkpage.setEditSummary('恢复“' + apiobj.params.page + '”的[[Help:讨论页|讨论页]]');
 		page.setChangeTags(Twinkle.changeTags);
 		talkpage.setChangeTags(Twinkle.changeTags);
 		talkpage.undeletePage();

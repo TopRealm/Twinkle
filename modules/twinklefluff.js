@@ -65,7 +65,7 @@ Twinkle.fluff = function twinklefluff() {
 // makes edits seconds after the original edit is made.  This only affects
 // vandalism rollback; for good faith rollback, it will stop, indicating a bot
 // has no faith, and for normal rollback, it will rollback that edit.
-Twinkle.fluff.trustedBots = ['Njzjzbot', 'Hyijun-bot'];
+Twinkle.fluff.trustedBots = [];
 Twinkle.fluff.skipTalk = null;
 Twinkle.fluff.rollbackInPlace = null;
 // String to insert when a username is hidden
@@ -507,7 +507,7 @@ Twinkle.fluff.callbacks = {
 
 		var page = response.query.pages[0];
 		if (!page.actions.edit) {
-			apiobj.statelem.error("Unable to edit the page, it's probably protected.");
+			apiobj.statelem.error("未能成功编辑页面，页面可能被半（全）保护");
 			return;
 		}
 
@@ -527,7 +527,7 @@ Twinkle.fluff.callbacks = {
 		var lastuser = top.user;
 
 		if (lastrevid < params.revid) {
-			Morebits.status.error('错误', [ '从服务器获取的最新修订版本ID ', Morebits.htmlNode('strong', lastrevid), ' 小于目前所显示的修订版本ID。这可能意味着当前修订版本已被删除、服务器延迟、或抓取到了坏掉的信息。取消。' ]);
+			Morebits.status.error('错误', [ '从服务器获取的最新修订版本ID ', Morebits.htmlNode('strong', lastrevid), ' 小于目前所显示的修订版本ID。这可能意味着当前修订版本已被删除、服务器延迟、或抓取到的信息有错误。取消。' ]);
 			return;
 		}
 

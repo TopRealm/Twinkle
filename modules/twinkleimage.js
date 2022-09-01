@@ -33,8 +33,8 @@ Twinkle.image.callback = function twinkleimageCallback() {
 	Window.setTitle('文件快速删除');
 	Window.setScriptName('Twinkle');
 	Window.addFooterLink('快速删除方针', 'QW:CSD');
-	Window.addFooterLink('参数设置', 'H:TW/PREF#image');
-	Window.addFooterLink('帮助文档', 'H:TW/DOC#image');
+	Window.addFooterLink('参数设置', 'H:TW/PREF#图权');
+	Window.addFooterLink('帮助文档', 'H:TW/DOC#图权');
 	Window.addFooterLink('问题反馈', 'HT:TW');
 
 	var form = new Morebits.quickForm(Twinkle.image.callback.evaluate);
@@ -53,7 +53,7 @@ Twinkle.image.callback = function twinkleimageCallback() {
 	);
 	var field = form.append({
 		type: 'field',
-		label: '需要的动作'
+		label: '理由'
 	});
 	field.append({
 		type: 'radio',
@@ -130,9 +130,8 @@ Twinkle.image.callback.choice = function twinkleimageCallbackChoose(event) {
 				type: 'checkbox',
 				list: [
 					{
-						label: 'Non-free',
+						label: '非自由版权文件',
 						name: 'non_free',
-						tooltip: 'File is licensed under a fair use claim'
 					}
 				]
 			});
@@ -143,8 +142,8 @@ Twinkle.image.callback.choice = function twinkleimageCallbackChoose(event) {
 				list: [
 					{
 						name: 'derivative',
-						label: 'Derivative work which lacks a source for incorporated works',
-						tooltip: 'File is a derivative of one or more other works whose source is not specified'
+						label: '未知来源的媒体衍生物',
+						tooltip: '文件是若干个未指明来源媒体的衍生物'
 					}
 				]
 			});
@@ -153,29 +152,7 @@ Twinkle.image.callback.choice = function twinkleimageCallbackChoose(event) {
 			work_area.append({
 				type: 'input',
 				name: 'source',
-				label: 'Source:'
-			});
-			break;
-		case 'disputed fair use rationale':
-			work_area.append({
-				type: 'textarea',
-				name: 'reason',
-				label: 'Concern:'
-			});
-			break;
-		case 'orphaned fair use':
-			work_area.append({
-				type: 'input',
-				name: 'replacement',
-				label: 'Replacement:',
-				tooltip: 'Optional file that replaces this one.  The "File:" prefix is optional.'
-			});
-			break;
-		case 'replaceable fair use':
-			work_area.append({
-				type: 'textarea',
-				name: 'reason',
-				label: 'Reason:'
+				label: '来源：'
 			});
 			break;
 		default:
@@ -199,21 +176,11 @@ Twinkle.image.callback.evaluate = function twinkleimageCallbackEvaluate(event) {
 		case 'no license':
 			csdcrit = 'F4';
 			break;
-		case 'orphaned fair use':
-			csdcrit = 'F5';
-			break;
-		case 'no fair use rationale':
-			csdcrit = 'F6';
-			break;
-		case 'disputed fair use rationale':
-		case 'replaceable fair use':
-			csdcrit = 'F7';
-			break;
 		case 'no permission':
 			csdcrit = 'F11';
 			break;
 		default:
-			throw new Error('Twinkle.image.callback.evaluate: unknown criterion');
+			throw new Error('Twinkle.image.callback.evaluate: 未知理由');
 	}
 
 	var lognomination = Twinkle.getPref('logSpeedyNominations') && Twinkle.getPref('noLogOnSpeedyNomination').indexOf(csdcrit.toLowerCase()) === -1;
@@ -229,10 +196,10 @@ Twinkle.image.callback.evaluate = function twinkleimageCallbackEvaluate(event) {
 	Morebits.status.init(event.target);
 
 	Morebits.wiki.actionCompleted.redirect = mw.config.get('wgPageName');
-	Morebits.wiki.actionCompleted.notice = 'Tagging complete';
+	Morebits.wiki.actionCompleted.notice = '标记完成';
 
 	// Tagging image
-	var qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'), 'Tagging file with deletion tag');
+	var qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'), '以删除模板标记文件');
 	qiuwen_page.setCallbackParameters(params);
 	qiuwen_page.load(Twinkle.image.callbacks.taggingImage);
 
@@ -247,7 +214,7 @@ Twinkle.image.callback.evaluate = function twinkleimageCallbackEvaluate(event) {
 		// No auto-notification, display what was going to be added.
 		var noteData = document.createElement('pre');
 		noteData.appendChild(document.createTextNode('{{subst:di-' + templatename + '-notice|1=' + mw.config.get('wgTitle') + '}} ~~~~'));
-		Morebits.status.info('Notification', [ 'Following/similar data should be posted to the original uploader:', document.createElement('br'), noteData ]);
+		Morebits.status.info('提醒', [ '这些内容也应当通知到原始上传者:', document.createElement('br'), noteData ]);
 	}
 };
 
@@ -268,22 +235,13 @@ Twinkle.image.callbacks = {
 			case 'no permission':
 				tag += params.source ? '|source=' + params.source : '';
 				break;
-			case 'disputed fair use rationale':
-				tag += params.reason ? '|concern=' + params.reason : '';
-				break;
-			case 'orphaned fair use':
-				tag += params.replacement ? '|replacement=' + params.replacement : '';
-				break;
-			case 'replaceable fair use':
-				tag += params.reason ? '|1=' + params.reason : '';
-				break;
 			default:
 				break;  // doesn't matter
 		}
 		tag += '|help=off}}\n';
 
 		pageobj.setPageText(tag + text);
-		pageobj.setEditSummary('This file is up for deletion, per [[QW:CSD#' + params.normalized + '|CSD ' + params.normalized + ']] (' + params.type + ').');
+		pageobj.setEditSummary('文件正被检查是否需要删除, 原因是[[QW:CSD#' + params.normalized + '|CSD ' + params.normalized + ']] (' + params.type + ').');
 		pageobj.setChangeTags(Twinkle.changeTags);
 		pageobj.setWatchlist(Twinkle.getPref('deliWatchPage'));
 		pageobj.setCreateOption('nocreate');
@@ -295,16 +253,16 @@ Twinkle.image.callbacks = {
 
 		// disallow warning yourself
 		if (initialContrib === mw.config.get('wgUserName')) {
-			pageobj.getStatusElement().warn('You (' + initialContrib + ') created this page; skipping user notification');
+			pageobj.getStatusElement().warn('你 (' + initialContrib + ') 创建了这个页面；跳过通知步骤');
 		} else {
-			var usertalkpage = new Morebits.wiki.page('User talk:' + initialContrib, 'Notifying initial contributor (' + initialContrib + ')');
+			var usertalkpage = new Morebits.wiki.page('User talk:' + initialContrib, '通知原始上传者 (' + initialContrib + ')');
 			var notifytext = '\n{{subst:di-' + params.templatename + '-notice|1=' + mw.config.get('wgTitle');
 			if (params.type === 'no permission') {
 				notifytext += params.source ? '|source=' + params.source : '';
 			}
 			notifytext += '}} ~~~~';
 			usertalkpage.setAppendText(notifytext);
-			usertalkpage.setEditSummary('Notification: tagging for deletion of [[:' + Morebits.pageNameNorm + ']].');
+			usertalkpage.setEditSummary('[[:' + Morebits.pageNameNorm + ']]的文件删除提醒。');
 			usertalkpage.setChangeTags(Twinkle.changeTags);
 			usertalkpage.setCreateOption('recreate');
 			usertalkpage.setWatchlist(Twinkle.getPref('deliWatchUser'));
@@ -320,10 +278,10 @@ Twinkle.image.callbacks = {
 	addToLog: function(params, initialContrib) {
 		var usl = new Morebits.userspaceLogger(Twinkle.getPref('speedyLogPageName'));
 		usl.initialText =
-			"This is a log of all [[QW:CSD|speedy deletion]] nominations made by this user using [[H:TW|Twinkle]]'s CSD module.\n\n" +
-			'If you no longer wish to keep this log, you can turn it off using the [[H:TW/PREF|preferences panel]], and ' +
-			'nominate this page for speedy deletion under [[QW:CSD#U1|CSD U1]].' +
-			(Morebits.userIsSysop ? '\n\nThis log does not track outright speedy deletions made using Twinkle.' : '');
+			'这是该用户使用[[H:TW|Twinkle]]的速删模块做出的[[QW:CSD|快速删除]]提名列表。\n\n' +
+			'如果您不再想保留此日志，请在[[' + Twinkle.getPref('configPage') + '|参数设置]]中关掉，并' +
+			'使用[[QW:O1|CSD O1]]提交快速删除。' +
+			(Morebits.userIsSysop ? '\n\n此日志并不记录用Twinkle直接执行的删除。' : '');
 
 		var formatParamLog = function(normalize, csdparam, input) {
 			if (normalize === 'F5' && csdparam === 'replacement') {
@@ -347,14 +305,14 @@ Twinkle.image.callbacks = {
 		});
 
 		if (extraInfo) {
-			appendText += '; additional information:' + extraInfo;
+			appendText += '; 其他信息:' + extraInfo;
 		}
 		if (initialContrib) {
-			appendText += '; notified {{user|1=' + initialContrib + '}}';
+			appendText += '; 已通知 {{user|1=' + initialContrib + '}}';
 		}
 		appendText += ' ~~~~~\n';
 
-		var editsummary = 'Logging speedy deletion nomination of [[:' + Morebits.pageNameNorm + ']].';
+		var editsummary = '在日志记录[[:' + Morebits.pageNameNorm + ']]的快速删除提名';
 
 		usl.changeTags = Twinkle.changeTags;
 		usl.log(appendText, editsummary);

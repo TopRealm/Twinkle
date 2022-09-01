@@ -37,8 +37,8 @@ Twinkle.copyvio.callback = function twinklecopyvioCallback() {
 	Window.setTitle('提报侵权页面');
 	Window.setScriptName('Twinkle');
 	Window.addFooterLink('常见错误', 'Qiuwen:管理员错误自查表/侵权处理');
-	Window.addFooterLink('参数设置', 'H:TW/PREF#copyvio');
-	Window.addFooterLink('帮助文档', 'H:TW/DOC#copyvio');
+	Window.addFooterLink('参数设置', 'H:TW/PREF#侵权');
+	Window.addFooterLink('帮助文档', 'H:TW/DOC#侵权');
 	Window.addFooterLink('问题反馈', 'HT:TW');
 
 	var form = new Morebits.quickForm(Twinkle.copyvio.callback.evaluate);
@@ -55,7 +55,7 @@ Twinkle.copyvio.callback = function twinklecopyvioCallback() {
 				label: '通知页面创建者',
 				value: 'notify',
 				name: 'notify',
-				tooltip: '在页面创建者讨论页上放置一通知模板。',
+				tooltip: '在页面创建者讨论页上放置通知模板。',
 				checked: true
 			}
 		]
@@ -97,7 +97,7 @@ Twinkle.copyvio.callbacks = {
 
 		// Notification to first contributor
 		if (params.usertalk) {
-			var usertalkpage = new Morebits.wiki.page('User talk:' + initialContrib, '通知页面创建者（');
+			var usertalkpage = new Morebits.wiki.page('User talk:' + initialContrib, '通知页面创建者（' + initialContrib + ')');
 			var notifytext = '\n{{subst:CopyvioNotice|' + mw.config.get('wgPageName') + '}}';
 			usertalkpage.setAppendText(notifytext);
 			usertalkpage.setEditSummary('通知：页面[[' + mw.config.get('wgPageName') + ']]疑似侵犯著作权');
@@ -114,7 +114,7 @@ Twinkle.copyvio.callbacks = {
 		var tag = '{{subst:Copyvio/auto|url=' + params.source.replace(/http/g, '&#104;ttp').replace(/\n+/g, '\n').replace(/^\s*([^*])/gm, '* $1').replace(/^\* $/m, '') + '|OldRevision=' + revisionId + '}}';
 		var text = pageobj.getPageText();
 		var oldcsd = text.match(/\{\{\s*(db(-\w*)?|d|delete)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}/i);
-		if (oldcsd && confirm('在页面上找到快速删除模板，要保留吗？\n\n当页面同时侵犯著作权又符合快速删除标准时，应该优先走快速删除程序。\n单击“确认”以保留快速删除模板，若您认为快速删除理由不合，单击“取消”以移除快速删除模板。')) {
+		if (oldcsd && confirm('在页面上找到快速删除模板，要保留吗？\n\n当页面同时侵犯著作权又符合快速删除标准时，应使用快速删除程序。\n单击“确认”以保留快速删除模板，若您认为快速删除理由不合，单击“取消”以移除快速删除模板。')) {
 			tag = oldcsd[0] + '\n' + tag;
 		}
 

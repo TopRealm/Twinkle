@@ -162,7 +162,7 @@ Twinkle.config.sections = [
 			{
 				name: 'disabledModules',
 				label: '关闭指定的Twinkle模块',
-				helptip: '您在此勾选的功能将无法使用；取消勾选即可重新启用功能',
+				helptip: '被勾选的功能将被禁用；取消勾选以重新启用功能',
 				type: 'set',
 				setValues: { arv: '告状', warn: '警告', talkback: '通知', speedy: '速删', xfd: '提删', image: '文件', protect: '保护', tag: '标记', diff: '差异', unlink: '链入', fluff: '撤销' }
 			},
@@ -171,7 +171,7 @@ Twinkle.config.sections = [
 			{
 				name: 'disabledSysopModules',
 				label: '关闭指定的Twinkle管理员模块',
-				helptip: '您在此勾选的功能将无法使用；取消勾选即可重新启用功能',
+				helptip: '被勾选的功能将被禁用；取消勾选以重新启用功能',
 				adminOnly: true,
 				type: 'set',
 				setValues: { block: '封禁', batchdelete: '批删', batchprotect: '批保', batchundelete: '批复' }
@@ -188,7 +188,7 @@ Twinkle.config.sections = [
 			// Whether to default to just blocking the /64 on or off
 			{
 				name: 'defaultToBlock64',
-				label: '对于IPv6地址，点击此选项，将默认封禁/64地址块',
+				label: '开启后，封禁对象为IPv6地址时将默认封禁/64地址块',
 				type: 'boolean'
 			},
 
@@ -279,7 +279,7 @@ Twinkle.config.sections = [
 			{
 				name: 'autoMenuAfterRollback',
 				label: '使用Twinkle撤销编辑后，自动打开用户讨论页上的Twinkle警告菜单',
-				helptip: '仅在选取下方对应框时才执行',
+				helptip: '需要至少启用下方一个选项',
 				type: 'boolean'
 			},
 
@@ -380,7 +380,7 @@ Twinkle.config.sections = [
 				name: 'speedySelectionStyle',
 				label: '何时执行标记或删除',
 				type: 'enum',
-				enumValues: { buttonClick: '当点击“提交”时', radioClick: '当我点击选项之一时' }
+				enumValues: { buttonClick: '当点击“提交”时', radioClick: '当我点击任一选项时' }
 			},
 
 			// TwinkleConfig.watchSpeedyPages (array)
@@ -424,7 +424,7 @@ Twinkle.config.sections = [
 			{
 				name: 'notifyUserOnSpeedyDeletionNomination',
 				label: '使用下列理由标记页面后，通知页面创建者',
-				helptip: '尽管您在对话框中选择通知，通知仍只会在使用这些理由时发出。',
+				helptip: '尽管您在对话框中选择通知，通知也只会在使用这些理由时发出。',
 				type: 'set',
 				setValues: Twinkle.config.commonSets.csdCriteriaNotification,
 				setDisplayOrder: Twinkle.config.commonSets.csdCriteriaNotificationDisplayOrder
@@ -435,7 +435,7 @@ Twinkle.config.sections = [
 			{
 				name: 'warnUserOnSpeedyDelete',
 				label: '使用下列理由标记页面后，警告页面创建者',
-				helptip: '尽管您在对话框中选择通知，通知仍只会在使用这些理由时发出。',
+				helptip: '尽管您在对话框中选择通知，警告也只会在使用这些理由时发出。',
 				adminOnly: true,
 				type: 'set',
 				setValues: Twinkle.config.commonSets.csdCriteriaNotification,
@@ -445,7 +445,7 @@ Twinkle.config.sections = [
 			// TwinkleConfig.promptForSpeedyDeletionSummary (array of strings)
 			{
 				name: 'promptForSpeedyDeletionSummary',
-				label: '使用下列理由标记页面时，允许编辑删除理由',
+				label: '使用下列理由标记页面时，允许编辑删除摘要',
 				adminOnly: true,
 				type: 'set',
 				setValues: Twinkle.config.commonSets.csdAndDICriteria,
@@ -498,7 +498,7 @@ Twinkle.config.sections = [
 			{
 				name: 'logSpeedyNominations',
 				label: '在用户空间中记录所有快速删除提名',
-				helptip: '非管理员无法访问到已删除的贡献，用户空间日志可以予以记录。',
+				helptip: '非管理员无法访问到已删除的贡献，可以使用用户空间日志予以记录。',
 				type: 'boolean'
 			},
 			{
@@ -517,6 +517,7 @@ Twinkle.config.sections = [
 		]
 	},
 
+	// translation in tag part is **not** perfected (issue #4)
 	{
 		title: '标记',
 		module: 'tag',
@@ -624,7 +625,7 @@ Twinkle.config.sections = [
 			{
 				name: 'unlinkNamespaces',
 				label: '取消以下命名空间中的反向链接',
-				helptip: '请避免选择讨论页，因这样会导致Twinkle试图修改讨论存档。',
+				helptip: '请避免选择讨论页，这样会导致Twinkle试图修改讨论存档。',
 				type: 'set',
 				setValues: Twinkle.config.commonSets.namespacesNoSpecial
 			}
@@ -661,7 +662,7 @@ Twinkle.config.sections = [
 			{
 				name: 'combinedSingletMenus',
 				label: '将两个单层级菜单合并成一个',
-				helptip: '当启用此选项时，无论默认警告级别选择单层级通知或单层级警告皆属于此项。',
+				helptip: '当启用此选项时，无论默认警告级别选择单层级通知或单层级警告皆属于同一项。',
 				type: 'boolean'
 			},
 
@@ -733,7 +734,7 @@ Twinkle.config.sections = [
 			{
 				name: 'xfdWatchDiscussion',
 				label: '加入存废讨论页到监视列表',
-				helptip: '当日的页面。',
+				helptip: '当日的存废讨论页面。',
 				type: 'enum',
 				enumValues: Twinkle.config.watchlistEnums
 			},
@@ -1175,7 +1176,7 @@ Twinkle.config.init = function twinkleconfigInit() {
 			if (mw.config.get('wgArticleId') > 0) {  // page exists
 				box.appendChild(document.createTextNode('本页包含您的Twinkle参数设置，您可使用'));
 			} else {  // page does not exist
-				box.appendChild(document.createTextNode('您可配置您的Twinkle，通过使用'));
+				box.appendChild(document.createTextNode('您可配置您的Twinkle，配置页在'));
 			}
 			link = document.createElement('a');
 			link.setAttribute('href', 'Help:Twinkle/参数设置');
@@ -1417,7 +1418,7 @@ Twinkle.config.resetPref = function twinkleconfigResetPref(pref) {
 			break;
 
 		default:
-			alert('twinkleconfig: unknown data type for preference ' + pref.name);
+			alert('twinkleconfig: 发现未知的数据类型，在属性 ' + pref.name);
 			break;
 	}
 };
@@ -1536,7 +1537,7 @@ Twinkle.config.writePrefs = function twinkleconfigWritePrefs(pageobj) {
 							break;
 
 						default:
-							alert('twinkleconfig: 未知数据类型，属性' + pref.name);
+							alert('twinkleconfig: 发现未知的数据类型，在属性' + pref.name);
 							break;
 					}
 				} else if (Twinkle.prefs) {

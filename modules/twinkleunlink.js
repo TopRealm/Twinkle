@@ -33,8 +33,8 @@ Twinkle.unlink.callback = function(presetReason) {
 	var Window = new Morebits.simpleWindow(600, 440);
 	Window.setTitle('取消页面链入' + (fileSpace ? '及文件使用' : ''));
 	Window.setScriptName('Twinkle');
-	Window.addFooterLink('参数设置', 'H:TW/PREF#unlink');
-	Window.addFooterLink('帮助文档', 'H:TW/DOC#unlink');
+	Window.addFooterLink('参数设置', 'H:TW/PREF#消链');
+	Window.addFooterLink('帮助文档', 'H:TW/DOC#销链');
 	Window.addFooterLink('问题反馈', 'HT:TW');
 
 	var form = new Morebits.quickForm(Twinkle.unlink.callback.evaluate);
