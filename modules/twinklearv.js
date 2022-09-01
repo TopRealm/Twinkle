@@ -31,9 +31,9 @@ Twinkle.arv = function twinklearv() {
 };
 
 Twinkle.arv.callback = function (uid) {
-	if (uid == mw.config.get("wgUserName")) {
-		alert("不可以告自己的状哦！");
-		return
+	if (uid === mw.config.get('wgUserName')) {
+		alert('不可以告自己的状哦！');
+		return;
 	}
 
 	var Window = new Morebits.simpleWindow(600, 500);
@@ -99,12 +99,12 @@ Twinkle.arv.callback = function (uid) {
 		format: 'json'
 	};
 	query.bkusers = uid;
-	new Morebits.wiki.api("检查用户的封禁状态", query, function(apiobj) {
+	new Morebits.wiki.api('检查用户的封禁状态', query, function(apiobj) {
 		var blocklist = apiobj.getResponse().query.blocks;
 		if (blocklist.length) {
 			// If an IP is blocked *and* rangeblocked, only use whichever is more recent
 			var block = blocklist[0];
-			var message = (isIP ? '此IP地址' : '此账户') + '已经被' + (block.partial ? '部分' : '');
+			var message = '此账户已经被' + (block.partial ? '部分' : '');
 			// Start and end differ, range blocked
 			message += block.rangestart !== block.rangeend ? '段封禁。' : '封禁。';
 			if (block.partial) {
@@ -203,12 +203,12 @@ Twinkle.arv.callback.changeCategory = function (e) {
 			work_area.append({
 				type: 'textarea',
 				name: 'reason',
-				label: '评论：',
+				label: '评论：'
 			});
 			work_area = work_area.render();
 			old_area.parentNode.replaceChild(work_area, old_area);
 			break;
-		
+
 		// not using, but keeping it for reference
 		case 'username':
 			work_area = new Morebits.quickForm.element({
@@ -218,7 +218,7 @@ Twinkle.arv.callback.changeCategory = function (e) {
 			});
 			work_area.append({
 				type: 'header',
-				label: '不当用户名类型',
+				label: '不当用户名类型'
 			});
 			work_area.append({
 				type: 'checkbox',
@@ -241,11 +241,11 @@ Twinkle.arv.callback.changeCategory = function (e) {
 					},
 					{
 						label: '司法机关认定的驰名商标或包含其他为社会公众所熟知的商标',
-						value: 'trademark',
+						value: 'trademark'
 					},
 					{
 						label: '域名、电子邮件地址。',
-						value: 'domain',
+						value: 'domain'
 					}
 				]
 			});
@@ -269,7 +269,7 @@ Twinkle.arv.callback.changeCategory = function (e) {
 					type: 'input',
 					name: 'sockmaster',
 					label: '主账号',
-					tooltip: '傀儡主账号的用户名（不带User:前缀）',
+					tooltip: '傀儡主账号的用户名（不带User:前缀）'
 				}
 			);
 			work_area.append({
@@ -284,8 +284,8 @@ Twinkle.arv.callback.changeCategory = function (e) {
 					{
 						label: '请求用户查核',
 						name: 'checkuser',
-						tooltip: '用户查核是一种用于获取傀儡指控相关技术证据的工具，若没有正当理由则不会使用，您必须在证据字段充分解释为什么需要使用该工具。用户查核不会用于公开连接用户账户使用的IP地址。',
-				}]
+						tooltip: '用户查核是一种用于获取傀儡指控相关技术证据的工具，若没有正当理由则不会使用，您必须在证据字段充分解释为什么需要使用该工具。用户查核不会用于公开连接用户账户使用的IP地址。'
+					}]
 			});
 			work_area = work_area.render();
 			old_area.parentNode.replaceChild(work_area, old_area);
@@ -316,13 +316,13 @@ Twinkle.arv.callback.changeCategory = function (e) {
 				list: [ {
 					label: '请求用户查核',
 					name: 'checkuser',
-					tooltip: '用户查核是一种用于获取傀儡指控相关技术证据的工具，若没有正当理由则不会使用，您必须在证据字段充分解释为什么需要使用该工具。用户查核不会用于公开连接用户账户使用的IP地址。',
+					tooltip: '用户查核是一种用于获取傀儡指控相关技术证据的工具，若没有正当理由则不会使用，您必须在证据字段充分解释为什么需要使用该工具。用户查核不会用于公开连接用户账户使用的IP地址。'
 				} ]
 			});
 			work_area = work_area.render();
 			old_area.parentNode.replaceChild(work_area, old_area);
 			break;
-		
+
 	}
 };
 
