@@ -183,12 +183,8 @@ Twinkle.close.codes = {
 			label: '转交侵权',
 			action: 'noop'
 		},
-		/* 'm2pfd': {
-			label: '转送页面存废讨论',
-			action: 'noop'
-		}, */
-		m2ifd: {
-			label: '转送文件存废讨论',
+		'm2pfd': {
+			label: '转送存废讨论',
 			action: 'noop'
 		},
 		r: {
