@@ -254,17 +254,17 @@ Twinkle.protect.callback.showLogAndCurrentProtectInfo = function twinkleprotectC
 			var label = Morebits.string.toUpperCaseFirstChar(type);
 
 			if (type === 'cascading') { // Covered by another page
-				label = 'Cascading protection ';
+				label = '连锁保护';
 				protectionNode.push($('<b>' + label + '</b>')[0]);
 				if (settings.source) { // Should by definition exist
 					var sourceLink = '<a target="_blank" href="' + mw.util.getUrl(settings.source) + '">' + settings.source + '</a>';
-					protectionNode.push($('<span>from ' + sourceLink + '</span>')[0]);
+					protectionNode.push($('<span>自' + sourceLink + '</span>')[0]);
 				}
 			} else {
 				var level = settings.level;
 				// Make cascading protection more prominent
 				if (settings.cascade) {
-					level += ' (cascading)';
+					level += ' (连锁保护)';
 				}
 				protectionNode.push($('<b>' + label + ': ' + level + '</b>')[0]);
 			}
@@ -283,7 +283,7 @@ Twinkle.protect.callback.showLogAndCurrentProtectInfo = function twinkleprotectC
 		protectionNode = protectionNode.slice(0, -1); // remove the trailing bullet
 		statusLevel = 'warn';
 	} else {
-		protectionNode.push($('<b>no protection</b>')[0]);
+		protectionNode.push($('<b>无保护</b>')[0]);
 	}
 
 	Morebits.status[statusLevel]('当前保护级别', protectionNode);
@@ -470,7 +470,7 @@ Twinkle.protect.callback.changeAction = function twinkleprotectCallbackChangeAct
 			break;
 
 		case 'request':
-			field_preset = new Morebits.quickForm.element({ type: 'field', label: 'Type of protection', name: 'field_preset' });
+			field_preset = new Morebits.quickForm.element({ type: 'field', label: '请求保护类型', name: 'field_preset' });
 			field_preset.append({
 				type: 'select',
 				name: 'category',
