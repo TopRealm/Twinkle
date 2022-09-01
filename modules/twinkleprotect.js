@@ -286,7 +286,7 @@ Twinkle.protect.callback.showLogAndCurrentProtectInfo = function twinkleprotectC
 		protectionNode.push($('<b>no protection</b>')[0]);
 	}
 
-	Morebits.status[statusLevel]('Current protection level', protectionNode);
+	Morebits.status[statusLevel]('当前保护级别', protectionNode);
 };
 
 Twinkle.protect.callback.changeAction = function twinkleprotectCallbackChangeAction(e) {
@@ -296,16 +296,16 @@ Twinkle.protect.callback.changeAction = function twinkleprotectCallbackChangeAct
 
 	switch (e.target.values) {
 		case 'protect':
-			field_preset = new Morebits.quickForm.element({ type: 'field', label: '默认', name: 'field_preset' });
+			field_preset = new Morebits.quickForm.element({ type: 'field', label: '预设', name: 'field_preset' });
 			field_preset.append({
 				type: 'select',
 				name: 'category',
-				label: '选择默认：',
+				label: '选择预设：',
 				event: Twinkle.protect.callback.changePreset,
 				list: mw.config.get('wgArticleId') ? Twinkle.protect.protectionTypes : Twinkle.protect.protectionTypesCreate
 			});
 
-			field2 = new Morebits.quickForm.element({ type: 'field', label: 'Protection options', name: 'field2' });
+			field2 = new Morebits.quickForm.element({ type: 'field', label: '保护选项', name: 'field2' });
 			field2.append({ type: 'div', name: 'currentprot', label: ' ' });  // holds the current protection level, as filled out by the async callback
 			field2.append({ type: 'div', name: 'hasprotectlog', label: ' ' });
 			// for existing pages
@@ -440,7 +440,7 @@ Twinkle.protect.callback.changeAction = function twinkleprotectCallbackChangeAct
 			}
 			/* falls through */
 		case 'tag':
-			field1 = new Morebits.quickForm.element({ type: 'field', label: 'Tagging options', name: 'field1' });
+			field1 = new Morebits.quickForm.element({ type: 'field', label: '保护模板选项', name: 'field1' });
 			field1.append({ type: 'div', name: 'currentprot', label: ' ' });  // holds the current protection level, as filled out by the async callback
 			field1.append({ type: 'div', name: 'hasprotectlog', label: ' ' });
 			field1.append({
@@ -499,7 +499,7 @@ Twinkle.protect.callback.changeAction = function twinkleprotectCallbackChangeAct
 			});
 			break;
 		default:
-			alert("？");
+			alert('？');
 			break;
 	}
 
@@ -985,7 +985,7 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 			if (input.editmodify || input.movemodify || !mw.config.get('wgArticleId')) {
 				protectIt(allDone);
 			} else {
-				alert("给Twinkle找点事做呗？");
+				alert('给Twinkle找点事做呗？');
 			}
 
 			break;
@@ -1049,7 +1049,7 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 					}
 					// otherwise falls through
 				default:
-					alert('未知保护类型！')
+					alert('未知保护类型！');
 					break;
 			}
 			switch (input.category) {
