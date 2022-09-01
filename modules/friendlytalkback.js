@@ -374,7 +374,7 @@ Twinkle.talkback.callbacks = {
 				break;
 			case 'mail':
 				text = '==' + Twinkle.getPref('mailHeading') + '==\n' +
-					"{{YGM|subject=" + input.section + '|ts=~~~~~}}';
+					'{{YGM|subject=' + input.section + '|ts=~~~~~}}';
 
 				if (input.message) {
 					text += '\n' + input.message + '  ~~~~';

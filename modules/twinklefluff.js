@@ -507,7 +507,7 @@ Twinkle.fluff.callbacks = {
 
 		var page = response.query.pages[0];
 		if (!page.actions.edit) {
-			apiobj.statelem.error("未能成功编辑页面，页面可能被半（全）保护");
+			apiobj.statelem.error('未能成功编辑页面，页面可能被半（全）保护');
 			return;
 		}
 

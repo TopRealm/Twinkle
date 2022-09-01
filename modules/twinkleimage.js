@@ -131,7 +131,7 @@ Twinkle.image.callback.choice = function twinkleimageCallbackChoose(event) {
 				list: [
 					{
 						label: '非自由版权文件',
-						name: 'non_free',
+						name: 'non_free'
 					}
 				]
 			});
