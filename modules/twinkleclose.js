@@ -22,7 +22,7 @@
  */
 
 Twinkle.close = function twinkleclose() {
-	if (Twinkle.getPref('XfdClose') === 'hide' || !/^Qiuwen:(頁面|檔案)存廢討論\/記錄\/\d+\/\d+\/\d+$/.test(mw.config.get('wgPageName'))) {
+	if (Twinkle.getPref('XfdClose') === 'hide' || !/^Qiuwen:存废讨论\/记录\/\d+\/\d+\/\d+$/.test(mw.config.get('wgPageName'))) {
 		return;
 	}
 
@@ -166,7 +166,7 @@ Twinkle.close.codes = {
 			adminonly: true
 		}
 	},
-	'转移至其他计划': {
+	/* '转移至其他计划': {
 		twc: {
 			label: '转移至求闻共享资源',
 			action: 'noop',
@@ -177,7 +177,7 @@ Twinkle.close.codes = {
 			action: 'noop',
 			adminonly: true
 		}
-	},
+	}, */
 	'其他处理方法': {
 		c: {
 			label: '转交侵权',
