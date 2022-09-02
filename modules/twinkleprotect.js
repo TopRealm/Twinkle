@@ -624,13 +624,14 @@ Twinkle.protect.protectionTypes = [
 		]
 	},
 	{
-		label: 'Template protection',
+		label: '模板与模块保护',
 		list: [
-			{ label: '高风险模板（模板）', value: 'pp-template' }
+			{ label: '高风险模板（模板）', value: 'pp-template' },
+			{ label: '高风险模块（模块）', value: 'pp-module'}
 		]
 	},
 	{
-		label: 'Semi-protection',
+		label: '半保护',
 		list: [
 			{ label: '常规（半）', value: 'pp-semi-protected' },
 			{ label: '持续破坏（半）', selected: true, value: 'pp-semi-vandalism' },
@@ -642,23 +643,23 @@ Twinkle.protect.protectionTypes = [
 		]
 	},
 	{
-		label: 'Move protection',
+		label: '移动保护',
 		list: [
 			{ label: '常规（移动）', value: 'pp-move' },
-			{ label: '争议、移动战（移动', value: 'pp-move-dispute' },
+			{ label: '争议、移动战（移动）', value: 'pp-move-dispute' },
 			{ label: '移动破坏（移动）', value: 'pp-move-vandalism' },
 			{ label: '高风险页面（移动）', value: 'pp-move-indef' }
 		]
 	}
 ].filter(function(type) {
-	// Filter for templates
-	return isTemplate || type.label !== 'Template protection';
+	// Filter for templates, type.label below synced with above
+	return isTemplate || type.label !== '模板与模块保护';
 });
 
 Twinkle.protect.protectionTypesCreate = [
-	{ label: 'Unprotection', value: 'unprotect' },
+	{ label: '解除保护', value: 'unprotect' },
 	{
-		label: 'Create protection',
+		label: '白纸保护',
 		list: [
 			{ label: '常规（白纸）', value: 'pp-create' },
 			{ label: '攻击性名称（白纸）', value: 'pp-create-offensive' },
@@ -695,7 +696,7 @@ Twinkle.protect.protectionPresetsInfo = {
 	'pp-vandalism': {
 		edit: 'sysop',
 		move: 'sysop',
-		reason: '被自动确认用户破坏'
+		reason: '自动确认用户破坏'
 	},
 	'pp-usertalk': {
 		edit: 'sysop',
@@ -709,25 +710,30 @@ Twinkle.protect.protectionPresetsInfo = {
 		expiry: 'infinity',
 		reason: '高风险模板'
 	},
+	'pp-module': {
+		edit: 'templateeditor',
+		move: 'templateeditor',
+		expiry: 'infinity',
+		reason: '高风险模块'
+	},
 	'pp-semi-vandalism': {
 		edit: 'autoconfirmed',
-		reason: '非自确破坏',
+		reason: '非自动确认用户破坏',
 		template: 'pp-vandalism'
 	},
 	'pp-semi-disruptive': {
 		edit: 'autoconfirmed',
-		reason: '持续破坏',
+		reason: '非自动确认用户持续加入破坏性内容',
 		template: 'pp-protected'
 	},
 	'pp-semi-unsourced': {
 		edit: 'autoconfirmed',
-		reason: '非自确持续加入无来源佐证的内容',
+		reason: '非自动确认用户持续加入无来源佐证的内容',
 		template: 'pp-protected'
 	},
 	'pp-semi-blp': {
 		edit: 'autoconfirmed',
-		reason: '非自确违反生者传记方针',
-		template: 'pp-blp'
+		reason: '非自动确认用户违反生者传记方针'
 	},
 	'pp-semi-usertalk': {
 		edit: 'autoconfirmed',
@@ -736,17 +742,9 @@ Twinkle.protect.protectionPresetsInfo = {
 		reason: '被封禁用户滥用其讨论页',
 		template: 'pp-usertalk'
 	},
-	'pp-semi-template': {  // removed for now
-		edit: 'autoconfirmed',
-		move: 'autoconfirmed',
-		expiry: 'infinity',
-		reason: '高风险模板',
-		template: 'pp-template'
-	},
 	'pp-semi-sock': {
 		edit: 'autoconfirmed',
-		reason: '持续的傀儡破坏',
-		template: 'pp-sock'
+		reason: '持续的傀儡破坏'
 	},
 	'pp-semi-protected': {
 		edit: 'autoconfirmed',
@@ -779,15 +777,18 @@ Twinkle.protect.protectionPresetsInfo = {
 	},
 	'pp-create-offensive': {
 		create: 'sysop',
-		reason: '攻击性名称'
+		reason: '攻击性名称',
+		template: 'pp-create'
 	},
 	'pp-create-salt': {
 		create: 'autoconfirmed',
-		reason: '多次重复创建'
+		reason: '多次重复创建',
+		template: 'pp-create'
 	},
 	'pp-create-blp': {
 		create: 'autoconfirmed',
-		reason: '近期删除的违反生者传记方针页面'
+		reason: '近期删除的违反生者传记方针页面',
+		template: 'pp-create'
 	},
 	'pp-create': {
 		create: 'autoconfirmed',
@@ -805,20 +806,21 @@ Twinkle.protect.protectionTags = [
 		value: 'noop'
 	},
 	{
-		label: 'Edit protection templates',
+		label: '编辑保护模板',
 		list: [
-			{ label: '{{pp-vandalism}}: 破坏', value: 'pp-vandalism' },
 			{ label: '{{pp-dispute}}: 争议、编辑战', value: 'pp-dispute' },
-			{ label: '{{pp-blp}}: 违反生者传记', value: 'pp-blp' },
-			{ label: '{{pp-sock}}: 傀儡破坏', value: 'pp-sock' },
+			{ label: '{{pp-vandalism}}: 破坏', value: 'pp-vandalism' },
 			{ label: '{{pp-template}}: 高风险模板', value: 'pp-template' },
+			{ label: '{{pp-module}}: 高风险模块', value: 'pp-module' },
 			{ label: '{{pp-usertalk}}: 封禁用户讨论页', value: 'pp-usertalk' },
-			{ label: '{{pp-protected}}: 常规保护', value: 'pp-protected' },
-			{ label: '{{pp-semi-indef}}: 常规长期半保护', value: 'pp-semi-indef' }
+			{ label: '{{pp-semi-sock}}: 傀儡破坏', value: 'pp-semi-sock' },
+			{ label: '{{pp-semi-blp}}: 违反生者传记', value: 'pp-semi-blp}' },
+			{ label: '{{pp-semi-indef}}: 常规长期半保护', value: 'pp-semi-indef' },
+			{ label: '{{pp-protected}}: 常规保护', value: 'pp-protected' }
 		]
 	},
 	{
-		label: 'Move protection templates',
+		label: '移动保护模板',
 		list: [
 			{ label: '{{pp-move-dispute}}: 争议、编辑战', value: 'pp-move-dispute' },
 			{ label: '{{pp-move-vandalism}}: 页面移动破坏', value: 'pp-move-vandalism' },
