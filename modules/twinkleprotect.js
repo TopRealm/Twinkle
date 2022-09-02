@@ -258,7 +258,7 @@ Twinkle.protect.callback.showLogAndCurrentProtectInfo = function twinkleprotectC
 				protectionNode.push($('<b>' + label + '</b>')[0]);
 				if (settings.source) { // Should by definition exist
 					var sourceLink = '<a target="_blank" href="' + mw.util.getUrl(settings.source) + '">' + settings.source + '</a>';
-					protectionNode.push($('<span>自' + sourceLink + '</span>')[0]);
+					protectionNode.push($('<span>，来自' + sourceLink + '</span>')[0]);
 				}
 			} else {
 				var level = settings.level;
@@ -270,13 +270,13 @@ Twinkle.protect.callback.showLogAndCurrentProtectInfo = function twinkleprotectC
 			}
 
 			if (settings.expiry === 'infinity') {
-				protectionNode.push(' (indefinite) ');
+				protectionNode.push('（无限期）');
 			} else {
-				protectionNode.push(' (expires ' + new Morebits.date(settings.expiry).calendar('utc') + ') ');
+				protectionNode.push(' (终止时间' + new Morebits.date(settings.expiry).calendar('utc') + ') ');
 			}
 			if (settings.admin) {
 				var adminLink = '<a target="_blank" href="' + mw.util.getUrl('User talk:' + settings.admin) + '">' + settings.admin + '</a>';
-				protectionNode.push($('<span>by ' + adminLink + '</span>')[0]);
+				protectionNode.push($('<span>由' + adminLink + '做出</span>')[0]);
 			}
 			protectionNode.push($('<span> \u2022 </span>')[0]);
 		});
