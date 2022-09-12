@@ -368,6 +368,14 @@ Twinkle.config.sections = [
 				label: '在这些页面上显示“撤销”链接',
 				type: 'set',
 				setValues: { diff: '差异', others: '其他用户的贡献', mine: '我的贡献', recent: '最近更改', history: '历史记录' }
+			},
+			{
+				name: 'customRevertSummary',
+				label: '回退理由',
+				helptip: '在查看差异时可选，仅善意回退、常规回退、恢复此版本',
+				type: 'customList',
+				customListValueTitle: '理由',
+				customListLabelTitle: '显示的文字'
 			}
 		]
 	},

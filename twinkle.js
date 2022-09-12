@@ -84,6 +84,7 @@ Twinkle.defaultConfig = {
 	confirmOnFluff: false,
 	confirmOnMobileFluff: true,
 	showRollbackLinks: [ 'diff', 'others' ],
+	customRevertSummary: [],
 
 	// DI (twinkleimage)
 	notifyUserOnDeli: true,
