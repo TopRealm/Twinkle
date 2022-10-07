@@ -1182,7 +1182,7 @@ Twinkle.protect.callbacks = {
 			return;
 		}
 
-		var protectedPage = new Morebits.wiki.page(mw.config.get('wgPageName'), 'Tagging page');
+		var protectedPage = new Morebits.wiki.page(mw.config.get('wgPageName'), '标记页面');
 		protectedPage.setCallbackParameters(tagparams);
 		protectedPage.load(Twinkle.protect.callbacks.taggingPage);
 	},
