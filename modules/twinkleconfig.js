@@ -1197,10 +1197,10 @@ Twinkle.config.init = function twinkleconfigInit() {
 			// place "Looking for Twinkle options?" notice
 			box.setAttribute('class', 'config-userskin-box');
 
-			box.appendChild(document.createTextNode('If you want to set Twinkle preferences, you can use the '));
+			box.appendChild(document.createTextNode('如果您需要调整Twinkle设置，请使用'));
 			link = document.createElement('a');
 			link.setAttribute('href', '/wiki/Help:Twinkle/参数设置');
-			link.appendChild(document.createTextNode('Twinkle preferences panel'));
+			link.appendChild(document.createTextNode('Twinkle参数设置面板'));
 			box.appendChild(link);
 			box.appendChild(document.createTextNode('.'));
 			$(box).insertAfter($('#contentSub'));
