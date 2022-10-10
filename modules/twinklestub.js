@@ -396,8 +396,8 @@ Twinkle.stub.callback.evaluate = function friendlytagCallbackEvaluate(e) {
 	var qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'), '正在标记' + Twinkle.stub.mode);
 	qiuwen_page.setCallbackParameters(params);
 	switch (Twinkle.stub.mode) {
-		case '條目':
 		case '条目':
+		case '條目':
 		/* falls through */
 		case '重定向':
 			qiuwen_page.load(Twinkle.stub.callbacks.main);
