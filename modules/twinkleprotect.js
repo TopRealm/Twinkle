@@ -479,7 +479,7 @@ Twinkle.protect.callback.changeAction = function twinkleprotectCallbackChangeAct
 				list: mw.config.get('wgArticleId') ? Twinkle.protect.protectionTypes : Twinkle.protect.protectionTypesCreate
 			});
 
-			field1 = new Morebits.quickForm.element({ type: 'field', label: 'Options', name: 'field1' });
+			field1 = new Morebits.quickForm.element({ type: 'field', label: '请求保护选项', name: 'field1' });
 			field1.append({ type: 'div', name: 'currentprot', label: ' ' });  // holds the current protection level, as filled out by the async callback
 			field1.append({ type: 'div', name: 'hasprotectlog', label: ' ' });
 			field1.append({
@@ -1056,31 +1056,24 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 			}
 			switch (input.category) {
 				case 'pp-dispute':
-					typereason = '争议、编辑战';
+					typereason = '争议或编辑战';
 					break;
 				case 'pp-vandalism':
 				case 'pp-semi-vandalism':
-					typereason = 'Persistent [[QW:VAND|vandalism]]';
-					break;
-				// no need of translation as will soon remove the unused template, a.k.a. remove below
-				case 'pp-semi-disruptive':
-					typereason = 'Persistent [[Qiuwen:Disruptive editing|disruptive editing]]';
-					break;
-				case 'pp-semi-unsourced':
-					typereason = 'Persistent addition of [[QW:INTREF|unsourced or poorly sourced content]]';
+					typereason = '持续[[QW:VAND|破坏]]';
 					break;
 				case 'pp-template':
-					typereason = '[[QW:HIGHRISK|High-risk template]]';
+					typereason = '高风险模板';
 					break;
 				case 'pp-usertalk':
 				case 'pp-semi-usertalk':
 					typereason = '被封禁用户滥用其讨论页';
 					break;
 				case 'pp-semi-sock':
-					typereason = 'Persistent [[QW:SOCK|sockpuppetry]]';
+					typereason = '持续滥用[[QW:SOCK|多重账号]]';
 					break;
 				case 'pp-semi-blp':
-					typereason = '[[QW:BLP|BLP]] policy violations';
+					typereason = '违反[[QW:BLP|生者传记方针]]';
 					break;
 				case 'pp-move-dispute':
 					typereason = '页面标题争议、编辑战';
@@ -1090,16 +1083,6 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 					break;
 				case 'pp-move-indef':
 					typereason = '高风险页面';
-					break;
-				// no need of translation as will soon remove the unused template, a.k.a. remove below
-				case 'pp-create-offensive':
-					typereason = 'Offensive name';
-					break;
-				case 'pp-create-blp':
-					typereason = 'Recently deleted [[QW:BLP|BLP]]';
-					break;
-				case 'pp-create-salt':
-					typereason = 'Repeatedly recreated';
 					break;
 				default:
 					typereason = '';
@@ -1127,10 +1110,10 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 			Morebits.simpleWindow.setButtonsEnabled(false);
 			Morebits.status.init(form);
 
-			var rppName = 'Qiuwen:请求保护页面';
+			var rppName = 'Qiuwen:页面保护请求';
 
 			// Updating data for the action completed event
-			Morebits.wiki.actionCompleted.redirect = 'Qiuwen:请求保护页面';
+			Morebits.wiki.actionCompleted.redirect = 'Qiuwen:页面保护请求';
 			Morebits.wiki.actionCompleted.notice = '提名完毕，正在转向讨论页';
 
 			var rppPage = new Morebits.wiki.page(rppName, '请求保护页面');
@@ -1214,6 +1197,7 @@ Twinkle.protect.callbacks = {
 				// Only tag if no {{rcat shell}} is found
 				if (!text.match(/{{(?:redr|this is a redirect|r(?:edirect)?(?:.?cat.*)?[ _]?sh)/i)) {
 					text = text.replace(/#REDIRECT ?(\[\[.*?\]\])(.*)/i, '#REDIRECT $1$2\n\n{{' + tag + '}}');
+					text = text.replace(/#重定向 ?(\[\[.*?\]\])(.*)/i, '#重定向 $1$2\n\n{{' + tag + '}}');
 				} else {
 					Morebits.status.info('重定向模板', '无事可做');
 					return;
@@ -1243,7 +1227,7 @@ Twinkle.protect.callbacks = {
 
 	fileRequest: function(rppPage) {
 
-		var rppPage2 = new Morebits.wiki.page('Qiuwen:请求保护页面', '拉取请求页面');
+		var rppPage2 = new Morebits.wiki.page('Qiuwen:页面保护请求', '拉取请求页面');
 		rppPage2.load(function() {
 			var params = rppPage.getCallbackParameters();
 			var text = rppPage.getPageText();
@@ -1254,8 +1238,8 @@ Twinkle.protect.callbacks = {
 			var tag = rppRe.exec(text) || rppRe.exec(text2);
 
 			var rppLink = document.createElement('a');
-			rppLink.setAttribute('href', mw.util.getUrl('Qiuwen:请求保护页面'));
-			rppLink.appendChild(document.createTextNode('Qiuwen:请求保护页面'));
+			rppLink.setAttribute('href', mw.util.getUrl('Qiuwen:页面保护请求'));
+			rppLink.appendChild(document.createTextNode('Qiuwen:页面保护请求'));
 
 			if (tag) {
 				statusElement.error([ '已有保护请求，在 ', rppLink, ', 停止操作' ]);
