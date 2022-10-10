@@ -152,7 +152,7 @@ Twinkle.copyvio.callbacks = {
 
 
 Twinkle.copyvio.callback.evaluate = function(e) {
-	mw.config.set('wgPageName', mw.config.get('wgPageName').replace(/_/g, ' '));  // for queen/king/whatever and country!
+	mw.config.set('wgPageName', mw.config.get('wgPageName').replace(/_/g, ' '));
 
 	var source = e.target.source.value;
 	var usertalk = e.target.notify.checked;
