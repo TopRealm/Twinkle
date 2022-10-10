@@ -168,7 +168,7 @@ Twinkle.talkback.changeTarget = function(e) {
 				type: 'input',
 				name: 'page',
 				label: '讨论页面名称',
-				tooltip: '正在进行讨论的页面名称。例如：“User talk:QiuWen”或“Qiuwen talk:首页”。仅限于所有对话页面、项目和模板命名空间。',
+				tooltip: '正在进行讨论的页面名称。例如：“User talk:QiuWen”或“Qiuwen talk:首页”。仅限于所有讨论页面、项目和模板命名空间。',
 				value: prev_page || 'User talk:' + mw.config.get('wgUserName')
 			});
 			work_area.append({

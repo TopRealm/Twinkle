@@ -148,7 +148,7 @@ Twinkle.config.sections = [
 				name: 'userTalkPageMode',
 				label: '当要打开用户讨论页时',
 				type: 'enum',
-				enumValues: { window: '在窗口中，替换成其它用户对话页', tab: '在新标签页中', blank: '在新窗口中' }
+				enumValues: { window: '在窗口中，替换成其它用户讨论页', tab: '在新标签页中', blank: '在新窗口中' }
 			},
 
 			// TwinkleConfig.dialogLargeFont (boolean)
