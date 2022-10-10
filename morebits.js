@@ -68,9 +68,10 @@ Morebits.l10n = {
 	 * @returns {number[] | null}
 	 */
 	signatureTimestampFormat: function (str) {
-		// YYYY年Month月DD日 (w) HH:mm (UTC)
-		var rgx = /(\d{4})年(\d{1,2})月(\d{1,2})日 \(.\) (\d{2}):(\d{2}) \(UTC\)/;
-		var match = rgx.exec(str);
+		var rgxUTC = /(\d{4})年(\d{1,2})月(\d{1,2})日 \(.\) (\d{2}):(\d{2}) \(UTC\)/; // YYYY年Month月DD日 (w) HH:mm (UTC)
+		var rgxCST = /(\d{4})年(\d{1,2})月(\d{1,2})日 \(.\) (\d{2}):(\d{2}) \(CST\)/; // YYYY年Month月DD日 (w) HH:mm (CST)
+		var match = rgxUTC.exec(str) || rgxCST.exec(str);
+		var matchCST = rgxCST.exec(str);
 		if (!match) {
 			return null;
 		}
@@ -79,7 +80,9 @@ Morebits.l10n = {
 			return null;
 		}
 		// ..... year .... month ... date .... hour ... minute
-		return [match[1], match[2] - 1, match[3], match[4], match[5]];
+		return matchCST ?
+			[match[1], match[2] - 1, match[3], match[4] - 8, match[5]] :
+			[match[1], match[2] - 1, match[3], match[4], match[5]];
 	}
 };
 
