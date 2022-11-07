@@ -174,10 +174,10 @@ Twinkle.image.callback.evaluate = function twinkleimageCallbackEvaluate(event) {
 		case 'no source no license':
 		case 'no source':
 		case 'no license':
-			csdcrit = 'F4';
+			csdcrit = 'F1';
 			break;
 		case 'no permission':
-			csdcrit = 'F11';
+			csdcrit = 'F2';
 			break;
 		default:
 			throw new Error('Twinkle.image.callback.evaluate: 未知理由');
@@ -224,9 +224,9 @@ Twinkle.image.callbacks = {
 		var params = pageobj.getCallbackParameters();
 
 		// remove "move to Commons" tag - deletion-tagged files cannot be moved to Commons
-		text = text.replace(/\{\{(mtc|(copy |move )?to ?commons|move to wikimedia commons|copy to wikimedia commons)[^}]*\}\}/gi, '');
+		// text = text.replace(/\{\{(mtc|(copy |move )?to ?commons|move to wikimedia commons|copy to wikimedia commons)[^}]*\}\}/gi, '');
 
-		var tag = '{{di-' + params.templatename + '|date={{subst:#time:j F Y}}';
+		var tag = '{{di-' + params.templatename + '|date={{subst:#time:c}}';
 		switch (params.type) {
 			case 'no source no license':
 			case 'no source':
