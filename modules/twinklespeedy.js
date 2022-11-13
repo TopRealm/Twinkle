@@ -378,7 +378,7 @@ Twinkle.speedy.callback.modeChanged = function twinklespeedyCallbackModeChanged(
 			work_area.append({ type: 'header', label: '文件' });
 			work_area.append({ type: radioOrCheckbox, name: 'csd', list: Twinkle.speedy.generateCsdList(Twinkle.speedy.fileList, mode) });
 			if (!Twinkle.speedy.mode.isSysop(mode)) {
-				work_area.append({ type: 'div', label: '标记CSD F3、F4、F6、F8、F9、F10，请使用Twinkle的“图权”功能。' });
+				work_area.append({ type: 'div', label: '标记快速删除F1（明显不符合本站著作权方针的文件）、F2（重复且不再被使用的文件），请使用Twinkle的“图权”功能。' });
 			}
 			break;
 
@@ -409,7 +409,7 @@ Twinkle.speedy.callback.modeChanged = function twinklespeedyCallbackModeChanged(
 	work_area.append({ type: 'header', label: '常规' });
 	work_area.append({ type: radioOrCheckbox, name: 'csd', list: Twinkle.speedy.generateCsdList(generalCriteria, mode) });
 	if (!Twinkle.speedy.mode.isSysop(mode)) {
-		work_area.append({ type: 'div', label: '标记CSD G16，请使用Twinkle的“侵权”功能。' });
+		work_area.append({ type: 'div', label: '提报侵权页面，请使用Twinkle的“侵权”功能。' });
 	}
 
 	if (mw.config.get('wgIsRedirect') || Morebits.userIsSysop) {
