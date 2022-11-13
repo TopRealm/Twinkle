@@ -845,7 +845,7 @@ Twinkle.speedy.callbacks = {
 
 		var statusIndicator = new Morebits.status('构造删除理由');
 		var api = new Morebits.wiki.api('解析删除模板', query, function(apiobj) {
-			var reason = decodeURIComponent($(apiobj.responseXML().querySelector('text').childNodes[0].nodeValue).find('#delete-reason').text().replace(/\+/g, ' '));
+			var reason = decodeURIComponent($(apiobj.getXML().querySelector('text').childNodes[0].nodeValue).find('#delete-reason').text().replace(/\+/g, ' '));
 			if (!reason) {
 				statusIndicator.warn('未能从删除模板生成删除理由');
 			} else {
