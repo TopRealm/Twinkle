@@ -43,7 +43,6 @@
  *
  * @namespace Morebits
  */
-
 (function (window, document, $) {
 // Wrap entire file with anonymous function
 
@@ -2016,10 +2015,10 @@ Morebits.date.prototype = {
 		var unbinder = new Morebits.unbinder(formatstr); // escape stuff between [...]
 		unbinder.unbind('\\[', '\\]');
 		unbinder.content = unbinder.content.replace(
-			/* Regex notes:
-       * d(d{2,3})? matches exactly 1, 3 or 4 occurrences of 'd' ('dd' is treated as a double match of 'd')
-       * Y{1,2}(Y{2})? matches exactly 1, 2 or 4 occurrences of 'Y'
-       */
+		/* Regex notes:
+         * d(d{2,3})? matches exactly 1, 3 or 4 occurrences of 'd' ('dd' is treated as a double match of 'd')
+         * Y{1,2}(Y{2})? matches exactly 1, 2 or 4 occurrences of 'Y'
+         */
 			/H{1,2}|h{1,2}|m{1,2}|s{1,2}|SSS|d(d{2,3})?|D{1,2}|M{1,4}|Y{1,2}(Y{2})?|A/g, function (match) {
 				return replacementMap[match];
 			});
@@ -4456,11 +4455,11 @@ Morebits.wiki.page = function (pageName, status) {
 }; // end Morebits.wiki.page
 
 /* Morebits.wiki.page TODO: (XXX)
-  * - Should we retry loads also?
-  * - Need to reset current action before the save?
-  * - Deal with action.completed stuff
-  * - Need to reset all parameters once done (e.g. edit summary, move destination, etc.)
-  */
+ * - Should we retry loads also?
+ * - Need to reset current action before the save?
+ * - Deal with action.completed stuff
+ * - Need to reset all parameters once done (e.g. edit summary, move destination, etc.)
+ */
 
 /* **************** Morebits.wiki.preview **************** */
 /**
