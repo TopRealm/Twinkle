@@ -9,6 +9,7 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - twinklebatchprotect.js */
+// <nowiki>
 (function ($) {
 /*
      ****************************************
@@ -21,26 +22,26 @@
 
 Twinkle.batchprotect = function twinklebatchprotect() {
 	if (Morebits.userIsSysop && (mw.config.get('wgArticleId') > 0 && (mw.config.get('wgNamespaceNumber') === 2 || mw.config.get('wgNamespaceNumber') === 4) || mw.config.get('wgNamespaceNumber') === 14 || mw.config.get('wgCanonicalSpecialPageName') === 'Prefixindex')) {
-		Twinkle.addPortletLink(Twinkle.batchprotect.callback, 'P-batch', 'tw-pbatch', 'Protect pages linked from this page');
+		Twinkle.addPortletLink(Twinkle.batchprotect.callback, '批保', 'tw-pbatch', '批量保护链出页面');
 	}
 };
 Twinkle.batchprotect.unlinkCache = {};
 Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 	var Window = new Morebits.simpleWindow(600, 400);
-	Window.setTitle('Batch protection');
+	Window.setTitle('批保');
 	Window.setScriptName('Twinkle');
-	Window.addFooterLink('Protection policy', 'QW:PROT');
-	Window.addFooterLink('帮助文档', 'H:TW/DOC#protect');
+	Window.addFooterLink('保护方针', 'QW:PROT');
+	Window.addFooterLink('帮助文档', 'H:TW/DOC#保护');
 	Window.addFooterLink('问题反馈', 'HT:TW');
 	var form = new Morebits.quickForm(Twinkle.batchprotect.callback.evaluate);
 	form.append({
 		type: 'checkbox',
 		event: Twinkle.protect.formevents.editmodify,
 		list: [ {
-			label: 'Modify edit protection',
+			label: '修改编辑保护',
 			value: 'editmodify',
 			name: 'editmodify',
-			tooltip: 'Only for existing pages.',
+			tooltip: '仅限现有页面。',
 			checked: true
 		} ]
 	});
@@ -260,16 +261,16 @@ Twinkle.batchprotect.callback.evaluate = function twinklebatchprotectCallbackEva
 	}
 	var input = Morebits.quickForm.getInputData(form);
 	if (!input.reason) {
-		alert("You've got to give a reason, you rouge admin!");
+		alert("您必须给出一个理由。");
 		return;
 	}
 	Morebits.simpleWindow.setButtonsEnabled(false);
 	Morebits.status.init(form);
 	if (input.pages.length === 0) {
-		Morebits.status.error('Error', 'Nothing to protect, aborting');
+		Morebits.status.error('Error', '待保护页面不存在，程序终止');
 		return;
 	}
-	var batchOperation = new Morebits.batchOperation('Applying protection settings');
+	var batchOperation = new Morebits.batchOperation('应用保护设置');
 	batchOperation.setOption('chunkSize', Twinkle.getPref('batchChunks'));
 	batchOperation.setOption('preserveIndividualStatusLines', true);
 	batchOperation.setPageList(input.pages);
@@ -279,7 +280,7 @@ Twinkle.batchprotect.callback.evaluate = function twinklebatchprotectCallbackEva
 			titles: pageName,
 			format: 'json'
 		};
-		var qiuwen_api = new Morebits.wiki.api('Checking if page ' + pageName + ' exists', query, Twinkle.batchprotect.callbacks.main, null, batchOperation.workerFailure);
+		var qiuwen_api = new Morebits.wiki.api('正在检查页面“' + pageName + '”是否存在', query, Twinkle.batchprotect.callbacks.main, null, batchOperation.workerFailure);
 		qiuwen_api.params = $.extend({
 			page: pageName,
 			batchOperation: batchOperation
@@ -294,7 +295,7 @@ Twinkle.batchprotect.callbacks = {
 			apiobj.params.page = response.query.normalized[0].to;
 		}
 		var exists = !response.query.pages[0].missing;
-		var page = new Morebits.wiki.page(apiobj.params.page, 'Protecting ' + apiobj.params.page);
+		var page = new Morebits.wiki.page(apiobj.params.page, '正在保护' + apiobj.params.page);
 		var takenAction = false;
 		if (exists && apiobj.params.editmodify) {
 			page.setEditProtection(apiobj.params.editlevel, apiobj.params.editexpiry);
@@ -309,7 +310,7 @@ Twinkle.batchprotect.callbacks = {
 			takenAction = true;
 		}
 		if (!takenAction) {
-			Morebits.status.warn('Protecting ' + apiobj.params.page, 'page ' + (exists ? 'exists' : 'does not exist') + '; nothing to do, skipping');
+			Morebits.status.warn('正在保护“' + apiobj.params.page, '”页面' + (exists ? '存在' : '不存在') + '；无事可做，跳过');
 			apiobj.params.batchOperation.workerFailure(apiobj);
 			return;
 		}

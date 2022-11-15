@@ -56,6 +56,7 @@ const deployTargets = [
 	{ file: 'modules/friendlytag.js', target: 'MediaWiki:Gadget-friendlytag.js' },
 	{ file: 'modules/friendlytalkback.js', target: 'MediaWiki:Gadget-friendlytalkback.js' },
 	{ file: 'modules/twinklearv.js', target: 'MediaWiki:Gadget-twinklearv.js' },
+	{ file: 'modules/twinklebatchprotect.js', target: 'MediaWiki:Gadget-twinklebatchprotect.js' },
 	{ file: 'modules/twinklebatchdelete.js', target: 'MediaWiki:Gadget-twinklebatchdelete.js' },
 	{ file: 'modules/twinklebatchundelete.js', target: 'MediaWiki:Gadget-twinklebatchundelete.js' },
 	{ file: 'modules/twinkleblock.js', target: 'MediaWiki:Gadget-twinkleblock.js' },
