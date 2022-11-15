@@ -12,8 +12,6 @@
 		"lint:fix": "eslint . --fix",
 		"stylelint": "stylelint *.css",
 		"stylelint:fix": "stylelint *.css --fix",
-		"patchtest": "node scripts/patch-test.js",
-		"server": "node scripts/server.js",
 		"deploy": "node scripts/deploy.js"
 	},
 	"devDependencies": {
