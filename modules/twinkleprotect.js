@@ -130,6 +130,7 @@ Twinkle.protect.fetchProtectingAdmin = function twinkleprotectFetchProtectingAdm
 	}).then(function (data) {
 		// don't check log entries that have already been checked (e.g. don't go into an infinite loop!)
 		var event = data.query ? $.grep(data.query.logevents, function (le) {
+			// eslint-disable-next-line no-jquery/no-in-array
 			return $.inArray(le.logid, logIds);
 		})[0] : null;
 		if (!event) {
