@@ -1,30 +1,16 @@
 # Twinkle
 
-Twinkle is a JavaScript application that gives Wikipedians a quick way of performing common maintenance tasks, such as nominating pages for deletion and cleaning up vandalism.
+Twinkle是一个JavaScript应用程序，引入自维基百科，其为求闻百科用户提供了一个快速执行常见维护任务的方法，例如提名删除页面和清理破坏性内容。
 
-See [Wikipedia:Twinkle][] on the English Wikipedia for more information.
+AzaToth是该工具的原作者和维护者，也是`morebits.js`库小工具的维护者。除Twinkle之外，它还构成了多个求闻百科脚本和编辑工具的基础。
 
-[AzaToth][] is the original author and maintainer of the tool, as well as the `morebits.js` library gadget, which forms the basis for many Wikipedia scripts and editing tools in addition to Twinkle.
+## 本代码库布局
 
-## How to file a bug report or feature request
+* `morebits.js`: Twinkle和许多其他脚本所使用的中心库。包含与MediaWiki API交互的代码，显示表单和对话框，生成状态日志，并做其他各种有用的事情。这里的绝大部分代码都不是针对Twinkle的，请看文档（[1](https://wikimedia-gadgets.github.io/twinkle/Morebits.html)和[2](https://github.com/wikimedia-gadgets/twinkle/wiki/morebits))
+* `twinkle.js`: 一般的Twinkle专用代码，主要与偏好和在用户界面中公开Twinkle有关。重要的是，它包含了Twinkle的默认偏好集。
+* `modules`: 包含各个Twinkle模块。
 
-If you're unsure whether you are experiencing a Twinkle-based bug, you should first try asking at [Wikipedia talk:Twinkle][], where other editors may assist you.  Bugs may be filed either here or at [Wikipedia talk:Twinkle][].  For simple feature requests or changes (e.g., a template was deleted or renamed) feel free to open an issue or pull request here, but for more significant changes, consider discussing the idea on [Wikipedia talk:Twinkle][] and any relevant pages first to ensure there is consensus for the change and to get broader community input.  If you believe you have found a security issue, follow the guidelines in [SECURITY.md](./SECURITY.md).
+[select2][]采用[MIT许可证][select2license]。
 
-If you'd like to start contributing, awesome!  Check out [CONTRIBUTING.md](CONTRIBUTING.md) to get started!
-
-## Layout of this repository
-
-* `morebits.js`: The central library used by Twinkle and many other scripts. Contains code to interact with the MediaWiki API, display forms and dialogs, generate status logs, and do various other useful things. The vast majority of code in here is not Twinkle-specific; see docs ([1](https://wikimedia-gadgets.github.io/twinkle/Morebits.html) and [2](https://github.com/wikimedia-gadgets/twinkle/wiki/morebits))
-* `twinkle.js`: General Twinkle-specific code, mostly related to preferences and exposing Twinkle in the UI. Significantly, it contains the default set of preferences of Twinkle.
-* `modules`: Contains the individual Twinkle modules. Descriptions for these can be found in header comments or in the [Twinkle documentation][]. The module `twinkleconfig.js` powers the [Twinkle preferences panel][H:TW/PREF].
-
-[select2][] is added under the [MIT license][select2license].  The MediaWiki code used [for tests](./tests/mocking/mw_shim.js) is added under the [GPL2 license][mwlicense].
-
-[Wikipedia:Twinkle]: https://enwp.org//Wikipedia:Twinkle
-[AzaToth]: https://enwp.org//User:AzaToth
-[Wikipedia talk:Twinkle]: https://enwp.org//Wikipedia_talk:Twinkle
-[Twinkle documentation]: https://enwp.org//Wikipedia:Twinkle/doc
-[H:TW/PREF]: https://enwp.org//Wikipedia:Twinkle/Preferences
 [select2]: https://github.com/select2/select2
 [select2license]: https://github.com/select2/select2/blob/develop/LICENSE.md
-[mwlicense]: https://gerrit.wikimedia.org/r/plugins/gitiles/mediawiki/core/+/master/COPYING
