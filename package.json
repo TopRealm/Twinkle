@@ -4,7 +4,7 @@
 	"private": true,
 	"repository": {
 		"type": "git",
-		"url": "https://git.qiuwen.wiki/qiuwen/twinkle-new"
+		"url": "https://git.qiuwen.wiki/qiuwen/Twinkle"
 	},
 	"scripts": {
 		"start": "node scripts/dev-server.js",

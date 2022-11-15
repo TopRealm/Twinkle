@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: CC-BY-SA-4.0
  * _addText: '{{Gadget Header|license=CC-BY-SA-4.0}}'
  *
- * @url https://git.qiuwen.wiki/qiuwen/twinkle-new
+ * @url https://git.qiuwen.wiki/qiuwen/Twinkle
  * @author © 2011-2022 English Wikipedia Contributors
  * @author © 2011-2021 Chinese Wikipedia Contributors
  * @author © 2021-     Qiuwen Baike Contributors
@@ -18,7 +18,7 @@
  * +-------------------------------------------------------+
  *
  * Scripts imported from Qiuwen Development Centre
- * [https://git.qiuwen.wiki/qiuwen/twinkle-new].
+ * [https://git.qiuwen.wiki/qiuwen/Twinkle].
  * Orginally imported from Github
  * [https://github.com/wikimedia-gadgets/twinkle].
  * Translaton imported from Chinese Wikipedia.
