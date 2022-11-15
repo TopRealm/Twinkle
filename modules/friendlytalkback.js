@@ -1,3 +1,5 @@
+'use strict';
+
 // <nowiki>
 /**
  * Twinkle.js - friendlytalkback.js
@@ -7,88 +9,86 @@
  * This work is licensed under a Creative Commons
  * Attribution-ShareAlike 4.0 International License.
  * https://creativecommons.org/licenses/by-sa/4.0/
+ *
+ * @param $
  */
-(function($) {
-
-
+(function ($) {
 /*
- ****************************************
- *** friendlytalkback.js: Talkback module
- ****************************************
- * Mode of invocation:     Tab ("TB")
- * Active on:              Any page with relevant user name (userspace, contribs, etc.) except IP ranges
- * Config directives in:   FriendlyConfig
- */
+   ****************************************
+   *** friendlytalkback.js: Talkback module
+   ****************************************
+   * Mode of invocation:     Tab ("TB")
+   * Active on:              Any page with relevant user name (userspace, contribs, etc.) except IP ranges
+   * Config directives in:   FriendlyConfig
+   */
 
-Twinkle.talkback = function() {
+Twinkle.talkback = function () {
 	if (!mw.config.exists('wgRelevantUserName')) {
 		return;
 	}
 	Twinkle.addPortletLink(Twinkle.talkback.callback, '通知', 'friendly-talkback', '回复通知');
 };
-
-Twinkle.talkback.callback = function() {
+Twinkle.talkback.callback = function () {
 	if (mw.config.get('wgRelevantUserName') === mw.config.get('wgUserName') && !confirm('您寂寞到了要自己回复自己的程度么？')) {
 		return;
 	}
-
 	var Window = new Morebits.simpleWindow(600, 350);
 	Window.setTitle('通知');
 	Window.setScriptName('Twinkle');
 	Window.addFooterLink('参数设置', 'H:TW/PREF#talkback');
 	Window.addFooterLink('帮助文档', 'H:TW/DOC#talkback');
 	Window.addFooterLink('问题反馈', 'HT:TW');
-
 	var form = new Morebits.quickForm(Twinkle.talkback.evaluate);
-
-	form.append({ type: 'radio', name: 'tbtarget',
-		list: [
-			{
-				label: '回复：我的讨论页',
-				value: 'mytalk',
-				checked: 'true'
-			},
-			{
-				label: '回复：其他用户的讨论页',
-				value: 'usertalk'
-			},
-			{
-				label: '回复：其它页面',
-				value: 'other'
-			},
-			{
-				label: '邀请讨论',
-				value: 'see'
-			},
-			{
-				label: '通告板通知',
-				value: 'notice'
-			},
-			{
-				label: '“有新邮件”',
-				value: 'mail'
-			}
-		],
+	form.append({
+		type: 'radio',
+		name: 'tbtarget',
+		list: [ {
+			label: '回复：我的讨论页',
+			value: 'mytalk',
+			checked: 'true'
+		}, {
+			label: '回复：其他用户的讨论页',
+			value: 'usertalk'
+		}, {
+			label: '回复：其它页面',
+			value: 'other'
+		}, {
+			label: '邀请讨论',
+			value: 'see'
+		}, {
+			label: '通告板通知',
+			value: 'notice'
+		}, {
+			label: '“有新邮件”',
+			value: 'mail'
+		} ],
 		event: Twinkle.talkback.changeTarget
 	});
-
 	form.append({
 		type: 'field',
 		label: '工作区',
 		name: 'work_area'
 	});
-
 	var previewlink = document.createElement('a');
-	$(previewlink).click(function() {
-		Twinkle.talkback.callbacks.preview(result);  // |result| is defined below
+	$(previewlink).on('click', function () {
+		Twinkle.talkback.callbacks.preview(result); // |result| is defined below
 	});
+
 	previewlink.style.cursor = 'pointer';
 	previewlink.textContent = '预览';
-	form.append({ type: 'div', id: 'talkbackpreview', label: [ previewlink ] });
-	form.append({ type: 'div', id: 'friendlytalkback-previewbox', style: 'display: none' });
-
-	form.append({ type: 'submit' });
-
+	form.append({
+		type: 'div',
+		id: 'talkbackpreview',
+		label: [ previewlink ]
+	});
+	form.append({
+		type: 'div',
+		id: 'friendlytalkback-previewbox',
+		style: 'display: none'
+	});
+	form.append({
+		type: 'submit'
+	});
 	var result = form.render();
 	Window.setContent(result);
 	Window.display();
@@ -111,10 +111,8 @@ Twinkle.talkback.callback = function() {
 	var qwapi = new Morebits.wiki.api('抓取退出通告信息', query, Twinkle.talkback.callback.optoutStatus);
 	qwapi.post();
 };
-
 Twinkle.talkback.optout = '';
-
-Twinkle.talkback.callback.optoutStatus = function(apiobj) {
+Twinkle.talkback.callback.optoutStatus = function (apiobj) {
 	var el = apiobj.getResponse().query.pages[0].extlinks;
 	if (el && el.length) {
 		Twinkle.talkback.optout = mw.config.get('wgRelevantUserName') + '不希望收到回复通告';
@@ -124,17 +122,13 @@ Twinkle.talkback.callback.optoutStatus = function(apiobj) {
 	}
 	$('#twinkle-talkback-optout-message').text(Twinkle.talkback.optout);
 };
-
 var prev_page = '';
 var prev_section = '';
 var prev_message = '';
-
-Twinkle.talkback.changeTarget = function(e) {
+Twinkle.talkback.changeTarget = function (e) {
 	var value = e.target.values;
 	var root = e.target.form;
-
 	var old_area = Morebits.quickForm.getElements(root, 'work_area')[0];
-
 	if (root.section) {
 		prev_section = root.section.value;
 	}
@@ -144,15 +138,12 @@ Twinkle.talkback.changeTarget = function(e) {
 	if (root.page) {
 		prev_page = root.page.value;
 	}
-
 	var work_area = new Morebits.quickForm.element({
 		type: 'field',
 		label: '回复通告信息',
 		name: 'work_area'
 	});
-
 	root.previewer.closePreview();
-
 	switch (value) {
 		case 'talkback':
 			/* falls through */
@@ -163,7 +154,6 @@ Twinkle.talkback.changeTarget = function(e) {
 				style: 'color: red',
 				id: 'twinkle-talkback-optout-message'
 			});
-
 			work_area.append({
 				type: 'input',
 				name: 'page',
@@ -184,7 +174,7 @@ Twinkle.talkback.changeTarget = function(e) {
 				type: 'select',
 				name: 'noticeboard',
 				label: '通告板：',
-				event: function(e) {
+				event: function event(e) {
 					if (e.target.value === 'afchd') {
 						Morebits.quickForm.overrideElementLabel(root.section, '标题或草稿名称（去除Draft前缀）：');
 						Morebits.quickForm.setElementTooltipVisibility(root.section, false);
@@ -194,8 +184,7 @@ Twinkle.talkback.changeTarget = function(e) {
 					}
 				}
 			});
-
-			$.each(Twinkle.talkback.noticeboards, function(value, data) {
+			$.each(Twinkle.talkback.noticeboards, function (value, data) {
 				noticeboard.append({
 					type: 'option',
 					label: data.label,
@@ -203,7 +192,6 @@ Twinkle.talkback.changeTarget = function(e) {
 					selected: !!data.defaultSelected
 				});
 			});
-
 			work_area.append({
 				type: 'input',
 				name: 'section',
@@ -212,7 +200,6 @@ Twinkle.talkback.changeTarget = function(e) {
 				value: prev_section
 			});
 			break;
-
 		case 'other':
 			work_area.append({
 				type: 'div',
@@ -220,7 +207,6 @@ Twinkle.talkback.changeTarget = function(e) {
 				style: 'color: red',
 				id: 'twinkle-talkback-optout-message'
 			});
-
 			work_area.append({
 				type: 'input',
 				name: 'page',
@@ -229,7 +215,6 @@ Twinkle.talkback.changeTarget = function(e) {
 				value: prev_page,
 				required: true
 			});
-
 			work_area.append({
 				type: 'input',
 				name: 'section',
@@ -238,7 +223,6 @@ Twinkle.talkback.changeTarget = function(e) {
 				value: prev_section
 			});
 			break;
-
 		case 'mail':
 			work_area.append({
 				type: 'input',
@@ -247,7 +231,6 @@ Twinkle.talkback.changeTarget = function(e) {
 				tooltip: '您发出的电子邮件的主题。'
 			});
 			break;
-
 		case 'see':
 			work_area.append({
 				type: 'input',
@@ -257,7 +240,6 @@ Twinkle.talkback.changeTarget = function(e) {
 				value: prev_page,
 				required: true
 			});
-
 			work_area.append({
 				type: 'input',
 				name: 'section',
@@ -267,20 +249,21 @@ Twinkle.talkback.changeTarget = function(e) {
 			});
 			break;
 	}
-
 	if (value !== 'notice') {
-		work_area.append({ type: 'textarea', label: '附加信息（可选）：', name: 'message', tooltip: '会在回复通告模板下出现的消息，您的签名会被加在最后。' });
+		work_area.append({
+			type: 'textarea',
+			label: '附加信息（可选）：',
+			name: 'message',
+			tooltip: '会在回复通告模板下出现的消息，您的签名会被加在最后。'
+		});
 	}
-
 	work_area = work_area.render();
 	root.replaceChild(work_area, old_area);
 	if (root.message) {
 		root.message.value = prev_message;
 	}
-
 	$('#twinkle-talkback-optout-message').text(Twinkle.talkback.optout);
 };
-
 Twinkle.talkback.noticeboards = {
 	affp: {
 		label: 'QW:AF/FP（防滥用过滤器/错误报告）',
@@ -296,19 +279,14 @@ Twinkle.talkback.noticeboards = {
 		editSummary: '您在[[Qiuwen:AFCHD|条目创建帮助]]页面的提问已有回复，请前往查看。'
 	}
 };
-
-Twinkle.talkback.evaluate = function(e) {
+Twinkle.talkback.evaluate = function (e) {
 	var input = Morebits.quickForm.getInputData(e.target);
-
 	var fullUserTalkPageName = new mw.Title(mw.config.get('wgRelevantUserName'), 3).toText();
 	var talkpage = new Morebits.wiki.page(fullUserTalkPageName, '加入回复通告');
-
 	Morebits.simpleWindow.setButtonsEnabled(false);
 	Morebits.status.init(e.target);
-
 	Morebits.wiki.actionCompleted.redirect = fullUserTalkPageName;
 	Morebits.wiki.actionCompleted.notice = '回复通告完成，将在几秒内刷新页面';
-
 	switch (input.tbtarget) {
 		case 'notice':
 			talkpage.setEditSummary(Twinkle.talkback.noticeboards[input.noticeboard].editSummary);
@@ -318,16 +296,14 @@ Twinkle.talkback.evaluate = function(e) {
 			break;
 		case 'see':
 			input.page = Twinkle.talkback.callbacks.normalizeTalkbackPage(input.page);
-			talkpage.setEditSummary('请看看[[:' + input.page +
-			(input.section ? '#' + input.section : '') + ']]上的讨论');
+			talkpage.setEditSummary('请看看[[:' + input.page + (input.section ? '#' + input.section : '') + ']]上的讨论');
 			break;
-		default:  // talkback
+		default:
+			// talkback
 			input.page = Twinkle.talkback.callbacks.normalizeTalkbackPage(input.page);
-			talkpage.setEditSummary('回复通告：[[:' + input.page +
-			(input.section ? '#' + input.section : '') + ']])');
+			talkpage.setEditSummary('回复通告：[[:' + input.page + (input.section ? '#' + input.section : '') + ']])');
 			break;
 	}
-
 	talkpage.setAppendText('\n\n' + Twinkle.talkback.callbacks.getNoticeWikitext(input));
 	talkpage.setChangeTags(Twinkle.changeTags);
 	talkpage.setCreateOption('recreate');
@@ -335,10 +311,9 @@ Twinkle.talkback.evaluate = function(e) {
 	talkpage.setFollowRedirect(true);
 	talkpage.append();
 };
-
 Twinkle.talkback.callbacks = {
 	// Not used for notice or mail, default to user page
-	normalizeTalkbackPage: function(page) {
+	normalizeTalkbackPage: function normalizeTalkbackPage(page) {
 		page = page || mw.config.get('wgUserName');
 
 		// Assume no prefix is a username, convert to user talk space
@@ -353,29 +328,23 @@ Twinkle.talkback.callbacks = {
 		}
 		return page;
 	},
-
-	preview: function(form) {
+	preview: function preview(form) {
 		var input = Morebits.quickForm.getInputData(form);
-
 		if (input.tbtarget === 'talkback' || input.tbtarget === 'see') {
 			input.page = Twinkle.talkback.callbacks.normalizeTalkbackPage(input.page);
 		}
-
 		var noticetext = Twinkle.talkback.callbacks.getNoticeWikitext(input);
 		form.previewer.beginRender(noticetext, 'User talk:' + mw.config.get('wgRelevantUserName')); // Force wikitext/correct username
 	},
 
-	getNoticeWikitext: function(input) {
+	getNoticeWikitext: function getNoticeWikitext(input) {
 		var text;
-
 		switch (input.tbtarget) {
 			case 'notice':
 				text = Morebits.string.safeReplace(Twinkle.talkback.noticeboards[input.noticeboard].text, '$SECTION', input.section);
 				break;
 			case 'mail':
-				text = '==' + Twinkle.getPref('mailHeading') + '==\n' +
-					'{{YGM|subject=' + input.section + '|ts=~~~~~}}';
-
+				text = '==' + Twinkle.getPref('mailHeading') + '==\n' + '{{YGM|subject=' + input.section + '|ts=~~~~~}}';
 				if (input.message) {
 					text += '\n' + input.message + '  ~~~~';
 				} else if (Twinkle.getPref('insertTalkbackSignature')) {
@@ -384,13 +353,11 @@ Twinkle.talkback.callbacks = {
 				break;
 			case 'see':
 				var heading = Twinkle.getPref('talkbackHeading');
-				text = '{{subst:Please see|location=' + input.page + (input.section ? '#' + input.section : '') +
-				'|more=' + input.message + '|heading=' + heading + '}}';
+				text = '{{subst:Please see|location=' + input.page + (input.section ? '#' + input.section : '') + '|more=' + input.message + '|heading=' + heading + '}}';
 				break;
-			default:  // talkback
-				text = '==' + Twinkle.getPref('talkbackHeading') + '==\n' +
-					'{{talkback|' + input.page + (input.section ? '|' + input.section : '') + '|ts=~~~~~}}';
-
+			default:
+				// talkback
+				text = '==' + Twinkle.getPref('talkbackHeading') + '==\n' + '{{talkback|' + input.page + (input.section ? '|' + input.section : '') + '|ts=~~~~~}}';
 				if (input.message) {
 					text += '\n' + input.message + ' ~~~~';
 				} else if (Twinkle.getPref('insertTalkbackSignature')) {
@@ -401,7 +368,6 @@ Twinkle.talkback.callbacks = {
 	}
 };
 Twinkle.addInitCallback(Twinkle.talkback, 'talkback');
-})(jQuery);
-
+}(jQuery));
 
 // </nowiki>
