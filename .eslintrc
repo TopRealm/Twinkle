@@ -94,7 +94,7 @@
 		"no-jquery/no-each-util": "off",
 		"no-jquery/no-map-util": "off",
 		"no-jquery/no-grep": "off",
-		"no-jquery/no-constructor-attributes": "warn",
+		"no-jquery/no-constructor-attributes": "off",
 		"no-jquery/no-sizzle": "off",
 		"no-jquery/no-parse-html-literal": "off",
 		"no-use-before-define": "off",
