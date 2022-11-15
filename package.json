@@ -12,7 +12,7 @@
 		"lint:fix": "eslint . --fix",
 		"patchtest": "node scripts/patch-test.js",
 		"server": "node scripts/server.js",
-		"test": "jest",
+		"babel": "babel -d modules modules && eslint modules/*.js --fix",
 		"deploy": "node scripts/deploy.js"
 	},
 	"devDependencies": {
@@ -24,8 +24,6 @@
 		"eslint-plugin-compat": "^4.0.2",
 		"eslint-plugin-es5": "^1.5.0",
 		"eslint-plugin-unicorn": "^44.0.2",
-		"jest": "^27.0.6",
-		"mock-mediawiki": "^1.2.2",
 		"mwn": "^0.11.1"
 	}
 }
