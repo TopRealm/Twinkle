@@ -7,29 +7,29 @@
  * This work is licensed under a Creative Commons
  * Attribution-ShareAlike 4.0 International License.
  * https://creativecommons.org/licenses/by-sa/4.0/
- *
- * @param $
  */
 (function ($) {
+
 /*
-     ****************************************
-     *** twinklestub.js: Tag module
-     ****************************************
-     * Mode of invocation:     Tab ("Stub")
-     * Active on:              Existing articles
-     * Config directives in:   FriendlyConfig
-     * Note:                   customised friendlytag module (for SEWP)
-     */
+	 ****************************************
+	 *** twinklestub.js: Tag module
+	 ****************************************
+	 * Mode of invocation:     Tab ("Stub")
+	 * Active on:              Existing articles
+	 * Config directives in:   FriendlyConfig
+	 * Note:                   customised friendlytag module (for SEWP)
+	 */
 
 Twinkle.stub = function friendlytag() {
 	if (Morebits.isPageRedirect()) {
 		// Skip
 		// article/draft article tagging
-	} else if ((mw.config.get('wgNamespaceNumber') === 0 || mw.config.get('wgNamespaceNumber') === 118) && mw.config.get('wgCurRevisionId') || Morebits.pageNameNorm === Twinkle.getPref('sandboxPage')) {
+	} else if (((mw.config.get('wgNamespaceNumber') === 0 || mw.config.get('wgNamespaceNumber') === 118) && mw.config.get('wgCurRevisionId')) || (Morebits.pageNameNorm === Twinkle.getPref('sandboxPage'))) {
 		Twinkle.stub.mode = '条目';
 		Twinkle.addPortletLink(Twinkle.stub.callback, '小作品', 'friendly-tag', '标记小作品');
 	}
 };
+
 Twinkle.stub.callback = function friendlytagCallback() {
 	var Window = new Morebits.simpleWindow(630, Twinkle.stub.mode === 'article' ? 450 : 400);
 	Window.setScriptName('Twinkle');
@@ -37,55 +37,54 @@ Twinkle.stub.callback = function friendlytagCallback() {
 	Window.addFooterLink('参数设置', 'H:TW/PREF#小作品');
 	Window.addFooterLink('帮助文档', 'H:TW/DOC#小作品');
 	Window.addFooterLink('问题反馈', 'HT:TW');
+
 	var form = new Morebits.quickForm(Twinkle.stub.callback.evaluate);
+
 	if (document.getElementsByClassName('patrollink').length) {
 		form.append({
 			type: 'checkbox',
-			list: [ {
-				label: '标记页面为已巡查',
-				value: 'patrolPage',
-				name: 'patrolPage',
-				checked: Twinkle.getPref('markStubbedPagesAsPatrolled')
-			} ]
+			list: [
+				{
+					label: '标记页面为已巡查',
+					value: 'patrolPage',
+					name: 'patrolPage',
+					checked: Twinkle.getPref('markStubbedPagesAsPatrolled')
+				}
+			]
 		});
 	}
+
 	switch (Twinkle.stub.mode) {
 		case '條目':
 		case '条目':
 			Window.setTitle('条目小作品标记');
+
 			form.append({
 				type: 'select',
 				name: 'sortorder',
 				label: '查看列表：',
 				tooltip: '您可以在Twinkle参数设置（H:TW/PREF）中更改此项。',
 				event: Twinkle.stub.updateSortOrder,
-				list: [ {
-					type: 'option',
-					value: 'cat',
-					label: '按类型',
-					selected: Twinkle.getPref('stubArticleSortOrder') === 'cat'
-				}, {
-					type: 'option',
-					value: 'alpha',
-					label: '按字母',
-					selected: Twinkle.getPref('stubArticleSortOrder') === 'alpha'
-				} ]
+				list: [
+					{ type: 'option', value: 'cat', label: '按类型', selected: Twinkle.getPref('stubArticleSortOrder') === 'cat' },
+					{ type: 'option', value: 'alpha', label: '按字母', selected: Twinkle.getPref('stubArticleSortOrder') === 'alpha' }
+				]
 			});
-			form.append({
-				type: 'div',
-				id: 'tagWorkArea'
-			});
+
+			form.append({ type: 'div', id: 'tagWorkArea' });
 			break;
+
 		default:
 			alert('Twinkle.stub：未知模式 ' + Twinkle.stub.mode);
 			break;
 	}
-	form.append({
-		type: 'submit'
-	});
+
+	form.append({ type: 'submit' });
+
 	var result = form.render();
 	Window.setContent(result);
 	Window.display();
+
 	if (Twinkle.stub.mode === '条目' || Twinkle.stub.mode === '條目') {
 		// fake a change event on the sort dropdown, to initialize the tag list
 		var evt = document.createEvent('Event');
@@ -93,35 +92,32 @@ Twinkle.stub.callback = function friendlytagCallback() {
 		result.sortorder.dispatchEvent(evt);
 	}
 };
+
 Twinkle.stub.checkedTags = [];
+
 Twinkle.stub.updateSortOrder = function (e) {
 	var sortorder = e.target.value;
+
 	Twinkle.stub.checkedTags = e.target.form.getChecked('articleTags');
 	if (!Twinkle.stub.checkedTags) {
 		Twinkle.stub.checkedTags = [];
 	}
-	var container = new Morebits.quickForm.element({
-		type: 'fragment'
-	});
+
+	var container = new Morebits.quickForm.element({ type: 'fragment' });
 
 	// function to generate a checkbox, with appropriate subgroup if needed
-	var makeCheckbox = function makeCheckbox(tag, description) {
-		var checkbox = {
-			value: tag,
-			label: '{{' + tag + '}}: ' + description
-		};
+	var makeCheckbox = function (tag, description) {
+		var checkbox = { value: tag, label: '{{' + tag + '}}: ' + description };
 		if (Twinkle.stub.checkedTags.indexOf(tag) !== -1) {
 			checkbox.checked = true;
 		}
+
 		return checkbox;
 	};
 
 	// append any custom tags
 	if (Twinkle.getPref('customStubList').length) {
-		container.append({
-			type: 'header',
-			label: '自定义模板'
-		});
+		container.append({ type: 'header', label: '自定义模板' });
 		var customcheckboxes = [];
 		$.each(Twinkle.getPref('customStubList'), function (_, item) {
 			customcheckboxes.push(makeCheckbox(item.value, item.label));
@@ -136,7 +132,7 @@ Twinkle.stub.updateSortOrder = function (e) {
 	// categorical sort order
 	if (sortorder === 'cat') {
 		// function to iterate through the tags and create a checkbox for each one
-		var doCategoryCheckboxes = function doCategoryCheckboxes(subdiv, array) {
+		var doCategoryCheckboxes = function (subdiv, array) {
 			var checkboxes = [];
 			$.each(array, function (k, tag) {
 				var description = Twinkle.stub.article.tags[tag];
@@ -148,26 +144,17 @@ Twinkle.stub.updateSortOrder = function (e) {
 				list: checkboxes
 			});
 		};
+
 		var i = 0;
 		// go through each category and sub-category and append lists of checkboxes
 		$.each(Twinkle.stub.article.tagCategories, function (title, content) {
-			container.append({
-				type: 'header',
-				id: 'tagHeader' + i,
-				label: title
-			});
-			var subdiv = container.append({
-				type: 'div',
-				id: 'tagSubdiv' + i++
-			});
+			container.append({ type: 'header', id: 'tagHeader' + i, label: title });
+			var subdiv = container.append({ type: 'div', id: 'tagSubdiv' + i++ });
 			if (Array.isArray(content)) {
 				doCategoryCheckboxes(subdiv, content);
 			} else {
 				$.each(content, function (subtitle, subcontent) {
-					subdiv.append({
-						type: 'div',
-						label: [ Morebits.htmlNode('b', subtitle) ]
-					});
+					subdiv.append({ type: 'div', label: [ Morebits.htmlNode('b', subtitle) ] });
 					doCategoryCheckboxes(subdiv, subcontent);
 				});
 			}
@@ -184,29 +171,25 @@ Twinkle.stub.updateSortOrder = function (e) {
 			list: checkboxes
 		});
 	}
+
 	var $workarea = $(e.target.form).find('div#tagWorkArea');
 	var rendered = container.render();
 	$workarea.empty().append(rendered);
 
 	// style adjustments
-	$workarea.find('h5').css({
-		'font-size': '110%'
-	});
-	$workarea.find('h5:not(:first-child)').css({
-		'margin-top': '1em'
-	});
-	$workarea.find('div').filter(':has(span.quickformDescription)').css({
-		'margin-top': '0.4em'
-	});
+	$workarea.find('h5').css({ 'font-size': '110%' });
+	$workarea.find('h5:not(:first-child)').css({ 'margin-top': '1em' });
+	$workarea.find('div').filter(':has(span.quickformDescription)').css({ 'margin-top': '0.4em' });
 
 	// add a link to each template's description page
 	$.each(Morebits.quickForm.getElements(e.target.form, 'articleTags'), function (index, checkbox) {
 		var $checkbox = $(checkbox);
 		var link = Morebits.htmlNode('a', '>');
 		link.setAttribute('class', 'tag-template-link');
-		link.setAttribute('href', mw.util.getUrl('Template:' + Morebits.string.toUpperCaseFirstChar(checkbox.values)));
+		link.setAttribute('href', mw.util.getUrl('Template:' +
+				Morebits.string.toUpperCaseFirstChar(checkbox.values)));
 		link.setAttribute('target', '_blank');
-		$checkbox.parent().append([ '\xA0', link ]);
+		$checkbox.parent().append([ '\u00A0', link ]);
 	});
 };
 
@@ -259,40 +242,83 @@ Twinkle.stub.article.tags = {
 
 /* eslint-disable quote-props */
 Twinkle.stub.article.tagCategories = {
-	'通用模板': [ 'stub', 'expand list' ],
-	'国家和地理': [ 'asia-stub', 'europe-stub', 'france-geo-stub', 'geo-stub', 'JP-stub', 'switzerland-stub', 'UK-stub', 'US-bio-stub', 'US-geo-stub', 'US-stub' ],
-	'杂项': [ 'food-stub', 'hist-stub', 'mil-stub', 'politic-stub', 'religion-stub', 'transp-stub' ],
-	'人物': [ 'actor-stub', 'bio-stub', 'US-bio-stub' ],
-	'科学': [ 'biology-stub', 'chem-stub', 'math-stub', 'med-stub', 'physics-stub', 'science-stub', 'weather-stub' ],
-	'体育': [ 'sport-stub' ],
-	'技术': [ 'tech-stub' ],
-	'艺术': [ 'actor-stub', 'lit-stub', 'movie-stub', 'music-stub', 'TV-stub' ]
+	'通用模板': [
+		'stub',
+		'expand list'
+	],
+	'国家和地理': [
+		'asia-stub',
+		'europe-stub',
+		'france-geo-stub',
+		'geo-stub',
+		'JP-stub',
+		'switzerland-stub',
+		'UK-stub',
+		'US-bio-stub',
+		'US-geo-stub',
+		'US-stub'
+	],
+	'杂项': [
+		'food-stub',
+		'hist-stub',
+		'mil-stub',
+		'politic-stub',
+		'religion-stub',
+		'transp-stub'
+	],
+	'人物': [
+		'actor-stub',
+		'bio-stub',
+		'US-bio-stub'
+	],
+	'科学': [
+		'biology-stub',
+		'chem-stub',
+		'math-stub',
+		'med-stub',
+		'physics-stub',
+		'science-stub',
+		'weather-stub'
+	],
+	'体育': [
+		'sport-stub'
+	],
+	'技术': [
+		'tech-stub'
+	],
+	'艺术': [
+		'actor-stub',
+		'lit-stub',
+		'movie-stub',
+		'music-stub',
+		'TV-stub'
+	]
 };
 /* eslint-enable quote-props */
 
 // Tags for REDIRECTS start here
 
 Twinkle.stub.callbacks = {
-	main: function main(pageobj) {
+	main: function (pageobj) {
 		var params = pageobj.getCallbackParameters(),
-			tagRe,
-			summaryText = '加入',
-			tags = [],
-			groupableTags = [],
-			i,
-			totalTags;
+			tagRe, summaryText = '加入',
+			tags = [], groupableTags = [], i, totalTags;
 
 		// Remove tags that become superfluous with this action
 		var pageText = pageobj.getPageText();
+
 		var addTag = function friendlytagAddTag(tagIndex, tagName) {
+
 			pageText += '\n{{' + tagName + '}}';
+
 			if (tagIndex > 0) {
-				if (tagIndex === totalTags - 1) {
+				if (tagIndex === (totalTags - 1)) {
 					summaryText += '和';
-				} else if (tagIndex < totalTags - 1) {
+				} else if (tagIndex < (totalTags - 1)) {
 					summaryText += '、';
 				}
 			}
+
 			summaryText += '{{[[';
 			summaryText += tagName.indexOf(':') !== -1 ? tagName : 'Template:' + tagName + '|' + tagName;
 			summaryText += ']]}}';
@@ -304,14 +330,19 @@ Twinkle.stub.callbacks = {
 			if (!tagRe.exec(pageText)) {
 				tags = tags.concat(params.tags[i]);
 			} else {
-				Morebits.status.info('信息', '在页面上找到{{' + params.tags[i] + '}}…跳过');
+				Morebits.status.info('信息', '在页面上找到{{' + params.tags[i] +
+						'}}…跳过');
 			}
 		}
+
 		tags = tags.concat(groupableTags);
+
 		tags.sort();
 		totalTags = tags.length;
 		$.each(tags, addTag);
+
 		summaryText += '标记到' + Twinkle.stub.mode;
+
 		pageobj.setPageText(pageText);
 		pageobj.setEditSummary(summaryText);
 		pageobj.setChangeTags(Twinkle.changeTags);
@@ -319,17 +350,20 @@ Twinkle.stub.callbacks = {
 		pageobj.setMinorEdit(Twinkle.getPref('markStubbedPagesAsMinor'));
 		pageobj.setCreateOption('nocreate');
 		pageobj.save();
+
 		if (params.patrol) {
 			pageobj.patrol();
 		}
 	}
 };
+
 Twinkle.stub.callback.evaluate = function friendlytagCallbackEvaluate(e) {
 	var form = e.target;
 	var params = {};
 	if (form.patrolPage) {
 		params.patrol = form.patrolPage.checked;
 	}
+
 	switch (Twinkle.stub.mode) {
 		case '條目':
 		case '条目':
@@ -340,17 +374,21 @@ Twinkle.stub.callback.evaluate = function friendlytagCallbackEvaluate(e) {
 			alert('Twinkle.stub：未知模式 ' + Twinkle.stub.mode);
 			break;
 	}
+
 	if (!params.tags.length) {
 		alert('必须选择至少一个标记！');
 		return;
 	}
+
 	Morebits.simpleWindow.setButtonsEnabled(false);
 	Morebits.status.init(form);
+
 	Morebits.wiki.actionCompleted.redirect = mw.config.get('wgPageName');
 	Morebits.wiki.actionCompleted.notice = '标记完成，将在几秒内刷新页面';
 	if (Twinkle.stub.mode === '重定向') {
 		Morebits.wiki.actionCompleted.followRedirect = false;
 	}
+
 	var qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'), '正在标记' + Twinkle.stub.mode);
 	qiuwen_page.setCallbackParameters(params);
 	switch (Twinkle.stub.mode) {
@@ -369,6 +407,7 @@ Twinkle.stub.callback.evaluate = function friendlytagCallbackEvaluate(e) {
 			break;
 	}
 };
+
 Twinkle.addInitCallback(Twinkle.stub, 'stub');
 }(jQuery));
 

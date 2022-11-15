@@ -5039,7 +5039,7 @@ Morebits.userspaceLogger = function (logPageName) {
 	 *
 	 * @param {string} logText - Doesn't include leading `#` or `*`.
 	 * @param {string} summaryText - Edit summary.
-	 * @returns {JQuery.Promise}
+	 * @returns {jQuery.Promise}
 	 */
 	this.log = function (logText, summaryText) {
 		var def = $.Deferred();
