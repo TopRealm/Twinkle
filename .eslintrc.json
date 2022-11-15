@@ -1,4 +1,5 @@
 {
+	"root": true,
 	"plugins": [
 		"es5",
 		"compat"
@@ -18,7 +19,6 @@
 		"wikimedia/jquery",
 		"wikimedia/mediawiki"
 	],
-	"root": true,
 	"env": {
 		"browser": true,
         "jquery": true,
@@ -30,7 +30,11 @@
 		"mw": "readonly",
 		"Map": "readonly"
 	},
-	"ignorePatterns": ["scripts/", "tests/", "lib/"],
+	"ignorePatterns": [
+		"scripts/",
+		"tests/",
+		"lib/"
+	],
 	"rules": {
 		"no-console": "error",
 		"no-extra-parens": ["error", "all", { "nestedBinaryExpressions": false }],
