@@ -54,7 +54,7 @@
 		"comma-spacing": ["error", { "before": false, "after": true }],
 		"computed-property-spacing": ["error", "never"],
 		"func-call-spacing": ["error", "never"],
-		"indent": ["error", "tab", { "outerIIFEBody": 0, "SwitchCase": 1 }],
+		"indent": ["warn", "tab", { "outerIIFEBody": 0, "SwitchCase": 1 }],
 		"key-spacing": ["error", {"singleLine": {"beforeColon": false, "afterColon": true}}],
 		"keyword-spacing": ["error", { "after": true, "before": true}],
 		"linebreak-style": ["error", "unix"],
@@ -62,6 +62,7 @@
 		"no-bitwise": "error",
 		"no-mixed-operators": "error",
 		"no-new-object": "error",
+		"no-shadow": ["error", { "allow": ["done"] } ],
 		"no-tabs": ["error", { "allowIndentationTabs": true }],
 		"no-trailing-spaces": "error",
 		"no-unneeded-ternary": "error",
@@ -74,7 +75,19 @@
 		"space-infix-ops": "error",
 		"space-unary-ops": "error",
 		"spaced-comment": ["error", "always", { "line": { "exceptions": ["-"] }, "block": { "balanced": true } }],
-		"switch-colon-spacing": "error"
+		"switch-colon-spacing": "error",
+		"no-underscore-dangle": "off",
+		"mediawiki/class-doc": "off",
+		"no-jquery/no-global-selector": "off",
+		"no-jquery/no-fade": "off",
+		"no-jquery/no-slide": "off",
+		"no-jquery/variable-pattern": "off",
+		"no-jquery/no-class-state": "off",
+		"jsdoc/check-tag-names": 0,
+		"jsdoc/require-param": 0,
+		"jsdoc/require-param-type": 0,
+		"jsdoc/require-returns": 0,
+		"max-len": "off"
 	},
 	"reportUnusedDisableDirectives": true
 }

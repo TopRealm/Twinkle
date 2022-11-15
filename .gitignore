@@ -1,14 +1,5 @@
-.mediawiki-bot-*
-alltwinkle.js
-.twinklerc
-/.settings
-/.project
-jsl.conf
-stash*.txt
-stash*.diff
-*.jsX
 .vscode/
-patch-test-loader.js
+dist/
 scripts/credentials.json
 
 # Windows
