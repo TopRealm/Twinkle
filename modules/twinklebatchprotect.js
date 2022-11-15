@@ -261,7 +261,7 @@ Twinkle.batchprotect.callback.evaluate = function twinklebatchprotectCallbackEva
 	}
 	var input = Morebits.quickForm.getInputData(form);
 	if (!input.reason) {
-		alert("您必须给出一个理由。");
+		alert('您必须给出一个理由。');
 		return;
 	}
 	Morebits.simpleWindow.setButtonsEnabled(false);
