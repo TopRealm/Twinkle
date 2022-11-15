@@ -1,4 +1,13 @@
-// <nowiki>
+/**
+ * SPDX-License-Identifier: CC-BY-SA-4.0
+ * _addText: '{{Gadget Header|license=CC-BY-SA-4.0}}'
+ *
+ * @url https://git.qiuwen.wiki/qiuwen/twinkle-new
+ * @author © 2011-2022 English Wikipedia Contributors
+ * @author © 2011-2021 Chinese Wikipedia Contributors
+ * @author © 2021-     Qiuwen Baike Contributors
+ * @license <https://creativecommons.org/licenses/by-sa/4.0/>
+ */
 /**
  * Twinkle.js - twinklestub.js
  * © 2011-2022 English Wikipedia Contributors
@@ -8,6 +17,7 @@
  * Attribution-ShareAlike 4.0 International License.
  * https://creativecommons.org/licenses/by-sa/4.0/
  */
+// <nowiki>
 (function ($) {
 
 /*
