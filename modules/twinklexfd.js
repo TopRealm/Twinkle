@@ -236,25 +236,25 @@ Twinkle.xfd.callback.change_category = function twinklexfdCallbackChangeCategory
 
 Twinkle.xfd.callback.change_afd_category = function twinklexfdCallbackChangeAfdCategory(e) {
 	if (e.target.value === 'merge') {
-		e.target.form.mergeinto.parentElement.removeAttribute('hidden');
-		e.target.form.fwdcsdreason.parentElement.setAttribute('hidden', '');
+		e.target.form.mergeinto.parentNode.removeAttribute('hidden');
+		e.target.form.fwdcsdreason.parentNode.setAttribute('hidden', '');
 		e.target.form.mergeinto.previousElementSibling.innerHTML = '合并到：';
 	} else if (e.target.value === 'fwdcsd') {
-		e.target.form.mergeinto.parentElement.removeAttribute('hidden');
-		e.target.form.fwdcsdreason.parentElement.removeAttribute('hidden');
+		e.target.form.mergeinto.parentNode.removeAttribute('hidden');
+		e.target.form.fwdcsdreason.parentNode.removeAttribute('hidden');
 		e.target.form.mergeinto.previousElementSibling.innerHTML = '提交人：';
 		e.target.form.xfdreason.value = decodeURIComponent($('#delete-reason').text()).replace(/\+/g, ' ');
 	} else if (e.target.value === 'fame') {
-		e.target.form.mergeinto.parentElement.setAttribute('hidden', '');
-		e.target.form.fwdcsdreason.parentElement.setAttribute('hidden', '');
+		e.target.form.mergeinto.parentNode.setAttribute('hidden', '');
+		e.target.form.fwdcsdreason.parentNode.setAttribute('hidden', '');
 		e.target.form.xfdreason.value = Twinkle.getPref('afdFameDefaultReason');
 	} else if (e.target.value === 'substub') {
-		e.target.form.mergeinto.parentElement.setAttribute('hidden', '');
-		e.target.form.fwdcsdreason.parentElement.setAttribute('hidden', '');
+		e.target.form.mergeinto.parentNode.setAttribute('hidden', '');
+		e.target.form.fwdcsdreason.parentNode.setAttribute('hidden', '');
 		e.target.form.xfdreason.value = Twinkle.getPref('afdSubstubDefaultReason');
 	} else {
-		e.target.form.mergeinto.parentElement.setAttribute('hidden', '');
-		e.target.form.fwdcsdreason.parentElement.setAttribute('hidden', '');
+		e.target.form.mergeinto.parentNode.setAttribute('hidden', '');
+		e.target.form.fwdcsdreason.parentNode.setAttribute('hidden', '');
 	}
 	if (Twinkle.getPref('afdDefaultCategory') === 'same') {
 		localStorage.Twinkle_afdCategory = e.target.value;

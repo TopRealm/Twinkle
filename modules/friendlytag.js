@@ -70,7 +70,7 @@ Twinkle.tag.callback = function friendlytagCallback() {
 		event: function twinkletagquickfilter() {
 			// flush the DOM of all existing underline spans
 			$allCheckboxDivs.find('.search-hit').each(function (i, e) {
-				var label_element = e.parentElement;
+				var label_element = e.parentNode;
 				// This would convert <label>Hello <span class=search-hit>wo</span>rld</label>
 				// to <label>Hello world</label>
 				label_element.innerHTML = label_element.textContent;
@@ -93,7 +93,7 @@ Twinkle.tag.callback = function friendlytagCallback() {
 						range.setEnd(textnode, searchHit.index + searchString.length);
 						var underline_span = $('<span>').addClass('search-hit').css('text-decoration', 'underline')[0];
 						range.surroundContents(underline_span);
-						this.parentElement.style.display = 'block'; // show
+						this.parentNode.style.display = 'block'; // show
 					}
 				});
 			} else {

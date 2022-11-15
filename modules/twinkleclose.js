@@ -408,9 +408,9 @@ Twinkle.close.callback.change_code = function twinklecloseCallbackChangeCode(e) 
 			redirects.disabled = false;
 		}
 		if (e.target.value === 'sd') {
-			e.target.form.sdreason.parentElement.removeAttribute('hidden');
+			e.target.form.sdreason.parentNode.removeAttribute('hidden');
 		} else {
-			e.target.form.sdreason.parentElement.setAttribute('hidden', '');
+			e.target.form.sdreason.parentNode.setAttribute('hidden', '');
 		}
 	}
 
