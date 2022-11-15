@@ -1,7 +1,3 @@
-/* eslint-disable no-throw-literal */
-/* eslint-disable es-x/no-symbol-prototype-description */
-/* eslint-disable jsdoc/no-undefined-types */
-/* eslint-disable es-x/no-map */
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
  * _addText: '{{Gadget Header|license=CC-BY-SA-4.0}}'
@@ -13,6 +9,10 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - morebits.js */
+/* eslint-disable no-throw-literal */
+/* eslint-disable es-x/no-symbol-prototype-description */
+/* eslint-disable jsdoc/no-undefined-types */
+/* eslint-disable es-x/no-map */
 // <nowiki>
 /**
  * A library full of lots of goodness for user scripts on MediaWiki wikis.
