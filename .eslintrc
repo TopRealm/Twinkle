@@ -59,7 +59,7 @@
 		"no-bitwise": "error",
 		"no-mixed-operators": "off",
 		"no-new-object": "error",
-		"no-shadow": ["error", { "allow": ["done"] } ],
+		"no-shadow": "off",
 		"no-tabs": ["error", { "allowIndentationTabs": true }],
 		"no-trailing-spaces": "error",
 		"no-unneeded-ternary": "error",
@@ -92,7 +92,14 @@
 		"camelcase": "off",
 		"no-alert": "off",
 		"no-jquery/no-each-util": "off",
-		"no-jquery/no-constructor-attributes": "warn"
+		"no-jquery/no-map-util": "off",
+		"no-jquery/no-constructor-attributes": "warn",
+		"no-jquery/no-sizzle": "off",
+		"no-jquery/no-parse-html-literal": "off",
+		"no-use-before-define": "off",
+		"no-array-prototype-values": "off",
+		"es-x/no-array-prototype-values": "off",
+		"unicorn/prefer-string-slice": "off"
 	},
 	"reportUnusedDisableDirectives": true
 }
