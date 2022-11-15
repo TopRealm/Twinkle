@@ -2500,9 +2500,6 @@ var morebitsWikiApiUserAgent = 'Qiuwen/1.1 (morebits.js)';
  * Note that doing so will set the useragent for every `Morebits.wiki.api`
  * process performed thereafter.
  *
- * @see {@link https://lists.wikimedia.org/pipermail/mediawiki-api-announce/2014-November/000075.html}
- * for original announcement.
- *
  * @memberof Morebits.wiki.api
  * @param {string} [ua=morebits.js] - User agent.  The default
  * value of `morebits.js` will be appended to any provided
