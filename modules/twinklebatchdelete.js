@@ -208,7 +208,7 @@ Twinkle.batchdelete.callback = function twinklebatchdeleteCallback() {
 			}).pop();
 			if (editProt) {
 				metadata.push('全保护' +
-					(editProt.expiry === 'infinity' ? ' 无限期' : new Morebits.date(editProt.expiry).calendar('utc') + ' (UTC)' + '过期'));
+					(editProt.expiry === 'infinity' ? ' 无限期' : new Morebits.date(editProt.expiry).calendar('utc') + ' (UTC)过期'));
 			}
 
 			if (page.ns === 6) {
@@ -435,7 +435,7 @@ Twinkle.batchdelete.callback.toggleSubpages = function twDbatchToggleSubpages(e)
 					}).pop();
 					if (editProt) {
 						metadata.push('fully protected' +
-							(editProt.expiry === 'infinity' ? '全保护' : new Morebits.date(editProt.expiry).calendar('utc') + ' (UTC)' + '过期'));
+							(editProt.expiry === 'infinity' ? '全保护' : new Morebits.date(editProt.expiry).calendar('utc') + ' (UTC)过期'));
 					}
 					if (page.ns === 6) {
 						metadata.push('上传者：' + page.imageinfo[0].user);

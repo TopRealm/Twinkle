@@ -1511,7 +1511,7 @@ Twinkle.warn.callbacks = {
 			}
 		}
 
-		$autolevelMessage.prepend($('<div>' + '将发送' + '<span style="font-weight: bold;">' + '层级' + level + '</span>' + '警告模板' + '。</div>'));
+		$autolevelMessage.prepend($('<div>将发送<span style="font-weight: bold;">层级' + level + '</span>警告模板。</div>'));
 		// Place after the stale and other-user-reverted (text-only) messages
 		$('#twinkle-warn-autolevel-message').remove(); // clean slate
 		$autolevelMessage.insertAfter($('#twinkle-warn-warning-messages'));
@@ -1625,9 +1625,9 @@ Twinkle.warn.callbacks = {
 			}
 			if (messageData.suppressArticleInSummary !== true && params.article) {
 				if (params.sub_group === 'uw-aiv') {  // these templates require a username
-					summary += '（' + '对于' + '[[User:' + params.article + ']]）';
+					summary += '（对于[[User:' + params.article + ']]）';
 				} else if (params.sub_group === 'uw-bite') {  // this template requires a username
-					summary += '，' + '于' + '[[User talk:' + params.article + ']]';
+					summary += '，于[[User talk:' + params.article + ']]';
 				} else {
 					summary += '，于[[' + params.article + ']]';
 				}

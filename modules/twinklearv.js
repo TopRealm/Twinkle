@@ -421,7 +421,7 @@ Twinkle.arv.callback.evaluate = function (e) {
 				aivPage.getStatusElement().status('加入新提报');
 				aivPage.setEditSummary('报告[[Special:Contributions/' + uid + '|' + uid + ']]');
 				aivPage.setChangeTags(Twinkle.changeTags);
-				aivPage.setAppendText('\n*{{vandal' + '|' + (/=/.test(uid) ? '1=' : '') + uid + '}} &ndash; ' + reason);
+				aivPage.setAppendText('\n*{{vandal|' + (/=/.test(uid) ? '1=' : '') + uid + '}} &ndash; ' + reason);
 				aivPage.append();
 			});
 			break;
@@ -757,22 +757,22 @@ Twinkle.arv.processAN3 = function (params) {
 			return ret;
 		}).reverse().join('\n');
 		var warningtext = params.warnings.reverse().map(function (v) {
-			return '# ' + ' {{diff2|' + v.revid + '|' + new Morebits.date(v.timestamp).format('HH:mm, D MMMM YYYY', 'utc') + ' (UTC)}} ' + hasHiddenComment(v);
+			return '#  {{diff2|' + v.revid + '|' + new Morebits.date(v.timestamp).format('HH:mm, D MMMM YYYY', 'utc') + ' (UTC)}} ' + hasHiddenComment(v);
 		}).join('\n');
 		var resolvetext = params.resolves.reverse().map(function (v) {
-			return '# ' + ' {{diff2|' + v.revid + '|' + new Morebits.date(v.timestamp).format('HH:mm, D MMMM YYYY', 'utc') + ' (UTC)}} ' + hasHiddenComment(v);
+			return '#  {{diff2|' + v.revid + '|' + new Morebits.date(v.timestamp).format('HH:mm, D MMMM YYYY', 'utc') + ' (UTC)}} ' + hasHiddenComment(v);
 		}).join('\n');
 
 		if (params.free_resolves) {
 			var page = params.free_resolves;
 			if (page.compare) {
-				resolvetext += '\n# ' + ' {{diff|oldid=' + page.compare.fromrevid + '|diff=' + page.compare.torevid + '|label=Consecutive edits on ' + page.compare.totitle + '}}';
+				resolvetext += '\n#  {{diff|oldid=' + page.compare.fromrevid + '|diff=' + page.compare.torevid + '|label=Consecutive edits on ' + page.compare.totitle + '}}';
 			} else if (page.revisions) {
 				var revCount = page.revisions.length;
 				var rev;
 				if (revCount < 3) { // diff=prev or next
 					rev = revCount === 1 ? page.revisions[0] : page.revisions[1];
-					resolvetext += '\n# ' + ' {{diff2|' + rev.revid + '|' + new Morebits.date(rev.timestamp).format('HH:mm, D MMMM YYYY', 'utc') + ' (UTC) on ' + page.title + '}} ' + hasHiddenComment(rev);
+					resolvetext += '\n#  {{diff2|' + rev.revid + '|' + new Morebits.date(rev.timestamp).format('HH:mm, D MMMM YYYY', 'utc') + ' (UTC) on ' + page.title + '}} ' + hasHiddenComment(rev);
 				} else { // diff and oldid are nonconsecutive
 					rev = page.revisions[0];
 					var revLatest = page.revisions[revCount - 1];
@@ -788,7 +788,7 @@ Twinkle.arv.processAN3 = function (params) {
 			comment += ' ~~~~';
 		}
 
-		var text = '\n\n' + '{{subst:AN3 report|diffs=' + difftext + '|warnings=' + warningtext + '|resolves=' + resolvetext + '|pagename=' + params.page + '|orig=' + origtext + '|comment=' + comment + '|uid=' + params.uid + '}}';
+		var text = '\n\n{{subst:AN3 report|diffs=' + difftext + '|warnings=' + warningtext + '|resolves=' + resolvetext + '|pagename=' + params.page + '|orig=' + origtext + '|comment=' + comment + '|uid=' + params.uid + '}}';
 
 		var reportpage = 'Qiuwen:Administrators\' noticeboard/Edit warring';
 

@@ -536,7 +536,7 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 			});
 		}
 
-		var $previewlink = $('<a id="twinkleblock-preivew-link">' + '预览' + '</a>');
+		var $previewlink = $('<a id="twinkleblock-preivew-link">预览</a>');
 		$previewlink.off('click').on('click', function () {
 			Twinkle.block.callback.preview($form[0]);
 		});
@@ -554,11 +554,11 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 			label: '选择用户页模板：',
 			list: [
 				{
-					label: '{{Blocked user}}：' + '一般永久封禁',
+					label: '{{Blocked user}}：一般永久封禁',
 					value: 'Blocked user'
 				},
 				{
-					label: '{{Blocked sockpuppet}}：' + '傀儡账户',
+					label: '{{Blocked sockpuppet}}：傀儡账户',
 					value: 'Blocked sockpuppet',
 					subgroup: [
 						{
@@ -575,7 +575,7 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 					]
 				},
 				{
-					label: '{{Sockpuppeteer|blocked}}：' + '傀儡主账户',
+					label: '{{Sockpuppeteer|blocked}}：傀儡主账户',
 					value: 'Sockpuppeteer',
 					subgroup: [
 						{
@@ -596,7 +596,7 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 					]
 				},
 				{
-					label: '{{Locked global account}}：' + '全域锁定',
+					label: '{{Locked global account}}：全域锁定',
 					value: 'Locked global account',
 					subgroup: [
 						{
@@ -617,7 +617,7 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 		field_tag_options.append({
 			type: 'input',
 			name: 'category',
-			label: 'Category:……的用户分身' + '（主账户用户名）',
+			label: 'Category:……的用户分身（主账户用户名）',
 			tooltip: '您通常应该使用{{Blocked sockpuppet}}的主账户参数来产生分类，只有单独使用{{Locked global account}}才需填写此项。'
 		});
 	}
@@ -740,7 +740,7 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 	}
 
 	if (blockBox && Twinkle.block.hasBlockLog) {
-		var $blockloglink = $('<a target="_blank" href="' + mw.util.getUrl('Special:Log', { action: 'view', page: relevantUserName, type: 'block' }) + '">' + '封禁日志' + '</a>)');
+		var $blockloglink = $('<a target="_blank" href="' + mw.util.getUrl('Special:Log', { action: 'view', page: relevantUserName, type: 'block' }) + '">封禁日志</a>)');
 
 		Morebits.status.init($('div[name="hasblocklog"] span').last()[0]);
 		Morebits.status.warn(
@@ -763,9 +763,9 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 		// returns partial: '' if the user is partially blocked
 		var statusStr = relevantUserName + (Twinkle.block.currentBlockInfo.partial === '' ? '已被部分封禁' : '已被全站封禁');
 		if (Twinkle.block.currentBlockInfo.expiry === 'infinity') {
-			statusStr += '（' + '无限期' + '）';
+			statusStr += '（无限期）';
 		} else if (new Morebits.date(Twinkle.block.currentBlockInfo.expiry).isValid()) {
-			statusStr += '（' + '终止于' + new Morebits.date(Twinkle.block.currentBlockInfo.expiry).calendar('utc') + '）';
+			statusStr += '（终止于' + new Morebits.date(Twinkle.block.currentBlockInfo.expiry).calendar('utc') + '）';
 		}
 		var infoStr = '提交请求以变更封禁';
 		if (Twinkle.block.currentBlockInfo.partial === undefined && partialBox) {
@@ -1142,7 +1142,7 @@ Twinkle.block.callback.toggle_see_alsos = function twinkleblockCallbackToggleSee
 	if (!Twinkle.block.seeAlsos.length) {
 		this.form.reason.value = reason;
 	} else {
-		this.form.reason.value = reason + '<!-- ' + '参见' + seeAlsoMessage + ' -->';
+		this.form.reason.value = reason + '<!-- 参见' + seeAlsoMessage + ' -->';
 	}
 };
 
@@ -1320,7 +1320,7 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate(e) {
 			return sum += params.tag.indexOf(tag) !== -1;
 		}, 0);
 		if (count > 1) {
-			var message = '请在以下标签中择一使用' + '：{{' + conflicts.join('}}、{{') + '}}。';
+			var message = '请在以下标签中择一使用：{{' + conflicts.join('}}、{{') + '}}。';
 			message += extra || '';
 			alert(message);
 			return true;

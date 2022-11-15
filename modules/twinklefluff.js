@@ -284,7 +284,7 @@ Twinkle.fluff.addLinks = {
 		var warnFromTalk = function (xtitle) {
 			var talkLink = $('#mw-diff-' + xtitle + '2 .mw-usertoollinks a').first();
 			if (talkLink.length) {
-				var extraParams = 'vanarticle=' + mw.util.rawurlencode(Morebits.pageNameNorm) + '&' + 'noautowarn=true';
+				var extraParams = 'vanarticle=' + mw.util.rawurlencode(Morebits.pageNameNorm) + '&noautowarn=true';
 				// diffIDs for vanarticlerevid
 				extraParams += '&vanarticlerevid=';
 				extraParams += xtitle === 'otitle' ? mw.config.get('wgDiffOldId') : mw.config.get('wgDiffNewId');
@@ -459,7 +459,7 @@ Twinkle.fluff.callbacks = {
 			return;
 		}
 
-		var optional_summary = prompt('请输入回退理由：' + '                                ', apiobj.params.summary);  // padded out to widen prompt in Firefox
+		var optional_summary = prompt('请输入回退理由：                                ', apiobj.params.summary);  // padded out to widen prompt in Firefox
 		if (optional_summary === null) {
 			apiobj.statelem.error('由用户取消。');
 			return;
@@ -643,7 +643,7 @@ Twinkle.fluff.callbacks = {
 		var summary, extra_summary;
 		switch (params.type) {
 			case 'agf':
-				extra_summary = prompt('可选的编辑摘要：' + '                              ', params.summary);  // padded out to widen prompt in Firefox
+				extra_summary = prompt('可选的编辑摘要：                              ', params.summary);  // padded out to widen prompt in Firefox
 				if (extra_summary === null) {
 					statelem.error('Aborted by user.');
 					return;
@@ -662,7 +662,7 @@ Twinkle.fluff.callbacks = {
 				/* falls through */
 			default:
 				if (Twinkle.getPref('offerReasonOnNormalRevert')) {
-					extra_summary = prompt('可选的编辑摘要：' + '                              ', params.summary);  // padded out to widen prompt in Firefox
+					extra_summary = prompt('可选的编辑摘要：                              ', params.summary);  // padded out to widen prompt in Firefox
 					if (extra_summary === null) {
 						statelem.error('用户取消操作。');
 						return;

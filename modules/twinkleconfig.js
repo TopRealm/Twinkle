@@ -1570,7 +1570,7 @@ Twinkle.config.writePrefs = function twinkleconfigWritePrefs(pageobj) {
 	});
 
 	var text =
-				'// <no' + 'wiki>\n' +
+				'// <nowiki>\n' +
 				'// twinkleoptions.js：用户Twinkle参数设置文件\n' +
 				'//\n' +
 				'// 注：修改您的参数设置最简单的办法是使用\n' +
@@ -1588,7 +1588,7 @@ Twinkle.config.writePrefs = function twinkleconfigWritePrefs(pageobj) {
 				';\n' +
 				'\n' +
 				'// twinkleoptions.js到此为止\n' +
-				'// </no' + 'wiki>\n';
+				'// </nowiki>\n';
 
 	pageobj.setPageText(text);
 	pageobj.setEditSummary('保存Twinkle参数设置：来自[[:' + Morebits.pageNameNorm + ']]的自动编辑');

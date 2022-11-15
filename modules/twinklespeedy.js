@@ -1166,7 +1166,7 @@ Twinkle.speedy.callbacks = {
 			} else if (params.normalizeds[0] === 'db') {
 				editsummary = '请求[[QW:CSD|快速删除]]：' + params.templateParams[0]['1'];
 			} else {
-				editsummary = '请求快速删除' + '（[[QW:CSD#' + params.normalizeds[0].toUpperCase() + '|CSD ' + params.normalizeds[0].toUpperCase() + ']]）';
+				editsummary = '请求快速删除（[[QW:CSD#' + params.normalizeds[0].toUpperCase() + '|CSD ' + params.normalizeds[0].toUpperCase() + ']]）';
 			}
 
 			// Blank attack pages

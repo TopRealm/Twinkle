@@ -147,7 +147,7 @@ Twinkle.copyvio.callbacks = {
 				'\\s*===+', 'mg');
 
 		if (!dateHeaderRegex.exec(text)) {
-			output = '\n\n===' + (date.getUTCMonth() + 1) + '月' + date.getUTCDate() + '日' + '===';
+			output = '\n\n===' + (date.getUTCMonth() + 1) + '月' + date.getUTCDate() + '日===';
 		}
 
 		output += '\n{{subst:CopyvioVFDRecord|' + mw.config.get('wgPageName') + '}}';
