@@ -4,14 +4,6 @@
 		"es5",
 		"compat"
 	],
-	"parser": "@babel/eslint-parser",
-	"parserOptions": {
-		"requireConfigFile": false,
-		"babelOptions": {
-			"configFile": false,
-			"presets": ["@babel/preset-env", "@babel/preset-react"]
-		}
-	},
 	"extends": [
 		"eslint:recommended",
 		"plugin:compat/recommended",
