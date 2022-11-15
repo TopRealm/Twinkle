@@ -8,15 +8,7 @@
  * @author © 2021-     Qiuwen Baike Contributors
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
-/**
- * Twinkle.js - friendlytag.js
- * © 2011-2022 English Wikipedia Contributors
- * © 2011-2021 Chinese Wikipedia Contributors
- * © 2021-     Qiuwen Baike Contributors
- * This work is licensed under a Creative Commons
- * Attribution-ShareAlike 4.0 International License.
- * https://creativecommons.org/licenses/by-sa/4.0/
- */
+/* Twinkle.js - friendlytag.js */
 // <nowiki>
 (function ($) {
 

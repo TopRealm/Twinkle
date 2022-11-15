@@ -8,16 +8,7 @@
  * @author © 2021-     Qiuwen Baike Contributors
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
-/**
- * Twinkle.js - twinklebatchprotect.js
- * © 2011-2022 English Wikipedia Contributors
- * © 2021-     Qiuwen Baike Contributors
- * This work is licensed under a Creative Commons
- * Attribution-ShareAlike 4.0 International License.
- * https://creativecommons.org/licenses/by-sa/4.0/
- *
- * @param $
- */
+/* Twinkle.js - twinklebatchprotect.js */
 (function ($) {
 /*
      ****************************************
