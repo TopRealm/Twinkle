@@ -12,7 +12,7 @@
 		"lint:fix": "eslint . --fix",
 		"patchtest": "node scripts/patch-test.js",
 		"server": "node scripts/server.js",
-		"babel": "babel -d modules modules && eslint modules/*.js --fix",
+		"babel": "babel -d modules modules && eslint . --fix",
 		"deploy": "node scripts/deploy.js"
 	},
 	"devDependencies": {
