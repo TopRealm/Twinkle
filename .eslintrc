@@ -93,6 +93,7 @@
 		"no-alert": "off",
 		"no-jquery/no-each-util": "off",
 		"no-jquery/no-map-util": "off",
+		"no-jquery/no-grep": "off",
 		"no-jquery/no-constructor-attributes": "warn",
 		"no-jquery/no-sizzle": "off",
 		"no-jquery/no-parse-html-literal": "off",

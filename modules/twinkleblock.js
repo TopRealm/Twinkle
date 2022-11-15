@@ -1317,7 +1317,8 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate(e) {
 	// Given an array of incompatible tags, check if we have two or more selected
 	var checkIncompatible = function (conflicts, extra) {
 		var count = conflicts.reduce(function (sum, tag) {
-			return sum += params.tag.indexOf(tag) !== -1;
+			sum += params.tag.indexOf(tag) !== -1;
+			return sum;
 		}, 0);
 		if (count > 1) {
 			var message = '请在以下标签中择一使用：{{' + conflicts.join('}}、{{') + '}}。';
@@ -1598,6 +1599,7 @@ Twinkle.block.callback.protectuserpage = function twinkleblockCallbackProtectUse
 
 Twinkle.block.callback.issue_template = function twinkleblockCallbackIssueTemplate(formData) {
 	if (Morebits.ip.isRange(relevantUserName)) {
+		// eslint-disable-next-line no-new
 		new Morebits.status('信息', '由于封禁目标为IP段，加入封禁模板已略过', 'warn');
 		return;
 	}

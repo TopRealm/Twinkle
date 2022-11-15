@@ -108,7 +108,9 @@ Twinkle.tag.callback = function friendlytagCallback() {
 			Window.setTitle('条目维护标记');
 
 			// Object.values is unavailable in IE 11
+			// eslint-disable-next-line compat/compat, es-x/no-object-values
 			var obj_values = Object.values || function (obj) {
+				// eslint-disable-next-line es-x/no-array-prototype-keys
 				return Object.keys(obj).map(function (key) {
 					return obj[key];
 				});
@@ -208,6 +210,7 @@ Twinkle.tag.callback = function friendlytagCallback() {
 						type: 'checkbox',
 						name: 'tags',
 						list: subgroup.map(function (item) {
+							// eslint-disable-next-line es-x/no-symbol-prototype-description
 							return { value: item.tag, label: '{{' + item.tag + '}}: ' + item.description, subgroup: item.subgroup };
 						})
 					});
@@ -339,6 +342,7 @@ Twinkle.tag.updateSortOrder = function (e) {
 
 	// function to generate a checkbox, with appropriate subgroup if needed
 	var makeCheckbox = function (item) {
+		// eslint-disable-next-line es-x/no-symbol-prototype-description
 		var tag = item.tag, description = item.description;
 		var checkbox = { value: tag, label: '{{' + tag + '}}: ' + description };
 		if (Twinkle.tag.checkedTags.indexOf(tag) !== -1) {
@@ -357,6 +361,7 @@ Twinkle.tag.updateSortOrder = function (e) {
 			var checkbox =
 					{
 						value: tag,
+						// eslint-disable-next-line es-x/no-symbol-prototype-description
 						label: '{{' + tag + '}}' + (Twinkle.tag.article.flatObject[tag] ? ': ' + Twinkle.tag.article.flatObject[tag].description : ''),
 						checked: unCheckedTags.indexOf(tag) === -1,
 						style: 'font-style: italic'
@@ -411,6 +416,7 @@ Twinkle.tag.updateSortOrder = function (e) {
 		}
 
 		// Avoid repeatedly resorting
+		// eslint-disable-next-line es-x/no-array-prototype-keys
 		Twinkle.tag.article.alphabeticalList = Twinkle.tag.article.alphabeticalList || Object.keys(Twinkle.tag.article.flatObject).sort();
 		var checkboxes = [];
 		Twinkle.tag.article.alphabeticalList.forEach(function (tag) {
@@ -1908,7 +1914,8 @@ Twinkle.tag.callback.evaluate = function friendlytagCallbackEvaluate(e) {
 	// Given an array of incompatible tags, check if we have two or more selected
 	var checkIncompatible = function (conflicts, extra) {
 		var count = conflicts.reduce(function (sum, tag) {
-			return sum += params.tags.indexOf(tag) !== -1;
+			sum += params.tags.indexOf(tag) !== -1;
+			return sum;
 		}, 0);
 		if (count > 1) {
 			var message = 'Please select only one of: {{' + conflicts.join('}}, {{') + '}}.';

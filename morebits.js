@@ -1,3 +1,7 @@
+/* eslint-disable no-throw-literal */
+/* eslint-disable es-x/no-symbol-prototype-description */
+/* eslint-disable jsdoc/no-undefined-types */
+/* eslint-disable es-x/no-map */
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
  * _addText: '{{Gadget Header|license=CC-BY-SA-4.0}}'
@@ -404,6 +408,7 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
 		case 'form':
 			node = document.createElement('form');
 			node.className = 'quickform';
+			// eslint-disable-next-line no-script-url
 			node.setAttribute('action', 'javascript:void(0);');
 			if (data.event) {
 				node.addEventListener(data.eventType || 'submit', data.event, false);
@@ -556,7 +561,8 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
 							type: 'div',
 							id: id + '_' + i + '_subgroup'
 						});
-						$.each(tmpgroup, function (idx, el) {
+						// eslint-disable-next-line no-loop-func
+						$.each(tmpgroup, function (_idx, el) {
 							var newEl = $.extend({}, el);
 							if (!newEl.type) {
 								newEl.type = data.type;
@@ -1337,6 +1343,7 @@ Morebits.ip = {
 		}
 		ipv6 = Morebits.ip.sanitizeIPv6(ipv6);
 		var ip_re = /^((?:[0-9A-F]{1,4}:){4})(?:[0-9A-F]{1,4}:){3}[0-9A-F]{1,4}(?:\/\d{1,3})?$/;
+		// eslint-disable-next-line no-useless-concat
 		return ipv6.replace(ip_re, '$1' + '0:0:0:0/64');
 	}
 };
@@ -1961,11 +1968,13 @@ Morebits.date.prototype = {
 			// No built-in week functions, so rather than build out ISO's getWeek/setWeek, just multiply
 			// Probably can't be used for Julian->Gregorian changeovers, etc.
 			if (unitNorm === 'Week') {
+				// eslint-disable-next-line no-sequences, no-unused-expressions
 				unitNorm = 'Date', num *= 7;
 			}
 			this['set' + unitNorm](this['get' + unitNorm]() + num);
 			return this;
 		}
+		// eslint-disable-next-line es-x/no-array-prototype-keys
 		throw new Error('Invalid unit "' + unit + '": Only ' + Object.keys(unitMap).join(', ') + ' are allowed.');
 	},
 
@@ -2340,8 +2349,7 @@ Morebits.wiki.api.prototype = {
 	/**
 	 * Carry out the request.
 	 *
-	 * @param {Object} callerAjaxParameters - Do not specify a parameter unless you really
-	 * really want to give jQuery some extra parameters.
+	 * @param {Object} callerAjaxParameters - Do not specify a parameter unless you really want to give jQuery some extra parameters.
 	 * @returns {promise} - A jQuery promise object that is resolved or rejected with the api object.
 	 */
 	post: function (callerAjaxParameters) {
@@ -2410,6 +2418,7 @@ Morebits.wiki.api.prototype = {
 			function onAPIfailure(jqXHR, statusText, errorThrown) {
 				this.statusText = statusText;
 				this.errorThrown = errorThrown; // frequently undefined
+				// eslint-disable-next-line no-unused-expressions, no-sequences
 				this.errorText = statusText, jqXHR.statusText, statusText + '在调用API时发生了错误“' + jqXHR.statusText + '”';
 				return this.returnError();
 			}
@@ -3817,6 +3826,7 @@ Morebits.wiki.page = function (pageName, status) {
 
 		var testactions = page.actions;
 		ctx.testActions = []; // was null
+		// eslint-disable-next-line es-x/no-array-prototype-keys
 		Object.keys(testactions).forEach(function (action) {
 			if (testactions[action]) {
 				ctx.testActions.push(action);
@@ -3879,6 +3889,7 @@ Morebits.wiki.page = function (pageName, status) {
 				}
 
 				// only notify user for redirects, not normalization
+				// eslint-disable-next-line no-new
 				new Morebits.status('信息', '由' + ctx.pageName + '重定向至' + resolvedName);
 			}
 
@@ -5529,6 +5540,7 @@ Morebits.batchOperation = function (currentAction) {
 			}
 
 		} else if (typeof arg === 'string' && ctx.options.preserveIndividualStatusLines) {
+			// eslint-disable-next-line no-new
 			new Morebits.status(arg, '完成（[[' + arg + ']]）');
 		}
 
