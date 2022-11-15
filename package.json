@@ -14,7 +14,6 @@
 		"stylelint:fix": "stylelint *.css --fix",
 		"patchtest": "node scripts/patch-test.js",
 		"server": "node scripts/server.js",
-		"babel": "babel -d modules modules && eslint . --fix",
 		"deploy": "node scripts/deploy.js"
 	},
 	"devDependencies": {
