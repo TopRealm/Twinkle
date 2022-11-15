@@ -25,7 +25,8 @@
 	"ignorePatterns": [
 		"scripts/",
 		"tests/",
-		"lib/"
+		"lib/",
+		"*.json"
 	],
 	"rules": {
 		"no-console": "error",
