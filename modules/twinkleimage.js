@@ -1,5 +1,3 @@
-'use strict';
-
 // <nowiki>
 /**
  * Twinkle.js - twinkleimage.js
