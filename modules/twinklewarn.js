@@ -1137,6 +1137,7 @@ Twinkle.warn.callback.change_category = function twinklewarnCallbackChangeCatego
 		case 'singlecombined':
 			var unSortedSinglets = $.extend({}, Twinkle.warn.messages.singlenotice, Twinkle.warn.messages.singlewarn);
 			var sortedSingletMessages = {};
+			// eslint-disable-next-line es-x/no-array-prototype-keys
 			Object.keys(unSortedSinglets).sort().forEach(function (key) {
 				sortedSingletMessages[key] = unSortedSinglets[key];
 			});
