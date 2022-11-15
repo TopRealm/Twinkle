@@ -39,7 +39,8 @@ window.Twinkle = Twinkle;  // allow global access
 Twinkle.initCallbacks = [];
 /**
  * Adds a callback to execute when Twinkle has loaded.
- * @param {function} func
+ *
+ * @param {Function} func
  * @param {string} [name] - name of module used to check if is disabled.
  * If name is not given, module is loaded unconditionally.
  */
@@ -60,7 +61,7 @@ Twinkle.defaultConfig = {
 	// General
 	userTalkPageMode: 'tab',
 	dialogLargeFont: false,
-	disabledModules: Morebits.userIsSysop ? [] : ['block'], // default to disable block for non-sysop, if enable manually, they can only use it to tag userpage
+	disabledModules: Morebits.userIsSysop ? [] : [ 'block' ], // default to disable block for non-sysop, if enable manually, they can only use it to tag userpage
 	disabledSysopModules: [],
 
 	// ARV
@@ -163,7 +164,7 @@ Twinkle.defaultConfig = {
 	// Formerly defaultConfig.friendly:
 	// Tag
 	groupByDefault: true,
-	watchTaggedVenues: ['articles', 'drafts', 'redirects', 'files'],
+	watchTaggedVenues: [ 'articles', 'drafts', 'redirects', 'files' ],
 	watchTaggedPages: '1 month',
 	watchMergeDiscussions: '1 month',
 	markTaggedPagesAsMinor: false,
@@ -215,7 +216,6 @@ switch (mw.config.get('skin')) {
 		Twinkle.defaultConfig.portletNext = null;
 }
 
-
 Twinkle.getPref = function twinkleGetPref(name) {
 	if (typeof Twinkle.prefs === 'object' && Twinkle.prefs[name] !== undefined) {
 		return Twinkle.prefs[name];
@@ -229,7 +229,6 @@ Twinkle.getPref = function twinkleGetPref(name) {
 	}
 	return Twinkle.defaultConfig[name];
 };
-
 
 /**
  * **************** Twinkle.addPortlet() ****************
@@ -258,9 +257,14 @@ Twinkle.getPref = function twinkleGetPref(name) {
  * @param String type -- type of portlet. Currently only used for the vector non-sidebar portlets, pass "menu" to make this portlet a drop down menu.
  * @param Node nextnodeid -- the id of the node before which the new item should be added, should be another item in the same list, or undefined to place it at the end.
  *
+ * @param navigation
+ * @param id
+ * @param text
+ * @param type
+ * @param nextnodeid
  * @return Node -- the DOM node of the new item (a DIV element) or null
  */
-Twinkle.addPortlet = function(navigation, id, text, type, nextnodeid) {
+Twinkle.addPortlet = function (navigation, id, text, type, nextnodeid) {
 	// sanity checks, and get required DOM nodes
 	var root = document.getElementById(navigation) || document.querySelector(navigation);
 	if (!root) {
@@ -349,7 +353,7 @@ Twinkle.addPortlet = function(navigation, id, text, type, nextnodeid) {
 			var a = document.createElement('a');
 			a.href = '#';
 
-			$(a).click(function(e) {
+			$(a).on('click', function (e) {
 				e.preventDefault();
 			});
 
@@ -371,25 +375,28 @@ Twinkle.addPortlet = function(navigation, id, text, type, nextnodeid) {
 		outerNav.appendChild(ul);
 	}
 
-
 	return outerNav;
 
 };
 
-
 /**
  * **************** Twinkle.addPortletLink() ****************
  * Builds a portlet menu if it doesn't exist yet, and add the portlet link.
+ *
  * @param task: Either a URL for the portlet link or a function to execute.
+ * @param task
+ * @param text
+ * @param id
+ * @param tooltip
  */
-Twinkle.addPortletLink = function(task, text, id, tooltip) {
+Twinkle.addPortletLink = function (task, text, id, tooltip) {
 	if (Twinkle.getPref('portletArea') !== null) {
 		Twinkle.addPortlet(Twinkle.getPref('portletArea'), Twinkle.getPref('portletId'), Twinkle.getPref('portletName'), Twinkle.getPref('portletType'), Twinkle.getPref('portletNext'));
 	}
 	var link = mw.util.addPortletLink(Twinkle.getPref('portletId'), typeof task === 'string' ? task : '#', text, id, tooltip);
 	$('.client-js .skin-vector #p-cactions').css('margin-right', 'initial');
 	if (typeof task === 'function') {
-		$(link).click(function (ev) {
+		$(link).on('click', function (ev) {
 			task();
 			ev.preventDefault();
 		});
@@ -399,7 +406,6 @@ Twinkle.addPortletLink = function(task, text, id, tooltip) {
 	}
 	return link;
 };
-
 
 /**
  * **************** General initialization code ****************
@@ -443,7 +449,7 @@ $.ajax({
 				Twinkle.prefs.optionsVersion = Twinkle.prefs.optionsVersion || 1;
 			}
 		} catch (e) {
-			mw.notify('未能解析您的Twinkle参数设置', {type: 'error'});
+			mw.notify('未能解析您的Twinkle参数设置', { type: 'error' });
 		}
 	})
 	.always(function () {
@@ -477,13 +483,13 @@ Twinkle.load = function () {
 
 	// Redefine addInitCallback so that any modules being loaded now on are directly
 	// initialised rather than added to initCallbacks array
-	Twinkle.addInitCallback = function(func, name) {
+	Twinkle.addInitCallback = function (func, name) {
 		if (!name || Twinkle.disabledModules.indexOf(name) === -1) {
 			func();
 		}
 	};
 	// Initialise modules that were saved in initCallbacks array
-	Twinkle.initCallbacks.forEach(function(module) {
+	Twinkle.initCallbacks.forEach(function (module) {
 		Twinkle.addInitCallback(module.func, module.name);
 	});
 
@@ -499,7 +505,6 @@ Twinkle.load = function () {
 		$('#p-cactions').css('margin-right', 'initial');
 	}
 };
-
 
 /**
  * Twinkle-specific data shared by multiple modules
@@ -523,7 +528,7 @@ Twinkle.makeFindSourcesDiv = function makeSourcesDiv(divID) {
 	}
 	if (!Twinkle.findSources) {
 		var parser = new Morebits.wiki.preview($(divID)[0]);
-		parser.beginRender('({{Find sources|' + Morebits.pageNameNorm + '}})', 'QW:AFD').then(function() {
+		parser.beginRender('({{Find sources|' + Morebits.pageNameNorm + '}})', 'QW:AFD').then(function () {
 			// Save for second-time around
 			Twinkle.findSources = parser.previewbox.innerHTML;
 			$(divID).removeClass('morebits-previewbox');
@@ -533,10 +538,15 @@ Twinkle.makeFindSourcesDiv = function makeSourcesDiv(divID) {
 	}
 };
 
-/** Twinkle-specific utility functions shared by multiple modules */
+/**
+ * Twinkle-specific utility functions shared by multiple modules
+ *
+ * @param first
+ * @param second
+ */
 // Used in batch and unlink to sort pages by namespace, as
 // json formatversion=2 sorts by pageid instead (#1251)
-Twinkle.sortByNamespace = function(first, second) {
+Twinkle.sortByNamespace = function (first, second) {
 	return first.ns - second.ns || (first.title > second.title ? 1 : -1);
 };
 
@@ -556,7 +566,7 @@ Twinkle.generateBatchPageLinks = function (checkbox) {
 	link.setAttribute('class', 'tw-batchpage-link');
 	link.setAttribute('href', mw.util.getUrl($checkbox.val()));
 	link.setAttribute('target', '_blank');
-	$checkbox.next().prepend([link, ' ']);
+	$checkbox.next().prepend([ link, ' ' ]);
 };
 
 }(window, document, jQuery)); // End wrap with anonymous function
