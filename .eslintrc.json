@@ -64,7 +64,7 @@
 		"linebreak-style": ["error", "unix"],
 		"no-array-constructor": "error",
 		"no-bitwise": "error",
-		"no-mixed-operators": "error",
+		"no-mixed-operators": "off",
 		"no-new-object": "error",
 		"no-shadow": ["error", { "allow": ["done"] } ],
 		"no-tabs": ["error", { "allowIndentationTabs": true }],
@@ -95,7 +95,11 @@
 		"jsdoc/valid-types": 0,
 		"jsdoc/check-param-names": 0,
 		"new-cap": "off",
-		"max-len": "off"
+		"max-len": "off",
+		"camelcase": "off",
+		"no-alert": "off",
+		"no-jquery/no-each-util": "off",
+		"no-jquery/no-constructor-attributes": "warn"
 	},
 	"reportUnusedDisableDirectives": true
 }
