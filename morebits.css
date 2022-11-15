@@ -18,19 +18,19 @@
 /* Morebits.status */
 
 .morebits_status_status {
-	color: #4682B4;
+	color: #4682b4;
 }
 
 .morebits_status_info {
-	color: #228B22;
+	color: #228b22;
 }
 
 .morebits_status_warn {
-	color: #FF4500;
+	color: #ff4500;
 }
 
 .morebits_status_error {
-	color: #FF4500;
+	color: #ff4500;
 	font-weight: bold;
 }
 
@@ -40,7 +40,7 @@ form.quickform {
 	width: 96%;
 	vertical-align: middle;
 	margin: auto;
-	padding: .5em;
+	padding: 0.5em;
 }
 
 form.quickform * {
@@ -48,27 +48,27 @@ form.quickform * {
 }
 
 form.quickform fieldset {
-	margin: .4em 0 1em;
+	margin: 0.4em 0 1em;
 }
 
 form.quickform legend {
-	color: #31628F;
+	color: #31628f;
 	font-weight: bold;
 }
 
-form.quickform input[type=text],
+form.quickform input[ type='text' ],
 form.quickform select {
 	min-width: 15em;
 	font-size: 110%;
 }
 
 form.quickform select {
-	border: 1px solid gray;
-	margin-left: .2em;
+	border: 1px solid #808080;
+	margin-left: 0.2em;
 }
 
-form.quickform input[type=checkbox],
-form.quickform input[type=radio] {
+form.quickform input[ type='checkbox' ],
+form.quickform input[ type='radio' ] {
 	height: 13px;
 	margin-top: 2px;
 	margin-right: 2px;
@@ -80,12 +80,12 @@ form.quickform input[type=radio] {
 
 form.quickform div {
 	font-size: 97.5%;
-	line-height: 18px;
+	line-height: 1.285em;
 }
 
 form.quickform h5 {
-	margin: .5em 0 0;
-	padding: .3em .2em .2em;
+	margin: 0.5em 0 0;
+	padding: 0.3em 0.2em 0.2em;
 	font-size: 108%; /* 100% is 12px => 108% is 12.96px */
 }
 
@@ -93,7 +93,7 @@ form.quickform h5 {
 form.quickform div + h5,
 form.quickform div + div > h5,
 form.quickform h5 + h5 {
-	border-top: 1px solid #88A;
+	border-top: 1px solid #88a;
 }
 
 form.quickform textarea {
@@ -103,7 +103,7 @@ form.quickform textarea {
 }
 
 form.quickform input:disabled + label {
-	color: gray;
+	color: #808080;
 }
 
 form.quickform span.quickformDescription {
@@ -116,37 +116,37 @@ form.quickform span.quickformDescription code {
 }
 
 form.quickform .quickformSubgroup {
-	margin-bottom: .5em;
+	margin-bottom: 0.5em;
 	margin-left: 3em;
 }
 
 /* The tooltip button and the content itself */
 form.quickform .morebits-tooltipButton {
-	color: mediumblue;
+	color: #0000cd;
 	font-weight: bold;
 	cursor: help;
-	padding: .3em;
-}
-.morebits-ui-tooltip {
-	padding: 4px 6px 4px 6px;
-	font-size: 13px;
+	padding: 0.3em;
 }
 
+.morebits-ui-tooltip {
+	padding: 4px 6px 4px 6px;
+	font-size: 1em;
+}
 
 /* Scrollbox styles, for use within Morebits.simpleWindow */
 
 div.morebits-scrollbox {
-	background: white;
-	border: 1px solid gray;
-	margin-bottom: .6em;
-	margin-top: .6em;
+	background: #fff;
+	border: 1px solid #808080;
+	margin-bottom: 0.6em;
+	margin-top: 0.6em;
 	max-height: 20em;
 	overflow: auto;
 	padding: 6px 6px 0;
 }
 
 div.morebits-scrollbox > h5:first-child {
-	border: none;
+	border: 0;
 	margin-top: 0;
 	padding-top: 0;
 }
@@ -155,18 +155,17 @@ div.morebits-scrollbox > :last-child {
 	margin-bottom: 6px;
 }
 
-
 /* Previewbox */
 
 div.morebits-previewbox {
-	background: white;
-	color: black;
+	background: #fff;
+	color: #000;
 	border: 2px inset;
-	margin: .4em auto .2em;
-	padding: .2em .4em;
+	margin: 0.4em auto 0.2em;
+	padding: 0.2em 0.4em;
 }
 
-div.morebits-previewbox *:not(img) {
+div.morebits-previewbox *:not( img ) {
 	vertical-align: baseline;
 }
 
@@ -174,13 +173,12 @@ div.morebits-previewbox .mw-editsection {
 	display: none;
 }
 
-
 /* Morebits.simpleWindow */
 
 .morebits-dialog {
 	border: 1px #666 solid;
 	font-family: sans-serif;
-	background-color: #F0F8FF;
+	background-color: #f0f8ff;
 	background-image: none;
 }
 
@@ -189,9 +187,11 @@ div.morebits-previewbox .mw-editsection {
 .skin-vector .morebits-dialog {
 	font-size: 75%; /* 100% is 16px => 75% is 12px */
 }
+
 .skin-timeless .morebits-dialog {
 	font-size: 79%; /* 100% is 15.2px => 79% is 12.008px */
 }
+
 .skin-monobook .morebits-dialog,
 .skin-modern .morebits-dialog {
 	font-size: 120%; /* 100% is 10px => 120% is 12px */
@@ -199,11 +199,11 @@ div.morebits-previewbox .mw-editsection {
 
 body .ui-dialog.morebits-dialog .ui-dialog-titlebar {
 	height: 1em;
-	background-color: #BCCADF !important;
+	background-color: #bccadf !important;
 	background-image: none !important;
 	font: bold 108% sans-serif; /* 100% is 12px (from above) => 108% is 12.96px */
 	overflow: hidden;
-	padding: .4em .3em .5em !important;
+	padding: 0.4em 0.3em 0.5em !important;
 	white-space: nowrap;
 }
 
@@ -216,11 +216,11 @@ body .ui-dialog.morebits-dialog .ui-dialog-titlebar {
 	right: 0;
 	top: auto;
 	width: 2em;
-	margin: -.5em -.15em 0;
+	margin: -0.5em -0.15em 0;
 }
 
 .ui-dialog.morebits-dialog .ui-dialog-titlebar-close span {
-	margin: .33em;
+	margin: 0.33em;
 }
 
 .ui-dialog.morebits-dialog .morebits-dialog-content {
@@ -228,15 +228,15 @@ body .ui-dialog.morebits-dialog .ui-dialog-titlebar {
 }
 
 body .ui-dialog.morebits-dialog .ui-dialog-buttonpane {
-	background-color: #BCCADF;
+	background-color: #bccadf;
 	margin: 0;
-	min-height: .5em;
+	min-height: 0.5em;
 	padding-left: 1.2em !important;
 }
 
 body .ui-dialog.morebits-dialog .ui-dialog-buttonpane button {
 	float: none;
-	margin: .2em 0 -.1em;
+	margin: 0.2em 0 -0.1em;
 	cursor: auto;
 }
 
@@ -247,15 +247,15 @@ body .ui-dialog.morebits-dialog .ui-dialog-buttonpane button {
 .morebits-dialog-footerlinks {
 	font-size: 97%; /* 100% is 12px (from above) => 97% is 11.64px */
 	float: right;
-	margin: .7em .4em 0 0;
+	margin: 0.7em 0.4em 0 0;
 }
 
 body .ui-dialog.morebits-dialog .morebits-dialog-footerlinks a {
-	color: #3062AD;
+	color: #3062ad;
 }
 
-.morebits-dialog-buttons[data-empty] + .morebits-dialog-footerlinks {
-	margin: .1em .4em -.2em 0;
+.morebits-dialog-buttons[ data-empty ] + .morebits-dialog-footerlinks {
+	margin: 0.1em 0.4em -0.2em 0;
 }
 
 .ui-icon {
