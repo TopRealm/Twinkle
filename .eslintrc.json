@@ -1,10 +1,30 @@
 {
-	"plugins": ["es5"],
-	"extends": ["eslint:recommended", "plugin:es5/no-es2015"],
+	"plugins": [
+		"es5",
+		"compat"
+	],
+	"parser": "@babel/eslint-parser",
+	"parserOptions": {
+		"requireConfigFile": false,
+		"babelOptions": {
+			"configFile": false,
+			"presets": ["@babel/preset-env", "@babel/preset-react"]
+		}
+	},
+	"extends": [
+		"eslint:recommended",
+		"plugin:compat/recommended",
+		"wikimedia/client-es5",
+		"wikimedia/jquery",
+		"wikimedia/mediawiki"
+	],
 	"root": true,
 	"env": {
 		"browser": true,
-		"jquery": true
+        "jquery": true,
+        "es6": false,
+        "es2020": false,
+        "es2021": false
 	},
 	"globals": {
 		"mw": "readonly",
