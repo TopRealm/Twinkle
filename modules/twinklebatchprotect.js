@@ -48,14 +48,14 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 	form.append({
 		type: 'select',
 		name: 'editlevel',
-		label: 'Edit protection:',
+		label: '编辑权限：',
 		event: Twinkle.protect.formevents.editlevel,
 		list: Twinkle.protect.protectionLevels
 	});
 	form.append({
 		type: 'select',
 		name: 'editexpiry',
-		label: 'Expires:',
+		label: '终止时间：',
 		event: function event(e) {
 			if (e.target.value === 'custom') {
 				Twinkle.protect.doCustomExpiry(e.target);
@@ -68,17 +68,17 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 		type: 'checkbox',
 		event: Twinkle.protect.formevents.movemodify,
 		list: [ {
-			label: 'Modify move protection',
+			label: '修改移动保护',
 			value: 'movemodify',
 			name: 'movemodify',
-			tooltip: 'Only for existing pages.',
+			tooltip: '仅限现有页面。',
 			checked: true
 		} ]
 	});
 	form.append({
 		type: 'select',
 		name: 'movelevel',
-		label: 'Move protection:',
+		label: '移动权限：',
 		event: Twinkle.protect.formevents.movelevel,
 		list: Twinkle.protect.protectionLevels.filter(function (level) {
 			// Autoconfirmed is required for a move, redundant
@@ -88,7 +88,7 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 	form.append({
 		type: 'select',
 		name: 'moveexpiry',
-		label: 'Expires:',
+		label: '终止时间：',
 		event: function event(e) {
 			if (e.target.value === 'custom') {
 				Twinkle.protect.doCustomExpiry(e.target);
@@ -105,24 +105,24 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 			e.target.form.createlevel.style.color = e.target.form.createexpiry.style.color = e.target.checked ? '' : 'transparent';
 		},
 		list: [ {
-			label: 'Modify create protection',
+			label: '修改创建保护',
 			value: 'createmodify',
 			name: 'createmodify',
-			tooltip: 'Only for pages that do not exist.',
+			tooltip: '仅限不存在的页面。',
 			checked: true
 		} ]
 	});
 	form.append({
 		type: 'select',
 		name: 'createlevel',
-		label: 'Create protection:',
+		label: '创建权限：',
 		event: Twinkle.protect.formevents.createlevel,
 		list: Twinkle.protect.protectionLevels
 	});
 	form.append({
 		type: 'select',
 		name: 'createexpiry',
-		label: 'Expires:',
+		label: '终止时间：',
 		event: function event(e) {
 			if (e.target.value === 'custom') {
 				Twinkle.protect.doCustomExpiry(e.target);
@@ -139,9 +139,8 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 	form.append({
 		type: 'input',
 		name: 'reason',
-		label: 'Reason:',
-		size: 60,
-		tooltip: 'For the protection log and page history.'
+		label: '理由（保护日志）',
+		size: 60
 	});
 	var query = {
 		action: 'query',
@@ -187,11 +186,11 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 				}).pop();
 			} else {
 				if (page.redirect) {
-					metadata.push('redirect');
+					metadata.push('重定向');
 				}
 				if (page.ns === 6) {
-					metadata.push('uploader: ' + page.imageinfo[0].user);
-					metadata.push('last edit from: ' + page.revisions[0].user);
+					metadata.push('上传者：' + page.imageinfo[0].user);
+					metadata.push('最后编辑者：' + page.revisions[0].user);
 				} else {
 					metadata.push(mw.language.convertNumber(page.revisions[0].size) + ' bytes');
 				}
@@ -200,7 +199,7 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 				}).pop();
 			}
 			if (editProt) {
-				metadata.push('fully' + (missing ? ' create' : '') + ' protected' + (editProt.expiry === 'infinity' ? ' indefinitely' : ', expires ' + new Morebits.date(editProt.expiry).calendar('utc') + ' (UTC)'));
+				metadata.push((missing ? '白纸' : '') + '全保护' + (editProt.expiry === 'infinity' ? '（永久）' : '（' + new Morebits.date(editProt.expiry).calendar('utc') + ' (UTC)过期）'));
 			}
 			var title = page.title;
 			list.push({

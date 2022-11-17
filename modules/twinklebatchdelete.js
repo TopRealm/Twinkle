@@ -171,7 +171,7 @@ Twinkle.batchdelete.callback = function twinklebatchdeleteCallback() {
 				return pr.type === 'edit' && pr.level === 'sysop';
 			}).pop();
 			if (editProt) {
-				metadata.push('全保护' + (editProt.expiry === 'infinity' ? ' 无限期' : new Morebits.date(editProt.expiry).calendar('utc') + ' (UTC)过期'));
+				metadata.push('全保护' + (editProt.expiry === 'infinity' ? '（无限期）' : '（' + new Morebits.date(editProt.expiry).calendar('utc') + ' (UTC)过期）'));
 			}
 			if (page.ns === 6) {
 				metadata.push('上传者：' + page.imageinfo[0].user);
@@ -181,7 +181,7 @@ Twinkle.batchdelete.callback = function twinklebatchdeleteCallback() {
 			}
 			var title = page.title;
 			Twinkle.batchdelete.pages[title] = {
-				label: title + (metadata.length ? ' (' + metadata.join('; ') + ')' : ''),
+				label: title + (metadata.length ? '（' + metadata.join('、') + '）' : ''),
 				value: title,
 				checked: true,
 				style: editProt ? 'color:red' : ''
@@ -365,13 +365,13 @@ Twinkle.batchdelete.callback.toggleSubpages = function twDbatchToggleSubpages(e)
 				pages.forEach(function (page) {
 					var metadata = [];
 					if (page.redirect) {
-						metadata.push('redirect');
+						metadata.push('重定向');
 					}
 					var editProt = page.protection.filter(function (pr) {
 						return pr.type === 'edit' && pr.level === 'sysop';
 					}).pop();
 					if (editProt) {
-						metadata.push('fully protected' + (editProt.expiry === 'infinity' ? '全保护' : new Morebits.date(editProt.expiry).calendar('utc') + ' (UTC)过期'));
+						metadata.push('全保护（' + (editProt.expiry === 'infinity' ? '永久' : '至' + new Morebits.date(editProt.expiry).calendar('utc') + ' (UTC)过期'));
 					}
 					if (page.ns === 6) {
 						metadata.push('上传者：' + page.imageinfo[0].user);
