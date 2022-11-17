@@ -7,7 +7,6 @@
 		"url": "https://git.qiuwen.wiki/qiuwen/Twinkle"
 	},
 	"scripts": {
-		"start": "node scripts/dev-server.js",
 		"eslint": "eslint .",
 		"eslint:fix": "eslint . --fix",
 		"stylelint": "stylelint *.css",
