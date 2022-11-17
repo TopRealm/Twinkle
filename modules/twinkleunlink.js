@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: CC-BY-SA-4.0
  * _addText: '{{Gadget Header|license=CC-BY-SA-4.0}}'
  *
- * @url https://git.qiuwen.wiki/qiuwen/Twinkle
+ * @source https://git.qiuwen.wiki/qiuwen/Twinkle
  * @author © 2011-2022 English Wikipedia Contributors
  * @author © 2011-2021 Chinese Wikipedia Contributors
  * @author © 2021-     Qiuwen Baike Contributors
