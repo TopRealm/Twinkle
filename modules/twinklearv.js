@@ -11,33 +11,29 @@
 /* Twinkle.js - twinklearv.js */
 // <nowiki>
 (function ($) {
-
 /*
-	 ****************************************
-	 *** twinklearv.js: ARV module
-	 ****************************************
-	 * Mode of invocation:     Tab ("ARV")
-	 * Active on:              Any page with relevant user name (userspace, contribs, etc.)
-	 */
+ ****************************************
+ *** twinklearv.js: ARV module
+ ****************************************
+ * Mode of invocation:  Tab ("ARV")
+ * Active on:           Any page with relevant user name (userspace, contribs, etc.)
+ */
 
 Twinkle.arv = function twinklearv() {
 	var username = mw.config.get('wgRelevantUserName');
 	if (!username || username === mw.config.get('wgUserName')) {
 		return;
 	}
-
 	var windowTitle = mw.util.isIPAddress(username) ? '报告IP地址给管理员' : '报告用户给管理员';
 	Twinkle.addPortletLink(function () {
 		Twinkle.arv.callback(username);
 	}, '告状', 'tw-arv', windowTitle);
 };
-
 Twinkle.arv.callback = function (uid) {
 	if (uid === mw.config.get('wgUserName')) {
 		alert('不可以告自己的状哦！');
 		return;
 	}
-
 	var Window = new Morebits.simpleWindow(600, 500);
 	Window.setTitle('报告用户给管理员'); // Backronym
 	Window.setScriptName('Twinkle');
@@ -47,7 +43,6 @@ Twinkle.arv.callback = function (uid) {
 	Window.addFooterLink('参数设置', 'H:TW/PREF#arv');
 	Window.addFooterLink('帮助文档', 'H:TW/DOC#arv');
 	Window.addFooterLink('问题反馈', 'HT:TW');
-
 	var form = new Morebits.quickForm(Twinkle.arv.callback.evaluate);
 	var categories = form.append({
 		type: 'select',
@@ -76,19 +71,20 @@ Twinkle.arv.callback = function (uid) {
 		style: 'color: red',
 		id: 'twinkle-arv-blockwarning'
 	});
-
 	form.append({
 		type: 'field',
 		label: 'Work area',
 		name: 'work_area'
 	});
-	form.append({ type: 'submit', label: '提交' });
+	form.append({
+		type: 'submit',
+		label: '提交'
+	});
 	form.append({
 		type: 'hidden',
 		name: 'uid',
 		value: uid
 	});
-
 	var result = form.render();
 	Window.setContent(result);
 	Window.display();
@@ -112,6 +108,7 @@ Twinkle.arv.callback = function (uid) {
 			if (block.partial) {
 				$('#twinkle-arv-blockwarning').css('color', 'black'); // Less severe
 			}
+
 			$('#twinkle-arv-blockwarning').text(message);
 		}
 	}).post();
@@ -121,13 +118,11 @@ Twinkle.arv.callback = function (uid) {
 	evt.initEvent('change', true, true);
 	result.category.dispatchEvent(evt);
 };
-
 Twinkle.arv.callback.changeCategory = function (e) {
 	var value = e.target.value;
 	var root = e.target.form;
 	var old_area = Morebits.quickForm.getElements(root, 'work_area')[0];
 	var work_area = null;
-
 	switch (value) {
 		case 'aiv':
 			/* falls through */
@@ -178,28 +173,22 @@ Twinkle.arv.callback.changeCategory = function (e) {
 			work_area.append({
 				type: 'checkbox',
 				name: 'arvtype',
-				list: [
-					{
-						label: '已发出最后（层级4或4im）警告',
-						value: 'final'
-					},
-					{
-						label: '封禁过期后随即破坏',
-						value: 'postblock'
-					},
-					{
-						label: '显而易见的纯破坏用户',
-						value: 'vandalonly'
-					},
-					{
-						label: '仅用来散发广告宣传的用户',
-						value: 'promoonly'
-					},
-					{
-						label: '显而易见的spambot或失窃账户',
-						value: 'spambot'
-					}
-				]
+				list: [ {
+					label: '已发出最后（层级4或4im）警告',
+					value: 'final'
+				}, {
+					label: '封禁过期后随即破坏',
+					value: 'postblock'
+				}, {
+					label: '显而易见的纯破坏用户',
+					value: 'vandalonly'
+				}, {
+					label: '仅用来散发广告宣传的用户',
+					value: 'promoonly'
+				}, {
+					label: '显而易见的spambot或失窃账户',
+					value: 'spambot'
+				} ]
 			});
 			work_area.append({
 				type: 'textarea',
@@ -224,31 +213,25 @@ Twinkle.arv.callback.changeCategory = function (e) {
 			work_area.append({
 				type: 'checkbox',
 				name: 'arvtype',
-				list: [
-					{
-						label: '误导性用户名',
-						value: 'misleading',
-						tooltip: '不得通过用户名暗示或让人误以为您在求闻百科有某种权限'
-					},
-					{
-						label: '宣传性用户名',
-						value: 'promotional',
-						tooltip: '不得注册宣传性用户名，不得以组织名义注册账号。不得以用户名宣扬特定政治及宗教观点。'
-					},
-					{
-						label: '违背公序良俗的用户名',
-						value: 'illegal',
-						tooltip: '包括但不限于：违反法律规定的用户名，可能引发严重争议的用户名，仿冒他人的用户名，侮辱性或破坏性用户名等'
-					},
-					{
-						label: '司法机关认定的驰名商标或包含其他为社会公众所熟知的商标',
-						value: 'trademark'
-					},
-					{
-						label: '域名、电子邮件地址。',
-						value: 'domain'
-					}
-				]
+				list: [ {
+					label: '误导性用户名',
+					value: 'misleading',
+					tooltip: '不得通过用户名暗示或让人误以为您在求闻百科有某种权限'
+				}, {
+					label: '宣传性用户名',
+					value: 'promotional',
+					tooltip: '不得注册宣传性用户名，不得以组织名义注册账号。不得以用户名宣扬特定政治及宗教观点。'
+				}, {
+					label: '违背公序良俗的用户名',
+					value: 'illegal',
+					tooltip: '包括但不限于：违反法律规定的用户名，可能引发严重争议的用户名，仿冒他人的用户名，侮辱性或破坏性用户名等'
+				}, {
+					label: '司法机关认定的驰名商标或包含其他为社会公众所熟知的商标',
+					value: 'trademark'
+				}, {
+					label: '域名、电子邮件地址。',
+					value: 'domain'
+				} ]
 			});
 			work_area.append({
 				type: 'textarea',
@@ -258,54 +241,18 @@ Twinkle.arv.callback.changeCategory = function (e) {
 			work_area = work_area.render();
 			old_area.parentNode.replaceChild(work_area, old_area);
 			break;
-
 		case 'puppet':
 			work_area = new Morebits.quickForm.element({
 				type: 'field',
 				label: '提报傀儡账号',
 				name: 'work_area'
 			});
-			work_area.append(
-				{
-					type: 'input',
-					name: 'sockmaster',
-					label: '主账号',
-					tooltip: '傀儡主账号的用户名（不带User:前缀）'
-				}
-			);
 			work_area.append({
-				type: 'textarea',
-				label: '证据：',
-				name: 'evidence',
-				tooltip: '输入能够用来体现这些用户可能滥用多重账户的证据，这通常包括互助客栈发言、页面历史或其他有关的信息。请避免在此处提供非与傀儡或滥用多重账户相关的其他讨论。'
+				type: 'input',
+				name: 'sockmaster',
+				label: '主账号',
+				tooltip: '傀儡主账号的用户名（不带User:前缀）'
 			});
-			work_area.append({
-				type: 'checkbox',
-				list: [
-					{
-						label: '请求用户查核',
-						name: 'checkuser',
-						tooltip: '用户查核是一种用于获取傀儡指控相关技术证据的工具，若没有正当理由则不会使用，您必须在证据字段充分解释为什么需要使用该工具。用户查核不会用于公开连接用户账户使用的IP地址。'
-					} ]
-			});
-			work_area = work_area.render();
-			old_area.parentNode.replaceChild(work_area, old_area);
-			break;
-		case 'sock':
-			work_area = new Morebits.quickForm.element({
-				type: 'field',
-				label: '提报傀儡主账号',
-				name: 'work_area'
-			});
-			work_area.append(
-				{
-					type: 'dyninput',
-					name: 'sockpuppet',
-					label: '傀儡账号',
-					sublabel: '用户名：',
-					tooltip: '傀儡账号的用户名（不带User:前缀）',
-					min: 2
-				});
 			work_area.append({
 				type: 'textarea',
 				label: '证据：',
@@ -323,10 +270,39 @@ Twinkle.arv.callback.changeCategory = function (e) {
 			work_area = work_area.render();
 			old_area.parentNode.replaceChild(work_area, old_area);
 			break;
-
+		case 'sock':
+			work_area = new Morebits.quickForm.element({
+				type: 'field',
+				label: '提报傀儡主账号',
+				name: 'work_area'
+			});
+			work_area.append({
+				type: 'dyninput',
+				name: 'sockpuppet',
+				label: '傀儡账号',
+				sublabel: '用户名：',
+				tooltip: '傀儡账号的用户名（不带User:前缀）',
+				min: 2
+			});
+			work_area.append({
+				type: 'textarea',
+				label: '证据：',
+				name: 'evidence',
+				tooltip: '输入能够用来体现这些用户可能滥用多重账户的证据，这通常包括互助客栈发言、页面历史或其他有关的信息。请避免在此处提供非与傀儡或滥用多重账户相关的其他讨论。'
+			});
+			work_area.append({
+				type: 'checkbox',
+				list: [ {
+					label: '请求用户查核',
+					name: 'checkuser',
+					tooltip: '用户查核是一种用于获取傀儡指控相关技术证据的工具，若没有正当理由则不会使用，您必须在证据字段充分解释为什么需要使用该工具。用户查核不会用于公开连接用户账户使用的IP地址。'
+				} ]
+			});
+			work_area = work_area.render();
+			old_area.parentNode.replaceChild(work_area, old_area);
+			break;
 	}
 };
-
 Twinkle.arv.callback.evaluate = function (e) {
 	var form = e.target;
 	var reason = '';
@@ -335,10 +311,8 @@ Twinkle.arv.callback.evaluate = function (e) {
 		comment = form.reason.value;
 	}
 	var uid = form.uid.value;
-
 	var types;
 	switch (form.category.value) {
-
 		// Report user for vandalism
 		case 'aiv':
 			/* falls through */
@@ -348,7 +322,6 @@ Twinkle.arv.callback.evaluate = function (e) {
 				alert('必须指定一个理由！');
 				return;
 			}
-
 			types = types.map(function (v) {
 				switch (v) {
 					case 'final':
@@ -365,17 +338,14 @@ Twinkle.arv.callback.evaluate = function (e) {
 						return '未知理由';
 				}
 			}).join('; ');
-
 			if (form.page.value !== '') {
 				// Allow links to redirects, files, and categories
 				reason = '在 {{No redirect|:' + form.page.value + '}}';
-
 				if (form.badid.value !== '') {
 					reason += ' ({{diff|' + form.page.value + '|' + form.badid.value + '|' + form.goodid.value + '|diff}})';
 				}
 				reason += ':';
 			}
-
 			if (types) {
 				reason += ' ' + types;
 			}
@@ -387,18 +357,15 @@ Twinkle.arv.callback.evaluate = function (e) {
 				reason += '.';
 			}
 			reason += ' ~~~~';
-			reason = reason.replace(/\r?\n/g, '\n*:');  // indent newlines
+			reason = reason.replace(/\r?\n/g, '\n*:'); // indent newlines
 
 			Morebits.simpleWindow.setButtonsEnabled(false);
 			Morebits.status.init(form);
-
 			Morebits.wiki.actionCompleted.redirect = 'Qiuwen:当前的破坏';
 			Morebits.wiki.actionCompleted.notice = '提报完成';
-
 			var aivPage = new Morebits.wiki.page('Qiuwen:当前的破坏', '处理VIP请求');
 			aivPage.setPageSection(1);
 			aivPage.setFollowRedirect(true);
-
 			aivPage.load(function () {
 				var text = aivPage.getPageText();
 				var $aivLink = '<a target="_blank" href="/wiki/QW:AIV">QW:AIV</a>';
@@ -409,7 +376,6 @@ Twinkle.arv.callback.evaluate = function (e) {
 					Morebits.status.printUserText(reason, '您输入的评论已在下方提供，您可以将其加入到' + $aivLink + ':');
 					return;
 				}
-
 				aivPage.setPageSection(0);
 				aivPage.getStatusElement().status('加入新提报');
 				aivPage.setEditSummary('报告[[Special:Contributions/' + uid + '|' + uid + ']]');
@@ -423,41 +389,36 @@ Twinkle.arv.callback.evaluate = function (e) {
 			// **not** i18n to Chinese as we pre-verify usernames
 		case 'username':
 			types = form.getChecked('arvtype').map(Morebits.string.toLowerCaseFirstChar);
-
 			var hasShared = types.indexOf('shared') > -1;
 			if (hasShared) {
 				types.splice(types.indexOf('shared'), 1);
 			}
-
 			if (types.length <= 2) {
 				types = types.join(' and ');
 			} else {
 				types = [ types.slice(0, -1).join(', '), types.slice(-1) ].join(' and ');
 			}
 			var article = 'a';
-			if (/[aeiouwyh]/.test(types[0] || '')) { // non 100% correct, but whatever, including 'h' for Cockney
+			if (/[aeiouwyh]/.test(types[0] || '')) {
+				// non 100% correct, but whatever, including 'h' for Cockney
 				article = 'an';
 			}
 			reason = '*{{user-uaa|1=' + uid + '}} &ndash; ';
 			if (types.length || hasShared) {
-				reason += 'Violation of the username policy as ' + article + ' ' + types + ' username' +
-						(hasShared ? ' that implies shared use. ' : '. ');
+				reason += 'Violation of the username policy as ' + article + ' ' + types + ' username' + (hasShared ? ' that implies shared use. ' : '. ');
 			}
 			if (comment !== '') {
 				reason += Morebits.string.toUpperCaseFirstChar(comment) + '. ';
 			}
 			reason += '~~~~';
-			reason = reason.replace(/\r?\n/g, '\n*:');  // indent newlines
+			reason = reason.replace(/\r?\n/g, '\n*:'); // indent newlines
 
 			Morebits.simpleWindow.setButtonsEnabled(false);
 			Morebits.status.init(form);
-
 			Morebits.wiki.actionCompleted.redirect = 'Qiuwen:Usernames for administrator attention';
 			Morebits.wiki.actionCompleted.notice = 'Reporting complete';
-
 			var uaaPage = new Morebits.wiki.page('Qiuwen:Usernames for administrator attention', 'Processing UAA request');
 			uaaPage.setFollowRedirect(true);
-
 			uaaPage.load(function () {
 				var text = uaaPage.getPageText();
 
@@ -486,7 +447,6 @@ Twinkle.arv.callback.evaluate = function (e) {
 				evidence: form.evidence.value.trim(),
 				checkuser: form.checkuser.checked
 			};
-
 			var puppetReport = form.category.value === 'puppet';
 			if (puppetReport && !form.sockmaster.value.trim()) {
 				alert('未指定主账户！');
@@ -495,12 +455,10 @@ Twinkle.arv.callback.evaluate = function (e) {
 				alert('未指定傀儡账户！');
 				return;
 			}
-
 			sockParameters.uid = puppetReport ? form.sockmaster.value.trim() : uid;
 			sockParameters.sockpuppets = puppetReport ? [ uid ] : Morebits.array.uniq($.map($('input:text[name=sockpuppet]', form), function (o) {
 				return $(o).val() || null;
 			}));
-
 			Morebits.simpleWindow.setButtonsEnabled(false);
 			Morebits.status.init(form);
 			Twinkle.arv.processSock(sockParameters);
@@ -511,29 +469,23 @@ Twinkle.arv.callback.evaluate = function (e) {
 			var diffs = $.map($('input:checkbox[name=s_diffs]:checked', form), function (o) {
 				return $(o).data('revinfo');
 			});
-
 			if (diffs.length < 3 && !confirm('You have selected fewer than three offending edits. Do you wish to make the report anyway?')) {
 				return;
 			}
-
 			var warnings = $.map($('input:checkbox[name=s_warnings]:checked', form), function (o) {
 				return $(o).data('revinfo');
 			});
-
 			if (!warnings.length && !confirm('You have not selected any edits where you warned the offender. Do you wish to make the report anyway?')) {
 				return;
 			}
-
 			var resolves = $.map($('input:checkbox[name=s_resolves]:checked', form), function (o) {
 				return $(o).data('revinfo');
 			});
 			var free_resolves = $('input[name=s_resolves_free]').val();
-
 			var an3_next = function (free_resolves) {
 				if (!resolves.length && !free_resolves && !confirm('You have not selected any edits where you tried to resolve the issue. Do you wish to make the report anyway?')) {
 					return;
 				}
-
 				var an3Parameters = {
 					uid: uid,
 					page: form.page.value.trim(),
@@ -543,12 +495,10 @@ Twinkle.arv.callback.evaluate = function (e) {
 					resolves: resolves,
 					free_resolves: free_resolves
 				};
-
 				Morebits.simpleWindow.setButtonsEnabled(false);
 				Morebits.status.init(form);
 				Twinkle.arv.processAN3(an3Parameters);
 			};
-
 			if (free_resolves) {
 				var query;
 				var diff, oldid;
@@ -573,7 +523,7 @@ Twinkle.arv.callback.evaluate = function (e) {
 				// Additionally, links like Special:Diff/123/next, Special:Diff/123/456, or ?diff=next&oldid=123
 				// would each require making use of rvdir=newer in the revisions API.
 				// That requires a title parameter, so we have to use compare instead of revisions.
-				if (oldid && (diff === 'cur' || (!title && (diff === 'next' || diffNum)))) {
+				if (oldid && (diff === 'cur' || !title && (diff === 'next' || diffNum))) {
 					query = {
 						action: 'compare',
 						fromrev: oldid,
@@ -593,7 +543,6 @@ Twinkle.arv.callback.evaluate = function (e) {
 						format: 'json',
 						indexpageids: true
 					};
-
 					if (diff && oldid) {
 						if (diff === 'prev') {
 							query.revids = oldid;
@@ -601,7 +550,6 @@ Twinkle.arv.callback.evaluate = function (e) {
 							query.titles = title;
 							query.rvdir = 'newer';
 							query.rvstartid = oldid;
-
 							if (diff === 'next' && title) {
 								query.rvlimit = 2;
 							} else if (diffNum) {
@@ -619,7 +567,6 @@ Twinkle.arv.callback.evaluate = function (e) {
 						}
 					}
 				}
-
 				new mw.Api().get(query).done(function (data) {
 					var page;
 					if (data.compare && data.compare.fromtitle === data.compare.totitle) {
@@ -640,26 +587,20 @@ Twinkle.arv.callback.evaluate = function (e) {
 			break;
 	}
 };
-
 Twinkle.arv.processSock = function (params) {
 	Morebits.wiki.addCheckpoint(); // prevent notification events from causing an erronous "action completed"
 
 	// prepare the SPI report
-	var text = '\n{{subst:SPI report|' +
-			params.sockpuppets.map(function (sock, index) {
-				return (index + 1) + '=' + sock;
-			}).join('|') + '\n|evidence=' + params.evidence + ' \n';
-
+	var text = '\n{{subst:SPI report|' + params.sockpuppets.map(function (sock, index) {
+		return index + 1 + '=' + sock;
+	}).join('|') + '\n|evidence=' + params.evidence + ' \n';
 	if (params.checkuser) {
 		text += '|checkuser=yes';
 	}
 	text += '}}';
-
 	var reportpage = 'Qiuwen:傀儡调查/' + params.uid;
-
 	Morebits.wiki.actionCompleted.redirect = reportpage;
 	Morebits.wiki.actionCompleted.notice = '提报完成';
-
 	var spiPage = new Morebits.wiki.page(reportpage, '拉取讨论页面');
 	spiPage.setFollowRedirect(true);
 	spiPage.setEditSummary('加入对[[Special:Contributions/' + params.uid + '|' + params.uid + ']]的新提报');
@@ -667,8 +608,7 @@ Twinkle.arv.processSock = function (params) {
 	spiPage.setAppendText(text);
 	spiPage.setWatchlist(Twinkle.getPref('spiWatchReport'));
 	spiPage.append();
-
-	Morebits.wiki.removeCheckpoint();  // all page updates have been started
+	Morebits.wiki.removeCheckpoint(); // all page updates have been started
 };
 
 // no need to call this func as no an3 now, hence not i18n
@@ -680,13 +620,13 @@ Twinkle.arv.processAN3 = function (params) {
 			minid = params.diffs[i].parentid;
 		}
 	}
-
 	new mw.Api().get({
 		action: 'query',
 		prop: 'revisions',
 		format: 'json',
 		rvprop: 'sha1|ids|timestamp|comment',
-		rvlimit: 100, // intentionally limited
+		rvlimit: 100,
+		// intentionally limited
 		rvstartid: minid,
 		rvexcludeuser: params.uid,
 		indexpageids: true,
@@ -700,9 +640,7 @@ Twinkle.arv.processAN3 = function (params) {
 				return '(comment hidden)';
 			}
 			return '"' + rev.comment + '"';
-
 		};
-
 		var orig;
 		if (data.length) {
 			var sha1 = data[0].sha1;
@@ -712,30 +650,25 @@ Twinkle.arv.processAN3 = function (params) {
 					break;
 				}
 			}
-
 			if (!orig) {
 				orig = data[0];
 			}
 		}
-
 		var origtext = '';
 		if (orig) {
 			origtext = '{{diff2|' + orig.revid + '|' + orig.timestamp + '}} ' + hasHiddenComment(orig);
 		}
-
 		var grouped_diffs = {};
-
 		var parentid, lastid;
 		for (var j = 0; j < params.diffs.length; ++j) {
 			var cur = params.diffs[j];
-			if ((cur.revid && cur.revid !== parentid) || lastid === null) {
+			if (cur.revid && cur.revid !== parentid || lastid === null) {
 				lastid = cur.revid;
 				grouped_diffs[lastid] = [];
 			}
 			parentid = cur.parentid;
 			grouped_diffs[lastid].push(cur);
 		}
-
 		var difftext = $.map(grouped_diffs, function (sub) {
 			var ret = '';
 			if (sub.length >= 2) {
@@ -755,7 +688,6 @@ Twinkle.arv.processAN3 = function (params) {
 		var resolvetext = params.resolves.reverse().map(function (v) {
 			return '#  {{diff2|' + v.revid + '|' + new Morebits.date(v.timestamp).format('HH:mm, D MMMM YYYY', 'utc') + ' (UTC)}} ' + hasHiddenComment(v);
 		}).join('\n');
-
 		if (params.free_resolves) {
 			var page = params.free_resolves;
 			if (page.compare) {
@@ -763,10 +695,12 @@ Twinkle.arv.processAN3 = function (params) {
 			} else if (page.revisions) {
 				var revCount = page.revisions.length;
 				var rev;
-				if (revCount < 3) { // diff=prev or next
+				if (revCount < 3) {
+					// diff=prev or next
 					rev = revCount === 1 ? page.revisions[0] : page.revisions[1];
 					resolvetext += '\n#  {{diff2|' + rev.revid + '|' + new Morebits.date(rev.timestamp).format('HH:mm, D MMMM YYYY', 'utc') + ' (UTC) on ' + page.title + '}} ' + hasHiddenComment(rev);
-				} else { // diff and oldid are nonconsecutive
+				} else {
+					// diff and oldid are nonconsecutive
 					rev = page.revisions[0];
 					var revLatest = page.revisions[revCount - 1];
 					var label = 'Consecutive edits made from ' + new Morebits.date(rev.timestamp).format('HH:mm, D MMMM YYYY', 'utc') + ' (UTC) to ' + new Morebits.date(revLatest.timestamp).format('HH:mm, D MMMM YYYY', 'utc') + ' (UTC) on ' + page.title;
@@ -774,20 +708,14 @@ Twinkle.arv.processAN3 = function (params) {
 				}
 			}
 		}
-
 		var comment = params.comment.replace(/~*$/g, '').trim();
-
 		if (comment) {
 			comment += ' ~~~~';
 		}
-
 		var text = '\n\n{{subst:AN3 report|diffs=' + difftext + '|warnings=' + warningtext + '|resolves=' + resolvetext + '|pagename=' + params.page + '|orig=' + origtext + '|comment=' + comment + '|uid=' + params.uid + '}}';
-
 		var reportpage = 'Qiuwen:Administrators\' noticeboard/Edit warring';
-
 		Morebits.wiki.actionCompleted.redirect = reportpage;
 		Morebits.wiki.actionCompleted.notice = 'Reporting complete';
-
 		var an3Page = new Morebits.wiki.page(reportpage, 'Retrieving discussion page');
 		an3Page.setFollowRedirect(true);
 		an3Page.setEditSummary('Adding new report for [[Special:Contributions/' + params.uid + '|' + params.uid + ']].');
@@ -798,14 +726,13 @@ Twinkle.arv.processAN3 = function (params) {
 		// notify user
 
 		var notifyText = '\n\n{{subst:an3-notice|1=' + mw.util.wikiUrlencode(params.uid) + '|auto=1}} ~~~~';
-
 		var talkPage = new Morebits.wiki.page('User talk:' + params.uid, 'Notifying edit warrior');
 		talkPage.setFollowRedirect(true);
 		talkPage.setEditSummary('Notifying about edit warring noticeboard discussion.');
 		talkPage.setChangeTags(Twinkle.changeTags);
 		talkPage.setAppendText(notifyText);
 		talkPage.append();
-		Morebits.wiki.removeCheckpoint();  // all page updates have been started
+		Morebits.wiki.removeCheckpoint(); // all page updates have been started
 	}).fail(function (data) {
 		console.log('API failed :(', data); // eslint-disable-line no-console
 	});

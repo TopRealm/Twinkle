@@ -11,15 +11,14 @@
 /* Twinkle.js - twinklecopyvio.js */
 // <nowiki>
 (function ($) { // eslint-disable-line no-unused-vars
-
 /*
-	 ****************************************
-	 *** twinklecopyvio.js: Copyvio module
-	 ****************************************
-	 * Mode of invocation:     Tab ("Copyvio")
-	 * Active on:              Existing, non-special pages, except for file pages with no local (non-Commons) file which are not redirects
-	 * Config directives in:   TwinkleConfig
-	 */
+ ****************************************
+ *** twinklecopyvio.js: Copyvio module
+ ****************************************
+ * Mode of invocation:    Tab ("Copyvio")
+ * Active on:             Existing, non-special pages, except for file pages with no local (non-Commons) file which are not redirects
+ * Config directives in:  TwinkleConfig
+ */
 
 Twinkle.copyvio = function twinklecopyvio() {
 	// Disable on:
@@ -27,12 +26,11 @@ Twinkle.copyvio = function twinklecopyvio() {
 	// * non-existent pages
 	// * files on Commons, whether there is a local page or not (unneeded local pages of files on Commons are eligible for CSD F2)
 	// * file pages without actual files (these are eligible for CSD G8)
-	if (mw.config.get('wgNamespaceNumber') < 0 || !mw.config.get('wgArticleId') || (mw.config.get('wgNamespaceNumber') === 6 && (document.getElementById('mw-sharedupload') || (!document.getElementById('mw-imagepage-section-filehistory') && !Morebits.isPageRedirect())))) {
+	if (mw.config.get('wgNamespaceNumber') < 0 || !mw.config.get('wgArticleId') || mw.config.get('wgNamespaceNumber') === 6 && (document.getElementById('mw-sharedupload') || !document.getElementById('mw-imagepage-section-filehistory') && !Morebits.isPageRedirect())) {
 		return;
 	}
 	Twinkle.addPortletLink(Twinkle.copyvio.callback, '侵权', 'tw-copyvio', '提报侵权页面', '');
 };
-
 Twinkle.copyvio.callback = function twinklecopyvioCallback() {
 	var Window = new Morebits.simpleWindow(600, 350);
 	Window.setTitle('提报侵权页面');
@@ -41,39 +39,33 @@ Twinkle.copyvio.callback = function twinklecopyvioCallback() {
 	Window.addFooterLink('参数设置', 'H:TW/PREF#侵权');
 	Window.addFooterLink('帮助文档', 'H:TW/DOC#侵权');
 	Window.addFooterLink('问题反馈', 'HT:TW');
-
 	var form = new Morebits.quickForm(Twinkle.copyvio.callback.evaluate);
 	form.append({
 		type: 'textarea',
 		label: '侵权来源：',
 		name: 'source'
-	}
-	);
+	});
 	form.append({
 		type: 'checkbox',
-		list: [
-			{
-				label: '通知页面创建者',
-				value: 'notify',
-				name: 'notify',
-				tooltip: '在页面创建者讨论页上放置通知模板。',
-				checked: true
-			}
-		]
-	}
-	);
-	form.append({ type: 'submit' });
-
+		list: [ {
+			label: '通知页面创建者',
+			value: 'notify',
+			name: 'notify',
+			tooltip: '在页面创建者讨论页上放置通知模板。',
+			checked: true
+		} ]
+	});
+	form.append({
+		type: 'submit'
+	});
 	var result = form.render();
 	Window.setContent(result);
 	Window.display();
 };
-
 Twinkle.copyvio.callbacks = {
 	tryTagging: function (pageobj) {
 		// 先尝试标记页面，如果发现已经标记则停止提报
 		var text = pageobj.getPageText();
-
 		if (text.indexOf('{{Copyvio|') === -1) {
 			Twinkle.copyvio.callbacks.taggingArticle(pageobj);
 
@@ -118,14 +110,12 @@ Twinkle.copyvio.callbacks = {
 		if (oldcsd && confirm('在页面上找到快速删除模板，要保留吗？\n\n当页面同时侵犯著作权又符合快速删除标准时，应使用快速删除程序。\n单击“确认”以保留快速删除模板，若您认为快速删除理由不合，单击“取消”以移除快速删除模板。')) {
 			tag = oldcsd[0] + '\n' + tag;
 		}
-
 		pageobj.setPageText(tag);
 		pageobj.setEditSummary('本页面疑似侵犯著作权');
 		pageobj.setChangeTags(Twinkle.changeTags);
 		pageobj.setWatchlist(Twinkle.getPref('copyvioWatchPage'));
 		// pageobj.setCreateOption('recreate');
 		pageobj.save();
-
 		if (Twinkle.getPref('markCopyvioPagesAsPatrolled')) {
 			pageobj.patrol();
 		}
@@ -134,14 +124,10 @@ Twinkle.copyvio.callbacks = {
 		var text = pageobj.getPageText();
 		var output = '';
 		var date = new Date();
-
-		var dateHeaderRegex = new RegExp('^===+\\s*' + (date.getUTCMonth() + 1) + '月' + date.getUTCDate() + '日' +
-				'\\s*===+', 'mg');
-
+		var dateHeaderRegex = new RegExp('^===+\\s*' + (date.getUTCMonth() + 1) + '月' + date.getUTCDate() + '日\\s*===+', 'mg');
 		if (!dateHeaderRegex.exec(text)) {
 			output = '\n\n===' + (date.getUTCMonth() + 1) + '月' + date.getUTCDate() + '日===';
 		}
-
 		output += '\n{{subst:CopyvioVFDRecord|' + mw.config.get('wgPageName') + '}}';
 		pageobj.setAppendText(output);
 		pageobj.setEditSummary('加入[[' + mw.config.get('wgPageName') + ']]');
@@ -150,25 +136,23 @@ Twinkle.copyvio.callbacks = {
 		pageobj.append();
 	}
 };
-
 Twinkle.copyvio.callback.evaluate = function (e) {
 	mw.config.set('wgPageName', mw.config.get('wgPageName').replace(/_/g, ' '));
-
 	var source = e.target.source.value;
 	var usertalk = e.target.notify.checked;
-
 	Morebits.simpleWindow.setButtonsEnabled(false);
 	Morebits.status.init(e.target);
-
 	if (!source.trim()) {
 		Morebits.status.error('错误', '未指定侵权来源');
 		return;
 	}
-
 	var query, qiuwen_page, qiuwen_api, logpage, params; // eslint-disable-line no-unused-vars
 	logpage = 'Qiuwen:侵权提报';
-	params = { source: source, logpage: logpage, usertalk: usertalk };
-
+	params = {
+		source: source,
+		logpage: logpage,
+		usertalk: usertalk
+	};
 	Morebits.wiki.addCheckpoint();
 	// Updating data for the action completed event
 	Morebits.wiki.actionCompleted.redirect = mw.config.get('wgPageName');
@@ -178,10 +162,8 @@ Twinkle.copyvio.callback.evaluate = function (e) {
 	qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'), '加入侵权模板到页面');
 	qiuwen_page.setCallbackParameters(params);
 	qiuwen_page.load(Twinkle.copyvio.callbacks.tryTagging);
-
 	Morebits.wiki.removeCheckpoint();
 };
-
 Twinkle.addInitCallback(Twinkle.copyvio, 'copyvio');
 }(jQuery));
 

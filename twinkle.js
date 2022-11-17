@@ -12,7 +12,7 @@
 // <nowiki>
 /**
  * +-------------------------------------------------------+
- * |          === WARNING: GLOBAL GADGET FILE ===          |
+ * |         === WARNING: GLOBAL GADGET FILE ===           |
  * |        Changes to this page affect many users.        |
  * |  Please discuss changes at Talk page before editing.  |
  * +-------------------------------------------------------+
@@ -28,15 +28,15 @@
 
 /* global Morebits */
 
-(function (window, document, $) { // Wrap with anonymous function
+(function (window, document, $) {
+// Wrap with anonymous function
 
 // Check if account is experienced enough to use Twinkle
 if (!Morebits.userIsInGroup('autoconfirmed') && !Morebits.userIsInGroup('confirmed') && !Morebits.userIsInGroup('senioreditor') && !Morebits.userIsInGroup('sysop') && !Morebits.userIsInGroup('steward')) {
 	return;
 }
-
 var Twinkle = {};
-window.Twinkle = Twinkle;  // allow global access
+window.Twinkle = Twinkle; // allow global access
 
 Twinkle.initCallbacks = [];
 /**
@@ -47,9 +47,11 @@ Twinkle.initCallbacks = [];
  * If name is not given, module is loaded unconditionally.
  */
 Twinkle.addInitCallback = function twinkleAddInitCallback(func, name) {
-	Twinkle.initCallbacks.push({ func: func, name: name });
+	Twinkle.initCallbacks.push({
+		func: func,
+		name: name
+	});
 };
-
 Twinkle.defaultConfig = {};
 /**
  * This holds the default set of preferences used by Twinkle.
@@ -63,18 +65,16 @@ Twinkle.defaultConfig = {
 	// General
 	userTalkPageMode: 'tab',
 	dialogLargeFont: false,
-	disabledModules: Morebits.userIsSysop ? [] : [ 'block' ], // default to disable block for non-sysop, if enable manually, they can only use it to tag userpage
+	disabledModules: Morebits.userIsSysop ? [] : [ 'block' ],
+	// default to disable block for non-sysop, if enable manually, they can only use it to tag userpage
 	disabledSysopModules: [],
-
 	// ARV
 	spiWatchReport: 'yes',
-
 	// Block
 	defaultToBlock64: false,
 	defaultToPartialBlocks: false,
 	blankTalkpageOnIndefBlock: false,
 	customBlockReasonList: [],
-
 	// Fluff (revert and rollback)
 	autoMenuAfterRollback: false,
 	openTalkPage: [ 'agf', 'norm', 'vand' ],
@@ -88,24 +88,20 @@ Twinkle.defaultConfig = {
 	confirmOnMobileFluff: true,
 	showRollbackLinks: [ 'diff', 'others' ],
 	customRevertSummary: [],
-
 	// DI (twinkleimage)
 	notifyUserOnDeli: true,
 	deliWatchPage: '1 month',
 	deliWatchUser: '1 month',
-
 	// Protect
 	watchRequestedPages: 'yes',
 	watchPPTaggedPages: 'default',
 	watchProtectedPages: 'default',
-
 	// CSD
 	speedySelectionStyle: 'buttonClick',
 	watchSpeedyPages: [ 'g1', 'g3', 'g4', 'g7', 'g8' ],
 	watchSpeedyExpiry: '1 month',
 	markSpeedyPagesAsPatrolled: false,
 	watchSpeedyUser: '1 month',
-
 	// these next two should probably be identical by default
 	notifyUserOnSpeedyDeletionNomination: [ 'db', 'g1', 'g2', 'g3', 'g4', 'g5', 'g6', 'g7', 'g8', 'g9', 'a1', 'a2', 'a3', 'r1', 'r2', 'f1', 'f2', 'o1', 'o2', 'o3' ],
 	warnUserOnSpeedyDelete: [ 'db', 'g1', 'g2', 'g3', 'g4', 'g5', 'g6', 'g7', 'g8', 'g9', 'a1', 'a2', 'a3', 'r1', 'r2', 'f1', 'f2', 'o1', 'o2', 'o3' ],
@@ -118,17 +114,14 @@ Twinkle.defaultConfig = {
 	logSpeedyNominations: true,
 	speedyLogPageName: 'CSD日志',
 	noLogOnSpeedyNomination: [ 'o1' ],
-
 	// Unlink
 	unlinkNamespaces: [ '0', '10', '118' ],
-
 	// Warn
 	defaultWarningGroup: '1',
 	combinedSingletMenus: false,
 	watchWarnings: '1 month',
 	oldSelect: false,
 	customWarningList: [],
-
 	// XfD
 	logXfdNominations: true,
 	xfdLogPageName: 'XfD日志',
@@ -144,25 +137,24 @@ Twinkle.defaultConfig = {
 	afdFameDefaultReason: '没有足够的可靠来源证明此条目符合[[Qiuwen:收录标准|收录标准]]',
 	afdSubstubDefaultReason: '過期小小作品',
 	XfdClose: Morebits.userIsSysop ? 'all' : 'hide',
-
 	// Copyvio
 	copyvioWatchPage: 'yes',
 	copyvioWatchUser: 'yes',
 	markCopyvioPagesAsPatrolled: true,
 	// Hidden preferences
-	autolevelStaleDays: 3, // Huggle is 3, CBNG is 2
-	revertMaxRevisions: 50, // intentionally limited
+	autolevelStaleDays: 3,
+	// Huggle is 3, CBNG is 2
+	revertMaxRevisions: 50,
+	// intentionally limited
 	batchMax: 5000,
 	batchChunks: 50,
 	configPage: 'Help:Twinkle/参数设置',
 	projectNamespaceName: mw.config.get('wgFormattedNamespaces')[4],
 	sandboxPage: 'Qiuwen:沙盒',
-
 	// Deprecated options, as a fallback for add-on scripts/modules
 	summaryAd: '（[[H:TW|Twinkle]]）',
 	deletionSummaryAd: '（[[H:TW|Twinkle]]）',
 	protectionSummaryAd: '（[[H:TW|Twinkle]]）',
-
 	// Formerly defaultConfig.friendly:
 	// Tag
 	groupByDefault: true,
@@ -175,20 +167,18 @@ Twinkle.defaultConfig = {
 	customTagList: [],
 	customFileTagList: [],
 	customRedirectTagList: [],
-
 	// Stub
 	watchStubbedPages: false,
 	markStubbedPagesAsMinor: false,
 	markStubbedPagesAsPatrolled: true,
 	stubArticleSortOrder: 'cat',
 	customStubList: [],
-
 	// Talkback
 	markTalkbackAsMinor: true,
-	insertTalkbackSignature: true,  // always sign talkback templates
+	insertTalkbackSignature: true,
+	// always sign talkback templates
 	talkbackHeading: '来自' + mw.config.get('wgUserName') + '的新邮件',
 	mailHeading: '您收到了一封邮件！',
-
 	// Shared
 	markSharedIPAsMinor: true
 };
@@ -217,7 +207,6 @@ switch (mw.config.get('skin')) {
 		Twinkle.defaultConfig.portletType = null;
 		Twinkle.defaultConfig.portletNext = null;
 }
-
 Twinkle.getPref = function twinkleGetPref(name) {
 	if (typeof Twinkle.prefs === 'object' && Twinkle.prefs[name] !== undefined) {
 		return Twinkle.prefs[name];
@@ -267,7 +256,6 @@ Twinkle.addPortlet = function (navigation, id, text, type, nextnodeid) {
 	if (!root) {
 		return null;
 	}
-
 	var item = document.getElementById(id);
 	if (item) {
 		if (item.parentNode && item.parentNode === root) {
@@ -275,7 +263,6 @@ Twinkle.addPortlet = function (navigation, id, text, type, nextnodeid) {
 		}
 		return null;
 	}
-
 	var nextnode;
 	if (nextnodeid) {
 		nextnode = document.getElementById(nextnodeid);
@@ -283,9 +270,10 @@ Twinkle.addPortlet = function (navigation, id, text, type, nextnodeid) {
 
 	// verify/normalize input
 	var skin = mw.config.get('skin');
-	if ((skin !== 'vector' && skin !== 'vector-2022') || (navigation !== 'left-navigation' && navigation !== 'right-navigation')) {
+	if (skin !== 'vector' && skin !== 'vector-2022' || navigation !== 'left-navigation' && navigation !== 'right-navigation') {
 		type = null; // menu supported only in vector's #left-navigation & #right-navigation
 	}
+
 	var outerNavClass, innerDivClass;
 	switch (skin) {
 		case 'vector':
@@ -323,11 +311,9 @@ Twinkle.addPortlet = function (navigation, id, text, type, nextnodeid) {
 	} else {
 		root.appendChild(outerNav);
 	}
-
 	var h3 = document.createElement('h3');
 	h3.id = id + '-label';
 	var ul = document.createElement('ul');
-
 	if (skin === 'vector' || skin === 'vector-2022') {
 		ul.className = 'vector-menu-content-list';
 		h3.className = 'vector-menu-heading';
@@ -346,23 +332,18 @@ Twinkle.addPortlet = function (navigation, id, text, type, nextnodeid) {
 			var span = document.createElement('span');
 			span.appendChild(document.createTextNode(text));
 			h3.appendChild(span);
-
 			var a = document.createElement('a');
 			a.href = '#';
-
 			$(a).on('click', function (e) {
 				e.preventDefault();
 			});
-
 			h3.appendChild(a);
 		}
 	} else {
 		// Basically just Timeless
 		h3.appendChild(document.createTextNode(text));
 	}
-
 	outerNav.appendChild(h3);
-
 	if (innerDivClass) {
 		var innerDiv = document.createElement('div');
 		innerDiv.className = innerDivClass;
@@ -371,9 +352,7 @@ Twinkle.addPortlet = function (navigation, id, text, type, nextnodeid) {
 	} else {
 		outerNav.appendChild(ul);
 	}
-
 	return outerNav;
-
 };
 
 /**
@@ -411,43 +390,41 @@ var scriptpathbefore = mw.util.wikiScript('index') + '?title=',
 $.ajax({
 	url: scriptpathbefore + 'User:' + encodeURIComponent(mw.config.get('wgUserName')) + '/twinkleoptions.js' + scriptpathafter,
 	dataType: 'text'
-})
-	.fail(function () {
-		mw.notify('Could not load your Twinkle preferences, resorting to default preferences');
-	})
-	.done(function (optionsText) {
+}).fail(function () {
+	mw.notify('Could not load your Twinkle preferences, resorting to default preferences');
+}).done(function (optionsText) {
+	// Quick pass if user has no options
+	if (optionsText === '') {
+		return;
+	}
 
-		// Quick pass if user has no options
-		if (optionsText === '') {
-			return;
-		}
+	// Twinkle options are basically a JSON object with some comments. Strip those:
+	optionsText = optionsText.replace(/(?:^(?:\/\/[^\n]*\n)*\n*|(?:\/\/[^\n]*(?:\n|$))*$)/g, '');
 
-		// Twinkle options are basically a JSON object with some comments. Strip those:
-		optionsText = optionsText.replace(/(?:^(?:\/\/[^\n]*\n)*\n*|(?:\/\/[^\n]*(?:\n|$))*$)/g, '');
-
-		// First version of options had some boilerplate code to make it eval-able -- strip that too. This part may become obsolete down the line.
-		if (optionsText.lastIndexOf('window.Twinkle.prefs = ', 0) === 0) {
-			optionsText = optionsText.replace(/(?:^window.Twinkle.prefs = |;\n*$)/g, '');
-		}
-
-		try {
-			var options = JSON.parse(optionsText);
-			if (options) {
-				if (options.twinkle || options.friendly) { // Old preferences format
-					Twinkle.prefs = $.extend(options.twinkle, options.friendly);
-				} else {
-					Twinkle.prefs = options;
-				}
-				// v2 established after unification of Twinkle/Friendly objects
-				Twinkle.prefs.optionsVersion = Twinkle.prefs.optionsVersion || 1;
+	// First version of options had some boilerplate code to make it eval-able -- strip that too. This part may become obsolete down the line.
+	if (optionsText.lastIndexOf('window.Twinkle.prefs = ', 0) === 0) {
+		optionsText = optionsText.replace(/(?:^window.Twinkle.prefs = |;\n*$)/g, '');
+	}
+	try {
+		var options = JSON.parse(optionsText);
+		if (options) {
+			if (options.twinkle || options.friendly) {
+				// Old preferences format
+				Twinkle.prefs = $.extend(options.twinkle, options.friendly);
+			} else {
+				Twinkle.prefs = options;
 			}
-		} catch (e) {
-			mw.notify('未能解析您的Twinkle参数设置', { type: 'error' });
+			// v2 established after unification of Twinkle/Friendly objects
+			Twinkle.prefs.optionsVersion = Twinkle.prefs.optionsVersion || 1;
 		}
-	})
-	.always(function () {
-		$(Twinkle.load);
-	});
+	} catch (e) {
+		mw.notify('未能解析您的Twinkle参数设置', {
+			type: 'error'
+		});
+	}
+}).always(function () {
+	$(Twinkle.load);
+});
 
 // Developers: you can import custom Twinkle modules here
 // For example, mw.loader.load(scriptpathbefore + "User:UncleDouggie/morebits-test.js" + scriptpathafter);
@@ -459,8 +436,7 @@ Twinkle.load = function () {
 	if (Morebits.userIsSysop) {
 		activeSpecialPageList = activeSpecialPageList.concat([ 'DeletedContributions', 'Prefixindex', 'BrokenRedirects' ]);
 	}
-	if (mw.config.get('wgNamespaceNumber') === -1 &&
-			activeSpecialPageList.indexOf(mw.config.get('wgCanonicalSpecialPageName')) === -1) {
+	if (mw.config.get('wgNamespaceNumber') === -1 && activeSpecialPageList.indexOf(mw.config.get('wgCanonicalSpecialPageName')) === -1) {
 		return;
 	}
 
@@ -471,7 +447,6 @@ Twinkle.load = function () {
 
 	// Set custom Api-User-Agent header, for server-side logging purposes
 	Morebits.wiki.api.setApiUserAgent('Twinkle/' + mw.config.get('wgWikiID'));
-
 	Twinkle.disabledModules = Twinkle.getPref('disabledModules').concat(Twinkle.getPref('disabledSysopModules'));
 
 	// Redefine addInitCallback so that any modules being loaded now on are directly
@@ -488,8 +463,7 @@ Twinkle.load = function () {
 
 	// Increases text size in Twinkle dialogs, if so configured
 	if (Twinkle.getPref('dialogLargeFont')) {
-		mw.util.addCSS('.morebits-dialog-content, .morebits-dialog-footerlinks { font-size: 100% !important; } ' +
-				'.morebits-dialog input, .morebits-dialog select, .morebits-dialog-content button { font-size: inherit !important; }');
+		mw.util.addCSS('.morebits-dialog-content, .morebits-dialog-footerlinks { font-size: 100% !important; } .morebits-dialog input, .morebits-dialog select, .morebits-dialog-content button { font-size: inherit !important; }');
 	}
 
 	// Hide the lingering space if the TW menu is empty
@@ -556,7 +530,6 @@ Twinkle.generateBatchPageLinks = function (checkbox) {
 	link.setAttribute('target', '_blank');
 	$checkbox.next().prepend([ link, ' ' ]);
 };
-
 }(window, document, jQuery)); // End wrap with anonymous function
 
 // </nowiki>

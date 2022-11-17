@@ -11,8 +11,8 @@
 /* Twinkle.js - twinkleblock.js */
 // <nowiki>
 (function ($) {
-
-var api = new mw.Api(), relevantUserName = mw.config.get('wgRelevantUserName');
+var api = new mw.Api(),
+	relevantUserName = mw.config.get('wgRelevantUserName');
 var menuFormattedNamespaces = $.extend({}, mw.config.get('wgFormattedNamespaces'));
 menuFormattedNamespaces[0] = '（条目）';
 var blockActionText = {
@@ -22,31 +22,26 @@ var blockActionText = {
 };
 
 /*
-	 ****************************************
-	 *** twinkleblock.js: Block module
-	 ****************************************
-	 * Mode of invocation:     Tab ("Block")
-	 * Active on:              Any page with relevant user name (userspace, contribs, etc.)
-	 */
+ ****************************************
+ *** twinkleblock.js: Block module
+ ****************************************
+ * Mode of invocation:     Tab ("Block")
+ * Active on:              Any page with relevant user name (userspace, contribs, etc.)
+ */
 
 Twinkle.block = function twinkleblock() {
 	// should show on Contributions or Block pages, anywhere there's a relevant user
-	if (relevantUserName &&
-			(Morebits.userIsSysop || !mw.util.isIPAddress(relevantUserName, true))) {
+	if (relevantUserName && (Morebits.userIsSysop || !mw.util.isIPAddress(relevantUserName, true))) {
 		Twinkle.addPortletLink(Twinkle.block.callback, '封禁', 'tw-block', '封禁相关用户');
 	}
 };
-
 Twinkle.block.callback = function twinkleblockCallback() {
-	if (relevantUserName === mw.config.get('wgUserName') &&
-				!confirm('您即将对自己执行封禁相关操作！确认要继续吗？')) {
+	if (relevantUserName === mw.config.get('wgUserName') && !confirm('您即将对自己执行封禁相关操作！确认要继续吗？')) {
 		return;
 	}
-
 	Twinkle.block.currentBlockInfo = undefined;
 	Twinkle.block.field_block_options = {};
 	Twinkle.block.field_template_options = {};
-
 	var Window = new Morebits.simpleWindow(650, 530);
 	// need to be verbose about who we're blocking
 	Window.setTitle('封禁或向' + relevantUserName + '发出封禁模板');
@@ -54,7 +49,6 @@ Twinkle.block.callback = function twinkleblockCallback() {
 	Window.addFooterLink('封禁方针', 'QW:BLOCK');
 	Window.addFooterLink('封禁设置', 'H:TW/PREF#封禁');
 	Window.addFooterLink('Twinkle帮助', 'H:TW/DOC#封禁');
-
 	var form = new Morebits.quickForm(Twinkle.block.callback.evaluate);
 	var actionfield = form.append({
 		type: 'field',
@@ -64,63 +58,75 @@ Twinkle.block.callback = function twinkleblockCallback() {
 		type: 'checkbox',
 		name: 'actiontype',
 		event: Twinkle.block.callback.change_action,
-		list: [
-			{
-				label: '封禁用户',
-				value: 'block',
-				tooltip: '用选择的选项全站封禁相关用户，如果未勾选部分封禁则为全站封禁。',
-				hidden: !Morebits.userIsSysop,
-				checked: Morebits.userIsSysop
-			},
-			{
-				label: '部分封禁',
-				value: 'partial',
-				tooltip: '启用部分封禁及部分封禁模板。',
-				hidden: !Morebits.userIsSysop,
-				checked: Twinkle.getPref('defaultToPartialBlocks')
-			},
-			{
-				label: '加入封禁模板到用户讨论页',
-				value: 'template',
-				tooltip: '如果执行封禁的管理员忘记发出封禁模板，或你封禁了用户而没有给其发出模板，则你可以用此来发出合适的模板。勾选部分封禁以使用部分封禁模板。',
-				hidden: !Morebits.userIsSysop,
-				checked: Morebits.userIsSysop
-			},
-			{
-				label: '标记用户页',
-				value: 'tag',
-				tooltip: '将用户页替换成相关的标记模板，仅限永久封禁使用。',
-				hidden: true,
-				checked: !Morebits.userIsSysop
-			},
-			{
-				label: '保护用户页',
-				value: 'protect',
-				tooltip: '全保护用户页，仅限永久封禁使用。',
-				hidden: true
-			},
-			{
-				label: '解除封禁用户',
-				value: 'unblock',
-				tooltip: '解除封禁相关用户。',
-				hidden: !Morebits.userIsSysop
-			}
-		]
+		list: [ {
+			label: '封禁用户',
+			value: 'block',
+			tooltip: '用选择的选项全站封禁相关用户，如果未勾选部分封禁则为全站封禁。',
+			hidden: !Morebits.userIsSysop,
+			checked: Morebits.userIsSysop
+		}, {
+			label: '部分封禁',
+			value: 'partial',
+			tooltip: '启用部分封禁及部分封禁模板。',
+			hidden: !Morebits.userIsSysop,
+			checked: Twinkle.getPref('defaultToPartialBlocks')
+		}, {
+			label: '加入封禁模板到用户讨论页',
+			value: 'template',
+			tooltip: '如果执行封禁的管理员忘记发出封禁模板，或你封禁了用户而没有给其发出模板，则你可以用此来发出合适的模板。勾选部分封禁以使用部分封禁模板。',
+			hidden: !Morebits.userIsSysop,
+			checked: Morebits.userIsSysop
+		}, {
+			label: '标记用户页',
+			value: 'tag',
+			tooltip: '将用户页替换成相关的标记模板，仅限永久封禁使用。',
+			hidden: true,
+			checked: !Morebits.userIsSysop
+		}, {
+			label: '保护用户页',
+			value: 'protect',
+			tooltip: '全保护用户页，仅限永久封禁使用。',
+			hidden: true
+		}, {
+			label: '解除封禁用户',
+			value: 'unblock',
+			tooltip: '解除封禁相关用户。',
+			hidden: !Morebits.userIsSysop
+		} ]
 	});
-
-	form.append({ type: 'field', label: '默认', name: 'field_preset' });
-	form.append({ type: 'field', label: '模板选项', name: 'field_template_options' });
-	form.append({ type: 'field', label: '封禁选项', name: 'field_block_options' });
-	form.append({ type: 'field', label: '标记用户页', name: 'field_tag_options' });
-	form.append({ type: 'field', label: '解除封禁选项', name: 'field_unblock_options' });
-
-	form.append({ type: 'submit', label: '提交' });
-
+	form.append({
+		type: 'field',
+		label: '默认',
+		name: 'field_preset'
+	});
+	form.append({
+		type: 'field',
+		label: '模板选项',
+		name: 'field_template_options'
+	});
+	form.append({
+		type: 'field',
+		label: '封禁选项',
+		name: 'field_block_options'
+	});
+	form.append({
+		type: 'field',
+		label: '标记用户页',
+		name: 'field_tag_options'
+	});
+	form.append({
+		type: 'field',
+		label: '解除封禁选项',
+		name: 'field_unblock_options'
+	});
+	form.append({
+		type: 'submit',
+		label: '提交'
+	});
 	var result = form.render();
 	Window.setContent(result);
 	Window.display();
 	result.root = result;
-
 	Twinkle.block.fetchUserInfo(function () {
 		if (Twinkle.block.isRegistered) {
 			var $form = $(result);
@@ -139,10 +145,8 @@ Twinkle.block.callback = function twinkleblockCallback() {
 		result.actiontype[0].dispatchEvent(evt);
 	});
 };
-
 Twinkle.block.fetchUserInfo = function twinkleblockFetchUserInfo(fn) {
 	var userName = relevantUserName;
-
 	var query = {
 		format: 'json',
 		action: 'query',
@@ -158,47 +162,40 @@ Twinkle.block.fetchUserInfo = function twinkleblockFetchUserInfo(fn) {
 	} else {
 		query.bkusers = userName;
 	}
-	api.get(query)
-		.then(function (data) {
-			var blockinfo = data.query.blocks[0],
-				userinfo = data.query.users[0];
-
-			Twinkle.block.isRegistered = !!userinfo.userid;
-			if (Twinkle.block.isRegistered) {
-				relevantUserName = 'User:' + userName;
-				Twinkle.block.userIsBot = !!userinfo.groupmemberships && userinfo.groupmemberships.map(function (e) {
-					return e.group;
-				}).indexOf('bot') !== -1;
-			} else {
-				relevantUserName = userName;
-				Twinkle.block.userIsBot = false;
-			}
-
-			if (blockinfo) {
-				// handle frustrating system of inverted boolean values
-				blockinfo.disabletalk = blockinfo.allowusertalk === undefined;
-				blockinfo.hardblock = blockinfo.anononly === undefined;
-				Twinkle.block.currentBlockInfo = blockinfo;
-			}
-
-			Twinkle.block.hasBlockLog = !!data.query.logevents.length;
-			// Used later to check if block status changed while filling out the form and display block info in window
-			Twinkle.block.blockLogId = Twinkle.block.hasBlockLog ? data.query.logevents[0].logid : false;
-			// Only use block or reblock log
-			Twinkle.block.recentBlockLog = data.query.logevents.length >= 1 && data.query.logevents[0].action !== 'unblock' ?
-				data.query.logevents[0] :
-				data.query.logevents.length >= 2 ? data.query.logevents[1] : null;
-			// Only ongoing block could be unblocked
-			Twinkle.block.manualUnblock = Twinkle.block.hasBlockLog && data.query.logevents[0].action === 'unblock';
-			if (typeof fn === 'function') {
-				return fn();
-			}
-		}, function (msg) {
-			Morebits.status.init($('div[name="currentblock"] span').last()[0]);
-			Morebits.status.warn('抓取用户信息出错', msg);
-		});
+	api.get(query).then(function (data) {
+		var blockinfo = data.query.blocks[0],
+			userinfo = data.query.users[0];
+		Twinkle.block.isRegistered = !!userinfo.userid;
+		if (Twinkle.block.isRegistered) {
+			relevantUserName = 'User:' + userName;
+			Twinkle.block.userIsBot = !!userinfo.groupmemberships && userinfo.groupmemberships.map(function (e) {
+				return e.group;
+			}).indexOf('bot') !== -1;
+		} else {
+			relevantUserName = userName;
+			Twinkle.block.userIsBot = false;
+		}
+		if (blockinfo) {
+			// handle frustrating system of inverted boolean values
+			blockinfo.disabletalk = blockinfo.allowusertalk === undefined;
+			blockinfo.hardblock = blockinfo.anononly === undefined;
+			Twinkle.block.currentBlockInfo = blockinfo;
+		}
+		Twinkle.block.hasBlockLog = !!data.query.logevents.length;
+		// Used later to check if block status changed while filling out the form and display block info in window
+		Twinkle.block.blockLogId = Twinkle.block.hasBlockLog ? data.query.logevents[0].logid : false;
+		// Only use block or reblock log
+		Twinkle.block.recentBlockLog = data.query.logevents.length >= 1 && data.query.logevents[0].action !== 'unblock' ? data.query.logevents[0] : data.query.logevents.length >= 2 ? data.query.logevents[1] : null;
+		// Only ongoing block could be unblocked
+		Twinkle.block.manualUnblock = Twinkle.block.hasBlockLog && data.query.logevents[0].action === 'unblock';
+		if (typeof fn === 'function') {
+			return fn();
+		}
+	}, function (msg) {
+		Morebits.status.init($('div[name="currentblock"] span').last()[0]);
+		Morebits.status.warn('抓取用户信息出错', msg);
+	});
 };
-
 Twinkle.block.callback.saveFieldset = function twinkleblockCallbacksaveFieldset(fieldset) {
 	Twinkle.block[$(fieldset).prop('name')] = {};
 	$(fieldset).serializeArray().forEach(function (el) {
@@ -207,9 +204,13 @@ Twinkle.block.callback.saveFieldset = function twinkleblockCallbacksaveFieldset(
 		Twinkle.block[$(fieldset).prop('name')][el.name] = el.value;
 	});
 };
-
 Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction(e) {
-	var field_preset, field_template_options, field_block_options, field_tag_options, field_unblock_options, $form = $(e.target.form);
+	var field_preset,
+		field_template_options,
+		field_block_options,
+		field_tag_options,
+		field_unblock_options,
+		$form = $(e.target.form);
 	// Make ifs shorter
 	var block = $form.find('[name=actiontype][value=block]');
 	var blockBox = block.is(':checked');
@@ -221,7 +222,6 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 	var partialBox = partial.is(':checked');
 	var unblock = $form.find('[name=actiontype][value=unblock]');
 	var blockGroup = partialBox ? Twinkle.block.blockGroupsPartial : Twinkle.block.blockGroups;
-
 	if (e.target.value === 'unblock') {
 		if (!Twinkle.block.currentBlockInfo) {
 			unblock.prop('checked', false);
@@ -238,14 +238,16 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 		unblock.prop('checked', false);
 	}
 	partial.prop('disabled', !blockBox && !templateBox);
-
 	Twinkle.block.callback.saveFieldset($('[name=field_block_options]'));
 	Twinkle.block.callback.saveFieldset($('[name=field_template_options]'));
 	Twinkle.block.callback.saveFieldset($('[name=field_tag_options]'));
 	Twinkle.block.callback.saveFieldset($('[name=field_unblock_options]'));
-
 	if (blockBox) {
-		field_preset = new Morebits.quickForm.element({ type: 'field', label: '默认', name: 'field_preset' });
+		field_preset = new Morebits.quickForm.element({
+			type: 'field',
+			label: '默认',
+			name: 'field_preset'
+		});
 		field_preset.append({
 			type: 'select',
 			name: 'preset',
@@ -253,33 +255,76 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 			event: Twinkle.block.callback.change_preset,
 			list: Twinkle.block.callback.filtered_block_groups(blockGroup)
 		});
-
-		field_block_options = new Morebits.quickForm.element({ type: 'field', label: '封禁选项', name: 'field_block_options' });
-		field_block_options.append({ type: 'div', name: 'currentblock', label: ' ' });
-		field_block_options.append({ type: 'div', name: 'hasblocklog', label: ' ' });
+		field_block_options = new Morebits.quickForm.element({
+			type: 'field',
+			label: '封禁选项',
+			name: 'field_block_options'
+		});
+		field_block_options.append({
+			type: 'div',
+			name: 'currentblock',
+			label: ' '
+		});
+		field_block_options.append({
+			type: 'div',
+			name: 'hasblocklog',
+			label: ' '
+		});
 		field_block_options.append({
 			type: 'select',
 			name: 'expiry_preset',
 			label: '过期时间：',
 			event: Twinkle.block.callback.change_expiry,
-			list: [
-				{ label: '自定义', value: 'custom', selected: true },
-				{ label: '无限期', value: 'infinity' },
-				{ label: '3小时', value: '3 hours' },
-				{ label: '12小时', value: '12 hours' },
-				{ label: '1天', value: '1 day' },
-				{ label: '31小时', value: '31 hours' },
-				{ label: '2天', value: '2 days' },
-				{ label: '3天', value: '3 days' },
-				{ label: '1周', value: '1 week' },
-				{ label: '2周', value: '2 weeks' },
-				{ label: '1个月', value: '1 month' },
-				{ label: '3个月', value: '3 months' },
-				{ label: '6个月', value: '6 months' },
-				{ label: '1年', value: '1 year' },
-				{ label: '2年', value: '2 years' },
-				{ label: '3年', value: '3 years' }
-			]
+			list: [ {
+				label: '自定义',
+				value: 'custom',
+				selected: true
+			}, {
+				label: '无限期',
+				value: 'infinity'
+			}, {
+				label: '3小时',
+				value: '3 hours'
+			}, {
+				label: '12小时',
+				value: '12 hours'
+			}, {
+				label: '1天',
+				value: '1 day'
+			}, {
+				label: '31小时',
+				value: '31 hours'
+			}, {
+				label: '2天',
+				value: '2 days'
+			}, {
+				label: '3天',
+				value: '3 days'
+			}, {
+				label: '1周',
+				value: '1 week'
+			}, {
+				label: '2周',
+				value: '2 weeks'
+			}, {
+				label: '1个月',
+				value: '1 month'
+			}, {
+				label: '3个月',
+				value: '3 months'
+			}, {
+				label: '6个月',
+				value: '6 months'
+			}, {
+				label: '1年',
+				value: '1 year'
+			}, {
+				label: '2年',
+				value: '2 years'
+			}, {
+				label: '3年',
+				value: '3 years'
+			} ]
 		});
 		field_block_options.append({
 			type: 'input',
@@ -288,8 +333,8 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 			tooltip: '您可以使用相对时间，如“1 minute”或“19 days”；或绝对时间，“yyyymmddhhmm”（如“200602011405”是2006年2月1日14:05 UTC。）',
 			value: Twinkle.block.field_block_options.expiry || Twinkle.block.field_template_options.template_expiry
 		});
-
-		if (partialBox) { // Partial block
+		if (partialBox) {
+			// Partial block
 			field_block_options.append({
 				type: 'select',
 				multiple: true,
@@ -309,33 +354,31 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 			$.each(menuFormattedNamespaces, function (number, name) {
 				// Ignore -1: Special; -2: Media; and 2300-2303: Gadget (talk) and Gadget definition (talk)
 				if (number >= 0 && number < 830) {
-					ns.append({ type: 'option', label: name, value: number });
+					ns.append({
+						type: 'option',
+						label: name,
+						value: number
+					});
 				}
 			});
 		}
-
-		var blockoptions = [
-			{
-				checked: Twinkle.block.field_block_options.nocreate,
-				label: '禁止创建账户',
-				name: 'nocreate',
-				value: '1'
-			},
-			{
-				checked: Twinkle.block.field_block_options.noemail,
-				label: '电子邮件停用',
-				name: 'noemail',
-				value: '1'
-			},
-			{
-				checked: Twinkle.block.field_block_options.disabletalk,
-				label: '不能编辑自己的讨论页',
-				name: 'disabletalk',
-				value: '1',
-				tooltip: partialBox ? '如果使用部分封禁，不应选择此项，除非您也想要禁止编辑用户讨论页。' : ''
-			}
-		];
-
+		var blockoptions = [ {
+			checked: Twinkle.block.field_block_options.nocreate,
+			label: '禁止创建账户',
+			name: 'nocreate',
+			value: '1'
+		}, {
+			checked: Twinkle.block.field_block_options.noemail,
+			label: '电子邮件停用',
+			name: 'noemail',
+			value: '1'
+		}, {
+			checked: Twinkle.block.field_block_options.disabletalk,
+			label: '不能编辑自己的讨论页',
+			name: 'disabletalk',
+			value: '1',
+			tooltip: partialBox ? '如果使用部分封禁，不应选择此项，除非您也想要禁止编辑用户讨论页。' : ''
+		} ];
 		if (Twinkle.block.isRegistered) {
 			blockoptions.push({
 				checked: Twinkle.block.field_block_options.autoblock,
@@ -351,21 +394,18 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 				value: '1'
 			});
 		}
-
 		blockoptions.push({
 			checked: Twinkle.block.field_block_options.watchuser,
 			label: '监视该用户的用户页和讨论页',
 			name: 'watchuser',
 			value: '1'
 		});
-
 		blockoptions.push({
 			checked: true,
 			label: '标记当前的破坏中的请求',
 			name: 'closevip',
 			value: '1'
 		});
-
 		field_block_options.append({
 			type: 'checkbox',
 			name: 'blockoptions',
@@ -389,61 +429,59 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 			name: 'filter_see_also',
 			event: Twinkle.block.callback.toggle_see_alsos,
 			style: 'display:inline-block; margin-right:5px',
-			list: [
-				{
-					label: '过滤器日志',
-					checked: false,
-					value: '过滤器日志'
-				}
-			]
+			list: [ {
+				label: '过滤器日志',
+				checked: false,
+				value: '过滤器日志'
+			} ]
 		});
 		field_block_options.append({
 			type: 'checkbox',
 			name: 'deleted_see_also',
 			event: Twinkle.block.callback.toggle_see_alsos,
 			style: 'display:inline-block',
-			list: [
-				{
-					label: '已删除的编辑',
-					checked: false,
-					value: '已删除的编辑'
-				}
-			]
+			list: [ {
+				label: '已删除的编辑',
+				checked: false,
+				value: '已删除的编辑'
+			} ]
 		});
 		field_block_options.append({
 			type: 'checkbox',
 			name: 'filter_see_also',
 			event: Twinkle.block.callback.toggle_see_alsos,
 			style: 'display:inline-block; margin-right:5px',
-			list: [
-				{
-					label: '用户讨论页',
-					checked: false,
-					value: '用户讨论页'
-				}
-			]
+			list: [ {
+				label: '用户讨论页',
+				checked: false,
+				value: '用户讨论页'
+			} ]
 		});
 		field_block_options.append({
 			type: 'checkbox',
 			name: 'filter_see_also',
 			event: Twinkle.block.callback.toggle_see_alsos,
 			style: 'display:inline-block; margin-right:5px',
-			list: [
-				{
-					label: '过去的封禁记录',
-					checked: false,
-					value: '过去的封禁记录'
-				}
-			]
+			list: [ {
+				label: '过去的封禁记录',
+				checked: false,
+				value: '过去的封禁记录'
+			} ]
 		});
-
 		if (Twinkle.block.currentBlockInfo) {
-			field_block_options.append({ type: 'hidden', name: 'reblock', value: '1' });
+			field_block_options.append({
+				type: 'hidden',
+				name: 'reblock',
+				value: '1'
+			});
 		}
 	}
-
 	if (templateBox) {
-		field_template_options = new Morebits.quickForm.element({ type: 'field', label: '模板选项', name: 'field_template_options' });
+		field_template_options = new Morebits.quickForm.element({
+			type: 'field',
+			label: '模板选项',
+			name: 'field_template_options'
+		});
 		field_template_options.append({
 			type: 'select',
 			name: 'template',
@@ -470,7 +508,6 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 			value: '',
 			tooltip: '阻止用户编辑的页面或命名空间的可选说明。'
 		});
-
 		if (!blockBox) {
 			field_template_options.append({
 				type: 'input',
@@ -489,42 +526,37 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 			tooltip: '可选的理由，用于替换默认理由。只在常规封禁模板中有效。',
 			value: Twinkle.block.field_template_options.block_reason
 		});
-
 		if (blockBox) {
 			field_template_options.append({
 				type: 'checkbox',
 				name: 'blank_duration',
-				list: [
-					{
-						label: '不在模板中包含封禁期限',
-						checked: Twinkle.block.field_template_options.blank_duration,
-						tooltip: '模板将会显示“一段时间”而不是具体时长'
-					}
-				]
+				list: [ {
+					label: '不在模板中包含封禁期限',
+					checked: Twinkle.block.field_template_options.blank_duration,
+					tooltip: '模板将会显示“一段时间”而不是具体时长'
+				} ]
 			});
 		} else {
 			field_template_options.append({
 				type: 'checkbox',
-				list: [
-					{
-						label: '不能编辑自己的讨论页',
-						name: 'notalk',
-						checked: Twinkle.block.field_template_options.notalk,
-						tooltip: '用此在保护模板中指明该用户编辑讨论页的权限已被移除'
-					}/* ,
-						{
-							label: '不能发送电子邮件',
-							name: 'noemail_template',
-							checked: Twinkle.block.field_template_options.noemail_template,
-							tooltip: '用此在保护模板中指明该用户发送电子邮件的权限已被移除'
-						},
-						{
-							label: '不能创建账户',
-							name: 'nocreate_template',
-							checked: Twinkle.block.field_template_options.nocreate_template,
-							tooltip: '用此在保护模板中指明该用户创建账户的权限已被移除'
-						} */
-				]
+				list: [ {
+					label: '不能编辑自己的讨论页',
+					name: 'notalk',
+					checked: Twinkle.block.field_template_options.notalk,
+					tooltip: '用此在保护模板中指明该用户编辑讨论页的权限已被移除'
+				} /* ,
+            {
+            label: '不能发送电子邮件',
+            name: 'noemail_template',
+            checked: Twinkle.block.field_template_options.noemail_template,
+            tooltip: '用此在保护模板中指明该用户发送电子邮件的权限已被移除'
+            },
+            {
+            label: '不能创建账户',
+            name: 'nocreate_template',
+            checked: Twinkle.block.field_template_options.nocreate_template,
+            tooltip: '用此在保护模板中指明该用户创建账户的权限已被移除'
+            } */]
 			});
 		}
 
@@ -532,80 +564,74 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 		$previewlink.off('click').on('click', function () {
 			Twinkle.block.callback.preview($form[0]);
 		});
-		$previewlink.css({ cursor: 'pointer' });
-		field_template_options.append({ type: 'div', id: 'blockpreview', label: [ $previewlink[0] ] });
-		field_template_options.append({ type: 'div', id: 'twinkleblock-previewbox', style: 'display: none' });
+		$previewlink.css({
+			cursor: 'pointer'
+		});
+		field_template_options.append({
+			type: 'div',
+			id: 'blockpreview',
+			label: [ $previewlink[0] ]
+		});
+		field_template_options.append({
+			type: 'div',
+			id: 'twinkleblock-previewbox',
+			style: 'display: none'
+		});
 	}
-
 	if ($form.find('[name=actiontype][value=tag]').is(':checked')) {
-		field_tag_options = new Morebits.quickForm.element({ type: 'field', label: '标记用户页', name: 'field_tag_options' });
-
+		field_tag_options = new Morebits.quickForm.element({
+			type: 'field',
+			label: '标记用户页',
+			name: 'field_tag_options'
+		});
 		field_tag_options.append({
 			type: 'checkbox',
 			name: 'tag',
 			label: '选择用户页模板：',
-			list: [
-				{
-					label: '{{Blocked user}}：一般永久封禁',
-					value: 'Blocked user'
-				},
-				{
-					label: '{{Blocked sockpuppet}}：傀儡账户',
-					value: 'Blocked sockpuppet',
-					subgroup: [
-						{
-							name: 'sppUsername',
-							type: 'input',
-							label: '主账户用户名：'
-						},
-						{
-							name: 'sppEvidence',
-							type: 'input',
-							label: '根据……确定：',
-							tooltip: '纯文字或是带[[]]的链接，例如：[[Special:固定链接/xxxxxxxx|用户查核]]'
-						}
-					]
-				},
-				{
-					label: '{{Sockpuppeteer|blocked}}：傀儡主账户',
-					value: 'Sockpuppeteer',
-					subgroup: [
-						{
-							type: 'checkbox',
-							list: [
-								{
-									name: 'spmChecked',
-									value: 'spmChecked',
-									label: '经用户查核确认'
-								}
-							]
-						},
-						{
-							name: 'spmEvidence',
-							type: 'input',
-							label: '额外理由：'
-						}
-					]
-				},
-				{
-					label: '{{Locked global account}}：全域锁定',
-					value: 'Locked global account',
-					subgroup: [
-						{
-							type: 'checkbox',
-							list: [
-								{
-									name: 'lockBlocked',
-									value: 'lockBlocked',
-									label: '亦被本地封禁'
-								}
-							]
-						}
-					]
-				}
-			]
+			list: [ {
+				label: '{{Blocked user}}：一般永久封禁',
+				value: 'Blocked user'
+			}, {
+				label: '{{Blocked sockpuppet}}：傀儡账户',
+				value: 'Blocked sockpuppet',
+				subgroup: [ {
+					name: 'sppUsername',
+					type: 'input',
+					label: '主账户用户名：'
+				}, {
+					name: 'sppEvidence',
+					type: 'input',
+					label: '根据……确定：',
+					tooltip: '纯文字或是带[[]]的链接，例如：[[Special:固定链接/xxxxxxxx|用户查核]]'
+				} ]
+			}, {
+				label: '{{Sockpuppeteer|blocked}}：傀儡主账户',
+				value: 'Sockpuppeteer',
+				subgroup: [ {
+					type: 'checkbox',
+					list: [ {
+						name: 'spmChecked',
+						value: 'spmChecked',
+						label: '经用户查核确认'
+					} ]
+				}, {
+					name: 'spmEvidence',
+					type: 'input',
+					label: '额外理由：'
+				} ]
+			}, {
+				label: '{{Locked global account}}：全域锁定',
+				value: 'Locked global account',
+				subgroup: [ {
+					type: 'checkbox',
+					list: [ {
+						name: 'lockBlocked',
+						value: 'lockBlocked',
+						label: '亦被本地封禁'
+					} ]
+				} ]
+			} ]
 		});
-
 		field_tag_options.append({
 			type: 'input',
 			name: 'category',
@@ -613,10 +639,12 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 			tooltip: '您通常应该使用{{Blocked sockpuppet}}的主账户参数来产生分类，只有单独使用{{Locked global account}}才需填写此项。'
 		});
 	}
-
 	if ($form.find('[name=actiontype][value=unblock]').is(':checked')) {
-		field_unblock_options = new Morebits.quickForm.element({ type: 'field', label: '解除封禁选项', name: 'field_unblock_options' });
-
+		field_unblock_options = new Morebits.quickForm.element({
+			type: 'field',
+			label: '解除封禁选项',
+			name: 'field_unblock_options'
+		});
 		field_unblock_options.append({
 			type: 'textarea',
 			label: '理由（用于封禁日志）：',
@@ -624,7 +652,6 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 			value: Twinkle.block.field_unblock_options.reason
 		});
 	}
-
 	var oldfield;
 	if (field_preset) {
 		oldfield = $form.find('fieldset[name="field_preset"]')[0];
@@ -635,7 +662,6 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 	if (field_block_options) {
 		oldfield = $form.find('fieldset[name="field_block_options"]')[0];
 		oldfield.parentNode.replaceChild(field_block_options.render(), oldfield);
-
 		$form.find('[name=pagerestrictions]').select2({
 			width: '100%',
 			placeholder: '输入要阻止用户编辑的页面',
@@ -644,8 +670,10 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 					return '搜索词汇不完整或无效';
 				}
 			},
-			maximumSelectionLength: 10, // Software limitation [[phab:T202776]]
-			minimumInputLength: 1, // prevent ajax call when empty
+			maximumSelectionLength: 10,
+			// Software limitation [[phab:T202776]]
+			minimumInputLength: 1,
+			// prevent ajax call when empty
 			ajax: {
 				url: mw.util.wikiScript('api'),
 				dataType: 'json',
@@ -683,7 +711,6 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 				});
 			}
 		});
-
 		$form.find('[name=namespacerestrictions]').select2({
 			width: '100%',
 			matcher: Morebits.select2.matchers.wordBeginning,
@@ -693,18 +720,15 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 			templateResult: Morebits.select2.highlightSearchMatches,
 			placeholder: '选择要阻止用户编辑的命名空间'
 		});
-
 		mw.util.addCSS(
 			// Reduce padding
 			'.select2-results .select2-results__option { padding-top: 1px; padding-bottom: 1px; }' +
-				// Adjust font size
-				'.select2-container .select2-dropdown .select2-results { font-size: 13px; }' +
-				'.select2-container .selection .select2-selection__rendered { font-size: 13px; }' +
-				// Remove black border
-				'.select2-container--default.select2-container--focus .select2-selection--multiple { border: 1px solid #aaa; }' +
-				// Make the tiny cross larger
-				'.select2-selection__choice__remove { font-size: 130%; }'
-		);
+      // Adjust font size
+      '.select2-container .select2-dropdown .select2-results { font-size: 13px; } .select2-container .selection .select2-selection__rendered { font-size: 13px; }' +
+      // Remove black border
+      '.select2-container--default.select2-container--focus .select2-selection--multiple { border: 1px solid #aaa; }' +
+      // Make the tiny cross larger
+      '.select2-selection__choice__remove { font-size: 130%; }');
 	} else {
 		$form.find('fieldset[name="field_block_options"]').hide();
 		// Clear select2 options
@@ -730,25 +754,15 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 	} else {
 		$form.find('fieldset[name="field_template_options"]').hide();
 	}
-
 	if (blockBox && Twinkle.block.hasBlockLog) {
-		var $blockloglink = $('<a target="_blank" href="' + mw.util.getUrl('Special:Log', { action: 'view', page: relevantUserName, type: 'block' }) + '">封禁日志</a>)');
-
+		var $blockloglink = $('<a target="_blank" href="' + mw.util.getUrl('Special:Log', {
+			action: 'view',
+			page: relevantUserName,
+			type: 'block'
+		}) + '">封禁日志</a>)');
 		Morebits.status.init($('div[name="hasblocklog"] span').last()[0]);
-		Morebits.status.warn(
-			Twinkle.block.currentBlockInfo ?
-				'封禁详情' :
-				[
-					'此用户曾在',
-					$('<b>' + new Morebits.date(Twinkle.block.recentBlockLog.timestamp).calendar('utc') + '</b>')[0],
-					'被' + Twinkle.block.recentBlockLog.user + '封禁',
-					$('<b>' + Morebits.string.formatTime(Twinkle.block.recentBlockLog.params.duration) + '</b>')[0],
-					Twinkle.block.manualUnblock ? '（手动解封）' : '（自动过期）'
-				],
-			$blockloglink[0]
-		);
+		Morebits.status.warn(Twinkle.block.currentBlockInfo ? '封禁详情' : [ '此用户曾在', $('<b>' + new Morebits.date(Twinkle.block.recentBlockLog.timestamp).calendar('utc') + '</b>')[0], '被' + Twinkle.block.recentBlockLog.user + '封禁', $('<b>' + Morebits.string.formatTime(Twinkle.block.recentBlockLog.params.duration) + '</b>')[0], Twinkle.block.manualUnblock ? '（手动解封）' : '（自动过期）' ], $blockloglink[0]);
 	}
-
 	if (blockBox && Twinkle.block.currentBlockInfo) {
 		Morebits.status.init($('div[name="currentblock"] span').last()[0]);
 		// list=blocks without bkprops (as we do in fetchUerInfo)
@@ -779,35 +793,35 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 };
 
 /*
-	 * Keep alphabetized by key name, Twinkle.block.blockGroups establishes
-	 *    the order they will appear in the interface
-	 *
-	 * Block preset format, all keys accept only 'true' (omit for false) except where noted:
-	 * <title of block template> : {
-	 *   autoblock: <autoblock any IP addresses used (for registered users only)>
-	 *   disabletalk: <disable user from editing their own talk page while blocked>
-	 *   expiry: <string - expiry timestamp, can include relative times like "5 months", "2 weeks" etc, use "infinity" for indefinite>
-	 *   forAnonOnly: <show block option in the interface only if the relevant user is an IP>
-	 *   forRegisteredOnly: <show block option in the interface only if the relevant user is registered>
-	 *   label: <string - label for the option of the dropdown in the interface (keep brief)>
-	 *   noemail: prevent the user from sending email through Special:Emailuser
-	 *   pageParam: <set if the associated block template accepts a page parameter>
-	 *   prependReason: <string - prepends the value of 'reason' to the end of the existing reason, namely for when revoking talk page access>
-	 *   nocreate: <block account creation from the user's IP (for anonymous users only)>
-	 *   nonstandard: <template does not conform to stewardship of WikiProject User Warnings and may not accept standard parameters>
-	 *   reason: <string - block rationale, as would appear in the block log,
-	 *            and the edit summary for when adding block template, unless 'summary' is set>
-	 *   reasonParam: <set if the associated block template accepts a reason parameter>
-	 *   sig: <string - set to ~~~~ if block template does not accept "true" as the value, or set null to omit sig param altogether>
-	 *   summary: <string - edit summary for when adding block template to user's talk page, if not set, 'reason' is used>
-	 *   suppressArticleInSummary: <set to suppress showing the article name in the edit summary, as with attack pages>
-	 *   templateName: <string - name of template to use (instead of key name), entry will be omitted from the Templates list.
-	 *                  (e.g. use another template but with different block options)>
-	 *   useInitialOptions: <when preset is chosen, only change given block options, leave others as they were>
-	 *
-	 * WARNING: 'anononly' and 'allowusertalk' are enabled by default.
-	 *   To disable, set 'hardblock' and 'disabletalk', respectively
-	 */
+ * Keep alphabetized by key name, Twinkle.block.blockGroups establishes
+ *  the order they will appear in the interface
+ *
+ * Block preset format, all keys accept only 'true' (omit for false) except where noted:
+ * <title of block template> : {
+ *   autoblock: <autoblock any IP addresses used (for registered users only)>
+ *   disabletalk: <disable user from editing their own talk page while blocked>
+ *   expiry: <string - expiry timestamp, can include relative times like "5 months", "2 weeks" etc, use "infinity" for indefinite>
+ *   forAnonOnly: <show block option in the interface only if the relevant user is an IP>
+ *   forRegisteredOnly: <show block option in the interface only if the relevant user is registered>
+ *   label: <string - label for the option of the dropdown in the interface (keep brief)>
+ *   noemail: prevent the user from sending email through Special:Emailuser
+ *   pageParam: <set if the associated block template accepts a page parameter>
+ *   prependReason: <string - prepends the value of 'reason' to the end of the existing reason, namely for when revoking talk page access>
+ *   nocreate: <block account creation from the user's IP (for anonymous users only)>
+ *   nonstandard: <template does not conform to stewardship of WikiProject User Warnings and may not accept standard parameters>
+ *   reason: <string - block rationale, as would appear in the block log,
+ *           and the edit summary for when adding block template, unless 'summary' is set>
+ *   reasonParam: <set if the associated block template accepts a reason parameter>
+ *   sig: <string - set to ~~~~ if block template does not accept "true" as the value, or set null to omit sig param altogether>
+ *   summary: <string - edit summary for when adding block template to user's talk page, if not set, 'reason' is used>
+ *   suppressArticleInSummary: <set to suppress showing the article name in the edit summary, as with attack pages>
+ *   templateName: <string - name of template to use (instead of key name), entry will be omitted from the Templates list.
+ *           (e.g. use another template but with different block options)>
+ *   useInitialOptions: <when preset is chosen, only change given block options, leave others as they were>
+ *
+ * WARNING: 'anononly' and 'allowusertalk' are enabled by default.
+ *   To disable, set 'hardblock' and 'disabletalk', respectively
+ */
 Twinkle.block.blockPresetsInfo = {
 	'anonblock': {
 		expiry: '3 days',
@@ -938,7 +952,6 @@ Twinkle.block.blockPresetsInfo = {
 		summary: '您已被禁止编辑求闻百科的部分内容'
 	}
 };
-
 Twinkle.block.blockGroupsUpdated = false;
 Twinkle.block.transformBlockPresets = function twinkleblockTransformBlockPresets() {
 	// supply sensible defaults
@@ -946,13 +959,11 @@ Twinkle.block.transformBlockPresets = function twinkleblockTransformBlockPresets
 		settings.summary = settings.summary || settings.reason;
 		settings.sig = settings.sig !== undefined ? settings.sig : 'yes';
 		settings.indefinite = settings.indefinite || Morebits.string.isInfinity(settings.expiry);
-
 		if (!Twinkle.block.isRegistered && settings.indefinite) {
 			settings.expiry = '1 day';
 		} else {
 			settings.expiry = settings.expiry || '1 day';
 		}
-
 		Twinkle.block.blockPresetsInfo[preset] = settings;
 	});
 	if (!Twinkle.block.blockGroupsUpdated) {
@@ -961,7 +972,9 @@ Twinkle.block.transformBlockPresets = function twinkleblockTransformBlockPresets
 				blockGroup.list = Twinkle.getPref('customBlockReasonList');
 			}
 			$.each(blockGroup.list, function (_, blockPreset) {
-				var value = blockPreset.value, reason = blockPreset.label, newPreset = value + ':' + reason;
+				var value = blockPreset.value,
+					reason = blockPreset.label,
+					newPreset = value + ':' + reason;
 				Twinkle.block.blockPresetsInfo[newPreset] = jQuery.extend(true, {}, Twinkle.block.blockPresetsInfo[value]);
 				Twinkle.block.blockPresetsInfo[newPreset].template = value;
 				if (blockGroup.meta) {
@@ -987,89 +1000,162 @@ Twinkle.block.transformBlockPresets = function twinkleblockTransformBlockPresets
 // These are the groups of presets and defines the order in which they appear. For each list item:
 //   label: <string, the description that will be visible in the dropdown>
 //   value: <string, the key of a preset in blockPresetsInfo>
-Twinkle.block.blockGroups = [
-	{
-		meta: true,
-		label: '封禁模板',
-		list: [
-			{ label: '一般封禁', value: 'uw-block' },
-			{ label: '永久封禁', value: 'uw-blockindef' },
-			{ label: '匿名封禁', value: 'uw-ablock', forAnonOnly: true }
-		]
-	},
-	{
-		label: '一般的封禁理由',
-		list: [
-			{ label: '[[QW:VAN|破坏]]', value: 'uw-vblock' },
-			{ label: '[[QW:VAN|纯粹破坏]]', value: 'uw-blockindef', forRegisteredOnly: true },
-			{ label: '[[QW:NOT#AD|散发广告、宣传或垃圾链接]]', value: 'uw-block' },
-			{ label: '仅[[QW:NOT#AD|散发广告、宣传或垃圾链接]]', value: 'uw-blockindef', forRegisteredOnly: true },
-			{ label: '违反[[QW:3RR|回退不过三原则]]', value: 'uw-3block' },
-			{ label: '无礼的行为、[[QW:NPA|攻击别人]]', value: 'uw-block' },
-			{ label: '[[QW:骚扰|骚扰用户]]', value: 'uw-block' },
-			{ label: '[[QW:POINT|为阐释观点扰乱求闻百科]]', value: 'uw-block' },
-			{ label: '[[QW:GAME|打求闻百科制度擦边球]]', value: 'uw-block' },
-			{ label: '涉嫌[[QW:SOCK|滥用多重账号]] - 根据用户贡献确定', value: 'uw-block', forAnonOnly: true },
-			{ label: '涉嫌[[QW:SOCK|滥用多重账号]] - 用户查核确认', value: 'uw-block', forAnonOnly: true },
-			{ label: '涉嫌[[QW:SOCK|滥用多重账号]] - 根据用户贡献确定', value: 'uw-blockindef', forRegisteredOnly: true },
-			{ label: '涉嫌[[QW:SOCK|滥用多重账号]] - 用户查核确认', value: 'uw-blockindef', forRegisteredOnly: true },
-			{ label: '滥用[[QW:SOCK|傀儡]]', value: 'uw-block', forRegisteredOnly: true },
-			{ label: '屡次增加不实资料', value: 'uw-block' },
-			{ label: '在条目中增加无意义文字', value: 'uw-block' },
-			{ label: '无故删除条目内容', value: 'uw-dblock' },
-			{ label: '多次加入[[QW:COPYVIO|侵犯著作权]]的内容', value: 'uw-block' },
-			{ label: '机器人发生故障并必须紧急停止', value: 'Bot block message', forRegisteredOnly: true }
-			// { label: '剥夺编辑讨论页权限', value: '' }
-		]
-	},
-	{
-		custom: true,
-		label: '自定义的封禁理由'
-	},
-	{
-		label: '用户名封禁',
-		list: [
-			{ label: '', value: 'uw-ublock|误导', forRegisteredOnly: true },
-			{ label: '', value: 'uw-ublock|宣传', forRegisteredOnly: true },
-			{ label: '', value: 'uw-ublock|攻击|或侮辱性', forRegisteredOnly: true },
-			{ label: '', value: 'uw-ublock|混淆', forRegisteredOnly: true }
-		]
-	},
-	{
-		label: '其他模板',
-		list: [
-			{ label: '', value: 'uw-ublock', forRegisteredOnly: true },
-			{ label: '', value: 'anonblock', forAnonOnly: true },
-			{ label: '', value: 'range block', forAnonOnly: true },
-			{ label: '', value: 'school block', forAnonOnly: true },
-			{ label: '', value: 'blocked proxy', forAnonOnly: true },
-			{ label: '', value: 'checkuserblock', forAnonOnly: true },
-			{ label: '', value: 'checkuserblock-account', forRegisteredOnly: true }
-		]
+Twinkle.block.blockGroups = [ {
+	meta: true,
+	label: '封禁模板',
+	list: [ {
+		label: '一般封禁',
+		value: 'uw-block'
+	}, {
+		label: '永久封禁',
+		value: 'uw-blockindef'
+	}, {
+		label: '匿名封禁',
+		value: 'uw-ablock',
+		forAnonOnly: true
+	} ]
+}, {
+	label: '一般的封禁理由',
+	list: [ {
+		label: '[[QW:VAN|破坏]]',
+		value: 'uw-vblock'
+	}, {
+		label: '[[QW:VAN|纯粹破坏]]',
+		value: 'uw-blockindef',
+		forRegisteredOnly: true
+	}, {
+		label: '[[QW:NOT#AD|散发广告、宣传或垃圾链接]]',
+		value: 'uw-block'
+	}, {
+		label: '仅[[QW:NOT#AD|散发广告、宣传或垃圾链接]]',
+		value: 'uw-blockindef',
+		forRegisteredOnly: true
+	}, {
+		label: '违反[[QW:3RR|回退不过三原则]]',
+		value: 'uw-3block'
+	}, {
+		label: '无礼的行为、[[QW:NPA|攻击别人]]',
+		value: 'uw-block'
+	}, {
+		label: '[[QW:骚扰|骚扰用户]]',
+		value: 'uw-block'
+	}, {
+		label: '[[QW:POINT|为阐释观点扰乱求闻百科]]',
+		value: 'uw-block'
+	}, {
+		label: '[[QW:GAME|打求闻百科制度擦边球]]',
+		value: 'uw-block'
+	}, {
+		label: '涉嫌[[QW:SOCK|滥用多重账号]] - 根据用户贡献确定',
+		value: 'uw-block',
+		forAnonOnly: true
+	}, {
+		label: '涉嫌[[QW:SOCK|滥用多重账号]] - 用户查核确认',
+		value: 'uw-block',
+		forAnonOnly: true
+	}, {
+		label: '涉嫌[[QW:SOCK|滥用多重账号]] - 根据用户贡献确定',
+		value: 'uw-blockindef',
+		forRegisteredOnly: true
+	}, {
+		label: '涉嫌[[QW:SOCK|滥用多重账号]] - 用户查核确认',
+		value: 'uw-blockindef',
+		forRegisteredOnly: true
+	}, {
+		label: '滥用[[QW:SOCK|傀儡]]',
+		value: 'uw-block',
+		forRegisteredOnly: true
+	}, {
+		label: '屡次增加不实资料',
+		value: 'uw-block'
+	}, {
+		label: '在条目中增加无意义文字',
+		value: 'uw-block'
+	}, {
+		label: '无故删除条目内容',
+		value: 'uw-dblock'
+	}, {
+		label: '多次加入[[QW:COPYVIO|侵犯著作权]]的内容',
+		value: 'uw-block'
+	}, {
+		label: '机器人发生故障并必须紧急停止',
+		value: 'Bot block message',
+		forRegisteredOnly: true
 	}
-];
-
-Twinkle.block.blockGroupsPartial = [
-	{
-		label: '部分封禁原因',
-		list: [
-			{ label: '部分封禁', value: 'uw-pblock', selected: true }
-		]
-	}
-];
-
+		// { label: '剥夺编辑讨论页权限', value: '' }
+	]
+}, {
+	custom: true,
+	label: '自定义的封禁理由'
+}, {
+	label: '用户名封禁',
+	list: [ {
+		label: '',
+		value: 'uw-ublock|误导',
+		forRegisteredOnly: true
+	}, {
+		label: '',
+		value: 'uw-ublock|宣传',
+		forRegisteredOnly: true
+	}, {
+		label: '',
+		value: 'uw-ublock|攻击|或侮辱性',
+		forRegisteredOnly: true
+	}, {
+		label: '',
+		value: 'uw-ublock|混淆',
+		forRegisteredOnly: true
+	} ]
+}, {
+	label: '其他模板',
+	list: [ {
+		label: '',
+		value: 'uw-ublock',
+		forRegisteredOnly: true
+	}, {
+		label: '',
+		value: 'anonblock',
+		forAnonOnly: true
+	}, {
+		label: '',
+		value: 'range block',
+		forAnonOnly: true
+	}, {
+		label: '',
+		value: 'school block',
+		forAnonOnly: true
+	}, {
+		label: '',
+		value: 'blocked proxy',
+		forAnonOnly: true
+	}, {
+		label: '',
+		value: 'checkuserblock',
+		forAnonOnly: true
+	}, {
+		label: '',
+		value: 'checkuserblock-account',
+		forRegisteredOnly: true
+	} ]
+} ];
+Twinkle.block.blockGroupsPartial = [ {
+	label: '部分封禁原因',
+	list: [ {
+		label: '部分封禁',
+		value: 'uw-pblock',
+		selected: true
+	} ]
+} ];
 Twinkle.block.callback.filtered_block_groups = function twinkleblockCallbackFilteredBlockGroups(group, show_template) {
 	return $.map(group, function (blockGroup) {
 		if (!show_template && blockGroup.meta) {
 			return;
 		}
-
 		var list = $.map(blockGroup.list, function (blockPreset) {
 			// only show uw-talkrevoked if reblocking
 			if (!Twinkle.block.currentBlockInfo && blockPreset.value === 'uw-talkrevoked') {
 				return;
 			}
-
 			var blockSettings = Twinkle.block.blockPresetsInfo[blockPreset.value];
 			var registrationRestrict = blockPreset.forRegisteredOnly ? Twinkle.block.isRegistered : blockPreset.forAnonOnly ? !Twinkle.block.isRegistered : true;
 			if (!(blockSettings.templateName && show_template) && registrationRestrict) {
@@ -1093,19 +1179,16 @@ Twinkle.block.callback.filtered_block_groups = function twinkleblockCallbackFilt
 		}
 	});
 };
-
 Twinkle.block.callback.change_preset = function twinkleblockCallbackChangePreset(e) {
 	var key = e.target.form.preset.value;
 	if (!key) {
 		return;
 	}
-
 	e.target.form.template.value = Twinkle.block.blockPresetsInfo[key].templateName || key;
 	e.target.form.template.value = key;
 	Twinkle.block.callback.update_form(e, Twinkle.block.blockPresetsInfo[key]);
 	Twinkle.block.callback.change_template(e);
 };
-
 Twinkle.block.callback.change_expiry = function twinkleblockCallbackChangeExpiry(e) {
 	var expiry = e.target.form.expiry;
 	if (e.target.value === 'custom') {
@@ -1115,31 +1198,25 @@ Twinkle.block.callback.change_expiry = function twinkleblockCallbackChangeExpiry
 		expiry.value = e.target.value;
 	}
 };
-
 Twinkle.block.seeAlsos = [];
 Twinkle.block.callback.toggle_see_alsos = function twinkleblockCallbackToggleSeeAlso() {
-	var reason = this.form.reason.value.replace(
-		new RegExp('(<!-- )(参见|參見)' + Twinkle.block.seeAlsos.join('、') + '( -->)'), ''
-	);
-
+	var reason = this.form.reason.value.replace(new RegExp('(<!-- )(参见|參見)' + Twinkle.block.seeAlsos.join('、') + '( -->)'), '');
 	Twinkle.block.seeAlsos = Twinkle.block.seeAlsos.filter(function (el) {
 		return el !== this.value;
 	}.bind(this));
-
 	if (this.checked) {
 		Twinkle.block.seeAlsos.push(this.value);
 	}
 	var seeAlsoMessage = Twinkle.block.seeAlsos.join('、');
-
 	if (!Twinkle.block.seeAlsos.length) {
 		this.form.reason.value = reason;
 	} else {
 		this.form.reason.value = reason + '<!-- 参见' + seeAlsoMessage + ' -->';
 	}
 };
-
 Twinkle.block.callback.update_form = function twinkleblockCallbackUpdateForm(e, data) {
-	var form = e.target.form, expiry = data.expiry;
+	var form = e.target.form,
+		expiry = data.expiry;
 
 	// don't override original expiry if useInitialOptions is set
 	if (!data.useInitialOptions) {
@@ -1149,7 +1226,6 @@ Twinkle.block.callback.update_form = function twinkleblockCallbackUpdateForm(e, 
 		} else {
 			form.expiry_preset.value = data.expiry || 'custom';
 		}
-
 		form.expiry.value = expiry;
 		if (form.expiry_preset.value === 'custom') {
 			Morebits.quickForm.setElementVisibility(form.expiry.parentNode, true);
@@ -1166,7 +1242,6 @@ Twinkle.block.callback.update_form = function twinkleblockCallbackUpdateForm(e, 
 	if (Twinkle.block.userIsBot || relevantUserName.search(/bot\b/i) > 0) {
 		data.autoblock = false;
 	}
-
 	$(form).find('[name=field_block_options]').find(':checkbox').each(function (i, el) {
 		// don't override original options if useInitialOptions is set
 		if (data.useInitialOptions && data[el.name] === undefined) {
@@ -1175,21 +1250,19 @@ Twinkle.block.callback.update_form = function twinkleblockCallbackUpdateForm(e, 
 		if (el.name === 'closevip') {
 			return;
 		}
-
 		var check = data[el.name] === '' || !!data[el.name];
 		$(el).prop('checked', check);
 	});
-
 	if (data.prependReason && data.reason) {
 		form.reason.value = data.reason + '; ' + form.reason.value;
 	} else {
 		form.reason.value = data.reason || '';
 	}
 };
-
 Twinkle.block.callback.change_template = function twinkleblockcallbackChangeTemplate(e) {
-	var form = e.target.form, value = form.template.value, settings = Twinkle.block.blockPresetsInfo[value];
-
+	var form = e.target.form,
+		value = form.template.value,
+		settings = Twinkle.block.blockPresetsInfo[value];
 	var blockBox = $(form).find('[name=actiontype][value=block]').is(':checked');
 	var partialBox = $(form).find('[name=actiontype][value=partial]').is(':checked');
 	var templateBox = $(form).find('[name=actiontype][value=template]').is(':checked');
@@ -1216,11 +1289,9 @@ Twinkle.block.callback.change_template = function twinkleblockcallbackChangeTemp
 		// Partial
 		// Morebits.quickForm.setElementVisibility(form.noemail_template.parentNode, partialBox);
 		// Morebits.quickForm.setElementVisibility(form.nocreate_template.parentNode, partialBox);
-	} else if (templateBox) { // Only present if block && template forms both visible
-		Morebits.quickForm.setElementVisibility(
-			form.blank_duration.parentNode,
-			!settings.indefinite && !settings.nonstandard
-		);
+	} else if (templateBox) {
+		// Only present if block && template forms both visible
+		Morebits.quickForm.setElementVisibility(form.blank_duration.parentNode, !settings.indefinite && !settings.nonstandard);
 	}
 
 	// Only particularly relevant if template form is present
@@ -1230,14 +1301,12 @@ Twinkle.block.callback.change_template = function twinkleblockcallbackChangeTemp
 
 	// Partial block
 	Morebits.quickForm.setElementVisibility(form.area.parentNode, partialBox && !blockBox);
-
 	form.root.previewer.closePreview();
 };
 Twinkle.block.prev_template_expiry = null;
 Twinkle.block.prev_block_reason = null;
 Twinkle.block.prev_article = null;
 Twinkle.block.prev_reason = null;
-
 Twinkle.block.callback.preview = function twinkleblockcallbackPreview(form) {
 	var params = {
 		article: form.article.value,
@@ -1255,15 +1324,11 @@ Twinkle.block.callback.preview = function twinkleblockcallbackPreview(form) {
 		// nocreate: form.nocreate.checked || (form.nocreate_template ? form.nocreate_template.checked : false),
 		area: form.area.value
 	};
-
 	var templateText = Twinkle.block.callback.getBlockNoticeWikitext(params);
-
 	form.previewer.beginRender(templateText);
 };
-
 Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate(e) {
 	var params = Morebits.quickForm.getInputData(e.target);
-
 	var $form = $(e.target),
 		toBlock = $form.find('[name=actiontype][value=block]').is(':checked'),
 		toWarn = $form.find('[name=actiontype][value=template]').is(':checked'),
@@ -1271,18 +1336,16 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate(e) {
 		toTag = $form.find('[name=actiontype][value=tag]').is(':checked'),
 		toProtect = $form.find('[name=actiontype][value=protect]').is(':checked'),
 		toUnblock = $form.find('[name=actiontype][value=unblock]').is(':checked'),
-		blockoptions = {}, templateoptions = {}, unblockoptions = {};
-
+		blockoptions = {},
+		templateoptions = {},
+		unblockoptions = {};
 	Twinkle.block.callback.saveFieldset($form.find('[name=field_block_options]'));
 	Twinkle.block.callback.saveFieldset($form.find('[name=field_template_options]'));
 	Twinkle.block.callback.saveFieldset($form.find('[name=field_tag_options]'));
 	Twinkle.block.callback.saveFieldset($form.find('[name=field_unblock_options]'));
-
 	blockoptions = Twinkle.block.field_block_options;
 	unblockoptions = Twinkle.block.field_unblock_options;
-
 	var toClosevip = !!blockoptions.closevip;
-
 	templateoptions = Twinkle.block.field_template_options;
 	templateoptions.disabletalk = !!(templateoptions.disabletalk || blockoptions.disabletalk);
 	templateoptions.hardblock = !!blockoptions.hardblock;
@@ -1319,12 +1382,10 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate(e) {
 			return true;
 		}
 	};
-
 	if (toTag) {
 		if (params.tag.length === 0) {
 			return alert('请至少选择一个用户页标记！');
 		}
-
 		if (checkIncompatible([ 'Blocked user', 'Blocked sockpuppet' ], '{{Blocked sockpuppet}}已涵盖{{Blocked user}}的功能。')) {
 			return;
 		}
@@ -1337,19 +1398,18 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate(e) {
 		if (checkIncompatible([ 'Blocked sockpuppet', 'Sockpuppeteer' ], '请从主账户和分身账户中选择一个。')) {
 			return;
 		}
-
 		if (params.tag.indexOf('Blocked sockpuppet') > -1 && params.sppUsername.trim() === '') {
 			return alert('请提供傀儡账户的主账户用户名！');
 		}
 	}
-
 	if (toBlock) {
 		if (blockoptions.partial) {
 			if (blockoptions.disabletalk && blockoptions.namespacerestrictions.indexOf('3') === -1) {
 				return alert('部分封禁无法阻止编辑自己的讨论页，除非也封禁了User talk命名空间！');
 			}
 			if (!blockoptions.namespacerestrictions && !blockoptions.pagerestrictions) {
-				if (!blockoptions.noemail && !blockoptions.nocreate) { // Blank entries technically allowed [[phab:T208645]]
+				if (!blockoptions.noemail && !blockoptions.nocreate) {
+					// Blank entries technically allowed [[phab:T208645]]
 					return alert('没有选择页面或命名空间，也没有停用电子邮件或禁止创建账户；请选择至少一个选项以应用部分封禁！');
 				} else if (!confirm('您将要进行封禁，但没有阻止任何页面或命名空间的编辑，确定要继续？')) {
 					return;
@@ -1364,7 +1424,6 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate(e) {
 		if (!blockoptions.reason) {
 			return alert('请提供封禁理由！');
 		}
-
 		Morebits.simpleWindow.setButtonsEnabled(false);
 		Morebits.status.init(e.target);
 		var statusElement = new Morebits.status('执行封禁');
@@ -1381,31 +1440,29 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate(e) {
 		}
 
 		/*
-			  Check if block status changed while processing the form.
-
-			  There's a lot to consider here. list=blocks provides the
-			  current block status, but there are at least two issues with
-			  relying on it. First, the id doesn't update on a reblock,
-			  meaning the individual parameters need to be compared. This
-			  can be done roughly with JSON.stringify - we can thankfully
-			  rely on order from the server, although sorting would be
-			  fine if not - but falsey values are problematic and is
-			  non-ideal. More importantly, list=blocks won't indicate if a
-			  non-blocked user is blocked then unblocked. This should be
-			  exceedingy rare, but regardless, we thus need to check
-			  list=logevents, which has a nicely updating logid
-			  parameter. We can't rely just on that, though, since it
-			  doesn't account for blocks that have expired on their own.
-
-			  As such, we use both. Using some ternaries, the logid
-			  variables are false if there's no logevents, so if they
-			  aren't equal we defintely have a changed entry (send
-			  confirmation). If they are equal, then either the user was
-			  never blocked (the block statuses will be equal, no
-			  confirmation) or there's no new block, in which case either
-			  a block expired (different statuses, confirmation) or the
-			  same block is still active (same status, no confirmation).
-			*/
+        Check if block status changed while processing the form.
+       			  There's a lot to consider here. list=blocks provides the
+        current block status, but there are at least two issues with
+        relying on it. First, the id doesn't update on a reblock,
+        meaning the individual parameters need to be compared. This
+        can be done roughly with JSON.stringify - we can thankfully
+        rely on order from the server, although sorting would be
+        fine if not - but falsey values are problematic and is
+        non-ideal. More importantly, list=blocks won't indicate if a
+        non-blocked user is blocked then unblocked. This should be
+        exceedingy rare, but regardless, we thus need to check
+        list=logevents, which has a nicely updating logid
+        parameter. We can't rely just on that, though, since it
+        doesn't account for blocks that have expired on their own.
+       			  As such, we use both. Using some ternaries, the logid
+        variables are false if there's no logevents, so if they
+        aren't equal we defintely have a changed entry (send
+        confirmation). If they are equal, then either the user was
+        never blocked (the block statuses will be equal, no
+        confirmation) or there's no new block, in which case either
+        a block expired (different statuses, confirmation) or the
+        same block is still active (same status, no confirmation).
+       	*/
 		var query = {
 			format: 'json',
 			action: 'query',
@@ -1419,12 +1476,10 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate(e) {
 		} else {
 			query.bkusers = blockoptions.user;
 		}
-
 		api.get(query).then(function (data) {
 			var block = data.query.blocks[0];
 			var logevents = data.query.logevents[0];
 			var logid = data.query.logevents.length ? logevents.logid : false;
-
 			if (logid !== Twinkle.block.blockLogId || !!block !== !!Twinkle.block.currentBlockInfo) {
 				var message = mw.config.get('wgRelevantUserName') + '的封禁状态已被修改。';
 				if (block) {
@@ -1432,7 +1487,6 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate(e) {
 				} else {
 					message += '最新日志：';
 				}
-
 				var logExpiry = '';
 				if (logevents.params.duration) {
 					if (logevents.params.duration === 'infinity') {
@@ -1441,12 +1495,11 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate(e) {
 						var expiryDate = new Morebits.date(logevents.params.expiry);
 						logExpiry += '到' + expiryDate.calendar();
 					}
-				} else { // no duration, action=unblock, just show timestamp
+				} else {
+					// no duration, action=unblock, just show timestamp
 					logExpiry = '于' + new Morebits.date(logevents.timestamp).calendar();
 				}
-				message += '由' + logevents.user + '以“' + logevents.comment + '”' +
-						blockActionText[logevents.action] + logExpiry + '，你想要以你的设置变更封禁吗？';
-
+				message += '由' + logevents.user + '以“' + logevents.comment + '”' + blockActionText[logevents.action] + logExpiry + '，你想要以你的设置变更封禁吗？';
 				if (!confirm(message)) {
 					Morebits.status.error('执行封禁', '用户取消操作');
 					return;
@@ -1474,7 +1527,6 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate(e) {
 	} else if (toWarn) {
 		Morebits.simpleWindow.setButtonsEnabled(false);
 		Morebits.status.init(e.target);
-
 		Twinkle.block.callback.issue_template(templateoptions);
 	}
 	if (toTag || toProtect) {
@@ -1489,7 +1541,6 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate(e) {
 		if (!unblockoptions.reason) {
 			return alert('请提供解除封禁理由！');
 		}
-
 		Morebits.simpleWindow.setButtonsEnabled(false);
 		Morebits.status.init(e.target);
 		var unblockStatusElement = new Morebits.status('执行解除封禁');
@@ -1507,16 +1558,13 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate(e) {
 		return alert('Twinkle没有要执行的任务！');
 	}
 };
-
 Twinkle.block.callback.taguserpage = function twinkleblockCallbackTagUserpage(pageobj) {
 	var params = pageobj.getCallbackParameters();
 	var statelem = pageobj.getStatusElement();
-
 	if (params.actiontype.indexOf('tag') > -1) {
 		var tags = [];
 		params.tag.forEach(function (tag) {
 			var tagtext = '{{' + tag;
-
 			switch (tag) {
 				case 'Blocked user':
 					break;
@@ -1543,17 +1591,13 @@ Twinkle.block.callback.taguserpage = function twinkleblockCallbackTagUserpage(pa
 				default:
 					return alert('未知的用户页模板！');
 			}
-
 			tagtext += '}}';
 			tags.push(tagtext);
 		});
-
 		var text = tags.join('\n');
-
 		if (params.category) {
 			text += '\n[[Category:' + params.category.trim() + '的用户分身]]';
 		}
-
 		pageobj.setPageText(text);
 		pageobj.setEditSummary('标记被永久封禁的用户页');
 		pageobj.setChangeTags(Twinkle.changeTags);
@@ -1566,11 +1610,9 @@ Twinkle.block.callback.taguserpage = function twinkleblockCallbackTagUserpage(pa
 		Twinkle.block.callback.protectuserpage(pageobj);
 	}
 };
-
 Twinkle.block.callback.protectuserpage = function twinkleblockCallbackProtectUserpage(pageobj) {
 	var params = pageobj.getCallbackParameters();
 	var statelem = pageobj.getStatusElement();
-
 	if (params.actiontype.indexOf('protect') > -1) {
 		if (pageobj.exists()) {
 			pageobj.setEditProtection('sysop', 'indefinite');
@@ -1588,16 +1630,13 @@ Twinkle.block.callback.protectuserpage = function twinkleblockCallbackProtectUse
 		statelem.info('全部完成');
 	}
 };
-
 Twinkle.block.callback.issue_template = function twinkleblockCallbackIssueTemplate(formData) {
 	if (Morebits.ip.isRange(relevantUserName)) {
 		// eslint-disable-next-line no-new
 		new Morebits.status('信息', '由于封禁目标为IP段，加入封禁模板已略过', 'warn');
 		return;
 	}
-
 	var userTalkPage = 'User_talk:' + relevantUserName;
-
 	var params = $.extend(formData, {
 		messageData: Twinkle.block.blockPresetsInfo[formData.template],
 		reason: Twinkle.block.field_template_options.block_reason,
@@ -1605,29 +1644,23 @@ Twinkle.block.callback.issue_template = function twinkleblockCallbackIssueTempla
 		// noemail: Twinkle.block.field_template_options.noemail_template,
 		// nocreate: Twinkle.block.field_template_options.nocreate_template
 	});
-	params.template = params.template.split(':', 1)[0];
 
+	params.template = params.template.split(':', 1)[0];
 	Morebits.wiki.actionCompleted.redirect = userTalkPage;
 	Morebits.wiki.actionCompleted.notice = '完成，将在几秒后加载用户讨论页';
-
 	var qiuwen_page = new Morebits.wiki.page(userTalkPage, '用户讨论页修改');
 	qiuwen_page.setCallbackParameters(params);
 	qiuwen_page.setFollowRedirect(true);
 	qiuwen_page.load(Twinkle.block.callback.main);
-
 };
-
 Twinkle.block.callback.closeRequest = function twinkleblockCallbackCloseRequest(vipPage) {
 	var params = vipPage.getCallbackParameters();
 	var text = vipPage.getPageText();
 	var statusElement = vipPage.getStatusElement();
 	var userName = relevantUserName;
-
 	var expiryText = Morebits.string.formatTime(params.expiry);
 	var comment = '{{Blocked|' + (Morebits.string.isInfinity(params.expiry) ? 'indef' : expiryText) + '}}。';
-
 	var requestList = text.split(/(?=\n===.+===\s*\n)/);
-
 	var found = false;
 	var hidename = false;
 	var vipRe = new RegExp('===\\s*{{\\s*[Vv]andal\\s*\\|\\s*(1\\s*=\\s*)?' + Morebits.pageNameRegex(userName) + '\\s*(\\|\\s*hidename\\s*=[^|]+)?}}\\s*===', 'm');
@@ -1635,26 +1668,20 @@ Twinkle.block.callback.closeRequest = function twinkleblockCallbackCloseRequest(
 		if (vipRe.exec(requestList[i])) {
 			hidename = /\|\s*hidename\s*=[^|]+/.test(requestList[i]);
 			requestList[i] = requestList[i].trimRight();
-
 			var newText = requestList[i].replace(/^(\*\s*处理：)[ \t]*(<!-- 非管理員僅可標記已執行的封禁，針對提報的意見請放在下一行 -->)?[ \t]*$/m, '$1' + comment + '--~~~~');
 			if (requestList[i] === newText) {
 				newText = requestList[i] + '\n* 处理：' + comment + '--~~~~';
 			}
-
 			requestList[i] = newText + '\n';
-
 			found = true;
 			break;
 		}
 	}
-
 	if (!found) {
 		statusElement.warn('没有找到相关的请求');
 		return;
 	}
-
 	text = requestList.join('');
-
 	var summary;
 	if (hidename) {
 		summary = '标记为已处理';
@@ -1666,21 +1693,19 @@ Twinkle.block.callback.closeRequest = function twinkleblockCallbackCloseRequest(
 			summary += '封禁' + expiryText;
 		}
 	}
-
 	vipPage.setEditSummary(summary);
 	vipPage.setChangeTags(Twinkle.changeTags);
 	vipPage.setPageText(text);
 	vipPage.save();
 };
-
 Twinkle.block.callback.getBlockNoticeWikitext = function (params, nosign) {
-	var text = '{{', settings = Twinkle.block.blockPresetsInfo[params.template];
+	var text = '{{',
+		settings = Twinkle.block.blockPresetsInfo[params.template];
 	if (!settings.nonstandard) {
 		text += 'subst:' + params.template;
 		if (params.article && settings.pageParam) {
 			text += '|page=' + params.article;
 		}
-
 		if (!/te?mp|^\s*$|min/.exec(params.expiry)) {
 			if (params.indefinite) {
 				text += '|indef=yes';
@@ -1688,11 +1713,9 @@ Twinkle.block.callback.getBlockNoticeWikitext = function (params, nosign) {
 				text += '|time=' + Morebits.string.formatTime(params.expiry);
 			}
 		}
-
 		if (!Twinkle.block.isRegistered && !params.hardblock) {
 			text += '|anon=yes';
 		}
-
 		if (params.reason) {
 			text += '|reason=' + params.reason;
 		}
@@ -1711,7 +1734,6 @@ Twinkle.block.callback.getBlockNoticeWikitext = function (params, nosign) {
 					}
 					var last = array.pop();
 					return array.join('、') + '和' + last;
-
 				};
 				text += '|area=某些';
 				if (params.pagerestrictions.length) {
@@ -1741,7 +1763,6 @@ Twinkle.block.callback.getBlockNoticeWikitext = function (params, nosign) {
 	} else {
 		text += params.template;
 	}
-
 	if ((settings.sig === '~~~~' || settings.sig === undefined) && !nosign) {
 		text += '}}--~~~~';
 	} else if (settings.sig && !nosign) {
@@ -1750,25 +1771,22 @@ Twinkle.block.callback.getBlockNoticeWikitext = function (params, nosign) {
 	} else {
 		text += '}}';
 	}
-
 	return text;
 };
-
 Twinkle.block.callback.main = function twinkleblockcallbackMain(pageobj) {
 	var params = pageobj.getCallbackParameters(),
 		date = new Morebits.date(pageobj.getLoadTime()),
 		messageData = params.messageData,
 		text;
-
 	params.indefinite = Morebits.string.isInfinity(params.expiry);
-
 	if (Twinkle.getPref('blankTalkpageOnIndefBlock') && params.template !== 'uw-lblock' && params.indefinite) {
 		Morebits.status.info('信息', '根据参数设置清空讨论页并为日期创建新二级标题');
 		text = date.monthHeader() + '\n';
 	} else {
 		text = pageobj.getPageText();
-
-		var dateHeaderRegex = date.monthHeaderRegex(), dateHeaderRegexLast, dateHeaderRegexResult;
+		var dateHeaderRegex = date.monthHeaderRegex(),
+			dateHeaderRegexLast,
+			dateHeaderRegexResult;
 		while ((dateHeaderRegexLast = dateHeaderRegex.exec(text)) !== null) {
 			dateHeaderRegexResult = dateHeaderRegexLast;
 		}
@@ -1776,19 +1794,15 @@ Twinkle.block.callback.main = function twinkleblockcallbackMain(pageobj) {
 		// \n== is not found, then the date header must be at the very start of the page. lastIndexOf
 		// returns -1 in this case, so lastHeaderIndex gets set to 0 as desired.
 		var lastHeaderIndex = text.lastIndexOf('\n==') + 1;
-
 		if (text.length > 0) {
 			text += '\n\n';
 		}
-
 		if (!dateHeaderRegexResult || dateHeaderRegexResult.index !== lastHeaderIndex) {
 			Morebits.status.info('信息', '未找到当月的二级标题，将创建新的');
 			text += date.monthHeader() + '\n';
 		}
 	}
-
 	params.expiry = typeof params.template_expiry !== 'undefined' ? params.template_expiry : params.expiry;
-
 	text += Twinkle.block.callback.getBlockNoticeWikitext(params);
 
 	// build the edit summary
@@ -1797,28 +1811,22 @@ Twinkle.block.callback.main = function twinkleblockcallbackMain(pageobj) {
 	if (messageData.suppressArticleInSummary !== true && params.article) {
 		summary += '，于[[' + params.article + ']]';
 	}
-
 	pageobj.setPageText(text);
 	pageobj.setEditSummary(summary);
 	pageobj.setChangeTags(Twinkle.changeTags);
 	pageobj.setWatchlist(Twinkle.getPref('watchWarnings'));
 	pageobj.save();
 };
-
 Twinkle.block.callback.main_flow = function twinkleblockcallbackMain(flowobj) {
 	var params = flowobj.getCallbackParameters();
-
-	params.indefinite = (/indef|infinity|never|\*|max/).test(params.expiry);
+	params.indefinite = /indef|infinity|never|\*|max/.test(params.expiry);
 	params.expiry = typeof params.template_expiry !== 'undefined' ? params.template_expiry : params.expiry;
-
 	var title = '封禁通知';
 	var content = Twinkle.block.callback.getBlockNoticeWikitext(params, true);
-
 	flowobj.setTopic(title);
 	flowobj.setContent(content);
 	flowobj.newTopic();
 };
-
 Twinkle.addInitCallback(Twinkle.block, 'block');
 }(jQuery));
 
