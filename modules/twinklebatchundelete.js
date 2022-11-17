@@ -95,7 +95,7 @@ Twinkle.batchundelete.callback = function twinklebatchundeleteCallback() {
 		});
 		apiobj.params.form.append({
 			type: 'button',
-			label: '全不选',
+			label: '反选',
 			event: function (e) {
 				$(Morebits.quickForm.getElements(e.target.form, 'pages')).prop('checked', false);
 			}

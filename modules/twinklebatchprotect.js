@@ -211,18 +211,18 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 		});
 		form.append({
 			type: 'header',
-			label: 'Pages to protect'
+			label: '待保护页面'
 		});
 		form.append({
 			type: 'button',
-			label: 'Select All',
+			label: '全选',
 			event: function event(e) {
 				$(Morebits.quickForm.getElements(e.target.form, 'pages')).prop('checked', true);
 			}
 		});
 		form.append({
 			type: 'button',
-			label: 'Deselect All',
+			label: '反选',
 			event: function event(e) {
 				$(Morebits.quickForm.getElements(e.target.form, 'pages')).prop('checked', false);
 			}
@@ -243,19 +243,19 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 		result.editexpiry.value = '2 days';
 		result.moveexpiry.value = '2 days';
 		result.createexpiry.value = 'infinity';
-		Morebits.quickForm.getElements(result, 'pages').forEach(Twinkle.generateArrowLinks);
+		Morebits.quickForm.getElements(result, '个页面').forEach(Twinkle.generateArrowLinks);
 	}, statelem);
 	qiuwen_api.post();
 };
 Twinkle.batchprotect.currentProtectCounter = 0;
 Twinkle.batchprotect.currentprotector = 0;
 Twinkle.batchprotect.callback.evaluate = function twinklebatchprotectCallbackEvaluate(event) {
-	Morebits.wiki.actionCompleted.notice = 'Batch protection is now complete';
+	Morebits.wiki.actionCompleted.notice = '批量保护完成';
 	var form = event.target;
-	var numProtected = $(Morebits.quickForm.getElements(form, 'pages')).filter(function (index, element) {
+	var numProtected = $(Morebits.quickForm.getElements(form, '个页面')).filter(function (index, element) {
 		return element.checked && element.nextElementSibling.style.color === 'red';
 	}).length;
-	if (numProtected > 0 && !confirm('You are about to act on ' + mw.language.convertNumber(numProtected) + ' fully protected page(s). Are you sure?')) {
+	if (numProtected > 0 && !confirm('您即将对' + mw.language.convertNumber(numProtected) + '个全保护页面进行操作。您确定吗？')) {
 		return;
 	}
 	var input = Morebits.quickForm.getInputData(form);

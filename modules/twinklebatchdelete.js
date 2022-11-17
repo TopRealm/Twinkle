@@ -206,7 +206,7 @@ Twinkle.batchdelete.callback = function twinklebatchdeleteCallback() {
 		});
 		form.append({
 			type: 'button',
-			label: '全不选',
+			label: '反选',
 			event: function dBatchDeselectAll() {
 				$(result).find('input[name=pages]:checked').each(function (_, e) {
 					e.click(); // uncheck it, and invoke click event so that subgroup can be hidden

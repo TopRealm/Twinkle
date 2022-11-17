@@ -176,7 +176,7 @@ Twinkle.unlink.callbacks = {
 					});
 					apiobj.params.form.append({
 						type: 'button',
-						label: '全不选',
+						label: '反选',
 						event: function (e) {
 							$(Morebits.quickForm.getElements(e.target.form, 'imageusage')).prop('checked', false);
 						}
@@ -229,7 +229,7 @@ Twinkle.unlink.callbacks = {
 				});
 				apiobj.params.form.append({
 					type: 'button',
-					label: '全不选',
+					label: '反选',
 					event: function (e) {
 						$(Morebits.quickForm.getElements(e.target.form, 'backlinks')).prop('checked', false);
 					}
