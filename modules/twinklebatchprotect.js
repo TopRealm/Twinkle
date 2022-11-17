@@ -222,7 +222,7 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 		});
 		form.append({
 			type: 'button',
-			label: '反选',
+			label: '全不选',
 			event: function event(e) {
 				$(Morebits.quickForm.getElements(e.target.form, 'pages')).prop('checked', false);
 			}
