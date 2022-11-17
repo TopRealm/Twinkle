@@ -6,10 +6,5 @@
 		"declaration-no-important": null,
 		"no-descending-specificity": null,
 		"indentation": "tab"
-	},
-	"ignorePatterns": [
-		"scripts/",
-		"tests/",
-		"lib/"
-	]
+	}
 }
