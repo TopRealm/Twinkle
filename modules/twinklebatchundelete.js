@@ -12,12 +12,12 @@
 // <nowiki>
 (function ($) {
 /*
- ****************************************
- *** twinklebatchundelete.js: Batch undelete module
- ****************************************
- * Mode of invocation:     Tab ("Und-batch")
- * Active on:              Existing user and project pages
- */
+   ****************************************
+   *** twinklebatchundelete.js: Batch undelete module
+   ****************************************
+   * Mode of invocation:     Tab ("Und-batch")
+   * Active on:              Existing user and project pages
+   */
 
 Twinkle.batchundelete = function twinklebatchundelete() {
 	if (!Morebits.userIsSysop || !mw.config.get('wgArticleId') || mw.config.get('wgNamespaceNumber') !== mw.config.get('wgNamespaceIds').user && mw.config.get('wgNamespaceNumber') !== mw.config.get('wgNamespaceIds').project) {

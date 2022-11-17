@@ -12,13 +12,13 @@
 // <nowiki>
 (function ($) {
 /*
-  	  ****************************************
-  	  *** twinklebatchprotect.js: Batch protect module (sysops only)
-  	  ****************************************
-  	  * Mode of invocation:     Tab ("P-batch")
-  	  * Active on:              Existing project pages and user pages; existing and
-  	  *                         non-existing categories; Special:PrefixIndex
-  	  */
+    	  ****************************************
+    	  *** twinklebatchprotect.js: Batch protect module (sysops only)
+    	  ****************************************
+    	  * Mode of invocation:     Tab ("P-batch")
+    	  * Active on:              Existing project pages and user pages; existing and
+    	  *                         non-existing categories; Special:PrefixIndex
+    	  */
 
 Twinkle.batchprotect = function twinklebatchprotect() {
 	if (Morebits.userIsSysop && (mw.config.get('wgArticleId') > 0 && (mw.config.get('wgNamespaceNumber') === 2 || mw.config.get('wgNamespaceNumber') === 4) || mw.config.get('wgNamespaceNumber') === 14 || mw.config.get('wgCanonicalSpecialPageName') === 'Prefixindex')) {

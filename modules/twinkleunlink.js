@@ -12,12 +12,12 @@
 // <nowiki>
 (function ($) {
 /*
- ****************************************
- *** twinkleunlink.js: Unlink module
- ****************************************
- * Mode of invocation:  Tab ("Unlink")
- * Active on:           Non-special pages, except Qiuwen:Sandbox
- */
+   ****************************************
+   *** twinkleunlink.js: Unlink module
+   ****************************************
+   * Mode of invocation:  Tab ("Unlink")
+   * Active on:           Non-special pages, except Qiuwen:Sandbox
+   */
 
 Twinkle.unlink = function twinkleunlink() {
 	if (mw.config.get('wgNamespaceNumber') < 0 || mw.config.get('wgPageName') === Twinkle.getPref('sandboxPage') || !Morebits.userIsSysop) {

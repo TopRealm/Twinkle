@@ -12,12 +12,12 @@
 // <nowiki>
 (function ($) {
 /*
- ****************************************
- *** twinklexfd.js: XFD module
- ****************************************
- * Mode of invocation:  Tab ("XFD")
- * Active on:           Existing, non-special pages, except for file pages with no local (non-Commons) file which are not redirects
- */
+   ****************************************
+   *** twinklexfd.js: XFD module
+   ****************************************
+   * Mode of invocation:  Tab ("XFD")
+   * Active on:           Existing, non-special pages, except for file pages with no local (non-Commons) file which are not redirects
+   */
 
 Twinkle.xfd = function twinklexfd() {
 	// Disable on:
@@ -392,7 +392,7 @@ Twinkle.xfd.callbacks = {
 							fame: '<u>不符合收录标准</u>条目',
 							substub: '<u>长度过短</u>条目',
 							batch: '页面'
-						// eslint-disable-next-line no-useless-concat
+							// eslint-disable-next-line no-useless-concat
 						}[type] + '的用户及时间：<br id="no-new-title" />~~' + '~~';
 						pageobj.setAppendText(appendText);
 					}

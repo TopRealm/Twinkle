@@ -12,14 +12,14 @@
 // <nowiki>
 (function ($) {
 /*
- ****************************************
- *** twinkleconfig.js: Preferences module
- ****************************************
- * Mode of invocation:  Adds configuration form to Help:Twinkle/参数设置,
- *                      and adds an ad box to the top of user subpages belonging to the
- *                      currently logged-in user which end in '.js'
- * Active on:           What I just said. Yeah.
- */
+   ****************************************
+   *** twinkleconfig.js: Preferences module
+   ****************************************
+   * Mode of invocation:  Adds configuration form to Help:Twinkle/参数设置,
+   *                      and adds an ad box to the top of user subpages belonging to the
+   *                      currently logged-in user which end in '.js'
+   * Active on:           What I just said. Yeah.
+   */
 
 Twinkle.config = {};
 Twinkle.config.watchlistEnums = {

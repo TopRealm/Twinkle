@@ -12,13 +12,13 @@
 // <nowiki>
 (function ($) {
 /*
- ****************************************
- *** friendlytag.js: Tag module
- ****************************************
- * Mode of invocation:     Tab ("Tag")
- * Active on:              Existing articles and drafts; file pages with a corresponding file
- *                         which is local (not on Commons); all redirects
- */
+   ****************************************
+   *** friendlytag.js: Tag module
+   ****************************************
+   * Mode of invocation:     Tab ("Tag")
+   * Active on:              Existing articles and drafts; file pages with a corresponding file
+   *                         which is local (not on Commons); all redirects
+   */
 
 Twinkle.tag = function friendlytag() {
 	// redirect tagging

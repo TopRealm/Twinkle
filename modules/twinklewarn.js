@@ -12,13 +12,13 @@
 // <nowiki>
 (function ($) {
 /*
- ****************************************
- *** twinklewarn.js: Warn module
- ****************************************
- * Mode of invocation:  Tab ("Warn")
- * Active on:           Any page with relevant user name (userspace, contribs,
- *                      etc.), as well as the rollback success page
- */
+   ****************************************
+   *** twinklewarn.js: Warn module
+   ****************************************
+   * Mode of invocation:  Tab ("Warn")
+   * Active on:           Any page with relevant user name (userspace, contribs,
+   *                      etc.), as well as the rollback success page
+   */
 
 var relevantUserName = mw.config.get('wgRelevantUserName');
 Twinkle.warn = function twinklewarn() {

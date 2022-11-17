@@ -12,12 +12,12 @@
 // <nowiki>
 (function ($) {
 /*
- ****************************************
- *** twinklearv.js: ARV module
- ****************************************
- * Mode of invocation:  Tab ("ARV")
- * Active on:           Any page with relevant user name (userspace, contribs, etc.)
- */
+   ****************************************
+   *** twinklearv.js: ARV module
+   ****************************************
+   * Mode of invocation:  Tab ("ARV")
+   * Active on:           Any page with relevant user name (userspace, contribs, etc.)
+   */
 
 Twinkle.arv = function twinklearv() {
 	var username = mw.config.get('wgRelevantUserName');
