@@ -100,7 +100,7 @@ Twinkle.tag.callback = function friendlytagCallback() {
 			Window.setTitle('条目维护标记');
 
 			// Object.values is unavailable in IE 11
-			// eslint-disable-next-line compat/compat, es-x/no-object-values
+			// eslint-disable-next-line es-x/no-object-values
 			var obj_values = Object.values || function (obj) {
 				// eslint-disable-next-line es-x/no-array-prototype-keys
 				return Object.keys(obj).map(function (key) {
