@@ -8,8 +8,8 @@
 	},
 	"scripts": {
 		"start": "node scripts/dev-server.js",
-		"lint": "eslint .",
-		"lint:fix": "eslint . --fix",
+		"eslint": "eslint .",
+		"eslint:fix": "eslint . --fix",
 		"stylelint": "stylelint *.css",
 		"stylelint:fix": "stylelint *.css --fix",
 		"deploy": "node scripts/deploy.js"
