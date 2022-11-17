@@ -1388,6 +1388,7 @@ Morebits.string = {
 	formatReasonText: function (str, addSig) {
 		var reason = (str || '').toString().trim();
 		var unbinder = new Morebits.unbinder(reason);
+		// eslint-disable-next-line no-useless-concat
 		unbinder.unbind('<no' + 'wiki>', '</no' + 'wiki>');
 		unbinder.content = unbinder.content.replace(/\|/g, '{{subst:!}}');
 		reason = unbinder.rebind();
