@@ -169,8 +169,8 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 	Window.setContent(statusdiv);
 	Morebits.status.init(statusdiv);
 	Window.display();
-	var statelem = new Morebits.status('Grabbing list of pages');
-	var qiuwen_api = new Morebits.wiki.api('loading...', query, function (apiobj) {
+	var statelem = new Morebits.status('抓取页面列表');
+	var qiuwen_api = new Morebits.wiki.api('加载中…', query, function (apiobj) {
 		var response = apiobj.getResponse();
 		var pages = response.query && response.query.pages || [];
 		var list = [];
@@ -180,7 +180,7 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 			var missing = !!page.missing,
 				editProt;
 			if (missing) {
-				metadata.push('page does not exist');
+				metadata.push('页面不存在');
 				editProt = page.protection.filter(function (pr) {
 					return pr.type === 'create' && pr.level === 'sysop';
 				}).pop();
@@ -192,7 +192,7 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 					metadata.push('上传者：' + page.imageinfo[0].user);
 					metadata.push('最后编辑者：' + page.revisions[0].user);
 				} else {
-					metadata.push(mw.language.convertNumber(page.revisions[0].size) + ' bytes');
+					metadata.push(mw.language.convertNumber(page.revisions[0].size) + '字节');
 				}
 				editProt = page.protection.filter(function (pr) {
 					return pr.type === 'edit' && pr.level === 'sysop';
