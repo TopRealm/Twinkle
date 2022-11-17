@@ -184,7 +184,8 @@ Twinkle.image.callback.evaluate = function twinkleimageCallbackEvaluate(event) {
 		}
 		// No auto-notification, display what was going to be added.
 		var noteData = document.createElement('pre');
-		noteData.appendChild(document.createTextNode('{{subst:di-' + templatename + '-notice|1=' + mw.config.get('wgTitle') + '}} ~~~~'));
+		// eslint-disable-next-line no-useless-concat
+		noteData.appendChild(document.createTextNode('{{subst:di-' + templatename + '-notice|1=' + mw.config.get('wgTitle') + '}} ~~' + '~~'));
 		Morebits.status.info('提醒', [ '这些内容也应当通知到原始上传者:', document.createElement('br'), noteData ]);
 	}
 };
@@ -231,7 +232,8 @@ Twinkle.image.callbacks = {
 			if (params.type === 'no permission') {
 				notifytext += params.source ? '|source=' + params.source : '';
 			}
-			notifytext += '}} ~~~~';
+			// eslint-disable-next-line no-useless-concat
+			notifytext += '}} ~~' + '~~';
 			usertalkpage.setAppendText(notifytext);
 			usertalkpage.setEditSummary('[[:' + Morebits.pageNameNorm + ']]的文件删除提醒。');
 			usertalkpage.setChangeTags(Twinkle.changeTags);
@@ -272,7 +274,8 @@ Twinkle.image.callbacks = {
 		if (initialContrib) {
 			appendText += '; 已通知 {{user|1=' + initialContrib + '}}';
 		}
-		appendText += ' ~~~~~\n';
+		// eslint-disable-next-line no-useless-concat
+		appendText += ' ~~' + '~' + '~~\n';
 		var editsummary = '在日志记录[[:' + Morebits.pageNameNorm + ']]的快速删除提名';
 		usl.changeTags = Twinkle.changeTags;
 		usl.log(appendText, editsummary);

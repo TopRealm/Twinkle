@@ -1725,7 +1725,8 @@ Twinkle.tag.callbacks = {
 				// COI: Start the discussion on the talk page (mainspace only)
 				if (params.coiReason) {
 					var coiTalkPage = new Morebits.wiki.page('Talk:' + Morebits.pageNameNorm, 'Starting discussion on talk page');
-					coiTalkPage.setNewSectionText(params.coiReason + ' ~~~~');
+					// eslint-disable-next-line no-useless-concat
+					coiTalkPage.setNewSectionText(params.coiReason + ' ~~' + '~~');
 					coiTalkPage.setNewSectionTitle('COI tag (' + new Morebits.date(pageobj.getLoadTime()).format('MMMM Y', 'utc') + ')');
 					coiTalkPage.setChangeTags(Twinkle.changeTags);
 					coiTalkPage.setCreateOption('recreate');
@@ -1736,7 +1737,8 @@ Twinkle.tag.callbacks = {
 				// Post a rationale on the talk page (mainspace only)
 				if (params.mergeReason) {
 					var mergeTalkPage = new Morebits.wiki.page('Talk:' + params.discussArticle, 'Posting rationale on talk page');
-					mergeTalkPage.setNewSectionText(params.mergeReason.trim() + ' ~~~~');
+					// eslint-disable-next-line no-useless-concat
+					mergeTalkPage.setNewSectionText(params.mergeReason.trim() + ' ~~' + '~~');
 					mergeTalkPage.setNewSectionTitle(params.talkDiscussionTitleLinked);
 					mergeTalkPage.setChangeTags(Twinkle.changeTags);
 					mergeTalkPage.setWatchlist(Twinkle.getPref('watchMergeDiscussions'));
@@ -1775,7 +1777,8 @@ Twinkle.tag.callbacks = {
 						var old_text = pageobj.getPageText();
 						var lang = params.translationLanguage;
 						var reason = params.translationComments;
-						var templateText = '{{subst:needtrans|pg=' + Morebits.pageNameNorm + '|Language=' + (lang || 'uncertain') + '|Comments=' + reason.trim() + '}} ~~~~';
+						// eslint-disable-next-line no-useless-concat
+						var templateText = '{{subst:needtrans|pg=' + Morebits.pageNameNorm + '|Language=' + (lang || 'uncertain') + '|Comments=' + reason.trim() + '}} ~~' + '~~';
 						var text, summary;
 						if (params.tags.indexOf('Rough translation') !== -1) {
 							text = old_text + '\n\n' + templateText;
@@ -1807,7 +1810,8 @@ Twinkle.tag.callbacks = {
 						}
 						var userTalkPage = new Morebits.wiki.page('User talk:' + initialContrib, 'Notifying initial contributor (' + initialContrib + ')');
 						userTalkPage.setNewSectionTitle('Your article [[' + Morebits.pageNameNorm + ']]');
-						userTalkPage.setNewSectionText('{{subst:uw-notenglish|1=' + Morebits.pageNameNorm + (params.translationPostAtPNT ? '' : '|nopnt=yes') + '}} ~~~~');
+						// eslint-disable-next-line no-useless-concat
+						userTalkPage.setNewSectionText('{{subst:uw-notenglish|1=' + Morebits.pageNameNorm + (params.translationPostAtPNT ? '' : '|nopnt=yes') + '}} ~~' + '~~');
 						userTalkPage.setEditSummary('Notice: Please use English when contributing to the English Wikipedia.');
 						userTalkPage.setChangeTags(Twinkle.changeTags);
 						userTalkPage.setCreateOption('recreate');

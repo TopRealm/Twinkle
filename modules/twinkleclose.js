@@ -585,7 +585,8 @@ Twinkle.close.callbacks = {
 		if (!Morebits.userIsSysop) {
 			text += '{{subst:NAC}}';
 		}
-		text += '--~~~~\n{{delf}}';
+		// eslint-disable-next-line no-useless-concat
+		text += '--~~' + '~~\n{{delf}}';
 		if (bar[1]) {
 			text += '\n----\n' + bar.slice(1).join('\n----\n');
 		}

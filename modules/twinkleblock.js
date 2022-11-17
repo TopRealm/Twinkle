@@ -812,7 +812,7 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
  *   reason: <string - block rationale, as would appear in the block log,
  *           and the edit summary for when adding block template, unless 'summary' is set>
  *   reasonParam: <set if the associated block template accepts a reason parameter>
- *   sig: <string - set to ~~~~ if block template does not accept "true" as the value, or set null to omit sig param altogether>
+ *   sig: <string - set to ~~ ~~ if block template does not accept "true" as the value, or set null to omit sig param altogether>
  *   summary: <string - edit summary for when adding block template to user's talk page, if not set, 'reason' is used>
  *   suppressArticleInSummary: <set to suppress showing the article name in the edit summary, as with attack pages>
  *   templateName: <string - name of template to use (instead of key name), entry will be omitted from the Templates list.
@@ -830,7 +830,8 @@ Twinkle.block.blockPresetsInfo = {
 		nonstandard: true,
 		reason: '{{anonblock}}',
 		summary: '匿名编辑封禁',
-		sig: '~~~~'
+		// eslint-disable-next-line no-useless-concat
+		sig: '~~' + '~~'
 	},
 	'blocked proxy': {
 		expiry: '2 years',
@@ -839,7 +840,8 @@ Twinkle.block.blockPresetsInfo = {
 		nonstandard: true,
 		reason: '{{blocked proxy}}',
 		summary: '开放代理封禁',
-		sig: '~~~~'
+		// eslint-disable-next-line no-useless-concat
+		sig: '~~' + '~~'
 	},
 	'checkuserblock': {
 		expiry: '1 week',
@@ -849,7 +851,8 @@ Twinkle.block.blockPresetsInfo = {
 		nonstandard: true,
 		reason: '{{checkuserblock}}',
 		summary: '用户查核IP封禁',
-		sig: '~~~~'
+		// eslint-disable-next-line no-useless-concat
+		sig: '~~' + '~~'
 	},
 	'checkuserblock-account': {
 		autoblock: true,
@@ -859,7 +862,8 @@ Twinkle.block.blockPresetsInfo = {
 		nonstandard: true,
 		reason: '{{checkuserblock-account}}',
 		summary: '用户查核账户封禁',
-		sig: '~~~~'
+		// eslint-disable-next-line no-useless-concat
+		sig: '~~' + '~~'
 	},
 	'range block': {
 		expiry: '1 week',
@@ -868,7 +872,8 @@ Twinkle.block.blockPresetsInfo = {
 		nonstandard: true,
 		reason: '{{range block}}',
 		summary: '广域封禁',
-		sig: '~~~~'
+		// eslint-disable-next-line no-useless-concat
+		sig: '~~' + '~~'
 	},
 	'school block': {
 		forAnonOnly: true,
@@ -876,7 +881,8 @@ Twinkle.block.blockPresetsInfo = {
 		nonstandard: true,
 		reason: '{{School block}}',
 		summary: '公用IP封禁',
-		sig: '~~~~'
+		// eslint-disable-next-line no-useless-concat
+		sig: '~~' + '~~'
 	},
 	// uw-prefixed
 	'uw-3block': {
@@ -941,7 +947,8 @@ Twinkle.block.blockPresetsInfo = {
 	},
 	'Bot block message': {
 		expiry: 'infinity',
-		sig: '~~~~'
+		// eslint-disable-next-line no-useless-concat
+		sig: '~~' + '~~'
 	},
 	'uw-pblock': {
 		autoblock: true,
@@ -1668,9 +1675,11 @@ Twinkle.block.callback.closeRequest = function twinkleblockCallbackCloseRequest(
 		if (vipRe.exec(requestList[i])) {
 			hidename = /\|\s*hidename\s*=[^|]+/.test(requestList[i]);
 			requestList[i] = requestList[i].trimRight();
-			var newText = requestList[i].replace(/^(\*\s*处理：)[ \t]*(<!-- 非管理員僅可標記已執行的封禁，針對提報的意見請放在下一行 -->)?[ \t]*$/m, '$1' + comment + '--~~~~');
+			// eslint-disable-next-line no-useless-concat
+			var newText = requestList[i].replace(/^(\*\s*处理：)[ \t]*(<!-- 非管理員僅可標記已執行的封禁，針對提報的意見請放在下一行 -->)?[ \t]*$/m, '$1' + comment + '--~~' + '~~');
 			if (requestList[i] === newText) {
-				newText = requestList[i] + '\n* 处理：' + comment + '--~~~~';
+				// eslint-disable-next-line no-useless-concat
+				newText = requestList[i] + '\n* 处理：' + comment + '--~~' + '~~';
 			}
 			requestList[i] = newText + '\n';
 			found = true;
@@ -1763,8 +1772,10 @@ Twinkle.block.callback.getBlockNoticeWikitext = function (params, nosign) {
 	} else {
 		text += params.template;
 	}
-	if ((settings.sig === '~~~~' || settings.sig === undefined) && !nosign) {
-		text += '}}--~~~~';
+	// eslint-disable-next-line no-useless-concat
+	if ((settings.sig === '~~' + '~~' || settings.sig === undefined) && !nosign) {
+		// eslint-disable-next-line no-useless-concat
+		text += '}}--~~' + '~~';
 	} else if (settings.sig && !nosign) {
 		text += '|sig=' + settings.sig;
 		text += '}}';

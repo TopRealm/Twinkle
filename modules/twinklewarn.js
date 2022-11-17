@@ -1374,7 +1374,8 @@ Twinkle.warn.callbacks = {
 		}
 		text += '|subst=subst:}}';
 		if (!noSign) {
-			text += ' ~~~~';
+			// eslint-disable-next-line no-useless-concat
+			text += ' ~~' + '~~';
 		}
 		return text;
 	},

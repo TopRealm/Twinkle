@@ -1205,7 +1205,8 @@ Twinkle.speedy.callbacks = {
 							var usertalkpage = new Morebits.wiki.page(talkPageName, '通知页面创建者（' + initialContrib + '）'),
 								notifytext;
 							notifytext = '\n{{subst:db-notice|target=' + Morebits.pageNameNorm;
-							notifytext += (params.welcomeuser ? '' : '|nowelcome=yes') + '}}--~~~~';
+							// eslint-disable-next-line no-useless-concat
+							notifytext += (params.welcomeuser ? '' : '|nowelcome=yes') + '}}--~~' + '~~';
 							var editsummary = '通知：';
 							if (params.normalizeds.indexOf('g12') === -1) {
 								// no article name in summary for G10 deletions
@@ -1266,7 +1267,8 @@ Twinkle.speedy.callbacks = {
 			if (initialContrib) {
 				appendText += '；通知{{user|' + initialContrib + '}}';
 			}
-			appendText += ' ~~~~~\n';
+			// eslint-disable-next-line no-useless-concat
+			appendText += ' ~~' + '~' + '~~\n';
 			usl.changeTags = Twinkle.changeTags;
 			usl.log(appendText, '记录对[[' + Morebits.pageNameNorm + ']]的快速删除提名');
 		}

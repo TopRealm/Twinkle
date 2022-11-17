@@ -292,7 +292,8 @@ Twinkle.xfd.callbacks = {
 				} else {
 					var talkPageName = 'User talk:' + initialContrib;
 					var usertalkpage = new Morebits.wiki.page(talkPageName, '通知页面创建者（' + initialContrib + '）');
-					var notifytext = '\n{{subst:AFDNote|' + Morebits.pageNameNorm + '}}--~~~~';
+					// eslint-disable-next-line no-useless-concat
+					var notifytext = '\n{{subst:AFDNote|' + Morebits.pageNameNorm + '}}--~~' + '~~';
 					usertalkpage.setAppendText(notifytext);
 					usertalkpage.setEditSummary('通知：页面[[' + Morebits.pageNameNorm + ']]存废讨论提名');
 					usertalkpage.setChangeTags(Twinkle.changeTags);
@@ -391,12 +392,14 @@ Twinkle.xfd.callbacks = {
 							fame: '<u>不符合收录标准</u>条目',
 							substub: '<u>长度过短</u>条目',
 							batch: '页面'
-						}[type] + '的用户及时间：<br id="no-new-title" />~~~~';
+						// eslint-disable-next-line no-useless-concat
+						}[type] + '的用户及时间：<br id="no-new-title" />~~' + '~~';
 						pageobj.setAppendText(appendText);
 					}
 					break;
 				default:
-					pageobj.setAppendText('\n{{subst:DRItem|Type=' + type + '|DRarticles=' + Morebits.pageNameNorm + '|Reason=' + Morebits.string.formatReasonText(params.reason) + (params.fwdcsdreason.trim() !== '' ? '<br>\n转交理由：' + params.fwdcsdreason : '') + '|To=' + to + '}}~~~~');
+					// eslint-disable-next-line no-useless-concat
+					pageobj.setAppendText('\n{{subst:DRItem|Type=' + type + '|DRarticles=' + Morebits.pageNameNorm + '|Reason=' + Morebits.string.formatReasonText(params.reason) + (params.fwdcsdreason.trim() !== '' ? '<br>\n转交理由：' + params.fwdcsdreason : '') + '|To=' + to + '}}~~' + '~~');
 					break;
 			}
 			pageobj.setEditSummary('加入[[' + Morebits.pageNameNorm + ']]');
@@ -463,7 +466,8 @@ Twinkle.xfd.callbacks = {
 				}
 				var talkPageName = 'User talk:' + initialContrib;
 				var usertalkpage = new Morebits.wiki.page(talkPageName, '通知页面创建者（' + initialContrib + '）');
-				var notifytext = '\n{{subst:idw|File:' + mw.config.get('wgTitle') + '}}--~~~~';
+				// eslint-disable-next-line no-useless-concat
+				var notifytext = '\n{{subst:idw|File:' + mw.config.get('wgTitle') + '}}--~~' + '~~';
 				usertalkpage.setAppendText(notifytext);
 				usertalkpage.setEditSummary('通知：文件[[' + Morebits.pageNameNorm + ']]存废讨论提名');
 				usertalkpage.setChangeTags(Twinkle.changeTags);
@@ -494,7 +498,8 @@ Twinkle.xfd.callbacks = {
 		todaysList: function (pageobj) {
 			// var text = pageobj.getPageText();
 			var params = pageobj.getCallbackParameters();
-			pageobj.setAppendText('\n{{subst:IfdItem|Filename=' + mw.config.get('wgTitle') + '|Uploader=' + params.uploader + '|Reason=' + Morebits.string.formatReasonText(params.reason) + '}}--~~~~');
+			// eslint-disable-next-line no-useless-concat
+			pageobj.setAppendText('\n{{subst:IfdItem|Filename=' + mw.config.get('wgTitle') + '|Uploader=' + params.uploader + '|Reason=' + Morebits.string.formatReasonText(params.reason) + '}}--~~' + '~~');
 			pageobj.setEditSummary('加入[[' + Morebits.pageNameNorm + ']]');
 			pageobj.setChangeTags(Twinkle.changeTags);
 			pageobj.setWatchlist(Twinkle.getPref('xfdWatchDiscussion'));
@@ -575,7 +580,8 @@ Twinkle.xfd.callbacks = {
 		if (initialContrib) {
 			appendText += '；通知{{user|' + initialContrib + '}}';
 		}
-		appendText += ' ~~~~~\n';
+		// eslint-disable-next-line no-useless-concat
+		appendText += ' ~~' + '~' + '~~\n';
 		usl.changeTags = Twinkle.changeTags;
 		usl.log(appendText, editsummary);
 	}

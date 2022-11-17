@@ -1353,7 +1353,8 @@ Twinkle.protect.callbacks = {
 					break;
 			}
 			words += params.typename;
-			newtag += "'''" + Morebits.string.toUpperCaseFirstChar(words) + (params.reason !== '' ? ":''' " + Morebits.string.formatReasonText(params.reason) : ".'''") + ' ~~~~';
+			// eslint-disable-next-line no-useless-concat
+			newtag += "'''" + Morebits.string.toUpperCaseFirstChar(words) + (params.reason !== '' ? ":''' " + Morebits.string.formatReasonText(params.reason) : ".'''") + ' ~~' + '~~';
 
 			// If either protection type results in a increased status, then post it under increase
 			// else we post it under decrease

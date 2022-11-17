@@ -1392,7 +1392,8 @@ Morebits.string = {
 		unbinder.content = unbinder.content.replace(/\|/g, '{{subst:!}}');
 		reason = unbinder.rebind();
 		if (addSig) {
-			var sig = '~~~~',
+			// eslint-disable-next-line no-useless-concat
+			var sig = '~~' + '~~',
 				sigIndex = reason.lastIndexOf(sig);
 			if (sigIndex === -1 || sigIndex !== reason.length - sig.length) {
 				reason += ' ' + sig;
@@ -4462,7 +4463,7 @@ Morebits.wiki.preview = function (previewbox) {
 	 * Displays the preview box, and begins an asynchronous attempt
 	 * to render the specified wikitext.
 	 *
-	 * @param {string} wikitext - Wikitext to render; most things should work, including `subst:` and `~~~~`.
+	 * @param {string} wikitext - Wikitext to render; most things should work, including `subst:` and signatures.
 	 * @param {string} [pageTitle] - Optional parameter for the page this should be rendered as being on, if omitted it is taken as the current page.
 	 * @param {string} [sectionTitle] - If provided, render the text as a new section using this as the title.
 	 * @returns {jQuery.promise}

@@ -356,7 +356,8 @@ Twinkle.arv.callback.evaluate = function (e) {
 			if (!/[.?!;]$/.test(reason)) {
 				reason += '.';
 			}
-			reason += ' ~~~~';
+			// eslint-disable-next-line no-useless-concat
+			reason += ' ~~' + '~~';
 			reason = reason.replace(/\r?\n/g, '\n*:'); // indent newlines
 
 			Morebits.simpleWindow.setButtonsEnabled(false);
@@ -410,7 +411,8 @@ Twinkle.arv.callback.evaluate = function (e) {
 			if (comment !== '') {
 				reason += Morebits.string.toUpperCaseFirstChar(comment) + '. ';
 			}
-			reason += '~~~~';
+			// eslint-disable-next-line no-useless-concat
+			reason += '~~' + '~~';
 			reason = reason.replace(/\r?\n/g, '\n*:'); // indent newlines
 
 			Morebits.simpleWindow.setButtonsEnabled(false);
@@ -710,7 +712,8 @@ Twinkle.arv.processAN3 = function (params) {
 		}
 		var comment = params.comment.replace(/~*$/g, '').trim();
 		if (comment) {
-			comment += ' ~~~~';
+			// eslint-disable-next-line no-useless-concat
+			comment += ' ~~' + '~~';
 		}
 		var text = '\n\n{{subst:AN3 report|diffs=' + difftext + '|warnings=' + warningtext + '|resolves=' + resolvetext + '|pagename=' + params.page + '|orig=' + origtext + '|comment=' + comment + '|uid=' + params.uid + '}}';
 		var reportpage = 'Qiuwen:Administrators\' noticeboard/Edit warring';
@@ -725,7 +728,8 @@ Twinkle.arv.processAN3 = function (params) {
 
 		// notify user
 
-		var notifyText = '\n\n{{subst:an3-notice|1=' + mw.util.wikiUrlencode(params.uid) + '|auto=1}} ~~~~';
+		// eslint-disable-next-line no-useless-concat
+		var notifyText = '\n\n{{subst:an3-notice|1=' + mw.util.wikiUrlencode(params.uid) + '|auto=1}} ~~' + '~~';
 		var talkPage = new Morebits.wiki.page('User talk:' + params.uid, 'Notifying edit warrior');
 		talkPage.setFollowRedirect(true);
 		talkPage.setEditSummary('Notifying about edit warring noticeboard discussion.');

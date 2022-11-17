@@ -266,14 +266,16 @@ Twinkle.talkback.noticeboards = {
 	affp: {
 		label: 'QW:AF/FP（防滥用过滤器/错误报告）',
 		title: '防滥用过滤器错误报告通知',
-		content: '您的[[Qiuwen:防滥用过滤器/错误报告|防滥用过滤器错误报告]]已有处理结果，请前往查看。--~~~~',
+		// eslint-disable-next-line no-useless-concat
+		content: '您的[[Qiuwen:防滥用过滤器/错误报告|防滥用过滤器错误报告]]已有处理结果，请前往查看。--~~' + '~~',
 		editSummary: '有关[[Qiuwen:防滥用过滤器/错误报告|防滥用过滤器错误报告]]的通知',
 		defaultSelected: true
 	},
 	// let's keep AN and its cousins at the top
 	afchd: {
 		label: 'QW:AFCHD（条目创建帮助）',
-		text: '您在[[Qiuwen:AFCHD|条目创建帮助]]页面的提问已有回复，请前往查看。--~~~~',
+		// eslint-disable-next-line no-useless-concat
+		text: '您在[[Qiuwen:AFCHD|条目创建帮助]]页面的提问已有回复，请前往查看。--~~' + '~~',
 		editSummary: '您在[[Qiuwen:AFCHD|条目创建帮助]]页面的提问已有回复，请前往查看。'
 	}
 };
@@ -342,11 +344,14 @@ Twinkle.talkback.callbacks = {
 				text = Morebits.string.safeReplace(Twinkle.talkback.noticeboards[input.noticeboard].text, '$SECTION', input.section);
 				break;
 			case 'mail':
-				text = '==' + Twinkle.getPref('mailHeading') + '==\n{{YGM|subject=' + input.section + '|ts=~~~~~}}';
+				// eslint-disable-next-line no-useless-concat
+				text = '==' + Twinkle.getPref('mailHeading') + '==\n{{YGM|subject=' + input.section + '|ts=~~' + '~' + '~~}}';
 				if (input.message) {
-					text += '\n' + input.message + '  ~~~~';
+					// eslint-disable-next-line no-useless-concat
+					text += '\n' + input.message + '  ~~' + '~~';
 				} else if (Twinkle.getPref('insertTalkbackSignature')) {
-					text += '\n~~~~';
+					// eslint-disable-next-line no-useless-concat
+					text += '\n~~' + '~~';
 				}
 				break;
 			case 'see':
@@ -355,11 +360,14 @@ Twinkle.talkback.callbacks = {
 				break;
 			default:
 				// talkback
-				text = '==' + Twinkle.getPref('talkbackHeading') + '==\n{{talkback|' + input.page + (input.section ? '|' + input.section : '') + '|ts=~~~~~}}';
+				// eslint-disable-next-line no-useless-concat
+				text = '==' + Twinkle.getPref('talkbackHeading') + '==\n{{talkback|' + input.page + (input.section ? '|' + input.section : '') + '|ts=~~' + '~' + '~~}}';
 				if (input.message) {
-					text += '\n' + input.message + ' ~~~~';
+					// eslint-disable-next-line no-useless-concat
+					text += '\n' + input.message + ' ~~' + '~~';
 				} else if (Twinkle.getPref('insertTalkbackSignature')) {
-					text += '\n~~~~';
+					// eslint-disable-next-line no-useless-concat
+					text += '\n~~' + '~~';
 				}
 		}
 		return text;
