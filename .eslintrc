@@ -24,7 +24,6 @@
 	},
 	"ignorePatterns": [
 		"scripts/",
-		"tests/",
 		"lib/",
 		"*.json"
 	],
