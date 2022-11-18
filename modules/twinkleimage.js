@@ -12,12 +12,12 @@
 // <nowiki>
 (function ($) {
 /*
-   ****************************************
-   *** twinkleimage.js: Image CSD module
-   ****************************************
-   * Mode of invocation:  Tab ("DI")
-   * Active on:           Local nonredirect file pages (not on Commons)
-   */
+ ****************************************
+ *** twinkleimage.js: Image CSD module
+ ****************************************
+ * Mode of invocation:  Tab ("DI")
+ * Active on:           Local nonredirect file pages (not on Commons)
+ */
 
 Twinkle.image = function twinkleimage() {
 	if (mw.config.get('wgNamespaceNumber') === 6 && !document.getElementById('mw-sharedupload') && document.getElementById('mw-imagepage-section-filehistory')) {

@@ -12,14 +12,14 @@
 // <nowiki>
 (function ($) {
 /*
-   ****************************************
-   *** twinklestub.js: Tag module
-   ****************************************
-   * Mode of invocation:   Tab ("Stub")
-   * Active on:            Existing articles
-   * Config directives in: FriendlyConfig
-   * Note:                 customised friendlytag module
-   */
+ ****************************************
+ *** twinklestub.js: Tag module
+ ****************************************
+ * Mode of invocation:   Tab ("Stub")
+ * Active on:            Existing articles
+ * Config directives in: FriendlyConfig
+ * Note:                 customised friendlytag module
+ */
 
 Twinkle.stub = function friendlytag() {
 	if (Morebits.isPageRedirect()) {

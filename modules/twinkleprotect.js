@@ -12,12 +12,12 @@
 // <nowiki>
 (function ($) {
 /*
-   ****************************************
-   *** twinkleprotect.js: Protect/RPP module
-   ****************************************
-   * Mode of invocation:  Tab ("PP"/"RPP")
-   * Active on:           Non-special, non-MediaWiki pages
-   */
+ ****************************************
+ *** twinkleprotect.js: Protect/RPP module
+ ****************************************
+ * Mode of invocation:  Tab ("PP"/"RPP")
+ * Active on:           Non-special, non-MediaWiki pages
+ */
 
 // Note: a lot of code in this module is re-used/called by batchprotect.
 

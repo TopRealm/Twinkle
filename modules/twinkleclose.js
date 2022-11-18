@@ -13,13 +13,13 @@
 
 (function ($) {
 /*
-   ****************************************
-   *** twinkleclose.js: XFD closing module
-   ****************************************
-   * Mode of invocation:    Links after section heading
-   * Active on:             AfD dated archive pages
-   * Config directives in:  TwinkleConfig
-   */
+ ****************************************
+ *** twinkleclose.js: XFD closing module
+ ****************************************
+ * Mode of invocation:    Links after section heading
+ * Active on:             AfD dated archive pages
+ * Config directives in:  TwinkleConfig
+ */
 
 Twinkle.close = function twinkleclose() {
 	if (Twinkle.getPref('XfdClose') === 'hide' || !/^Qiuwen:存废讨论\/记录\/\d+\/\d+\/\d+$/.test(mw.config.get('wgPageName'))) {
@@ -162,17 +162,17 @@ Twinkle.close.codes = {
 		}
 	},
 	/* '转移至其他计划': {
-       		twc: {
-       			label: '转移至求闻共享资源',
-       			action: 'noop',
-       			adminonly: true
-       		},
-       		two: {
-       			label: '转移至其他计划',
-       			action: 'noop',
-       			adminonly: true
-       		}
-       	}, */
+          		twc: {
+          			label: '转移至求闻共享资源',
+          			action: 'noop',
+          			adminonly: true
+          		},
+          		two: {
+          			label: '转移至其他计划',
+          			action: 'noop',
+          			adminonly: true
+          		}
+          	}, */
 	'其他处理方法': {
 		c: {
 			label: '转交侵权',
