@@ -9,7 +9,7 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - twinklespeedy.js */
-// <nowiki>
+/* <nowiki> */
 (function ($) {
 /*
  ****************************************
@@ -1513,4 +1513,4 @@ Twinkle.speedy.callback.evaluateUser = function twinklespeedyCallbackEvaluateUse
 Twinkle.addInitCallback(Twinkle.speedy, 'speedy');
 }(jQuery));
 
-// </nowiki>
+/* </nowiki> */

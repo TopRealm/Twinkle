@@ -9,7 +9,7 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - twinkleblock.js */
-// <nowiki>
+/* <nowiki> */
 (function ($) {
 /*
  ****************************************
@@ -1840,4 +1840,4 @@ Twinkle.block.callback.main_flow = function twinkleblockcallbackMain(flowobj) {
 Twinkle.addInitCallback(Twinkle.block, 'block');
 }(jQuery));
 
-// </nowiki>
+/* </nowiki> */

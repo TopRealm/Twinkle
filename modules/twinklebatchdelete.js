@@ -9,7 +9,7 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - twinklebatchdelete.js */
-// <nowiki>
+/* <nowiki> */
 (function ($) {
 /*
  ****************************************
@@ -711,4 +711,4 @@ Twinkle.batchdelete.callbacks = {
 Twinkle.addInitCallback(Twinkle.batchdelete, 'batchdelete');
 }(jQuery));
 
-// </nowiki>
+/* </nowiki> */

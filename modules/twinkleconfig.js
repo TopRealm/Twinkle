@@ -9,7 +9,7 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - twinkleconfig.js */
-// <nowiki>
+/* <nowiki> */
 (function ($) {
 /*
  ****************************************
@@ -1430,9 +1430,9 @@ Twinkle.config.writePrefs = function twinkleconfigWritePrefs(pageobj) {
 			}
 		});
 	});
-	var text = '// <nowiki>\n// twinkleoptions.js：用户Twinkle参数设置文件\n//\n// 注：修改您的参数设置最简单的办法是使用\n// Twinkle参数设置面板，在[[' + Morebits.pageNameNorm + ']]。\n//\n// 这个文件是自动生成的，您所做的任何修改（除了\n// 以一种合法的JavaScript的方式来修改这些属性值）会\n// 在下一次您点击“保存”时被覆盖。\n// 修改此文件时，请记得使用合法的JavaScript。\n\n\nwindow.Twinkle.prefs = ';
+	var text = '/* <nowiki> */\n// twinkleoptions.js：用户Twinkle参数设置文件\n//\n// 注：修改您的参数设置最简单的办法是使用\n// Twinkle参数设置面板，在[[' + Morebits.pageNameNorm + ']]。\n//\n// 这个文件是自动生成的，您所做的任何修改（除了\n// 以一种合法的JavaScript的方式来修改这些属性值）会\n// 在下一次您点击“保存”时被覆盖。\n// 修改此文件时，请记得使用合法的JavaScript。\n\n\nwindow.Twinkle.prefs = ';
 	text += JSON.stringify(newConfig, null, 2);
-	text += ';\n\n// twinkleoptions.js到此为止\n// </nowiki>\n';
+	text += ';\n\n// twinkleoptions.js到此为止\n/* </nowiki> */\n';
 	pageobj.setPageText(text);
 	pageobj.setEditSummary('保存Twinkle参数设置：来自[[:' + Morebits.pageNameNorm + ']]的自动编辑');
 	pageobj.setChangeTags(Twinkle.changeTags);
@@ -1454,4 +1454,4 @@ Twinkle.config.saveSuccess = function twinkleconfigSaveSuccess(pageobj) {
 Twinkle.addInitCallback(Twinkle.config.init);
 }(jQuery));
 
-// </nowiki>
+/* </nowiki> */

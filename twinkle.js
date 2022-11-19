@@ -9,7 +9,7 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - twinkle.js */
-// <nowiki>
+/* <nowiki> */
 /**
  * +-------------------------------------------------------+
  * |         === WARNING: GLOBAL GADGET FILE ===           |
@@ -532,4 +532,4 @@ Twinkle.generateBatchPageLinks = function (checkbox) {
 };
 }(window, document, jQuery)); // End wrap with anonymous function
 
-// </nowiki>
+/* </nowiki> */

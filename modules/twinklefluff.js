@@ -9,7 +9,7 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - twinklefluff.js */
-// <nowiki>
+/* <nowiki> */
 (function ($) {
 /*
  ****************************************
@@ -733,4 +733,4 @@ Twinkle.fluff.formatSummary = function (builtInString, userName, customString) {
 Twinkle.addInitCallback(Twinkle.fluff, 'fluff');
 }(jQuery));
 
-// </nowiki>
+/* </nowiki> */

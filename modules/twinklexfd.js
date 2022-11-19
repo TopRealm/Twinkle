@@ -9,7 +9,7 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - twinkleblock.js */
-// <nowiki>
+/* <nowiki> */
 (function ($) {
 /*
  ****************************************
@@ -669,4 +669,4 @@ Twinkle.xfd.callback.evaluate = function (e) {
 Twinkle.addInitCallback(Twinkle.xfd, 'xfd');
 }(jQuery));
 
-// </nowiki>
+/* </nowiki> */

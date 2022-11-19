@@ -9,7 +9,7 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - twinklearv.js */
-// <nowiki>
+/* <nowiki> */
 (function ($) {
 /*
  ****************************************
@@ -745,4 +745,4 @@ Twinkle.arv.processAN3 = function (params) {
 Twinkle.addInitCallback(Twinkle.arv, 'arv');
 }(jQuery));
 
-// </nowiki>
+/* </nowiki> */

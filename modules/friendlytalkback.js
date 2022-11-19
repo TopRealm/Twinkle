@@ -9,7 +9,7 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - friendlytalkback.js */
-// <nowiki>
+/* <nowiki> */
 (function ($) {
 /*
    ****************************************
@@ -376,4 +376,4 @@ Twinkle.talkback.callbacks = {
 Twinkle.addInitCallback(Twinkle.talkback, 'talkback');
 }(jQuery));
 
-// </nowiki>
+/* </nowiki> */

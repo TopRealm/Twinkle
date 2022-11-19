@@ -9,7 +9,7 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - twinkleimage.js */
-// <nowiki>
+/* <nowiki> */
 (function ($) {
 /*
  ****************************************
@@ -284,4 +284,4 @@ Twinkle.image.callbacks = {
 Twinkle.addInitCallback(Twinkle.image, 'image');
 }(jQuery));
 
-// </nowiki>
+/* </nowiki> */

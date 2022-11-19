@@ -9,7 +9,7 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - twinkleprotect.js */
-// <nowiki>
+/* <nowiki> */
 (function ($) {
 /*
  ****************************************
@@ -1443,4 +1443,4 @@ Twinkle.protect.callbacks = {
 Twinkle.addInitCallback(Twinkle.protect, 'protect');
 }(jQuery));
 
-// </nowiki>
+/* </nowiki> */

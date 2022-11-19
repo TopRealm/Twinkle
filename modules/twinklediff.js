@@ -9,7 +9,7 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - twinklediff.js */
-// <nowiki>
+/* <nowiki> */
 (function ($) {
 /*
  ****************************************
@@ -90,4 +90,4 @@ Twinkle.diff.callbacks = {
 Twinkle.addInitCallback(Twinkle.diff, 'diff');
 }(jQuery));
 
-// </nowiki>
+/* </nowiki> */

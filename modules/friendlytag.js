@@ -9,7 +9,7 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - friendlytag.js */
-// <nowiki>
+/* <nowiki> */
 (function ($) {
 /*
  ****************************************
@@ -2423,4 +2423,4 @@ Twinkle.tag.callback.evaluate = function friendlytagCallbackEvaluate(e) {
 };
 Twinkle.addInitCallback(Twinkle.tag, 'tag');
 }(jQuery));
-// </nowiki>
+/* </nowiki> */

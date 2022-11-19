@@ -9,7 +9,7 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - twinklecopyvio.js */
-// <nowiki>
+/* <nowiki> */
 // eslint-disable-next-line no-unused-vars
 (function ($) {
 /*
@@ -168,4 +168,4 @@ Twinkle.copyvio.callback.evaluate = function (e) {
 Twinkle.addInitCallback(Twinkle.copyvio, 'copyvio');
 }(jQuery));
 
-// </nowiki>
+/* </nowiki> */

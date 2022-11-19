@@ -9,7 +9,7 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - twinkleclose.js */
-// <nowiki>
+/* <nowiki> */
 
 (function ($) {
 /*
@@ -611,4 +611,4 @@ Twinkle.close.callbacks = {
 Twinkle.addInitCallback(Twinkle.close, 'close');
 }(jQuery));
 
-// </nowiki>
+/* </nowiki> */

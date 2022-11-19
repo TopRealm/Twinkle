@@ -9,7 +9,7 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - twinklebatchprotect.js */
-// <nowiki>
+/* <nowiki> */
 (function ($) {
 /*
  ****************************************
@@ -321,4 +321,4 @@ Twinkle.batchprotect.callbacks = {
 Twinkle.addInitCallback(Twinkle.batchprotect, 'batchprotect');
 }(jQuery));
 
-// </nowiki>
+/* </nowiki> */

@@ -13,7 +13,7 @@
 
 /* eslint-disable jsdoc/no-undefined-types */
 /* eslint-disable es-x/no-map */
-// <nowiki>
+/* <nowiki> */
 /**
  * A library full of lots of goodness for user scripts on MediaWiki wikis.
  *
@@ -5764,4 +5764,4 @@ if (typeof arguments === 'undefined') {
 	window.Status = Morebits.status;
 }
 
-// </nowiki>
+/* </nowiki> */

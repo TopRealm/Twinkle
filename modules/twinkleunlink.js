@@ -9,7 +9,7 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - twinkleunlink.js */
-// <nowiki>
+/* <nowiki> */
 (function ($) {
 /*
  ****************************************
@@ -305,4 +305,4 @@ Twinkle.unlink.callbacks = {
 Twinkle.addInitCallback(Twinkle.unlink, 'unlink');
 }(jQuery));
 
-// </nowiki>
+/* </nowiki> */

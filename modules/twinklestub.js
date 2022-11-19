@@ -9,7 +9,7 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - twinklestub.js */
-// <nowiki>
+/* <nowiki> */
 (function ($) {
 /*
  ****************************************
@@ -372,4 +372,4 @@ Twinkle.stub.callback.evaluate = function friendlytagCallbackEvaluate(e) {
 Twinkle.addInitCallback(Twinkle.stub, 'stub');
 }(jQuery));
 
-// </nowiki>
+/* </nowiki> */

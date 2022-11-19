@@ -9,7 +9,7 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - twinklewarn.js */
-// <nowiki>
+/* <nowiki> */
 (function ($) {
 /*
  ****************************************
@@ -1823,4 +1823,4 @@
   Twinkle.addInitCallback(Twinkle.warn, 'warn');
 })(jQuery);
 
-// </nowiki>
+/* </nowiki> */
