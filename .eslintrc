@@ -4,6 +4,14 @@
 		"es5",
 		"compat"
 	],
+	"parser": "@babel/eslint-parser",
+	"parserOptions": {
+		"requireConfigFile": false,
+		"babelOptions": {
+			"configFile": false,
+			"presets": ["@babel/preset-env", "@babel/preset-react"]
+		}
+	},
 	"extends": [
 		"eslint:recommended",
 		"plugin:compat/recommended",
@@ -17,10 +25,6 @@
 		"es6": false,
 		"es2020": false,
 		"es2021": false
-	},
-	"globals": {
-		"mw": "readonly",
-		"Map": "readonly"
 	},
 	"ignorePatterns": [
 		"scripts/",
@@ -102,5 +106,9 @@
 		"es-x/no-symbol-prototype-description": "off",
 		"unicorn/prefer-string-slice": "off"
 	},
-	"reportUnusedDisableDirectives": true
+	"reportUnusedDisableDirectives": true,
+	"globals": {
+		"mw": "readonly",
+		"Map": "readonly"
+	},
 }

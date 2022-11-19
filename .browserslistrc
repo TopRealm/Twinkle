@@ -1,0 +1,2 @@
+# See https://www.mediawiki.org/wiki/Compatibility#Basic_(Grade_C)
+defaults, cover 95%, not Chrome < 31, not Firefox < 39, not Edge < 12, not IE < 11, not Safari < 9.1, not ios_saf < 9.1, not Android < 5, not and_chr < 5
