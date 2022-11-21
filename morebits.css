@@ -192,13 +192,8 @@ div.morebits-previewbox .mw-editsection {
 	font-size: 75%; /* 100% is 16px => 75% is 12px */
 }
 
-.skin-timeless .morebits-dialog {
+.skin-gongbi .morebits-dialog {
 	font-size: 79%; /* 100% is 15.2px => 79% is 12.008px */
-}
-
-.skin-monobook .morebits-dialog,
-.skin-modern .morebits-dialog {
-	font-size: 120%; /* 100% is 10px => 120% is 12px */
 }
 
 body .ui-dialog.morebits-dialog .ui-dialog-titlebar {
