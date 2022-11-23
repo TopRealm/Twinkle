@@ -9,6 +9,24 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - twinkle.js */
+'use strict';
+
+// Polyfill
+// eslint-disable-next-line no-implicit-globals
+function _typeof(obj) {
+	'@babel/helpers - typeof';
+
+	// eslint-disable-next-line no-return-assign, no-func-assign, no-undef
+	return _typeof = typeof Symbol === 'function' && typeof Symbol.iterator === 'symbol' ? function (obj) {
+		return typeof obj;
+
+	} : function (obj) {
+		// eslint-disable-next-line no-undef
+		return obj && typeof Symbol === 'function' && obj.constructor === Symbol && obj !== Symbol.prototype ? 'symbol' : typeof obj;
+		// eslint-disable-next-line no-sequences
+	}, _typeof(obj);
+}
+
 /* <nowiki> */
 /**
  * +-------------------------------------------------------+
@@ -208,14 +226,14 @@ switch (mw.config.get('skin')) {
 		Twinkle.defaultConfig.portletNext = null;
 }
 Twinkle.getPref = function twinkleGetPref(name) {
-	if (typeof Twinkle.prefs === 'object' && Twinkle.prefs[name] !== undefined) {
+	if (_typeof(Twinkle.prefs) === 'object' && Twinkle.prefs[name] !== undefined) {
 		return Twinkle.prefs[name];
 	}
 	// Old preferences format, used before twinkleoptions.js was a thing
-	if (typeof window.TwinkleConfig === 'object' && window.TwinkleConfig[name] !== undefined) {
+	if (_typeof(window.TwinkleConfig) === 'object' && window.TwinkleConfig[name] !== undefined) {
 		return window.TwinkleConfig[name];
 	}
-	if (typeof window.FriendlyConfig === 'object' && window.FriendlyConfig[name] !== undefined) {
+	if (_typeof(window.FriendlyConfig) === 'object' && window.FriendlyConfig[name] !== undefined) {
 		return window.FriendlyConfig[name];
 	}
 	return Twinkle.defaultConfig[name];

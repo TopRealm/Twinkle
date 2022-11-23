@@ -10,7 +10,6 @@
  */
 /* Twinkle.js - morebits.js */
 /* eslint-disable no-throw-literal */
-
 /* eslint-disable jsdoc/no-undefined-types */
 /* eslint-disable es-x/no-map */
 /* <nowiki> */
@@ -73,7 +72,7 @@ Morebits.l10n = {
 	 * @param {string} str
 	 * @returns {number[] | null}
 	 */
-	signatureTimestampFormat: function (str) {
+	signatureTimestampFormat: function signatureTimestampFormat(str) {
 		var rgxUTC = /(\d{4})年(\d{1,2})月(\d{1,2})日 \(.\) (\d{2}):(\d{2}) \(UTC\)/; // YYYY年Month月DD日 (w) HH:mm (UTC)
 		var rgxCST = /(\d{4})年(\d{1,2})月(\d{1,2})日 \(.\) (\d{2}):(\d{2}) \(CST\)/; // YYYY年Month月DD日 (w) HH:mm (CST)
 		var match = rgxUTC.exec(str) || rgxCST.exec(str);
@@ -552,7 +551,7 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
 						subgroup.className = 'quickformSubgroup';
 						subnode.subgroup = subgroup;
 						subnode.shown = false;
-						event = function (e) {
+						event = function event(e) {
 							if (e.target.checked) {
 								e.target.parentNode.appendChild(e.target.subgroup);
 								if (e.target.type === 'radio') {
@@ -571,7 +570,7 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
 							subnode.parentNode.appendChild(subgroup);
 						}
 					} else if (data.type === 'radio') {
-						event = function (e) {
+						event = function event(e) {
 							if (e.target.checked) {
 								var name = e.target.name;
 								if (e.target.form.names[name] !== undefined) {
@@ -643,7 +642,7 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
 				type: 'button',
 				label: '更多',
 				disabled: min >= max,
-				event: function (e) {
+				event: function event(e) {
 					var new_node = new Morebits.quickForm.element(e.target.sublist);
 					e.target.area.appendChild(new_node.render());
 					if (++e.target.counter >= e.target.max) {
@@ -704,7 +703,7 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
 				var remove = this.compute({
 					type: 'button',
 					label: '移除',
-					event: function (e) {
+					event: function event(e) {
 						var list = e.target.listnode;
 						var node = e.target.inputnode;
 						var more = e.target.morebutton;
@@ -1195,7 +1194,7 @@ Morebits.ip = {
 	 * @param {string} address - The IPv6 address, with or without CIDR.
 	 * @returns {string}
 	 */
-	sanitizeIPv6: function (address) {
+	sanitizeIPv6: function sanitizeIPv6(address) {
 		address = address.trim();
 		if (address === '') {
 			return null;
@@ -1248,7 +1247,7 @@ Morebits.ip = {
 	 * @param {string} ip
 	 * @returns {boolean} - True if given a valid IP address range, false otherwise.
 	 */
-	isRange: function (ip) {
+	isRange: function isRange(ip) {
 		return mw.util.isIPAddress(ip, true) && !mw.util.isIPAddress(ip);
 	},
 	/**
@@ -1259,7 +1258,7 @@ Morebits.ip = {
 	 * @returns {boolean} - True for valid ranges within the CIDR limits,
 	 * otherwise false (ranges outside the limit, single IPs, non-IPs).
 	 */
-	validCIDR: function (ip) {
+	validCIDR: function validCIDR(ip) {
 		if (Morebits.ip.isRange(ip)) {
 			var subnet = parseInt(ip.match(/\/(\d{1,3})$/)[1], 10);
 			if (subnet) {
@@ -1284,7 +1283,7 @@ Morebits.ip = {
 	 * @returns {boolean|string} - False if not IPv6 or bigger than a 64,
 	 * otherwise the (sanitized) /64 address.
 	 */
-	get64: function (ipv6) {
+	get64: function get64(ipv6) {
 		if (!ipv6 || !mw.util.isIPv6Address(ipv6, true)) {
 			return false;
 		}
@@ -1310,7 +1309,7 @@ Morebits.string = {
 	 * @param {string} str
 	 * @returns {string}
 	 */
-	toUpperCaseFirstChar: function (str) {
+	toUpperCaseFirstChar: function toUpperCaseFirstChar(str) {
 		str = str.toString();
 		return str.slice(0, 1).toUpperCase() + str.slice(1);
 	},
@@ -1318,7 +1317,7 @@ Morebits.string = {
 	 * @param {string} str
 	 * @returns {string}
 	 */
-	toLowerCaseFirstChar: function (str) {
+	toLowerCaseFirstChar: function toLowerCaseFirstChar(str) {
 		str = str.toString();
 		return str.slice(0, 1).toLowerCase() + str.slice(1);
 	},
@@ -1335,7 +1334,7 @@ Morebits.string = {
 	 * @throws If the `start` and `end` strings aren't of the same length.
 	 * @throws If `skiplist` isn't an array or string
 	 */
-	splitWeightedByKeys: function (str, start, end, skiplist) {
+	splitWeightedByKeys: function splitWeightedByKeys(str, start, end, skiplist) {
 		if (start.length !== end.length) {
 			throw new Error('start marker and end marker must be of the same length');
 		}
@@ -1385,7 +1384,7 @@ Morebits.string = {
 	 * @param {boolean} [addSig]
 	 * @returns {string}
 	 */
-	formatReasonText: function (str, addSig) {
+	formatReasonText: function formatReasonText(str, addSig) {
 		var reason = (str || '').toString().trim();
 		var unbinder = new Morebits.unbinder(reason);
 		// eslint-disable-next-line no-useless-concat
@@ -1410,7 +1409,7 @@ Morebits.string = {
 	 * @param {string} str
 	 * @returns {string}
 	 */
-	formatReasonForLog: function (str) {
+	formatReasonForLog: function formatReasonForLog(str) {
 		return str
 		// handle line breaks, which otherwise break numbering
 			.replace(/\n+/g, '{{pb}}')
@@ -1450,7 +1449,7 @@ Morebits.string = {
 	 * @param {string} text - String to be escaped.
 	 * @returns {string} - The escaped text.
 	 */
-	escapeRegExp: function (text) {
+	escapeRegExp: function escapeRegExp(text) {
 		return mw.util.escapeRegExp(text).replace(/ |_/g, '[_ ]');
 	},
 	/**
@@ -1492,7 +1491,7 @@ Morebits.string = {
 	 * @param {string} punctuation
 	 * @returns {string}
 	 */
-	appendPunctuation: function (str, punctuation) {
+	appendPunctuation: function appendPunctuation(str, punctuation) {
 		if (punctuation === undefined) {
 			punctuation = '。';
 		}
@@ -1517,7 +1516,7 @@ Morebits.array = {
 	 * @returns {Array} A copy of the array with duplicates removed.
 	 * @throws When provided a non-array.
 	 */
-	uniq: function (arr) {
+	uniq: function uniq(arr) {
 		if (!Array.isArray(arr)) {
 			throw 'A non-array object passed to Morebits.array.uniq';
 		}
@@ -1533,7 +1532,7 @@ Morebits.array = {
 	 * removed; subsequent instances of those values (duplicates) remain.
 	 * @throws When provided a non-array.
 	 */
-	dups: function (arr) {
+	dups: function dups(arr) {
 		if (!Array.isArray(arr)) {
 			throw 'A non-array object passed to Morebits.array.dups';
 		}
@@ -1549,7 +1548,7 @@ Morebits.array = {
 	 * @returns {Array[]} An array containing the smaller, chunked arrays.
 	 * @throws When provided a non-array.
 	 */
-	chunk: function (arr, size) {
+	chunk: function chunk(arr, size) {
 		if (!Array.isArray(arr)) {
 			throw 'A non-array object passed to Morebits.array.chunk';
 		}
@@ -1583,7 +1582,7 @@ Morebits.select2 = {
 		 * Custom matcher in which if the optgroup name matches, all options in that
 		 * group are shown, like in jquery.chosen.
 		 */
-		optgroupFull: function (params, data) {
+		optgroupFull: function optgroupFull(params, data) {
 			var originalMatcher = $.fn.select2.defaults.defaults.matcher;
 			var result = originalMatcher(params, data);
 			if (result && params.term && data.text.toUpperCase().indexOf(params.term.toUpperCase()) !== -1) {
@@ -1592,7 +1591,7 @@ Morebits.select2 = {
 			return result;
 		},
 		/** Custom matcher that matches from the beginning of words only. */
-		wordBeginning: function (params, data) {
+		wordBeginning: function wordBeginning(params, data) {
 			var originalMatcher = $.fn.select2.defaults.defaults.matcher;
 			var result = originalMatcher(params, data);
 			if (!params.term || result && new RegExp('\\b' + mw.util.escapeRegExp(params.term), 'i').test(result.text)) {
@@ -1602,7 +1601,7 @@ Morebits.select2 = {
 		}
 	},
 	/** Underline matched part of options. */
-	highlightSearchMatches: function (data) {
+	highlightSearchMatches: function highlightSearchMatches(data) {
 		var searchTerm = Morebits.select2SearchQuery;
 		if (!searchTerm || data.loading) {
 			return data.text;
@@ -1614,7 +1613,7 @@ Morebits.select2 = {
 		return $('<span>').append(data.text.slice(0, idx), $('<span>').css('text-decoration', 'underline').text(data.text.slice(idx, idx + searchTerm.length)), data.text.slice(idx + searchTerm.length));
 	},
 	/** Intercept query as it is happening, for use in highlightSearchMatches. */
-	queryInterceptor: function (params) {
+	queryInterceptor: function queryInterceptor(params) {
 		Morebits.select2SearchQuery = params && params.term;
 	},
 	/**
@@ -1623,7 +1622,7 @@ Morebits.select2 = {
 	 *
 	 * @see {@link https://github.com/select2/select2/issues/3279#issuecomment-442524147}
 	 */
-	autoStart: function (ev) {
+	autoStart: function autoStart(ev) {
 		if (ev.which < 48) {
 			return;
 		}
@@ -1784,7 +1783,7 @@ Morebits.date.localeData = {
 		pastWeek: '上周 dddd A h:mm',
 		other: 'YYYY-MM-DD'
 	},
-	signatureTimestampFormat: function (str) {
+	signatureTimestampFormat: function signatureTimestampFormat(str) {
 		console.warn('NOTE: Morebits.date.localedata.signatureTimestampFormat was renamed to Morebits.l10n.signatureTimestampFormat in March 2022, please use that instead'); // eslint-disable-line no-console
 		return Morebits.l10n.signatureTimestampFormat(str);
 	}
@@ -1816,53 +1815,53 @@ Morebits.date.unitMap = {
 };
 Morebits.date.prototype = {
 	/** @returns {boolean} */
-	isValid: function () {
+	isValid: function isValid() {
 		return !isNaN(this.getTime());
 	},
 	/**
 	 * @param {(Date|Morebits.date)} date
 	 * @returns {boolean}
 	 */
-	isBefore: function (date) {
+	isBefore: function isBefore(date) {
 		return this.getTime() < date.getTime();
 	},
 	/**
 	 * @param {(Date|Morebits.date)} date
 	 * @returns {boolean}
 	 */
-	isAfter: function (date) {
+	isAfter: function isAfter(date) {
 		return this.getTime() > date.getTime();
 	},
 	/** @returns {string} */
-	getUTCMonthName: function () {
+	getUTCMonthName: function getUTCMonthName() {
 		return Morebits.date.localeData.months[this.getUTCMonth()];
 	},
 	/** @returns {string} */
-	getUTCMonthNameAbbrev: function () {
+	getUTCMonthNameAbbrev: function getUTCMonthNameAbbrev() {
 		return Morebits.date.localeData.monthsShort[this.getUTCMonth()];
 	},
 	/** @returns {string} */
-	getMonthName: function () {
+	getMonthName: function getMonthName() {
 		return Morebits.date.localeData.months[this.getMonth()];
 	},
 	/** @returns {string} */
-	getMonthNameAbbrev: function () {
+	getMonthNameAbbrev: function getMonthNameAbbrev() {
 		return Morebits.date.localeData.monthsShort[this.getMonth()];
 	},
 	/** @returns {string} */
-	getUTCDayName: function () {
+	getUTCDayName: function getUTCDayName() {
 		return Morebits.date.localeData.days[this.getUTCDay()];
 	},
 	/** @returns {string} */
-	getUTCDayNameAbbrev: function () {
+	getUTCDayNameAbbrev: function getUTCDayNameAbbrev() {
 		return Morebits.date.localeData.daysShort[this.getUTCDay()];
 	},
 	/** @returns {string} */
-	getDayName: function () {
+	getDayName: function getDayName() {
 		return Morebits.date.localeData.days[this.getDay()];
 	},
 	/** @returns {string} */
-	getDayNameAbbrev: function () {
+	getDayNameAbbrev: function getDayNameAbbrev() {
 		return Morebits.date.localeData.daysShort[this.getDay()];
 	},
 	/**
@@ -1874,7 +1873,7 @@ Morebits.date.prototype = {
 	 * @throws If invalid or unsupported unit is given.
 	 * @returns {Morebits.date}
 	 */
-	add: function (number, unit) {
+	add: function add(number, unit) {
 		var num = parseInt(number, 10); // normalize
 		if (isNaN(num)) {
 			throw new Error('Invalid number "' + number + '" provided.');
@@ -1904,7 +1903,7 @@ Morebits.date.prototype = {
 	 * @throws If invalid or unsupported unit is given.
 	 * @returns {Morebits.date}
 	 */
-	subtract: function (number, unit) {
+	subtract: function subtract(number, unit) {
 		return this.add(-number, unit);
 	},
 	/**
@@ -1943,7 +1942,7 @@ Morebits.date.prototype = {
 	 * `utc`, or specify a time zone as number of minutes relative to UTC.
 	 * @returns {string}
 	 */
-	format: function (formatstr, zone) {
+	format: function format(formatstr, zone) {
 		if (!this.isValid()) {
 			return 'Invalid date'; // Put the truth out, preferable to "NaNNaNNan NaN:NaN" or whatever
 		}
@@ -1961,7 +1960,7 @@ Morebits.date.prototype = {
 		if (!formatstr) {
 			return udate.toISOString();
 		}
-		var pad = function (num, len) {
+		var pad = function pad(num, len) {
 			len = len || 2; // Up to length of 00 + 1
 			return ('00' + num).toString().slice(0 - len);
 		};
@@ -2002,9 +2001,9 @@ Morebits.date.prototype = {
 		unbinder.unbind('\\[', '\\]');
 		unbinder.content = unbinder.content.replace(
 			/* Regex notes:
-			 * d(d{2,3})? matches exactly 1, 3 or 4 occurrences of 'd' ('dd' is treated as a double match of 'd')
-			 * Y{1,2}(Y{2})? matches exactly 1, 2 or 4 occurrences of 'Y'
-			 */
+       * d(d{2,3})? matches exactly 1, 3 or 4 occurrences of 'd' ('dd' is treated as a double match of 'd')
+       * Y{1,2}(Y{2})? matches exactly 1, 2 or 4 occurrences of 'Y'
+       */
 			/H{1,2}|h{1,2}|m{1,2}|s{1,2}|SSS|d(d{2,3})?|D{1,2}|M{1,4}|Y{1,2}(Y{2})?|A/g, function (match) {
 				return replacementMap[match];
 			});
@@ -2018,7 +2017,7 @@ Morebits.date.prototype = {
 	 * 'utc' (for UTC), or specify a time zone as number of minutes past UTC.
 	 * @returns {string}
 	 */
-	calendar: function (zone) {
+	calendar: function calendar(zone) {
 		// Zero out the hours, minutes, seconds and milliseconds - keeping only the date;
 		// find the difference. Note that setHours() returns the same thing as getTime().
 		var dateDiff = (new Date().setHours(0, 0, 0, 0) - new Date(this).setHours(0, 0, 0, 0)) / 8.64e7;
@@ -2043,7 +2042,7 @@ Morebits.date.prototype = {
 	 *
 	 * @returns {RegExp}
 	 */
-	monthHeaderRegex: function () {
+	monthHeaderRegex: function monthHeaderRegex() {
 		return new RegExp('^(==+)\\s*' + this.getUTCFullYear() + '年(?:' + this.getUTCMonthName() + '|' + this.getUTCMonthNameAbbrev() + ')\\s*\\1', 'mg');
 	},
 	/**
@@ -2053,7 +2052,7 @@ Morebits.date.prototype = {
 	 * with no wikitext markers (==).
 	 * @returns {string}
 	 */
-	monthHeader: function (level) {
+	monthHeader: function monthHeader(level) {
 		// Default to 2, but allow for 0 or stringy numbers
 		level = parseInt(level, 10);
 		level = isNaN(level) ? 2 : level;
@@ -2266,11 +2265,11 @@ Morebits.wiki.api.prototype = {
 	 *
 	 * @param {*} parent
 	 */
-	setParent: function (parent) {
+	setParent: function setParent(parent) {
 		this.parent = parent;
 	},
 	/** @param {Morebits.status} statusElement */
-	setStatusElement: function (statusElement) {
+	setStatusElement: function setStatusElement(statusElement) {
 		this.statelem = statusElement;
 		this.statelem.status(this.currentAction);
 	},
@@ -2280,7 +2279,7 @@ Morebits.wiki.api.prototype = {
 	 * @param {Object} callerAjaxParameters - Do not specify a parameter unless you really want to give jQuery some extra parameters.
 	 * @returns {promise} - A jQuery promise object that is resolved or rejected with the api object.
 	 */
-	post: function (callerAjaxParameters) {
+	post: function post(callerAjaxParameters) {
 		++Morebits.wiki.numberOfActionsLeft;
 		var queryString = $.map(this.query, function (val, i) {
 			if (Array.isArray(val)) {
@@ -2342,7 +2341,7 @@ Morebits.wiki.api.prototype = {
 			return this.returnError();
 		});
 	},
-	returnError: function (callerAjaxParameters) {
+	returnError: function returnError(callerAjaxParameters) {
 		if (this.errorCode === 'badtoken' && !this.badtokenRetry) {
 			this.statelem.warn('无效令牌，获取新的令牌并重试……');
 			this.badtokenRetry = true;
@@ -2365,20 +2364,20 @@ Morebits.wiki.api.prototype = {
 
 		return $.Deferred().rejectWith(this.parent, [ this ]);
 	},
-	getStatusElement: function () {
+	getStatusElement: function getStatusElement() {
 		return this.statelem;
 	},
-	getErrorCode: function () {
+	getErrorCode: function getErrorCode() {
 		return this.errorCode;
 	},
-	getErrorText: function () {
+	getErrorText: function getErrorText() {
 		return this.errorText;
 	},
-	getXML: function () {
+	getXML: function getXML() {
 		// retained for backwards compatibility, use getResponse() instead
 		return this.responseXML;
 	},
-	getResponse: function () {
+	getResponse: function getResponse() {
 		return this.response;
 	}
 };
@@ -2608,7 +2607,7 @@ Morebits.wiki.page = function (pageName, status) {
 		stabilizeApi: null,
 		stabilizeProcessApi: null
 	};
-	var emptyFunction = function () {};
+	var emptyFunction = function emptyFunction() {};
 
 	/**
 	 * Loads the text for the page.
@@ -3558,9 +3557,9 @@ Morebits.wiki.page = function (pageName, status) {
 	};
 
 	/*
-	 * Private member functions
-	 * These are not exposed outside
-	 */
+     * Private member functions
+     * These are not exposed outside
+     */
 
 	/**
 	 * Determines whether we can save an API call by using the csrf token
@@ -3575,7 +3574,7 @@ Morebits.wiki.page = function (pageName, status) {
 	 * "edit" or "delete". In practice, only "edit" or "notedit" matters.
 	 * @returns {boolean}
 	 */
-	var fnCanUseMwUserToken = function (action) {
+	var fnCanUseMwUserToken = function fnCanUseMwUserToken(action) {
 		action = typeof action !== 'undefined' ? action : 'edit'; // IE doesn't support default parameters
 
 		// If a watchlist expiry is set, we must always load the page
@@ -3628,7 +3627,7 @@ Morebits.wiki.page = function (pageName, status) {
 	 * "delete".
 	 * @returns {Object} Appropriate query.
 	 */
-	var fnNeedTokenInfoQuery = function (action) {
+	var fnNeedTokenInfoQuery = function fnNeedTokenInfoQuery(action) {
 		var query = {
 			action: 'query',
 			meta: 'tokens',
@@ -3650,12 +3649,12 @@ Morebits.wiki.page = function (pageName, status) {
 	};
 
 	// callback from loadSuccess() for append(), prepend(), and newSection() threads
-	var fnAutoSave = function (pageobj) {
+	var fnAutoSave = function fnAutoSave(pageobj) {
 		pageobj.save(ctx.onSaveSuccess, ctx.onSaveFailure);
 	};
 
 	// callback from loadApi.post()
-	var fnLoadSuccess = function () {
+	var fnLoadSuccess = function fnLoadSuccess() {
 		var response = ctx.loadApi.getResponse().query;
 		if (!fnCheckPageName(response, ctx.onLoadFailure)) {
 			return; // abort
@@ -3738,7 +3737,7 @@ Morebits.wiki.page = function (pageName, status) {
 	};
 
 	// helper function to parse the page name returned from the API
-	var fnCheckPageName = function (response, onFailure) {
+	var fnCheckPageName = function fnCheckPageName(response, onFailure) {
 		if (!onFailure) {
 			onFailure = emptyFunction;
 		}
@@ -3792,7 +3791,7 @@ Morebits.wiki.page = function (pageName, status) {
 	 *
 	 * @returns {boolean}
 	 */
-	var fnApplyWatchlistExpiry = function () {
+	var fnApplyWatchlistExpiry = function fnApplyWatchlistExpiry() {
 		if (ctx.watchlistExpiry) {
 			if (!ctx.watched || Morebits.string.isInfinity(ctx.watchlistExpiry)) {
 				return true;
@@ -3824,7 +3823,7 @@ Morebits.wiki.page = function (pageName, status) {
 	};
 
 	// callback from saveApi.post()
-	var fnSaveSuccess = function () {
+	var fnSaveSuccess = function fnSaveSuccess() {
 		ctx.editMode = 'all'; // cancel append/prepend/newSection/revert modes
 		var response = ctx.saveApi.getResponse();
 
@@ -3857,7 +3856,7 @@ Morebits.wiki.page = function (pageName, status) {
 	};
 
 	// callback from saveApi.post()
-	var fnSaveError = function () {
+	var fnSaveError = function fnSaveError() {
 		var errorCode = ctx.saveApi.getErrorCode();
 
 		// check for edit conflict
@@ -3921,7 +3920,7 @@ Morebits.wiki.page = function (pageName, status) {
 		}
 	};
 
-	var isTextRedirect = function (text) {
+	var isTextRedirect = function isTextRedirect(text) {
 		if (!text) {
 			// no text - content empty or inaccessible (revdelled or suppressed)
 			return false;
@@ -3930,7 +3929,7 @@ Morebits.wiki.page = function (pageName, status) {
 			return new RegExp('^\\s*' + tag + '\\W', 'i').test(text);
 		});
 	};
-	var fnLookupCreationSuccess = function () {
+	var fnLookupCreationSuccess = function fnLookupCreationSuccess() {
 		var response = ctx.lookupCreationApi.getResponse().query;
 		if (!fnCheckPageName(response, ctx.onLookupCreationFailure)) {
 			return; // abort
@@ -3966,7 +3965,7 @@ Morebits.wiki.page = function (pageName, status) {
 			ctx.lookupCreationApi.post();
 		}
 	};
-	var fnLookupNonRedirectCreator = function () {
+	var fnLookupNonRedirectCreator = function fnLookupNonRedirectCreator() {
 		var response = ctx.lookupCreationApi.getResponse().query;
 		var revs = response.pages[0].revisions;
 		for (var i = 0; i < revs.length; i++) {
@@ -4003,7 +4002,7 @@ Morebits.wiki.page = function (pageName, status) {
 	 * @param {string} onFailure - Failure callback.
 	 * @returns {boolean}
 	 */
-	var fnPreflightChecks = function (action, onFailure) {
+	var fnPreflightChecks = function fnPreflightChecks(action, onFailure) {
 		// if a non-admin tries to do this, don't bother
 		if (!Morebits.userIsSysop && action !== 'move') {
 			ctx.statusElement.error('无法对页面进行“' + action + '”操作：只有具备相应权限者可以进行此操作');
@@ -4027,7 +4026,7 @@ Morebits.wiki.page = function (pageName, status) {
 	 * @param {string} response - The response document from the API call.
 	 * @returns {boolean}
 	 */
-	var fnProcessChecks = function (action, onFailure, response) {
+	var fnProcessChecks = function fnProcessChecks(action, onFailure, response) {
 		var missing = response.pages[0].missing;
 
 		// No undelete as an existing page could have deleted revisions
@@ -4065,7 +4064,7 @@ Morebits.wiki.page = function (pageName, status) {
 		return true; // all OK
 	};
 
-	var fnProcessMove = function () {
+	var fnProcessMove = function fnProcessMove() {
 		var pageTitle, token;
 		if (fnCanUseMwUserToken('move')) {
 			token = mw.user.tokens.get('csrfToken');
@@ -4108,7 +4107,7 @@ Morebits.wiki.page = function (pageName, status) {
 		ctx.moveProcessApi.setParent(this);
 		ctx.moveProcessApi.post();
 	};
-	var fnProcessPatrol = function () {
+	var fnProcessPatrol = function fnProcessPatrol() {
 		var query = {
 			action: 'patrol',
 			format: 'json'
@@ -4146,7 +4145,7 @@ Morebits.wiki.page = function (pageName, status) {
 	};
 
 	// Ensure that the page is curatable
-	var fnProcessTriageList = function () {
+	var fnProcessTriageList = function fnProcessTriageList() {
 		if (ctx.pageID) {
 			ctx.csrfToken = mw.user.tokens.get('csrfToken');
 		} else {
@@ -4171,7 +4170,7 @@ Morebits.wiki.page = function (pageName, status) {
 	};
 
 	// callback from triageProcessListApi.post()
-	var fnProcessTriage = function () {
+	var fnProcessTriage = function fnProcessTriage() {
 		var responseList = ctx.triageProcessListApi.getResponse().pagetriagelist;
 		// Exit if not in the queue
 		if (!responseList || responseList.result !== 'success') {
@@ -4196,7 +4195,7 @@ Morebits.wiki.page = function (pageName, status) {
 			ctx.triageProcessApi.post();
 		}
 	};
-	var fnProcessDelete = function () {
+	var fnProcessDelete = function fnProcessDelete() {
 		var pageTitle, token;
 		if (fnCanUseMwUserToken('delete')) {
 			token = mw.user.tokens.get('csrfToken');
@@ -4232,7 +4231,7 @@ Morebits.wiki.page = function (pageName, status) {
 	};
 
 	// callback from deleteProcessApi.post()
-	var fnProcessDeleteError = function () {
+	var fnProcessDeleteError = function fnProcessDeleteError() {
 		var errorCode = ctx.deleteProcessApi.getErrorCode();
 
 		// check for "Database query error"
@@ -4254,7 +4253,7 @@ Morebits.wiki.page = function (pageName, status) {
 		}
 	};
 
-	var fnProcessUndelete = function () {
+	var fnProcessUndelete = function fnProcessUndelete() {
 		var pageTitle, token;
 		if (fnCanUseMwUserToken('undelete')) {
 			token = mw.user.tokens.get('csrfToken');
@@ -4289,7 +4288,7 @@ Morebits.wiki.page = function (pageName, status) {
 	};
 
 	// callback from undeleteProcessApi.post()
-	var fnProcessUndeleteError = function () {
+	var fnProcessUndeleteError = function fnProcessUndeleteError() {
 		var errorCode = ctx.undeleteProcessApi.getErrorCode();
 
 		// check for "Database query error"
@@ -4318,7 +4317,7 @@ Morebits.wiki.page = function (pageName, status) {
 		}
 	};
 
-	var fnProcessProtect = function () {
+	var fnProcessProtect = function fnProcessProtect() {
 		var response = ctx.protectApi.getResponse().query;
 		if (!fnProcessChecks('protect', ctx.onProtectFailure, response)) {
 			return; // abort
@@ -4427,7 +4426,7 @@ Morebits.wiki.page = function (pageName, status) {
 		ctx.protectProcessApi.setParent(this);
 		ctx.protectProcessApi.post();
 	};
-	var sleep = function (milliseconds) {
+	var sleep = function sleep(milliseconds) {
 		var deferred = $.Deferred();
 		setTimeout(deferred.resolve, milliseconds);
 		return deferred;
@@ -4435,11 +4434,11 @@ Morebits.wiki.page = function (pageName, status) {
 }; // end Morebits.wiki.page
 
 /* Morebits.wiki.page TODO: (XXX)
- * - Should we retry loads also?
- * - Need to reset current action before the save?
- * - Deal with action.completed stuff
- * - Need to reset all parameters once done (e.g. edit summary, move destination, etc.)
- */
+   * - Should we retry loads also?
+   * - Need to reset current action before the save?
+   * - Deal with action.completed stuff
+   * - Need to reset all parameters once done (e.g. edit summary, move destination, etc.)
+   */
 
 /* **************** Morebits.wiki.preview **************** */
 /**
@@ -4491,7 +4490,7 @@ Morebits.wiki.preview = function (previewbox) {
 		var renderApi = new Morebits.wiki.api('加载中…', query, fnRenderSuccess, new Morebits.status('预览'));
 		return renderApi.post();
 	};
-	var fnRenderSuccess = function (apiobj) {
+	var fnRenderSuccess = function fnRenderSuccess(apiobj) {
 		var html = apiobj.getResponse().parse.text;
 		if (!html) {
 			apiobj.statelem.error('加载预览失败，或模板为空');
@@ -4638,7 +4637,7 @@ Morebits.wikitext.page.prototype = {
 	 * @param {string} link_target
 	 * @returns {Morebits.wikitext.page}
 	 */
-	removeLink: function (link_target) {
+	removeLink: function removeLink(link_target) {
 		// Remove a leading colon, to be handled later
 		if (link_target.indexOf(':') === 0) {
 			link_target = link_target.slice(1);
@@ -4670,7 +4669,7 @@ Morebits.wikitext.page.prototype = {
 	 * @param {string} [reason] - Reason to be included in comment, alongside the commented-out image.
 	 * @returns {Morebits.wikitext.page}
 	 */
-	commentOutImage: function (image, reason) {
+	commentOutImage: function commentOutImage(image, reason) {
 		var unbinder = new Morebits.unbinder(this.text);
 		unbinder.unbind('<!--', '-->');
 		reason = reason ? reason + ': ' : '';
@@ -4713,7 +4712,7 @@ Morebits.wikitext.page.prototype = {
 	 * @param {string} data - The display options.
 	 * @returns {Morebits.wikitext.page}
 	 */
-	addToImageComment: function (image, data) {
+	addToImageComment: function addToImageComment(image, data) {
 		var image_re_string = Morebits.pageNameRegex(image);
 		var links_re = new RegExp('\\[\\[' + Morebits.namespaceRegex(6) + ':\\s*' + image_re_string + '\\s*[\\|(?:\\]\\])]');
 		var allLinks = Morebits.string.splitWeightedByKeys(this.text, '[[', ']]');
@@ -4737,7 +4736,7 @@ Morebits.wikitext.page.prototype = {
 	 * include namespace prefix only if not in template namespace.
 	 * @returns {Morebits.wikitext.page}
 	 */
-	removeTemplate: function (template) {
+	removeTemplate: function removeTemplate(template) {
 		var template_re_string = Morebits.pageNameRegex(template);
 		var links_re = new RegExp('\\{\\{(?:' + Morebits.namespaceRegex(10) + ':)?\\s*' + template_re_string + '\\s*[\\|(?:\\}\\})]');
 		var allTemplates = Morebits.string.splitWeightedByKeys(this.text, '{{', '}}', [ '{{{', '}}}' ]);
@@ -4762,7 +4761,7 @@ Morebits.wikitext.page.prototype = {
 	 * before any template matches (i.e. before `{{`), such as html comments.
 	 * @returns {Morebits.wikitext.page}
 	 */
-	insertAfterTemplates: function (tag, regex, flags, preRegex) {
+	insertAfterTemplates: function insertAfterTemplates(tag, regex, flags, preRegex) {
 		if (typeof tag === 'undefined') {
 			throw new Error('No tag provided');
 		}
@@ -4814,7 +4813,7 @@ Morebits.wikitext.page.prototype = {
 	 *
 	 * @returns {string}
 	 */
-	getText: function () {
+	getText: function getText() {
 		return this.text;
 	}
 };
@@ -4944,14 +4943,14 @@ Morebits.status.prototype = {
 	node: null,
 	linked: false,
 	/** Add the status element node to the DOM. */
-	link: function () {
+	link: function link() {
 		if (!this.linked && Morebits.status.root) {
 			Morebits.status.root.appendChild(this.node);
 			this.linked = true;
 		}
 	},
 	/** Remove the status element node from the DOM. */
-	unlink: function () {
+	unlink: function unlink() {
 		if (this.linked) {
 			Morebits.status.root.removeChild(this.node);
 			this.linked = false;
@@ -4964,7 +4963,7 @@ Morebits.status.prototype = {
 	 * @param {string} type - 'status' (blue), 'info' (green), 'warn'
 	 * (red), or 'error' (bold red).
 	 */
-	update: function (status, type) {
+	update: function update(status, type) {
 		this.statRaw = status;
 		this.stat = Morebits.createHtml(status);
 		if (type) {
@@ -4986,7 +4985,7 @@ Morebits.status.prototype = {
 		this.render();
 	},
 	/** Produce the html for first part of the status message. */
-	generate: function () {
+	generate: function generate() {
 		this.node = document.createElement('div');
 		this.node.appendChild(document.createElement('span')).appendChild(this.text);
 		this.node.appendChild(document.createElement('span')).appendChild(document.createTextNode(': '));
@@ -4995,7 +4994,7 @@ Morebits.status.prototype = {
 	},
 
 	/** Complete the html, for the second part of the status message. */
-	render: function () {
+	render: function render() {
 		this.node.className = 'morebits_status_' + this.type;
 		while (this.target.hasChildNodes()) {
 			this.target.removeChild(this.target.firstChild);
@@ -5003,16 +5002,16 @@ Morebits.status.prototype = {
 		this.target.appendChild(this.stat);
 		this.link();
 	},
-	status: function (status) {
-		this.update(status, 'status');
+	status: function status(_status) {
+		this.update(_status, 'status');
 	},
-	info: function (status) {
+	info: function info(status) {
 		this.update(status, 'info');
 	},
-	warn: function (status) {
+	warn: function warn(status) {
 		this.update(status, 'warn');
 	},
-	error: function (status) {
+	error: function error(status) {
 		this.update(status, 'error');
 	}
 };
@@ -5332,7 +5331,7 @@ Morebits.batchOperation = function (currentAction) {
 	// private functions
 
 	var thisProxy = this;
-	var fnStartNewChunk = function () {
+	var fnStartNewChunk = function fnStartNewChunk() {
 		var chunk = ctx.pageChunks[++ctx.currentChunkIndex];
 		if (!chunk) {
 			return; // done! yay
@@ -5344,7 +5343,7 @@ Morebits.batchOperation = function (currentAction) {
 			ctx.worker(page, thisProxy);
 		});
 	};
-	var fnDoneOne = function () {
+	var fnDoneOne = function fnDoneOne() {
 		ctx.countFinished++;
 
 		// update overall status line
@@ -5470,7 +5469,7 @@ Morebits.simpleWindow = function SimpleWindow(width, height) {
 	$(this.content).dialog({
 		autoOpen: false,
 		buttons: {
-			'Placeholder button': function () {}
+			'Placeholder button': function PlaceholderButton() {}
 		},
 		dialogClass: 'morebits-dialog',
 		width: Math.min(parseInt(window.innerWidth, 10), parseInt(width || 800, 10)),
@@ -5479,20 +5478,20 @@ Morebits.simpleWindow = function SimpleWindow(width, height) {
 		// the 20 pixels represents adjustment for the extra height of the jQuery dialog "chrome", compared
 		// to that of the old SimpleWindow
 		height: height + 20,
-		close: function (event) {
+		close: function close(event) {
 			// dialogs and their content can be destroyed once closed
 			$(event.target).dialog('destroy').remove();
 		},
-		resizeStart: function () {
+		resizeStart: function resizeStart() {
 			this.scrollbox = $(this).find('.morebits-scrollbox')[0];
 			if (this.scrollbox) {
 				this.scrollbox.style.maxHeight = 'none';
 			}
 		},
-		resizeStop: function () {
+		resizeStop: function resizeStop() {
 			this.scrollbox = null;
 		},
-		resize: function () {
+		resize: function resize() {
 			this.style.maxHeight = '';
 			if (this.scrollbox) {
 				this.scrollbox.style.width = '';
@@ -5526,7 +5525,7 @@ Morebits.simpleWindow.prototype = {
 	 *
 	 * @returns {Morebits.simpleWindow}
 	 */
-	focus: function () {
+	focus: function focus() {
 		$(this.content).dialog('moveToTop');
 		return this;
 	},
@@ -5537,7 +5536,7 @@ Morebits.simpleWindow.prototype = {
 	 * @param {event} [event]
 	 * @returns {Morebits.simpleWindow}
 	 */
-	close: function (event) {
+	close: function close(event) {
 		if (event) {
 			event.preventDefault();
 		}
@@ -5550,13 +5549,13 @@ Morebits.simpleWindow.prototype = {
 	 *
 	 * @returns {Morebits.simpleWindow}
 	 */
-	display: function () {
+	display: function display() {
 		if (this.scriptName) {
 			var $widget = $(this.content).dialog('widget');
 			$widget.find('.morebits-dialog-scriptname').remove();
 			var scriptnamespan = document.createElement('span');
 			scriptnamespan.className = 'morebits-dialog-scriptname';
-			scriptnamespan.textContent = this.scriptName + ' \u00B7 '; // U+00B7 MIDDLE DOT = &middot;
+			scriptnamespan.textContent = this.scriptName + ' \xB7 '; // U+00B7 MIDDLE DOT = &middot;
 			$widget.find('.ui-dialog-title').prepend(scriptnamespan);
 		}
 		var dialog = $(this.content).dialog('open');
@@ -5574,7 +5573,7 @@ Morebits.simpleWindow.prototype = {
 	 * @param {string} title
 	 * @returns {Morebits.simpleWindow}
 	 */
-	setTitle: function (title) {
+	setTitle: function setTitle(title) {
 		$(this.content).dialog('option', 'title', title);
 		return this;
 	},
@@ -5585,7 +5584,7 @@ Morebits.simpleWindow.prototype = {
 	 * @param {string} name
 	 * @returns {Morebits.simpleWindow}
 	 */
-	setScriptName: function (name) {
+	setScriptName: function setScriptName(name) {
 		this.scriptName = name;
 		return this;
 	},
@@ -5595,7 +5594,7 @@ Morebits.simpleWindow.prototype = {
 	 * @param {number} width
 	 * @returns {Morebits.simpleWindow}
 	 */
-	setWidth: function (width) {
+	setWidth: function setWidth(width) {
 		$(this.content).dialog('option', 'width', width);
 		return this;
 	},
@@ -5606,7 +5605,7 @@ Morebits.simpleWindow.prototype = {
 	 * @param {number} height
 	 * @returns {Morebits.simpleWindow}
 	 */
-	setHeight: function (height) {
+	setHeight: function setHeight(height) {
 		this.height = height;
 
 		// from display time onwards, let the browser determine the optimum height,
@@ -5631,7 +5630,7 @@ Morebits.simpleWindow.prototype = {
 	 * @param {HTMLElement} content
 	 * @returns {Morebits.simpleWindow}
 	 */
-	setContent: function (content) {
+	setContent: function setContent(content) {
 		this.purgeContent();
 		this.addContent(content);
 		return this;
@@ -5642,7 +5641,7 @@ Morebits.simpleWindow.prototype = {
 	 * @param {HTMLElement} content
 	 * @returns {Morebits.simpleWindow}
 	 */
-	addContent: function (content) {
+	addContent: function addContent(content) {
 		this.content.appendChild(content);
 
 		// look for submit buttons in the content, hide them, and add a proxy button to the button pane
@@ -5672,7 +5671,7 @@ Morebits.simpleWindow.prototype = {
 	 *
 	 * @returns {Morebits.simpleWindow}
 	 */
-	purgeContent: function () {
+	purgeContent: function purgeContent() {
 		this.buttons = [];
 		// delete all buttons in the buttonpane
 		$(this.content).dialog('widget').find('.morebits-dialog-buttons').empty();
@@ -5692,7 +5691,7 @@ Morebits.simpleWindow.prototype = {
 	 * @param {boolean} [prep=false] - Set true to prepend rather than append.
 	 * @returns {Morebits.simpleWindow}
 	 */
-	addFooterLink: function (text, wikiPage, prep) {
+	addFooterLink: function addFooterLink(text, wikiPage, prep) {
 		var $footerlinks = $(this.content).dialog('widget').find('.morebits-dialog-footerlinks');
 		if (this.hasFooterLinks) {
 			var bullet = document.createElement('span');
@@ -5725,7 +5724,7 @@ Morebits.simpleWindow.prototype = {
 	 * page will be disabled, i.e., cannot be interacted with.
 	 * @returns {Morebits.simpleWindow}
 	 */
-	setModality: function (modal) {
+	setModality: function setModality(modal) {
 		$(this.content).dialog('option', 'modal', modal);
 		return this;
 	}

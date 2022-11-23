@@ -9,6 +9,24 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - twinkleconfig.js */
+'use strict';
+
+// Polyfill
+// eslint-disable-next-line no-implicit-globals
+function _typeof(obj) {
+	'@babel/helpers - typeof';
+
+	// eslint-disable-next-line no-return-assign, no-func-assign, no-undef
+	return _typeof = typeof Symbol === 'function' && typeof Symbol.iterator === 'symbol' ? function (obj) {
+		return typeof obj;
+
+	} : function (obj) {
+		// eslint-disable-next-line no-undef
+		return obj && typeof Symbol === 'function' && obj.constructor === Symbol && obj !== Symbol.prototype ? 'symbol' : typeof obj;
+		// eslint-disable-next-line no-sequences
+	}, _typeof(obj);
+}
+
 /* <nowiki> */
 (function ($) {
 /*
@@ -1001,7 +1019,7 @@ Twinkle.config.init = function twinkleconfigInit() {
 						cell.appendChild(label);
 						var checkdiv = document.createElement('div');
 						checkdiv.style.paddingLeft = '1em';
-						var worker = function (itemkey, itemvalue) {
+						var worker = function worker(itemkey, itemvalue) {
 							var checklabel = document.createElement('label');
 							checklabel.style.marginRight = '0.7em';
 							checklabel.style.display = 'inline-block';
@@ -1342,7 +1360,7 @@ Twinkle.config.writePrefs = function twinkleconfigWritePrefs(pageobj) {
 	// arrays of strings, and arrays of { value, label })
 	// and it is not very robust: e.g. compare([2], ["2"]) === true, and
 	// compare({}, {}) === false, but it's good enough for our purposes here
-	var compare = function (a, b) {
+	var compare = function compare(a, b) {
 		if (Array.isArray(a)) {
 			if (a.length !== b.length) {
 				return false;
@@ -1351,7 +1369,7 @@ Twinkle.config.writePrefs = function twinkleconfigWritePrefs(pageobj) {
 				bsort = b.sort();
 			for (var i = 0; asort[i]; ++i) {
 				// comparison of the two properties of custom lists
-				if (typeof asort[i] === 'object' && (asort[i].label !== bsort[i].label || asort[i].value !== bsort[i].value)) {
+				if (_typeof(asort[i]) === 'object' && (asort[i].label !== bsort[i].label || asort[i].value !== bsort[i].value)) {
 					return false;
 				} else if (asort[i].toString() !== bsort[i].toString()) {
 					return false;
