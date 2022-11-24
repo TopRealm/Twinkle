@@ -10,7 +10,6 @@
  */
 /* Twinkle.js - morebits.js */
 /* eslint-disable no-throw-literal */
-/* eslint-disable jsdoc/no-undefined-types */
 /* eslint-disable es-x/no-map */
 /* <nowiki> */
 /**
@@ -2277,7 +2276,7 @@ Morebits.wiki.api.prototype = {
 	 * Carry out the request.
 	 *
 	 * @param {Object} callerAjaxParameters - Do not specify a parameter unless you really want to give jQuery some extra parameters.
-	 * @returns {promise} - A jQuery promise object that is resolved or rejected with the api object.
+	 * @returns {@promise} - A jQuery promise object that is resolved or rejected with the api object.
 	 */
 	post: function post(callerAjaxParameters) {
 		++Morebits.wiki.numberOfActionsLeft;
