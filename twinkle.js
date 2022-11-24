@@ -209,7 +209,7 @@ switch (mw.config.get('skin')) {
 		Twinkle.defaultConfig.portletType = 'menu';
 		Twinkle.defaultConfig.portletNext = 'p-search';
 		break;
-	case 'timeless':
+	case 'gongbi':
 		Twinkle.defaultConfig.portletArea = '#page-tools .sidebar-inner';
 		Twinkle.defaultConfig.portletId = 'p-twinkle';
 		Twinkle.defaultConfig.portletName = 'Twinkle';
@@ -251,12 +251,6 @@ Twinkle.getPref = function twinkleGetPref(name) {
  *  "left-navigation", outer nav class contains "vector-menu-tabs" or "vector-menu-dropdown". Existing portlets: "p-namespaces", "p-variants" (menu)
  *  "right-navigation", outer nav class contains "vector-menu-tabs" or "vector-menu-dropdown". Existing portlets: "p-views", "p-cactions" (menu), "p-search"
  *  Special layout of p-personal portlet (part of "head") through specialized styles.
- * Monobook:
- *  "column-one", outer nav class "portlet", inner div class "pBody". Existing portlets: "p-cactions", "p-personal", "p-logo", "p-navigation", "p-search", "p-interaction", "p-tb", "p-coll-print_export"
- *  Special layout of p-cactions and p-personal through specialized styles.
- * Modern:
- *  "mw_contentwrapper" (top nav), outer nav class "portlet", inner div class "pBody". Existing portlets or elements: "p-cactions", "mw_content"
- *  "mw_portlets" (sidebar), outer nav class "portlet", inner div class "pBody". Existing portlets: "p-navigation", "p-search", "p-interaction", "p-tb", "p-coll-print_export"
  *
  * @param String navigation -- id of the target navigation area (skin dependant, on vector either of "left-navigation", "right-navigation", or "mw-panel")
  * @param String id -- id of the portlet menu to create, preferably start with "p-".
@@ -301,13 +295,7 @@ Twinkle.addPortlet = function (navigation, id, text, type, nextnodeid) {
 			outerNavClass = 'mw-portlet vector-menu vector-menu-' + (navigation === 'mw-panel' ? 'portal' : type === 'menu' ? 'dropdown vector-menu-dropdown-noicon' : 'tabs');
 			innerDivClass = 'vector-menu-content';
 			break;
-		case 'modern':
-			if (navigation !== 'mw_portlets' && navigation !== 'mw_contentwrapper') {
-				navigation = 'mw_portlets';
-			}
-			outerNavClass = 'portlet';
-			break;
-		case 'timeless':
+		case 'gongbi':
 			outerNavClass = 'mw-portlet';
 			innerDivClass = 'mw-portlet-body';
 			break;
@@ -344,7 +332,7 @@ Twinkle.addPortlet = function (navigation, id, text, type, nextnodeid) {
 			outerNav.appendChild(chkbox);
 
 			// Vector gets its title in a span; all others except
-			// timeless have no title, and it has no span
+			// Gongbi have no title, and it has no span
 			var span = document.createElement('span');
 			span.appendChild(document.createTextNode(text));
 			h3.appendChild(span);
@@ -356,7 +344,7 @@ Twinkle.addPortlet = function (navigation, id, text, type, nextnodeid) {
 			h3.appendChild(a);
 		}
 	} else {
-		// Basically just Timeless
+		// Basically just Gongbi
 		h3.appendChild(document.createTextNode(text));
 	}
 	outerNav.appendChild(h3);
