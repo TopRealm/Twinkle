@@ -27,7 +27,6 @@ var blockActionText = {
 	reblock: '重新封禁',
 	unblock: '解除封禁'
 };
-
 Twinkle.block = function twinkleblock() {
 	// should show on Contributions or Block pages, anywhere there's a relevant user
 	if (relevantUserName && (Morebits.userIsSysop || !mw.util.isIPAddress(relevantUserName, true))) {
@@ -543,14 +542,12 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 					name: 'notalk',
 					checked: Twinkle.block.field_template_options.notalk,
 					tooltip: '用此在保护模板中指明该用户编辑讨论页的权限已被移除'
-				},
-				{
+				}, {
 					label: '不能发送电子邮件',
 					name: 'noemail_template',
 					checked: Twinkle.block.field_template_options.noemail_template,
 					tooltip: '用此在保护模板中指明该用户发送电子邮件的权限已被移除'
-				},
-				{
+				}, {
 					label: '不能创建账户',
 					name: 'nocreate_template',
 					checked: Twinkle.block.field_template_options.nocreate_template,
@@ -558,7 +555,6 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 				} ]
 			});
 		}
-
 		var $previewlink = $('<a id="twinkleblock-preivew-link">预览</a>');
 		$previewlink.off('click').on('click', function () {
 			Twinkle.block.callback.preview($form[0]);
