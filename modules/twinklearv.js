@@ -520,7 +520,7 @@ Twinkle.arv.callback.evaluate = function (e) {
 				var diffNum = /^\d+$/.test(diff); // used repeatedly
 
 				// rvdiffto in prop=revisions is deprecated, but action=compare doesn't return
-				// timestamps ([[phab:T247686]]) so we can't rely on it unless necessary.
+				// timestamps so we can't rely on it unless necessary.
 				// Likewise, we can't rely on a meaningful comment for diff=cur.
 				// Additionally, links like Special:Diff/123/next, Special:Diff/123/456, or ?diff=next&oldid=123
 				// would each require making use of rvdir=newer in the revisions API.

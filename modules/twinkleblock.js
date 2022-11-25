@@ -666,7 +666,7 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 				}
 			},
 			maximumSelectionLength: 10,
-			// Software limitation [[phab:T202776]]
+			// Software limitation
 			minimumInputLength: 1,
 			// prevent ajax call when empty
 			ajax: {
@@ -1411,7 +1411,7 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate(e) {
 			}
 			if (!blockoptions.namespacerestrictions && !blockoptions.pagerestrictions) {
 				if (!blockoptions.noemail && !blockoptions.nocreate) {
-					// Blank entries technically allowed [[phab:T208645]]
+					// Blank entries technically allowed
 					return alert('没有选择页面或命名空间，也没有停用电子邮件或禁止创建账户；请选择至少一个选项以应用部分封禁！');
 				} else if (!confirm('您将要进行封禁，但没有阻止任何页面或命名空间的编辑，确定要继续？')) {
 					return;
@@ -1436,7 +1436,7 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate(e) {
 		blockoptions.anononly = blockoptions.hardblock ? undefined : true;
 		blockoptions.allowusertalk = blockoptions.disabletalk ? undefined : true;
 
-		// fix for bug with block API, see [[phab:T68646]]
+		// fix for bug with block API, see
 		if (blockoptions.expiry === 'infinity') {
 			blockoptions.expiry = 'infinite';
 		}

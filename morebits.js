@@ -2067,7 +2067,7 @@ Morebits.date.prototype = {
 
 // Allow native Date.prototype methods to be used on Morebits.date objects
 Object.getOwnPropertyNames(Date.prototype).forEach(function (func) {
-	// Exclude methods that collide with PageTriage's Date.js external, which clobbers native Date: [[phab:T268513]]
+	// Exclude methods that collide with PageTriage's Date.js external, which clobbers native Date
 	if ([ 'add', 'getDayName', 'getMonthName' ].indexOf(func) === -1) {
 		Morebits.date.prototype[func] = function () {
 			return this._d[func].apply(this._d, Array.prototype.slice.call(arguments));
@@ -4182,7 +4182,7 @@ Morebits.wiki.page = function (pageName, status) {
 				action: 'pagetriageaction',
 				pageid: ctx.pageID,
 				reviewed: 1,
-				// tags: ctx.changeTags, // pagetriage tag support: [[phab:T252980]]
+				// tags: ctx.changeTags, // pagetriage tag support
 				// Could use an adder to modify/create note:
 				// summaryAd, but that seems overwrought
 				token: ctx.csrfToken,
@@ -4411,7 +4411,7 @@ Morebits.wiki.page = function (pageName, status) {
 			watchlist: ctx.watchlistOption,
 			format: 'json'
 		};
-		// Only shows up in logs, not page history [[phab:T259983]]
+		// Only shows up in logs, not page history
 		if (ctx.changeTags) {
 			query.tags = ctx.changeTags;
 		}

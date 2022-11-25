@@ -154,7 +154,7 @@ Twinkle.batchundelete.callback.evaluate = function (event) {
 		qiuwen_page.setEditSummary(input.reason + ' (批量)');
 		qiuwen_page.setChangeTags(Twinkle.changeTags);
 		qiuwen_page.suppressProtectWarning();
-		qiuwen_page.setMaxRetries(3); // temporary increase from 2 to make batchundelete more likely to succeed [[phab:T222402]] #613
+		qiuwen_page.setMaxRetries(3); // temporary increase from 2 to make batchundelete more likely to succeed
 		qiuwen_page.undeletePage(Twinkle.batchundelete.callbacks.doExtras, pageUndeleter.workerFailure);
 	});
 };

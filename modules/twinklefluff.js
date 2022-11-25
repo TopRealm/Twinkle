@@ -29,7 +29,7 @@ Twinkle.fluff = function twinklefluff() {
 	// care of namespace/contentModel restrictions as well as explicit
 	// protections; it won't take care of cascading or TitleBlacklist.
 	if (mw.config.get('wgIsProbablyEditable')) {
-		// wgDiffOldId included for clarity in if else loop [[phab:T214985]]
+		// wgDiffOldId included for clarity in if else loop
 		if (mw.config.get('wgDiffNewId') || mw.config.get('wgDiffOldId')) {
 			// Reload alongside the revision slider
 			mw.hook('wikipage.diff').add(function () {
@@ -180,7 +180,7 @@ Twinkle.fluff.addLinks = {
 					var page = $(current).find('.mw-contributions-title').text();
 
 					// It's unlikely, but we can't easily check for revdel'd usernames
-					// since only a strong element is provided, with no easy selector [[phab:T255903]]
+					// since only a strong element is provided, with no easy selector
 					current.appendChild(Twinkle.fluff.linkBuilder.rollbackLinks(username, true, current.dataset.mwRevid, page));
 				});
 			}
