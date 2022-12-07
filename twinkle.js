@@ -27,6 +27,7 @@
  */
 
 /* global Morebits */
+/* eslint-disable no-console */
 
 (function (window, document, $) { // Wrap with anonymous function
 
@@ -423,6 +424,7 @@ $.ajax({
 })
 	.fail(function () {
 		mw.notify('未能加载您的Twinkle参数设置', { type: 'error' });
+		console.error('[Twinkle] 未能加载您的Twinkle参数设置');
 	})
 	.done(function (optionsText) {
 
@@ -452,6 +454,7 @@ $.ajax({
 			}
 		} catch (e) {
 			mw.notify('未能解析您的Twinkle参数设置', { type: 'error' });
+			console.error('[Twinkle] 未能加载您的Twinkle参数设置');
 		}
 	})
 	.always(function () {
