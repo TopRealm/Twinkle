@@ -422,7 +422,7 @@ $.ajax({
 	dataType: 'text'
 })
 	.fail(function () {
-		mw.notify('Could not load your Twinkle preferences, resorting to default preferences');
+		mw.notify('未能加载您的Twinkle参数设置', { type: 'error' });
 	})
 	.done(function (optionsText) {
 
@@ -464,12 +464,12 @@ $.ajax({
 Twinkle.load = function () {
 	// Don't activate on special pages other than those listed here, so
 	// that others load faster, especially the watchlist.
-	var activeSpecialPageList = [ 'AbuseLog', 'Block', 'Contributions', 'Recentchanges', 'Recentchangeslinked' ]; // wgRelevantUserName defined for non-sysops on Special:Block
+	var activeSpecialPageList = [ 'Block', 'Contributions', 'AbuseLog', 'Recentchanges', 'Recentchangeslinked' ]; // wgRelevantUserName defined for non-sysops on Special:Block
 	if (Morebits.userIsSysop) {
 		activeSpecialPageList = activeSpecialPageList.concat([ 'DeletedContributions', 'Prefixindex', 'BrokenRedirects' ]);
 	}
 	if (mw.config.get('wgNamespaceNumber') === -1 &&
-			activeSpecialPageList.indexOf(mw.config.get('wgCanonicalSpecialPageName')) === -1) {
+		activeSpecialPageList.indexOf(mw.config.get('wgCanonicalSpecialPageName')) === -1) {
 		return;
 	}
 
@@ -479,26 +479,26 @@ Twinkle.load = function () {
 	}
 
 	// Set custom Api-User-Agent header, for server-side logging purposes
-	Morebits.wiki.api.setApiUserAgent('Twinkle/' + mw.config.get('wgWikiID'));
+	Morebits.wiki.api.setApiUserAgent('Twinkle (' + mw.config.get('wgWikiID') + ')');
 
 	Twinkle.disabledModules = Twinkle.getPref('disabledModules').concat(Twinkle.getPref('disabledSysopModules'));
 
 	// Redefine addInitCallback so that any modules being loaded now on are directly
 	// initialised rather than added to initCallbacks array
-	Twinkle.addInitCallback = function (func, name) {
+	Twinkle.addInitCallback = function(func, name) {
 		if (!name || Twinkle.disabledModules.indexOf(name) === -1) {
 			func();
 		}
 	};
 	// Initialise modules that were saved in initCallbacks array
-	Twinkle.initCallbacks.forEach(function (module) {
+	Twinkle.initCallbacks.forEach(function(module) {
 		Twinkle.addInitCallback(module.func, module.name);
 	});
 
 	// Increases text size in Twinkle dialogs, if so configured
 	if (Twinkle.getPref('dialogLargeFont')) {
 		mw.util.addCSS('.morebits-dialog-content, .morebits-dialog-footerlinks { font-size: 100% !important; } ' +
-				'.morebits-dialog input, .morebits-dialog select, .morebits-dialog-content button { font-size: inherit !important; }');
+			'.morebits-dialog input, .morebits-dialog select, .morebits-dialog-content button { font-size: inherit !important; }');
 	}
 
 	// Hide the lingering space if the TW menu is empty
@@ -523,31 +523,8 @@ Twinkle.summaryAd = '（[[H:TW|Twinkle]]）';
 // Check QW:STYLE
 Twinkle.hatnoteRegex = '(?:Short[ _]description)|(?:Rellink|Hatnote|HAT)|(?:Main|细节|細節|Main[ _]articles|主条目|主條目|Hurricane[ _]main|条目|條目|主|頁面|页面|主頁面|主页面|主頁|主页|主題目|主题目|Main[ _]article|AP)|(?:Wrongtitle|Correct[ _]title)|(?:主条目消歧义|主條目消歧義|消歧义链接|消歧義鏈接|消歧義連結|消连|消連|消歧义连结|DisambLink|Noteref|Dablink)|(?:Distinguish|不是|Not|提示|混淆|分別|分别|區別|区别|本条目的主题不是|本條目的主題不是|本条目主题不是|本條目主題不是|条目主题不是|條目主題不是|主题不是|主題不是|Confused|区分|區分|Confusion|Confuse|RedirectNOT|Misspelling)|(?:Distinguish2|SelfDistinguish|Not2|不是2)|(?:For)|(?:Details|Further|See|另见|另見|More|相關條目|相关条目|Detail|见|見|更多资料|更多資料|Further[ _]information|更多资讯|更多資訊|More[ _]information|更多信息)|(?:Selfref)|(?:About|Otheruses4|关于|關於)|(?:Other[ _]uses|Otheruse|条目消歧义|條目消歧義|他用|Otheruses)|(?:Other[ _]uses list|Otheruselist|主條目消歧義列表|主条目消歧义列表|Otheruseslist|Aboutlist|About[ _]list|Otheruses[ _]list)|(?:Redirect|重定向至此|Redirects[ _]here|Redirect[ _]to)|(?:Redirect2|主條目消歧義2|主条目消歧义2|Redir|重定向至此2)|(?:Redirect3)|(?:Redirect4)|(?:Redirect-distinguish)|(?:Redirect-synonym)|(?:Redirect-multi)|(?:Seealso|参看|參看|See[ _]also|参见|參見|Also)|(?:See[ _]also2|Seealso2|不轉換參見|不转换参见)|(?:Other[ _]places)|(?:Contrast|對比|对比)';
 
-// Used in XFD
-Twinkle.makeFindSourcesDiv = function makeSourcesDiv(divID) {
-	if (!$(divID).length) {
-		return;
-	}
-	if (!Twinkle.findSources) {
-		var parser = new Morebits.wiki.preview($(divID)[0]);
-		parser.beginRender('({{Find sources|' + Morebits.pageNameNorm + '}})', 'QW:AFD').then(function () {
-			// Save for second-time around
-			Twinkle.findSources = parser.previewbox.innerHTML;
-			$(divID).removeClass('morebits-previewbox');
-		});
-	} else {
-		$(divID).html(Twinkle.findSources);
-	}
-};
-
-/**
- * Twinkle-specific utility functions shared by multiple modules
- *
- * @param first
- * @param second
- */
-// Used in batch and unlink to sort pages by namespace, as
-// json formatversion=2 sorts by pageid instead (#1251)
+// Used in batch, unlink, and deprod to sort pages by namespace, as
+// json formatversion=2 sorts by pageid instead
 Twinkle.sortByNamespace = function (first, second) {
 	return first.ns - second.ns || (first.title > second.title ? 1 : -1);
 };
