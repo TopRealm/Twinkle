@@ -32,7 +32,7 @@
 (function (window, document, $) { // Wrap with anonymous function
 
 // Check if account is experienced enough to use Twinkle
-if (!Morebits.userIsInGroup('autoconfirmed') && !Morebits.userIsInGroup('confirmed') && !Morebits.userIsInGroup('senioreditor') && !Morebits.userIsInGroup('sysop') && !Morebits.userIsInGroup('steward')) {
+if (!Morebits.userIsInGroup('autoconfirmed') && !Morebits.userIsInGroup('confirmed')) {
 	return;
 }
 
