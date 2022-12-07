@@ -39,6 +39,21 @@ if (!Morebits.userIsInGroup('autoconfirmed') && !Morebits.userIsInGroup('confirm
 var Twinkle = {};
 window.Twinkle = Twinkle;  // allow global access
 
+/**
+ * Twinkle-specific data shared by multiple modules
+ * Likely customized per installation
+ */
+
+// Custom change tag(s) to be applied to all Twinkle actions, create at Special:Tags
+Twinkle.changeTags = 'Twinkle';
+// Available for actions that don't (yet) support tags
+// currently: FlaggedRevs and PageTriage
+Twinkle.summaryAd = '（[[H:TW|Twinkle]]）';
+
+// Various hatnote templates, used when tagging (csd/xfd/tag/protect) to
+// Check QW:STYLE
+Twinkle.hatnoteRegex = '(?:Short[ _]description)|(?:Rellink|Hatnote|HAT)|(?:Main|细节|細節|Main[ _]articles|主条目|主條目|Hurricane[ _]main|条目|條目|主|頁面|页面|主頁面|主页面|主頁|主页|主題目|主题目|Main[ _]article|AP)|(?:Wrongtitle|Correct[ _]title)|(?:主条目消歧义|主條目消歧義|消歧义链接|消歧義鏈接|消歧義連結|消连|消連|消歧义连结|DisambLink|Noteref|Dablink)|(?:Distinguish|不是|Not|提示|混淆|分別|分别|區別|区别|本条目的主题不是|本條目的主題不是|本条目主题不是|本條目主題不是|条目主题不是|條目主題不是|主题不是|主題不是|Confused|区分|區分|Confusion|Confuse|RedirectNOT|Misspelling)|(?:Distinguish2|SelfDistinguish|Not2|不是2)|(?:For)|(?:Details|Further|See|另见|另見|More|相關條目|相关条目|Detail|见|見|更多资料|更多資料|Further[ _]information|更多资讯|更多資訊|More[ _]information|更多信息)|(?:Selfref)|(?:About|Otheruses4|关于|關於)|(?:Other[ _]uses|Otheruse|条目消歧义|條目消歧義|他用|Otheruses)|(?:Other[ _]uses list|Otheruselist|主條目消歧義列表|主条目消歧义列表|Otheruseslist|Aboutlist|About[ _]list|Otheruses[ _]list)|(?:Redirect|重定向至此|Redirects[ _]here|Redirect[ _]to)|(?:Redirect2|主條目消歧義2|主条目消歧义2|Redir|重定向至此2)|(?:Redirect3)|(?:Redirect4)|(?:Redirect-distinguish)|(?:Redirect-synonym)|(?:Redirect-multi)|(?:Seealso|参看|參看|See[ _]also|参见|參見|Also)|(?:See[ _]also2|Seealso2|不轉換參見|不转换参见)|(?:Other[ _]places)|(?:Contrast|對比|对比)';
+
 Twinkle.initCallbacks = [];
 /**
  * Adds a callback to execute when Twinkle has loaded.
@@ -320,7 +335,15 @@ Twinkle.addPortlet = function (navigation, id, text, type, nextnodeid) {
 	}
 
 	// Build the DOM elements.
-	var outerNav = document.createElement('nav');
+	var outerNav, heading;
+	if (skin === 'vector-2022') {
+		outerNav = document.createElement('div');
+		heading = document.createElement('label');
+	} else {
+		outerNav = document.createElement('nav');
+		heading = document.createElement('h3');
+	}
+
 	outerNav.setAttribute('aria-labelledby', id + '-label');
 	outerNav.className = outerNavClass + ' emptyPortlet';
 	outerNav.id = id;
@@ -330,13 +353,12 @@ Twinkle.addPortlet = function (navigation, id, text, type, nextnodeid) {
 		root.appendChild(outerNav);
 	}
 
-	var h3 = document.createElement('h3');
-	h3.id = id + '-label';
+	heading.id = id + '-label';
 	var ul = document.createElement('ul');
 
 	if (skin === 'vector' || skin === 'vector-2022') {
 		ul.className = 'vector-menu-content-list';
-		h3.className = 'vector-menu-heading';
+		heading.className = 'vector-menu-heading';
 
 		// add invisible checkbox to keep menu open when clicked
 		// similar to the p-cactions ("More") menu
@@ -348,10 +370,10 @@ Twinkle.addPortlet = function (navigation, id, text, type, nextnodeid) {
 			outerNav.appendChild(chkbox);
 
 			// Vector gets its title in a span; all others except
-			// Gongbi have no title, and it has no span
+			// gongbi have no title, and it has no span
 			var span = document.createElement('span');
 			span.appendChild(document.createTextNode(text));
-			h3.appendChild(span);
+			heading.appendChild(span);
 
 			var a = document.createElement('a');
 			a.href = '#';
@@ -360,14 +382,14 @@ Twinkle.addPortlet = function (navigation, id, text, type, nextnodeid) {
 				e.preventDefault();
 			});
 
-			h3.appendChild(a);
+			heading.appendChild(a);
 		}
 	} else {
-		// Basically just Gongbi
-		h3.appendChild(document.createTextNode(text));
+		// Basically just gongbi
+		heading.appendChild(document.createTextNode(text));
 	}
 
-	outerNav.appendChild(h3);
+	outerNav.appendChild(heading);
 
 	if (innerDivClass) {
 		var innerDiv = document.createElement('div');
@@ -379,7 +401,6 @@ Twinkle.addPortlet = function (navigation, id, text, type, nextnodeid) {
 	}
 
 	return outerNav;
-
 };
 
 /**
@@ -399,7 +420,7 @@ Twinkle.addPortletLink = function (task, text, id, tooltip) {
 	var link = mw.util.addPortletLink(Twinkle.getPref('portletId'), typeof task === 'string' ? task : '#', text, id, tooltip);
 	$('.client-js .skin-vector #p-cactions').css('margin-right', 'initial');
 	if (typeof task === 'function') {
-		$(link).on('click', function (ev) {
+		$(link).find('a').on('click', function (ev) {
 			task();
 			ev.preventDefault();
 		});
@@ -488,13 +509,13 @@ Twinkle.load = function () {
 
 	// Redefine addInitCallback so that any modules being loaded now on are directly
 	// initialised rather than added to initCallbacks array
-	Twinkle.addInitCallback = function(func, name) {
+	Twinkle.addInitCallback = function (func, name) {
 		if (!name || Twinkle.disabledModules.indexOf(name) === -1) {
 			func();
 		}
 	};
 	// Initialise modules that were saved in initCallbacks array
-	Twinkle.initCallbacks.forEach(function(module) {
+	Twinkle.initCallbacks.forEach(function (module) {
 		Twinkle.addInitCallback(module.func, module.name);
 	});
 
@@ -510,21 +531,6 @@ Twinkle.load = function () {
 		$('#p-cactions').css('margin-right', 'initial');
 	}
 };
-
-/**
- * Twinkle-specific data shared by multiple modules
- * Likely customized per installation
- */
-
-// Custom change tag(s) to be applied to all Twinkle actions, create at Special:Tags
-Twinkle.changeTags = 'Twinkle';
-// Available for actions that don't (yet) support tags
-// currently: FlaggedRevs and PageTriage
-Twinkle.summaryAd = '（[[H:TW|Twinkle]]）';
-
-// Various hatnote templates, used when tagging (csd/xfd/tag/protect) to
-// Check QW:STYLE
-Twinkle.hatnoteRegex = '(?:Short[ _]description)|(?:Rellink|Hatnote|HAT)|(?:Main|细节|細節|Main[ _]articles|主条目|主條目|Hurricane[ _]main|条目|條目|主|頁面|页面|主頁面|主页面|主頁|主页|主題目|主题目|Main[ _]article|AP)|(?:Wrongtitle|Correct[ _]title)|(?:主条目消歧义|主條目消歧義|消歧义链接|消歧義鏈接|消歧義連結|消连|消連|消歧义连结|DisambLink|Noteref|Dablink)|(?:Distinguish|不是|Not|提示|混淆|分別|分别|區別|区别|本条目的主题不是|本條目的主題不是|本条目主题不是|本條目主題不是|条目主题不是|條目主題不是|主题不是|主題不是|Confused|区分|區分|Confusion|Confuse|RedirectNOT|Misspelling)|(?:Distinguish2|SelfDistinguish|Not2|不是2)|(?:For)|(?:Details|Further|See|另见|另見|More|相關條目|相关条目|Detail|见|見|更多资料|更多資料|Further[ _]information|更多资讯|更多資訊|More[ _]information|更多信息)|(?:Selfref)|(?:About|Otheruses4|关于|關於)|(?:Other[ _]uses|Otheruse|条目消歧义|條目消歧義|他用|Otheruses)|(?:Other[ _]uses list|Otheruselist|主條目消歧義列表|主条目消歧义列表|Otheruseslist|Aboutlist|About[ _]list|Otheruses[ _]list)|(?:Redirect|重定向至此|Redirects[ _]here|Redirect[ _]to)|(?:Redirect2|主條目消歧義2|主条目消歧义2|Redir|重定向至此2)|(?:Redirect3)|(?:Redirect4)|(?:Redirect-distinguish)|(?:Redirect-synonym)|(?:Redirect-multi)|(?:Seealso|参看|參看|See[ _]also|参见|參見|Also)|(?:See[ _]also2|Seealso2|不轉換參見|不转换参见)|(?:Other[ _]places)|(?:Contrast|對比|对比)';
 
 // Used in batch, unlink, and deprod to sort pages by namespace, as
 // json formatversion=2 sorts by pageid instead
