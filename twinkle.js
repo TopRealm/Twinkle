@@ -359,7 +359,7 @@ Twinkle.addPortlet = function (navigation, id, text, type, nextnodeid) {
 				e.preventDefault();
 			});
 
-			h3.appendChild(a);G
+			h3.appendChild(a);
 		}
 	} else {
 		// Basically just Gongbi
