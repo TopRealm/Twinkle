@@ -1516,7 +1516,7 @@ Twinkle.speedy.callback.evaluateUser = function twinklespeedyCallbackEvaluateUse
 	Morebits.wiki.actionCompleted.redirect = mw.config.get('wgPageName');
 	Morebits.wiki.actionCompleted.notice = '标记完成';
 	var qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'), '标记页面');
-	qiuwen_page.setChangeTags(Twinkle.changeTags); // Here to apply to triage
+	qiuwen_page.setChangeTags(Twinkle.changeTags);
 	qiuwen_page.setCallbackParameters(params);
 	qiuwen_page.load(Twinkle.speedy.callbacks.user.main);
 };
