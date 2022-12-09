@@ -222,7 +222,7 @@ Twinkle.getPref = function twinkleGetPref(name) {
 	if (typeof Twinkle.prefs === 'object' && Twinkle.prefs[name] !== undefined) {
 		return Twinkle.prefs[name];
 	}
-	// Old preferences format, used before twinkleoptions.js was a thing
+	// Old preferences format, used before twinkleoptions.json was a thing
 	if (typeof window.TwinkleConfig === 'object' && window.TwinkleConfig[name] !== undefined) {
 		return window.TwinkleConfig[name];
 	}
@@ -411,7 +411,7 @@ var scriptpathbefore = mw.util.wikiScript('index') + '?title=',
 
 // Retrieve the user's Twinkle preferences
 $.ajax({
-	url: scriptpathbefore + 'User:' + encodeURIComponent(mw.config.get('wgUserName')) + '/twinkleoptions.js' + scriptpathafter,
+	url: scriptpathbefore + 'User:' + encodeURIComponent(mw.config.get('wgUserName')) + '/twinkleoptions.json' + scriptpathafter,
 	dataType: 'text'
 })
 	.fail(function () {

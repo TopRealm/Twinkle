@@ -115,7 +115,7 @@ Twinkle.config.commonSets = {
 	 *   title: <human-readable section title>,
 	 *   module: <name of the associated module, used to link to sections>,
 	 *   adminOnly: <true for admin-only sections>,
-	 *   hidden: <true for advanced preferences that rarely need to be changed - they can still be modified by manually editing twinkleoptions.js>,
+	 *   hidden: <true for advanced preferences that rarely need to be changed - they can still be modified by manually editing twinkleoptions.json>,
 	 *   preferences: [
 	 *     {
 	 *       name: <TwinkleConfig property name>,
@@ -857,7 +857,7 @@ Twinkle.config.init = function twinkleconfigInit() {
 		contentdiv.textContent = '';  // clear children
 
 		// let user know about possible conflict with skin js/common.js file
-		// (settings in that file will still work, but they will be overwritten by twinkleoptions.js settings)
+		// (settings in that file will still work, but they will be overwritten by twinkleoptions.json settings)
 		if (window.TwinkleConfig || window.FriendlyConfig) {
 			var contentnotice = document.createElement('p');
 			contentnotice.innerHTML = '<b>在这里修改您的参数设置之前，</b>确认您已移除了<a href="' + mw.util.getUrl('Special:MyPage/skin.js') + '" title="Special:MyPage/skin.js">用户JavaScript文件</a>中任何旧的<code>FriendlyConfig</code>设置。';
@@ -1451,7 +1451,7 @@ Twinkle.config.resetAllPrefs = function twinkleconfigResetAllPrefs() {
 Twinkle.config.save = function twinkleconfigSave(e) {
 	Morebits.status.init(document.getElementById('twinkle-config-content'));
 
-	var userjs = mw.config.get('wgFormattedNamespaces')[mw.config.get('wgNamespaceIds').user] + ':' + mw.config.get('wgUserName') + '/twinkleoptions.js';
+	var userjs = mw.config.get('wgFormattedNamespaces')[mw.config.get('wgNamespaceIds').user] + ':' + mw.config.get('wgUserName') + '/twinkleoptions.json';
 	var qiuwen_page = new Morebits.wiki.page(userjs, '保存参数设置到 ' + userjs);
 	qiuwen_page.setCallbackParameters(e.target);
 	qiuwen_page.load(Twinkle.config.writePrefs);
@@ -1550,7 +1550,7 @@ Twinkle.config.writePrefs = function twinkleconfigWritePrefs(pageobj) {
 							break;
 					}
 				} else if (Twinkle.prefs) {
-					// Retain the hidden preferences that may have customised by the user from twinkleoptions.js
+					// Retain the hidden preferences that may have customised by the user from twinkleoptions.json
 					// undefined if not set
 					userValue = Twinkle.prefs[pref.name];
 				}
@@ -1563,26 +1563,7 @@ Twinkle.config.writePrefs = function twinkleconfigWritePrefs(pageobj) {
 		});
 	});
 
-	var text =
-			'// <no' + 'wiki>\n' +
-			'// twinkleoptions.js：用户Twinkle参数设置文件\n' +
-			'//\n' +
-			'// 注：修改您的参数设置最简单的办法是使用\n' +
-			'// Twinkle参数设置面板，在[[' + Morebits.pageNameNorm + ']]。\n' +
-			'//\n' +
-			'// 这个文件是自动生成的，您所做的任何修改（除了\n' +
-			'// 以一种合法的JavaScript的方式来修改这些属性值）会\n' +
-			'// 在下一次您点击“保存”时被覆盖。\n' +
-			'// 修改此文件时，请记得使用合法的JavaScript。\n' +
-			'\n' +
-			'\n' +
-			'window.Twinkle.prefs = ';
-	text += JSON.stringify(newConfig, null, 2);
-	text +=
-			';\n' +
-			'\n' +
-			'// twinkleoptions.js到此为止\n' +
-			'// </no' + 'wiki>\n';
+	var text = JSON.stringify(newConfig, null, 2);
 
 	pageobj.setPageText(text);
 	pageobj.setEditSummary('保存Twinkle参数设置：来自[[:' + Morebits.pageNameNorm + ']]的自动编辑');
