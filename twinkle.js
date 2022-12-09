@@ -424,6 +424,9 @@ Twinkle.addPortletLink = function (task, text, id, tooltip) {
  * **************** General initialization code ****************
  */
 
+var scriptpathbefore = mw.util.wikiScript('index') + '?title=',
+	scriptpathafter = '&action=raw&ctype=text/javascript&happy=yes';
+
 // Retrieve the user's Twinkle preferences
 $.ajax({
 	url: scriptpathbefore + 'User:' + encodeURIComponent(mw.config.get('wgUserName')) + '/twinkleoptions.js' + scriptpathafter,
