@@ -1194,7 +1194,7 @@ Twinkle.config.init = function twinkleconfigInit() {
 			box.appendChild(document.createTextNode('，或直接编辑本页。'));
 			$(box).insertAfter($('#contentSub'));
 
-		} else if (['monobook', 'vector', 'vector-2022', 'cologneblue', 'modern', 'timeless', 'minerva', 'common'].indexOf(scriptPageName) !== -1) {
+		} else if (['vector', 'vector-2022', 'gongbi', 'common'].indexOf(scriptPageName) !== -1) {
 			// place "Looking for Twinkle options?" notice
 			box.setAttribute('class', 'config-userskin-box');
 

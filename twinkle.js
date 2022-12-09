@@ -202,7 +202,7 @@ switch (mw.config.get('skin')) {
 		Twinkle.defaultConfig.portletType = 'menu';
 		Twinkle.defaultConfig.portletNext = 'p-search';
 		break;
-	case 'timeless':
+	case 'gongbi':
 		Twinkle.defaultConfig.portletArea = '#page-tools .sidebar-inner';
 		Twinkle.defaultConfig.portletId = 'p-twinkle';
 		Twinkle.defaultConfig.portletName = 'Twinkle';
@@ -304,7 +304,7 @@ Twinkle.addPortlet = function(navigation, id, text, type, nextnodeid) {
 			}
 			outerNavClass = 'portlet';
 			break;
-		case 'timeless':
+		case 'gongbi':
 			outerNavClass = 'mw-portlet';
 			innerDivClass = 'mw-portlet-body';
 			break;
@@ -343,7 +343,7 @@ Twinkle.addPortlet = function(navigation, id, text, type, nextnodeid) {
 			outerNav.appendChild(chkbox);
 
 			// Vector gets its title in a span; all others except
-			// timeless have no title, and it has no span
+			// gongbi have no title, and it has no span
 			var span = document.createElement('span');
 			span.appendChild(document.createTextNode(text));
 			h3.appendChild(span);
@@ -358,7 +358,6 @@ Twinkle.addPortlet = function(navigation, id, text, type, nextnodeid) {
 			h3.appendChild(a);
 		}
 	} else {
-		// Basically just Timeless
 		h3.appendChild(document.createTextNode(text));
 	}
 
