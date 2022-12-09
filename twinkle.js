@@ -462,6 +462,7 @@ $.ajax({
 				Twinkle.prefs.optionsVersion = Twinkle.prefs.optionsVersion || 1;
 			}
 		} catch (e) {
+			console.log(e);
 			mw.notify('未能解析您的Twinkle参数设置', { type: 'error' });
 		}
 	})
