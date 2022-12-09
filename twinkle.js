@@ -424,9 +424,6 @@ Twinkle.addPortletLink = function (task, text, id, tooltip) {
  * **************** General initialization code ****************
  */
 
-var scriptpathbefore = mw.util.wikiScript('index') + '?title=',
-	scriptpathafter = '&action=raw&ctype=application/json&happy=yes';
-
 // Retrieve the user's Twinkle preferences
 $.ajax({
 	url: scriptpathbefore + 'User:' + encodeURIComponent(mw.config.get('wgUserName')) + '/twinkleoptions.js' + scriptpathafter,
@@ -440,6 +437,14 @@ $.ajax({
 		// Quick pass if user has no options
 		if (optionsText === '') {
 			return;
+		}
+
+		// Twinkle options are basically a JSON object with some comments. Strip those:
+		optionsText = optionsText.replace(/(?:^(?:\/\/[^\n]*\n)*\n*|(?:\/\/[^\n]*(?:\n|$))*$)/g, '');
+
+		// First version of options had some boilerplate code to make it eval-able -- strip that too. This part may become obsolete down the line.
+		if (optionsText.lastIndexOf('window.Twinkle.prefs = ', 0) === 0) {
+			optionsText = optionsText.replace(/(?:^window.Twinkle.prefs = |;\n*$)/g, '');
 		}
 
 		try {
