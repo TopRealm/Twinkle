@@ -407,7 +407,7 @@ Twinkle.addPortletLink = function(task, text, id, tooltip) {
  */
 
 var scriptpathbefore = mw.util.wikiScript('index') + '?title=',
-	scriptpathafter = '&action=raw&ctype=text/javascript&happy=yes';
+	scriptpathafter = '&action=raw&ctype=application/json&happy=yes';
 
 // Retrieve the user's Twinkle preferences
 $.ajax({
