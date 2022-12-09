@@ -1323,7 +1323,7 @@ Twinkle.warn.callback.change_subcategory = function twinklewarnCallbackChangeSub
 	// The value of each tag is the label next to the input field
 	var notLinkedArticle = {
 		'uw-bite': '被“咬到”的用户（不含User:） ',
-		'uw-username': '用户名违反方针，因为… ',
+		'uw-username': '用户名违反方针，因为…… ',
 		'uw-aiv': '可选输入被警告的用户名（不含User:） '
 	};
 	if ([ 'singlenotice', 'singlewarn', 'singlecombined', 'kitchensink' ].indexOf(main_group) !== -1) {

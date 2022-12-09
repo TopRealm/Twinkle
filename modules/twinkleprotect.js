@@ -667,7 +667,7 @@ Twinkle.protect.protectionLengths = [ {
 	label: '无限期',
 	value: 'infinity'
 }, {
-	label: '自定义…',
+	label: '自定义……',
 	value: 'custom'
 } ];
 Twinkle.protect.protectionTypes = [ {

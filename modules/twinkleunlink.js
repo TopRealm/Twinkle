@@ -88,7 +88,7 @@ Twinkle.unlink.callback = function (presetReason) {
 	var root = document.createElement('div');
 	root.style.padding = '15px'; // just so it doesn't look broken
 	Morebits.status.init(root);
-	qiuwen_api.statelem.status('加载中…');
+	qiuwen_api.statelem.status('加载中……');
 	Window.setContent(root);
 	Window.display();
 };

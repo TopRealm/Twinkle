@@ -304,7 +304,7 @@ Twinkle.stub.callbacks = {
 			if (!tagRe.exec(pageText)) {
 				tags = tags.concat(params.tags[i]);
 			} else {
-				Morebits.status.info('信息', '在页面上找到{{' + params.tags[i] + '}}…跳过');
+				Morebits.status.info('信息', '在页面上找到{{' + params.tags[i] + '}}……跳过');
 			}
 		}
 		tags = tags.concat(groupableTags);

@@ -170,7 +170,7 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 	Morebits.status.init(statusdiv);
 	Window.display();
 	var statelem = new Morebits.status('抓取页面列表');
-	var qiuwen_api = new Morebits.wiki.api('加载中…', query, function (apiobj) {
+	var qiuwen_api = new Morebits.wiki.api('加载中……', query, function (apiobj) {
 		var response = apiobj.getResponse();
 		var pages = response.query && response.query.pages || [];
 		var list = [];

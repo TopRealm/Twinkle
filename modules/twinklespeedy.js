@@ -878,7 +878,7 @@ Twinkle.speedy.callbacks = {
 			if (reason === null) {
 				return Morebits.status.error('询问理由', '用户取消操作。');
 			} else if (!reason || !reason.replace(/^\s*/, '').replace(/\s*$/, '')) {
-				return Morebits.status.error('询问理由', '你不给我理由…我就…不管了…');
+				return Morebits.status.error('询问理由', '你不给我理由……我就……不管了……');
 			}
 			var deleteMain = function () {
 				thispage.setEditSummary(reason);
@@ -928,7 +928,7 @@ Twinkle.speedy.callbacks = {
 					rdlimit: 5000 // 500 is max for normal users, 5000 for bots and sysops
 				};
 
-				var qiuwen_api = new Morebits.wiki.api('获取重定向列表…', query, Twinkle.speedy.callbacks.sysop.deleteRedirectsMain, new Morebits.status('删除重定向'));
+				var qiuwen_api = new Morebits.wiki.api('获取重定向列表……', query, Twinkle.speedy.callbacks.sysop.deleteRedirectsMain, new Morebits.status('删除重定向'));
 				qiuwen_api.params = params;
 				qiuwen_api.post();
 			}
@@ -1040,7 +1040,7 @@ Twinkle.speedy.callbacks = {
 				Morebits.status.info($bigtext[0], $link[0]);
 			} else {
 				// open the initial contributor's talk page
-				var statusIndicator = new Morebits.status('打开用户' + user + '的讨论页编辑窗口', '打开中…');
+				var statusIndicator = new Morebits.status('打开用户' + user + '的讨论页编辑窗口', '打开中……');
 				switch (Twinkle.getPref('userTalkPageMode')) {
 					case 'tab':
 						window.open(mw.util.wikiScript('index') + '?' + $.param(query), '_blank');
@@ -1096,7 +1096,7 @@ Twinkle.speedy.callbacks = {
 			}
 			var text = pageobj.getPageText();
 			var params = pageobj.getCallbackParameters();
-			statelem.status('检查页面已有标记…');
+			statelem.status('检查页面已有标记……');
 
 			// check for existing deletion tags
 			var textNoSd = text.replace(/\{\{\s*(db(-\w*)?|d|delete|deletebecause|speedy|csd|速刪|速删|快删|快刪)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/ig, '');

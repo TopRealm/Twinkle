@@ -519,7 +519,7 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 		field_template_options.append({
 			type: 'input',
 			name: 'block_reason',
-			label: '“由于…您已被封禁”',
+			label: '“由于……您已被封禁”',
 			display: 'none',
 			tooltip: '可选的理由，用于替换默认理由。只在常规封禁模板中有效。',
 			value: Twinkle.block.field_template_options.block_reason
