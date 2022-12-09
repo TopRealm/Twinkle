@@ -1176,9 +1176,11 @@ Twinkle.config.init = function twinkleconfigInit() {
 
 		var link,
 			scriptPageName = mw.config.get('wgPageName').slice(mw.config.get('wgPageName').lastIndexOf('/') + 1,
-				mw.config.get('wgPageName').lastIndexOf('.js'));
+				mw.config.get('wgPageName').lastIndexOf('.js')),
+			jsonPageName = mw.config.get('wgPageName').slice(mw.config.get('wgPageName').lastIndexOf('/') + 1,
+				mw.config.get('wgPageName').lastIndexOf('.json'));
 
-		if (scriptPageName === 'twinkleoptions') {
+		if (jsonPageName === 'twinkleoptions') {
 			// place "why not try the preference panel" notice
 			box.setAttribute('class', 'config-twopt-box');
 
