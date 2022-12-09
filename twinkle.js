@@ -16,7 +16,7 @@
  * +-------------------------------------------------------+
  *
  * Scripts imported from Qiuwen Development Centre
- * [https://git.qiuwen.wiki/qiuwen/twinkle-new].
+ * [https://git.qiuwen.wiki/InterfaceAdmin/Twinkle].
  * Orginally imported from Github
  * [https://github.com/wikimedia-gadgets/twinkle].
  * Translaton imported from Chinese Wikipedia.
