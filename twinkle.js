@@ -153,7 +153,7 @@ Twinkle.defaultConfig = {
 	revertMaxRevisions: 50, // intentionally limited
 	batchMax: 5000,
 	batchChunks: 50,
-	configPage: 'Help:Twinkle/参数设置',
+	configPage: '/wiki/Help:Twinkle/参数设置',
 	projectNamespaceName: mw.config.get('wgFormattedNamespaces')[4],
 	sandboxPage: 'Qiuwen:沙盒',
 

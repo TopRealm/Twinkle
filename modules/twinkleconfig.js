@@ -1188,7 +1188,7 @@ Twinkle.config.init = function twinkleconfigInit() {
 				box.appendChild(document.createTextNode('您可配置您的Twinkle，配置页在'));
 			}
 			link = document.createElement('a');
-			link.setAttribute('href', 'Help:Twinkle/参数设置');
+			link.setAttribute('href', '/wiki/Help:Twinkle/参数设置');
 			link.appendChild(document.createTextNode('Twinkle参数设置面板'));
 			box.appendChild(link);
 			box.appendChild(document.createTextNode('，或直接编辑本页。'));
