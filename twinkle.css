@@ -1,16 +1,30 @@
 /**
- * Twinkle.js - twinkle.css
- * © 2011-2022 English Wikipedia Contributors
- * This work is licensed under a Creative Commons
- * Attribution-ShareAlike 4.0 International License.
- * https://creativecommons.org/licenses/by-sa/4.0/
+ * SPDX-License-Identifier: CC-BY-SA-4.0
+ * _addText: '{{Gadget Header|license=CC-BY-SA-4.0}}'
+ *
+ * @source https://git.qiuwen.wiki/qiuwen/Twinkle
+ * @author © 2011-2022 English Wikipedia Contributors
+ * @author © 2011-2021 Chinese Wikipedia Contributors
+ * @author © 2021-     Qiuwen Baike Contributors
+ * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
+/* Twinkle.js - twinkle.css */
 /**
  * Explicitly set width of TW menu so that we can use a hidden peer gadget
  * to add space where the TW menu would go before it loads.
  */
-.skin-vector .vector-menu-dropdown #p-twinkle {
+ .skin-vector .vector-menu-dropdown #p-twinkle {
 	width: 3.24em;
+}
+
+/* twinkleclose.js */
+a.twinkle-close-button {
+	color: #f00;
+	font-weight: bold;
+}
+
+a.twinkle-close-button-disabled {
+	color: #808080;
 }
 
 /* The additional box on user skin.js and twinklepreferences.js pages */
@@ -35,6 +49,6 @@
 }
 
 /* H:TW/PREF */
-#twinkle-config-content input[type=checkbox] {
+#twinkle-config-content input[ type='checkbox' ] {
 	margin-right: 2px;
 }
