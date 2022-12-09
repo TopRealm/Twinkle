@@ -61,7 +61,7 @@
 
 /** @lends Morebits */
 var Morebits = {};
-window.Morebits = Morebits;  // allow global access
+window.Morebits = Morebits; // allow global access
 
 // No Morebits.i18n at this time
 
@@ -2330,11 +2330,11 @@ Morebits.wiki.api.prototype = {
 	currentAction: '',
 	onSuccess: null,
 	onError: null,
-	parent: window,  // use global context if there is no parent object
+	parent: window, // use global context if there is no parent object
 	query: null,
 	response: null,
-	responseXML: null,  // use `response` instead; retained for backwards compatibility
-	statelem: null,  // this non-standard name kept for backwards compatibility
+	responseXML: null, // use `response` instead; retained for backwards compatibility
+	statelem: null, // this non-standard name kept for backwards compatibility
 	statusText: null, // result received from the API, normally "success" or "error"
 	errorCode: null, // short text error code, if any, as documented in the MediaWiki API
 	errorText: null, // full error description, if any
@@ -2617,15 +2617,15 @@ Morebits.wiki.page = function (pageName, status) {
 		pageExists: false,
 		editSummary: null,
 		changeTags: null,
-		testActions: null,  // array if any valid actions
+		testActions: null, // array if any valid actions
 		callbackParameters: null,
 		statusElement: status instanceof Morebits.status ? status : new Morebits.status(status),
 
 		// - edit
 		pageText: null,
-		editMode: 'all',  // save() replaces entire contents of the page by default
-		appendText: null,   // can't reuse pageText for this because pageText is needed to follow a redirect
-		prependText: null,  // can't reuse pageText for this because pageText is needed to follow a redirect
+		editMode: 'all', // save() replaces entire contents of the page by default
+		appendText: null,  // can't reuse pageText for this because pageText is needed to follow a redirect
+		prependText: null, // can't reuse pageText for this because pageText is needed to follow a redirect
 		newSectionText: null,
 		newSectionTitle: null,
 		createOption: null,
@@ -2740,7 +2740,7 @@ Morebits.wiki.page = function (pageName, status) {
 		};
 
 		if (ctx.editMode === 'all') {
-			ctx.loadQuery.rvprop = 'content|timestamp';  // get the page content at the same time, if needed
+			ctx.loadQuery.rvprop = 'content|timestamp'; // get the page content at the same time, if needed
 		} else if (ctx.editMode === 'revert') {
 			ctx.loadQuery.rvprop = 'timestamp';
 			ctx.loadQuery.rvlimit = 1;
@@ -2748,7 +2748,7 @@ Morebits.wiki.page = function (pageName, status) {
 		}
 
 		if (ctx.followRedirect) {
-			ctx.loadQuery.redirects = '';  // follow all redirects
+			ctx.loadQuery.redirects = ''; // follow all redirects
 		}
 		if (typeof ctx.pageSection === 'number') {
 			ctx.loadQuery.rvsection = ctx.pageSection;
@@ -2840,7 +2840,7 @@ Morebits.wiki.page = function (pageName, status) {
 		if (ctx.minorEdit) {
 			query.minor = true;
 		} else {
-			query.notminor = true;  // force Twinkle config to override user preference setting for "all edits are minor"
+			query.notminor = true; // force Twinkle config to override user preference setting for "all edits are minor"
 		}
 
 		// Set bot edit attribute. If this parameter is present with any value, it is interpreted as true
@@ -2855,7 +2855,7 @@ Morebits.wiki.page = function (pageName, status) {
 					ctx.onSaveFailure(this);
 					return;
 				}
-				query.appendtext = ctx.appendText;  // use mode to append to current page contents
+				query.appendtext = ctx.appendText; // use mode to append to current page contents
 				break;
 			case 'prepend':
 				if (ctx.prependText === null) {
@@ -2863,7 +2863,7 @@ Morebits.wiki.page = function (pageName, status) {
 					ctx.onSaveFailure(this);
 					return;
 				}
-				query.prependtext = ctx.prependText;  // use mode to prepend to current page contents
+				query.prependtext = ctx.prependText; // use mode to prepend to current page contents
 				break;
 			case 'new':
 				if (!ctx.newSectionText) { // API doesn't allow empty new section text
@@ -2872,7 +2872,7 @@ Morebits.wiki.page = function (pageName, status) {
 					return;
 				}
 				query.section = 'new';
-				query.text = ctx.newSectionText;  // add a new section to current page
+				query.text = ctx.newSectionText; // add a new section to current page
 				query.sectiontitle = ctx.newSectionTitle || ctx.editSummary; // done by the API, but non-'' values would get treated as text
 				break;
 			case 'revert':
@@ -3447,7 +3447,7 @@ Morebits.wiki.page = function (pageName, status) {
 		}
 
 		if (ctx.followRedirect) {
-			query.redirects = '';  // follow all redirects
+			query.redirects = ''; // follow all redirects
 		}
 
 		ctx.lookupCreationApi = new Morebits.wiki.api('抓取页面创建者信息', query, fnLookupCreationSuccess, ctx.statusElement, ctx.onLookupCreationFailure);
@@ -3737,7 +3737,7 @@ Morebits.wiki.page = function (pageName, status) {
 			ctx.pageText = rev.content;
 			ctx.pageID = page.pageid;
 		} else {
-			ctx.pageText = '';  // allow for concatenation, etc.
+			ctx.pageText = ''; // allow for concatenation, etc.
 			ctx.pageID = 0; // nonexistent in response, matches wgArticleId
 		}
 		ctx.csrfToken = response.tokens.csrftoken;
@@ -3788,7 +3788,7 @@ Morebits.wiki.page = function (pageName, status) {
 			}
 			ctx.revertUser = rev && rev.user;
 			if (!ctx.revertUser) {
-				if (rev && rev.userhidden) {  // username was RevDel'd or oversighted
+				if (rev && rev.userhidden) { // username was RevDel'd or oversighted
 					ctx.revertUser = '（用户名已隐藏）';
 				} else {
 					ctx.statusElement.error('未能获取此修订版本的编辑者。');
@@ -3797,13 +3797,13 @@ Morebits.wiki.page = function (pageName, status) {
 				}
 			}
 			// set revert edit summary
-			ctx.editSummary = '[[WP:UNDO|取消]]由 ' + ctx.revertUser + ' 所做出的' + '修订 ' + ctx.revertOldID + '：' + ctx.editSummary;
+			ctx.editSummary = '[[QW:UNDO|取消]]由 ' + ctx.revertUser + ' 所做出的' + '修订 ' + ctx.revertOldID + '：' + ctx.editSummary;
 		}
 
 		ctx.pageLoaded = true;
 
-		// alert("Generate edit conflict now");  // for testing edit conflict recovery logic
-		ctx.onLoadSuccess(this);  // invoke callback
+		// alert("Generate edit conflict now"); // for testing edit conflict recovery logic
+		ctx.onLoadSuccess(this); // invoke callback
 	};
 
 	// helper function to parse the page name returned from the API
@@ -3896,7 +3896,7 @@ Morebits.wiki.page = function (pageName, status) {
 
 	// callback from saveApi.post()
 	var fnSaveSuccess = function () {
-		ctx.editMode = 'all';  // cancel append/prepend/newSection/revert modes
+		ctx.editMode = 'all'; // cancel append/prepend/newSection/revert modes
 		var response = ctx.saveApi.getResponse();
 
 		// see if the API thinks we were successful
@@ -3909,7 +3909,7 @@ Morebits.wiki.page = function (pageName, status) {
 			link.appendChild(document.createTextNode(ctx.pageName));
 			ctx.statusElement.info([ '完成（', link, '）' ]);
 			if (ctx.onSaveSuccess) {
-				ctx.onSaveSuccess(this);  // invoke callback
+				ctx.onSaveSuccess(this); // invoke callback
 			}
 			return;
 		}
@@ -3938,11 +3938,11 @@ Morebits.wiki.page = function (pageName, status) {
 			// edit conflicts can occur when the page needs to be purged from the server cache
 			var purgeQuery = {
 				action: 'purge',
-				titles: ctx.pageName  // redirects are already resolved
+				titles: ctx.pageName // redirects are already resolved
 			};
 
 			var purgeApi = new Morebits.wiki.api('检测到编辑冲突，正在更新服务器缓存', purgeQuery, function () {
-				--Morebits.wiki.numberOfActionsLeft;  // allow for normal completion if retry succeeds
+				--Morebits.wiki.numberOfActionsLeft; // allow for normal completion if retry succeeds
 
 				ctx.statusElement.info('检测到编辑冲突，重试修改');
 				if (fnCanUseMwUserToken('edit')) {
@@ -3958,7 +3958,7 @@ Morebits.wiki.page = function (pageName, status) {
 
 			// the error might be transient, so try again
 			ctx.statusElement.info('保存失败，在2秒后重试……');
-			--Morebits.wiki.numberOfActionsLeft;  // allow for normal completion if retry succeeds
+			--Morebits.wiki.numberOfActionsLeft; // allow for normal completion if retry succeeds
 
 			// wait for sometime for client to regain connectivity
 			sleep(2000).then(function () {
@@ -3998,9 +3998,9 @@ Morebits.wiki.page = function (pageName, status) {
 					ctx.statusElement.error('不能保存修改：' + ctx.saveApi.getErrorText());
 			}
 
-			ctx.editMode = 'all';  // cancel append/prepend/newSection/revert modes
+			ctx.editMode = 'all'; // cancel append/prepend/newSection/revert modes
 			if (ctx.onSaveFailure) {
-				ctx.onSaveFailure(this);  // invoke callback
+				ctx.onSaveFailure(this); // invoke callback
 			}
 		}
 	};
@@ -4308,19 +4308,19 @@ Morebits.wiki.page = function (pageName, status) {
 		// check for "Database query error"
 		if (errorCode === 'internal_api_error_DBQueryError' && ctx.retries++ < ctx.maxRetries) {
 			ctx.statusElement.info('数据库查询错误，重试');
-			--Morebits.wiki.numberOfActionsLeft;  // allow for normal completion if retry succeeds
+			--Morebits.wiki.numberOfActionsLeft; // allow for normal completion if retry succeeds
 			ctx.deleteProcessApi.post(); // give it another go!
 
 		} else if (errorCode === 'missingtitle') {
 			ctx.statusElement.error('不能删除页面，因其已不存在');
 			if (ctx.onDeleteFailure) {
-				ctx.onDeleteFailure.call(this, ctx.deleteProcessApi);  // invoke callback
+				ctx.onDeleteFailure.call(this, ctx.deleteProcessApi); // invoke callback
 			}
 			// hard error, give up
 		} else {
 			ctx.statusElement.error('无法删除页面：' + ctx.deleteProcessApi.getErrorText());
 			if (ctx.onDeleteFailure) {
-				ctx.onDeleteFailure.call(this, ctx.deleteProcessApi);  // invoke callback
+				ctx.onDeleteFailure.call(this, ctx.deleteProcessApi); // invoke callback
 			}
 		}
 	};
@@ -4374,24 +4374,24 @@ Morebits.wiki.page = function (pageName, status) {
 		if (errorCode === 'internal_api_error_DBQueryError') {
 			if (ctx.retries++ < ctx.maxRetries) {
 				ctx.statusElement.info('数据库查询错误，重试');
-				--Morebits.wiki.numberOfActionsLeft;  // allow for normal completion if retry succeeds
+				--Morebits.wiki.numberOfActionsLeft; // allow for normal completion if retry succeeds
 				ctx.undeleteProcessApi.post(); // give it another go!
 			} else {
 				ctx.statusElement.error('持续的数据库查询错误，重新加载页面并重试');
 				if (ctx.onUndeleteFailure) {
-					ctx.onUndeleteFailure.call(this, ctx.undeleteProcessApi);  // invoke callback
+					ctx.onUndeleteFailure.call(this, ctx.undeleteProcessApi); // invoke callback
 				}
 			}
 		} else if (errorCode === 'cantundelete') {
 			ctx.statusElement.error('无法还原删除页面，因没有版本供还原或已被还原');
 			if (ctx.onUndeleteFailure) {
-				ctx.onUndeleteFailure.call(this, ctx.undeleteProcessApi);  // invoke callback
+				ctx.onUndeleteFailure.call(this, ctx.undeleteProcessApi); // invoke callback
 			}
 			// hard error, give up
 		} else {
 			ctx.statusElement.error('无法还原页面：' + ctx.undeleteProcessApi.getErrorText());
 			if (ctx.onUndeleteFailure) {
-				ctx.onUndeleteFailure.call(this, ctx.undeleteProcessApi);  // invoke callback
+				ctx.onUndeleteFailure.call(this, ctx.undeleteProcessApi); // invoke callback
 			}
 		}
 	};
@@ -4561,7 +4561,7 @@ Morebits.wiki.preview = function (previewbox) {
 		var query = {
 			action: 'parse',
 			prop: [ 'text', 'modules' ],
-			pst: true,  // PST = pre-save transform; this makes substitution work properly
+			pst: true, // PST = pre-save transform; this makes substitution work properly
 			preview: true,
 			text: wikitext,
 			title: pageTitle || pageName, // zhwiki
@@ -4621,7 +4621,7 @@ Morebits.wikitext.parseTemplate = function (text, start) {
 	start = start || 0;
 
 	var level = []; // Track of how deep we are ({{, {{{, or [[)
-	var count = -1;  // Number of parameters found
+	var count = -1; // Number of parameters found
 	var unnamed = 0; // Keep track of what number an unnamed parameter should receive
 	var equals = -1; // After finding "=" before a parameter, the index; otherwise, -1
 	var current = '';
@@ -5456,7 +5456,7 @@ Morebits.batchOperation = function (currentAction) {
 	var fnStartNewChunk = function () {
 		var chunk = ctx.pageChunks[++ctx.currentChunkIndex];
 		if (!chunk) {
-			return;  // done! yay
+			return; // done! yay
 		}
 
 		// start workers for the current chunk
@@ -5683,16 +5683,16 @@ Morebits.simpleWindow.prototype = {
 			$widget.find('.morebits-dialog-scriptname').remove();
 			var scriptnamespan = document.createElement('span');
 			scriptnamespan.className = 'morebits-dialog-scriptname';
-			scriptnamespan.textContent = this.scriptName + ' \u00B7 ';  // U+00B7 MIDDLE DOT = &middot;
+			scriptnamespan.textContent = this.scriptName + ' \u00B7 '; // U+00B7 MIDDLE DOT = &middot;
 			$widget.find('.ui-dialog-title').prepend(scriptnamespan);
 		}
 
 		var dialog = $(this.content).dialog('open');
-		if (window.setupTooltips && window.pg && window.pg.re && window.pg.re.diff) {  // tie in with NAVPOP
+		if (window.setupTooltips && window.pg && window.pg.re && window.pg.re.diff) { // tie in with NAVPOP
 			dialog.parent()[0].ranSetupTooltipsAlready = false;
 			window.setupTooltips(dialog.parent()[0]);
 		}
-		this.setHeight(this.height);  // init height algorithm
+		this.setHeight(this.height); // init height algorithm
 		return this;
 	},
 
@@ -5795,7 +5795,7 @@ Morebits.simpleWindow.prototype = {
 		if (this.buttons.length > 0) {
 			$(this.content).dialog('widget').find('.morebits-dialog-buttons').empty().append(this.buttons)[0].removeAttribute('data-empty');
 		} else {
-			$(this.content).dialog('widget').find('.morebits-dialog-buttons')[0].setAttribute('data-empty', 'data-empty');  // used by CSS
+			$(this.content).dialog('widget').find('.morebits-dialog-buttons')[0].setAttribute('data-empty', 'data-empty'); // used by CSS
 		}
 		return this;
 	},
@@ -5831,7 +5831,7 @@ Morebits.simpleWindow.prototype = {
 		var $footerlinks = $(this.content).dialog('widget').find('.morebits-dialog-footerlinks');
 		if (this.hasFooterLinks) {
 			var bullet = document.createElement('span');
-			bullet.textContent = ' \u2022 ';  // U+2022 BULLET
+			bullet.textContent = ' \u2022 '; // U+2022 BULLET
 			if (prep) {
 				$footerlinks.prepend(bullet);
 			} else {
@@ -5893,11 +5893,11 @@ Morebits.simpleWindow.setButtonsEnabled = function (enabled) {
  * Thanks.
  */
 
-if (typeof arguments === 'undefined') {  // typeof is here for a reason...
+if (typeof arguments === 'undefined') { // typeof is here for a reason...
 	/* global Morebits */
 	window.SimpleWindow = Morebits.simpleWindow;
 	window.QuickForm = Morebits.quickForm;
-	window.Wikipedia = Morebits.wiki;
+	window.Qiuwen = Morebits.wiki;
 	window.Status = Morebits.status;
 }
 

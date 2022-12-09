@@ -208,7 +208,7 @@ Twinkle.image.callbacks = {
 				break;
 			default:
 				break;
-        // doesn't matter
+       // doesn't matter
 		}
 
 		tag += '|help=off}}\n';

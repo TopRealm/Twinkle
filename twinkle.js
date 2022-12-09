@@ -36,7 +36,7 @@ if (!Morebits.userIsInGroup('autoconfirmed') && !Morebits.userIsInGroup('confirm
 }
 
 var Twinkle = {};
-window.Twinkle = Twinkle;  // allow global access
+window.Twinkle = Twinkle; // allow global access
 
 /**
  * Twinkle-specific data shared by multiple modules
@@ -199,7 +199,7 @@ Twinkle.defaultConfig = {
 
 	// Talkback
 	markTalkbackAsMinor: true,
-	insertTalkbackSignature: true,  // always sign talkback templates
+	insertTalkbackSignature: true, // always sign talkback templates
 	talkbackHeading: '来自' + mw.config.get('wgUserName') + '的新邮件',
 	mailHeading: '您收到了一封邮件！',
 
@@ -440,7 +440,7 @@ $.ajax({
 		console.log(optionsText);
 
 		// Quick pass if user has no options
-		if (optionsText === '') {
+		if (optionsText === '' || optionsText === ' ') {
 			return;
 		}
 

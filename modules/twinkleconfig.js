@@ -10,19 +10,6 @@
  */
 /* Twinkle.js - twinkleconfig.js */
 
-// Polyfill
-// eslint-disable-next-line no-implicit-globals
-function _typeof(obj) {
-	// eslint-disable-next-line no-return-assign, no-func-assign, no-undef
-	return _typeof = typeof Symbol === 'function' && typeof Symbol.iterator === 'symbol' ? function (obj) {
-		return typeof obj;
-	} : function (obj) {
-		// eslint-disable-next-line no-undef
-		return obj && typeof Symbol === 'function' && obj.constructor === Symbol && obj !== Symbol.prototype ? 'symbol' : typeof obj;
-		// eslint-disable-next-line no-sequences
-	}, _typeof(obj);
-}
-
 /* <nowiki> */
 (function ($) {
 /*
@@ -968,8 +955,8 @@ Twinkle.config.init = function twinkleconfigInit() {
 							var option = document.createElement('option');
 							option.setAttribute('value', enumvalue);
 							if (gotPref === enumvalue ||
-                // Hack to convert old boolean watchlist prefs
-                // to corresponding enums (added in v2.1)
+							// Hack to convert old boolean watchlist prefs
+							// to corresponding enums (added in v2.1)
                 typeof gotPref === 'boolean' && (gotPref && enumvalue === 'yes' || !gotPref && enumvalue === 'no')) {
 								option.setAttribute('selected', 'selected');
 							}
@@ -1328,16 +1315,16 @@ Twinkle.config.writePrefs = function twinkleconfigWritePrefs(pageobj) {
 	// arrays of strings, and arrays of { value, label })
 	// and it is not very robust: e.g. compare([2], ["2"]) === true, and
 	// compare({}, {}) === false, but it's good enough for our purposes here
-	var compare = function compare(a, b) {
+	var compare = function (a, b) {
 		if (Array.isArray(a)) {
 			if (a.length !== b.length) {
 				return false;
 			}
-			var asort = a.sort(),
-				bsort = b.sort();
+			var asort = a.sort(), bsort = b.sort();
 			for (var i = 0; asort[i]; ++i) {
 				// comparison of the two properties of custom lists
-				if (_typeof(asort[i]) === 'object' && (asort[i].label !== bsort[i].label || asort[i].value !== bsort[i].value)) {
+				if ((typeof asort[i] === 'object') && (asort[i].label !== bsort[i].label ||
+					asort[i].value !== bsort[i].value)) {
 					return false;
 				} else if (asort[i].toString() !== bsort[i].toString()) {
 					return false;
@@ -1346,7 +1333,9 @@ Twinkle.config.writePrefs = function twinkleconfigWritePrefs(pageobj) {
 			return true;
 		}
 		return a === b;
+
 	};
+
 	$(Twinkle.config.sections).each(function (sectionkey, section) {
 		if (section.adminOnly && !Morebits.userIsSysop) {
 			return; // i.e. "continue" in this context
@@ -1360,34 +1349,34 @@ Twinkle.config.writePrefs = function twinkleconfigWritePrefs(pageobj) {
 			if (!pref.adminOnly || Morebits.userIsSysop) {
 				if (!section.hidden) {
 					switch (pref.type) {
-						case 'boolean':
-							// read from the checkbox
+						case 'boolean': // read from the checkbox
 							userValue = form[pref.name].checked;
 							break;
+
 						case 'string': // read from the input box or combo box
 						case 'enum':
 							userValue = form[pref.name].value;
 							break;
-						case 'integer':
-							// read from the input box
+
+						case 'integer': // read from the input box
 							userValue = parseInt(form[pref.name].value, 10);
 							if (isNaN(userValue)) {
-								Morebits.status.warn('保存', '您为' + pref.name + '指定的值（' + pref.value + '）不合法。保存操作将继续，但此值将会跳过。');
+								Morebits.status.warn('保存您为' + pref.name + ' 指定的值（' + pref.value + '）不合法，会继续保存操作，但此值将会跳过。');
 								userValue = null;
 							}
 							break;
-						case 'set':
-							// read from the set of check boxes
+
+						case 'set': // read from the set of check boxes
 							userValue = [];
 							if (pref.setDisplayOrder) {
-								// read only those keys specified in the display order
+							// read only those keys specified in the display order
 								$.each(pref.setDisplayOrder, function (itemkey, item) {
 									if (form[pref.name + '_' + item].checked) {
 										userValue.push(item);
 									}
 								});
 							} else {
-								// read all the keys in the list of values
+							// read all the keys in the list of values
 								$.each(pref.setValues, function (itemkey) {
 									if (form[pref.name + '_' + itemkey].checked) {
 										userValue.push(itemkey);
@@ -1395,12 +1384,13 @@ Twinkle.config.writePrefs = function twinkleconfigWritePrefs(pageobj) {
 								});
 							}
 							break;
-						case 'customList':
-							// read from the jQuery data stored on the button object
+
+						case 'customList': // read from the jQuery data stored on the button object
 							userValue = $(form[pref.name]).data('value');
 							break;
+
 						default:
-							alert('twinkleconfig: 发现未知的数据类型，在属性' + pref.name);
+							alert('twinkleconfig: 未知数据类型，属性 ' + pref.name);
 							break;
 					}
 				} else if (Twinkle.prefs) {
@@ -1416,27 +1406,48 @@ Twinkle.config.writePrefs = function twinkleconfigWritePrefs(pageobj) {
 			}
 		});
 	});
-	var text = '// twinkleoptions.js：用户Twinkle参数设置文件\n//\n// 注：修改您的参数设置最简单的办法是使用\n// Twinkle参数设置面板，在[[' + Morebits.pageNameNorm + ']]。\n//\n// 这个文件是自动生成的，您所做的任何修改（除了\n// 以一种合法的JavaScript的方式来修改这些属性值）会\n// 在下一次您点击“保存”时被覆盖。\n// 修改此文件时，请记得使用合法的JavaScript。\n\n\nwindow.Twinkle.prefs = ';
+
+	var text =
+		'// <nowiki>\n' +
+		'// twinkleoptions.js：用户Twinkle参数设置文件\n' +
+		'//\n' +
+		'// 注：修改您的参数设置最简单的办法是使用\n' +
+		'// Twinkle参数设置面板，在[[' + Morebits.pageNameNorm + ']]。\n' +
+		'//\n' +
+		'// 这个文件是自动生成的，您所做的任何修改（除了\n' +
+		'// 以一种合法的JavaScript的方式来修改这些属性值）会\n' +
+		'// 在下一次您点击“保存”时被覆盖。\n' +
+		'// 修改此文件时，请记得使用合法的JavaScript。\n' +
+		'\n' +
+		'window.Twinkle.prefs = ';
 	text += JSON.stringify(newConfig, null, 2);
-	text += ';\n\n// twinkleoptions.js到此为止\n';
+	text +=
+		';\n' +
+		'\n' +
+		'// twinkleoptions.js到此为止\n' +
+		'// </nowiki>';
+
 	pageobj.setPageText(text);
 	pageobj.setEditSummary('保存Twinkle参数设置：来自[[:' + Morebits.pageNameNorm + ']]的自动编辑');
 	pageobj.setChangeTags(Twinkle.changeTags);
 	pageobj.setCreateOption('recreate');
 	pageobj.save(Twinkle.config.saveSuccess);
 };
+
 Twinkle.config.saveSuccess = function twinkleconfigSaveSuccess(pageobj) {
-	pageobj.getStatusElement().info('successful');
+	pageobj.getStatusElement().info('成功');
+
 	var noticebox = document.createElement('div');
-	noticebox.className = 'successbox';
+	noticebox.className = 'mw-message-box mw-message-box-success';
 	noticebox.style.fontSize = '100%';
 	noticebox.style.marginTop = '2em';
-	noticebox.innerHTML = '<p><b>您的Twinkle参数设置已被保存。</b></p><p>要看到这些更改，您可能需要<b>绕过浏览器缓存</b>（参见<a href="' + mw.util.getUrl('QW:BYPASS') + '" title="QW:BYPASS">QW:BYPASS</a>）。</p>';
+	noticebox.innerHTML = '<p><b>您的Twinkle参数设置已被保存。</b></p><p>要看到这些更改，您可能需要<a href="' + mw.util.getUrl('QW:BYPASS') + '" title="QW:BYPASS"><b>绕过浏览器缓存</b></a>。</p>';
 	Morebits.status.root.appendChild(noticebox);
 	var noticeclear = document.createElement('br');
 	noticeclear.style.clear = 'both';
 	Morebits.status.root.appendChild(noticeclear);
 };
+
 Twinkle.addInitCallback(Twinkle.config.init);
 }(jQuery));
 
