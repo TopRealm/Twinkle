@@ -34,8 +34,8 @@ Twinkle.tag = function friendlytag() {
 		Twinkle.tag.mode = 'article';
 		// Can't remove tags when not viewing current version
 		Twinkle.tag.canRemove = mw.config.get('wgCurRevisionId') === mw.config.get('wgRevisionId') &&
-     // Disabled on latest diff because the diff slider could be used to slide
-     // away from the latest diff without causing the script to reload
+		// Disabled on latest diff because the diff slider could be used to slide
+		// away from the latest diff without causing the script to reload
       !mw.config.get('wgDiffNewId');
 		Twinkle.addPortletLink(Twinkle.tag.callback, '标记', 'friendly-tag', '为条目或移除添加标记');
 	}
@@ -1973,11 +1973,11 @@ Twinkle.tag.callbacks = {
 			// as well as deletion/protection-related templates
 			var wikipage = new Morebits.wikitext.page(pageText);
 			var templatesAfter = Twinkle.hatnoteRegex +
-       // Protection templates
+			// Protection templates
         'pp|pp-.*?|' +
-       // CSD
+			// CSD
         'db|delete|db-.*?|speedy deletion-.*?|' +
-       // not a hatnote, but sometimes under a CSD or AfD
+			// not a hatnote, but sometimes under a CSD or AfD
         'salt|proposed deletion endorsed';
 			// AfD is special, as the tag includes html comments before and after the actual template
 			// trailing whitespace/newline needed since this subst's a newline
