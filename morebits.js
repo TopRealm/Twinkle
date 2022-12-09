@@ -2846,7 +2846,7 @@ Morebits.wiki.page = function (pageName, status) {
 		switch (ctx.editMode) {
 			case 'append':
 				if (ctx.appendText === null) {
-					ctx.statusElement.error('Internal error: append text not set before save!');
+					ctx.statusElement.error('内部错误：保存页面前未设置文后附加文字。');
 					ctx.onSaveFailure(this);
 					return;
 				}
@@ -2854,7 +2854,7 @@ Morebits.wiki.page = function (pageName, status) {
 				break;
 			case 'prepend':
 				if (ctx.prependText === null) {
-					ctx.statusElement.error('Internal error: prepend text not set before save!');
+					ctx.statusElement.error('内部错误：保存页面前未设置文前附加文字。');
 					ctx.onSaveFailure(this);
 					return;
 				}
