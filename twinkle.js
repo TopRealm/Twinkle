@@ -443,20 +443,18 @@ $.ajax({
 		}
 
 		// Twinkle options are basically a JSON object with some comments. Strip those:
-		optionsText = optionsText.replace(/(?:^(?:\/\/[^\n]*\n)*\n*|(?:\/\/[^\n]*(?:\n|$))*$)/g, '');
+		var optionsTextCommentsRemoved = optionsText.replace(/(?:^(?:\/\/[^\n]*\n)*\n*|(?:\/\/[^\n]*(?:\n|$))*$)/g, '');
 
 		// First version of options had some boilerplate code to make it eval-able -- strip that too. This part may become obsolete down the line.
-		if (optionsText.lastIndexOf('window.Twinkle.prefs = ', 0) === 0) {
-			optionsText = optionsText.replace(/(?:^window.Twinkle.prefs = |;\n*$)/g, '');
-		}
+		var optionsTextPrefixRemoved = optionsTextCommentsRemoved.replace(/(?:^window.Twinkle.prefs = |;\n*$)/g, '');
 
 		try {
-			var options = JSON.parse(optionsText);
-			if (options) {
-				if (options.twinkle || options.friendly) { // Old preferences format
-					Twinkle.prefs = $.extend(options.twinkle, options.friendly);
+			var optionsTextJSON = JSON.parse(optionsTextPrefixRemoved);
+			if (optionsTextJSON) {
+				if (optionsTextJSON.twinkle || optionsTextJSON.friendly) { // Old preferences format
+					Twinkle.prefs = $.extend(optionsTextJSON.twinkle, optionsTextJSON.friendly);
 				} else {
-					Twinkle.prefs = options;
+					Twinkle.prefs = optionsTextJSON;
 				}
 				// v2 established after unification of Twinkle/Friendly objects
 				Twinkle.prefs.optionsVersion = Twinkle.prefs.optionsVersion || 1;
