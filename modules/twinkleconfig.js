@@ -1175,8 +1175,6 @@ Twinkle.config.init = function twinkleconfigInit() {
 		box.setAttribute('id', 'twinkle-config-headerbox');
 
 		var link,
-			scriptPageName = mw.config.get('wgPageName').slice(mw.config.get('wgPageName').lastIndexOf('/') + 1,
-				mw.config.get('wgPageName').lastIndexOf('.js')),
 			jsonPageName = mw.config.get('wgPageName').slice(mw.config.get('wgPageName').lastIndexOf('/') + 1,
 				mw.config.get('wgPageName').lastIndexOf('.json'));
 
@@ -1196,7 +1194,7 @@ Twinkle.config.init = function twinkleconfigInit() {
 			box.appendChild(document.createTextNode('，或直接编辑本页。'));
 			$(box).insertAfter($('#contentSub'));
 
-		} else if (['vector', 'vector-2022', 'gongbi', 'common'].indexOf(scriptPageName) !== -1) {
+		} else if (['vector', 'vector-2022', 'gongbi', 'common'].indexOf(jsonPageName) !== -1) {
 			// place "Looking for Twinkle options?" notice
 			box.setAttribute('class', 'config-userskin-box');
 
