@@ -670,3 +670,5 @@ Twinkle.addInitCallback(Twinkle.xfd, 'xfd');
 }(jQuery));
 
 /* </nowiki> */
+
+// </nowiki>

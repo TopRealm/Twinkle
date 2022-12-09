@@ -10,7 +10,6 @@
  */
 /* Twinkle.js - twinkleclose.js */
 /* <nowiki> */
-
 (function ($) {
 /*
  ****************************************

@@ -7,6 +7,14 @@
  * @author © 2011-2021 Chinese Wikipedia Contributors
  * @author © 2021-     Qiuwen Baike Contributors
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
+ * SPDX-License-Identifier: CC-BY-SA-4.0
+ * _addText: '{{Gadget Header|license=CC-BY-SA-4.0}}'
+ *
+ * @source https://git.qiuwen.wiki/qiuwen/Twinkle
+ * @author © 2011-2022 English Wikipedia Contributors
+ * @author © 2011-2021 Chinese Wikipedia Contributors
+ * @author © 2021-     Qiuwen Baike Contributors
+ * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - morebits.js */
 /* eslint-disable es-x/no-array-prototype-keys */
@@ -4322,33 +4330,6 @@ Morebits.wiki.page = function (pageName, status) {
 		ctx.triageProcessListApi = new Morebits.wiki.api('checking curation status...', query, fnProcessTriage);
 		ctx.triageProcessListApi.setParent(this);
 		ctx.triageProcessListApi.post();
-	};
-
-	// callback from triageProcessListApi.post()
-	var fnProcessTriage = function () {
-		var responseList = ctx.triageProcessListApi.getResponse().pagetriagelist;
-		// Exit if not in the queue
-		if (!responseList || responseList.result !== 'success') {
-			return;
-		}
-		var page = responseList.pages && responseList.pages[0];
-		// Do nothing if page already triaged/patrolled
-		if (!page || !parseInt(page.patrol_status, 10)) {
-			var query = {
-				action: 'pagetriageaction',
-				pageid: ctx.pageID,
-				reviewed: 1,
-				// tags: ctx.changeTags, // pagetriage tag support: [[phab:T252980]]
-				// Could use an adder to modify/create note:
-				// summaryAd, but that seems overwrought
-				token: ctx.csrfToken,
-				format: 'json'
-			};
-			var triageStat = new Morebits.status('Marking page as curated');
-			ctx.triageProcessApi = new Morebits.wiki.api('curating page...', query, null, triageStat);
-			ctx.triageProcessApi.setParent(this);
-			ctx.triageProcessApi.post();
-		}
 	};
 
 	var fnProcessDelete = function () {

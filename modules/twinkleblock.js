@@ -11,15 +11,8 @@
 /* Twinkle.js - twinkleblock.js */
 /* <nowiki> */
 (function ($) {
-/*
- ****************************************
- *** twinkleblock.js: Block module
- ****************************************
- * Mode of invocation: Tab ("Block")
- * Active on:      Any page with relevant user name (userspace, contribs, etc.)
- */
-var api = new mw.Api(),
-	relevantUserName = mw.config.get('wgRelevantUserName');
+
+var api = new mw.Api(), relevantUserName = mw.config.get('wgRelevantUserName');
 var menuFormattedNamespaces = $.extend({}, mw.config.get('wgFormattedNamespaces'));
 menuFormattedNamespaces[0] = '（条目）';
 var blockActionText = {
@@ -1837,3 +1830,5 @@ Twinkle.addInitCallback(Twinkle.block, 'block');
 }(jQuery));
 
 /* </nowiki> */
+
+// </nowiki>

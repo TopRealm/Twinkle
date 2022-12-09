@@ -18,7 +18,7 @@
  * +-------------------------------------------------------+
  *
  * Scripts imported from Qiuwen Development Centre
- * [https://git.qiuwen.wiki/qiuwen/Twinkle].
+ * [https://git.qiuwen.wiki/InterfaceAdmin/Twinkle].
  * Orginally imported from Github
  * [https://github.com/wikimedia-gadgets/twinkle].
  * Translaton imported from Chinese Wikipedia.
@@ -168,7 +168,7 @@ Twinkle.defaultConfig = {
 	revertMaxRevisions: 50, // intentionally limited
 	batchMax: 5000,
 	batchChunks: 50,
-	configPage: 'Help:Twinkle/参数设置',
+	configPage: '/wiki/Help:Twinkle/参数设置',
 	projectNamespaceName: mw.config.get('wgFormattedNamespaces')[4],
 	sandboxPage: 'Qiuwen:沙盒',
 
@@ -236,7 +236,7 @@ Twinkle.getPref = function twinkleGetPref(name) {
 	if (typeof Twinkle.prefs === 'object' && Twinkle.prefs[name] !== undefined) {
 		return Twinkle.prefs[name];
 	}
-	// Old preferences format, used before twinkleoptions.js was a thing
+	// Old preferences format, used before twinkleoptions.json was a thing
 	if (typeof window.TwinkleConfig === 'object' && window.TwinkleConfig[name] !== undefined) {
 		return window.TwinkleConfig[name];
 	}
@@ -379,8 +379,7 @@ Twinkle.addPortlet = function (navigation, id, text, type, nextnodeid) {
 			heading.appendChild(a);
 		}
 	} else {
-		// Basically just gongbi
-		heading.appendChild(document.createTextNode(text));
+		h3.appendChild(document.createTextNode(text));
 	}
 
 	outerNav.appendChild(heading);
@@ -426,11 +425,11 @@ Twinkle.addPortletLink = function (task, text, id, tooltip) {
  */
 
 var scriptpathbefore = mw.util.wikiScript('index') + '?title=',
-	scriptpathafter = '&action=raw&ctype=text/javascript&happy=yes';
+	scriptpathafter = '&action=raw&ctype=application/json&happy=yes';
 
 // Retrieve the user's Twinkle preferences
 $.ajax({
-	url: scriptpathbefore + 'User:' + encodeURIComponent(mw.config.get('wgUserName')) + '/twinkleoptions.js' + scriptpathafter,
+	url: scriptpathbefore + 'User:' + encodeURIComponent(mw.config.get('wgUserName')) + '/twinkleoptions.json' + scriptpathafter,
 	dataType: 'text'
 })
 	.fail(function () {
@@ -441,14 +440,6 @@ $.ajax({
 		// Quick pass if user has no options
 		if (optionsText === '') {
 			return;
-		}
-
-		// Twinkle options are basically a JSON object with some comments. Strip those:
-		optionsText = optionsText.replace(/(?:^(?:\/\/[^\n]*\n)*\n*|(?:\/\/[^\n]*(?:\n|$))*$)/g, '');
-
-		// First version of options had some boilerplate code to make it eval-able -- strip that too. This part may become obsolete down the line.
-		if (optionsText.lastIndexOf('window.Twinkle.prefs = ', 0) === 0) {
-			optionsText = optionsText.replace(/(?:^window.Twinkle.prefs = |;\n*$)/g, '');
 		}
 
 		try {
@@ -517,6 +508,38 @@ Twinkle.load = function () {
 	var isVector = mw.config.get('skin') === 'vector' || mw.config.get('skin') === 'vector-2022';
 	if (isVector && Twinkle.getPref('portletType') === 'menu' && $('#p-twinkle').length === 0) {
 		$('#p-cactions').css('margin-right', 'initial');
+	}
+};
+
+
+/**
+ * Twinkle-specific data shared by multiple modules
+ * Likely customized per installation
+ */
+
+// Custom change tag(s) to be applied to all Twinkle actions, create at Special:Tags
+Twinkle.changeTags = 'Twinkle';
+// Available for actions that don't (yet) support tags
+Twinkle.summaryAd = '（[[H:TW|Twinkle]]）';
+
+// Various hatnote templates, used when tagging (csd/xfd/tag/protect) to
+// Check QW:STYLE
+Twinkle.hatnoteRegex = '(?:Short[ _]description)|(?:Rellink|Hatnote|HAT)|(?:Main|细节|細節|Main[ _]articles|主条目|主條目|Hurricane[ _]main|条目|條目|主|頁面|页面|主頁面|主页面|主頁|主页|主題目|主题目|Main[ _]article|AP)|(?:Wrongtitle|Correct[ _]title)|(?:主条目消歧义|主條目消歧義|消歧义链接|消歧義鏈接|消歧義連結|消连|消連|消歧义连结|DisambLink|Noteref|Dablink)|(?:Distinguish|不是|Not|提示|混淆|分別|分别|區別|区别|本条目的主题不是|本條目的主題不是|本条目主题不是|本條目主題不是|条目主题不是|條目主題不是|主题不是|主題不是|Confused|区分|區分|Confusion|Confuse|RedirectNOT|Misspelling)|(?:Distinguish2|SelfDistinguish|Not2|不是2)|(?:For)|(?:Details|Further|See|另见|另見|More|相關條目|相关条目|Detail|见|見|更多资料|更多資料|Further[ _]information|更多资讯|更多資訊|More[ _]information|更多信息)|(?:Selfref)|(?:About|Otheruses4|关于|關於)|(?:Other[ _]uses|Otheruse|条目消歧义|條目消歧義|他用|Otheruses)|(?:Other[ _]uses list|Otheruselist|主條目消歧義列表|主条目消歧义列表|Otheruseslist|Aboutlist|About[ _]list|Otheruses[ _]list)|(?:Redirect|重定向至此|Redirects[ _]here|Redirect[ _]to)|(?:Redirect2|主條目消歧義2|主条目消歧义2|Redir|重定向至此2)|(?:Redirect3)|(?:Redirect4)|(?:Redirect-distinguish)|(?:Redirect-synonym)|(?:Redirect-multi)|(?:Seealso|参看|參看|See[ _]also|参见|參見|Also)|(?:See[ _]also2|Seealso2|不轉換參見|不转换参见)|(?:Other[ _]places)|(?:Contrast|對比|对比)';
+
+// Used in XFD
+Twinkle.makeFindSourcesDiv = function makeSourcesDiv(divID) {
+	if (!$(divID).length) {
+		return;
+	}
+	if (!Twinkle.findSources) {
+		var parser = new Morebits.wiki.preview($(divID)[0]);
+		parser.beginRender('({{Find sources|' + Morebits.pageNameNorm + '}})', 'QW:AFD').then(function() {
+			// Save for second-time around
+			Twinkle.findSources = parser.previewbox.innerHTML;
+			$(divID).removeClass('morebits-previewbox');
+		});
+	} else {
+		$(divID).html(Twinkle.findSources);
 	}
 };
 

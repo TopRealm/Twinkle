@@ -105,7 +105,7 @@ Twinkle.protect.callback = function twinkleprotectCallback() {
 // remind the user contact before requesting unprotection (evaluate)
 Twinkle.protect.trustedBots = [];
 
-// Customizable namespace
+// Customizable namespace settings
 // In theory it'd be nice to have restrictionlevels defined here,
 // but those are only available via a siteinfo query
 

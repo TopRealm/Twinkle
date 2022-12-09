@@ -10,7 +10,7 @@
  */
 /* Twinkle.js - friendlytag.js */
 /* <nowiki> */
-(function ($) {
+(function($) {
 /*
  ****************************************
  *** friendlytag.js: Tag module
@@ -2422,5 +2422,5 @@ Twinkle.tag.callback.evaluate = function friendlytagCallbackEvaluate(e) {
 	qiuwen_page.load(Twinkle.tag.callbacks[Twinkle.tag.mode]);
 };
 Twinkle.addInitCallback(Twinkle.tag, 'tag');
-}(jQuery));
+})(jQuery);
 /* </nowiki> */
