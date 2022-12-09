@@ -424,14 +424,6 @@ $.ajax({
 			return;
 		}
 
-		// Twinkle options are basically a JSON object with some comments. Strip those:
-		optionsText = optionsText.replace(/(?:^(?:\/\/[^\n]*\n)*\n*|(?:\/\/[^\n]*(?:\n|$))*$)/g, '');
-
-		// First version of options had some boilerplate code to make it eval-able -- strip that too. This part may become obsolete down the line.
-		if (optionsText.lastIndexOf('window.Twinkle.prefs = ', 0) === 0) {
-			optionsText = optionsText.replace(/(?:^window.Twinkle.prefs = |;\n*$)/g, '');
-		}
-
 		try {
 			var options = JSON.parse(optionsText);
 			if (options) {
