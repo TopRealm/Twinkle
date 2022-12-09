@@ -436,6 +436,8 @@ $.ajax({
 		mw.notify('未能加载您的Twinkle参数设置', { type: 'error' });
 	})
 	.done(function (optionsText) {
+		// Debug
+		console.log(optionsText);
 
 		// Quick pass if user has no options
 		if (optionsText === '') {
@@ -445,8 +447,14 @@ $.ajax({
 		// Twinkle options are basically a JSON object with some comments. Strip those:
 		var optionsTextCommentsRemoved = optionsText.replace(/(?:^(?:\/\/[^\n]*\n)*\n*|(?:\/\/[^\n]*(?:\n|$))*$)/g, '');
 
+		// Debug
+		console.log(optionsTextCommentsRemoved);
+
 		// First version of options had some boilerplate code to make it eval-able -- strip that too. This part may become obsolete down the line.
 		var optionsTextPrefixRemoved = optionsTextCommentsRemoved.replace(/(?:^window.Twinkle.prefs = |;\n*$)/g, '');
+
+		// Debug
+		console.log(optionsTextPrefixRemoved);
 
 		try {
 			var optionsTextJSON = JSON.parse(optionsTextPrefixRemoved);
