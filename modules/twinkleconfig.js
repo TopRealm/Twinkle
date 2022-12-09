@@ -110,7 +110,7 @@ Twinkle.config.commonSets = {
  *   title: <human-readable section title>,
  *   module: <name of the associated module, used to link to sections>,
  *   adminOnly: <true for admin-only sections>,
- *   hidden: <true for advanced preferences that rarely need to be changed - they can still be modified by manually editing twinkleoptions.json>,
+ *   hidden: <true for advanced preferences that rarely need to be changed - they can still be modified by manually editing twinkleoptions.js>,
  *   preferences: [
  *     {
  *       name: <TwinkleConfig property name>,
@@ -851,7 +851,7 @@ Twinkle.config.init = function twinkleconfigInit() {
 		contentdiv.textContent = '';  // clear children
 
 		// let user know about possible conflict with skin js/common.js file
-		// (settings in that file will still work, but they will be overwritten by twinkleoptions.json settings)
+		// (settings in that file will still work, but they will be overwritten by twinkleoptions.js settings)
 		if (window.TwinkleConfig || window.FriendlyConfig) {
 			var contentnotice = document.createElement('p');
 			contentnotice.innerHTML = '<b>在这里修改您的参数设置之前，</b>确认您已移除了<a href="' + mw.util.getUrl('Special:MyPage/skin.js') + '" title="Special:MyPage/skin.js">用户JavaScript文件</a>中任何旧的<code>FriendlyConfig</code>设置。';
@@ -1170,10 +1170,10 @@ Twinkle.config.init = function twinkleconfigInit() {
 		box.setAttribute('id', 'twinkle-config-headerbox');
 
 		var link,
-			jsonPageName = mw.config.get('wgPageName').slice(mw.config.get('wgPageName').lastIndexOf('/') + 1,
-				mw.config.get('wgPageName').lastIndexOf('.json'));
+			scriptPageName = mw.config.get('wgPageName').slice(mw.config.get('wgPageName').lastIndexOf('/') + 1,
+				mw.config.get('wgPageName').lastIndexOf('.js'));
 
-		if (jsonPageName === 'twinkleoptions') {
+		if (scriptPageName === 'twinkleoptions') {
 			// place "why not try the preference panel" notice
 			box.setAttribute('class', 'config-twopt-box');
 
@@ -1189,7 +1189,7 @@ Twinkle.config.init = function twinkleconfigInit() {
 			box.appendChild(document.createTextNode('，或直接编辑本页。'));
 			$(box).insertAfter($('#contentSub'));
 
-		} else if ([ 'vector', 'vector-2022', 'gongbi', 'common' ].indexOf(jsonPageName) !== -1) {
+		} else if ([ 'vector', 'vector-2022', 'gongbi', 'common' ].indexOf(scriptPageName) !== -1) {
 			// place "Looking for Twinkle options?" notice
 			box.setAttribute('class', 'config-userskin-box');
 
@@ -1446,7 +1446,7 @@ Twinkle.config.resetAllPrefs = function twinkleconfigResetAllPrefs() {
 Twinkle.config.save = function twinkleconfigSave(e) {
 	Morebits.status.init(document.getElementById('twinkle-config-content'));
 
-	var userjs = mw.config.get('wgFormattedNamespaces')[mw.config.get('wgNamespaceIds').user] + ':' + mw.config.get('wgUserName') + '/twinkleoptions.json';
+	var userjs = mw.config.get('wgFormattedNamespaces')[mw.config.get('wgNamespaceIds').user] + ':' + mw.config.get('wgUserName') + '/twinkleoptions.js';
 	var qiuwen_page = new Morebits.wiki.page(userjs, '保存参数设置到 ' + userjs);
 	qiuwen_page.setCallbackParameters(e.target);
 	qiuwen_page.load(Twinkle.config.writePrefs);
@@ -1545,7 +1545,7 @@ Twinkle.config.writePrefs = function twinkleconfigWritePrefs(pageobj) {
 							break;
 					}
 				} else if (Twinkle.prefs) {
-					// Retain the hidden preferences that may have customised by the user from twinkleoptions.json
+					// Retain the hidden preferences that may have customised by the user from twinkleoptions.js
 					// undefined if not set
 					userValue = Twinkle.prefs[pref.name];
 				}
