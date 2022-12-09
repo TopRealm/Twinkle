@@ -2650,9 +2650,6 @@ Morebits.wiki.page = function (pageName, status) {
 		// - creation lookup
 		lookupNonRedirectCreator: false,
 
-		// - stabilize (FlaggedRevs)
-		flaggedRevs: null,
-
 		// internal status
 		pageLoaded: false,
 		csrfToken: null,
@@ -2695,17 +2692,12 @@ Morebits.wiki.page = function (pageName, status) {
 		moveProcessApi: null,
 		patrolApi: null,
 		patrolProcessApi: null,
-		triageApi: null,
-		triageProcessListApi: null,
-		triageProcessApi: null,
 		deleteApi: null,
 		deleteProcessApi: null,
 		undeleteApi: null,
 		undeleteProcessApi: null,
 		protectApi: null,
 		protectProcessApi: null,
-		stabilizeApi: null,
-		stabilizeProcessApi: null
 	};
 
 	var emptyFunction = function () { };
@@ -3346,15 +3338,6 @@ Morebits.wiki.page = function (pageName, status) {
 	 */
 	this.getStatusElement = function () {
 		return ctx.statusElement;
-	};
-
-	/**
-	 * @param {string} level - The right required for edits not to require
-	 * review. Possible options: none, autoconfirmed, review (not on enWiki).
-	 * @param {string} [expiry=infinity]
-	 */
-	this.setFlaggedRevs = function (level, expiry) {
-		ctx.flaggedRevs = { level: level, expiry: expiry || 'infinity' };
 	};
 
 	/**
