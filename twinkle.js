@@ -445,19 +445,19 @@ $.ajax({
 		}
 
 		// Twinkle options are basically a JSON object with some comments. Strip those:
-		var optionsTextCommentsRemoved = optionsText.replace(/(?:^(?:\/\/[^\n]*\n)*\n*|(?:\/\/[^\n]*(?:\n|$))*$)/g, '');
+		optionsText = optionsText.replace(/(\/\*\s+?<\/?nowiki>\s+?\*\/\n?|\/\/.*|\n+|^\s+|\s+$)/g, '');
 
 		// Debug
-		console.log(optionsTextCommentsRemoved);
+		console.log(optionsText);
 
 		// First version of options had some boilerplate code to make it eval-able -- strip that too. This part may become obsolete down the line.
-		var optionsTextPrefixRemoved = optionsTextCommentsRemoved.replace(/(?:^window.Twinkle.prefs = |;\n*$)/g, '');
+		optionsText = optionsText.replace(/(?:^window.Twinkle.prefs = |;\n*$)/g, '');
 
 		// Debug
-		console.log(optionsTextPrefixRemoved);
+		console.log(optionsText);
 
 		try {
-			var optionsTextJSON = JSON.parse(optionsTextPrefixRemoved);
+			var optionsTextJSON = JSON.parse(optionsText);
 			if (optionsTextJSON) {
 				if (optionsTextJSON.twinkle || optionsTextJSON.friendly) { // Old preferences format
 					Twinkle.prefs = $.extend(optionsTextJSON.twinkle, optionsTextJSON.friendly);
