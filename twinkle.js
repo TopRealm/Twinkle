@@ -445,6 +445,7 @@ $.ajax({
 			}
 		} catch (e) {
 			mw.notify('未能解析您的Twinkle参数设置', {type: 'error'});
+			console.log(e);
 		}
 	})
 	.always(function () {
