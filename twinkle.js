@@ -379,7 +379,7 @@ Twinkle.addPortlet = function (navigation, id, text, type, nextnodeid) {
 			heading.appendChild(a);
 		}
 	} else {
-		h3.appendChild(document.createTextNode(text));
+		heading.appendChild(document.createTextNode(text));
 	}
 
 	outerNav.appendChild(heading);
@@ -511,7 +511,6 @@ Twinkle.load = function () {
 	}
 };
 
-
 /**
  * Twinkle-specific data shared by multiple modules
  * Likely customized per installation
@@ -533,7 +532,7 @@ Twinkle.makeFindSourcesDiv = function makeSourcesDiv(divID) {
 	}
 	if (!Twinkle.findSources) {
 		var parser = new Morebits.wiki.preview($(divID)[0]);
-		parser.beginRender('({{Find sources|' + Morebits.pageNameNorm + '}})', 'QW:AFD').then(function() {
+		parser.beginRender('({{Find sources|' + Morebits.pageNameNorm + '}})', 'QW:AFD').then(function () {
 			// Save for second-time around
 			Twinkle.findSources = parser.previewbox.innerHTML;
 			$(divID).removeClass('morebits-previewbox');

@@ -10,7 +10,7 @@
  */
 /* Twinkle.js - friendlytag.js */
 /* <nowiki> */
-(function($) {
+(function ($) {
 /*
  ****************************************
  *** friendlytag.js: Tag module
@@ -1821,7 +1821,7 @@ Twinkle.tag.callbacks = {
 				}
 			});
 			if (params.patrol) {
-				pageobj.triage();
+				pageobj.patrol();
 			}
 		};
 
@@ -2174,7 +2174,7 @@ Twinkle.tag.callbacks = {
 		pageobj.setCreateOption('nocreate');
 		pageobj.save();
 		if (params.patrol) {
-			pageobj.triage();
+			pageobj.patrol();
 		}
 	},
 	file: function friendlytagCallbacksFile(pageobj) {
@@ -2275,7 +2275,7 @@ Twinkle.tag.callbacks = {
 		pageobj.setCreateOption('nocreate');
 		pageobj.save();
 		if (params.patrol) {
-			pageobj.triage();
+			pageobj.patrol();
 		}
 	}
 };
@@ -2418,9 +2418,9 @@ Twinkle.tag.callback.evaluate = function friendlytagCallbackEvaluate(e) {
 	}
 	var qiuwen_page = new Morebits.wiki.page(Morebits.pageNameNorm, 'Tagging ' + Twinkle.tag.mode);
 	qiuwen_page.setCallbackParameters(params);
-	qiuwen_page.setChangeTags(Twinkle.changeTags); // Here to apply to triage
+	qiuwen_page.setChangeTags(Twinkle.changeTags);
 	qiuwen_page.load(Twinkle.tag.callbacks[Twinkle.tag.mode]);
 };
 Twinkle.addInitCallback(Twinkle.tag, 'tag');
-})(jQuery);
+}(jQuery));
 /* </nowiki> */

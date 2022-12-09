@@ -372,5 +372,4 @@ Twinkle.stub.callback.evaluate = function friendlytagCallbackEvaluate(e) {
 Twinkle.addInitCallback(Twinkle.stub, 'stub');
 }(jQuery));
 
-
 /* </nowiki> */
