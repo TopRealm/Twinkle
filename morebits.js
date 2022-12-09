@@ -1,13 +1,15 @@
-// <nowiki>
 /**
- * Twinkle.js - morebits.js
- * © 2011-2022 English Wikipedia Contributors
- * © 2011-2021 Chinese Wikipedia Contributors
- * © 2021-     Qiuwen Baike Contributors
- * This work is licensed under a Creative Commons
- * Attribution-ShareAlike 4.0 International License.
- * https://creativecommons.org/licenses/by-sa/4.0/
+ * SPDX-License-Identifier: CC-BY-SA-4.0
+ * _addText: '{{Gadget Header|license=CC-BY-SA-4.0}}'
+ *
+ * @source https://git.qiuwen.wiki/qiuwen/Twinkle
+ * @author © 2011-2022 English Wikipedia Contributors
+ * @author © 2011-2021 Chinese Wikipedia Contributors
+ * @author © 2021-     Qiuwen Baike Contributors
+ * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
+/* Twinkle.js - morebits.js */
+/* <nowiki> */
 /**
  * A library full of lots of goodness for user scripts on MediaWiki wikis.
  *
@@ -2303,7 +2305,7 @@ Morebits.wiki.api = function(currentAction, query, onSuccess, statusElement, onE
 	}
 
 	// Ignore tags for queries and most common unsupported actions, produces warnings
-	if (query.action && ['query', 'review', 'stabilize', 'pagetriageaction', 'watch'].indexOf(query.action) !== -1) {
+	if (query.action && ['query', 'watch'].indexOf(query.action) !== -1) {
 		delete query.tags;
 	} else if (!query.tags && morebitsWikiChangeTag) {
 		query.tags = morebitsWikiChangeTag;
@@ -2647,9 +2649,6 @@ Morebits.wiki.page = function(pageName, status) {
 		// - creation lookup
 		lookupNonRedirectCreator: false,
 
-		// - stabilize (FlaggedRevs)
-		flaggedRevs: null,
-
 		// internal status
 		pageLoaded: false,
 		csrfToken: null,
@@ -2680,8 +2679,6 @@ Morebits.wiki.page = function(pageName, status) {
 		onUndeleteFailure: null,
 		onProtectSuccess: null,
 		onProtectFailure: null,
-		onStabilizeSuccess: null,
-		onStabilizeFailure: null,
 
 		// internal objects
 		loadQuery: null,
@@ -2701,8 +2698,6 @@ Morebits.wiki.page = function(pageName, status) {
 		undeleteProcessApi: null,
 		protectApi: null,
 		protectProcessApi: null,
-		stabilizeApi: null,
-		stabilizeProcessApi: null
 	};
 
 	var emptyFunction = function() { };
@@ -3024,9 +3019,7 @@ Morebits.wiki.page = function(pageName, status) {
 
 	/**
 	 * Set any custom tag(s) to be applied to the API action.
-	 * A number of actions don't support it, most notably watch, review,
-	 * and stabilize ({@link https://phabricator.wikimedia.org/T247721|T247721}), and
-	 * pagetriageaction ({@link https://phabricator.wikimedia.org/T252980|T252980}).
+	 * A number of actions don't support it, most notably watch.
 	 *
 	 * @param {string|string[]} tags - String or array of tag(s).
 	 */
@@ -3346,15 +3339,6 @@ Morebits.wiki.page = function(pageName, status) {
 	 */
 	this.getStatusElement = function() {
 		return ctx.statusElement;
-	};
-
-	/**
-	 * @param {string} level - The right required for edits not to require
-	 * review. Possible options: none, autoconfirmed, review (not on enWiki).
-	 * @param {string} [expiry=infinity]
-	 */
-	this.setFlaggedRevs = function(level, expiry) {
-		ctx.flaggedRevs = { level: level, expiry: expiry || 'infinity' };
 	};
 
 	/**
@@ -3689,8 +3673,8 @@ Morebits.wiki.page = function(pageName, status) {
 	 * more info (e.g. protection or watchlist expiry).
 	 *
 	 * Currently used for `append`, `prepend`, `newSection`, `move`,
-	 * `stabilize`, `deletePage`, and `undeletePage`. Not used for
-	 * `protect` since it always needs to request protection status.
+	 * `deletePage`, and `undeletePage`. Not used for `protect` since
+	 * it always needs to request protection status.
 	 *
 	 * @param {string} [action=edit] - The action being undertaken, e.g.
 	 * "edit" or "delete". In practice, only "edit" or "notedit" matters.
@@ -3741,7 +3725,6 @@ Morebits.wiki.page = function(pageName, status) {
 	 * in one place. Used for {@link Morebits.wiki.page#deletePage|delete},
 	 * {@link Morebits.wiki.page#undeletePage|undelete},
 	 * {@link* Morebits.wiki.page#protect|protect},
-	 * {@link Morebits.wiki.page#stabilize|stabilize},
 	 * and {@link Morebits.wiki.page#move|move}
 	 * (basically, just not {@link Morebits.wiki.page#load|load}).
 	 *
@@ -3760,7 +3743,7 @@ Morebits.wiki.page = function(pageName, status) {
 			format: 'json'
 		};
 		// Protection not checked for flagged-revs or non-sysop moves
-		if (action !== 'stabilize' && (action !== 'move' || Morebits.userIsSysop)) {
+		if (action !== 'move' || Morebits.userIsSysop) {
 			query.inprop += '|protection';
 		}
 		if (ctx.followRedirect && action !== 'undelete') {
@@ -4144,7 +4127,7 @@ Morebits.wiki.page = function(pageName, status) {
 
 	/**
 	 * Common checks for action methods. Used for move, undelete, delete,
-	 * protect, stabilize.
+	 * protect.
 	 *
 	 * @param {string} action - The action being checked.
 	 * @param {string} onFailure - Failure callback.
@@ -4168,7 +4151,7 @@ Morebits.wiki.page = function(pageName, status) {
 
 	/**
 	 * Common checks for fnProcess functions (`fnProcessDelete`, `fnProcessMove`, etc.
-	 * Used for move, undelete, delete, protect, stabilize.
+	 * Used for move, undelete, delete, protect.
 	 *
 	 * @param {string} action - The action being checked.
 	 * @param {string} onFailure - Failure callback.
@@ -4179,7 +4162,7 @@ Morebits.wiki.page = function(pageName, status) {
 		var missing = response.pages[0].missing;
 
 		// No undelete as an existing page could have deleted revisions
-		var actionMissing = missing && ['delete', 'stabilize', 'move'].indexOf(action) !== -1;
+		var actionMissing = missing && ['delete', 'move'].indexOf(action) !== -1;
 		var protectMissing = action === 'protect' && missing && (ctx.protectEdit || ctx.protectMove);
 		var saltMissing = action === 'protect' && !missing && ctx.protectCreate;
 
@@ -4336,33 +4319,6 @@ Morebits.wiki.page = function(pageName, status) {
 		ctx.triageProcessListApi = new Morebits.wiki.api('checking curation status...', query, fnProcessTriage);
 		ctx.triageProcessListApi.setParent(this);
 		ctx.triageProcessListApi.post();
-	};
-
-	// callback from triageProcessListApi.post()
-	var fnProcessTriage = function() {
-		var responseList = ctx.triageProcessListApi.getResponse().pagetriagelist;
-		// Exit if not in the queue
-		if (!responseList || responseList.result !== 'success') {
-			return;
-		}
-		var page = responseList.pages && responseList.pages[0];
-		// Do nothing if page already triaged/patrolled
-		if (!page || !parseInt(page.patrol_status, 10)) {
-			var query = {
-				action: 'pagetriageaction',
-				pageid: ctx.pageID,
-				reviewed: 1,
-				// tags: ctx.changeTags, // pagetriage tag support: [[phab:T252980]]
-				// Could use an adder to modify/create note:
-				// summaryAd, but that seems overwrought
-				token: ctx.csrfToken,
-				format: 'json'
-			};
-			var triageStat = new Morebits.status('Marking page as curated');
-			ctx.triageProcessApi = new Morebits.wiki.api('curating page...', query, null, triageStat);
-			ctx.triageProcessApi.setParent(this);
-			ctx.triageProcessApi.post();
-		}
 	};
 
 	var fnProcessDelete = function() {
@@ -6014,4 +5970,4 @@ if (typeof arguments === 'undefined') {  // typeof is here for a reason...
 	window.Status = Morebits.status;
 }
 
-// </nowiki>
+/* </nowiki> */

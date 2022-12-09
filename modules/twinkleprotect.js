@@ -1,22 +1,22 @@
-// <nowiki>
 /**
- * Twinkle.js - twinkleprotect.js
- * © 2011-2022 English Wikipedia Contributors
- * © 2011-2021 Chinese Wikipedia Contributors
- * © 2021-     Qiuwen Baike Contributors
- * This work is licensed under a Creative Commons
- * Attribution-ShareAlike 4.0 International License.
- * https://creativecommons.org/licenses/by-sa/4.0/
+ * SPDX-License-Identifier: CC-BY-SA-4.0
+ * _addText: '{{Gadget Header|license=CC-BY-SA-4.0}}'
+ *
+ * @source https://git.qiuwen.wiki/qiuwen/Twinkle
+ * @author © 2011-2022 English Wikipedia Contributors
+ * @author © 2011-2021 Chinese Wikipedia Contributors
+ * @author © 2021-     Qiuwen Baike Contributors
+ * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
-(function($) {
-
-
+/* Twinkle.js - twinkleprotect.js */
+/* <nowiki> */
+(function ($) {
 /*
  ****************************************
  *** twinkleprotect.js: Protect/RPP module
  ****************************************
- * Mode of invocation:     Tab ("PP"/"RPP")
- * Active on:              Non-special, non-MediaWiki pages
+ * Mode of invocation:  Tab ("PP"/"RPP")
+ * Active on:           Non-special, non-MediaWiki pages
  */
 
 // Note: a lot of code in this module is re-used/called by batchprotect.
@@ -104,7 +104,7 @@ Twinkle.protect.callback = function twinkleprotectCallback() {
 // remind the user contact before requesting unprotection (evaluate)
 Twinkle.protect.trustedBots = [ ];
 
-// Customizable namespace and FlaggedRevs settings
+// Customizable namespace settings
 // In theory it'd be nice to have restrictionlevels defined here,
 // but those are only available via a siteinfo query
 
@@ -1368,4 +1368,4 @@ Twinkle.addInitCallback(Twinkle.protect, 'protect');
 })(jQuery);
 
 
-// </nowiki>
+/* </nowiki> */

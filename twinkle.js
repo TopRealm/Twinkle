@@ -1,16 +1,18 @@
-// <nowiki>
 /**
- * Twinkle.js - twinkle.js
- * © 2011-2022 English Wikipedia Contributors
- * © 2011-2021 Chinese Wikipedia Contributors
- * © 2021-     Qiuwen Baike Contributors
- * This work is licensed under a Creative Commons
- * Attribution-ShareAlike 4.0 International License.
- * https://creativecommons.org/licenses/by-sa/4.0/
+ * SPDX-License-Identifier: CC-BY-SA-4.0
+ * _addText: '{{Gadget Header|license=CC-BY-SA-4.0}}'
+ *
+ * @source https://git.qiuwen.wiki/qiuwen/Twinkle
+ * @author © 2011-2022 English Wikipedia Contributors
+ * @author © 2011-2021 Chinese Wikipedia Contributors
+ * @author © 2021-     Qiuwen Baike Contributors
+ * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
+/* Twinkle.js - twinkle.js */
+/* <nowiki> */
 /**
  * +-------------------------------------------------------+
- * |          === WARNING: GLOBAL GADGET FILE ===          |
+ * |         === WARNING: GLOBAL GADGET FILE ===           |
  * |        Changes to this page affect many users.        |
  * |  Please discuss changes at Talk page before editing.  |
  * +-------------------------------------------------------+
@@ -509,7 +511,6 @@ Twinkle.load = function () {
 // Custom change tag(s) to be applied to all Twinkle actions, create at Special:Tags
 Twinkle.changeTags = 'Twinkle';
 // Available for actions that don't (yet) support tags
-// currently: FlaggedRevs and PageTriage
 Twinkle.summaryAd = '（[[H:TW|Twinkle]]）';
 
 // Various hatnote templates, used when tagging (csd/xfd/tag/protect) to
@@ -561,4 +562,4 @@ Twinkle.generateBatchPageLinks = function (checkbox) {
 
 }(window, document, jQuery)); // End wrap with anonymous function
 
-// </nowiki>
+/* </nowiki> */

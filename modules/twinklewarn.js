@@ -1,16 +1,16 @@
-// <nowiki>
 /**
- * Twinkle.js - twinklewarn.js
- * © 2011-2022 English Wikipedia Contributors
- * © 2011-2021 Chinese Wikipedia Contributors
- * © 2021-     Qiuwen Baike Contributors
- * This work is licensed under a Creative Commons
- * Attribution-ShareAlike 4.0 International License.
- * https://creativecommons.org/licenses/by-sa/4.0/
+ * SPDX-License-Identifier: CC-BY-SA-4.0
+ * _addText: '{{Gadget Header|license=CC-BY-SA-4.0}}'
+ *
+ * @source https://git.qiuwen.wiki/qiuwen/Twinkle
+ * @author © 2011-2022 English Wikipedia Contributors
+ * @author © 2011-2021 Chinese Wikipedia Contributors
+ * @author © 2021-     Qiuwen Baike Contributors
+ * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
+/* Twinkle.js - twinklewarn.js */
+/* <nowiki> */
 (function($) {
-
-
 /*
  ****************************************
  *** twinklewarn.js: Warn module
@@ -1799,4 +1799,4 @@ Twinkle.addInitCallback(Twinkle.warn, 'warn');
 })(jQuery);
 
 
-// </nowiki>
+/* </nowiki> */
