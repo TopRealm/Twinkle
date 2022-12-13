@@ -405,7 +405,7 @@ Twinkle.config.sections = [ {
 		enumValues: Twinkle.config.watchlistEnums
 	},
 	// TwinkleConfig.markSpeedyPagesAsPatrolled (boolean)
-	// If, when applying speedy template to page, to mark the page as triaged/patrolled (if the page was reached from NewPages)
+	// If, when applying speedy template to page, to mark the page as patrolled (if the page was reached from NewPages)
 	{
 		name: 'markSpeedyPagesAsPatrolled',
 		label: '当标记页面时，标记页面为已巡查（若可能）',
