@@ -12,13 +12,13 @@
 /* <nowiki> */
 (function ($) {
 /*
-   ****************************************
-   *** friendlytalkback.js: Talkback module
-   ****************************************
-   * Mode of invocation:     Tab ("TB")
-   * Active on:              Any page with relevant user name (userspace, contribs, etc.) except IP ranges
-   * Config directives in:   FriendlyConfig
-   */
+	 ****************************************
+	 *** friendlytalkback.js: Talkback module
+	 ****************************************
+	 * Mode of invocation:     Tab ("TB")
+	 * Active on:              Any page with relevant user name (userspace, contribs, etc.) except IP ranges
+	 * Config directives in:   FriendlyConfig
+	 */
 
 Twinkle.talkback = function () {
 	if (!mw.config.exists('wgRelevantUserName')) {

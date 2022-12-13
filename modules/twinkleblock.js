@@ -11,8 +11,8 @@
 /* Twinkle.js - twinkleblock.js */
 /* <nowiki> */
 (function ($) {
-
-var api = new mw.Api(), relevantUserName = mw.config.get('wgRelevantUserName');
+var api = new mw.Api(),
+	relevantUserName = mw.config.get('wgRelevantUserName');
 var menuFormattedNamespaces = $.extend({}, mw.config.get('wgFormattedNamespaces'));
 menuFormattedNamespaces[0] = '（条目）';
 var blockActionText = {
@@ -711,12 +711,12 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 		mw.util.addCSS(
 			// Reduce padding
 			'.select2-results .select2-results__option { padding-top: 1px; padding-bottom: 1px; }' +
-			// Adjust font size
-			'.select2-container .select2-dropdown .select2-results { font-size: 13px; } .select2-container .selection .select2-selection__rendered { font-size: 13px; }' +
-			// Remove black border
-			'.select2-container--default.select2-container--focus .select2-selection--multiple { border: 1px solid #aaa; }' +
-			// Make the tiny cross larger
-			'.select2-selection__choice__remove { font-size: 130%; }');
+      // Adjust font size
+      '.select2-container .select2-dropdown .select2-results { font-size: 13px; } .select2-container .selection .select2-selection__rendered { font-size: 13px; }' +
+      // Remove black border
+      '.select2-container--default.select2-container--focus .select2-selection--multiple { border: 1px solid #aaa; }' +
+      // Make the tiny cross larger
+      '.select2-selection__choice__remove { font-size: 130%; }');
 	} else {
 		$form.find('fieldset[name="field_block_options"]').hide();
 		// Clear select2 options
@@ -781,35 +781,35 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 };
 
 /*
- * Keep alphabetized by key name, Twinkle.block.blockGroups establishes
- *  the order they will appear in the interface
- *
- * Block preset format, all keys accept only 'true' (omit for false) except where noted:
- * <title of block template> : {
- *   autoblock: <autoblock any IP addresses used (for registered users only)>
- *   disabletalk: <disable user from editing their own talk page while blocked>
- *   expiry: <string - expiry timestamp, can include relative times like "5 months", "2 weeks" etc, use "infinity" for indefinite>
- *   forAnonOnly: <show block option in the interface only if the relevant user is an IP>
- *   forRegisteredOnly: <show block option in the interface only if the relevant user is registered>
- *   label: <string - label for the option of the dropdown in the interface (keep brief)>
- *   noemail: prevent the user from sending email through Special:Emailuser
- *   pageParam: <set if the associated block template accepts a page parameter>
- *   prependReason: <string - prepends the value of 'reason' to the end of the existing reason, namely for when revoking talk page access>
- *   nocreate: <block account creation from the user's IP (for anonymous users only)>
- *   nonstandard: <template does not conform to stewardship of WikiProject User Warnings and may not accept standard parameters>
- *   reason: <string - block rationale, as would appear in the block log,
- *   and the edit summary for when adding block template, unless 'summary' is set>
- *   reasonParam: <set if the associated block template accepts a reason parameter>
- *   sig: <string - set to ~~ ~~ if block template does not accept "true" as the value, or set null to omit sig param altogether>
- *   summary: <string - edit summary for when adding block template to user's talk page, if not set, 'reason' is used>
- *   suppressArticleInSummary: <set to suppress showing the article name in the edit summary, as with attack pages>
- *   templateName: <string - name of template to use (instead of key name), entry will be omitted from the Templates list.
- *   (e.g. use another template but with different block options)>
- *   useInitialOptions: <when preset is chosen, only change given block options, leave others as they were>
- *
- * WARNING: 'anononly' and 'allowusertalk' are enabled by default.
- *   To disable, set 'hardblock' and 'disabletalk', respectively
- */
+   * Keep alphabetized by key name, Twinkle.block.blockGroups establishes
+   *  the order they will appear in the interface
+   *
+   * Block preset format, all keys accept only 'true' (omit for false) except where noted:
+   * <title of block template> : {
+   *   autoblock: <autoblock any IP addresses used (for registered users only)>
+   *   disabletalk: <disable user from editing their own talk page while blocked>
+   *   expiry: <string - expiry timestamp, can include relative times like "5 months", "2 weeks" etc, use "infinity" for indefinite>
+   *   forAnonOnly: <show block option in the interface only if the relevant user is an IP>
+   *   forRegisteredOnly: <show block option in the interface only if the relevant user is registered>
+   *   label: <string - label for the option of the dropdown in the interface (keep brief)>
+   *   noemail: prevent the user from sending email through Special:Emailuser
+   *   pageParam: <set if the associated block template accepts a page parameter>
+   *   prependReason: <string - prepends the value of 'reason' to the end of the existing reason, namely for when revoking talk page access>
+   *   nocreate: <block account creation from the user's IP (for anonymous users only)>
+   *   nonstandard: <template does not conform to stewardship of WikiProject User Warnings and may not accept standard parameters>
+   *   reason: <string - block rationale, as would appear in the block log,
+   *   and the edit summary for when adding block template, unless 'summary' is set>
+   *   reasonParam: <set if the associated block template accepts a reason parameter>
+   *   sig: <string - set to ~~ ~~ if block template does not accept "true" as the value, or set null to omit sig param altogether>
+   *   summary: <string - edit summary for when adding block template to user's talk page, if not set, 'reason' is used>
+   *   suppressArticleInSummary: <set to suppress showing the article name in the edit summary, as with attack pages>
+   *   templateName: <string - name of template to use (instead of key name), entry will be omitted from the Templates list.
+   *   (e.g. use another template but with different block options)>
+   *   useInitialOptions: <when preset is chosen, only change given block options, leave others as they were>
+   *
+   * WARNING: 'anononly' and 'allowusertalk' are enabled by default.
+   *   To disable, set 'hardblock' and 'disabletalk', respectively
+   */
 Twinkle.block.blockPresetsInfo = {
 	'anonblock': {
 		expiry: '3 days',
@@ -1435,29 +1435,29 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate(e) {
 		}
 
 		/*
-		 * Check if block status changed while processing the form.
-		 *   There's a lot to consider here. list=blocks provides the
-		 * current block status, but there are at least two issues with
-		 * relying on it. First, the id doesn't update on a reblock,
-		 * meaning the individual parameters need to be compared. This
-		 * can be done roughly with JSON.stringify - we can thankfully
-		 * rely on order from the server, although sorting would be
-		 * fine if not - but falsey values are problematic and is
-		 * non-ideal. More importantly, list=blocks won't indicate if a
-		 * non-blocked user is blocked then unblocked. This should be
-		 * exceedingy rare, but regardless, we thus need to check
-		 * list=logevents, which has a nicely updating logid
-		 * parameter. We can't rely just on that, though, since it
-		 * doesn't account for blocks that have expired on their own.
-		 *    As such, we use both. Using some ternaries, the logid
-		 * variables are false if there's no logevents, so if they
-		 * aren't equal we defintely have a changed entry (send
-		 * confirmation). If they are equal, then either the user was
-		 * never blocked (the block statuses will be equal, no
-		 * confirmation) or there's no new block, in which case either
-		 * a block expired (different statuses, confirmation) or the
-		 * same block is still active (same status, no confirmation).
-		 */
+  	 * Check if block status changed while processing the form.
+  	 *   There's a lot to consider here. list=blocks provides the
+  	 * current block status, but there are at least two issues with
+  	 * relying on it. First, the id doesn't update on a reblock,
+  	 * meaning the individual parameters need to be compared. This
+  	 * can be done roughly with JSON.stringify - we can thankfully
+  	 * rely on order from the server, although sorting would be
+  	 * fine if not - but falsey values are problematic and is
+  	 * non-ideal. More importantly, list=blocks won't indicate if a
+  	 * non-blocked user is blocked then unblocked. This should be
+  	 * exceedingy rare, but regardless, we thus need to check
+  	 * list=logevents, which has a nicely updating logid
+  	 * parameter. We can't rely just on that, though, since it
+  	 * doesn't account for blocks that have expired on their own.
+  	 *    As such, we use both. Using some ternaries, the logid
+  	 * variables are false if there's no logevents, so if they
+  	 * aren't equal we defintely have a changed entry (send
+  	 * confirmation). If they are equal, then either the user was
+  	 * never blocked (the block statuses will be equal, no
+  	 * confirmation) or there's no new block, in which case either
+  	 * a block expired (different statuses, confirmation) or the
+  	 * same block is still active (same status, no confirmation).
+  	 */
 		var query = {
 			format: 'json',
 			action: 'query',

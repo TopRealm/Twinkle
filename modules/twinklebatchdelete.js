@@ -12,12 +12,12 @@
 /* <nowiki> */
 (function ($) {
 /*
- ****************************************
- *** twinklebatchdelete.js: Batch delete module (sysops only)
- ****************************************
- * Mode of invocation:     Tab ("D-batch")
- * Active on:              Existing non-articles, and Special:PrefixIndex
- */
+   ****************************************
+   *** twinklebatchdelete.js: Batch delete module (sysops only)
+   ****************************************
+   * Mode of invocation:     Tab ("D-batch")
+   * Active on:              Existing non-articles, and Special:PrefixIndex
+   */
 
 Twinkle.batchdelete = function twinklebatchdelete() {
 	if (Morebits.userIsSysop && (mw.config.get('wgCurRevisionId') && mw.config.get('wgNamespaceNumber') > 0 || mw.config.get('wgCanonicalSpecialPageName') === 'Prefixindex' || mw.config.get('wgCanonicalSpecialPageName') === 'BrokenRedirects')) {

@@ -12,12 +12,12 @@
 /* <nowiki> */
 (function ($) {
 /*
- ****************************************
- *** twinklefluff.js: Revert/rollback module
- ****************************************
- * Mode of invocation:  Links on contributions, recent changes, history, and diff pages
- * Active on:           Diff pages, history pages, Special:RecentChanges(Linked), and Special:Contributions
- */
+   ****************************************
+   *** twinklefluff.js: Revert/rollback module
+   ****************************************
+   * Mode of invocation:  Links on contributions, recent changes, history, and diff pages
+   * Active on:           Diff pages, history pages, Special:RecentChanges(Linked), and Special:Contributions
+   */
 
 /**
  * Twinklefluff revert and antivandalism utility
@@ -494,8 +494,8 @@ Twinkle.fluff.callbacks = {
 						return;
 				}
 			} else if (params.type === 'vand' &&
-			// Okay to test on user since it will either fail or sysop will correctly access it
-			// Besides, none of the trusted bots are going to be revdel'd
+        // Okay to test on user since it will either fail or sysop will correctly access it
+        // Besides, none of the trusted bots are going to be revdel'd
         Twinkle.fluff.trustedBots.indexOf(top.getAttribute('user')) !== -1 && revs.length > 1 && revs[1].getAttribute('revid') === params.revid) {
 				Morebits.status.info('信息', [ '最新修订版本由 ', Morebits.htmlNode('strong', lastuser), '，一个可信的机器人做出，但之前的版本被认为是破坏，继续回退操作。' ]);
 				index = 2;
@@ -598,7 +598,7 @@ Twinkle.fluff.callbacks = {
 				break;
 		}
 		if ((Twinkle.getPref('confirmOnFluff') ||
-		// Mobile user agent taken from [[en:MediaWiki:Gadget-confirmationRollback-mobile.js]]
+      // Mobile user agent taken from [[en:MediaWiki:Gadget-confirmationRollback-mobile.js]]
       Twinkle.getPref('confirmOnMobileFluff') && /Android|webOS|iPhone|iPad|iPod|BlackBerry|Mobile|Opera Mini/i.test(navigator.userAgent)) && !userHasAlreadyConfirmedAction && !confirm('回退页面：您确定吗？')) {
 			statelem.error('用户取消操作。');
 			return;
