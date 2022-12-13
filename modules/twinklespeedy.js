@@ -38,7 +38,6 @@
 Twinkle.speedy = function twinklespeedy() {
 	// Disable on:
 	// * special pages
-	// * Flow pages
 	// * non-existent pages
 	if (mw.config.get('wgNamespaceNumber') < 0 || !mw.config.get('wgArticleId')) {
 		return;

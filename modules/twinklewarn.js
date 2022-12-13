@@ -1386,7 +1386,7 @@ Twinkle.warn.callbacks = {
 		var linkedarticle = input.article;
 		var templatetext;
 		templatetext = Twinkle.warn.callbacks.getWarningWikitext(templatename, linkedarticle, input.reason, input.main_group === 'custom');
-		form.previewer.beginRender(templatetext, 'User_talk:' + relevantUserName + (Twinkle.warn.isFlow ? '/Wikitext' : '')); // Force wikitext/correct username
+		form.previewer.beginRender(templatetext, 'User_talk:' + relevantUserName); // Force wikitext/correct username
 	},
 
 	// Just a pass-through unless the autolevel option was selected

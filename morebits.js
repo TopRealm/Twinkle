@@ -4567,7 +4567,7 @@ Morebits.wiki.preview = function (previewbox) {
 		previewbox.appendChild(statusspan);
 		Morebits.status.init(statusspan);
 
-		// 如果页面不是wikitext（例如用户js/css、Flow等），那么找一个wikitext页面来预览。
+		// 如果页面不是wikitext（例如用户js/css等），那么找一个wikitext页面来预览。
 		var pageName = mw.config.get('wgPageName');
 		if (mw.config.get('wgPageContentModel') !== 'wikitext') {
 			pageName = 'Draft:' + pageName;
