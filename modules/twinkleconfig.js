@@ -1,4 +1,3 @@
-/* eslint-disable no-useless-concat */
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
  * _addText: '{{Gadget Header|license=CC-BY-SA-4.0}}'
@@ -10,7 +9,7 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - twinkleconfig.js */
-
+/* eslint-disable no-useless-concat */
 /* <nowiki> */
 (function ($) {
 /*
@@ -1648,32 +1647,6 @@ Twinkle.config.writePrefs = function twinkleconfigWritePrefs(pageobj) {
 	// preferences that this script knows about are kept
 	var newConfig = { optionsVersion: 2.1 };
 
-	// a comparison function is needed later on
-	// it is just enough for our purposes (i.e. comparing strings, numbers, booleans,
-	// arrays of strings, and arrays of { value, label })
-	// and it is not very robust: e.g. compare([2], ["2"]) === true, and
-	// compare({}, {}) === false, but it's good enough for our purposes here
-	var compare = function (a, b) {
-		if (Array.isArray(a)) {
-			if (a.length !== b.length) {
-				return false;
-			}
-			var asort = a.sort(), bsort = b.sort();
-			for (var i = 0; asort[i]; ++i) {
-				// comparison of the two properties of custom lists
-				if ((typeof asort[i] === 'object') && (asort[i].label !== bsort[i].label ||
-						asort[i].value !== bsort[i].value)) {
-					return false;
-				} else if (asort[i].toString() !== bsort[i].toString()) {
-					return false;
-				}
-			}
-			return true;
-		}
-		return a === b;
-
-	};
-
 	$(Twinkle.config.sections).each(function (sectionkey, section) {
 		if (section.adminOnly && !Morebits.userIsSysop) {
 			return;  // i.e. "continue" in this context
@@ -1738,8 +1711,7 @@ Twinkle.config.writePrefs = function twinkleconfigWritePrefs(pageobj) {
 				}
 			}
 
-			// only save those preferences that are *different* from the default
-			if (userValue !== undefined && !compare(userValue, Twinkle.defaultConfig[pref.name])) {
+			if (userValue !== undefined) {
 				newConfig[pref.name] = userValue;
 			}
 		});
