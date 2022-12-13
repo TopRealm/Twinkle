@@ -435,28 +435,21 @@ $.ajax({
 	})
 	.done(function (optionsText) {
 
-		console.log(optionsText);
-
 		// Quick pass if user has no options
 		if (optionsText === '' || optionsText === ' ') {
 			return;
 		}
 
 		// Twinkle options are basically a JSON object with some comments. Strip those:
-		optionsText = optionsText.replace(/\/\*\s+?<\/?nowiki>\s+?\*\/\n?/g, '');
-		console.log(optionsText);
+		var optionsText_nowiki = optionsText.replace(/^\s+|^\n$|\/(\*|\/)\s+?<\/?nowiki>\s+?(\*\/)?\n?/g, '');
 
-		optionsText = optionsText.replace(/(?:^(?:\/\/[^\n]*\n)*\n*|(?:\/\/[^\n]*(?:\n|$))*$)/g, '');
-		console.log(optionsText);
+		var optionsText_nocomment = optionsText_nowiki.replace(/(?:^(?:\/\/[^\n]*\n)*\n*|(?:\/\/[^\n]*(?:\n|$))*$)/g, '');
 
 		// First version of options had some boilerplate code to make it eval-able -- strip that too. This part may become obsolete down the line.
-		if (optionsText.lastIndexOf('window.Twinkle.prefs = ', 0) === 0) {
-			optionsText = optionsText.replace(/(?:^window.Twinkle.prefs = |;\n*$)/g, '');
-			console.log(optionsText);
-		}
+		var optionsText_nowindow = optionsText_nocomment.replace(/(?:^window.Twinkle.prefs = |;\n*$)/g, '');
 
 		try {
-			var options = JSON.parse(optionsText);
+			var options = JSON.parse(optionsText_nowindow);
 			if (options) {
 				if (options.twinkle || options.friendly) { // Old preferences format
 					Twinkle.prefs = $.extend(options.twinkle, options.friendly);
@@ -468,7 +461,6 @@ $.ajax({
 			}
 		} catch (e) {
 			mw.notify('未能解析您的Twinkle参数设置', { type: 'error' });
-			console.log(e);
 		}
 	})
 	.always(function () {
