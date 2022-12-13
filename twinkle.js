@@ -36,7 +36,7 @@ if (!Morebits.userIsInGroup('autoconfirmed') && !Morebits.userIsInGroup('confirm
 }
 
 var Twinkle = {};
-window.Twinkle = Twinkle; // allow global access
+window.Twinkle = Twinkle;  // allow global access
 
 /**
  * Twinkle-specific data shared by multiple modules
@@ -122,6 +122,7 @@ Twinkle.defaultConfig = {
 	notifyUserOnSpeedyDeletionNomination: [ 'db', 'g1', 'g2', 'g3', 'g4', 'g5', 'g6', 'g7', 'g8', 'g9', 'a1', 'a2', 'a3', 'r1', 'r2', 'f1', 'f2', 'o1', 'o2', 'o3' ],
 	warnUserOnSpeedyDelete: [ 'db', 'g1', 'g2', 'g3', 'g4', 'g5', 'g6', 'g7', 'g8', 'g9', 'a1', 'a2', 'a3', 'r1', 'r2', 'f1', 'f2', 'o1', 'o2', 'o3' ],
 	promptForSpeedyDeletionSummary: [],
+	openUserTalkPageOnSpeedyDelete: [],
 	deleteTalkPageOnDelete: true,
 	deleteRedirectsOnDelete: true,
 	deleteSysopDefaultToDelete: false,
@@ -130,6 +131,7 @@ Twinkle.defaultConfig = {
 	logSpeedyNominations: true,
 	speedyLogPageName: 'CSD日志',
 	noLogOnSpeedyNomination: [ 'o1' ],
+	enlargeG11Input: false,
 
 	// Unlink
 	unlinkNamespaces: [ '0', '10', '118' ],
@@ -137,7 +139,7 @@ Twinkle.defaultConfig = {
 	// Warn
 	defaultWarningGroup: '1',
 	combinedSingletMenus: false,
-	watchWarnings: '1 month',
+	watchWarnings: 'yes',
 	oldSelect: false,
 	customWarningList: [],
 	autoMenuAfterRollback: false,
@@ -147,10 +149,8 @@ Twinkle.defaultConfig = {
 	xfdLogPageName: 'XfD日志',
 	noLogOnXfdNomination: [],
 	xfdWatchDiscussion: 'default',
-	xfdWatchList: 'no',
-	xfdWatchPage: '1 month',
-	xfdWatchUser: '1 month',
-	xfdWatchRelated: '1 month',
+	xfdWatchPage: 'default',
+	xfdWatchUser: 'default',
 	markXfdPagesAsPatrolled: true,
 	FwdCsdToXfd: Morebits.userIsSysop,
 	afdDefaultCategory: 'delete',
@@ -168,7 +168,7 @@ Twinkle.defaultConfig = {
 	revertMaxRevisions: 50, // intentionally limited
 	batchMax: 5000,
 	batchChunks: 50,
-	configPage: '/wiki/Help:Twinkle/参数设置',
+	configPage: 'Help:Twinkle/参数设置',
 	projectNamespaceName: mw.config.get('wgFormattedNamespaces')[4],
 	sandboxPage: 'Qiuwen:沙盒',
 
@@ -199,12 +199,9 @@ Twinkle.defaultConfig = {
 
 	// Talkback
 	markTalkbackAsMinor: true,
-	insertTalkbackSignature: true, // always sign talkback templates
-	talkbackHeading: '来自' + mw.config.get('wgUserName') + '的新邮件',
-	mailHeading: '您收到了一封邮件！',
-
-	// Shared
-	markSharedIPAsMinor: true
+	insertTalkbackSignature: true,  // always sign talkback templates
+	talkbackHeading: '回覆通告',
+	mailHeading: '您有新邮件！',
 };
 
 // now some skin dependent config.
@@ -379,6 +376,7 @@ Twinkle.addPortlet = function (navigation, id, text, type, nextnodeid) {
 			heading.appendChild(a);
 		}
 	} else {
+		// Basically just gongbi
 		heading.appendChild(document.createTextNode(text));
 	}
 
@@ -436,8 +434,6 @@ $.ajax({
 		mw.notify('未能加载您的Twinkle参数设置', { type: 'error' });
 	})
 	.done(function (optionsText) {
-		// Debug
-		console.log(optionsText);
 
 		// Quick pass if user has no options
 		if (optionsText === '' || optionsText === ' ') {
@@ -445,30 +441,26 @@ $.ajax({
 		}
 
 		// Twinkle options are basically a JSON object with some comments. Strip those:
-		optionsText = optionsText.replace(/(\/\*\s+?<\/?nowiki>\s+?\*\/\n?|\/\/.*|\n+|^\s+|\s+$)/g, '');
-
-		// Debug
-		console.log(optionsText);
+		optionsText = optionsText.replace(/\/\*\s+?<\/?nowiki>\s+?\*\/\n?/g, '');
+		optionsText = optionsText.replace(/(?:^(?:\/\/[^\n]*\n)*\n*|(?:\/\/[^\n]*(?:\n|$))*$)/g, '');
 
 		// First version of options had some boilerplate code to make it eval-able -- strip that too. This part may become obsolete down the line.
-		optionsText = optionsText.replace(/(?:^window.Twinkle.prefs = |;\n*$)/g, '');
-
-		// Debug
-		console.log(optionsText);
+		if (optionsText.lastIndexOf('window.Twinkle.prefs = ', 0) === 0) {
+			optionsText = optionsText.replace(/(?:^window.Twinkle.prefs = |;\n*$)/g, '');
+		}
 
 		try {
-			var optionsTextJSON = JSON.parse(optionsText);
-			if (optionsTextJSON) {
-				if (optionsTextJSON.twinkle || optionsTextJSON.friendly) { // Old preferences format
-					Twinkle.prefs = $.extend(optionsTextJSON.twinkle, optionsTextJSON.friendly);
+			var options = JSON.parse(optionsText);
+			if (options) {
+				if (options.twinkle || options.friendly) { // Old preferences format
+					Twinkle.prefs = $.extend(options.twinkle, options.friendly);
 				} else {
-					Twinkle.prefs = optionsTextJSON;
+					Twinkle.prefs = options;
 				}
 				// v2 established after unification of Twinkle/Friendly objects
 				Twinkle.prefs.optionsVersion = Twinkle.prefs.optionsVersion || 1;
 			}
 		} catch (e) {
-			console.log(e);
 			mw.notify('未能解析您的Twinkle参数设置', { type: 'error' });
 		}
 	})
