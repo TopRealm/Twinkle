@@ -1670,10 +1670,6 @@ Twinkle.warn.callbacks = {
 
 		// Get actual warning text
 		var warningText = Twinkle.warn.callbacks.getWarningWikitext(params.sub_group, params.article, params.reason, params.main_group === 'custom');
-		if (Twinkle.getPref('showSharedIPNotice') && mw.util.isIPAddress(mw.config.get('wgTitle'))) {
-			Morebits.status.info('信息', '加入共享IP说明');
-			warningText += '\n{{subst:SharedIPAdvice}}';
-		}
 		var sectionExists = false,
 			sectionNumber = 0;
 		// Only check sections if there are sections or there's a chance we won't create our own
