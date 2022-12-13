@@ -201,7 +201,7 @@ Twinkle.defaultConfig = {
 	markTalkbackAsMinor: true,
 	insertTalkbackSignature: true,  // always sign talkback templates
 	talkbackHeading: '回覆通告',
-	mailHeading: '您有新邮件！',
+	mailHeading: '您有新邮件！'
 };
 
 // now some skin dependent config.
