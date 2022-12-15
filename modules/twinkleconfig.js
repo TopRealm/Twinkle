@@ -1255,7 +1255,7 @@ Twinkle.config.legacyPrefsNotice = function twinkleconfigLegacyPrefsNotice(pageo
 	var text = pageobj.getPageText();
 	var contentnotice = pageobj.getCallbackParameters();
 	if (text.indexOf('TwinkleConfig') !== -1 || text.indexOf('FriendlyConfig') !== -1) {
-		contentnotice.innerHTML = '<table class="plainlinks ombox ombox-content"><tr><td class="mbox-image">' + '<img alt="" src="https://upload.qiuwenbaike.cn/images/thumb/8/8f/Alert_Mark_%28Orange%29.svg/40px-Alert_Mark_%28Orange%29.svg.png" /></td>' + '<td class="mbox-text"><p><big><b>在这里修改您的参数设置之前，</b>您必须移除在用户JavaScript文件中任何旧的Friendly设置。</big></p>' + '<p>要这样做，您可以<a href="' + mw.config.get('wgScript') + '?title=User:' + encodeURIComponent(mw.config.get('wgUserName')) + '/' + mw.config.get('skin') + '.js&action=edit" target="_blank"><b>编辑您的个人JavaScript</b></a>。删除提到<code>FriendlyConfig</code>的代码。</p>' + '</td></tr></table>';
+		contentnotice.innerHTML = '<table class="plainlinks ombox ombox-content"><tr><td class="mbox-image">' + '<img alt="" src="https://tu.zhongwen.wiki/images/thumb/8/8f/Alert_Mark_%28Orange%29.svg/40px-Alert_Mark_%28Orange%29.svg.png" /></td>' + '<td class="mbox-text"><p><big><b>在这里修改您的参数设置之前，</b>您必须移除在用户JavaScript文件中任何旧的Friendly设置。</big></p>' + '<p>要这样做，您可以<a href="' + mw.config.get('wgScript') + '?title=User:' + encodeURIComponent(mw.config.get('wgUserName')) + '/' + mw.config.get('skin') + '.js&action=edit" target="_blank"><b>编辑您的个人JavaScript</b></a>。删除提到<code>FriendlyConfig</code>的代码。</p>' + '</td></tr></table>';
 	} else {
 		$(contentnotice).remove();
 	}
