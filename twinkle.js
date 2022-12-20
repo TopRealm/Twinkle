@@ -209,6 +209,13 @@ switch (mw.config.get('skin')) {
 		Twinkle.defaultConfig.portletType = null;
 		Twinkle.defaultConfig.portletNext = 'p-userpagetools';
 		break;
+	case 'citizen':
+		Twinkle.defaultConfig.portletArea = '#page-actions-more__card';
+		Twinkle.defaultConfig.portletId = 'p-cactions';
+		Twinkle.defaultConfig.portletName = 'Twinkle';
+		Twinkle.defaultConfig.portletType = 'nav';
+		Twinkle.defaultConfig.portletNext = 'p-tb';
+		break;
 	default:
 		Twinkle.defaultConfig.portletArea = null;
 		Twinkle.defaultConfig.portletId = 'p-cactions';
@@ -303,6 +310,10 @@ Twinkle.addPortlet = function (navigation, id, text, type, nextnodeid) {
 		case 'gongbi':
 			outerNavClass = 'mw-portlet';
 			innerDivClass = 'mw-portlet-body';
+			break;
+		case 'citizen':
+			outerNavClass = 'mw-portlet';
+			innerDivClass = 'mw-portlet-twinkle';
 			break;
 		default:
 			navigation = 'column-one';
