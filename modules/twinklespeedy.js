@@ -8,15 +8,6 @@
  * @author © 2011-2021 Chinese Wikipedia Contributors
  * @author © 2021-     Qiuwen Baike Contributors
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
- * SPDX-License-Identifier: CC-BY-SA-4.0
- * _addText: '{{Gadget Header|license=CC-BY-SA-4.0}}'
- *
- * @source https://git.qiuwen.wiki/InterfaceAdmin/Twinkle
- * @source https://git.qiuwen.wiki/Mirror/xiplus-twinkle
- * @author © 2011-2022 English Wikipedia Contributors
- * @author © 2011-2021 Chinese Wikipedia Contributors
- * @author © 2021-     Qiuwen Baike Contributors
- * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - twinklespeedy.js */
 /* <nowiki> */
