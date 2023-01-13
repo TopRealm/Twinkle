@@ -1454,7 +1454,7 @@ Morebits.string = {
 	 * Determine if the user-provided expiration will be considered an
 	 * infinite-length by MW.
 	 *
-	 * @see {@link https://phabricator.wikimedia.org/T68646}
+	 * @see {@link phabricator.wikimedia.org/T68646}
 	 *
 	 * @param {string} expiry
 	 * @returns {boolean}
@@ -3000,7 +3000,7 @@ Morebits.wiki.page = function (pageName, status) {
 	 * UNIX: 2147483647
 	 * SQL: 2038-01-09 03:14:07
 	 * Can also be `infinity` or infinity-like (`infinite`, `indefinite`, and `never`).
-	 * See {@link https://phabricator.wikimedia.org/source/mediawiki-libs-Timestamp/browse/master/src/ConvertibleTimestamp.php;4e53b859a9580c55958078f46dd4f3a44d0fcaa0$57-109?as=source&blame=off}
+	 * See {@link phabricator.wikimedia.org/source/mediawiki-libs-Timestamp/browse/master/src/ConvertibleTimestamp.php;4e53b859a9580c55958078f46dd4f3a44d0fcaa0$57-109?as=source&blame=off}
 	 */
 	this.setWatchlist = function (watchlistOption, watchlistExpiry) {
 		if (watchlistOption instanceof Morebits.date || watchlistOption instanceof Date) {
@@ -3059,7 +3059,7 @@ Morebits.wiki.page = function (pageName, status) {
 	 * UNIX: 2147483647
 	 * SQL: 2038-01-09 03:14:07
 	 * Can also be `infinity` or infinity-like (`infinite`, `indefinite`, and `never`).
-	 * See {@link https://phabricator.wikimedia.org/source/mediawiki-libs-Timestamp/browse/master/src/ConvertibleTimestamp.php;4e53b859a9580c55958078f46dd4f3a44d0fcaa0$57-109?as=source&blame=off}
+	 * See {@link phabricator.wikimedia.org/source/mediawiki-libs-Timestamp/browse/master/src/ConvertibleTimestamp.php;4e53b859a9580c55958078f46dd4f3a44d0fcaa0$57-109?as=source&blame=off}
 	 */
 	this.setWatchlistExpiry = function (watchlistExpiry) {
 		if (typeof watchlistExpiry === 'undefined') {
