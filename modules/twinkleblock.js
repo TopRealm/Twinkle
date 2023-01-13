@@ -1831,5 +1831,3 @@ Twinkle.addInitCallback(Twinkle.block, 'block');
 }(jQuery));
 
 /* </nowiki> */
-
-// </nowiki>
