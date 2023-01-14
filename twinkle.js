@@ -212,7 +212,7 @@ switch (mw.config.get('skin')) {
 		break;
 	case 'citizen':
 		Twinkle.defaultConfig.portletArea = '#page-actions-more__card';
-		Twinkle.defaultConfig.portletId = 'p-cactions';
+		Twinkle.defaultConfig.portletId = 'p-twinkle';
 		Twinkle.defaultConfig.portletName = 'Twinkle';
 		Twinkle.defaultConfig.portletType = 'nav';
 		Twinkle.defaultConfig.portletNext = 'p-tb';
