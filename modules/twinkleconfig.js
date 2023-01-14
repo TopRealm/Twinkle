@@ -459,17 +459,6 @@ Twinkle.config.sections = [ {
 		setValues: Twinkle.config.commonSets.csdCriteriaNotification,
 		setDisplayOrder: Twinkle.config.commonSets.csdCriteriaNotificationDisplayOrder
 	},
-	// TwinkleConfig.welcomeUserOnSpeedyDeletionNotification (array of strings)
-	// On what types of speedy deletion notifications shall the user be welcomed
-	// with a "firstarticle" notice if his talk page has not yet been created.
-	{
-		name: 'welcomeUserOnSpeedyDeletionNotification',
-		label: '在使用以下理由时欢迎页面创建者',
-		helptip: '欢迎模板仅在用户被通知时加入，使用的模板是{{firstarticle}}。',
-		type: 'set',
-		setValues: Twinkle.config.commonSets.csdCriteriaNotification,
-		setDisplayOrder: Twinkle.config.commonSets.csdCriteriaNotificationDisplayOrder
-	},
 	// TwinkleConfig.promptForSpeedyDeletionSummary (array of strings)
 	{
 		name: 'promptForSpeedyDeletionSummary',

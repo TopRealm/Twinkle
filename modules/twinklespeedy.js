@@ -1469,16 +1469,6 @@ Twinkle.speedy.callback.evaluateUser = function twinklespeedyCallbackEvaluateUse
 		});
 	}
 
-	var welcomeuser = false;
-	if (notifyuser) {
-		$.each(normalizeds, function (_index, norm) {
-			if (Twinkle.getPref('welcomeUserOnSpeedyDeletionNotification').indexOf(norm) !== -1) {
-				welcomeuser = true;
-				return false; // break
-			}
-		});
-	}
-
 	var csdlog = false;
 	if (Twinkle.getPref('logSpeedyNominations')) {
 		$.each(normalizeds, function (_index, norm) {
