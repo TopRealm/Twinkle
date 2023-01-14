@@ -1208,7 +1208,7 @@ Twinkle.speedy.callbacks = {
 								notifytext;
 							notifytext = '\n{{subst:db-notice|target=' + Morebits.pageNameNorm;
 							// eslint-disable-next-line no-useless-concat
-							notifytext += (params.welcomeuser ? '' : '|nowelcome=yes') + '}}--~~' + '~~';
+							notifytext += '}}--~~' + '~~';
 							var editsummary = '通知：';
 							if (params.normalizeds.indexOf('g12') === -1) {
 								// no article name in summary for G10 deletions
@@ -1485,7 +1485,6 @@ Twinkle.speedy.callback.evaluateUser = function twinklespeedyCallbackEvaluateUse
 		normalizeds: normalizeds,
 		watch: watchPage,
 		usertalk: notifyuser,
-		welcomeuser: welcomeuser,
 		lognomination: csdlog,
 		templateParams: Twinkle.speedy.getParameters(form, values),
 		blank: blank
