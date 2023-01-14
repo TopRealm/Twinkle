@@ -6,7 +6,7 @@
  * @source https://git.qiuwen.wiki/Mirror/xiplus-twinkle
  * @author © 2011-2022 English Wikipedia Contributors
  * @author © 2011-2021 Chinese Wikipedia Contributors
- * @author © 2021-     Qiuwen Baike Contributors
+ * @author © 2021-	 Qiuwen Baike Contributors
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - twinkle.css */
@@ -16,6 +16,17 @@
  */
 .skin-vector .vector-menu-dropdown #p-twinkle {
 	width: 3.24em;
+}
+
+.skin-citizen #p-twinkle h3 {
+	display: block;
+	padding: 0.75em 1.25em;
+	margin: 0;
+	color: #54595d;
+	font-size: 0.8em;
+	font-weight: normal;
+	letter-spacing: 0.05em;
+	font-family: sans-serif;
 }
 
 /* twinkleclose.js */
