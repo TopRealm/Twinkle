@@ -475,7 +475,7 @@ Twinkle.load = function () {
 	}
 
 	// Set custom Api-User-Agent header, for server-side logging purposes
-	Morebits.wiki.api.setApiUserAgent('Twinkle (' + mw.config.get('wgWikiID') + ')');
+	Morebits.wiki.api.setApiUserAgent('Qiuwen/1.1 Twinkle/1.1');
 	Twinkle.disabledModules = Twinkle.getPref('disabledModules').concat(Twinkle.getPref('disabledSysopModules'));
 
 	// Redefine addInitCallback so that any modules being loaded now on are directly

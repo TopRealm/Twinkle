@@ -2435,7 +2435,7 @@ var morebitsWikiApiUserAgent = 'Qiuwen/1.1 (morebits.js)';
  * value.
  */
 Morebits.wiki.api.setApiUserAgent = function (ua) {
-	morebitsWikiApiUserAgent = 'Qiuwen/1.1 (morebits.js' + (ua ? '; ' + ua : '') + ')';
+	morebitsWikiApiUserAgent = 'Qiuwen/1.1 morebits.js' + (ua ? '; ' + ua : '');
 };
 
 /**
