@@ -2420,7 +2420,7 @@ Morebits.wiki.getCachedJson = function (title) {
 		return JSON.parse(wikitext);
 	});
 };
-var morebitsWikiApiUserAgent = 'Qiuwen/1.1 (morebits.js)';
+var morebitsWikiApiUserAgent = 'Qiuwen/1.1 morebits.js';
 /**
  * Set the custom user agent header, which is used for server-side logging.
  * Note that doing so will set the useragent for every `Morebits.wiki.api`
