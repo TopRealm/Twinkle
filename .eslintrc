@@ -11,6 +11,8 @@
 	},
 	"ignorePatterns": ["scripts/", "lib/", "*.json"],
 	"rules": {
+		"camelcase": "off",
+		"no-useless-concat": "off",
 		"no-console": "error",
 		"no-extra-parens": ["error", "all", { "nestedBinaryExpressions": false }],
 		"no-unreachable-loop": "error",
@@ -71,7 +73,6 @@
 		"jsdoc/check-param-names": 0,
 		"new-cap": "off",
 		"max-len": "off",
-		"camelcase": "off",
 		"no-alert": "off",
 		"no-jquery/no-each-util": "off",
 		"no-jquery/no-map-util": "off",
