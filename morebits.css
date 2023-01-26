@@ -61,7 +61,7 @@ form.quickform legend {
 	font-weight: bold;
 }
 
-form.quickform input[type="text"],
+form.quickform input[type='text'],
 form.quickform select {
 	min-width: 15em;
 	font-size: 110%;
@@ -72,8 +72,8 @@ form.quickform select {
 	margin-left: 0.2em;
 }
 
-form.quickform input[type="checkbox"],
-form.quickform input[type="radio"] {
+form.quickform input[type='checkbox'],
+form.quickform input[type='radio'] {
 	height: 13px;
 	margin-top: 2px;
 	margin-right: 2px;
