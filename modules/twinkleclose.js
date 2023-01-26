@@ -163,18 +163,6 @@ Twinkle.close.codes = {
 			adminonly: true
 		}
 	},
-	/* '转移至其他计划': {
-    twc: {
-    	label: '转移至求闻共享资源',
-    	action: 'noop',
-    	adminonly: true
-    },
-    two: {
-    	label: '转移至其他计划',
-    	action: 'noop',
-    	adminonly: true
-    }
-    }, */
 	其他处理方法: {
 		c: {
 			label: '转交侵权',
@@ -213,7 +201,18 @@ Twinkle.close.codes = {
 			label: '无共识',
 			action: 'keep'
 		}
-	}
+	}/* , '转移至其他计划': {
+		twc: {
+			label: '转移至求闻共享资源',
+			action: 'noop',
+			adminonly: true
+		},
+		two: {
+			label: '转移至其他计划',
+			action: 'noop',
+			adminonly: true
+		}
+	} */
 };
 /* eslint-enable quote-props */
 
