@@ -1,16 +1,7 @@
 {
 	"root": true,
-	"plugins": [
-		"es5",
-		"compat"
-	],
-	"extends": [
-		"eslint:recommended",
-		"plugin:compat/recommended",
-		"wikimedia/client-es5",
-		"wikimedia/jquery",
-		"wikimedia/mediawiki"
-	],
+	"plugins": ["es5", "compat"],
+	"extends": ["eslint:recommended", "plugin:compat/recommended", "wikimedia/client-es5", "wikimedia/jquery", "wikimedia/mediawiki"],
 	"env": {
 		"browser": true,
 		"jquery": true,
@@ -18,11 +9,7 @@
 		"es2020": false,
 		"es2021": false
 	},
-	"ignorePatterns": [
-		"scripts/",
-		"lib/",
-		"*.json"
-	],
+	"ignorePatterns": ["scripts/", "lib/", "*.json"],
 	"rules": {
 		"no-console": "error",
 		"no-extra-parens": ["error", "all", { "nestedBinaryExpressions": false }],
@@ -47,8 +34,8 @@
 		"computed-property-spacing": ["error", "never"],
 		"func-call-spacing": ["error", "never"],
 		"indent": ["warn", "tab", { "outerIIFEBody": 0, "SwitchCase": 1 }],
-		"key-spacing": ["error", {"singleLine": {"beforeColon": false, "afterColon": true}}],
-		"keyword-spacing": ["error", { "after": true, "before": true}],
+		"key-spacing": ["error", { "singleLine": { "beforeColon": false, "afterColon": true } }],
+		"keyword-spacing": ["error", { "after": true, "before": true }],
 		"linebreak-style": ["error", "unix"],
 		"no-array-constructor": "error",
 		"no-bitwise": "error",
