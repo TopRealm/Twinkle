@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
@@ -12,8 +12,7 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - morebits.js */
-/* eslint-disable es-x/no-array-prototype-keys */
-/* eslint-disable es-x/no-map */
+
 /* eslint-disable no-new */
 /* eslint-disable no-throw-literal */
 
@@ -51,9 +50,8 @@
  *
  * @namespace Morebits
  */
-(function (window, document, $) {
+( ( window, document, $ ) => {
 // Wrap entire file with anonymous function
-
 /** @lends Morebits */
 var Morebits = {};
 window.Morebits = Morebits; // allow global access
@@ -66,7 +64,7 @@ Morebits.l10n = {
 	 * Local aliases for "redirect" magic word.
 	 * Check using api.php?action=query&format=json&meta=siteinfo&formatversion=2&siprop=magicwords
 	 */
-	redirectTagAliases: [ '#REDIRECT', '#重定向' ],
+	redirectTagAliases: [ "#REDIRECT", "#重定向" ],
 	/**
 	 * Takes a string as argument and checks if it is a timestamp or not
 	 * If not, it returns null. If yes, it returns an array of integers
@@ -76,20 +74,20 @@ Morebits.l10n = {
 	 * @param {string} str
 	 * @returns {number[] | null}
 	 */
-	signatureTimestampFormat: function signatureTimestampFormat(str) {
+	signatureTimestampFormat: function signatureTimestampFormat( str ) {
 		var rgxUTC = /(\d{4})年(\d{1,2})月(\d{1,2})日 \(.\) (\d{2}):(\d{2}) \(UTC\)/; // YYYY年Month月DD日 (w) HH:mm (UTC)
 		var rgxCST = /(\d{4})年(\d{1,2})月(\d{1,2})日 \(.\) (\d{2}):(\d{2}) \(CST\)/; // YYYY年Month月DD日 (w) HH:mm (CST)
-		var match = rgxUTC.exec(str) || rgxCST.exec(str);
-		var matchCST = rgxCST.exec(str);
-		if (!match) {
+		var match = rgxUTC.exec( str ) || rgxCST.exec( str );
+		var matchCST = rgxCST.exec( str );
+		if ( !match ) {
 			return null;
 		}
-		var month = Morebits.date.localeData.months.indexOf(match[4]);
-		if (month === -1) {
+		var month = Morebits.date.localeData.months.indexOf( match[ 4 ] );
+		if ( month === -1 ) {
 			return null;
 		}
 		// ..... year .... month ... date .... hour ... minute
-		return matchCST ? [ match[1], match[2] - 1, match[3], match[4] - 8, match[5] ] : [ match[1], match[2] - 1, match[3], match[4], match[5] ];
+		return matchCST ? [ match[ 1 ], match[ 2 ] - 1, match[ 3 ], match[ 4 ] - 8, match[ 5 ] ] : [ match[ 1 ], match[ 2 ] - 1, match[ 3 ], match[ 4 ], match[ 5 ] ];
 	}
 };
 
@@ -99,15 +97,15 @@ Morebits.l10n = {
  * @param {string} group - e.g. `sysop`, `extendedconfirmed`, etc.
  * @returns {boolean}
  */
-Morebits.userIsInGroup = function (group) {
-	return mw.config.get('wgUserGroups').indexOf(group) !== -1;
+Morebits.userIsInGroup = function ( group ) {
+	return mw.config.get( "wgUserGroups" ).indexOf( group ) !== -1;
 };
 /**
  * Hardcodes whether the user is a sysop, used a lot.
  *
  * @type {boolean}
  */
-Morebits.userIsSysop = Morebits.userIsInGroup('sysop') || Morebits.userIsInGroup('steward');
+Morebits.userIsSysop = Morebits.userIsInGroup( "sysop" ) || Morebits.userIsInGroup( "steward" );
 
 /**
  * Determines whether the current page is a redirect or soft redirect. Fails
@@ -117,7 +115,7 @@ Morebits.userIsSysop = Morebits.userIsInGroup('sysop') || Morebits.userIsInGroup
  * @returns {boolean}
  */
 Morebits.isPageRedirect = function () {
-	return !!(mw.config.get('wgIsRedirect') || document.getElementById('softredirect') || $('.box-RfD').length || $('.box-Redirect_category_shell').length);
+	return !!( mw.config.get( "wgIsRedirect" ) || document.getElementById( "softredirect" ) || $( ".box-RfD" ).length || $( ".box-Redirect_category_shell" ).length );
 };
 
 /**
@@ -126,7 +124,7 @@ Morebits.isPageRedirect = function () {
  *
  * @type {string}
  */
-Morebits.pageNameNorm = mw.config.get('wgPageName').replace(/_/g, ' ');
+Morebits.pageNameNorm = mw.config.get( "wgPageName" ).replace( /_/g, " " );
 
 /**
  * Create a string for use in regex matching a page name.  Accounts for
@@ -136,16 +134,15 @@ Morebits.pageNameNorm = mw.config.get('wgPageName').replace(/_/g, ' ');
  * @param {string} pageName - Page name without namespace.
  * @returns {string} - For a page name `Foo bar`, returns the string `[Ff]oo[_ ]bar`.
  */
-Morebits.pageNameRegex = function (pageName) {
-	if (pageName === '') {
-		return '';
+Morebits.pageNameRegex = function ( pageName ) {
+	if ( pageName === "" ) {
+		return "";
 	}
-	var firstChar = pageName[0],
-		remainder = Morebits.string.escapeRegExp(pageName.slice(1));
-	if (mw.Title.phpCharToUpper(firstChar) !== firstChar.toLowerCase()) {
-		return '[' + mw.Title.phpCharToUpper(firstChar) + firstChar.toLowerCase() + ']' + remainder;
+	var firstChar = pageName[ 0 ], remainder = Morebits.string.escapeRegExp( pageName.slice( 1 ) );
+	if ( mw.Title.phpCharToUpper( firstChar ) !== firstChar.toLowerCase() ) {
+		return `[${mw.Title.phpCharToUpper( firstChar )}${firstChar.toLowerCase()}]${remainder}`;
 	}
-	return Morebits.string.escapeRegExp(firstChar) + remainder;
+	return Morebits.string.escapeRegExp( firstChar ) + remainder;
 };
 
 /**
@@ -157,21 +154,21 @@ Morebits.pageNameRegex = function (pageName) {
  * @param {string|Node|(string|Node)[]} input
  * @returns {DocumentFragment}
  */
-Morebits.createHtml = function (input) {
+Morebits.createHtml = function ( input ) {
 	var fragment = document.createDocumentFragment();
-	if (!input) {
+	if ( !input ) {
 		return fragment;
 	}
-	if (!Array.isArray(input)) {
+	if ( !Array.isArray( input ) ) {
 		input = [ input ];
 	}
-	for (var i = 0; i < input.length; ++i) {
-		if (input[i] instanceof Node) {
-			fragment.appendChild(input[i]);
+	for ( var i = 0; i < input.length; ++i ) {
+		if ( input[ i ] instanceof Node ) {
+			fragment.appendChild( input[ i ] );
 		} else {
-			$.parseHTML(Morebits.createHtml.renderWikilinks(input[i])).forEach(function (node) {
-				fragment.appendChild(node);
-			});
+			$.parseHTML( Morebits.createHtml.renderWikilinks( input[ i ] ) ).forEach( ( node ) => {
+				fragment.appendChild( node );
+			} );
 		}
 	}
 	return fragment;
@@ -183,16 +180,16 @@ Morebits.createHtml = function (input) {
  * @param text
  * @returns {*}
  */
-Morebits.createHtml.renderWikilinks = function (text) {
-	var ub = new Morebits.unbinder(text);
+Morebits.createHtml.renderWikilinks = function ( text ) {
+	var ub = new Morebits.unbinder( text );
 	// Don't convert wikilinks within code tags as they're used for displaying wiki-code
-	ub.unbind('<code>', '</code>');
-	ub.content = ub.content.replace(/\[\[:?(?:([^|\]]+?)\|)?([^\]|]+?)\]\]/g, function (_, target, text) {
-		if (!target) {
+	ub.unbind( "<code>", "</code>" );
+	ub.content = ub.content.replace( /\[\[:?(?:([^|\]]+?)\|)?([^\]|]+?)\]\]/g, ( _, target, text ) => {
+		if ( !target ) {
 			target = text;
 		}
-		return '<a target="_blank" href="' + mw.util.getUrl(target) + '" title="' + target.replace(/"/g, '&#34;') + '">' + text + '</a>';
-	});
+		return `<a target="_blank" href="${mw.util.getUrl( target )}" title="${target.replace( /"/g, "&#34;" )}">${text}</a>`;
+	} );
 	return ub.rebind();
 };
 
@@ -211,31 +208,30 @@ Morebits.createHtml.renderWikilinks = function (text) {
  * Morebits.namespaceRegex([6])
  * @returns {string} - Regex-suitable string of all namespace aliases.
  */
-Morebits.namespaceRegex = function (namespaces) {
-	if (!Array.isArray(namespaces)) {
+Morebits.namespaceRegex = function ( namespaces ) {
+	if ( !Array.isArray( namespaces ) ) {
 		namespaces = [ namespaces ];
 	}
-	var aliases = [],
-		regex;
-	$.each(mw.config.get('wgNamespaceIds'), function (name, number) {
-		if (namespaces.indexOf(number) !== -1) {
+	var aliases = [], regex;
+	$.each( mw.config.get( "wgNamespaceIds" ), ( name, number ) => {
+		if ( namespaces.indexOf( number ) !== -1 ) {
 			// Namespaces are completely agnostic as to case,
 			// and a regex string is more useful/compatible than a RegExp object,
 			// so we accept any casing for any letter.
-			aliases.push(name.split('').map(function (char) {
-				return Morebits.pageNameRegex(char);
-			}).join(''));
+			aliases.push( name.split( "" ).map( ( char ) => {
+				return Morebits.pageNameRegex( char );
+			} ).join( "" ) );
 		}
-	});
-	switch (aliases.length) {
+	} );
+	switch ( aliases.length ) {
 		case 0:
-			regex = '';
+			regex = "";
 			break;
 		case 1:
-			regex = aliases[0];
+			regex = aliases[ 0 ];
 			break;
 		default:
-			regex = '(?:' + aliases.join('|') + ')';
+			regex = `(?:${aliases.join( "|" )})`;
 			break;
 	}
 	return regex;
@@ -251,12 +247,12 @@ Morebits.namespaceRegex = function (namespaces) {
  * @param {event} event - Function to execute when form is submitted.
  * @param {string} [eventType=submit] - Type of the event.
  */
-Morebits.quickForm = function QuickForm(event, eventType) {
-	this.root = new Morebits.quickForm.element({
-		type: 'form',
+Morebits.quickForm = function QuickForm( event, eventType ) {
+	this.root = new Morebits.quickForm.element( {
+		type: "form",
 		event: event,
 		eventType: eventType
-	});
+	} );
 };
 
 /**
@@ -279,8 +275,8 @@ Morebits.quickForm.prototype.render = function QuickFormRender() {
  * a quickform element is constructed.
  * @returns {Morebits.quickForm.element} - Same as what is passed to the function.
  */
-Morebits.quickForm.prototype.append = function QuickFormAppend(data) {
-	return this.root.append(data);
+Morebits.quickForm.prototype.append = function QuickFormAppend( data ) {
+	return this.root.append( data );
 };
 
 /**
@@ -340,7 +336,7 @@ Morebits.quickForm.prototype.append = function QuickFormAppend(data) {
  *     required: true
  * });
  */
-Morebits.quickForm.element = function QuickFormElement(data) {
+Morebits.quickForm.element = function QuickFormElement( data ) {
 	this.data = data;
 	this.childs = [];
 };
@@ -359,14 +355,14 @@ Morebits.quickForm.element.id = 0;
  * create the quickForm element.
  * @returns {Morebits.quickForm.element} The same element passed in.
  */
-Morebits.quickForm.element.prototype.append = function QuickFormElementAppend(data) {
+Morebits.quickForm.element.prototype.append = function QuickFormElementAppend( data ) {
 	var child;
-	if (data instanceof Morebits.quickForm.element) {
+	if ( data instanceof Morebits.quickForm.element ) {
 		child = data;
 	} else {
-		child = new Morebits.quickForm.element(data);
+		child = new Morebits.quickForm.element( data );
 	}
-	this.childs.push(child);
+	this.childs.push( child );
 	return child;
 };
 
@@ -377,301 +373,301 @@ Morebits.quickForm.element.prototype.append = function QuickFormElementAppend(da
  * @memberof Morebits.quickForm.element
  * @returns {HTMLElement}
  */
-Morebits.quickForm.element.prototype.render = function QuickFormElementRender(internal_subgroup_id) {
-	var currentNode = this.compute(this.data, internal_subgroup_id);
-	for (var i = 0; i < this.childs.length; ++i) {
+Morebits.quickForm.element.prototype.render = function QuickFormElementRender( internal_subgroup_id ) {
+	var currentNode = this.compute( this.data, internal_subgroup_id );
+	for ( var i = 0; i < this.childs.length; ++i ) {
 		// do not pass internal_subgroup_id to recursive calls
-		currentNode[1].appendChild(this.childs[i].render());
+		currentNode[ 1 ].appendChild( this.childs[ i ].render() );
 	}
-	return currentNode[0];
+	return currentNode[ 0 ];
 };
 
 /** @memberof Morebits.quickForm.element */
-Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(data, in_id) {
+Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute( data, in_id ) {
 	var node;
 	var childContainer = null;
 	var label;
-	var id = (in_id ? in_id + '_' : '') + 'node_' + Morebits.quickForm.element.id++;
-	if (data.adminonly && !Morebits.userIsSysop) {
+	var id = `${in_id ? `${in_id}_` : ""}node_${Morebits.quickForm.element.id++}`;
+	if ( data.adminonly && !Morebits.userIsSysop ) {
 		// hell hack alpha
-		data.type = 'hidden';
+		data.type = "hidden";
 	}
 	var i, current, subnode;
-	switch (data.type) {
-		case 'form':
-			node = document.createElement('form');
-			node.className = 'quickform';
+	switch ( data.type ) {
+		case "form":
+			node = document.createElement( "form" );
+			node.className = "quickform";
 			// eslint-disable-next-line no-script-url
-			node.setAttribute('action', 'javascript:void(0);');
-			if (data.event) {
-				node.addEventListener(data.eventType || 'submit', data.event, false);
+			node.setAttribute( "action", "javascript:void(0);" );
+			if ( data.event ) {
+				node.addEventListener( data.eventType || "submit", data.event, false );
 			}
 			break;
-		case 'fragment':
+		case "fragment":
 			node = document.createDocumentFragment();
 			// fragments can't have any attributes, so just return it straight away
 			return [ node, node ];
-		case 'select':
-			node = document.createElement('div');
-			node.setAttribute('id', 'div_' + id);
-			if (data.label) {
-				label = node.appendChild(document.createElement('label'));
-				label.setAttribute('for', id);
-				label.appendChild(Morebits.createHtml(data.label));
+		case "select":
+			node = document.createElement( "div" );
+			node.setAttribute( "id", `div_${id}` );
+			if ( data.label ) {
+				label = node.appendChild( document.createElement( "label" ) );
+				label.setAttribute( "for", id );
+				label.appendChild( Morebits.createHtml( data.label ) );
 			}
-			var select = node.appendChild(document.createElement('select'));
-			if (data.event) {
-				select.addEventListener('change', data.event, false);
+			var select = node.appendChild( document.createElement( "select" ) );
+			if ( data.event ) {
+				select.addEventListener( "change", data.event, false );
 			}
-			if (data.multiple) {
-				select.setAttribute('multiple', 'multiple');
+			if ( data.multiple ) {
+				select.setAttribute( "multiple", "multiple" );
 			}
-			if (data.size) {
-				select.setAttribute('size', data.size);
+			if ( data.size ) {
+				select.setAttribute( "size", data.size );
 			}
-			if (data.disabled) {
-				select.setAttribute('disabled', 'disabled');
+			if ( data.disabled ) {
+				select.setAttribute( "disabled", "disabled" );
 			}
-			select.setAttribute('name', data.name);
-			if (data.list) {
-				for (i = 0; i < data.list.length; ++i) {
-					current = data.list[i];
-					if (current.list) {
-						current.type = 'optgroup';
+			select.setAttribute( "name", data.name );
+			if ( data.list ) {
+				for ( i = 0; i < data.list.length; ++i ) {
+					current = data.list[ i ];
+					if ( current.list ) {
+						current.type = "optgroup";
 					} else {
-						current.type = 'option';
+						current.type = "option";
 					}
-					subnode = this.compute(current);
-					select.appendChild(subnode[0]);
+					subnode = this.compute( current );
+					select.appendChild( subnode[ 0 ] );
 				}
 			}
 			childContainer = select;
 			break;
-		case 'option':
-			node = document.createElement('option');
+		case "option":
+			node = document.createElement( "option" );
 			node.values = data.value;
-			node.setAttribute('value', data.value);
-			if (data.selected) {
-				node.setAttribute('selected', 'selected');
+			node.setAttribute( "value", data.value );
+			if ( data.selected ) {
+				node.setAttribute( "selected", "selected" );
 			}
-			if (data.disabled) {
-				node.setAttribute('disabled', 'disabled');
+			if ( data.disabled ) {
+				node.setAttribute( "disabled", "disabled" );
 			}
-			node.setAttribute('label', data.label);
-			node.appendChild(document.createTextNode(data.label));
+			node.setAttribute( "label", data.label );
+			node.appendChild( document.createTextNode( data.label ) );
 			break;
-		case 'optgroup':
-			node = document.createElement('optgroup');
-			node.setAttribute('label', data.label);
-			if (data.list) {
-				for (i = 0; i < data.list.length; ++i) {
-					current = data.list[i];
-					current.type = 'option'; // must be options here
+		case "optgroup":
+			node = document.createElement( "optgroup" );
+			node.setAttribute( "label", data.label );
+			if ( data.list ) {
+				for ( i = 0; i < data.list.length; ++i ) {
+					current = data.list[ i ];
+					current.type = "option"; // must be options here
 
-					subnode = this.compute(current);
-					node.appendChild(subnode[0]);
+					subnode = this.compute( current );
+					node.appendChild( subnode[ 0 ] );
 				}
 			}
 			break;
-		case 'field':
-			node = document.createElement('fieldset');
-			label = node.appendChild(document.createElement('legend'));
-			label.appendChild(Morebits.createHtml(data.label));
-			if (data.name) {
-				node.setAttribute('name', data.name);
+		case "field":
+			node = document.createElement( "fieldset" );
+			label = node.appendChild( document.createElement( "legend" ) );
+			label.appendChild( Morebits.createHtml( data.label ) );
+			if ( data.name ) {
+				node.setAttribute( "name", data.name );
 			}
-			if (data.disabled) {
-				node.setAttribute('disabled', 'disabled');
+			if ( data.disabled ) {
+				node.setAttribute( "disabled", "disabled" );
 			}
 			break;
-		case 'checkbox':
-		case 'radio':
-			node = document.createElement('div');
-			if (data.list) {
-				for (i = 0; i < data.list.length; ++i) {
-					var cur_id = id + '_' + i;
-					current = data.list[i];
+		case "checkbox":
+		case "radio":
+			node = document.createElement( "div" );
+			if ( data.list ) {
+				for ( i = 0; i < data.list.length; ++i ) {
+					var cur_id = `${id}_${i}`;
+					current = data.list[ i ];
 					var cur_div;
-					if (current.type === 'header') {
+					if ( current.type === "header" ) {
 						// inline hack
-						cur_div = node.appendChild(document.createElement('h6'));
-						cur_div.appendChild(document.createTextNode(current.label));
-						if (current.tooltip) {
-							Morebits.quickForm.element.generateTooltip(cur_div, current);
+						cur_div = node.appendChild( document.createElement( "h6" ) );
+						cur_div.appendChild( document.createTextNode( current.label ) );
+						if ( current.tooltip ) {
+							Morebits.quickForm.element.generateTooltip( cur_div, current );
 						}
 						continue;
 					}
-					cur_div = node.appendChild(document.createElement('div'));
+					cur_div = node.appendChild( document.createElement( "div" ) );
 					// Add hidden attr
-					if (current.hidden) {
-						cur_div.setAttribute('hidden', '');
+					if ( current.hidden ) {
+						cur_div.setAttribute( "hidden", "" );
 					}
-					subnode = cur_div.appendChild(document.createElement('input'));
+					subnode = cur_div.appendChild( document.createElement( "input" ) );
 					subnode.values = current.value;
-					subnode.setAttribute('value', current.value);
-					subnode.setAttribute('type', data.type);
-					subnode.setAttribute('id', cur_id);
-					subnode.setAttribute('name', current.name || data.name);
+					subnode.setAttribute( "value", current.value );
+					subnode.setAttribute( "type", data.type );
+					subnode.setAttribute( "id", cur_id );
+					subnode.setAttribute( "name", current.name || data.name );
 
 					// If name is provided on the individual checkbox, add a data-single
 					// attribute which indicates it isn't part of a list of checkboxes with
 					// same name. Used in getInputData()
-					if (current.name) {
-						subnode.setAttribute('data-single', 'data-single');
+					if ( current.name ) {
+						subnode.setAttribute( "data-single", "data-single" );
 					}
-					if (current.checked) {
-						subnode.setAttribute('checked', 'checked');
+					if ( current.checked ) {
+						subnode.setAttribute( "checked", "checked" );
 					}
-					if (current.disabled) {
-						subnode.setAttribute('disabled', 'disabled');
+					if ( current.disabled ) {
+						subnode.setAttribute( "disabled", "disabled" );
 					}
-					label = cur_div.appendChild(document.createElement('label'));
-					label.appendChild(Morebits.createHtml(current.label));
-					label.setAttribute('for', cur_id);
-					if (current.tooltip) {
-						Morebits.quickForm.element.generateTooltip(label, current);
+					label = cur_div.appendChild( document.createElement( "label" ) );
+					label.appendChild( Morebits.createHtml( current.label ) );
+					label.setAttribute( "for", cur_id );
+					if ( current.tooltip ) {
+						Morebits.quickForm.element.generateTooltip( label, current );
 					}
 					// styles go on the label, doesn't make sense to style a checkbox/radio
-					if (current.style) {
-						label.setAttribute('style', current.style);
+					if ( current.style ) {
+						label.setAttribute( "style", current.style );
 					}
 					var event;
-					if (current.subgroup) {
+					if ( current.subgroup ) {
 						var tmpgroup = current.subgroup;
-						if (!Array.isArray(tmpgroup)) {
+						if ( !Array.isArray( tmpgroup ) ) {
 							tmpgroup = [ tmpgroup ];
 						}
-						var subgroupRaw = new Morebits.quickForm.element({
-							type: 'div',
-							id: id + '_' + i + '_subgroup'
-						});
-						// eslint-disable-next-line no-loop-func
-						$.each(tmpgroup, function (idx, el) {
-							var newEl = $.extend({}, el);
-							if (!newEl.type) {
+						var subgroupRaw = new Morebits.quickForm.element( {
+							type: "div",
+							id: `${id}_${i}_subgroup`
+						} );
+							// eslint-disable-next-line no-loop-func
+						$.each( tmpgroup, ( idx, el ) => {
+							var newEl = $.extend( {}, el );
+							if ( !newEl.type ) {
 								newEl.type = data.type;
 							}
-							newEl.name = (current.name || data.name) + '.' + newEl.name;
-							subgroupRaw.append(newEl);
-						});
-						var subgroup = subgroupRaw.render(cur_id);
-						subgroup.className = 'quickformSubgroup';
+							newEl.name = `${current.name || data.name}.${newEl.name}`;
+							subgroupRaw.append( newEl );
+						} );
+						var subgroup = subgroupRaw.render( cur_id );
+						subgroup.className = "quickformSubgroup";
 						subnode.subgroup = subgroup;
 						subnode.shown = false;
-						event = function event(e) {
-							if (e.target.checked) {
-								e.target.parentNode.appendChild(e.target.subgroup);
-								if (e.target.type === 'radio') {
+						event = function event( e ) {
+							if ( e.target.checked ) {
+								e.target.parentNode.appendChild( e.target.subgroup );
+								if ( e.target.type === "radio" ) {
 									var name = e.target.name;
-									if (e.target.form.names[name] !== undefined) {
-										e.target.form.names[name].parentNode.removeChild(e.target.form.names[name].subgroup);
+									if ( e.target.form.names[ name ] !== undefined ) {
+										e.target.form.names[ name ].parentNode.removeChild( e.target.form.names[ name ].subgroup );
 									}
-									e.target.form.names[name] = e.target;
+									e.target.form.names[ name ] = e.target;
 								}
 							} else {
-								e.target.parentNode.removeChild(e.target.subgroup);
+								e.target.parentNode.removeChild( e.target.subgroup );
 							}
 						};
-						subnode.addEventListener('change', event, true);
-						if (current.checked) {
-							subnode.parentNode.appendChild(subgroup);
+						subnode.addEventListener( "change", event, true );
+						if ( current.checked ) {
+							subnode.parentNode.appendChild( subgroup );
 						}
-					} else if (data.type === 'radio') {
-						event = function event(e) {
-							if (e.target.checked) {
+					} else if ( data.type === "radio" ) {
+						event = function event( e ) {
+							if ( e.target.checked ) {
 								var name = e.target.name;
-								if (e.target.form.names[name] !== undefined) {
-									e.target.form.names[name].parentNode.removeChild(e.target.form.names[name].subgroup);
+								if ( e.target.form.names[ name ] !== undefined ) {
+									e.target.form.names[ name ].parentNode.removeChild( e.target.form.names[ name ].subgroup );
 								}
-								delete e.target.form.names[name];
+								delete e.target.form.names[ name ];
 							}
 						};
-						subnode.addEventListener('change', event, true);
+						subnode.addEventListener( "change", event, true );
 					}
 					// add users' event last, so it can interact with the subgroup
-					if (data.event) {
-						subnode.addEventListener('change', data.event, false);
-					} else if (current.event) {
-						subnode.addEventListener('change', current.event, true);
+					if ( data.event ) {
+						subnode.addEventListener( "change", data.event, false );
+					} else if ( current.event ) {
+						subnode.addEventListener( "change", current.event, true );
 					}
 				}
 			}
-			if (data.shiftClickSupport && data.type === 'checkbox') {
-				Morebits.checkboxShiftClickSupport(Morebits.quickForm.getElements(node, data.name));
+			if ( data.shiftClickSupport && data.type === "checkbox" ) {
+				Morebits.checkboxShiftClickSupport( Morebits.quickForm.getElements( node, data.name ) );
 			}
 			break;
 			// input is actually a text-type, so number here inherits the same stuff
-		case 'number':
-		case 'input':
-			node = document.createElement('div');
-			node.setAttribute('id', 'div_' + id);
+		case "number":
+		case "input":
+			node = document.createElement( "div" );
+			node.setAttribute( "id", `div_${id}` );
 			// Add hidden attr
-			if (data.hidden) {
-				node.setAttribute('hidden', '');
+			if ( data.hidden ) {
+				node.setAttribute( "hidden", "" );
 			}
-			if (data.label) {
-				label = node.appendChild(document.createElement('label'));
-				label.appendChild(Morebits.createHtml(data.label));
-				label.setAttribute('for', data.id || id);
+			if ( data.label ) {
+				label = node.appendChild( document.createElement( "label" ) );
+				label.appendChild( Morebits.createHtml( data.label ) );
+				label.setAttribute( "for", data.id || id );
 			}
-			subnode = node.appendChild(document.createElement('input'));
+			subnode = node.appendChild( document.createElement( "input" ) );
 			// Add value and placeholder attrs
-			if (data.value) {
-				subnode.setAttribute('value', data.value);
+			if ( data.value ) {
+				subnode.setAttribute( "value", data.value );
 			}
-			if (data.placeholder) {
-				subnode.setAttribute('placeholder', data.placeholder);
+			if ( data.placeholder ) {
+				subnode.setAttribute( "placeholder", data.placeholder );
 			}
-			subnode.setAttribute('name', data.name);
-			if (data.type === 'input') {
-				subnode.setAttribute('type', 'text');
+			subnode.setAttribute( "name", data.name );
+			if ( data.type === "input" ) {
+				subnode.setAttribute( "type", "text" );
 			} else {
-				subnode.setAttribute('type', 'number');
-				[ 'min', 'max', 'step', 'list' ].forEach(function (att) {
-					if (data[att]) {
-						subnode.setAttribute(att, data[att]);
+				subnode.setAttribute( "type", "number" );
+				[ "min", "max", "step", "list" ].forEach( ( att ) => {
+					if ( data[ att ] ) {
+						subnode.setAttribute( att, data[ att ] );
 					}
-				});
+				} );
 			}
-			[ 'value', 'size', 'placeholder', 'maxlength' ].forEach(function (att) {
-				if (data[att]) {
-					subnode.setAttribute(att, data[att]);
+			[ "value", "size", "placeholder", "maxlength" ].forEach( ( att ) => {
+				if ( data[ att ] ) {
+					subnode.setAttribute( att, data[ att ] );
 				}
-			});
-			[ 'disabled', 'required', 'readonly' ].forEach(function (att) {
-				if (data[att]) {
-					subnode.setAttribute(att, att);
+			} );
+			[ "disabled", "required", "readonly" ].forEach( ( att ) => {
+				if ( data[ att ] ) {
+					subnode.setAttribute( att, att );
 				}
-			});
-			if (data.event) {
-				subnode.addEventListener('keyup', data.event, false);
+			} );
+			if ( data.event ) {
+				subnode.addEventListener( "keyup", data.event, false );
 			}
 			childContainer = subnode;
 			break;
-		case 'dyninput':
+		case "dyninput":
 			var min = data.min || 1;
 			var max = data.max || Infinity;
-			node = document.createElement('div');
-			label = node.appendChild(document.createElement('h5'));
-			label.appendChild(Morebits.createHtml(data.label));
-			var listNode = node.appendChild(document.createElement('div'));
-			var more = this.compute({
-				type: 'button',
-				label: '更多',
+			node = document.createElement( "div" );
+			label = node.appendChild( document.createElement( "h5" ) );
+			label.appendChild( Morebits.createHtml( data.label ) );
+			var listNode = node.appendChild( document.createElement( "div" ) );
+			var more = this.compute( {
+				type: "button",
+				label: "更多",
 				disabled: min >= max,
-				event: function event(e) {
-					var new_node = new Morebits.quickForm.element(e.target.sublist);
-					e.target.area.appendChild(new_node.render());
-					if (++e.target.counter >= e.target.max) {
-						e.target.setAttribute('disabled', 'disabled');
+				event: function event( e ) {
+					var new_node = new Morebits.quickForm.element( e.target.sublist );
+					e.target.area.appendChild( new_node.render() );
+					if ( ++e.target.counter >= e.target.max ) {
+						e.target.setAttribute( "disabled", "disabled" );
 					}
 					e.stopPropagation();
 				}
-			});
-			node.appendChild(more[0]);
-			var moreButton = more[1];
+			} );
+			node.appendChild( more[ 0 ] );
+			var moreButton = more[ 1 ];
 			var sublist = {
-				type: '_dyninput_element',
+				type: "_dyninput_element",
 				label: data.sublabel || data.label,
 				name: data.name,
 				value: data.value,
@@ -680,9 +676,9 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
 				maxlength: data.maxlength,
 				event: data.event
 			};
-			for (i = 0; i < min; ++i) {
-				var elem = new Morebits.quickForm.element(sublist);
-				listNode.appendChild(elem.render());
+			for ( i = 0; i < min; ++i ) {
+				var elem = new Morebits.quickForm.element( sublist );
+				listNode.appendChild( elem.render() );
 			}
 			sublist.remove = true;
 			sublist.morebutton = moreButton;
@@ -692,162 +688,162 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
 			moreButton.max = max - min;
 			moreButton.counter = 0;
 			break;
-		case '_dyninput_element':
+		case "_dyninput_element":
 			// Private, similar to normal input
-			node = document.createElement('div');
-			if (data.label) {
-				label = node.appendChild(document.createElement('label'));
-				label.appendChild(document.createTextNode(data.label));
-				label.setAttribute('for', id);
+			node = document.createElement( "div" );
+			if ( data.label ) {
+				label = node.appendChild( document.createElement( "label" ) );
+				label.appendChild( document.createTextNode( data.label ) );
+				label.setAttribute( "for", id );
 			}
-			subnode = node.appendChild(document.createElement('input'));
-			if (data.value) {
-				subnode.setAttribute('value', data.value);
+			subnode = node.appendChild( document.createElement( "input" ) );
+			if ( data.value ) {
+				subnode.setAttribute( "value", data.value );
 			}
-			subnode.setAttribute('name', data.name);
-			subnode.setAttribute('type', 'text');
-			if (data.size) {
-				subnode.setAttribute('size', data.size);
+			subnode.setAttribute( "name", data.name );
+			subnode.setAttribute( "type", "text" );
+			if ( data.size ) {
+				subnode.setAttribute( "size", data.size );
 			}
-			if (data.maxlength) {
-				subnode.setAttribute('maxlength', data.maxlength);
+			if ( data.maxlength ) {
+				subnode.setAttribute( "maxlength", data.maxlength );
 			}
-			if (data.event) {
-				subnode.addEventListener('keyup', data.event, false);
+			if ( data.event ) {
+				subnode.addEventListener( "keyup", data.event, false );
 			}
-			if (data.remove) {
-				var remove = this.compute({
-					type: 'button',
-					label: '移除',
-					event: function event(e) {
+			if ( data.remove ) {
+				var remove = this.compute( {
+					type: "button",
+					label: "移除",
+					event: function event( e ) {
 						var list = e.target.listnode;
 						var node = e.target.inputnode;
 						var more = e.target.morebutton;
-						list.removeChild(node);
+						list.removeChild( node );
 						--more.counter;
-						more.removeAttribute('disabled');
+						more.removeAttribute( "disabled" );
 						e.stopPropagation();
 					}
-				});
-				node.appendChild(remove[0]);
-				var removeButton = remove[1];
+				} );
+				node.appendChild( remove[ 0 ] );
+				var removeButton = remove[ 1 ];
 				removeButton.inputnode = node;
 				removeButton.listnode = data.listnode;
 				removeButton.morebutton = data.morebutton;
 			}
 			break;
-		case 'hidden':
-			node = document.createElement('input');
-			node.setAttribute('type', 'hidden');
+		case "hidden":
+			node = document.createElement( "input" );
+			node.setAttribute( "type", "hidden" );
 			node.values = data.value;
-			node.setAttribute('value', data.value);
-			node.setAttribute('name', data.name);
+			node.setAttribute( "value", data.value );
+			node.setAttribute( "name", data.name );
 			break;
-		case 'header':
-			node = document.createElement('h5');
-			node.appendChild(Morebits.createHtml(data.label));
+		case "header":
+			node = document.createElement( "h5" );
+			node.appendChild( Morebits.createHtml( data.label ) );
 			break;
-		case 'div':
-			node = document.createElement('div');
-			if (data.name) {
-				node.setAttribute('name', data.name);
+		case "div":
+			node = document.createElement( "div" );
+			if ( data.name ) {
+				node.setAttribute( "name", data.name );
 			}
-			if (data.label) {
-				var result = document.createElement('span');
-				result.className = 'quickformDescription';
-				result.appendChild(Morebits.createHtml(data.label));
-				node.appendChild(result);
-			}
-			break;
-		case 'submit':
-			node = document.createElement('span');
-			childContainer = node.appendChild(document.createElement('input'));
-			childContainer.setAttribute('type', 'submit');
-			if (data.label) {
-				childContainer.setAttribute('value', data.label);
-			}
-			childContainer.setAttribute('name', data.name || 'submit');
-			if (data.disabled) {
-				childContainer.setAttribute('disabled', 'disabled');
+			if ( data.label ) {
+				var result = document.createElement( "span" );
+				result.className = "quickformDescription";
+				result.appendChild( Morebits.createHtml( data.label ) );
+				node.appendChild( result );
 			}
 			break;
-		case 'button':
-			node = document.createElement('span');
-			childContainer = node.appendChild(document.createElement('input'));
-			childContainer.setAttribute('type', 'button');
-			if (data.label) {
-				childContainer.setAttribute('value', data.label);
+		case "submit":
+			node = document.createElement( "span" );
+			childContainer = node.appendChild( document.createElement( "input" ) );
+			childContainer.setAttribute( "type", "submit" );
+			if ( data.label ) {
+				childContainer.setAttribute( "value", data.label );
 			}
-			childContainer.setAttribute('name', data.name);
-			if (data.disabled) {
-				childContainer.setAttribute('disabled', 'disabled');
-			}
-			if (data.event) {
-				childContainer.addEventListener('click', data.event, false);
+			childContainer.setAttribute( "name", data.name || "submit" );
+			if ( data.disabled ) {
+				childContainer.setAttribute( "disabled", "disabled" );
 			}
 			break;
-		case 'textarea':
-			node = document.createElement('div');
-			node.setAttribute('id', 'div_' + id);
+		case "button":
+			node = document.createElement( "span" );
+			childContainer = node.appendChild( document.createElement( "input" ) );
+			childContainer.setAttribute( "type", "button" );
+			if ( data.label ) {
+				childContainer.setAttribute( "value", data.label );
+			}
+			childContainer.setAttribute( "name", data.name );
+			if ( data.disabled ) {
+				childContainer.setAttribute( "disabled", "disabled" );
+			}
+			if ( data.event ) {
+				childContainer.addEventListener( "click", data.event, false );
+			}
+			break;
+		case "textarea":
+			node = document.createElement( "div" );
+			node.setAttribute( "id", `div_${id}` );
 			// Add hidden attr
-			if (data.hidden) {
-				node.setAttribute('hidden', '');
+			if ( data.hidden ) {
+				node.setAttribute( "hidden", "" );
 			}
-			if (data.label) {
-				label = node.appendChild(document.createElement('h5'));
-				var labelElement = document.createElement('label');
-				labelElement.appendChild(Morebits.createHtml(data.label));
-				labelElement.setAttribute('for', data.id || id);
-				label.appendChild(labelElement);
+			if ( data.label ) {
+				label = node.appendChild( document.createElement( "h5" ) );
+				var labelElement = document.createElement( "label" );
+				labelElement.appendChild( Morebits.createHtml( data.label ) );
+				labelElement.setAttribute( "for", data.id || id );
+				label.appendChild( labelElement );
 			}
-			subnode = node.appendChild(document.createElement('textarea'));
-			subnode.setAttribute('name', data.name);
-			if (data.cols) {
-				subnode.setAttribute('cols', data.cols);
+			subnode = node.appendChild( document.createElement( "textarea" ) );
+			subnode.setAttribute( "name", data.name );
+			if ( data.cols ) {
+				subnode.setAttribute( "cols", data.cols );
 			}
-			if (data.rows) {
-				subnode.setAttribute('rows', data.rows);
+			if ( data.rows ) {
+				subnode.setAttribute( "rows", data.rows );
 			}
-			if (data.disabled) {
-				subnode.setAttribute('disabled', 'disabled');
+			if ( data.disabled ) {
+				subnode.setAttribute( "disabled", "disabled" );
 			}
-			if (data.required) {
-				subnode.setAttribute('required', 'required');
+			if ( data.required ) {
+				subnode.setAttribute( "required", "required" );
 			}
-			if (data.readonly) {
-				subnode.setAttribute('readonly', 'readonly');
+			if ( data.readonly ) {
+				subnode.setAttribute( "readonly", "readonly" );
 			}
-			if (data.value) {
+			if ( data.value ) {
 				subnode.value = data.value;
 			}
 			// Add placeholder attr
-			if (data.placeholder) {
+			if ( data.placeholder ) {
 				subnode.placeholder = data.placeholder;
 			}
 			childContainer = subnode;
 			break;
 		default:
-			throw new Error('Morebits.quickForm: unknown element type ' + data.type.toString());
+			throw new Error( `Morebits.quickForm: unknown element type ${data.type.toString()}` );
 	}
-	if (!childContainer) {
+	if ( !childContainer ) {
 		childContainer = node;
 	}
-	if (data.tooltip) {
-		Morebits.quickForm.element.generateTooltip(label || node, data);
+	if ( data.tooltip ) {
+		Morebits.quickForm.element.generateTooltip( label || node, data );
 	}
-	if (data.extra) {
+	if ( data.extra ) {
 		childContainer.extra = data.extra;
 	}
-	if (data.$data) {
-		$(childContainer).data(data.$data);
+	if ( data.$data ) {
+		$( childContainer ).data( data.$data );
 	}
-	if (data.style) {
-		childContainer.setAttribute('style', data.style);
+	if ( data.style ) {
+		childContainer.setAttribute( "style", data.style );
 	}
-	if (data.className) {
-		childContainer.className = childContainer.className ? childContainer.className + ' ' + data.className : data.className;
+	if ( data.className ) {
+		childContainer.className = childContainer.className ? `${childContainer.className} ${data.className}` : data.className;
 	}
-	childContainer.setAttribute('id', data.id || id);
+	childContainer.setAttribute( "id", data.id || id );
 	return [ node, childContainer ];
 };
 
@@ -859,25 +855,24 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
  * @param {HTMLElement} node - The HTML element beside which a tooltip is to be generated.
  * @param {Object} data - Tooltip-related configuration data.
  */
-Morebits.quickForm.element.generateTooltip = function QuickFormElementGenerateTooltip(node, data) {
-	var tooltipButton = node.appendChild(document.createElement('span'));
-	tooltipButton.className = 'morebits-tooltipButton';
+Morebits.quickForm.element.generateTooltip = function QuickFormElementGenerateTooltip( node, data ) {
+	var tooltipButton = node.appendChild( document.createElement( "span" ) );
+	tooltipButton.className = "morebits-tooltipButton";
 	tooltipButton.title = data.tooltip; // Provides the content for jQuery UI
-	tooltipButton.appendChild(document.createTextNode('?'));
-	$(tooltipButton).tooltip({
+	tooltipButton.appendChild( document.createTextNode( "?" ) );
+	$( tooltipButton ).tooltip( {
 		position: {
-			my: 'left top',
-			at: 'center bottom',
-			collision: 'flipfit'
+			my: "left top",
+			at: "center bottom",
+			collision: "flipfit"
 		},
 		// Deprecated in UI 1.12, but MW stuck on 1.9.2 indefinitely; see #398 and T71386
-		tooltipClass: 'morebits-ui-tooltip'
-	});
+		tooltipClass: "morebits-ui-tooltip"
+	} );
 };
 
 // Some utility methods for manipulating quickForms after their creation:
 // (None of these work for "dyninput" type fields at present)
-
 /**
  * Returns an object containing all filled form data entered by the user, with the object
  * keys being the form element names. Disabled fields will be ignored, but not hidden fields.
@@ -886,44 +881,44 @@ Morebits.quickForm.element.generateTooltip = function QuickFormElementGenerateTo
  * @param {HTMLFormElement} form
  * @returns {Object} With field names as keys, input data as values.
  */
-Morebits.quickForm.getInputData = function (form) {
+Morebits.quickForm.getInputData = function ( form ) {
 	var result = {};
-	for (var i = 0; i < form.elements.length; i++) {
-		var field = form.elements[i];
-		if (field.disabled || !field.name || !field.type || field.type === 'submit' || field.type === 'button') {
+	for ( var i = 0; i < form.elements.length; i++ ) {
+		var field = form.elements[ i ];
+		if ( field.disabled || !field.name || !field.type || field.type === "submit" || field.type === "button" ) {
 			continue;
 		}
 
 		// For elements in subgroups, quickform prepends element names with
 		// name of the parent group followed by a period, get rid of that.
-		var fieldNameNorm = field.name.slice(field.name.indexOf('.') + 1);
-		switch (field.type) {
-			case 'radio':
-				if (field.checked) {
-					result[fieldNameNorm] = field.value;
+		var fieldNameNorm = field.name.slice( field.name.indexOf( "." ) + 1 );
+		switch ( field.type ) {
+			case "radio":
+				if ( field.checked ) {
+					result[ fieldNameNorm ] = field.value;
 				}
 				break;
-			case 'checkbox':
-				if (field.dataset.single) {
-					result[fieldNameNorm] = field.checked; // boolean
+			case "checkbox":
+				if ( field.dataset.single ) {
+					result[ fieldNameNorm ] = field.checked; // boolean
 				} else {
-					result[fieldNameNorm] = result[fieldNameNorm] || [];
-					if (field.checked) {
-						result[fieldNameNorm].push(field.value);
+					result[ fieldNameNorm ] = result[ fieldNameNorm ] || [];
+					if ( field.checked ) {
+						result[ fieldNameNorm ].push( field.value );
 					}
 				}
 				break;
-			case 'select-multiple':
-				result[fieldNameNorm] = $(field).val(); // field.value doesn't work
+			case "select-multiple":
+				result[ fieldNameNorm ] = $( field ).val(); // field.value doesn't work
 				break;
-			case 'text': // falls through
-			case 'textarea':
-				result[fieldNameNorm] = field.value.trim();
+			case "text": // falls through
+			case "textarea":
+				result[ fieldNameNorm ] = field.value.trim();
 				break;
 			default:
 				// could be select-one, date, number, email, etc
-				if (field.value) {
-					result[fieldNameNorm] = field.value;
+				if ( field.value ) {
+					result[ fieldNameNorm ] = field.value;
 				}
 				break;
 		}
@@ -939,14 +934,14 @@ Morebits.quickForm.getInputData = function (form) {
  * @param {string} fieldName - The name or id of the fields.
  * @returns {HTMLElement[]} - Array of matching form elements.
  */
-Morebits.quickForm.getElements = function QuickFormGetElements(form, fieldName) {
-	var $form = $(form);
-	fieldName = $.escapeSelector(fieldName); // sanitize input
-	var $elements = $form.find('[name="' + fieldName + '"]');
-	if ($elements.length > 0) {
+Morebits.quickForm.getElements = function QuickFormGetElements( form, fieldName ) {
+	var $form = $( form );
+	fieldName = $.escapeSelector( fieldName ); // sanitize input
+	var $elements = $form.find( `[name="${fieldName}"]` );
+	if ( $elements.length > 0 ) {
 		return $elements.toArray();
 	}
-	$elements = $form.find('#' + fieldName);
+	$elements = $form.find( `#${fieldName}` );
 	return $elements.toArray();
 };
 
@@ -959,12 +954,12 @@ Morebits.quickForm.getElements = function QuickFormGetElements(form, fieldName) 
  * @param {string} value - Value to search for.
  * @returns {HTMLInputElement}
  */
-Morebits.quickForm.getCheckboxOrRadio = function QuickFormGetCheckboxOrRadio(elementArray, value) {
-	var found = $.grep(elementArray, function (el) {
+Morebits.quickForm.getCheckboxOrRadio = function QuickFormGetCheckboxOrRadio( elementArray, value ) {
+	var found = $.grep( elementArray, ( el ) => {
 		return el.value === value;
-	});
-	if (found.length > 0) {
-		return found[0];
+	} );
+	if ( found.length > 0 ) {
+		return found[ 0 ];
 	}
 	return null;
 };
@@ -977,9 +972,9 @@ Morebits.quickForm.getCheckboxOrRadio = function QuickFormGetCheckboxOrRadio(ele
  * @param {HTMLElement} element
  * @returns {HTMLElement}
  */
-Morebits.quickForm.getElementContainer = function QuickFormGetElementContainer(element) {
+Morebits.quickForm.getElementContainer = function QuickFormGetElementContainer( element ) {
 	// for divs, headings and fieldsets, the container is the element itself
-	if (element instanceof HTMLFieldSetElement || element instanceof HTMLDivElement || element instanceof HTMLHeadingElement) {
+	if ( element instanceof HTMLFieldSetElement || element instanceof HTMLDivElement || element instanceof HTMLHeadingElement ) {
 		return element;
 	}
 
@@ -995,19 +990,19 @@ Morebits.quickForm.getElementContainer = function QuickFormGetElementContainer(e
  * @param {(HTMLElement|Morebits.quickForm.element)} element
  * @returns {HTMLElement}
  */
-Morebits.quickForm.getElementLabelObject = function QuickFormGetElementLabelObject(element) {
+Morebits.quickForm.getElementLabelObject = function QuickFormGetElementLabelObject( element ) {
 	// for buttons, divs and headers, the label is on the element itself
-	if (element.type === 'button' || element.type === 'submit' || element instanceof HTMLDivElement || element instanceof HTMLHeadingElement) {
+	if ( element.type === "button" || element.type === "submit" || element instanceof HTMLDivElement || element instanceof HTMLHeadingElement ) {
 		return element;
 		// for fieldsets, the label is the child <legend> element
-	} else if (element instanceof HTMLFieldSetElement) {
-		return element.getElementsByTagName('legend')[0];
+	} else if ( element instanceof HTMLFieldSetElement ) {
+		return element.getElementsByTagName( "legend" )[ 0 ];
 		// for textareas, the label is the sibling <h5> element
-	} else if (element instanceof HTMLTextAreaElement) {
-		return element.parentNode.getElementsByTagName('h5')[0];
+	} else if ( element instanceof HTMLTextAreaElement ) {
+		return element.parentNode.getElementsByTagName( "h5" )[ 0 ];
 	}
 	// for others, the label is the sibling <label> element
-	return element.parentNode.getElementsByTagName('label')[0];
+	return element.parentNode.getElementsByTagName( "label" )[ 0 ];
 };
 
 /**
@@ -1017,9 +1012,9 @@ Morebits.quickForm.getElementLabelObject = function QuickFormGetElementLabelObje
  * @param {(HTMLElement|Morebits.quickForm.element)} element
  * @returns {string}
  */
-Morebits.quickForm.getElementLabel = function QuickFormGetElementLabel(element) {
-	var labelElement = Morebits.quickForm.getElementLabelObject(element);
-	if (!labelElement) {
+Morebits.quickForm.getElementLabel = function QuickFormGetElementLabel( element ) {
+	var labelElement = Morebits.quickForm.getElementLabelObject( element );
+	if ( !labelElement ) {
 		return null;
 	}
 	return labelElement.firstChild.textContent;
@@ -1033,9 +1028,9 @@ Morebits.quickForm.getElementLabel = function QuickFormGetElementLabel(element) 
  * @param {string} labelText
  * @returns {boolean} True if succeeded, false if the label element is unavailable.
  */
-Morebits.quickForm.setElementLabel = function QuickFormSetElementLabel(element, labelText) {
-	var labelElement = Morebits.quickForm.getElementLabelObject(element);
-	if (!labelElement) {
+Morebits.quickForm.setElementLabel = function QuickFormSetElementLabel( element, labelText ) {
+	var labelElement = Morebits.quickForm.getElementLabelObject( element );
+	if ( !labelElement ) {
 		return false;
 	}
 	labelElement.firstChild.textContent = labelText;
@@ -1050,11 +1045,11 @@ Morebits.quickForm.setElementLabel = function QuickFormSetElementLabel(element, 
  * @param {string} temporaryLabelText
  * @returns {boolean} `true` if succeeded, `false` if the label element is unavailable.
  */
-Morebits.quickForm.overrideElementLabel = function QuickFormOverrideElementLabel(element, temporaryLabelText) {
-	if (!element.hasAttribute('data-oldlabel')) {
-		element.setAttribute('data-oldlabel', Morebits.quickForm.getElementLabel(element));
+Morebits.quickForm.overrideElementLabel = function QuickFormOverrideElementLabel( element, temporaryLabelText ) {
+	if ( !element.hasAttribute( "data-oldlabel" ) ) {
+		element.setAttribute( "data-oldlabel", Morebits.quickForm.getElementLabel( element ) );
 	}
-	return Morebits.quickForm.setElementLabel(element, temporaryLabelText);
+	return Morebits.quickForm.setElementLabel( element, temporaryLabelText );
 };
 
 /**
@@ -1064,9 +1059,9 @@ Morebits.quickForm.overrideElementLabel = function QuickFormOverrideElementLabel
  * @param {(HTMLElement|Morebits.quickForm.element)} element
  * @returns {boolean} True if succeeded, false if the label element is unavailable.
  */
-Morebits.quickForm.resetElementLabel = function QuickFormResetElementLabel(element) {
-	if (element.hasAttribute('data-oldlabel')) {
-		return Morebits.quickForm.setElementLabel(element, element.getAttribute('data-oldlabel'));
+Morebits.quickForm.resetElementLabel = function QuickFormResetElementLabel( element ) {
+	if ( element.hasAttribute( "data-oldlabel" ) ) {
+		return Morebits.quickForm.setElementLabel( element, element.getAttribute( "data-oldlabel" ) );
 	}
 	return null;
 };
@@ -1078,8 +1073,8 @@ Morebits.quickForm.resetElementLabel = function QuickFormResetElementLabel(eleme
  * @param {(HTMLElement|jQuery|string)} element - HTML/jQuery element, or jQuery selector string.
  * @param {boolean} [visibility] - Skip this to toggle visibility.
  */
-Morebits.quickForm.setElementVisibility = function QuickFormSetElementVisibility(element, visibility) {
-	$(element).toggle(visibility);
+Morebits.quickForm.setElementVisibility = function QuickFormSetElementVisibility( element, visibility ) {
+	$( element ).toggle( visibility );
 };
 
 /**
@@ -1089,8 +1084,8 @@ Morebits.quickForm.setElementVisibility = function QuickFormSetElementVisibility
  * @param {(HTMLElement|jQuery)} element
  * @param {boolean} [visibility] - Skip this to toggle visibility.
  */
-Morebits.quickForm.setElementTooltipVisibility = function QuickFormSetElementTooltipVisibility(element, visibility) {
-	$(Morebits.quickForm.getElementContainer(element)).find('.morebits-tooltipButton').toggle(visibility);
+Morebits.quickForm.setElementTooltipVisibility = function QuickFormSetElementTooltipVisibility( element, visibility ) {
+	$( Morebits.quickForm.getElementContainer( element ) ).find( ".morebits-tooltipButton" ).toggle( visibility );
 };
 
 /**
@@ -1108,40 +1103,40 @@ Morebits.quickForm.setElementTooltipVisibility = function QuickFormSetElementToo
  * @returns {string[]} - Contains the values of elements with the given name
  * checked property set to true.
  */
-HTMLFormElement.prototype.getChecked = function (name, type) {
-	var elements = this.elements[name];
-	if (!elements) {
+HTMLFormElement.prototype.getChecked = function ( name, type ) {
+	var elements = this.elements[ name ];
+	if ( !elements ) {
 		return [];
 	}
 	var return_array = [];
 	var i;
-	if (elements instanceof HTMLSelectElement) {
+	if ( elements instanceof HTMLSelectElement ) {
 		var options = elements.options;
-		for (i = 0; i < options.length; ++i) {
-			if (options[i].selected) {
-				if (options[i].values) {
-					return_array.push(options[i].values);
+		for ( i = 0; i < options.length; ++i ) {
+			if ( options[ i ].selected ) {
+				if ( options[ i ].values ) {
+					return_array.push( options[ i ].values );
 				} else {
-					return_array.push(options[i].value);
+					return_array.push( options[ i ].value );
 				}
 			}
 		}
-	} else if (elements instanceof HTMLInputElement) {
-		if (type && elements.type !== type) {
+	} else if ( elements instanceof HTMLInputElement ) {
+		if ( type && elements.type !== type ) {
 			return [];
-		} else if (elements.checked) {
+		} else if ( elements.checked ) {
 			return [ elements.value ];
 		}
 	} else {
-		for (i = 0; i < elements.length; ++i) {
-			if (elements[i].checked) {
-				if (type && elements[i].type !== type) {
+		for ( i = 0; i < elements.length; ++i ) {
+			if ( elements[ i ].checked ) {
+				if ( type && elements[ i ].type !== type ) {
 					continue;
 				}
-				if (elements[i].values) {
-					return_array.push(elements[i].values);
+				if ( elements[ i ].values ) {
+					return_array.push( elements[ i ].values );
 				} else {
-					return_array.push(elements[i].value);
+					return_array.push( elements[ i ].value );
 				}
 			}
 		}
@@ -1161,40 +1156,40 @@ HTMLFormElement.prototype.getChecked = function (name, type) {
  * @returns {string[]} - Contains the values of elements with the given name
  * checked property set to true.
  */
-HTMLFormElement.prototype.getUnchecked = function (name, type) {
-	var elements = this.elements[name];
-	if (!elements) {
+HTMLFormElement.prototype.getUnchecked = function ( name, type ) {
+	var elements = this.elements[ name ];
+	if ( !elements ) {
 		return [];
 	}
 	var return_array = [];
 	var i;
-	if (elements instanceof HTMLSelectElement) {
+	if ( elements instanceof HTMLSelectElement ) {
 		var options = elements.options;
-		for (i = 0; i < options.length; ++i) {
-			if (!options[i].selected) {
-				if (options[i].values) {
-					return_array.push(options[i].values);
+		for ( i = 0; i < options.length; ++i ) {
+			if ( !options[ i ].selected ) {
+				if ( options[ i ].values ) {
+					return_array.push( options[ i ].values );
 				} else {
-					return_array.push(options[i].value);
+					return_array.push( options[ i ].value );
 				}
 			}
 		}
-	} else if (elements instanceof HTMLInputElement) {
-		if (type && elements.type !== type) {
+	} else if ( elements instanceof HTMLInputElement ) {
+		if ( type && elements.type !== type ) {
 			return [];
-		} else if (!elements.checked) {
+		} else if ( !elements.checked ) {
 			return [ elements.value ];
 		}
 	} else {
-		for (i = 0; i < elements.length; ++i) {
-			if (!elements[i].checked) {
-				if (type && elements[i].type !== type) {
+		for ( i = 0; i < elements.length; ++i ) {
+			if ( !elements[ i ].checked ) {
+				if ( type && elements[ i ].type !== type ) {
 					continue;
 				}
-				if (elements[i].values) {
-					return_array.push(elements[i].values);
+				if ( elements[ i ].values ) {
+					return_array.push( elements[ i ].values );
 				} else {
-					return_array.push(elements[i].value);
+					return_array.push( elements[ i ].value );
 				}
 			}
 		}
@@ -1218,51 +1213,53 @@ Morebits.ip = {
 	 * @param {string} address - The IPv6 address, with or without CIDR.
 	 * @returns {string}
 	 */
-	sanitizeIPv6: function sanitizeIPv6(address) {
+	sanitizeIPv6: function sanitizeIPv6( address ) {
 		address = address.trim();
-		if (address === '') {
+		if ( address === "" ) {
 			return null;
 		}
-		if (!mw.util.isIPv6Address(address, true)) {
+		if ( !mw.util.isIPv6Address( address, true ) ) {
 			return address; // nothing else to do for IPv4 addresses or invalid ones
 		}
 		// Remove any whitespaces, convert to upper case
 		address = address.toUpperCase();
 		// Expand zero abbreviations
-		var abbrevPos = address.indexOf('::');
-		if (abbrevPos > -1) {
+		var abbrevPos = address.indexOf( "::" );
+		if ( abbrevPos > -1 ) {
 			// We know this is valid IPv6. Find the last index of the
 			// address before any CIDR number (e.g. "a:b:c::/24").
-			var CIDRStart = address.indexOf('/');
+			var CIDRStart = address.indexOf( "/" );
 			var addressEnd = CIDRStart !== -1 ? CIDRStart - 1 : address.length - 1;
 			// If the '::' is at the beginning...
 			var repeat, extra, pad;
-			if (abbrevPos === 0) {
-				repeat = '0:';
-				extra = address === '::' ? '0' : ''; // for the address '::'
+			if ( abbrevPos === 0 ) {
+				repeat = "0:";
+				extra = address === "::" ? "0" : ""; // for the address '::'
 				pad = 9; // 7+2 (due to '::')
+
 				// If the '::' is at the end...
-			} else if (abbrevPos === addressEnd - 1) {
-				repeat = ':0';
-				extra = '';
+			} else if ( abbrevPos === addressEnd - 1 ) {
+				repeat = ":0";
+				extra = "";
 				pad = 9; // 7+2 (due to '::')
+
 				// If the '::' is in the middle...
 			} else {
-				repeat = ':0';
-				extra = ':';
+				repeat = ":0";
+				extra = ":";
 				pad = 8; // 6+2 (due to '::')
 			}
 
 			var replacement = repeat;
-			pad -= address.split(':').length - 1;
-			for (var i = 1; i < pad; i++) {
+			pad -= address.split( ":" ).length - 1;
+			for ( var i = 1; i < pad; i++ ) {
 				replacement += repeat;
 			}
 			replacement += extra;
-			address = address.replace('::', replacement);
+			address = address.replace( "::", replacement );
 		}
 		// Remove leading zeros from each bloc as needed
-		return address.replace(/(^|:)0+([0-9A-Fa-f]{1,4})/g, '$1$2');
+		return address.replace( /(^|:)0+([0-9A-Fa-f]{1,4})/g, "$1$2" );
 	},
 	/**
 	 * Determine if the given IP address is a range.  Just conjoins
@@ -1271,8 +1268,8 @@ Morebits.ip = {
 	 * @param {string} ip
 	 * @returns {boolean} - True if given a valid IP address range, false otherwise.
 	 */
-	isRange: function isRange(ip) {
-		return mw.util.isIPAddress(ip, true) && !mw.util.isIPAddress(ip);
+	isRange: function isRange( ip ) {
+		return mw.util.isIPAddress( ip, true ) && !mw.util.isIPAddress( ip );
 	},
 	/**
 	 * Check that an IP range is within the CIDR limits.  Most likely to be useful
@@ -1282,17 +1279,17 @@ Morebits.ip = {
 	 * @returns {boolean} - True for valid ranges within the CIDR limits,
 	 * otherwise false (ranges outside the limit, single IPs, non-IPs).
 	 */
-	validCIDR: function validCIDR(ip) {
-		if (Morebits.ip.isRange(ip)) {
-			var subnet = parseInt(ip.match(/\/(\d{1,3})$/)[1], 10);
-			if (subnet) {
+	validCIDR: function validCIDR( ip ) {
+		if ( Morebits.ip.isRange( ip ) ) {
+			var subnet = parseInt( ip.match( /\/(\d{1,3})$/ )[ 1 ], 10 );
+			if ( subnet ) {
 				// Should be redundant
-				if (mw.util.isIPv6Address(ip, true)) {
-					if (subnet >= 32) {
+				if ( mw.util.isIPv6Address( ip, true ) ) {
+					if ( subnet >= 32 ) {
 						return true;
 					}
 				} else {
-					if (subnet >= 16) {
+					if ( subnet >= 16 ) {
 						return true;
 					}
 				}
@@ -1307,17 +1304,17 @@ Morebits.ip = {
 	 * @returns {boolean|string} - False if not IPv6 or bigger than a 64,
 	 * otherwise the (sanitized) /64 address.
 	 */
-	get64: function get64(ipv6) {
-		if (!ipv6 || !mw.util.isIPv6Address(ipv6, true)) {
+	get64: function get64( ipv6 ) {
+		if ( !ipv6 || !mw.util.isIPv6Address( ipv6, true ) ) {
 			return false;
 		}
-		var subnetMatch = ipv6.match(/\/(\d{1,3})$/);
-		if (subnetMatch && parseInt(subnetMatch[1], 10) < 64) {
+		var subnetMatch = ipv6.match( /\/(\d{1,3})$/ );
+		if ( subnetMatch && parseInt( subnetMatch[ 1 ], 10 ) < 64 ) {
 			return false;
 		}
-		ipv6 = Morebits.ip.sanitizeIPv6(ipv6);
+		ipv6 = Morebits.ip.sanitizeIPv6( ipv6 );
 		var ip_re = /^((?:[0-9A-F]{1,4}:){4})(?:[0-9A-F]{1,4}:){3}[0-9A-F]{1,4}(?:\/\d{1,3})?$/;
-		return ipv6.replace(ip_re, '$1' + '0:0:0:0/64');
+		return ipv6.replace( ip_re, "$1" + "0:0:0:0/64" );
 	}
 };
 
@@ -1332,17 +1329,17 @@ Morebits.string = {
 	 * @param {string} str
 	 * @returns {string}
 	 */
-	toUpperCaseFirstChar: function toUpperCaseFirstChar(str) {
+	toUpperCaseFirstChar: function toUpperCaseFirstChar( str ) {
 		str = str.toString();
-		return str.substr(0, 1).toUpperCase() + str.substr(1);
+		return str.slice( 0, 1 ).toUpperCase() + str.slice( 1 );
 	},
 	/**
 	 * @param {string} str
 	 * @returns {string}
 	 */
-	toLowerCaseFirstChar: function toLowerCaseFirstChar(str) {
+	toLowerCaseFirstChar: function toLowerCaseFirstChar( str ) {
 		str = str.toString();
-		return str.substr(0, 1).toLowerCase() + str.substr(1);
+		return str.slice( 0, 1 ).toLowerCase() + str.slice( 1 );
 	},
 	/**
 	 * Gives an array of substrings of `str` - starting with `start` and
@@ -1357,41 +1354,41 @@ Morebits.string = {
 	 * @throws If the `start` and `end` strings aren't of the same length.
 	 * @throws If `skiplist` isn't an array or string
 	 */
-	splitWeightedByKeys: function splitWeightedByKeys(str, start, end, skiplist) {
-		if (start.length !== end.length) {
-			throw new Error('start marker and end marker must be of the same length');
+	splitWeightedByKeys: function splitWeightedByKeys( str, start, end, skiplist ) {
+		if ( start.length !== end.length ) {
+			throw new Error( "start marker and end marker must be of the same length" );
 		}
 		var level = 0;
 		var initial = null;
 		var result = [];
-		if (!Array.isArray(skiplist)) {
-			if (skiplist === undefined) {
+		if ( !Array.isArray( skiplist ) ) {
+			if ( skiplist === undefined ) {
 				skiplist = [];
-			} else if (typeof skiplist === 'string') {
+			} else if ( typeof skiplist === "string" ) {
 				skiplist = [ skiplist ];
 			} else {
-				throw new Error('non-applicable skiplist parameter');
+				throw new Error( "non-applicable skiplist parameter" );
 			}
 		}
-		for (var i = 0; i < str.length; ++i) {
-			for (var j = 0; j < skiplist.length; ++j) {
-				if (str.substr(i, skiplist[j].length) === skiplist[j]) {
-					i += skiplist[j].length - 1;
+		for ( var i = 0; i < str.length; ++i ) {
+			for ( var j = 0; j < skiplist.length; ++j ) {
+				if ( str.substr( i, skiplist[ j ].length ) === skiplist[ j ] ) {
+					i += skiplist[ j ].length - 1;
 					continue;
 				}
 			}
-			if (str.substr(i, start.length) === start) {
-				if (initial === null) {
+			if ( str.substr( i, start.length ) === start ) {
+				if ( initial === null ) {
 					initial = i;
 				}
 				++level;
 				i += start.length - 1;
-			} else if (str.substr(i, end.length) === end) {
+			} else if ( str.substr( i, end.length ) === end ) {
 				--level;
 				i += end.length - 1;
 			}
-			if (!level && initial !== null) {
-				result.push(str.substring(initial, i + 1));
+			if ( !level && initial !== null ) {
+				result.push( str.substring( initial, i + 1 ) );
 				initial = null;
 			}
 		}
@@ -1407,17 +1404,16 @@ Morebits.string = {
 	 * @param {boolean} [addSig]
 	 * @returns {string}
 	 */
-	formatReasonText: function formatReasonText(str, addSig) {
-		var reason = (str || '').toString().trim();
-		var unbinder = new Morebits.unbinder(reason);
-		unbinder.unbind('<no' + 'wiki>', '</no' + 'wiki>');
-		unbinder.content = unbinder.content.replace(/\|/g, '{{subst:!}}');
+	formatReasonText: function formatReasonText( str, addSig ) {
+		var reason = ( str || "" ).toString().trim();
+		var unbinder = new Morebits.unbinder( reason );
+		unbinder.unbind( "<no" + "wiki>", "</no" + "wiki>" );
+		unbinder.content = unbinder.content.replace( /\|/g, "{{subst:!}}" );
 		reason = unbinder.rebind();
-		if (addSig) {
-			var sig = '~~' + '~~',
-				sigIndex = reason.lastIndexOf(sig);
-			if (sigIndex === -1 || sigIndex !== reason.length - sig.length) {
-				reason += ' ' + sig;
+		if ( addSig ) {
+			var sig = "~~" + "~~", sigIndex = reason.lastIndexOf( sig );
+			if ( sigIndex === -1 || sigIndex !== reason.length - sig.length ) {
+				reason += ` ${sig}`;
 			}
 		}
 		return reason.trim();
@@ -1430,12 +1426,12 @@ Morebits.string = {
 	 * @param {string} str
 	 * @returns {string}
 	 */
-	formatReasonForLog: function formatReasonForLog(str) {
+	formatReasonForLog: function formatReasonForLog( str ) {
 		return str
 		// handle line breaks, which otherwise break numbering
-			.replace(/\n+/g, '{{pb}}')
+			.replace( /\n+/g, "{{pb}}" )
 		// put an extra # in front before bulleted or numbered list items
-			.replace(/^(#+)/gm, '#$1').replace(/^(\*+)/gm, '#$1');
+			.replace( /^(#+)/gm, "#$1" ).replace( /^(\*+)/gm, "#$1" );
 	},
 	/**
 	 * Like `String.prototype.replace()`, but escapes any dollar signs in
@@ -1448,8 +1444,8 @@ Morebits.string = {
 	 * @param {string} replacement
 	 * @returns {string}
 	 */
-	safeReplace: function morebitsStringSafeReplace(string, pattern, replacement) {
-		return string.replace(pattern, replacement.replace(/\$/g, '$$$$'));
+	safeReplace: function morebitsStringSafeReplace( string, pattern, replacement ) {
+		return string.replace( pattern, replacement.replace( /\$/g, "$$$$" ) );
 	},
 	/**
 	 * Determine if the user-provided expiration will be considered an
@@ -1460,8 +1456,8 @@ Morebits.string = {
 	 * @param {string} expiry
 	 * @returns {boolean}
 	 */
-	isInfinity: function morebitsStringIsInfinity(expiry) {
-		return [ 'indefinite', 'infinity', 'infinite', 'never' ].indexOf(expiry) !== -1;
+	isInfinity: function morebitsStringIsInfinity( expiry ) {
+		return [ "indefinite", "infinity", "infinite", "never" ].indexOf( expiry ) !== -1;
 	},
 	/**
 	 * Escapes a string to be used in a RegExp, replacing spaces and
@@ -1470,8 +1466,8 @@ Morebits.string = {
 	 * @param {string} text - String to be escaped.
 	 * @returns {string} - The escaped text.
 	 */
-	escapeRegExp: function escapeRegExp(text) {
-		return mw.util.escapeRegExp(text).replace(/ |_/g, '[_ ]');
+	escapeRegExp: function escapeRegExp( text ) {
+		return mw.util.escapeRegExp( text ).replace( / |_/g, "[_ ]" );
 	},
 	/**
 	 * formatTime
@@ -1479,31 +1475,31 @@ Morebits.string = {
 	 * @param {*} time The string to foramt
 	 * @returns {string}
 	 */
-	formatTime: function morebitsStringFormatTime(time) {
+	formatTime: function morebitsStringFormatTime( time ) {
 		var m;
-		if ((m = time.match(/^\s*(\d+)\s*sec(ond)?s?\s*$/)) !== null) {
-			return m[1] + '秒';
+		if ( ( m = time.match( /^\s*(\d+)\s*sec(ond)?s?\s*$/ ) ) !== null ) {
+			return `${m[ 1 ]}秒`;
 		}
-		if ((m = time.match(/^\s*(\d+)\s*min(ute)?s?\s*$/)) !== null) {
-			return m[1] + '分';
+		if ( ( m = time.match( /^\s*(\d+)\s*min(ute)?s?\s*$/ ) ) !== null ) {
+			return `${m[ 1 ]}分`;
 		}
-		if ((m = time.match(/^\s*(\d+)\s*hours?\s*$/)) !== null) {
-			return m[1] + '小时';
+		if ( ( m = time.match( /^\s*(\d+)\s*hours?\s*$/ ) ) !== null ) {
+			return `${m[ 1 ]}小时`;
 		}
-		if ((m = time.match(/^\s*(\d+)\s*days?\s*$/)) !== null) {
-			return m[1] + '天';
+		if ( ( m = time.match( /^\s*(\d+)\s*days?\s*$/ ) ) !== null ) {
+			return `${m[ 1 ]}天`;
 		}
-		if ((m = time.match(/^\s*(\d+)\s*weeks?\s*$/)) !== null) {
-			return m[1] + '周';
+		if ( ( m = time.match( /^\s*(\d+)\s*weeks?\s*$/ ) ) !== null ) {
+			return `${m[ 1 ]}周`;
 		}
-		if ((m = time.match(/^\s*(\d+)\s*months?\s*$/)) !== null) {
-			return m[1] + '个月';
+		if ( ( m = time.match( /^\s*(\d+)\s*months?\s*$/ ) ) !== null ) {
+			return `${m[ 1 ]}个月`;
 		}
-		if ((m = time.match(/^\s*(\d+)\s*years?\s*$/)) !== null) {
-			return m[1] + '年';
+		if ( ( m = time.match( /^\s*(\d+)\s*years?\s*$/ ) ) !== null ) {
+			return `${m[ 1 ]}年`;
 		}
-		if (Morebits.string.isInfinity(time.trim())) {
-			return '无限期';
+		if ( Morebits.string.isInfinity( time.trim() ) ) {
+			return "无限期";
 		}
 		return time;
 	},
@@ -1514,11 +1510,11 @@ Morebits.string = {
 	 * @param {string} punctuation
 	 * @returns {string}
 	 */
-	appendPunctuation: function appendPunctuation(str, punctuation) {
-		if (punctuation === undefined) {
-			punctuation = '。';
+	appendPunctuation: function appendPunctuation( str, punctuation ) {
+		if ( punctuation === undefined ) {
+			punctuation = "。";
 		}
-		if (str.search(/[.?!;。？！；]$/) === -1) {
+		if ( str.search( /[.?!;。？！；]$/ ) === -1 ) {
 			str += punctuation;
 		}
 		return str;
@@ -1539,13 +1535,13 @@ Morebits.array = {
 	 * @returns {Array} A copy of the array with duplicates removed.
 	 * @throws When provided a non-array.
 	 */
-	uniq: function uniq(arr) {
-		if (!Array.isArray(arr)) {
-			throw 'A non-array object passed to Morebits.array.uniq';
+	uniq: function uniq( arr ) {
+		if ( !Array.isArray( arr ) ) {
+			throw "A non-array object passed to Morebits.array.uniq";
 		}
-		return arr.filter(function (item, idx) {
-			return arr.indexOf(item) === idx;
-		});
+		return arr.filter( ( item, idx ) => {
+			return arr.indexOf( item ) === idx;
+		} );
 	},
 	/**
 	 * Remove non-duplicated items from an array.
@@ -1555,13 +1551,13 @@ Morebits.array = {
 	 * removed; subsequent instances of those values (duplicates) remain.
 	 * @throws When provided a non-array.
 	 */
-	dups: function dups(arr) {
-		if (!Array.isArray(arr)) {
-			throw 'A non-array object passed to Morebits.array.dups';
+	dups: function dups( arr ) {
+		if ( !Array.isArray( arr ) ) {
+			throw "A non-array object passed to Morebits.array.dups";
 		}
-		return arr.filter(function (item, idx) {
-			return arr.indexOf(item) !== idx;
-		});
+		return arr.filter( ( item, idx ) => {
+			return arr.indexOf( item ) !== idx;
+		} );
 	},
 	/**
 	 * Break up an array into smaller arrays.
@@ -1571,19 +1567,19 @@ Morebits.array = {
 	 * @returns {Array[]} An array containing the smaller, chunked arrays.
 	 * @throws When provided a non-array.
 	 */
-	chunk: function chunk(arr, size) {
-		if (!Array.isArray(arr)) {
-			throw 'A non-array object passed to Morebits.array.chunk';
+	chunk: function chunk( arr, size ) {
+		if ( !Array.isArray( arr ) ) {
+			throw "A non-array object passed to Morebits.array.chunk";
 		}
-		if (typeof size !== 'number' || size <= 0) {
+		if ( typeof size !== "number" || size <= 0 ) {
 			// pretty impossible to do anything :)
 			return [ arr ]; // we return an array consisting of this array.
 		}
 
-		var numChunks = Math.ceil(arr.length / size);
-		var result = new Array(numChunks);
-		for (var i = 0; i < numChunks; i++) {
-			result[i] = arr.slice(i * size, (i + 1) * size);
+		var numChunks = Math.ceil( arr.length / size );
+		var result = new Array( numChunks );
+		for ( var i = 0; i < numChunks; i++ ) {
+			result[ i ] = arr.slice( i * size, ( i + 1 ) * size );
 		}
 		return result;
 	}
@@ -1605,38 +1601,38 @@ Morebits.select2 = {
 		 * Custom matcher in which if the optgroup name matches, all options in that
 		 * group are shown, like in jquery.chosen.
 		 */
-		optgroupFull: function optgroupFull(params, data) {
+		optgroupFull: function optgroupFull( params, data ) {
 			var originalMatcher = $.fn.select2.defaults.defaults.matcher;
-			var result = originalMatcher(params, data);
-			if (result && params.term && data.text.toUpperCase().indexOf(params.term.toUpperCase()) !== -1) {
+			var result = originalMatcher( params, data );
+			if ( result && params.term && data.text.toUpperCase().indexOf( params.term.toUpperCase() ) !== -1 ) {
 				result.children = data.children;
 			}
 			return result;
 		},
 		/** Custom matcher that matches from the beginning of words only. */
-		wordBeginning: function wordBeginning(params, data) {
+		wordBeginning: function wordBeginning( params, data ) {
 			var originalMatcher = $.fn.select2.defaults.defaults.matcher;
-			var result = originalMatcher(params, data);
-			if (!params.term || result && new RegExp('\\b' + mw.util.escapeRegExp(params.term), 'i').test(result.text)) {
+			var result = originalMatcher( params, data );
+			if ( !params.term || result && new RegExp( `\\b${mw.util.escapeRegExp( params.term )}`, "i" ).test( result.text ) ) {
 				return result;
 			}
 			return null;
 		}
 	},
 	/** Underline matched part of options. */
-	highlightSearchMatches: function highlightSearchMatches(data) {
+	highlightSearchMatches: function highlightSearchMatches( data ) {
 		var searchTerm = Morebits.select2SearchQuery;
-		if (!searchTerm || data.loading) {
+		if ( !searchTerm || data.loading ) {
 			return data.text;
 		}
-		var idx = data.text.toUpperCase().indexOf(searchTerm.toUpperCase());
-		if (idx < 0) {
+		var idx = data.text.toUpperCase().indexOf( searchTerm.toUpperCase() );
+		if ( idx < 0 ) {
 			return data.text;
 		}
-		return $('<span>').append(data.text.slice(0, idx), $('<span>').css('text-decoration', 'underline').text(data.text.slice(idx, idx + searchTerm.length)), data.text.slice(idx + searchTerm.length));
+		return $( "<span>" ).append( data.text.slice( 0, idx ), $( "<span>" ).css( "text-decoration", "underline" ).text( data.text.slice( idx, idx + searchTerm.length ) ), data.text.slice( idx + searchTerm.length ) );
 	},
 	/** Intercept query as it is happening, for use in highlightSearchMatches. */
-	queryInterceptor: function queryInterceptor(params) {
+	queryInterceptor: function queryInterceptor( params ) {
 		Morebits.select2SearchQuery = params && params.term;
 	},
 	/**
@@ -1645,19 +1641,19 @@ Morebits.select2 = {
 	 *
 	 * @see {@link https://github.com/select2/select2/issues/3279#issuecomment-442524147}
 	 */
-	autoStart: function autoStart(ev) {
-		if (ev.which < 48) {
+	autoStart: function autoStart( ev ) {
+		if ( ev.which < 48 ) {
 			return;
 		}
-		var target = $(ev.target).closest('.select2-container');
-		if (!target.length) {
+		var target = $( ev.target ).closest( ".select2-container" );
+		if ( !target.length ) {
 			return;
 		}
 		target = target.prev();
-		target.select2('open');
-		var search = target.data('select2').dropdown.$search || target.data('select2').selection.$search;
+		target.select2( "open" );
+		var search = target.data( "select2" ).dropdown.$search || target.data( "select2" ).selection.$search;
 		// Use DOM .focus() to work around a jQuery 3.6.0 regression (https://github.com/select2/select2/issues/5993)
-		search[0].focus();
+		search[ 0 ].focus();
 	}
 };
 
@@ -1673,16 +1669,16 @@ Morebits.select2 = {
  * u.content = u.content.replace(/world/g, 'earth');
  * u.rebind(); // gives 'Hello earth <!-- world --> earth'
  */
-Morebits.unbinder = function Unbinder(string) {
-	if (typeof string !== 'string') {
-		throw new Error('not a string');
+Morebits.unbinder = function Unbinder( string ) {
+	if ( typeof string !== "string" ) {
+		throw new Error( "not a string" );
 	}
 	/** The text being processed. */
 	this.content = string;
 	this.counter = 0;
 	this.history = {};
-	this.prefix = '%UNIQ::' + Math.random() + '::';
-	this.postfix = '::UNIQ%';
+	this.prefix = `%UNIQ::${Math.random()}::`;
+	this.postfix = "::UNIQ%";
 };
 Morebits.unbinder.prototype = {
 	/**
@@ -1694,12 +1690,12 @@ Morebits.unbinder.prototype = {
 	 * @param {string} postfix
 	 * @throws If either `prefix` or `postfix` is missing.
 	 */
-	unbind: function UnbinderUnbind(prefix, postfix) {
-		if (!prefix || !postfix) {
-			throw new Error('Both prefix and postfix must be provided');
+	unbind: function UnbinderUnbind( prefix, postfix ) {
+		if ( !prefix || !postfix ) {
+			throw new Error( "Both prefix and postfix must be provided" );
 		}
-		var re = new RegExp(prefix + '([\\s\\S]*?)' + postfix, 'g');
-		this.content = this.content.replace(re, Morebits.unbinder.getCallback(this));
+		var re = new RegExp( `${prefix}([\\s\\S]*?)${postfix}`, "g" );
+		this.content = this.content.replace( re, Morebits.unbinder.getCallback( this ) );
 	},
 	/**
 	 * Restore the hidden portion of the `content` string.
@@ -1709,9 +1705,9 @@ Morebits.unbinder.prototype = {
 	rebind: function UnbinderRebind() {
 		var content = this.content;
 		content.self = this;
-		for (var current in this.history) {
-			if (Object.prototype.hasOwnProperty.call(this.history, current)) {
-				content = content.replace(current, this.history[current]);
+		for ( var current in this.history ) {
+			if ( Object.prototype.hasOwnProperty.call( this.history, current ) ) {
+				content = content.replace( current, this.history[ current ] );
 			}
 		}
 		return content;
@@ -1727,10 +1723,10 @@ Morebits.unbinder.prototype = {
 	history: null // {}
 };
 /** @memberof Morebits.unbinder */
-Morebits.unbinder.getCallback = function UnbinderGetCallback(self) {
-	return function UnbinderCallback(match) {
+Morebits.unbinder.getCallback = function UnbinderGetCallback( self ) {
+	return function UnbinderCallback( match ) {
 		var current = self.prefix + self.counter + self.postfix;
-		self.history[current] = match;
+		self.history[ current ] = match;
 		++self.counter;
 		return current;
 	};
@@ -1746,37 +1742,37 @@ Morebits.unbinder.getCallback = function UnbinderGetCallback(self) {
  * @class
  */
 Morebits.date = function () {
-	var args = Array.prototype.slice.call(arguments);
+	var args = Array.prototype.slice.call( arguments );
 
 	// Check MediaWiki formats
 	// Must be first since firefox erroneously accepts the timestamp
 	// format, sans timezone (See also: #921, #936, #1174, #1187), and the
 	// 14-digit string will be interpreted differently.
-	if (args.length === 1) {
-		var param = args[0];
-		if (/^\d{14}$/.test(param)) {
+	if ( args.length === 1 ) {
+		var param = args[ 0 ];
+		if ( /^\d{14}$/.test( param ) ) {
 			// YYYYMMDDHHmmss
-			var digitMatch = /(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/.exec(param);
-			if (digitMatch) {
+			var digitMatch = /(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/.exec( param );
+			if ( digitMatch ) {
 				// ..... year ... month .. date ... hour .... minute ..... second
-				this._d = new Date(Date.UTC.apply(null, [ digitMatch[1], digitMatch[2] - 1, digitMatch[3], digitMatch[4], digitMatch[5], digitMatch[6] ]));
+				this._d = new Date( Date.UTC.apply( null, [ digitMatch[ 1 ], digitMatch[ 2 ] - 1, digitMatch[ 3 ], digitMatch[ 4 ], digitMatch[ 5 ], digitMatch[ 6 ] ] ) );
 			}
-		} else if (typeof param === 'string') {
+		} else if ( typeof param === "string" ) {
 			// Wikitext signature timestamp
-			var dateParts = Morebits.l10n.signatureTimestampFormat(param);
-			if (dateParts) {
-				this._d = new Date(Date.UTC.apply(null, dateParts));
+			var dateParts = Morebits.l10n.signatureTimestampFormat( param );
+			if ( dateParts ) {
+				this._d = new Date( Date.UTC.apply( null, dateParts ) );
 			}
 		}
 	}
-	if (!this._d) {
+	if ( !this._d ) {
 		// Try standard date
-		this._d = new (Function.prototype.bind.apply(Date, [ Date ].concat(args)))();
+		this._d = new ( Function.prototype.bind.apply( Date, [ Date ].concat( args ) ) )();
 	}
 
 	// Still no?
-	if (!this.isValid()) {
-		mw.log.warn('Invalid Morebits.date initialisation:', args);
+	if ( !this.isValid() ) {
+		mw.log.warn( "Invalid Morebits.date initialisation:", args );
 	}
 };
 
@@ -1794,17 +1790,17 @@ Morebits.date = function () {
  */
 Morebits.date.localeData = {
 	// message names here correspond to MediaWiki message names
-	months: [ '1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月' ],
-	monthsShort: [ '1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月' ],
-	days: [ '周日', '周一', '周二', '周三', '周四', '周五', '周六' ],
-	daysShort: [ '日', '一', '二', '三', '四', '五', '六' ],
+	months: [ "1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月" ],
+	monthsShort: [ "1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月" ],
+	days: [ "周日", "周一", "周二", "周三", "周四", "周五", "周六" ],
+	daysShort: [ "日", "一", "二", "三", "四", "五", "六" ],
 	relativeTimes: {
-		thisDay: '今天 A h:mm',
-		prevDay: '昨天 A h:mm',
-		nextDay: '明天 A h:mm',
-		thisWeek: 'dddd A h:mm',
-		pastWeek: '上周 dddd A h:mm',
-		other: 'YYYY-MM-DD'
+		thisDay: "今天 A h:mm",
+		prevDay: "昨天 A h:mm",
+		nextDay: "明天 A h:mm",
+		thisWeek: "dddd A h:mm",
+		pastWeek: "上周 dddd A h:mm",
+		other: "YYYY-MM-DD"
 	}
 };
 
@@ -1823,65 +1819,65 @@ Morebits.date.localeData = {
  * @property {string} years
  */
 Morebits.date.unitMap = {
-	seconds: 'Seconds',
-	minutes: 'Minutes',
-	hours: 'Hours',
-	days: 'Date',
-	weeks: 'Week',
+	seconds: "Seconds",
+	minutes: "Minutes",
+	hours: "Hours",
+	days: "Date",
+	weeks: "Week",
 	// Not a function but handled in `add` through cunning use of multiplication
-	months: 'Month',
-	years: 'FullYear'
+	months: "Month",
+	years: "FullYear"
 };
 Morebits.date.prototype = {
 	/** @returns {boolean} */
 	isValid: function isValid() {
-		return !isNaN(this.getTime());
+		return !isNaN( this.getTime() );
 	},
 	/**
 	 * @param {(Date|Morebits.date)} date
 	 * @returns {boolean}
 	 */
-	isBefore: function isBefore(date) {
+	isBefore: function isBefore( date ) {
 		return this.getTime() < date.getTime();
 	},
 	/**
 	 * @param {(Date|Morebits.date)} date
 	 * @returns {boolean}
 	 */
-	isAfter: function isAfter(date) {
+	isAfter: function isAfter( date ) {
 		return this.getTime() > date.getTime();
 	},
 	/** @returns {string} */
 	getUTCMonthName: function getUTCMonthName() {
-		return Morebits.date.localeData.months[this.getUTCMonth()];
+		return Morebits.date.localeData.months[ this.getUTCMonth() ];
 	},
 	/** @returns {string} */
 	getUTCMonthNameAbbrev: function getUTCMonthNameAbbrev() {
-		return Morebits.date.localeData.monthsShort[this.getUTCMonth()];
+		return Morebits.date.localeData.monthsShort[ this.getUTCMonth() ];
 	},
 	/** @returns {string} */
 	getMonthName: function getMonthName() {
-		return Morebits.date.localeData.months[this.getMonth()];
+		return Morebits.date.localeData.months[ this.getMonth() ];
 	},
 	/** @returns {string} */
 	getMonthNameAbbrev: function getMonthNameAbbrev() {
-		return Morebits.date.localeData.monthsShort[this.getMonth()];
+		return Morebits.date.localeData.monthsShort[ this.getMonth() ];
 	},
 	/** @returns {string} */
 	getUTCDayName: function getUTCDayName() {
-		return Morebits.date.localeData.days[this.getUTCDay()];
+		return Morebits.date.localeData.days[ this.getUTCDay() ];
 	},
 	/** @returns {string} */
 	getUTCDayNameAbbrev: function getUTCDayNameAbbrev() {
-		return Morebits.date.localeData.daysShort[this.getUTCDay()];
+		return Morebits.date.localeData.daysShort[ this.getUTCDay() ];
 	},
 	/** @returns {string} */
 	getDayName: function getDayName() {
-		return Morebits.date.localeData.days[this.getDay()];
+		return Morebits.date.localeData.days[ this.getDay() ];
 	},
 	/** @returns {string} */
 	getDayNameAbbrev: function getDayNameAbbrev() {
-		return Morebits.date.localeData.daysShort[this.getDay()];
+		return Morebits.date.localeData.daysShort[ this.getDay() ];
 	},
 	/**
 	 * Add a given number of minutes, hours, days, weeks, months, or years to the date.
@@ -1892,25 +1888,25 @@ Morebits.date.prototype = {
 	 * @throws If invalid or unsupported unit is given.
 	 * @returns {Morebits.date}
 	 */
-	add: function add(number, unit) {
-		var num = parseInt(number, 10); // normalize
-		if (isNaN(num)) {
-			throw new Error('Invalid number "' + number + '" provided.');
+	add: function add( number, unit ) {
+		var num = parseInt( number, 10 ); // normalize
+		if ( isNaN( num ) ) {
+			throw new Error( `Invalid number "${number}" provided.` );
 		}
 		unit = unit.toLowerCase(); // normalize
 		var unitMap = Morebits.date.unitMap;
-		var unitNorm = unitMap[unit] || unitMap[unit + 's']; // so that both singular and  plural forms work
-		if (unitNorm) {
+		var unitNorm = unitMap[ unit ] || unitMap[ `${unit}s` ]; // so that both singular and  plural forms work
+		if ( unitNorm ) {
 			// No built-in week functions, so rather than build out ISO's getWeek/setWeek, just multiply
 			// Probably can't be used for Julian->Gregorian changeovers, etc.
-			if (unitNorm === 'Week') {
+			if ( unitNorm === "Week" ) {
 				// eslint-disable-next-line no-unused-expressions, no-sequences
-				unitNorm = 'Date', num *= 7;
+				unitNorm = "Date", num *= 7;
 			}
-			this['set' + unitNorm](this['get' + unitNorm]() + num);
+			this[ `set${unitNorm}` ]( this[ `get${unitNorm}` ]() + num );
 			return this;
 		}
-		throw new Error('Invalid unit "' + unit + '": Only ' + Object.keys(unitMap).join(', ') + ' are allowed.');
+		throw new Error( `Invalid unit "${unit}": Only ${Object.keys( unitMap ).join( ", " )} are allowed.` );
 	},
 	/**
 	 * Subtracts a given number of minutes, hours, days, weeks, months, or years to the date.
@@ -1921,8 +1917,8 @@ Morebits.date.prototype = {
 	 * @throws If invalid or unsupported unit is given.
 	 * @returns {Morebits.date}
 	 */
-	subtract: function subtract(number, unit) {
-		return this.add(-number, unit);
+	subtract: function subtract( number, unit ) {
+		return this.add( -number, unit );
 	},
 	/**
 	 * Format the date into a string per the given format string.
@@ -1960,72 +1956,66 @@ Morebits.date.prototype = {
 	 * `utc`, or specify a time zone as number of minutes relative to UTC.
 	 * @returns {string}
 	 */
-	format: function format(formatstr, zone) {
-		if (!this.isValid()) {
-			return 'Invalid date'; // Put the truth out, preferable to "NaNNaNNan NaN:NaN" or whatever
+	format: function format( formatstr, zone ) {
+		if ( !this.isValid() ) {
+			return "Invalid date"; // Put the truth out, preferable to "NaNNaNNan NaN:NaN" or whatever
 		}
 
 		var udate = this;
 		// create a new date object that will contain the date to display as system time
-		if (zone === 'utc') {
-			udate = new Morebits.date(this.getTime()).add(this.getTimezoneOffset(), 'minutes');
-		} else if (typeof zone === 'number') {
+		if ( zone === "utc" ) {
+			udate = new Morebits.date( this.getTime() ).add( this.getTimezoneOffset(), "minutes" );
+		} else if ( typeof zone === "number" ) {
 			// convert to utc, then add the utc offset given
-			udate = new Morebits.date(this.getTime()).add(this.getTimezoneOffset() + zone, 'minutes');
+			udate = new Morebits.date( this.getTime() ).add( this.getTimezoneOffset() + zone, "minutes" );
 		}
 
 		// default to ISOString
-		if (!formatstr) {
+		if ( !formatstr ) {
 			return udate.toISOString();
 		}
-		var pad = function pad(num, len) {
+		var pad = function pad( num, len ) {
 			len = len || 2; // Up to length of 00 + 1
-			return ('00' + num).toString().slice(0 - len);
+			return `00${num}`.toString().slice( 0 - len );
 		};
-		var h24 = udate.getHours(),
-			m = udate.getMinutes(),
-			s = udate.getSeconds(),
-			ms = udate.getMilliseconds();
-		var D = udate.getDate(),
-			M = udate.getMonth() + 1,
-			Y = udate.getFullYear();
-		var h12 = h24 % 12 || 12,
-			amOrPm = h24 >= 12 ? '下午' : '上午';
+		var h24 = udate.getHours(), m = udate.getMinutes(), s = udate.getSeconds(), ms = udate.getMilliseconds();
+		var D = udate.getDate(), M = udate.getMonth() + 1, Y = udate.getFullYear();
+		var h12 = h24 % 12 || 12, amOrPm = h24 >= 12 ? "下午" : "上午";
 		var replacementMap = {
-			HH: pad(h24),
+			HH: pad( h24 ),
 			H: h24,
-			hh: pad(h12),
+			hh: pad( h12 ),
 			h: h12,
 			A: amOrPm,
-			mm: pad(m),
+			mm: pad( m ),
 			m: m,
-			ss: pad(s),
+			ss: pad( s ),
 			s: s,
-			SSS: pad(ms, 3),
+			SSS: pad( ms, 3 ),
 			dddd: udate.getDayName(),
 			ddd: udate.getDayNameAbbrev(),
 			d: udate.getDay(),
-			DD: pad(D),
+			DD: pad( D ),
 			D: D,
 			MMMM: udate.getMonthName(),
 			MMM: udate.getMonthNameAbbrev(),
-			MM: pad(M),
+			MM: pad( M ),
 			M: M,
 			YYYY: Y,
-			YY: pad(Y % 100),
+			YY: pad( Y % 100 ),
 			Y: Y
 		};
-		var unbinder = new Morebits.unbinder(formatstr); // escape stuff between [...]
-		unbinder.unbind('\\[', '\\]');
+		var unbinder = new Morebits.unbinder( formatstr ); // escape stuff between [...]
+		unbinder.unbind( "\\[", "\\]" );
 		unbinder.content = unbinder.content.replace(
 			/* Regex notes:
-       * d(d{2,3})? matches exactly 1, 3 or 4 occurrences of 'd' ('dd' is treated as a double match of 'd')
-       * Y{1,2}(Y{2})? matches exactly 1, 2 or 4 occurrences of 'Y'
-       */
-			/H{1,2}|h{1,2}|m{1,2}|s{1,2}|SSS|d(d{2,3})?|D{1,2}|M{1,4}|Y{1,2}(Y{2})?|A/g, function (match) {
-				return replacementMap[match];
-			});
-		return unbinder.rebind().replace(/\[(.*?)\]/g, '$1');
+		   * d(d{2,3})? matches exactly 1, 3 or 4 occurrences of 'd' ('dd' is treated as a double match of 'd')
+		   * Y{1,2}(Y{2})? matches exactly 1, 2 or 4 occurrences of 'Y'
+		   */
+			/H{1,2}|h{1,2}|m{1,2}|s{1,2}|SSS|d(d{2,3})?|D{1,2}|M{1,4}|Y{1,2}(Y{2})?|A/g, ( match ) => {
+				return replacementMap[ match ];
+			} );
+		return unbinder.rebind().replace( /\[(.*?)\]/g, "$1" );
 	},
 	/**
 	 * Gives a readable relative time string such as "Yesterday at 6:43 PM" or "Last Thursday at 11:45 AM".
@@ -2035,23 +2025,23 @@ Morebits.date.prototype = {
 	 * 'utc' (for UTC), or specify a time zone as number of minutes past UTC.
 	 * @returns {string}
 	 */
-	calendar: function calendar(zone) {
+	calendar: function calendar( zone ) {
 		// Zero out the hours, minutes, seconds and milliseconds - keeping only the date;
 		// find the difference. Note that setHours() returns the same thing as getTime().
-		var dateDiff = (new Date().setHours(0, 0, 0, 0) - new Date(this).setHours(0, 0, 0, 0)) / 8.64e7;
-		switch (true) {
+		var dateDiff = ( new Date().setHours( 0, 0, 0, 0 ) - new Date( this ).setHours( 0, 0, 0, 0 ) ) / 8.64e7;
+		switch ( true ) {
 			case dateDiff === 0:
-				return this.format(Morebits.date.localeData.relativeTimes.thisDay, zone);
+				return this.format( Morebits.date.localeData.relativeTimes.thisDay, zone );
 			case dateDiff === 1:
-				return this.format(Morebits.date.localeData.relativeTimes.prevDay, zone);
+				return this.format( Morebits.date.localeData.relativeTimes.prevDay, zone );
 			case dateDiff > 0 && dateDiff < 7:
-				return this.format(Morebits.date.localeData.relativeTimes.pastWeek, zone);
+				return this.format( Morebits.date.localeData.relativeTimes.pastWeek, zone );
 			case dateDiff === -1:
-				return this.format(Morebits.date.localeData.relativeTimes.nextDay, zone);
+				return this.format( Morebits.date.localeData.relativeTimes.nextDay, zone );
 			case dateDiff < 0 && dateDiff > -7:
-				return this.format(Morebits.date.localeData.relativeTimes.thisWeek, zone);
+				return this.format( Morebits.date.localeData.relativeTimes.thisWeek, zone );
 			default:
-				return this.format(Morebits.date.localeData.relativeTimes.other, zone);
+				return this.format( Morebits.date.localeData.relativeTimes.other, zone );
 		}
 	},
 	/**
@@ -2061,7 +2051,7 @@ Morebits.date.prototype = {
 	 * @returns {RegExp}
 	 */
 	monthHeaderRegex: function monthHeaderRegex() {
-		return new RegExp('^(==+)\\s*' + this.getUTCFullYear() + '年(?:' + this.getUTCMonthName() + '|' + this.getUTCMonthNameAbbrev() + ')\\s*\\1', 'mg');
+		return new RegExp( `^(==+)\\s*${this.getUTCFullYear()}年(?:${this.getUTCMonthName()}|${this.getUTCMonthNameAbbrev()})\\s*\\1`, "mg" );
 	},
 	/**
 	 * Creates a wikitext section header with the month and year.
@@ -2070,29 +2060,29 @@ Morebits.date.prototype = {
 	 * with no wikitext markers (==).
 	 * @returns {string}
 	 */
-	monthHeader: function monthHeader(level) {
+	monthHeader: function monthHeader( level ) {
 		// Default to 2, but allow for 0 or stringy numbers
-		level = parseInt(level, 10);
-		level = isNaN(level) ? 2 : level;
-		var header = Array(level + 1).join('='); // String.prototype.repeat not supported in IE 11
-		var text = this.getUTCFullYear() + '年' + this.getUTCMonthName();
-		if (header.length) {
+		level = parseInt( level, 10 );
+		level = isNaN( level ) ? 2 : level;
+		var header = Array( level + 1 ).join( "=" ); // String.prototype.repeat not supported in IE 11
+		var text = `${this.getUTCFullYear()}年${this.getUTCMonthName()}`;
+		if ( header.length ) {
 			// wikitext-formatted header
-			return header + ' ' + text + ' ' + header;
+			return `${header} ${text} ${header}`;
 		}
 		return text; // Just the string
 	}
 };
 
 // Allow native Date.prototype methods to be used on Morebits.date objects
-Object.getOwnPropertyNames(Date.prototype).forEach(function (func) {
+Object.getOwnPropertyNames( Date.prototype ).forEach( ( func ) => {
 	// Exclude methods that collide with PageTriage's Date.js external, which clobbers native Date: [[phab:T268513]]
-	if ([ 'add', 'getDayName', 'getMonthName' ].indexOf(func) === -1) {
-		Morebits.date.prototype[func] = function () {
-			return this._d[func].apply(this._d, Array.prototype.slice.call(arguments));
+	if ( [ "add", "getDayName", "getMonthName" ].indexOf( func ) === -1 ) {
+		Morebits.date.prototype[ func ] = function () {
+			return this._d[ func ].apply( this._d, Array.prototype.slice.call( arguments ) );
 		};
 	}
-});
+} );
 
 /* **************** Morebits.wiki **************** */
 /**
@@ -2110,7 +2100,7 @@ Morebits.wiki = {};
  * @returns {boolean}
  */
 Morebits.wiki.isPageRedirect = function qiuwenIsPageRedirect() {
-	console.warn('NOTE: Morebits.wiki.isPageRedirect has been deprecated, use Morebits.isPageRedirect instead.'); // eslint-disable-line no-console
+	console.warn( "NOTE: Morebits.wiki.isPageRedirect has been deprecated, use Morebits.isPageRedirect instead." );
 	return Morebits.isPageRedirect();
 };
 
@@ -2154,34 +2144,34 @@ Morebits.wiki.nbrOfCheckpointsLeft = 0;
  *
  * @memberof Morebits.wiki
  */
-Morebits.wiki.actionCompleted = function (self) {
-	if (--Morebits.wiki.numberOfActionsLeft <= 0 && Morebits.wiki.nbrOfCheckpointsLeft <= 0) {
-		Morebits.wiki.actionCompleted.event(self);
+Morebits.wiki.actionCompleted = function ( self ) {
+	if ( --Morebits.wiki.numberOfActionsLeft <= 0 && Morebits.wiki.nbrOfCheckpointsLeft <= 0 ) {
+		Morebits.wiki.actionCompleted.event( self );
 	}
 };
 
 // Change per action wanted
 /** @memberof Morebits.wiki */
 Morebits.wiki.actionCompleted.event = function () {
-	if (Morebits.wiki.actionCompleted.notice) {
-		Morebits.status.actionCompleted(Morebits.wiki.actionCompleted.notice);
+	if ( Morebits.wiki.actionCompleted.notice ) {
+		Morebits.status.actionCompleted( Morebits.wiki.actionCompleted.notice );
 	}
-	if (Morebits.wiki.actionCompleted.redirect) {
+	if ( Morebits.wiki.actionCompleted.redirect ) {
 		// if it isn't a URL, make it one. TODO: This breaks on the articles 'http://', 'ftp://', and similar ones.
-		if (!/^\w+:\/\//.test(Morebits.wiki.actionCompleted.redirect)) {
-			Morebits.wiki.actionCompleted.redirect = mw.util.getUrl(Morebits.wiki.actionCompleted.redirect);
-			if (Morebits.wiki.actionCompleted.followRedirect === false) {
-				Morebits.wiki.actionCompleted.redirect += '?redirect=no';
+		if ( !/^\w+:\/\//.test( Morebits.wiki.actionCompleted.redirect ) ) {
+			Morebits.wiki.actionCompleted.redirect = mw.util.getUrl( Morebits.wiki.actionCompleted.redirect );
+			if ( Morebits.wiki.actionCompleted.followRedirect === false ) {
+				Morebits.wiki.actionCompleted.redirect += "?redirect=no";
 			}
 		}
-		window.setTimeout(function () {
+		window.setTimeout( () => {
 			window.location = Morebits.wiki.actionCompleted.redirect;
-		}, Morebits.wiki.actionCompleted.timeOut);
+		}, Morebits.wiki.actionCompleted.timeOut );
 	}
 };
 
 /** @memberof Morebits.wiki */
-Morebits.wiki.actionCompleted.timeOut = typeof window.wpActionCompletedTimeOut === 'undefined' ? 5000 : window.wpActionCompletedTimeOut;
+Morebits.wiki.actionCompleted.timeOut = typeof window.wpActionCompletedTimeOut === "undefined" ? 5000 : window.wpActionCompletedTimeOut;
 /** @memberof Morebits.wiki */
 Morebits.wiki.actionCompleted.redirect = null;
 /** @memberof Morebits.wiki */
@@ -2194,7 +2184,7 @@ Morebits.wiki.addCheckpoint = function () {
 
 /** @memberof Morebits.wiki */
 Morebits.wiki.removeCheckpoint = function () {
-	if (--Morebits.wiki.nbrOfCheckpointsLeft <= 0 && Morebits.wiki.numberOfActionsLeft <= 0) {
+	if ( --Morebits.wiki.nbrOfCheckpointsLeft <= 0 && Morebits.wiki.numberOfActionsLeft <= 0 ) {
 		Morebits.wiki.actionCompleted.event();
 	}
 };
@@ -2221,44 +2211,44 @@ Morebits.wiki.removeCheckpoint = function () {
  * @param {Morebits.status} [statusElement] - A Morebits.status object to use for status messages.
  * @param {Function} [onError] - The function to call if an error occurs.
  */
-Morebits.wiki.api = function (currentAction, query, onSuccess, statusElement, onError) {
+Morebits.wiki.api = function ( currentAction, query, onSuccess, statusElement, onError ) {
 	this.currentAction = currentAction;
 	this.query = query;
-	this.query.assert = 'user';
+	this.query.assert = "user";
 	// Enforce newer error formats, preferring html
-	if (!query.errorformat || [ 'wikitext', 'plaintext' ].indexOf(query.errorformat) === -1) {
-		this.query.errorformat = 'html';
+	if ( !query.errorformat || [ "wikitext", "plaintext" ].indexOf( query.errorformat ) === -1 ) {
+		this.query.errorformat = "html";
 	}
 	// Explicitly use the wiki's content language to minimize confusion,
 	// see #1179 for discussion
-	this.query.uselang = this.query.uselang || 'content'; // Use wgUserLanguage for preview
-	this.query.errorlang = 'uselang';
+	this.query.uselang = this.query.uselang || "content"; // Use wgUserLanguage for preview
+	this.query.errorlang = "uselang";
 	this.query.errorsuselocal = 1;
 	this.onSuccess = onSuccess;
 	this.onError = onError;
-	if (statusElement) {
-		this.setStatusElement(statusElement);
+	if ( statusElement ) {
+		this.setStatusElement( statusElement );
 	} else {
-		this.statelem = new Morebits.status(currentAction);
+		this.statelem = new Morebits.status( currentAction );
 	}
 	// JSON is used throughout Morebits/Twinkle, but xml remains the default for backwards compatibility
-	if (!query.format) {
-		this.query.format = 'xml';
-	} else if (query.format === 'json' && !query.formatversion) {
-		this.query.formatversion = '2';
-	} else if ([ 'xml', 'json' ].indexOf(query.format) === -1) {
-		this.statelem.error('Invalid API format: only xml and json are supported.');
+	if ( !query.format ) {
+		this.query.format = "xml";
+	} else if ( query.format === "json" && !query.formatversion ) {
+		this.query.formatversion = "2";
+	} else if ( [ "xml", "json" ].indexOf( query.format ) === -1 ) {
+		this.statelem.error( "Invalid API format: only xml and json are supported." );
 	}
 
 	// Ignore tags for queries and most common unsupported actions, produces warnings
-	if (query.action && [ 'query', 'review', 'watch' ].indexOf(query.action) !== -1) {
+	if ( query.action && [ "query", "review", "watch" ].indexOf( query.action ) !== -1 ) {
 		delete query.tags;
-	} else if (!query.tags && morebitsWikiChangeTag) {
+	} else if ( !query.tags && morebitsWikiChangeTag ) {
 		query.tags = morebitsWikiChangeTag;
 	}
 };
 Morebits.wiki.api.prototype = {
-	currentAction: '',
+	currentAction: "",
 	onSuccess: null,
 	onError: null,
 	parent: window,
@@ -2277,19 +2267,18 @@ Morebits.wiki.api.prototype = {
 	// full error description, if any
 	badtokenRetry: false,
 	// set to true if this on a retry attempted after a badtoken error
-
 	/**
 	 * Keep track of parent object for callbacks.
 	 *
 	 * @param {*} parent
 	 */
-	setParent: function setParent(parent) {
+	setParent: function setParent( parent ) {
 		this.parent = parent;
 	},
 	/** @param {Morebits.status} statusElement */
-	setStatusElement: function setStatusElement(statusElement) {
+	setStatusElement: function setStatusElement( statusElement ) {
 		this.statelem = statusElement;
-		this.statelem.status(this.currentAction);
+		this.statelem.status( this.currentAction );
 	},
 	/**
 	 * Carry out the request.
@@ -2298,89 +2287,87 @@ Morebits.wiki.api.prototype = {
 	 * really want to give jQuery some extra parameters.
 	 * @returns {@Promise} - A jQuery promise object that is resolved or rejected with the api object.
 	 */
-	post: function post(callerAjaxParameters) {
+	post: function post( callerAjaxParameters ) {
 		++Morebits.wiki.numberOfActionsLeft;
-		var queryString = $.map(this.query, function (val, i) {
-			if (Array.isArray(val)) {
-				return encodeURIComponent(i) + '=' + val.map(encodeURIComponent).join('|');
-			} else if (val !== undefined) {
-				return encodeURIComponent(i) + '=' + encodeURIComponent(val);
+		var queryString = $.map( this.query, ( val, i ) => {
+			if ( Array.isArray( val ) ) {
+				return `${encodeURIComponent( i )}=${val.map( encodeURIComponent ).join( "|" )}`;
+			} else if ( val !== undefined ) {
+				return `${encodeURIComponent( i )}=${encodeURIComponent( val )}`;
 			}
-		}).join('&').replace(/^(.*?)(\btoken=[^&]*)&(.*)/, '$1$3&$2');
-		// token should always be the last item in the query string (bug TW-B-0013)
-
-		var ajaxparams = $.extend({}, {
+		} ).join( "&" ).replace( /^(.*?)(\btoken=[^&]*)&(.*)/, "$1$3&$2" );
+			// token should always be the last item in the query string (bug TW-B-0013)
+		var ajaxparams = $.extend( {}, {
 			context: this,
-			type: this.query.action === 'query' ? 'GET' : 'POST',
-			url: mw.util.wikiScript('api'),
+			type: this.query.action === "query" ? "GET" : "POST",
+			url: mw.util.wikiScript( "api" ),
 			data: queryString,
 			dataType: this.query.format,
 			headers: {
-				'Api-User-Agent': morebitsWikiApiUserAgent
+				"Api-User-Agent": morebitsWikiApiUserAgent
 			}
-		}, callerAjaxParameters);
-		return $.ajax(ajaxparams).then(function onAPIsuccess(response, statusText) {
+		}, callerAjaxParameters );
+		return $.ajax( ajaxparams ).then( function onAPIsuccess( response, statusText ) {
 			this.statusText = statusText;
 			this.response = this.responseXML = response;
 			// Limit to first error
-			if (this.query.format === 'json') {
-				this.errorCode = response.errors && response.errors[0].code;
-				if (this.query.errorformat === 'html') {
-					this.errorText = response.errors && response.errors[0].html;
-				} else if (this.query.errorformat === 'wikitext' || this.query.errorformat === 'plaintext') {
-					this.errorText = response.errors && response.errors[0].text;
+			if ( this.query.format === "json" ) {
+				this.errorCode = response.errors && response.errors[ 0 ].code;
+				if ( this.query.errorformat === "html" ) {
+					this.errorText = response.errors && response.errors[ 0 ].html;
+				} else if ( this.query.errorformat === "wikitext" || this.query.errorformat === "plaintext" ) {
+					this.errorText = response.errors && response.errors[ 0 ].text;
 				}
 			} else {
-				this.errorCode = $(response).find('errors error').eq(0).attr('code');
+				this.errorCode = $( response ).find( "errors error" ).eq( 0 ).attr( "code" );
 				// Sufficient for html, wikitext, or plaintext errorformats
-				this.errorText = $(response).find('errors error').eq(0).text();
+				this.errorText = $( response ).find( "errors error" ).eq( 0 ).text();
 			}
-			if (typeof this.errorCode === 'string') {
+			if ( typeof this.errorCode === "string" ) {
 				// the API didn't like what we told it, e.g., bad edit token or an error creating a page
-				return this.returnError(callerAjaxParameters);
+				return this.returnError( callerAjaxParameters );
 			}
 
 			// invoke success callback if one was supplied
-			if (this.onSuccess) {
+			if ( this.onSuccess ) {
 				// set the callback context to this.parent for new code and supply the API object
 				// as the first argument to the callback (for legacy code)
-				this.onSuccess.call(this.parent, this);
+				this.onSuccess.call( this.parent, this );
 			} else {
-				this.statelem.info('完成');
+				this.statelem.info( "完成" );
 			}
 			Morebits.wiki.actionCompleted();
-			return $.Deferred().resolveWith(this.parent, [ this ]);
+			return $.Deferred().resolveWith( this.parent, [ this ] );
 		},
 		// only network and server errors reach here - complaints from the API itself are caught in success()
-		function onAPIfailure(jqXHR, statusText, errorThrown) {
+		function onAPIfailure( jqXHR, statusText, errorThrown ) {
 			this.statusText = statusText;
 			this.errorThrown = errorThrown; // frequently undefined
-			this.errorText = statusText + '在调用API时发生了错误“' + jqXHR.statusText + '”';
+			this.errorText = `${statusText}在调用API时发生了错误“${jqXHR.statusText}”`;
 			return this.returnError();
-		});
+		} );
 	},
-	returnError: function returnError(callerAjaxParameters) {
-		if (this.errorCode === 'badtoken' && !this.badtokenRetry) {
-			this.statelem.warn('无效令牌，获取新的令牌并重试……');
+	returnError: function returnError( callerAjaxParameters ) {
+		if ( this.errorCode === "badtoken" && !this.badtokenRetry ) {
+			this.statelem.warn( "无效令牌，获取新的令牌并重试……" );
 			this.badtokenRetry = true;
 			// Get a new CSRF token and retry. If the original action needs a different
 			// type of action than CSRF, we do one pointless retry before bailing out
-			return Morebits.wiki.api.getToken().then(function (token) {
+			return Morebits.wiki.api.getToken().then( ( token ) => {
 				this.query.token = token;
-				return this.post(callerAjaxParameters);
-			}.bind(this));
+				return this.post( callerAjaxParameters );
+			} );
 		}
-		this.statelem.error(this.errorText + '（' + this.errorCode + '）');
+		this.statelem.error( `${this.errorText}（${this.errorCode}）` );
 
 		// invoke failure callback if one was supplied
-		if (this.onError) {
+		if ( this.onError ) {
 			// set the callback context to this.parent for new code and supply the API object
 			// as the first argument to the callback for legacy code
-			this.onError.call(this.parent, this);
+			this.onError.call( this.parent, this );
 		}
 		// don't complete the action so that the error remains displayed
-
-		return $.Deferred().rejectWith(this.parent, [ this ]);
+		return $.Deferred().rejectWith( this.parent, [ this ] );
 	},
 	getStatusElement: function getStatusElement() {
 		return this.statelem;
@@ -2401,27 +2388,27 @@ Morebits.wiki.api.prototype = {
 };
 
 /** Retrieves wikitext from a page. Caching enabled, duration 1 day. */
-Morebits.wiki.getCachedJson = function (title) {
+Morebits.wiki.getCachedJson = function ( title ) {
 	var query = {
-		action: 'query',
-		prop: 'revisions',
+		action: "query",
+		prop: "revisions",
 		titles: title,
-		rvslots: '*',
-		rvprop: 'content',
-		format: 'json',
-		smaxage: '86400',
+		rvslots: "*",
+		rvprop: "content",
+		format: "json",
+		smaxage: "86400",
 		// cache for 1 day
-		maxage: '86400' // cache for 1 day
+		maxage: "86400" // cache for 1 day
 	};
 
-	return new Morebits.wiki.api('', query).post().then(function (apiobj) {
+	return new Morebits.wiki.api( "", query ).post().then( ( apiobj ) => {
 		apiobj.getStatusElement().unlink();
 		var response = apiobj.getResponse();
-		var wikitext = response.query.pages[0].revisions[0].slots.main.content;
-		return JSON.parse(wikitext);
-	});
+		var wikitext = response.query.pages[ 0 ].revisions[ 0 ].slots.main.content;
+		return JSON.parse( wikitext );
+	} );
 };
-var morebitsWikiApiUserAgent = 'Qiuwen/1.1 morebits.js';
+var morebitsWikiApiUserAgent = "Qiuwen/1.1 morebits.js";
 /**
  * Set the custom user agent header, which is used for server-side logging.
  * Note that doing so will set the useragent for every `Morebits.wiki.api`
@@ -2435,8 +2422,8 @@ var morebitsWikiApiUserAgent = 'Qiuwen/1.1 morebits.js';
  * value of `morebits.js` will be appended to any provided
  * value.
  */
-Morebits.wiki.api.setApiUserAgent = function (ua) {
-	morebitsWikiApiUserAgent = 'Qiuwen/1.1 morebits.js' + (ua ? '; ' + ua : '');
+Morebits.wiki.api.setApiUserAgent = function ( ua ) {
+	morebitsWikiApiUserAgent = `Qiuwen/1.1 morebits.js${ua ? `; ${ua}` : ""}`;
 };
 
 /**
@@ -2447,7 +2434,7 @@ Morebits.wiki.api.setApiUserAgent = function (ua) {
  * @memberof Morebits.wiki.api
  * @type {string}
  */
-var morebitsWikiChangeTag = '';
+var morebitsWikiChangeTag = "";
 
 /**
  * Get a new CSRF token on encountering token errors.
@@ -2456,15 +2443,15 @@ var morebitsWikiChangeTag = '';
  * @returns {string} MediaWiki CSRF token.
  */
 Morebits.wiki.api.getToken = function () {
-	var tokenApi = new Morebits.wiki.api('获取令牌', {
-		action: 'query',
-		meta: 'tokens',
-		type: 'csrf',
-		format: 'json'
-	});
-	return tokenApi.post().then(function (apiobj) {
+	var tokenApi = new Morebits.wiki.api( "获取令牌", {
+		action: "query",
+		meta: "tokens",
+		type: "csrf",
+		format: "json"
+	} );
+	return tokenApi.post().then( ( apiobj ) => {
 		return apiobj.response.query.tokens.csrftoken;
-	});
+	} );
 };
 
 /* **************** Morebits.wiki.page **************** */
@@ -2515,9 +2502,9 @@ Morebits.wiki.api.getToken = function () {
  * @param {string|Morebits.status} [status] - A string describing the action about to be undertaken,
  * or a Morebits.status object
  */
-Morebits.wiki.page = function (pageName, status) {
-	if (!status) {
-		status = '打开页面“' + pageName + '”';
+Morebits.wiki.page = function ( pageName, status ) {
+	if ( !status ) {
+		status = `打开页面“${pageName}”`;
 	}
 
 	/**
@@ -2537,10 +2524,10 @@ Morebits.wiki.page = function (pageName, status) {
 		testActions: null,
 		// array if any valid actions
 		callbackParameters: null,
-		statusElement: status instanceof Morebits.status ? status : new Morebits.status(status),
+		statusElement: status instanceof Morebits.status ? status : new Morebits.status( status ),
 		// - edit
 		pageText: null,
-		editMode: 'all',
+		editMode: "all",
 		// save() replaces entire contents of the page by default
 		appendText: null,
 		// can't reuse pageText for this because pageText is needed to follow a redirect
@@ -2556,7 +2543,7 @@ Morebits.wiki.page = function (pageName, status) {
 		maxRetries: 2,
 		followRedirect: false,
 		followCrossNsRedirect: true,
-		watchlistOption: 'nochange',
+		watchlistOption: "nochange",
 		watchlistExpiry: null,
 		creator: null,
 		timestamp: null,
@@ -2619,7 +2606,7 @@ Morebits.wiki.page = function (pageName, status) {
 		protectApi: null,
 		protectProcessApi: null
 	};
-	var emptyFunction = function emptyFunction() {};
+	var emptyFunction = function emptyFunction() { };
 
 	/**
 	 * Loads the text for the page.
@@ -2627,49 +2614,49 @@ Morebits.wiki.page = function (pageName, status) {
 	 * @param {Function} onSuccess - Callback function which is called when the load has succeeded.
 	 * @param {Function} [onFailure] - Callback function which is called when the load fails.
 	 */
-	this.load = function (onSuccess, onFailure) {
+	this.load = function ( onSuccess, onFailure ) {
 		ctx.onLoadSuccess = onSuccess;
 		ctx.onLoadFailure = onFailure || emptyFunction;
 
 		// Need to be able to do something after the page loads
-		if (!onSuccess) {
-			ctx.statusElement.error('内部错误：不存在提供给load()的onSuccess回调。');
-			ctx.onLoadFailure(this);
+		if ( !onSuccess ) {
+			ctx.statusElement.error( "内部错误：不存在提供给load()的onSuccess回调。" );
+			ctx.onLoadFailure( this );
 			return;
 		}
 		ctx.loadQuery = {
-			action: 'query',
-			prop: 'info|revisions',
-			inprop: 'watched',
-			intestactions: 'edit',
+			action: "query",
+			prop: "info|revisions",
+			inprop: "watched",
+			intestactions: "edit",
 			// can be expanded
-			curtimestamp: '',
-			meta: 'tokens',
-			type: 'csrf',
+			curtimestamp: "",
+			meta: "tokens",
+			type: "csrf",
 			titles: ctx.pageName,
-			format: 'json'
+			format: "json"
 			// don't need rvlimit=1 because we don't need rvstartid here and only one actual rev is returned by default
 		};
 
-		if (ctx.editMode === 'all') {
-			ctx.loadQuery.rvprop = 'content|timestamp'; // get the page content at the same time, if needed
-		} else if (ctx.editMode === 'revert') {
-			ctx.loadQuery.rvprop = 'timestamp';
+		if ( ctx.editMode === "all" ) {
+			ctx.loadQuery.rvprop = "content|timestamp"; // get the page content at the same time, if needed
+		} else if ( ctx.editMode === "revert" ) {
+			ctx.loadQuery.rvprop = "timestamp";
 			ctx.loadQuery.rvlimit = 1;
 			ctx.loadQuery.rvstartid = ctx.revertOldID;
 		}
-		if (ctx.followRedirect) {
-			ctx.loadQuery.redirects = ''; // follow all redirects
+		if ( ctx.followRedirect ) {
+			ctx.loadQuery.redirects = ""; // follow all redirects
 		}
 
-		if (typeof ctx.pageSection === 'number') {
+		if ( typeof ctx.pageSection === "number" ) {
 			ctx.loadQuery.rvsection = ctx.pageSection;
 		}
-		if (Morebits.userIsSysop) {
-			ctx.loadQuery.inprop += '|protection';
+		if ( Morebits.userIsSysop ) {
+			ctx.loadQuery.inprop += "|protection";
 		}
-		ctx.loadApi = new Morebits.wiki.api('抓取页面……', ctx.loadQuery, fnLoadSuccess, ctx.statusElement, ctx.onLoadFailure);
-		ctx.loadApi.setParent(this);
+		ctx.loadApi = new Morebits.wiki.api( "抓取页面……", ctx.loadQuery, fnLoadSuccess, ctx.statusElement, ctx.onLoadFailure );
+		ctx.loadApi.setParent( this );
 		ctx.loadApi.post();
 	};
 
@@ -2686,98 +2673,98 @@ Morebits.wiki.page = function (pageName, status) {
 	 * @param {Function} [onSuccess] - Callback function which is called when the save has succeeded.
 	 * @param {Function} [onFailure] - Callback function which is called when the save fails.
 	 */
-	this.save = function (onSuccess, onFailure) {
+	this.save = function ( onSuccess, onFailure ) {
 		ctx.onSaveSuccess = onSuccess;
 		ctx.onSaveFailure = onFailure || emptyFunction;
 
 		// are we getting our editing token from mw.user.tokens?
-		var canUseMwUserToken = fnCanUseMwUserToken('edit');
-		if (!ctx.pageLoaded && !canUseMwUserToken) {
-			ctx.statusElement.error('内部错误：试图保存未加载完成的页面');
-			ctx.onSaveFailure(this);
+		var canUseMwUserToken = fnCanUseMwUserToken( "edit" );
+		if ( !ctx.pageLoaded && !canUseMwUserToken ) {
+			ctx.statusElement.error( "内部错误：试图保存未加载完成的页面" );
+			ctx.onSaveFailure( this );
 			return;
 		}
-		if (!ctx.editSummary) {
+		if ( !ctx.editSummary ) {
 			// new section mode allows (nay, encourages) using the
 			// title as the edit summary, but the query needs
 			// editSummary to be undefined or '', not null
-			if (ctx.editMode === 'new' && ctx.newSectionTitle) {
-				ctx.editSummary = '';
+			if ( ctx.editMode === "new" && ctx.newSectionTitle ) {
+				ctx.editSummary = "";
 			} else {
-				ctx.statusElement.error('内部错误：保存页面前未设置编辑摘要。');
-				ctx.onSaveFailure(this);
+				ctx.statusElement.error( "内部错误：保存页面前未设置编辑摘要。" );
+				ctx.onSaveFailure( this );
 				return;
 			}
 		}
 
 		// shouldn't happen if canUseMwUserToken === true
-		if (ctx.fullyProtected && !ctx.suppressProtectWarning && !confirm(ctx.fullyProtected === 'infinity' ? '您即将编辑全保护页面“' + ctx.pageName + '”（永久）。\n\n单击“确定”以确认操作，或单击“取消”以取消操作。' : 'You are about to make an edit to the fully protected page "' + ctx.pageName + '"（保护期至：' + new Morebits.date(ctx.fullyProtected).calendar('utc') + ' (UTC)）。\n\n单击“确定”以确认操作，或单击“取消”以取消操作。')) {
-			ctx.statusElement.error('已取消对全保护页面的编辑。');
-			ctx.onSaveFailure(this);
+		if ( ctx.fullyProtected && !ctx.suppressProtectWarning && !confirm( ctx.fullyProtected === "infinity" ? `您即将编辑全保护页面“${ctx.pageName}”（永久）。\n\n单击“确定”以确认操作，或单击“取消”以取消操作。` : `You are about to make an edit to the fully protected page "${ctx.pageName}"（保护期至：${new Morebits.date( ctx.fullyProtected ).calendar( "utc" )} (UTC)）。\n\n单击“确定”以确认操作，或单击“取消”以取消操作。` ) ) {
+			ctx.statusElement.error( "已取消对全保护页面的编辑。" );
+			ctx.onSaveFailure( this );
 			return;
 		}
 		ctx.retries = 0;
 		var query = {
-			action: 'edit',
+			action: "edit",
 			title: ctx.pageName,
 			summary: ctx.editSummary,
-			token: canUseMwUserToken ? mw.user.tokens.get('csrfToken') : ctx.csrfToken,
+			token: canUseMwUserToken ? mw.user.tokens.get( "csrfToken" ) : ctx.csrfToken,
 			watchlist: ctx.watchlistOption,
-			format: 'json'
+			format: "json"
 		};
-		if (ctx.changeTags) {
+		if ( ctx.changeTags ) {
 			query.tags = ctx.changeTags;
 		}
-		if (fnApplyWatchlistExpiry()) {
+		if ( fnApplyWatchlistExpiry() ) {
 			query.watchlistexpiry = ctx.watchlistExpiry;
 		}
-		if (typeof ctx.pageSection === 'number') {
+		if ( typeof ctx.pageSection === "number" ) {
 			query.section = ctx.pageSection;
 		}
 
 		// Set minor edit attribute. If these parameters are present with any value, it is interpreted as true
-		if (ctx.minorEdit) {
+		if ( ctx.minorEdit ) {
 			query.minor = true;
 		} else {
 			query.notminor = true; // force Twinkle config to override user preference setting for "all edits are minor"
 		}
 
 		// Set bot edit attribute. If this parameter is present with any value, it is interpreted as true
-		if (ctx.botEdit) {
+		if ( ctx.botEdit ) {
 			query.bot = true;
 		}
-		switch (ctx.editMode) {
-			case 'append':
-				if (ctx.appendText === null) {
-					ctx.statusElement.error('内部错误：保存页面前未设置文后附加文字。');
-					ctx.onSaveFailure(this);
+		switch ( ctx.editMode ) {
+			case "append":
+				if ( ctx.appendText === null ) {
+					ctx.statusElement.error( "内部错误：保存页面前未设置文后附加文字。" );
+					ctx.onSaveFailure( this );
 					return;
 				}
 				query.appendtext = ctx.appendText; // use mode to append to current page contents
 				break;
-			case 'prepend':
-				if (ctx.prependText === null) {
-					ctx.statusElement.error('内部错误：保存页面前未设置文前附加文字。');
-					ctx.onSaveFailure(this);
+			case "prepend":
+				if ( ctx.prependText === null ) {
+					ctx.statusElement.error( "内部错误：保存页面前未设置文前附加文字。" );
+					ctx.onSaveFailure( this );
 					return;
 				}
 				query.prependtext = ctx.prependText; // use mode to prepend to current page contents
 				break;
-			case 'new':
-				if (!ctx.newSectionText) {
+			case "new":
+				if ( !ctx.newSectionText ) {
 					// API doesn't allow empty new section text
-					ctx.statusElement.error('内部错误：保存页面前未设置新章节文字。');
-					ctx.onSaveFailure(this);
+					ctx.statusElement.error( "内部错误：保存页面前未设置新章节文字。" );
+					ctx.onSaveFailure( this );
 					return;
 				}
-				query.section = 'new';
+				query.section = "new";
 				query.text = ctx.newSectionText; // add a new section to current page
 				query.sectiontitle = ctx.newSectionTitle || ctx.editSummary; // done by the API, but non-'' values would get treated as text
 				break;
-			case 'revert':
+			case "revert":
 				query.undo = ctx.revertCurID;
 				query.undoafter = ctx.revertOldID;
-				if (ctx.lastEditTime) {
+				if ( ctx.lastEditTime ) {
 					query.basetimestamp = ctx.lastEditTime; // check that page hasn't been edited since it was loaded
 				}
 
@@ -2786,21 +2773,21 @@ Morebits.wiki.page = function (pageName, status) {
 			default:
 				// 'all'
 				query.text = ctx.pageText; // replace entire contents of the page
-				if (ctx.lastEditTime) {
+				if ( ctx.lastEditTime ) {
 					query.basetimestamp = ctx.lastEditTime; // check that page hasn't been edited since it was loaded
 				}
 
 				query.starttimestamp = ctx.loadTime; // check that page hasn't been deleted since it was loaded (don't recreate bad stuff)
 				break;
 		}
-		if ([ 'recreate', 'createonly', 'nocreate' ].indexOf(ctx.createOption) !== -1) {
-			query[ctx.createOption] = '';
+		if ( [ "recreate", "createonly", "nocreate" ].indexOf( ctx.createOption ) !== -1 ) {
+			query[ ctx.createOption ] = "";
 		}
-		if (canUseMwUserToken && ctx.followRedirect) {
+		if ( canUseMwUserToken && ctx.followRedirect ) {
 			query.redirect = true;
 		}
-		ctx.saveApi = new Morebits.wiki.api('保存页面……', query, fnSaveSuccess, ctx.statusElement, fnSaveError);
-		ctx.saveApi.setParent(this);
+		ctx.saveApi = new Morebits.wiki.api( "保存页面……", query, fnSaveSuccess, ctx.statusElement, fnSaveError );
+		ctx.saveApi.setParent( this );
 		ctx.saveApi.post();
 	};
 
@@ -2812,14 +2799,14 @@ Morebits.wiki.page = function (pageName, status) {
 	 * @param {Function} [onSuccess] - Callback function which is called when the method has succeeded.
 	 * @param {Function} [onFailure] - Callback function which is called when the method fails.
 	 */
-	this.append = function (onSuccess, onFailure) {
-		ctx.editMode = 'append';
-		if (fnCanUseMwUserToken('edit')) {
-			this.save(onSuccess, onFailure);
+	this.append = function ( onSuccess, onFailure ) {
+		ctx.editMode = "append";
+		if ( fnCanUseMwUserToken( "edit" ) ) {
+			this.save( onSuccess, onFailure );
 		} else {
 			ctx.onSaveSuccess = onSuccess;
 			ctx.onSaveFailure = onFailure || emptyFunction;
-			this.load(fnAutoSave, ctx.onSaveFailure);
+			this.load( fnAutoSave, ctx.onSaveFailure );
 		}
 	};
 
@@ -2831,14 +2818,14 @@ Morebits.wiki.page = function (pageName, status) {
 	 * @param {Function}  [onSuccess] - Callback function which is called when the method has succeeded.
 	 * @param {Function}  [onFailure] - Callback function which is called when the method fails.
 	 */
-	this.prepend = function (onSuccess, onFailure) {
-		ctx.editMode = 'prepend';
-		if (fnCanUseMwUserToken('edit')) {
-			this.save(onSuccess, onFailure);
+	this.prepend = function ( onSuccess, onFailure ) {
+		ctx.editMode = "prepend";
+		if ( fnCanUseMwUserToken( "edit" ) ) {
+			this.save( onSuccess, onFailure );
 		} else {
 			ctx.onSaveSuccess = onSuccess;
 			ctx.onSaveFailure = onFailure || emptyFunction;
-			this.load(fnAutoSave, ctx.onSaveFailure);
+			this.load( fnAutoSave, ctx.onSaveFailure );
 		}
 	};
 
@@ -2853,14 +2840,14 @@ Morebits.wiki.page = function (pageName, status) {
 	 * @param {Function}  [onSuccess] - Callback function which is called when the method has succeeded.
 	 * @param {Function}  [onFailure] - Callback function which is called when the method fails.
 	 */
-	this.newSection = function (onSuccess, onFailure) {
-		ctx.editMode = 'new';
-		if (fnCanUseMwUserToken('edit')) {
-			this.save(onSuccess, onFailure);
+	this.newSection = function ( onSuccess, onFailure ) {
+		ctx.editMode = "new";
+		if ( fnCanUseMwUserToken( "edit" ) ) {
+			this.save( onSuccess, onFailure );
 		} else {
 			ctx.onSaveSuccess = onSuccess;
 			ctx.onSaveFailure = onFailure || emptyFunction;
-			this.load(fnAutoSave, ctx.onSaveFailure);
+			this.load( fnAutoSave, ctx.onSaveFailure );
 		}
 	};
 
@@ -2875,26 +2862,26 @@ Morebits.wiki.page = function (pageName, status) {
 	};
 
 	/** @param {string} pageText - Updated page text that will be saved when `save()` is called */
-	this.setPageText = function (pageText) {
-		ctx.editMode = 'all';
+	this.setPageText = function ( pageText ) {
+		ctx.editMode = "all";
 		ctx.pageText = pageText;
 	};
 
 	/** @param {string} appendText - Text that will be appended to the page when `append()` is called */
-	this.setAppendText = function (appendText) {
-		ctx.editMode = 'append';
+	this.setAppendText = function ( appendText ) {
+		ctx.editMode = "append";
 		ctx.appendText = appendText;
 	};
 
 	/** @param {string} prependText - Text that will be prepended to the page when `prepend()` is called */
-	this.setPrependText = function (prependText) {
-		ctx.editMode = 'prepend';
+	this.setPrependText = function ( prependText ) {
+		ctx.editMode = "prepend";
 		ctx.prependText = prependText;
 	};
 
 	/** @param {string} newSectionText - Text that will be added in a new section on the page when `newSection()` is called */
-	this.setNewSectionText = function (newSectionText) {
-		ctx.editMode = 'new';
+	this.setNewSectionText = function ( newSectionText ) {
+		ctx.editMode = "new";
 		ctx.newSectionText = newSectionText;
 	};
 
@@ -2902,8 +2889,8 @@ Morebits.wiki.page = function (pageName, status) {
 	 * @param {string} newSectionTitle - Title for the new section created when `newSection()` is called
 	 * If missing, `ctx.editSummary` will be used. Issues may occur if a substituted template is used.
 	 */
-	this.setNewSectionTitle = function (newSectionTitle) {
-		ctx.editMode = 'new';
+	this.setNewSectionTitle = function ( newSectionTitle ) {
+		ctx.editMode = "new";
 		ctx.newSectionTitle = newSectionTitle;
 	};
 
@@ -2914,7 +2901,7 @@ Morebits.wiki.page = function (pageName, status) {
 	 *
 	 * @param {string} summary
 	 */
-	this.setEditSummary = function (summary) {
+	this.setEditSummary = function ( summary ) {
 		ctx.editSummary = summary;
 	};
 
@@ -2924,7 +2911,7 @@ Morebits.wiki.page = function (pageName, status) {
 	 *
 	 * @param {string|string[]} tags - String or array of tag(s).
 	 */
-	this.setChangeTags = function (tags) {
+	this.setChangeTags = function ( tags ) {
 		ctx.changeTags = tags;
 	};
 
@@ -2938,17 +2925,17 @@ Morebits.wiki.page = function (pageName, status) {
 	 * in the moment between loading the page and saving the edit (default).
 	 *
 	 */
-	this.setCreateOption = function (createOption) {
+	this.setCreateOption = function ( createOption ) {
 		ctx.createOption = createOption;
 	};
 
 	/** @param {boolean} minorEdit - Set true to mark the edit as a minor edit. */
-	this.setMinorEdit = function (minorEdit) {
+	this.setMinorEdit = function ( minorEdit ) {
 		ctx.minorEdit = minorEdit;
 	};
 
 	/** @param {boolean} botEdit - Set true to mark the edit as a bot edit */
-	this.setBotEdit = function (botEdit) {
+	this.setBotEdit = function ( botEdit ) {
 		ctx.botEdit = botEdit;
 	};
 
@@ -2956,7 +2943,7 @@ Morebits.wiki.page = function (pageName, status) {
 	 * @param {number} pageSection - Integer specifying the section number to load or save.
 	 * If specified as `null`, the entire page will be retrieved.
 	 */
-	this.setPageSection = function (pageSection) {
+	this.setPageSection = function ( pageSection ) {
 		ctx.pageSection = pageSection;
 	};
 
@@ -2964,7 +2951,7 @@ Morebits.wiki.page = function (pageName, status) {
 	 * @param {number} maxConflictRetries - Number of retries for save errors involving an edit conflict or
 	 * loss of token. Default: 2.
 	 */
-	this.setMaxConflictRetries = function (maxConflictRetries) {
+	this.setMaxConflictRetries = function ( maxConflictRetries ) {
 		ctx.maxConflictRetries = maxConflictRetries;
 	};
 
@@ -2972,7 +2959,7 @@ Morebits.wiki.page = function (pageName, status) {
 	 * @param {number} maxRetries - Number of retries for save errors not involving an edit conflict or
 	 * loss of token. Default: 2.
 	 */
-	this.setMaxRetries = function (maxRetries) {
+	this.setMaxRetries = function ( maxRetries ) {
 		ctx.maxRetries = maxRetries;
 	};
 
@@ -3003,45 +2990,45 @@ Morebits.wiki.page = function (pageName, status) {
 	 * Can also be `infinity` or infinity-like (`infinite`, `indefinite`, and `never`).
 	 * See {@link phabricator.wikimedia.org/source/mediawiki-libs-Timestamp/browse/master/src/ConvertibleTimestamp.php;4e53b859a9580c55958078f46dd4f3a44d0fcaa0$57-109?as=source&blame=off}
 	 */
-	this.setWatchlist = function (watchlistOption, watchlistExpiry) {
-		if (watchlistOption instanceof Morebits.date || watchlistOption instanceof Date) {
+	this.setWatchlist = function ( watchlistOption, watchlistExpiry ) {
+		if ( watchlistOption instanceof Morebits.date || watchlistOption instanceof Date ) {
 			watchlistOption = watchlistOption.toISOString();
 		}
-		if (typeof watchlistExpiry === 'undefined') {
-			watchlistExpiry = 'infinity';
-		} else if (watchlistExpiry instanceof Morebits.date || watchlistExpiry instanceof Date) {
+		if ( typeof watchlistExpiry === "undefined" ) {
+			watchlistExpiry = "infinity";
+		} else if ( watchlistExpiry instanceof Morebits.date || watchlistExpiry instanceof Date ) {
 			watchlistExpiry = watchlistExpiry.toISOString();
 		}
-		switch (watchlistOption) {
-			case 'nochange':
-			case 'no':
+		switch ( watchlistOption ) {
+			case "nochange":
+			case "no":
 			case false:
 			case undefined:
-				ctx.watchlistOption = 'nochange';
+				ctx.watchlistOption = "nochange";
 				// The MW API allows for changing expiry with nochange (as "nochange" refers to the binary status),
 				// but by keeping this null it will default to any existing expiry, ensure there is actually "no change."
 				ctx.watchlistExpiry = null;
 				break;
-			case 'unwatch':
+			case "unwatch":
 				// expiry unimportant
-				ctx.watchlistOption = 'unwatch';
+				ctx.watchlistOption = "unwatch";
 				break;
-			case 'preferences':
-			case 'default':
-				ctx.watchlistOption = 'preferences';
+			case "preferences":
+			case "default":
+				ctx.watchlistOption = "preferences";
 				// The API allows an expiry here, but there is as of yet (T265716)
 				// no expiry preference option, so it's a bit devoid of context.
 				ctx.watchlistExpiry = watchlistExpiry;
 				break;
-			case 'watch':
-			case 'yes':
+			case "watch":
+			case "yes":
 			case true:
-				ctx.watchlistOption = 'watch';
+				ctx.watchlistOption = "watch";
 				ctx.watchlistExpiry = watchlistExpiry;
 				break;
 			default:
 				// Not really a "default" per se but catches "any other string"
-				ctx.watchlistOption = 'watch';
+				ctx.watchlistOption = "watch";
 				ctx.watchlistExpiry = watchlistOption;
 				break;
 		}
@@ -3062,10 +3049,10 @@ Morebits.wiki.page = function (pageName, status) {
 	 * Can also be `infinity` or infinity-like (`infinite`, `indefinite`, and `never`).
 	 * See {@link phabricator.wikimedia.org/source/mediawiki-libs-Timestamp/browse/master/src/ConvertibleTimestamp.php;4e53b859a9580c55958078f46dd4f3a44d0fcaa0$57-109?as=source&blame=off}
 	 */
-	this.setWatchlistExpiry = function (watchlistExpiry) {
-		if (typeof watchlistExpiry === 'undefined') {
-			watchlistExpiry = 'infinity';
-		} else if (watchlistExpiry instanceof Morebits.date || watchlistExpiry instanceof Date) {
+	this.setWatchlistExpiry = function ( watchlistExpiry ) {
+		if ( typeof watchlistExpiry === "undefined" ) {
+			watchlistExpiry = "infinity";
+		} else if ( watchlistExpiry instanceof Morebits.date || watchlistExpiry instanceof Date ) {
 			watchlistExpiry = watchlistExpiry.toISOString();
 		}
 		ctx.watchlistExpiry = watchlistExpiry;
@@ -3088,12 +3075,12 @@ Morebits.wiki.page = function (pageName, status) {
 	 * is only needed for the few Twinkle watchlist preferences that
 	 * accept a string value of `default`.
 	 */
-	this.setWatchlistFromPreferences = function (watchlistOption) {
-		console.warn('NOTE: Morebits.wiki.page.setWatchlistFromPreferences was deprecated December 2020, please use setWatchlist'); // eslint-disable-line no-console
-		if (watchlistOption) {
-			ctx.watchlistOption = 'preferences';
+	this.setWatchlistFromPreferences = function ( watchlistOption ) {
+		console.warn( "NOTE: Morebits.wiki.page.setWatchlistFromPreferences was deprecated December 2020, please use setWatchlist" );
+		if ( watchlistOption ) {
+			ctx.watchlistOption = "preferences";
 		} else {
-			ctx.watchlistOption = 'nochange';
+			ctx.watchlistOption = "nochange";
 		}
 	};
 
@@ -3107,13 +3094,13 @@ Morebits.wiki.page = function (pageName, status) {
 	 * - `true`: (default) follow redirect even if it is a cross-namespace redirect
 	 * - `false`: don't follow redirect if it is cross-namespace, edit the redirect itself.
 	 */
-	this.setFollowRedirect = function (followRedirect, followCrossNsRedirect) {
-		if (ctx.pageLoaded) {
-			ctx.statusElement.error('Internal error: cannot change redirect setting after the page has been loaded!');
+	this.setFollowRedirect = function ( followRedirect, followCrossNsRedirect ) {
+		if ( ctx.pageLoaded ) {
+			ctx.statusElement.error( "Internal error: cannot change redirect setting after the page has been loaded!" );
 			return;
 		}
 		ctx.followRedirect = followRedirect;
-		ctx.followCrossNsRedirect = typeof followCrossNsRedirect !== 'undefined' ? followCrossNsRedirect : ctx.followCrossNsRedirect;
+		ctx.followCrossNsRedirect = typeof followCrossNsRedirect !== "undefined" ? followCrossNsRedirect : ctx.followCrossNsRedirect;
 	};
 
 	// lookup-creation setter function
@@ -3130,28 +3117,28 @@ Morebits.wiki.page = function (pageName, status) {
 	 * 3. Must not be used when the page has a non-wikitext contentmodel
 	 * such as Modulespace Lua or user JavaScript/CSS.
 	 */
-	this.setLookupNonRedirectCreator = function (flag) {
+	this.setLookupNonRedirectCreator = function ( flag ) {
 		ctx.lookupNonRedirectCreator = flag;
 	};
 
 	// Move-related setter functions
 	/** @param {string} destination */
-	this.setMoveDestination = function (destination) {
+	this.setMoveDestination = function ( destination ) {
 		ctx.moveDestination = destination;
 	};
 
 	/** @param {boolean} flag */
-	this.setMoveTalkPage = function (flag) {
+	this.setMoveTalkPage = function ( flag ) {
 		ctx.moveTalkPage = !!flag;
 	};
 
 	/** @param {boolean} flag */
-	this.setMoveSubpages = function (flag) {
+	this.setMoveSubpages = function ( flag ) {
 		ctx.moveSubpages = !!flag;
 	};
 
 	/** @param {boolean} flag */
-	this.setMoveSuppressRedirect = function (flag) {
+	this.setMoveSuppressRedirect = function ( flag ) {
 		ctx.moveSuppressRedirect = !!flag;
 	};
 
@@ -3162,25 +3149,25 @@ Morebits.wiki.page = function (pageName, status) {
 	 * (enWiki-only).
 	 * @param {string} [expiry=infinity]
 	 */
-	this.setEditProtection = function (level, expiry) {
+	this.setEditProtection = function ( level, expiry ) {
 		ctx.protectEdit = {
 			level: level,
-			expiry: expiry || 'infinity'
+			expiry: expiry || "infinity"
 		};
 	};
-	this.setMoveProtection = function (level, expiry) {
+	this.setMoveProtection = function ( level, expiry ) {
 		ctx.protectMove = {
 			level: level,
-			expiry: expiry || 'infinity'
+			expiry: expiry || "infinity"
 		};
 	};
-	this.setCreateProtection = function (level, expiry) {
+	this.setCreateProtection = function ( level, expiry ) {
 		ctx.protectCreate = {
 			level: level,
-			expiry: expiry || 'infinity'
+			expiry: expiry || "infinity"
 		};
 	};
-	this.setCascadingProtection = function (flag) {
+	this.setCascadingProtection = function ( flag ) {
 		ctx.protectCascade = !!flag;
 	};
 	this.suppressProtectWarning = function () {
@@ -3188,7 +3175,7 @@ Morebits.wiki.page = function (pageName, status) {
 	};
 
 	// Revert-related getters/setters:
-	this.setOldID = function (oldID) {
+	this.setOldID = function ( oldID ) {
 		ctx.revertOldID = oldID;
 	};
 
@@ -3208,7 +3195,6 @@ Morebits.wiki.page = function (pageName, status) {
 	};
 
 	// Miscellaneous getters/setters:
-
 	/**
 	 * Define an object for use in a callback function.
 	 *
@@ -3221,7 +3207,7 @@ Morebits.wiki.page = function (pageName, status) {
 	 *
 	 * @param {Object} callbackParameters
 	 */
-	this.setCallbackParameters = function (callbackParameters) {
+	this.setCallbackParameters = function ( callbackParameters ) {
 		ctx.callbackParameters = callbackParameters;
 	};
 
@@ -3235,7 +3221,7 @@ Morebits.wiki.page = function (pageName, status) {
 	/**
 	 * @param {Morebits.status} statusElement
 	 */
-	this.setStatusElement = function (statusElement) {
+	this.setStatusElement = function ( statusElement ) {
 		ctx.statusElement = statusElement;
 	};
 
@@ -3303,7 +3289,7 @@ Morebits.wiki.page = function (pageName, status) {
 
 	/** @returns {boolean} whether or not you can edit the page */
 	this.canEdit = function () {
-		return !!ctx.testActions && ctx.testActions.indexOf('edit') !== -1;
+		return !!ctx.testActions && ctx.testActions.indexOf( "edit" ) !== -1;
 	};
 
 	/**
@@ -3318,22 +3304,22 @@ Morebits.wiki.page = function (pageName, status) {
 	 * @param {Function} [onFailure] - Callback function to be called when
 	 * the lookup fails
 	 */
-	this.lookupCreation = function (onSuccess, onFailure) {
+	this.lookupCreation = function ( onSuccess, onFailure ) {
 		ctx.onLookupCreationSuccess = onSuccess;
 		ctx.onLookupCreationFailure = onFailure || emptyFunction;
-		if (!onSuccess) {
-			ctx.statusElement.error('内部错误：未向lookupCreation()提供onSuccess回调。');
-			ctx.onLookupCreationFailure(this);
+		if ( !onSuccess ) {
+			ctx.statusElement.error( "内部错误：未向lookupCreation()提供onSuccess回调。" );
+			ctx.onLookupCreationFailure( this );
 			return;
 		}
 		var query = {
-			action: 'query',
-			prop: 'revisions',
+			action: "query",
+			prop: "revisions",
 			titles: ctx.pageName,
 			rvlimit: 1,
-			rvprop: 'user|timestamp',
-			rvdir: 'newer',
-			format: 'json'
+			rvprop: "user|timestamp",
+			rvdir: "newer",
+			format: "json"
 		};
 
 		// Only the wikitext content model can reliably handle
@@ -3341,16 +3327,16 @@ Morebits.wiki.page = function (pageName, status) {
 		// content rvprop. Relatedly, non-wikitext models don't
 		// understand the #REDIRECT concept, so we shouldn't attempt
 		// the redirect resolution in fnLookupCreationSuccess
-		if (ctx.lookupNonRedirectCreator) {
+		if ( ctx.lookupNonRedirectCreator ) {
 			query.rvsection = 0;
-			query.rvprop += '|content';
+			query.rvprop += "|content";
 		}
-		if (ctx.followRedirect) {
-			query.redirects = ''; // follow all redirects
+		if ( ctx.followRedirect ) {
+			query.redirects = ""; // follow all redirects
 		}
 
-		ctx.lookupCreationApi = new Morebits.wiki.api('抓取页面创建者信息', query, fnLookupCreationSuccess, ctx.statusElement, ctx.onLookupCreationFailure);
-		ctx.lookupCreationApi.setParent(this);
+		ctx.lookupCreationApi = new Morebits.wiki.api( "抓取页面创建者信息", query, fnLookupCreationSuccess, ctx.statusElement, ctx.onLookupCreationFailure );
+		ctx.lookupCreationApi.setParent( this );
 		ctx.lookupCreationApi.post();
 	};
 
@@ -3360,16 +3346,16 @@ Morebits.wiki.page = function (pageName, status) {
 	 * @param {Function} [onSuccess] - Callback function to run on success.
 	 * @param {Function} [onFailure] - Callback function to run on failure.
 	 */
-	this.revert = function (onSuccess, onFailure) {
+	this.revert = function ( onSuccess, onFailure ) {
 		ctx.onSaveSuccess = onSuccess;
 		ctx.onSaveFailure = onFailure || emptyFunction;
-		if (!ctx.revertOldID) {
-			ctx.statusElement.error('内部错误：撤销编辑前，未设置拟撤销版本ID。');
-			ctx.onSaveFailure(this);
+		if ( !ctx.revertOldID ) {
+			ctx.statusElement.error( "内部错误：撤销编辑前，未设置拟撤销版本ID。" );
+			ctx.onSaveFailure( this );
 			return;
 		}
-		ctx.editMode = 'revert';
-		this.load(fnAutoSave, ctx.onSaveFailure);
+		ctx.editMode = "revert";
+		this.load( fnAutoSave, ctx.onSaveFailure );
 	};
 
 	/**
@@ -3378,24 +3364,24 @@ Morebits.wiki.page = function (pageName, status) {
 	 * @param {Function} [onSuccess] - Callback function to run on success.
 	 * @param {Function} [onFailure] - Callback function to run on failure.
 	 */
-	this.move = function (onSuccess, onFailure) {
+	this.move = function ( onSuccess, onFailure ) {
 		ctx.onMoveSuccess = onSuccess;
 		ctx.onMoveFailure = onFailure || emptyFunction;
-		if (!fnPreflightChecks.call(this, 'move', ctx.onMoveFailure)) {
+		if ( !fnPreflightChecks.call( this, "move", ctx.onMoveFailure ) ) {
 			return; // abort
 		}
 
-		if (!ctx.moveDestination) {
-			ctx.statusElement.error('内部错误：移动页面前，未设置目标页面名称。');
-			ctx.onMoveFailure(this);
+		if ( !ctx.moveDestination ) {
+			ctx.statusElement.error( "内部错误：移动页面前，未设置目标页面名称。" );
+			ctx.onMoveFailure( this );
 			return;
 		}
-		if (fnCanUseMwUserToken('move')) {
-			fnProcessMove.call(this, this);
+		if ( fnCanUseMwUserToken( "move" ) ) {
+			fnProcessMove.call( this, this );
 		} else {
-			var query = fnNeedTokenInfoQuery('move');
-			ctx.moveApi = new Morebits.wiki.api('获取令牌……', query, fnProcessMove, ctx.statusElement, ctx.onMoveFailure);
-			ctx.moveApi.setParent(this);
+			var query = fnNeedTokenInfoQuery( "move" );
+			ctx.moveApi = new Morebits.wiki.api( "获取令牌……", query, fnProcessMove, ctx.statusElement, ctx.onMoveFailure );
+			ctx.moveApi.setParent( this );
 			ctx.moveApi.post();
 		}
 	};
@@ -3410,32 +3396,32 @@ Morebits.wiki.page = function (pageName, status) {
 	 * No error handling since we don't actually care about the errors.
 	 */
 	this.patrol = function () {
-		if (!Morebits.userIsSysop && !Morebits.userIsInGroup('patroller')) {
+		if ( !Morebits.userIsSysop && !Morebits.userIsInGroup( "patroller" ) ) {
 			return;
 		}
 
 		// If a link is present, don't need to check if it's patrolled
-		if ($('.patrollink').length) {
-			var patrolhref = $('.patrollink a').attr('href');
-			ctx.rcid = mw.util.getParamValue('rcid', patrolhref);
-			fnProcessPatrol(this, this);
+		if ( $( ".patrollink" ).length ) {
+			var patrolhref = $( ".patrollink a" ).attr( "href" );
+			ctx.rcid = mw.util.getParamValue( "rcid", patrolhref );
+			fnProcessPatrol( this, this );
 		} else {
 			var patrolQuery = {
-				action: 'query',
-				prop: 'info',
-				meta: 'tokens',
-				type: 'patrol',
+				action: "query",
+				prop: "info",
+				meta: "tokens",
+				type: "patrol",
 				// as long as we're querying, might as well get a token
-				list: 'recentchanges',
+				list: "recentchanges",
 				// check if the page is unpatrolled
 				titles: ctx.pageName,
-				rcprop: 'patrolled',
+				rcprop: "patrolled",
 				rctitle: ctx.pageName,
 				rclimit: 1,
-				format: 'json'
+				format: "json"
 			};
-			ctx.patrolApi = new Morebits.wiki.api('获取令牌……', patrolQuery, fnProcessPatrol);
-			ctx.patrolApi.setParent(this);
+			ctx.patrolApi = new Morebits.wiki.api( "获取令牌……", patrolQuery, fnProcessPatrol );
+			ctx.patrolApi.setParent( this );
 			ctx.patrolApi.post();
 		}
 	};
@@ -3447,19 +3433,19 @@ Morebits.wiki.page = function (pageName, status) {
 	 * @param {Function} [onSuccess] - Callback function to run on success.
 	 * @param {Function} [onFailure] - Callback function to run on failure.
 	 */
-	this.deletePage = function (onSuccess, onFailure) {
+	this.deletePage = function ( onSuccess, onFailure ) {
 		ctx.onDeleteSuccess = onSuccess;
 		ctx.onDeleteFailure = onFailure || emptyFunction;
-		if (!fnPreflightChecks.call(this, 'delete', ctx.onDeleteFailure)) {
+		if ( !fnPreflightChecks.call( this, "delete", ctx.onDeleteFailure ) ) {
 			return; // abort
 		}
 
-		if (fnCanUseMwUserToken('delete')) {
-			fnProcessDelete.call(this, this);
+		if ( fnCanUseMwUserToken( "delete" ) ) {
+			fnProcessDelete.call( this, this );
 		} else {
-			var query = fnNeedTokenInfoQuery('delete');
-			ctx.deleteApi = new Morebits.wiki.api('获取令牌……', query, fnProcessDelete, ctx.statusElement, ctx.onDeleteFailure);
-			ctx.deleteApi.setParent(this);
+			var query = fnNeedTokenInfoQuery( "delete" );
+			ctx.deleteApi = new Morebits.wiki.api( "获取令牌……", query, fnProcessDelete, ctx.statusElement, ctx.onDeleteFailure );
+			ctx.deleteApi.setParent( this );
 			ctx.deleteApi.post();
 		}
 	};
@@ -3470,19 +3456,19 @@ Morebits.wiki.page = function (pageName, status) {
 	 * @param {Function} [onSuccess] - Callback function to run on success.
 	 * @param {Function} [onFailure] - Callback function to run on failure.
 	 */
-	this.undeletePage = function (onSuccess, onFailure) {
+	this.undeletePage = function ( onSuccess, onFailure ) {
 		ctx.onUndeleteSuccess = onSuccess;
 		ctx.onUndeleteFailure = onFailure || emptyFunction;
-		if (!fnPreflightChecks.call(this, 'undelete', ctx.onUndeleteFailure)) {
+		if ( !fnPreflightChecks.call( this, "undelete", ctx.onUndeleteFailure ) ) {
 			return; // abort
 		}
 
-		if (fnCanUseMwUserToken('undelete')) {
-			fnProcessUndelete.call(this, this);
+		if ( fnCanUseMwUserToken( "undelete" ) ) {
+			fnProcessUndelete.call( this, this );
 		} else {
-			var query = fnNeedTokenInfoQuery('undelete');
-			ctx.undeleteApi = new Morebits.wiki.api('获取令牌……', query, fnProcessUndelete, ctx.statusElement, ctx.onUndeleteFailure);
-			ctx.undeleteApi.setParent(this);
+			var query = fnNeedTokenInfoQuery( "undelete" );
+			ctx.undeleteApi = new Morebits.wiki.api( "获取令牌……", query, fnProcessUndelete, ctx.statusElement, ctx.onUndeleteFailure );
+			ctx.undeleteApi.setParent( this );
 			ctx.undeleteApi.post();
 		}
 	};
@@ -3493,33 +3479,32 @@ Morebits.wiki.page = function (pageName, status) {
 	 * @param {Function} [onSuccess] - Callback function to run on success.
 	 * @param {Function} [onFailure] - Callback function to run on failure.
 	 */
-	this.protect = function (onSuccess, onFailure) {
+	this.protect = function ( onSuccess, onFailure ) {
 		ctx.onProtectSuccess = onSuccess;
 		ctx.onProtectFailure = onFailure || emptyFunction;
-		if (!fnPreflightChecks.call(this, 'protect', ctx.onProtectFailure)) {
+		if ( !fnPreflightChecks.call( this, "protect", ctx.onProtectFailure ) ) {
 			return; // abort
 		}
 
-		if (!ctx.protectEdit && !ctx.protectMove && !ctx.protectCreate) {
-			ctx.statusElement.error('Internal error: you must set edit and/or move and/or create protection before calling protect()!');
-			ctx.onProtectFailure(this);
+		if ( !ctx.protectEdit && !ctx.protectMove && !ctx.protectCreate ) {
+			ctx.statusElement.error( "Internal error: you must set edit and/or move and/or create protection before calling protect()!" );
+			ctx.onProtectFailure( this );
 			return;
 		}
 
 		// because of the way MW API interprets protection levels
 		// (absolute, not differential), we always need to request
 		// protection levels from the server
-		var query = fnNeedTokenInfoQuery('protect');
-		ctx.protectApi = new Morebits.wiki.api('获取令牌……', query, fnProcessProtect, ctx.statusElement, ctx.onProtectFailure);
-		ctx.protectApi.setParent(this);
+		var query = fnNeedTokenInfoQuery( "protect" );
+		ctx.protectApi = new Morebits.wiki.api( "获取令牌……", query, fnProcessProtect, ctx.statusElement, ctx.onProtectFailure );
+		ctx.protectApi.setParent( this );
 		ctx.protectApi.post();
 	};
 
 	/*
-     * Private member functions
-     * These are not exposed outside
-     */
-
+		 * Private member functions
+		 * These are not exposed outside
+		 */
 	/**
 	 * Determines whether we can save an API call by using the csrf token
 	 * sent with the page HTML, or whether we need to ask the server for
@@ -3533,42 +3518,42 @@ Morebits.wiki.page = function (pageName, status) {
 	 * "edit" or "delete". In practice, only "edit" or "notedit" matters.
 	 * @returns {boolean}
 	 */
-	var fnCanUseMwUserToken = function fnCanUseMwUserToken(action) {
-		action = typeof action !== 'undefined' ? action : 'edit'; // IE doesn't support default parameters
+	var fnCanUseMwUserToken = function fnCanUseMwUserToken( action ) {
+		action = typeof action !== "undefined" ? action : "edit"; // IE doesn't support default parameters
 
 		// If a watchlist expiry is set, we must always load the page
 		// to avoid overwriting indefinite protection.  Of course, not
 		// needed if setting indefinite watching!
-		if (ctx.watchlistExpiry && !Morebits.string.isInfinity(ctx.watchlistExpiry)) {
+		if ( ctx.watchlistExpiry && !Morebits.string.isInfinity( ctx.watchlistExpiry ) ) {
 			return false;
 		}
 
 		// API-based redirect resolution only works for action=query and
 		// action=edit in append/prepend/new modes
-		if (ctx.followRedirect) {
-			if (!ctx.followCrossNsRedirect) {
+		if ( ctx.followRedirect ) {
+			if ( !ctx.followCrossNsRedirect ) {
 				return false; // must load the page to check for cross namespace redirects
 			}
 
-			if (action !== 'edit' || ctx.editMode === 'all' || ctx.editMode === 'revert') {
+			if ( action !== "edit" || ctx.editMode === "all" || ctx.editMode === "revert" ) {
 				return false;
 			}
 		}
 
 		// do we need to fetch the edit protection expiry?
-		if (Morebits.userIsSysop && !ctx.suppressProtectWarning) {
-			if (new mw.Title(Morebits.pageNameNorm).getPrefixedText() !== new mw.Title(ctx.pageName).getPrefixedText()) {
+		if ( Morebits.userIsSysop && !ctx.suppressProtectWarning ) {
+			if ( new mw.Title( Morebits.pageNameNorm ).getPrefixedText() !== new mw.Title( ctx.pageName ).getPrefixedText() ) {
 				return false;
 			}
 
 			// wgRestrictionEdit is null on non-existent pages,
 			// so this neatly handles nonexistent pages
-			var editRestriction = mw.config.get('wgRestrictionEdit');
-			if (!editRestriction || editRestriction.indexOf('sysop') !== -1) {
+			var editRestriction = mw.config.get( "wgRestrictionEdit" );
+			if ( !editRestriction || editRestriction.indexOf( "sysop" ) !== -1 ) {
 				return false;
 			}
 		}
-		return !!mw.user.tokens.get('csrfToken');
+		return !!mw.user.tokens.get( "csrfToken" );
 	};
 
 	/**
@@ -3585,62 +3570,61 @@ Morebits.wiki.page = function (pageName, status) {
 	 * "delete".
 	 * @returns {Object} Appropriate query.
 	 */
-	var fnNeedTokenInfoQuery = function fnNeedTokenInfoQuery(action) {
+	var fnNeedTokenInfoQuery = function fnNeedTokenInfoQuery( action ) {
 		var query = {
-			action: 'query',
-			meta: 'tokens',
-			type: 'csrf',
+			action: "query",
+			meta: "tokens",
+			type: "csrf",
 			titles: ctx.pageName,
-			prop: 'info',
-			inprop: 'watched',
-			format: 'json'
+			prop: "info",
+			inprop: "watched",
+			format: "json"
 		};
-		// Protection not checked for flagged-revs or non-sysop moves
-		if (action !== 'move' || Morebits.userIsSysop) {
-			query.inprop += '|protection';
+			// Protection not checked for flagged-revs or non-sysop moves
+		if ( action !== "move" || Morebits.userIsSysop ) {
+			query.inprop += "|protection";
 		}
-		if (ctx.followRedirect && action !== 'undelete') {
-			query.redirects = ''; // follow all redirects
+		if ( ctx.followRedirect && action !== "undelete" ) {
+			query.redirects = ""; // follow all redirects
 		}
 
 		return query;
 	};
 
 	// callback from loadSuccess() for append(), prepend(), and newSection() threads
-	var fnAutoSave = function fnAutoSave(pageobj) {
-		pageobj.save(ctx.onSaveSuccess, ctx.onSaveFailure);
+	var fnAutoSave = function fnAutoSave( pageobj ) {
+		pageobj.save( ctx.onSaveSuccess, ctx.onSaveFailure );
 	};
 
 	// callback from loadApi.post()
 	var fnLoadSuccess = function fnLoadSuccess() {
 		var response = ctx.loadApi.getResponse().query;
-		if (!fnCheckPageName(response, ctx.onLoadFailure)) {
+		if ( !fnCheckPageName( response, ctx.onLoadFailure ) ) {
 			return; // abort
 		}
 
-		var page = response.pages[0],
-			rev;
+		var page = response.pages[ 0 ], rev;
 		ctx.pageExists = !page.missing;
-		if (ctx.pageExists) {
-			rev = page.revisions[0];
+		if ( ctx.pageExists ) {
+			rev = page.revisions[ 0 ];
 			ctx.lastEditTime = rev.timestamp;
 			ctx.pageText = rev.content;
 			ctx.pageID = page.pageid;
 		} else {
-			ctx.pageText = ''; // allow for concatenation, etc.
+			ctx.pageText = ""; // allow for concatenation, etc.
 			ctx.pageID = 0; // nonexistent in response, matches wgArticleId
 		}
 
 		ctx.csrfToken = response.tokens.csrftoken;
-		if (!ctx.csrfToken) {
-			ctx.statusElement.error('未能获取编辑令牌。');
-			ctx.onLoadFailure(this);
+		if ( !ctx.csrfToken ) {
+			ctx.statusElement.error( "未能获取编辑令牌。" );
+			ctx.onLoadFailure( this );
 			return;
 		}
 		ctx.loadTime = ctx.loadApi.getResponse().curtimestamp;
-		if (!ctx.loadTime) {
-			ctx.statusElement.error('未能获取当前时间戳。');
-			ctx.onLoadFailure(this);
+		if ( !ctx.loadTime ) {
+			ctx.statusElement.error( "未能获取当前时间戳。" );
+			ctx.onLoadFailure( this );
 			return;
 		}
 		ctx.contentModel = page.contentmodel;
@@ -3648,11 +3632,11 @@ Morebits.wiki.page = function (pageName, status) {
 
 		// extract protection info, to alert admins when they are about to edit a protected page
 		// Includes cascading protection
-		if (Morebits.userIsSysop) {
-			var editProt = page.protection.filter(function (pr) {
-				return pr.type === 'edit' && pr.level === 'sysop';
-			}).pop();
-			if (editProt) {
+		if ( Morebits.userIsSysop ) {
+			var editProt = page.protection.filter( ( pr ) => {
+				return pr.type === "edit" && pr.level === "sysop";
+			} ).pop();
+			if ( editProt ) {
 				ctx.fullyProtected = editProt.expiry;
 			} else {
 				ctx.fullyProtected = false;
@@ -3661,72 +3645,72 @@ Morebits.wiki.page = function (pageName, status) {
 		ctx.revertCurID = page.lastrevid;
 		var testactions = page.actions;
 		ctx.testActions = []; // was null
-		Object.keys(testactions).forEach(function (action) {
-			if (testactions[action]) {
-				ctx.testActions.push(action);
+		Object.keys( testactions ).forEach( ( action ) => {
+			if ( testactions[ action ] ) {
+				ctx.testActions.push( action );
 			}
-		});
-		if (ctx.editMode === 'revert') {
+		} );
+		if ( ctx.editMode === "revert" ) {
 			ctx.revertCurID = rev && rev.revid;
-			if (!ctx.revertCurID) {
-				ctx.statusElement.error('未能获取当前修订版本ID。');
-				ctx.onLoadFailure(this);
+			if ( !ctx.revertCurID ) {
+				ctx.statusElement.error( "未能获取当前修订版本ID。" );
+				ctx.onLoadFailure( this );
 				return;
 			}
 			ctx.revertUser = rev && rev.user;
-			if (!ctx.revertUser) {
-				if (rev && rev.userhidden) {
+			if ( !ctx.revertUser ) {
+				if ( rev && rev.userhidden ) {
 					// username was RevDel'd or oversighted
-					ctx.revertUser = '<用户名已隐藏>';
+					ctx.revertUser = "<用户名已隐藏>";
 				} else {
-					ctx.statusElement.error('未能获取此修订版本的编辑者。');
-					ctx.onLoadFailure(this);
+					ctx.statusElement.error( "未能获取此修订版本的编辑者。" );
+					ctx.onLoadFailure( this );
 					return;
 				}
 			}
 			// set revert edit summary
-			ctx.editSummary = '[[QW:UNDO|撤销]]由 ' + ctx.revertUser + ' 所做出的' + '修订 ' + ctx.revertOldID + '：' + ctx.editSummary;
+			ctx.editSummary = `[[QW:UNDO|撤销]]由 ${ctx.revertUser} 所做出的` + `修订 ${ctx.revertOldID}：${ctx.editSummary}`;
 		}
 		ctx.pageLoaded = true;
 
 		// alert("Generate edit conflict now");  // for testing edit conflict recovery logic
-		ctx.onLoadSuccess(this); // invoke callback
+		ctx.onLoadSuccess( this ); // invoke callback
 	};
 
 	// helper function to parse the page name returned from the API
-	var fnCheckPageName = function fnCheckPageName(response, onFailure) {
-		if (!onFailure) {
+	var fnCheckPageName = function fnCheckPageName( response, onFailure ) {
+		if ( !onFailure ) {
 			onFailure = emptyFunction;
 		}
-		var page = response.pages && response.pages[0];
-		if (page) {
+		var page = response.pages && response.pages[ 0 ];
+		if ( page ) {
 			// check for invalid titles
-			if (page.invalid) {
-				ctx.statusElement.error('标题不合法：' + ctx.pageName);
-				onFailure(this);
+			if ( page.invalid ) {
+				ctx.statusElement.error( `标题不合法：${ctx.pageName}` );
+				onFailure( this );
 				return false; // abort
 			}
 
 			// retrieve actual title of the page after normalization and redirects
 			var resolvedName = page.title;
-			if (response.redirects) {
+			if ( response.redirects ) {
 				// check for cross-namespace redirect:
-				var origNs = new mw.Title(ctx.pageName).namespace;
-				var newNs = new mw.Title(resolvedName).namespace;
-				if (origNs !== newNs && !ctx.followCrossNsRedirect) {
-					ctx.statusElement.error(ctx.pageName + '是跨命名空间重定向到' + resolvedName + '，略过');
-					onFailure(this);
+				var origNs = new mw.Title( ctx.pageName ).namespace;
+				var newNs = new mw.Title( resolvedName ).namespace;
+				if ( origNs !== newNs && !ctx.followCrossNsRedirect ) {
+					ctx.statusElement.error( `${ctx.pageName}是跨命名空间重定向到${resolvedName}，略过` );
+					onFailure( this );
 					return false;
 				}
 
 				// only notify user for redirects, not normalization
-				new Morebits.status('信息', '从 ' + ctx.pageName + ' 重定向到 ' + resolvedName);
+				new Morebits.status( "信息", `从 ${ctx.pageName} 重定向到 ${resolvedName}` );
 			}
 			ctx.pageName = resolvedName; // update to redirect target or normalized name
 		} else {
 			// could be a circular redirect or other problem
-			ctx.statusElement.error('不能解析页面的重定向：' + ctx.pageName);
-			onFailure(this);
+			ctx.statusElement.error( `不能解析页面的重定向：${ctx.pageName}` );
+			onFailure( this );
 
 			// force error to stay on the screen
 			++Morebits.wiki.numberOfActionsLeft;
@@ -3748,23 +3732,23 @@ Morebits.wiki.page = function (pageName, status) {
 	 * @returns {boolean}
 	 */
 	var fnApplyWatchlistExpiry = function fnApplyWatchlistExpiry() {
-		if (ctx.watchlistExpiry) {
-			if (!ctx.watched || Morebits.string.isInfinity(ctx.watchlistExpiry)) {
+		if ( ctx.watchlistExpiry ) {
+			if ( !ctx.watched || Morebits.string.isInfinity( ctx.watchlistExpiry ) ) {
 				return true;
-			} else if (typeof ctx.watched === 'string') {
+			} else if ( typeof ctx.watched === "string" ) {
 				var newExpiry;
 				// Attempt to determine if the new expiry is a
 				// relative (e.g. `1 month`) or absolute datetime
-				var rel = ctx.watchlistExpiry.split(' ');
+				var rel = ctx.watchlistExpiry.split( " " );
 				try {
-					newExpiry = new Morebits.date().add(rel[0], rel[1]);
-				} catch (e) {
-					newExpiry = new Morebits.date(ctx.watchlistExpiry);
+					newExpiry = new Morebits.date().add( rel[ 0 ], rel[ 1 ] );
+				} catch ( e ) {
+					newExpiry = new Morebits.date( ctx.watchlistExpiry );
 				}
 
 				// If the date is valid, only use it if it extends the current expiry
-				if (newExpiry.isValid()) {
-					if (newExpiry.isAfter(new Morebits.date(ctx.watched))) {
+				if ( newExpiry.isValid() ) {
+					if ( newExpiry.isAfter( new Morebits.date( ctx.watched ) ) ) {
 						return true;
 					}
 				} else {
@@ -3780,19 +3764,19 @@ Morebits.wiki.page = function (pageName, status) {
 
 	// callback from saveApi.post()
 	var fnSaveSuccess = function fnSaveSuccess() {
-		ctx.editMode = 'all'; // cancel append/prepend/newSection/revert modes
+		ctx.editMode = "all"; // cancel append/prepend/newSection/revert modes
 		var response = ctx.saveApi.getResponse();
 
 		// see if the API thinks we were successful
-		if (response.edit.result === 'Success') {
+		if ( response.edit.result === "Success" ) {
 			// real success
 			// default on success action - display link for edited page
-			var link = document.createElement('a');
-			link.setAttribute('href', mw.util.getUrl(ctx.pageName));
-			link.appendChild(document.createTextNode(ctx.pageName));
-			ctx.statusElement.info([ '完成（', link, '）' ]);
-			if (ctx.onSaveSuccess) {
-				ctx.onSaveSuccess(this); // invoke callback
+			var link = document.createElement( "a" );
+			link.setAttribute( "href", mw.util.getUrl( ctx.pageName ) );
+			link.appendChild( document.createTextNode( ctx.pageName ) );
+			ctx.statusElement.info( [ "完成（", link, "）" ] );
+			if ( ctx.onSaveSuccess ) {
+				ctx.onSaveSuccess( this ); // invoke callback
 			}
 
 			return;
@@ -3800,15 +3784,15 @@ Morebits.wiki.page = function (pageName, status) {
 
 		// errors here are only generated by extensions which hook APIEditBeforeSave within MediaWiki,
 		// which as of 1.34.0-wmf.23 (Sept 2019) should only encompass captcha messages
-		if (response.edit.captcha) {
-			ctx.statusElement.error('不能保存页面，因服务器要求您输入验证码。');
+		if ( response.edit.captcha ) {
+			ctx.statusElement.error( "不能保存页面，因服务器要求您输入验证码。" );
 		} else {
-			ctx.statusElement.error('保存页面时由API得到未知错误');
+			ctx.statusElement.error( "保存页面时由API得到未知错误" );
 		}
 
 		// force error to stay on the screen
 		++Morebits.wiki.numberOfActionsLeft;
-		ctx.onSaveFailure(this);
+		ctx.onSaveFailure( this );
 	};
 
 	// callback from saveApi.post()
@@ -3816,143 +3800,143 @@ Morebits.wiki.page = function (pageName, status) {
 		var errorCode = ctx.saveApi.getErrorCode();
 
 		// check for edit conflict
-		if (errorCode === 'editconflict' && ctx.conflictRetries++ < ctx.maxConflictRetries) {
+		if ( errorCode === "editconflict" && ctx.conflictRetries++ < ctx.maxConflictRetries ) {
 			// edit conflicts can occur when the page needs to be purged from the server cache
 			var purgeQuery = {
-				action: 'purge',
+				action: "purge",
 				titles: ctx.pageName // redirects are already resolved
 			};
 
-			var purgeApi = new Morebits.wiki.api('检测到编辑冲突，正在更新服务器缓存', purgeQuery, function () {
+			var purgeApi = new Morebits.wiki.api( "检测到编辑冲突，正在更新服务器缓存", purgeQuery, () => {
 				--Morebits.wiki.numberOfActionsLeft; // allow for normal completion if retry succeeds
 
-				ctx.statusElement.info('检测到编辑冲突，重试修改');
-				if (fnCanUseMwUserToken('edit')) {
+				ctx.statusElement.info( "检测到编辑冲突，重试修改" );
+				if ( fnCanUseMwUserToken( "edit" ) ) {
 					ctx.saveApi.post(); // necessarily append, prepend, or newSection, so this should work as desired
 				} else {
 					ctx.loadApi.post(); // reload the page and reapply the edit
 				}
-			}, ctx.statusElement);
+			}, ctx.statusElement );
 			purgeApi.post();
 
 			// check for network or server error
-		} else if ((errorCode === null || errorCode === undefined) && ctx.retries++ < ctx.maxRetries) {
+		} else if ( ( errorCode === null || errorCode === undefined ) && ctx.retries++ < ctx.maxRetries ) {
 			// the error might be transient, so try again
-			ctx.statusElement.info('保存失败，在2秒后重试…');
+			ctx.statusElement.info( "保存失败，在2秒后重试…" );
 			--Morebits.wiki.numberOfActionsLeft; // allow for normal completion if retry succeeds
 
 			// wait for sometime for client to regain connectivity
-			sleep(2000).then(function () {
+			sleep( 2000 ).then( () => {
 				ctx.saveApi.post(); // give it another go!
-			});
+			} );
 
 			// hard error, give up
 		} else {
 			var response = ctx.saveApi.getResponse();
 			var errorData = response.error ||
-        // bc error format
-        response.errors[0].data; // html/wikitext/plaintext error format
+					// bc error format
+					response.errors[ 0 ].data; // html/wikitext/plaintext error format
 
-			switch (errorCode) {
-				case 'protectedpage':
+			switch ( errorCode ) {
+				case "protectedpage":
 					// non-admin attempting to edit a protected page - this gives a friendlier message than the default
-					ctx.statusElement.error('不能保存修改：页面被保护');
+					ctx.statusElement.error( "不能保存修改：页面被保护" );
 					break;
-				case 'abusefilter-disallowed':
-					ctx.statusElement.error('编辑被防滥用过滤器规则“' + errorData.abusefilter.description + '”阻止；如果您认为您的该次编辑是有意义的，请至“Qiuwen:防滥用过滤器”提报。');
+				case "abusefilter-disallowed":
+					ctx.statusElement.error( `编辑被防滥用过滤器规则“${errorData.abusefilter.description}”阻止；如果您认为您的该次编辑是有意义的，请至“Qiuwen:防滥用过滤器”提报。` );
 					break;
-				case 'abusefilter-warning':
-					ctx.statusElement.error([ '编辑被防滥用过滤器规则“', errorData.abusefilter.description, '”警告；如果您仍希望做出该编辑，请尝试重新提交——根据过滤器的设置，您可能仍可以作出此编辑；如果您认为您的该次编辑是有意义的，请至“Qiuwen:防滥用过滤器”提报。' ]);
+				case "abusefilter-warning":
+					ctx.statusElement.error( [ "编辑被防滥用过滤器规则“", errorData.abusefilter.description, "”警告；如果您仍希望做出该编辑，请尝试重新提交——根据过滤器的设置，您可能仍可以作出此编辑；如果您认为您的该次编辑是有意义的，请至“Qiuwen:防滥用过滤器”提报。" ] );
 					// We should provide the user with a way to automatically retry the action if they so choose -
 					// I can't see how to do this without creating a UI dependency on Morebits.wiki.page though -- TTO
 					break;
-				case 'spamblacklist':
+				case "spamblacklist":
 					// If multiple items are blacklisted, we only return the first
-					var spam = errorData.spamblacklist.matches[0];
-					ctx.statusElement.error('不能保存页面，因URL ' + spam + ' 在垃圾链接黑名单中。');
+					var spam = errorData.spamblacklist.matches[ 0 ];
+					ctx.statusElement.error( `不能保存页面，因URL ${spam} 在垃圾链接黑名单中。` );
 					break;
 				default:
-					ctx.statusElement.error('不能保存修改：' + ctx.saveApi.getErrorText());
+					ctx.statusElement.error( `不能保存修改：${ctx.saveApi.getErrorText()}` );
 			}
-			ctx.editMode = 'all'; // cancel append/prepend/newSection/revert modes
-			if (ctx.onSaveFailure) {
-				ctx.onSaveFailure(this); // invoke callback
+			ctx.editMode = "all"; // cancel append/prepend/newSection/revert modes
+			if ( ctx.onSaveFailure ) {
+				ctx.onSaveFailure( this ); // invoke callback
 			}
 		}
 	};
 
-	var isTextRedirect = function isTextRedirect(text) {
-		if (!text) {
+	var isTextRedirect = function isTextRedirect( text ) {
+		if ( !text ) {
 			// no text - content empty or inaccessible (revdelled or suppressed)
 			return false;
 		}
-		return Morebits.l10n.redirectTagAliases.some(function (tag) {
-			return new RegExp('^\\s*' + tag + '\\W', 'i').test(text);
-		});
+		return Morebits.l10n.redirectTagAliases.some( ( tag ) => {
+			return new RegExp( `^\\s*${tag}\\W`, "i" ).test( text );
+		} );
 	};
 	var fnLookupCreationSuccess = function fnLookupCreationSuccess() {
 		var response = ctx.lookupCreationApi.getResponse().query;
-		if (!fnCheckPageName(response, ctx.onLookupCreationFailure)) {
+		if ( !fnCheckPageName( response, ctx.onLookupCreationFailure ) ) {
 			return; // abort
 		}
 
-		var rev = response.pages[0].revisions && response.pages[0].revisions[0];
-		if (!rev) {
-			ctx.statusElement.error('无法找到' + ctx.pageName + '的任何修订版本');
-			ctx.onLookupCreationFailure(this);
+		var rev = response.pages[ 0 ].revisions && response.pages[ 0 ].revisions[ 0 ];
+		if ( !rev ) {
+			ctx.statusElement.error( `无法找到${ctx.pageName}的任何修订版本` );
+			ctx.onLookupCreationFailure( this );
 			return;
 		}
-		if (!ctx.lookupNonRedirectCreator || !isTextRedirect(rev.content)) {
+		if ( !ctx.lookupNonRedirectCreator || !isTextRedirect( rev.content ) ) {
 			ctx.creator = rev.user;
-			if (!ctx.creator) {
-				ctx.statusElement.error('无法获取页面创建者的名字');
-				ctx.onLookupCreationFailure(this);
+			if ( !ctx.creator ) {
+				ctx.statusElement.error( "无法获取页面创建者的名字" );
+				ctx.onLookupCreationFailure( this );
 				return;
 			}
 			ctx.timestamp = rev.timestamp;
-			if (!ctx.timestamp) {
-				ctx.statusElement.error('无法获取页面创建时间');
-				ctx.onLookupCreationFailure(this);
+			if ( !ctx.timestamp ) {
+				ctx.statusElement.error( "无法获取页面创建时间" );
+				ctx.onLookupCreationFailure( this );
 				return;
 			}
-			ctx.statusElement.info('已获取页面创建信息');
-			ctx.onLookupCreationSuccess(this);
+			ctx.statusElement.info( "已获取页面创建信息" );
+			ctx.onLookupCreationSuccess( this );
 		} else {
 			ctx.lookupCreationApi.query.rvlimit = 50; // modify previous query to fetch more revisions
 			ctx.lookupCreationApi.query.titles = ctx.pageName; // update pageName if redirect resolution took place in earlier query
 
-			ctx.lookupCreationApi = new Morebits.wiki.api('获取页面创建信息', ctx.lookupCreationApi.query, fnLookupNonRedirectCreator, ctx.statusElement, ctx.onLookupCreationFailure);
-			ctx.lookupCreationApi.setParent(this);
+			ctx.lookupCreationApi = new Morebits.wiki.api( "获取页面创建信息", ctx.lookupCreationApi.query, fnLookupNonRedirectCreator, ctx.statusElement, ctx.onLookupCreationFailure );
+			ctx.lookupCreationApi.setParent( this );
 			ctx.lookupCreationApi.post();
 		}
 	};
 	var fnLookupNonRedirectCreator = function fnLookupNonRedirectCreator() {
 		var response = ctx.lookupCreationApi.getResponse().query;
-		var revs = response.pages[0].revisions;
-		for (var i = 0; i < revs.length; i++) {
-			if (!isTextRedirect(revs[i].content)) {
-				ctx.creator = revs[i].user;
-				ctx.timestamp = revs[i].timestamp;
+		var revs = response.pages[ 0 ].revisions;
+		for ( var i = 0; i < revs.length; i++ ) {
+			if ( !isTextRedirect( revs[ i ].content ) ) {
+				ctx.creator = revs[ i ].user;
+				ctx.timestamp = revs[ i ].timestamp;
 				break;
 			}
 		}
-		if (!ctx.creator) {
+		if ( !ctx.creator ) {
 			// fallback to give first revision author if no non-redirect version in the first 50
-			ctx.creator = revs[0].user;
-			ctx.timestamp = revs[0].timestamp;
-			if (!ctx.creator) {
-				ctx.statusElement.error('无法获取页面创建者的名字');
-				ctx.onLookupCreationFailure(this);
+			ctx.creator = revs[ 0 ].user;
+			ctx.timestamp = revs[ 0 ].timestamp;
+			if ( !ctx.creator ) {
+				ctx.statusElement.error( "无法获取页面创建者的名字" );
+				ctx.onLookupCreationFailure( this );
 				return;
 			}
 		}
-		if (!ctx.timestamp) {
-			ctx.statusElement.error('无法获取页面创建时间');
-			ctx.onLookupCreationFailure(this);
+		if ( !ctx.timestamp ) {
+			ctx.statusElement.error( "无法获取页面创建时间" );
+			ctx.onLookupCreationFailure( this );
 			return;
 		}
-		ctx.statusElement.info('已获取页面创建信息');
-		ctx.onLookupCreationSuccess(this);
+		ctx.statusElement.info( "已获取页面创建信息" );
+		ctx.onLookupCreationSuccess( this );
 	};
 
 	/**
@@ -3963,16 +3947,16 @@ Morebits.wiki.page = function (pageName, status) {
 	 * @param {string} onFailure - Failure callback.
 	 * @returns {boolean}
 	 */
-	var fnPreflightChecks = function fnPreflightChecks(action, onFailure) {
+	var fnPreflightChecks = function fnPreflightChecks( action, onFailure ) {
 		// if a non-admin tries to do this, don't bother
-		if (!Morebits.userIsSysop && action !== 'move') {
-			ctx.statusElement.error('无法对页面进行“' + action + '”操作：只有管理员可以进行此操作');
-			onFailure(this);
+		if ( !Morebits.userIsSysop && action !== "move" ) {
+			ctx.statusElement.error( `无法对页面进行“${action}”操作：只有管理员可以进行此操作` );
+			onFailure( this );
 			return false;
 		}
-		if (!ctx.editSummary) {
-			ctx.statusElement.error('Internal error: ' + action + ' reason not set (use setEditSummary function)!');
-			onFailure(this);
+		if ( !ctx.editSummary ) {
+			ctx.statusElement.error( `Internal error: ${action} reason not set (use setEditSummary function)!` );
+			onFailure( this );
 			return false;
 		}
 		return true; // all OK
@@ -3987,39 +3971,39 @@ Morebits.wiki.page = function (pageName, status) {
 	 * @param {string} response - The response document from the API call.
 	 * @returns {boolean}
 	 */
-	var fnProcessChecks = function fnProcessChecks(action, onFailure, response) {
-		var missing = response.pages[0].missing;
+	var fnProcessChecks = function fnProcessChecks( action, onFailure, response ) {
+		var missing = response.pages[ 0 ].missing;
 
 		// No undelete as an existing page could have deleted revisions
-		var actionMissing = missing && [ 'delete', 'move' ].indexOf(action) !== -1;
-		var protectMissing = action === 'protect' && missing && (ctx.protectEdit || ctx.protectMove);
-		var saltMissing = action === 'protect' && !missing && ctx.protectCreate;
-		if (actionMissing || protectMissing || saltMissing) {
-			ctx.statusElement.error('无法对页面进行“' + action + '”操作，因为页面' + (missing ? '已不' : '已经') + '存在');
-			onFailure(this);
+		var actionMissing = missing && [ "delete", "move" ].indexOf( action ) !== -1;
+		var protectMissing = action === "protect" && missing && ( ctx.protectEdit || ctx.protectMove );
+		var saltMissing = action === "protect" && !missing && ctx.protectCreate;
+		if ( actionMissing || protectMissing || saltMissing ) {
+			ctx.statusElement.error( `无法对页面进行“${action}”操作，因为页面${missing ? "已不" : "已经"}存在` );
+			onFailure( this );
 			return false;
 		}
 
 		// Delete, undelete, move
 		// extract protection info
 		var editprot;
-		if (action === 'undelete') {
-			editprot = response.pages[0].protection.filter(function (pr) {
-				return pr.type === 'create' && pr.level === 'sysop';
-			}).pop();
-		} else if (action === 'delete' || action === 'move') {
-			editprot = response.pages[0].protection.filter(function (pr) {
-				return pr.type === 'edit' && pr.level === 'sysop';
-			}).pop();
+		if ( action === "undelete" ) {
+			editprot = response.pages[ 0 ].protection.filter( ( pr ) => {
+				return pr.type === "create" && pr.level === "sysop";
+			} ).pop();
+		} else if ( action === "delete" || action === "move" ) {
+			editprot = response.pages[ 0 ].protection.filter( ( pr ) => {
+				return pr.type === "edit" && pr.level === "sysop";
+			} ).pop();
 		}
-		if (editprot && !ctx.suppressProtectWarning && !confirm('您即将对全保护页面“' + ctx.pageName + (editprot.expiry === 'infinity' ? '”（永久）' : '”（到期：' + new Morebits.date(editprot.expiry).calendar('utc') + ' (UTC)）') + '”进行“' + action + '”操作' + '。\n\n单击确定以继续操作，或单击取消以取消操作。')) {
-			ctx.statusElement.error('已取消对全保护页面的操作。');
-			onFailure(this);
+		if ( editprot && !ctx.suppressProtectWarning && !confirm( `您即将对全保护页面“${ctx.pageName}${editprot.expiry === "infinity" ? "”（永久）" : `”（到期：${new Morebits.date( editprot.expiry ).calendar( "utc" )} (UTC)）`}”进行“${action}”操作` + "。\n\n单击确定以继续操作，或单击取消以取消操作。" ) ) {
+			ctx.statusElement.error( "已取消对全保护页面的操作。" );
+			onFailure( this );
 			return false;
 		}
-		if (!response.tokens.csrftoken) {
-			ctx.statusElement.error('无法获取令牌。');
-			onFailure(this);
+		if ( !response.tokens.csrftoken ) {
+			ctx.statusElement.error( "无法获取令牌。" );
+			onFailure( this );
 			return false;
 		}
 		return true; // all OK
@@ -4027,116 +4011,116 @@ Morebits.wiki.page = function (pageName, status) {
 
 	var fnProcessMove = function fnProcessMove() {
 		var pageTitle, token;
-		if (fnCanUseMwUserToken('move')) {
-			token = mw.user.tokens.get('csrfToken');
+		if ( fnCanUseMwUserToken( "move" ) ) {
+			token = mw.user.tokens.get( "csrfToken" );
 			pageTitle = ctx.pageName;
 		} else {
 			var response = ctx.moveApi.getResponse().query;
-			if (!fnProcessChecks('move', ctx.onMoveFailure, response)) {
+			if ( !fnProcessChecks( "move", ctx.onMoveFailure, response ) ) {
 				return; // abort
 			}
 
 			token = response.tokens.csrftoken;
-			var page = response.pages[0];
+			var page = response.pages[ 0 ];
 			pageTitle = page.title;
 			ctx.watched = page.watchlistexpiry || page.watched;
 		}
 		var query = {
-			action: 'move',
+			action: "move",
 			from: pageTitle,
 			to: ctx.moveDestination,
 			token: token,
 			reason: ctx.editSummary,
 			watchlist: ctx.watchlistOption,
-			format: 'json'
+			format: "json"
 		};
-		if (ctx.changeTags) {
+		if ( ctx.changeTags ) {
 			query.tags = ctx.changeTags;
 		}
-		if (fnApplyWatchlistExpiry()) {
+		if ( fnApplyWatchlistExpiry() ) {
 			query.watchlistexpiry = ctx.watchlistExpiry;
 		}
-		if (ctx.moveTalkPage) {
-			query.movetalk = 'true';
+		if ( ctx.moveTalkPage ) {
+			query.movetalk = "true";
 		}
-		if (ctx.moveSubpages) {
-			query.movesubpages = 'true';
+		if ( ctx.moveSubpages ) {
+			query.movesubpages = "true";
 		}
-		if (ctx.moveSuppressRedirect) {
-			query.noredirect = 'true';
+		if ( ctx.moveSuppressRedirect ) {
+			query.noredirect = "true";
 		}
-		ctx.moveProcessApi = new Morebits.wiki.api('移动页面…', query, ctx.onMoveSuccess, ctx.statusElement, ctx.onMoveFailure);
-		ctx.moveProcessApi.setParent(this);
+		ctx.moveProcessApi = new Morebits.wiki.api( "移动页面…", query, ctx.onMoveSuccess, ctx.statusElement, ctx.onMoveFailure );
+		ctx.moveProcessApi.setParent( this );
 		ctx.moveProcessApi.post();
 	};
 	var fnProcessPatrol = function fnProcessPatrol() {
 		var query = {
-			action: 'patrol',
-			format: 'json'
+			action: "patrol",
+			format: "json"
 		};
 
 		// Didn't need to load the page
-		if (ctx.rcid) {
+		if ( ctx.rcid ) {
 			query.rcid = ctx.rcid;
-			query.token = mw.user.tokens.get('patrolToken');
+			query.token = mw.user.tokens.get( "patrolToken" );
 		} else {
 			var response = ctx.patrolApi.getResponse().query;
 
 			// Don't patrol if not unpatrolled
-			if (!response.recentchanges[0].unpatrolled) {
+			if ( !response.recentchanges[ 0 ].unpatrolled ) {
 				return;
 			}
-			var lastrevid = response.pages[0].lastrevid;
-			if (!lastrevid) {
+			var lastrevid = response.pages[ 0 ].lastrevid;
+			if ( !lastrevid ) {
 				return;
 			}
 			query.revid = lastrevid;
 			var token = response.tokens.csrftoken;
-			if (!token) {
+			if ( !token ) {
 				return;
 			}
 			query.token = token;
 		}
-		if (ctx.changeTags) {
+		if ( ctx.changeTags ) {
 			query.tags = ctx.changeTags;
 		}
-		var patrolStat = new Morebits.status('标记页面为已巡查');
-		ctx.patrolProcessApi = new Morebits.wiki.api('巡查页面…', query, null, patrolStat);
-		ctx.patrolProcessApi.setParent(this);
+		var patrolStat = new Morebits.status( "标记页面为已巡查" );
+		ctx.patrolProcessApi = new Morebits.wiki.api( "巡查页面…", query, null, patrolStat );
+		ctx.patrolProcessApi.setParent( this );
 		ctx.patrolProcessApi.post();
 	};
 	var fnProcessDelete = function fnProcessDelete() {
 		var pageTitle, token;
-		if (fnCanUseMwUserToken('delete')) {
-			token = mw.user.tokens.get('csrfToken');
+		if ( fnCanUseMwUserToken( "delete" ) ) {
+			token = mw.user.tokens.get( "csrfToken" );
 			pageTitle = ctx.pageName;
 		} else {
 			var response = ctx.deleteApi.getResponse().query;
-			if (!fnProcessChecks('delete', ctx.onDeleteFailure, response)) {
+			if ( !fnProcessChecks( "delete", ctx.onDeleteFailure, response ) ) {
 				return; // abort
 			}
 
 			token = response.tokens.csrftoken;
-			var page = response.pages[0];
+			var page = response.pages[ 0 ];
 			pageTitle = page.title;
 			ctx.watched = page.watchlistexpiry || page.watched;
 		}
 		var query = {
-			action: 'delete',
+			action: "delete",
 			title: pageTitle,
 			token: token,
 			reason: ctx.editSummary,
 			watchlist: ctx.watchlistOption,
-			format: 'json'
+			format: "json"
 		};
-		if (ctx.changeTags) {
+		if ( ctx.changeTags ) {
 			query.tags = ctx.changeTags;
 		}
-		if (fnApplyWatchlistExpiry()) {
+		if ( fnApplyWatchlistExpiry() ) {
 			query.watchlistexpiry = ctx.watchlistExpiry;
 		}
-		ctx.deleteProcessApi = new Morebits.wiki.api('删除页面…', query, ctx.onDeleteSuccess, ctx.statusElement, fnProcessDeleteError);
-		ctx.deleteProcessApi.setParent(this);
+		ctx.deleteProcessApi = new Morebits.wiki.api( "删除页面…", query, ctx.onDeleteSuccess, ctx.statusElement, fnProcessDeleteError );
+		ctx.deleteProcessApi.setParent( this );
 		ctx.deleteProcessApi.post();
 	};
 
@@ -4145,56 +4129,56 @@ Morebits.wiki.page = function (pageName, status) {
 		var errorCode = ctx.deleteProcessApi.getErrorCode();
 
 		// check for "Database query error"
-		if (errorCode === 'internal_api_error_DBQueryError' && ctx.retries++ < ctx.maxRetries) {
-			ctx.statusElement.info('数据库查询错误，重试');
+		if ( errorCode === "internal_api_error_DBQueryError" && ctx.retries++ < ctx.maxRetries ) {
+			ctx.statusElement.info( "数据库查询错误，重试" );
 			--Morebits.wiki.numberOfActionsLeft; // allow for normal completion if retry succeeds
 			ctx.deleteProcessApi.post(); // give it another go!
-		} else if (errorCode === 'missingtitle') {
-			ctx.statusElement.error('不能删除页面，因其已不存在');
-			if (ctx.onDeleteFailure) {
-				ctx.onDeleteFailure.call(this, ctx.deleteProcessApi); // invoke callback
+		} else if ( errorCode === "missingtitle" ) {
+			ctx.statusElement.error( "不能删除页面，因其已不存在" );
+			if ( ctx.onDeleteFailure ) {
+				ctx.onDeleteFailure.call( this, ctx.deleteProcessApi ); // invoke callback
 			}
 			// hard error, give up
 		} else {
-			ctx.statusElement.error('无法删除页面：' + ctx.deleteProcessApi.getErrorText());
-			if (ctx.onDeleteFailure) {
-				ctx.onDeleteFailure.call(this, ctx.deleteProcessApi); // invoke callback
+			ctx.statusElement.error( `无法删除页面：${ctx.deleteProcessApi.getErrorText()}` );
+			if ( ctx.onDeleteFailure ) {
+				ctx.onDeleteFailure.call( this, ctx.deleteProcessApi ); // invoke callback
 			}
 		}
 	};
 
 	var fnProcessUndelete = function fnProcessUndelete() {
 		var pageTitle, token;
-		if (fnCanUseMwUserToken('undelete')) {
-			token = mw.user.tokens.get('csrfToken');
+		if ( fnCanUseMwUserToken( "undelete" ) ) {
+			token = mw.user.tokens.get( "csrfToken" );
 			pageTitle = ctx.pageName;
 		} else {
 			var response = ctx.undeleteApi.getResponse().query;
-			if (!fnProcessChecks('undelete', ctx.onUndeleteFailure, response)) {
+			if ( !fnProcessChecks( "undelete", ctx.onUndeleteFailure, response ) ) {
 				return; // abort
 			}
 
 			token = response.tokens.csrftoken;
-			var page = response.pages[0];
+			var page = response.pages[ 0 ];
 			pageTitle = page.title;
 			ctx.watched = page.watchlistexpiry || page.watched;
 		}
 		var query = {
-			action: 'undelete',
+			action: "undelete",
 			title: pageTitle,
 			token: token,
 			reason: ctx.editSummary,
 			watchlist: ctx.watchlistOption,
-			format: 'json'
+			format: "json"
 		};
-		if (ctx.changeTags) {
+		if ( ctx.changeTags ) {
 			query.tags = ctx.changeTags;
 		}
-		if (fnApplyWatchlistExpiry()) {
+		if ( fnApplyWatchlistExpiry() ) {
 			query.watchlistexpiry = ctx.watchlistExpiry;
 		}
-		ctx.undeleteProcessApi = new Morebits.wiki.api('还原页面…', query, ctx.onUndeleteSuccess, ctx.statusElement, fnProcessUndeleteError);
-		ctx.undeleteProcessApi.setParent(this);
+		ctx.undeleteProcessApi = new Morebits.wiki.api( "还原页面…", query, ctx.onUndeleteSuccess, ctx.statusElement, fnProcessUndeleteError );
+		ctx.undeleteProcessApi.setParent( this );
 		ctx.undeleteProcessApi.post();
 	};
 
@@ -4203,70 +4187,70 @@ Morebits.wiki.page = function (pageName, status) {
 		var errorCode = ctx.undeleteProcessApi.getErrorCode();
 
 		// check for "Database query error"
-		if (errorCode === 'internal_api_error_DBQueryError') {
-			if (ctx.retries++ < ctx.maxRetries) {
-				ctx.statusElement.info('数据库查询错误，重试');
+		if ( errorCode === "internal_api_error_DBQueryError" ) {
+			if ( ctx.retries++ < ctx.maxRetries ) {
+				ctx.statusElement.info( "数据库查询错误，重试" );
 				--Morebits.wiki.numberOfActionsLeft; // allow for normal completion if retry succeeds
 				ctx.undeleteProcessApi.post(); // give it another go!
 			} else {
-				ctx.statusElement.error('持续的数据库查询错误，重新加载页面并重试');
-				if (ctx.onUndeleteFailure) {
-					ctx.onUndeleteFailure.call(this, ctx.undeleteProcessApi); // invoke callback
+				ctx.statusElement.error( "持续的数据库查询错误，重新加载页面并重试" );
+				if ( ctx.onUndeleteFailure ) {
+					ctx.onUndeleteFailure.call( this, ctx.undeleteProcessApi ); // invoke callback
 				}
 			}
-		} else if (errorCode === 'cantundelete') {
-			ctx.statusElement.error('无法还原删除页面，因没有版本供还原或已被还原');
-			if (ctx.onUndeleteFailure) {
-				ctx.onUndeleteFailure.call(this, ctx.undeleteProcessApi); // invoke callback
+		} else if ( errorCode === "cantundelete" ) {
+			ctx.statusElement.error( "无法还原删除页面，因没有版本供还原或已被还原" );
+			if ( ctx.onUndeleteFailure ) {
+				ctx.onUndeleteFailure.call( this, ctx.undeleteProcessApi ); // invoke callback
 			}
 			// hard error, give up
 		} else {
-			ctx.statusElement.error('无法还原页面：' + ctx.undeleteProcessApi.getErrorText());
-			if (ctx.onUndeleteFailure) {
-				ctx.onUndeleteFailure.call(this, ctx.undeleteProcessApi); // invoke callback
+			ctx.statusElement.error( `无法还原页面：${ctx.undeleteProcessApi.getErrorText()}` );
+			if ( ctx.onUndeleteFailure ) {
+				ctx.onUndeleteFailure.call( this, ctx.undeleteProcessApi ); // invoke callback
 			}
 		}
 	};
 
 	var fnProcessProtect = function fnProcessProtect() {
 		var response = ctx.protectApi.getResponse().query;
-		if (!fnProcessChecks('protect', ctx.onProtectFailure, response)) {
+		if ( !fnProcessChecks( "protect", ctx.onProtectFailure, response ) ) {
 			return; // abort
 		}
 
 		var token = response.tokens.csrftoken;
-		var page = response.pages[0];
+		var page = response.pages[ 0 ];
 		var pageTitle = page.title;
 		ctx.watched = page.watchlistexpiry || page.watched;
 
 		// Fetch existing protection levels
-		var prs = response.pages[0].protection;
+		var prs = response.pages[ 0 ].protection;
 		var editprot, moveprot, createprot;
-		prs.forEach(function (pr) {
+		prs.forEach( ( pr ) => {
 			// Filter out protection from cascading
-			if (pr.type === 'edit' && !pr.source) {
+			if ( pr.type === "edit" && !pr.source ) {
 				editprot = pr;
-			} else if (pr.type === 'move') {
+			} else if ( pr.type === "move" ) {
 				moveprot = pr;
-			} else if (pr.type === 'create') {
+			} else if ( pr.type === "create" ) {
 				createprot = pr;
 			}
-		});
+		} );
 
 		// Fall back to current levels if not explicitly set
-		if (!ctx.protectEdit && editprot) {
+		if ( !ctx.protectEdit && editprot ) {
 			ctx.protectEdit = {
 				level: editprot.level,
 				expiry: editprot.expiry
 			};
 		}
-		if (!ctx.protectMove && moveprot) {
+		if ( !ctx.protectMove && moveprot ) {
 			ctx.protectMove = {
 				level: moveprot.level,
 				expiry: moveprot.expiry
 			};
 		}
-		if (!ctx.protectCreate && createprot) {
+		if ( !ctx.protectCreate && createprot ) {
 			ctx.protectCreate = {
 				level: createprot.level,
 				expiry: createprot.expiry
@@ -4274,83 +4258,81 @@ Morebits.wiki.page = function (pageName, status) {
 		}
 
 		// Default to pre-existing cascading protection if unchanged (similar to above)
-		if (ctx.protectCascade === null) {
-			ctx.protectCascade = !!prs.filter(function (pr) {
+		if ( ctx.protectCascade === null ) {
+			ctx.protectCascade = !!prs.filter( ( pr ) => {
 				return pr.cascade;
-			}).length;
+			} ).length;
 		}
 		// Warn if cascading protection being applied with an invalid protection level,
 		// which for edit protection will cause cascading to be silently stripped
-		if (ctx.protectCascade === null) {
-			ctx.protectCascade = !!prs.filter(function (pr) {
+		if ( ctx.protectCascade === null ) {
+			ctx.protectCascade = !!prs.filter( ( pr ) => {
 				return pr.cascade;
-			}).length;
+			} ).length;
 		}
-		if (ctx.protectCascade) {
+		if ( ctx.protectCascade ) {
 			// On move protection, this is technically stricter than the MW API,
 			// but seems reasonable to avoid dumb values and misleading log entries (T265626)
-			if ((!ctx.protectEdit || ctx.protectEdit.level !== 'sysop' || !ctx.protectMove || ctx.protectMove.level !== 'sysop') && !confirm('您已对“' + ctx.pageName + '”启用了连锁保护' + '，但没有设置仅管理员的保护级别。\n\n' + '单击确认以自动调整并继续连锁全保护，单击取消以跳过此操作')) {
-				ctx.statusElement.error('连锁保护已取消。');
-				ctx.onProtectFailure(this);
+			if ( ( !ctx.protectEdit || ctx.protectEdit.level !== "sysop" || !ctx.protectMove || ctx.protectMove.level !== "sysop" ) && !confirm( `您已对“${ctx.pageName}”启用了连锁保护` + "，但没有设置仅管理员的保护级别。\n\n" + "单击确认以自动调整并继续连锁全保护，单击取消以跳过此操作" ) ) {
+				ctx.statusElement.error( "连锁保护已取消。" );
+				ctx.onProtectFailure( this );
 				return;
 			}
-			ctx.protectEdit.level = 'sysop';
-			ctx.protectMove.level = 'sysop';
+			ctx.protectEdit.level = "sysop";
+			ctx.protectMove.level = "sysop";
 		}
 
 		// Build protection levels and expirys (expiries?) for query
-		var protections = [],
-			expirys = [];
-		if (ctx.protectEdit) {
-			protections.push('edit=' + ctx.protectEdit.level);
-			expirys.push(ctx.protectEdit.expiry);
+		var protections = [], expirys = [];
+		if ( ctx.protectEdit ) {
+			protections.push( `edit=${ctx.protectEdit.level}` );
+			expirys.push( ctx.protectEdit.expiry );
 		}
-		if (ctx.protectMove) {
-			protections.push('move=' + ctx.protectMove.level);
-			expirys.push(ctx.protectMove.expiry);
+		if ( ctx.protectMove ) {
+			protections.push( `move=${ctx.protectMove.level}` );
+			expirys.push( ctx.protectMove.expiry );
 		}
-		if (ctx.protectCreate) {
-			protections.push('create=' + ctx.protectCreate.level);
-			expirys.push(ctx.protectCreate.expiry);
+		if ( ctx.protectCreate ) {
+			protections.push( `create=${ctx.protectCreate.level}` );
+			expirys.push( ctx.protectCreate.expiry );
 		}
 		var query = {
-			action: 'protect',
+			action: "protect",
 			title: pageTitle,
 			token: token,
-			protections: protections.join('|'),
-			expiry: expirys.join('|'),
+			protections: protections.join( "|" ),
+			expiry: expirys.join( "|" ),
 			reason: ctx.editSummary,
 			watchlist: ctx.watchlistOption,
-			format: 'json'
+			format: "json"
 		};
-		// Only shows up in logs, not page history [[phab:T259983]]
-		if (ctx.changeTags) {
+			// Only shows up in logs, not page history [[phab:T259983]]
+		if ( ctx.changeTags ) {
 			query.tags = ctx.changeTags;
 		}
-		if (fnApplyWatchlistExpiry()) {
+		if ( fnApplyWatchlistExpiry() ) {
 			query.watchlistexpiry = ctx.watchlistExpiry;
 		}
-		if (ctx.protectCascade) {
-			query.cascade = 'true';
+		if ( ctx.protectCascade ) {
+			query.cascade = "true";
 		}
-		ctx.protectProcessApi = new Morebits.wiki.api('保护页面…', query, ctx.onProtectSuccess, ctx.statusElement, ctx.onProtectFailure);
-		ctx.protectProcessApi.setParent(this);
+		ctx.protectProcessApi = new Morebits.wiki.api( "保护页面…", query, ctx.onProtectSuccess, ctx.statusElement, ctx.onProtectFailure );
+		ctx.protectProcessApi.setParent( this );
 		ctx.protectProcessApi.post();
 	};
-	var sleep = function sleep(milliseconds) {
+	var sleep = function sleep( milliseconds ) {
 		var deferred = $.Deferred();
-		setTimeout(deferred.resolve, milliseconds);
+		setTimeout( deferred.resolve, milliseconds );
 		return deferred;
 	};
 }; // end Morebits.wiki.page
 
 /* Morebits.wiki.page TODO: (XXX)
-   * - Should we retry loads also?
-   * - Need to reset current action before the save?
-   * - Deal with action.completed stuff
-   * - Need to reset all parameters once done (e.g. edit summary, move destination, etc.)
-   */
-
+	   * - Should we retry loads also?
+	   * - Need to reset current action before the save?
+	   * - Deal with action.completed stuff
+	   * - Need to reset all parameters once done (e.g. edit summary, move destination, etc.)
+	   */
 /* **************** Morebits.wiki.preview **************** */
 /**
  * Use the API to parse a fragment of wikitext and render it as HTML.
@@ -4366,9 +4348,9 @@ Morebits.wiki.page = function (pageName, status) {
  * @param {HTMLElement} previewbox - The element that will contain the rendered HTML,
  * usually a <div> element.
  */
-Morebits.wiki.preview = function (previewbox) {
+Morebits.wiki.preview = function ( previewbox ) {
 	this.previewbox = previewbox;
-	$(previewbox).addClass('morebits-previewbox').hide();
+	$( previewbox ).addClass( "morebits-previewbox" ).hide();
 
 	/**
 	 * Displays the preview box, and begins an asynchronous attempt
@@ -4379,20 +4361,20 @@ Morebits.wiki.preview = function (previewbox) {
 	 * @param {string} [sectionTitle] - If provided, render the text as a new section using this as the title.
 	 * @returns {jQuery.promise}
 	 */
-	this.beginRender = function (wikitext, pageTitle, sectionTitle) {
-		$(previewbox).show();
-		var statusspan = document.createElement('span');
-		previewbox.appendChild(statusspan);
-		Morebits.status.init(statusspan);
+	this.beginRender = function ( wikitext, pageTitle, sectionTitle ) {
+		$( previewbox ).show();
+		var statusspan = document.createElement( "span" );
+		previewbox.appendChild( statusspan );
+		Morebits.status.init( statusspan );
 
 		// 如果页面不是wikitext（例如用户js/css等），那么找一个wikitext页面来预览。
-		var pageName = mw.config.get('wgPageName');
-		if (mw.config.get('wgPageContentModel') !== 'wikitext') {
-			pageName = 'Draft:' + pageName;
+		var pageName = mw.config.get( "wgPageName" );
+		if ( mw.config.get( "wgPageContentModel" ) !== "wikitext" ) {
+			pageName = `Draft:${pageName}`;
 		}
 		var query = {
-			action: 'parse',
-			prop: [ 'text', 'modules' ],
+			action: "parse",
+			prop: [ "text", "modules" ],
 			pst: true,
 			// PST = pre-save transform; this makes substitution work properly
 			preview: true,
@@ -4401,40 +4383,39 @@ Morebits.wiki.preview = function (previewbox) {
 			// zhwiki
 			disablelimitreport: true,
 			disableeditsection: true,
-			uselang: mw.config.get('wgUserLanguage'),
+			uselang: mw.config.get( "wgUserLanguage" ),
 			// Use wgUserLanguage for preview
-			format: 'json'
+			format: "json"
 		};
-		if (sectionTitle) {
-			query.section = 'new';
+		if ( sectionTitle ) {
+			query.section = "new";
 			query.sectiontitle = sectionTitle;
 		}
-		var renderApi = new Morebits.wiki.api('加载中…', query, fnRenderSuccess, new Morebits.status('预览'));
+		var renderApi = new Morebits.wiki.api( "加载中…", query, fnRenderSuccess, new Morebits.status( "预览" ) );
 		renderApi.post();
 	};
-	var fnRenderSuccess = function fnRenderSuccess(apiobj) {
+	var fnRenderSuccess = function fnRenderSuccess( apiobj ) {
 		var response = apiobj.getResponse();
 		var html = response.parse.text;
-		if (!html) {
-			apiobj.statelem.error('加载预览失败，或模板为空');
+		if ( !html ) {
+			apiobj.statelem.error( "加载预览失败，或模板为空" );
 			return;
 		}
 		previewbox.innerHTML = html;
-		mw.loader.load(response.parse.modulestyles);
-		mw.loader.load(response.parse.modules);
+		mw.loader.load( response.parse.modulestyles );
+		mw.loader.load( response.parse.modules );
 
 		// this makes links open in new tab
-		$(previewbox).find('a').attr('target', '_blank');
+		$( previewbox ).find( "a" ).attr( "target", "_blank" );
 	};
 
 	/** Hides the preview box and clears it. */
 	this.closePreview = function () {
-		$(previewbox).empty().hide();
+		$( previewbox ).empty().hide();
 	};
 };
 
 /* **************** Morebits.wikitext **************** */
-
 /**
  * Wikitext manipulation.
  *
@@ -4451,15 +4432,15 @@ Morebits.wikitext = {};
  * @param {number} [start=0] - Index noting where in the text the template begins.
  * @returns {Object} `{name: templateName, parameters: {key: value}}`.
  */
-Morebits.wikitext.parseTemplate = function (text, start) {
+Morebits.wikitext.parseTemplate = function ( text, start ) {
 	start = start || 0;
 	var level = []; // Track of how deep we are ({{, {{{, or [[)
 	var count = -1; // Number of parameters found
 	var unnamed = 0; // Keep track of what number an unnamed parameter should receive
 	var equals = -1; // After finding "=" before a parameter, the index; otherwise, -1
-	var current = '';
+	var current = "";
 	var result = {
-		name: '',
+		name: "",
 		parameters: {}
 	};
 	var key, value;
@@ -4470,77 +4451,77 @@ Morebits.wikitext.parseTemplate = function (text, start) {
 	 * @param {boolean} [final=false] - Whether this is the final
 	 * parameter and we need to remove the trailing `}}`.
 	 */
-	function findParam(final) {
+	function findParam( final ) {
 		// Nothing found yet, this must be the template name
-		if (count === -1) {
-			result.name = current.substring(2).trim();
+		if ( count === -1 ) {
+			result.name = current.slice( 2 ).trim();
 			++count;
 		} else {
 			// In a parameter
-			if (equals !== -1) {
+			if ( equals !== -1 ) {
 				// We found an equals, so save the parameter as key: value
-				key = current.substring(0, equals).trim();
-				value = final ? current.substring(equals + 1, current.length - 2).trim() : current.substring(equals + 1).trim();
-				result.parameters[key] = value;
+				key = current.slice( 0, Math.max( 0, equals ) ).trim();
+				value = final ? current.substring( equals + 1, current.length - 2 ).trim() : current.slice( Math.max( 0, equals + 1 ) ).trim();
+				result.parameters[ key ] = value;
 				equals = -1;
 			} else {
 				// No equals, so it must be unnamed; no trim since whitespace allowed
-				var param = final ? current.substring(equals + 1, current.length - 2) : current;
-				if (param) {
-					result.parameters[++unnamed] = param;
+				var param = final ? current.substring( equals + 1, current.length - 2 ) : current;
+				if ( param ) {
+					result.parameters[ ++unnamed ] = param;
 					++count;
 				}
 			}
 		}
 	}
-	for (var i = start; i < text.length; ++i) {
-		var test3 = text.substr(i, 3);
-		if (test3 === '{{{' || test3 === '}}}' && level[level.length - 1] === 3) {
+	for ( var i = start; i < text.length; ++i ) {
+		var test3 = text.substr( i, 3 );
+		if ( test3 === "{{{" || test3 === "}}}" && level[ level.length - 1 ] === 3 ) {
 			current += test3;
 			i += 2;
-			if (test3 === '{{{') {
-				level.push(3);
+			if ( test3 === "{{{" ) {
+				level.push( 3 );
 			} else {
 				level.pop();
 			}
 			continue;
 		}
-		var test2 = text.substr(i, 2);
+		var test2 = text.substr( i, 2 );
 		// Entering a template (or link)
-		if (test2 === '{{' || test2 === '[[') {
+		if ( test2 === "{{" || test2 === "[[" ) {
 			current += test2;
 			++i;
-			if (test2 === '{{') {
-				level.push(2);
+			if ( test2 === "{{" ) {
+				level.push( 2 );
 			} else {
-				level.push('wl');
+				level.push( "wl" );
 			}
 			continue;
 		}
 		// Either leaving a link or template/parser function
-		if (test2 === '}}' && level[level.length - 1] === 2 || test2 === ']]' && level[level.length - 1] === 'wl') {
+		if ( test2 === "}}" && level[ level.length - 1 ] === 2 || test2 === "]]" && level[ level.length - 1 ] === "wl" ) {
 			current += test2;
 			++i;
 			level.pop();
 
 			// Find the final parameter if this really is the end
-			if (test2 === '}}' && level.length === 0) {
-				findParam(true);
+			if ( test2 === "}}" && level.length === 0 ) {
+				findParam( true );
 				break;
 			}
 			continue;
 		}
-		if (text.charAt(i) === '|' && level.length === 1) {
+		if ( text.charAt( i ) === "|" && level.length === 1 ) {
 			// Another pipe found, toplevel, so parameter coming up!
 			findParam();
-			current = '';
-		} else if (equals === -1 && text.charAt(i) === '=' && level.length === 1) {
+			current = "";
+		} else if ( equals === -1 && text.charAt( i ) === "=" && level.length === 1 ) {
 			// Equals found, toplevel
 			equals = current.length;
-			current += text.charAt(i);
+			current += text.charAt( i );
 		} else {
 			// Just advance the position
-			current += text.charAt(i);
+			current += text.charAt( i );
 		}
 	}
 	return result;
@@ -4553,34 +4534,34 @@ Morebits.wikitext.parseTemplate = function (text, start) {
  * @memberof Morebits.wikitext
  * @param {string} text - Wikitext to be manipulated.
  */
-Morebits.wikitext.page = function mediawikiPage(text) {
+Morebits.wikitext.page = function mediawikiPage( text ) {
 	this.text = text;
 };
 Morebits.wikitext.page.prototype = {
-	text: '',
+	text: "",
 	/**
 	 * Removes links to `link_target` from the page text.
 	 *
 	 * @param {string} link_target
 	 * @returns {Morebits.wikitext.page}
 	 */
-	removeLink: function removeLink(link_target) {
-		var mwTitle = mw.Title.newFromText(link_target);
+	removeLink: function removeLink( link_target ) {
+		var mwTitle = mw.Title.newFromText( link_target );
 		var namespaceID = mwTitle.getNamespaceId();
 		var title = mwTitle.getMainText();
-		var link_regex_string = '';
-		if (namespaceID !== 0) {
-			link_regex_string = Morebits.namespaceRegex(namespaceID) + ':';
+		var link_regex_string = "";
+		if ( namespaceID !== 0 ) {
+			link_regex_string = `${Morebits.namespaceRegex( namespaceID )}:`;
 		}
-		link_regex_string += Morebits.pageNameRegex(title);
+		link_regex_string += Morebits.pageNameRegex( title );
 
 		// For most namespaces, unlink both [[User:Test]] and [[:User:Test]]
 		// For files and categories, only unlink [[:Category:Test]]. Do not unlink [[Category:Test]]
-		var isFileOrCategory = [ 6, 14 ].indexOf(namespaceID) !== -1;
-		var colon = isFileOrCategory ? ':' : ':?';
-		var simple_link_regex = new RegExp('\\[\\[' + colon + '(' + link_regex_string + ')\\]\\]', 'g');
-		var piped_link_regex = new RegExp('\\[\\[' + colon + link_regex_string + '\\|(.+?)\\]\\]', 'g');
-		this.text = this.text.replace(simple_link_regex, '$1').replace(piped_link_regex, '$1');
+		var isFileOrCategory = [ 6, 14 ].indexOf( namespaceID ) !== -1;
+		var colon = isFileOrCategory ? ":" : ":?";
+		var simple_link_regex = new RegExp( `\\[\\[${colon}(${link_regex_string})\\]\\]`, "g" );
+		var piped_link_regex = new RegExp( `\\[\\[${colon}${link_regex_string}\\|(.+?)\\]\\]`, "g" );
+		this.text = this.text.replace( simple_link_regex, "$1" ).replace( piped_link_regex, "$1" );
 		return this;
 	},
 	/**
@@ -4591,38 +4572,38 @@ Morebits.wikitext.page.prototype = {
 	 * @param {string} [reason] - Reason to be included in comment, alongside the commented-out image.
 	 * @returns {Morebits.wikitext.page}
 	 */
-	commentOutImage: function commentOutImage(image, reason) {
-		var unbinder = new Morebits.unbinder(this.text);
-		unbinder.unbind('<!--', '-->');
-		reason = reason ? reason + ': ' : '';
-		var image_re_string = Morebits.pageNameRegex(image);
+	commentOutImage: function commentOutImage( image, reason ) {
+		var unbinder = new Morebits.unbinder( this.text );
+		unbinder.unbind( "<!--", "-->" );
+		reason = reason ? `${reason}: ` : "";
+		var image_re_string = Morebits.pageNameRegex( image );
 
 		// Check for normal image links, i.e. [[File:Foobar.png|...]]
 		// Will eat the whole link
-		var links_re = new RegExp('\\[\\[' + Morebits.namespaceRegex(6) + ':\\s*' + image_re_string + '\\s*[\\|(?:\\]\\])]');
-		var allLinks = Morebits.string.splitWeightedByKeys(unbinder.content, '[[', ']]');
-		for (var i = 0; i < allLinks.length; ++i) {
-			if (links_re.test(allLinks[i])) {
-				var replacement = '<!-- ' + reason + allLinks[i] + ' -->';
-				unbinder.content = unbinder.content.replace(allLinks[i], replacement);
+		var links_re = new RegExp( `\\[\\[${Morebits.namespaceRegex( 6 )}:\\s*${image_re_string}\\s*[\\|(?:\\]\\])]` );
+		var allLinks = Morebits.string.splitWeightedByKeys( unbinder.content, "[[", "]]" );
+		for ( var i = 0; i < allLinks.length; ++i ) {
+			if ( links_re.test( allLinks[ i ] ) ) {
+				var replacement = `<!-- ${reason}${allLinks[ i ]} -->`;
+				unbinder.content = unbinder.content.replace( allLinks[ i ], replacement );
 				// unbind the newly created comments
-				unbinder.unbind('<!--', '-->');
+				unbinder.unbind( "<!--", "-->" );
 			}
 		}
 
 		// Check for gallery images, i.e. instances that must start on a new line,
 		// eventually preceded with some space, and must include File: prefix
 		// Will eat the whole line.
-		var gallery_image_re = new RegExp('(^\\s*' + Morebits.namespaceRegex(6) + ':\\s*' + image_re_string + '\\s*(?:\\|.*?$|$))', 'mg');
-		unbinder.content = unbinder.content.replace(gallery_image_re, '<!-- ' + reason + '$1 -->');
+		var gallery_image_re = new RegExp( `(^\\s*${Morebits.namespaceRegex( 6 )}:\\s*${image_re_string}\\s*(?:\\|.*?$|$))`, "mg" );
+		unbinder.content = unbinder.content.replace( gallery_image_re, `<!-- ${reason}$1 -->` );
 
 		// unbind the newly created comments
-		unbinder.unbind('<!--', '-->');
+		unbinder.unbind( "<!--", "-->" );
 
 		// Check free image usages, for example as template arguments, might have the File: prefix excluded, but must be preceded by an |
 		// Will only eat the image name and the preceding bar and an eventual named parameter
-		var free_image_re = new RegExp('(\\|\\s*(?:[\\w\\s]+\\=)?\\s*(?:' + Morebits.namespaceRegex(6) + ':\\s*)?' + image_re_string + ')', 'mg');
-		unbinder.content = unbinder.content.replace(free_image_re, '<!-- ' + reason + '$1 -->');
+		var free_image_re = new RegExp( `(\\|\\s*(?:[\\w\\s]+\\=)?\\s*(?:${Morebits.namespaceRegex( 6 )}:\\s*)?${image_re_string})`, "mg" );
+		unbinder.content = unbinder.content.replace( free_image_re, `<!-- ${reason}$1 -->` );
 		// Rebind the content now, we are done!
 		this.text = unbinder.rebind();
 		return this;
@@ -4634,21 +4615,21 @@ Morebits.wikitext.page.prototype = {
 	 * @param {string} data - The display options.
 	 * @returns {Morebits.wikitext.page}
 	 */
-	addToImageComment: function addToImageComment(image, data) {
-		var image_re_string = Morebits.pageNameRegex(image);
-		var links_re = new RegExp('\\[\\[' + Morebits.namespaceRegex(6) + ':\\s*' + image_re_string + '\\s*[\\|(?:\\]\\])]');
-		var allLinks = Morebits.string.splitWeightedByKeys(this.text, '[[', ']]');
-		for (var i = 0; i < allLinks.length; ++i) {
-			if (links_re.test(allLinks[i])) {
-				var replacement = allLinks[i];
+	addToImageComment: function addToImageComment( image, data ) {
+		var image_re_string = Morebits.pageNameRegex( image );
+		var links_re = new RegExp( `\\[\\[${Morebits.namespaceRegex( 6 )}:\\s*${image_re_string}\\s*[\\|(?:\\]\\])]` );
+		var allLinks = Morebits.string.splitWeightedByKeys( this.text, "[[", "]]" );
+		for ( var i = 0; i < allLinks.length; ++i ) {
+			if ( links_re.test( allLinks[ i ] ) ) {
+				var replacement = allLinks[ i ];
 				// just put it at the end?
-				replacement = replacement.replace(/\]\]$/, '|' + data + ']]');
-				this.text = this.text.replace(allLinks[i], replacement);
+				replacement = replacement.replace( /\]\]$/, `|${data}]]` );
+				this.text = this.text.replace( allLinks[ i ], replacement );
 			}
 		}
-		var gallery_re = new RegExp('^(\\s*' + image_re_string + '.*?)\\|?(.*?)$', 'mg');
-		var newtext = '$1|$2 ' + data;
-		this.text = this.text.replace(gallery_re, newtext);
+		var gallery_re = new RegExp( `^(\\s*${image_re_string}.*?)\\|?(.*?)$`, "mg" );
+		var newtext = `$1|$2 ${data}`;
+		this.text = this.text.replace( gallery_re, newtext );
 		return this;
 	},
 	/**
@@ -4658,13 +4639,13 @@ Morebits.wikitext.page.prototype = {
 	 * include namespace prefix only if not in template namespace.
 	 * @returns {Morebits.wikitext.page}
 	 */
-	removeTemplate: function removeTemplate(template) {
-		var template_re_string = Morebits.pageNameRegex(template);
-		var links_re = new RegExp('\\{\\{(?:' + Morebits.namespaceRegex(10) + ':)?\\s*' + template_re_string + '\\s*[\\|(?:\\}\\})]');
-		var allTemplates = Morebits.string.splitWeightedByKeys(this.text, '{{', '}}', [ '{{{', '}}}' ]);
-		for (var i = 0; i < allTemplates.length; ++i) {
-			if (links_re.test(allTemplates[i])) {
-				this.text = this.text.replace(allTemplates[i], '');
+	removeTemplate: function removeTemplate( template ) {
+		var template_re_string = Morebits.pageNameRegex( template );
+		var links_re = new RegExp( `\\{\\{(?:${Morebits.namespaceRegex( 10 )}:)?\\s*${template_re_string}\\s*[\\|(?:\\}\\})]` );
+		var allTemplates = Morebits.string.splitWeightedByKeys( this.text, "{{", "}}", [ "{{{", "}}}" ] );
+		for ( var i = 0; i < allTemplates.length; ++i ) {
+			if ( links_re.test( allTemplates[ i ] ) ) {
+				this.text = this.text.replace( allTemplates[ i ], "" );
 			}
 		}
 		return this;
@@ -4683,51 +4664,51 @@ Morebits.wikitext.page.prototype = {
 	 * before any template matches (i.e. before `{{`), such as html comments.
 	 * @returns {Morebits.wikitext.page}
 	 */
-	insertAfterTemplates: function insertAfterTemplates(tag, regex, flags, preRegex) {
-		if (typeof tag === 'undefined') {
-			throw new Error('No tag provided');
+	insertAfterTemplates: function insertAfterTemplates( tag, regex, flags, preRegex ) {
+		if ( typeof tag === "undefined" ) {
+			throw new Error( "No tag provided" );
 		}
 
 		// .length is only a property of strings and arrays so we
 		// shouldn't need to check type
-		if (typeof regex === 'undefined' || !regex.length) {
-			throw new Error('No regex provided');
-		} else if (Array.isArray(regex)) {
-			regex = regex.join('|');
+		if ( typeof regex === "undefined" || !regex.length ) {
+			throw new Error( "No regex provided" );
+		} else if ( Array.isArray( regex ) ) {
+			regex = regex.join( "|" );
 		}
-		if (typeof flags !== 'string') {
-			flags = 'i';
+		if ( typeof flags !== "string" ) {
+			flags = "i";
 		}
-		if (!preRegex || !preRegex.length) {
-			preRegex = '';
-		} else if (Array.isArray(preRegex)) {
-			preRegex = preRegex.join('|');
+		if ( !preRegex || !preRegex.length ) {
+			preRegex = "";
+		} else if ( Array.isArray( preRegex ) ) {
+			preRegex = preRegex.join( "|" );
 		}
 
 		// Regex is extra complicated to allow for templates with
 		// parameters and to handle whitespace properly
-		this.text = this.text.replace(new RegExp(
+		this.text = this.text.replace( new RegExp(
 			// leading whitespace
-			'^\\s*' +
-      // capture template(s)
-      '(?:((?:\\s*' +
-      // Pre-template regex, such as leading html comments
-      preRegex + '|' +
-      // begin template format
-      '\\{\\{\\s*(?:' +
-      // Template regex
-      regex +
-      // end main template name, optionally with a number
-      // Probably remove the (?:) though
-      ')\\d*\\s*' +
-      // template parameters
-      '(\\|(?:\\{\\{[^{}]*\\}\\}|[^{}])*)?' +
-      // end template format
-      '\\}\\})+' +
-      // end capture
-      '(?:\\s*\\n)?)' +
-      // trailing whitespace
-      '\\s*)?', flags), '$1' + tag);
+			"^\\s*" +
+				// capture template(s)
+				`(?:((?:\\s*${
+				// Pre-template regex, such as leading html comments
+					preRegex}|` +
+				// begin template format
+				`\\{\\{\\s*(?:${
+				// Template regex
+					regex
+				// end main template name, optionally with a number
+				// Probably remove the (?:) though
+				})\\d*\\s*` +
+				// template parameters
+				"(\\|(?:\\{\\{[^{}]*\\}\\}|[^{}])*)?" +
+				// end template format
+				"\\}\\})+" +
+				// end capture
+				"(?:\\s*\\n)?)" +
+				// trailing whitespace
+				"\\s*)?", flags ), `$1${tag}` );
 		return this;
 	},
 	/**
@@ -4749,23 +4730,23 @@ Morebits.wikitext.page.prototype = {
  * @class
  * @param {string} logPageName - Title of the subpage of the current user's log.
  */
-Morebits.userspaceLogger = function (logPageName) {
-	if (!logPageName) {
-		throw new Error('no log page name specified');
+Morebits.userspaceLogger = function ( logPageName ) {
+	if ( !logPageName ) {
+		throw new Error( "no log page name specified" );
 	}
 	/**
 	 * The text to prefix the log with upon creation, defaults to empty.
 	 *
 	 * @type {string}
 	 */
-	this.initialText = '';
+	this.initialText = "";
 	/**
 	 * The header level to use for months, defaults to 3 (`===`).
 	 *
 	 * @type {number}
 	 */
 	this.headerLevel = 3;
-	this.changeTags = '';
+	this.changeTags = "";
 
 	/**
 	 * Log the entry.
@@ -4774,27 +4755,27 @@ Morebits.userspaceLogger = function (logPageName) {
 	 * @param {string} summaryText - Edit summary.
 	 * @returns {@jQuery.Promise}
 	 */
-	this.log = function (logText, summaryText) {
+	this.log = function ( logText, summaryText ) {
 		var def = $.Deferred();
-		if (!logText) {
+		if ( !logText ) {
 			return def.reject();
 		}
-		var page = new Morebits.wiki.page('User:' + mw.config.get('wgUserName') + '/' + logPageName, '将项目加入到用户空间日志'); // make this '... to ' + logPageName ?
-		page.load(function (pageobj) {
+		var page = new Morebits.wiki.page( `User:${mw.config.get( "wgUserName" )}/${logPageName}`, "将项目加入到用户空间日志" ); // make this '... to ' + logPageName ?
+		page.load( ( pageobj ) => {
 			// add blurb if log page doesn't exist or is blank
 			var text = pageobj.getPageText() || this.initialText;
 
 			// create monthly header if it doesn't exist already
-			var date = new Morebits.date(pageobj.getLoadTime());
-			if (!date.monthHeaderRegex().exec(text)) {
-				text += '\n\n' + date.monthHeader(this.headerLevel);
+			var date = new Morebits.date( pageobj.getLoadTime() );
+			if ( !date.monthHeaderRegex().exec( text ) ) {
+				text += `\n\n${date.monthHeader( this.headerLevel )}`;
 			}
-			pageobj.setPageText(text + '\n' + logText);
-			pageobj.setEditSummary(summaryText);
-			pageobj.setChangeTags(this.changeTags);
-			pageobj.setCreateOption('recreate');
-			pageobj.save(def.resolve, def.reject);
-		}.bind(this));
+			pageobj.setPageText( `${text}\n${logText}` );
+			pageobj.setEditSummary( summaryText );
+			pageobj.setChangeTags( this.changeTags );
+			pageobj.setCreateOption( "recreate" );
+			pageobj.save( def.resolve, def.reject );
+		} );
 		return def;
 	};
 };
@@ -4813,14 +4794,13 @@ Morebits.userspaceLogger = function (logPageName) {
  * line, allowable values are: `status` (blue), `info` (green), `warn` (red),
  * or `error` (bold red).
  */
-
-Morebits.status = function Status(text, stat, type) {
+Morebits.status = function Status( text, stat, type ) {
 	this.textRaw = text;
-	this.text = Morebits.createHtml(text);
-	this.type = type || 'status';
+	this.text = Morebits.createHtml( text );
+	this.type = type || "status";
 	this.generate();
-	if (stat) {
-		this.update(stat, type);
+	if ( stat ) {
+		this.update( stat, type );
 	}
 };
 
@@ -4831,12 +4811,12 @@ Morebits.status = function Status(text, stat, type) {
  * @param {HTMLElement} root - Usually a div element.
  * @throws If `root` is not an `HTMLElement`.
  */
-Morebits.status.init = function (root) {
-	if (!(root instanceof Element)) {
-		throw new Error('object not an instance of Element');
+Morebits.status.init = function ( root ) {
+	if ( !( root instanceof Element ) ) {
+		throw new Error( "object not an instance of Element" );
 	}
-	while (root.hasChildNodes()) {
-		root.removeChild(root.firstChild);
+	while ( root.hasChildNodes() ) {
+		root.removeChild( root.firstChild );
 	}
 	Morebits.status.root = root;
 	Morebits.status.errorEvent = null;
@@ -4848,11 +4828,11 @@ Morebits.status.root = null;
  * @param {Function} handler - Function to execute on error.
  * @throws When `handler` is not a function.
  */
-Morebits.status.onError = function (handler) {
-	if (typeof handler === 'function') {
+Morebits.status.onError = function ( handler ) {
+	if ( typeof handler === "function" ) {
 		Morebits.status.errorEvent = handler;
 	} else {
-		throw 'Morebits.status.onError: handler is not a function';
+		throw "Morebits.status.onError: handler is not a function";
 	}
 };
 Morebits.status.prototype = {
@@ -4860,21 +4840,21 @@ Morebits.status.prototype = {
 	statRaw: null,
 	text: null,
 	textRaw: null,
-	type: 'status',
+	type: "status",
 	target: null,
 	node: null,
 	linked: false,
 	/** Add the status element node to the DOM. */
 	link: function link() {
-		if (!this.linked && Morebits.status.root) {
-			Morebits.status.root.appendChild(this.node);
+		if ( !this.linked && Morebits.status.root ) {
+			Morebits.status.root.appendChild( this.node );
 			this.linked = true;
 		}
 	},
 	/** Remove the status element node from the DOM. */
 	unlink: function unlink() {
-		if (this.linked) {
-			Morebits.status.root.removeChild(this.node);
+		if ( this.linked ) {
+			Morebits.status.root.removeChild( this.node );
 			this.linked = false;
 		}
 	},
@@ -4885,22 +4865,22 @@ Morebits.status.prototype = {
 	 * @param {string} type - 'status' (blue), 'info' (green), 'warn'
 	 * (red), or 'error' (bold red).
 	 */
-	update: function update(status, type) {
+	update: function update( status, type ) {
 		this.statRaw = status;
-		this.stat = Morebits.createHtml(status);
-		if (type) {
+		this.stat = Morebits.createHtml( status );
+		if ( type ) {
 			this.type = type;
-			if (type === 'error') {
+			if ( type === "error" ) {
 				// hack to force the page not to reload when an error is output - see also Morebits.status() above
 				Morebits.wiki.numberOfActionsLeft = 1000;
 
 				// call error callback
-				if (Morebits.status.errorEvent) {
+				if ( Morebits.status.errorEvent ) {
 					Morebits.status.errorEvent();
 				}
 
 				// also log error messages in the browser console
-				console.error(this.textRaw + ': ' + this.statRaw); // eslint-disable-line no-console
+				console.error( `${this.textRaw}: ${this.statRaw}` );
 			}
 		}
 
@@ -4908,33 +4888,33 @@ Morebits.status.prototype = {
 	},
 	/** Produce the html for first part of the status message. */
 	generate: function generate() {
-		this.node = document.createElement('div');
-		this.node.appendChild(document.createElement('span')).appendChild(this.text);
-		this.node.appendChild(document.createElement('span')).appendChild(document.createTextNode(': '));
-		this.target = this.node.appendChild(document.createElement('span'));
-		this.target.appendChild(document.createTextNode('')); // dummy node
+		this.node = document.createElement( "div" );
+		this.node.appendChild( document.createElement( "span" ) ).appendChild( this.text );
+		this.node.appendChild( document.createElement( "span" ) ).appendChild( document.createTextNode( ": " ) );
+		this.target = this.node.appendChild( document.createElement( "span" ) );
+		this.target.appendChild( document.createTextNode( "" ) ); // dummy node
 	},
 
 	/** Complete the html, for the second part of the status message. */
 	render: function render() {
-		this.node.className = 'morebits_status_' + this.type;
-		while (this.target.hasChildNodes()) {
-			this.target.removeChild(this.target.firstChild);
+		this.node.className = `morebits_status_${this.type}`;
+		while ( this.target.hasChildNodes() ) {
+			this.target.removeChild( this.target.firstChild );
 		}
-		this.target.appendChild(this.stat);
+		this.target.appendChild( this.stat );
 		this.link();
 	},
-	status: function status(_status) {
-		this.update(_status, 'status');
+	status: function status( _status ) {
+		this.update( _status, "status" );
 	},
-	info: function info(status) {
-		this.update(status, 'info');
+	info: function info( status ) {
+		this.update( status, "info" );
 	},
-	warn: function warn(status) {
-		this.update(status, 'warn');
+	warn: function warn( status ) {
+		this.update( status, "warn" );
 	},
-	error: function error(status) {
-		this.update(status, 'error');
+	error: function error( status ) {
+		this.update( status, "error" );
 	}
 };
 /**
@@ -4943,8 +4923,8 @@ Morebits.status.prototype = {
  * @param {string} status - After colon
  * @returns {Morebits.status} - `status`-type (blue)
  */
-Morebits.status.status = function (text, status) {
-	return new Morebits.status(text, status);
+Morebits.status.status = function ( text, status ) {
+	return new Morebits.status( text, status );
 };
 /**
  * @memberof Morebits.status
@@ -4952,8 +4932,8 @@ Morebits.status.status = function (text, status) {
  * @param {string} status - After colon
  * @returns {Morebits.status} - `info`-type (green)
  */
-Morebits.status.info = function (text, status) {
-	return new Morebits.status(text, status, 'info');
+Morebits.status.info = function ( text, status ) {
+	return new Morebits.status( text, status, "info" );
 };
 /**
  * @memberof Morebits.status
@@ -4961,8 +4941,8 @@ Morebits.status.info = function (text, status) {
  * @param {string} status - After colon
  * @returns {Morebits.status} - `warn`-type (red)
  */
-Morebits.status.warn = function (text, status) {
-	return new Morebits.status(text, status, 'warn');
+Morebits.status.warn = function ( text, status ) {
+	return new Morebits.status( text, status, "warn" );
 };
 /**
  * @memberof Morebits.status
@@ -4970,8 +4950,8 @@ Morebits.status.warn = function (text, status) {
  * @param {string} status - After colon
  * @returns {Morebits.status} - `error`-type (bold red)
  */
-Morebits.status.error = function (text, status) {
-	return new Morebits.status(text, status, 'error');
+Morebits.status.error = function ( text, status ) {
+	return new Morebits.status( text, status, "error" );
 };
 
 /**
@@ -4981,12 +4961,12 @@ Morebits.status.error = function (text, status) {
  * @memberof Morebits.status
  * @param {string} text
  */
-Morebits.status.actionCompleted = function (text) {
-	var node = document.createElement('div');
-	node.appendChild(document.createElement('b')).appendChild(document.createTextNode(text));
-	node.className = 'morebits_status_info morebits_action_complete';
-	if (Morebits.status.root) {
-		Morebits.status.root.appendChild(node);
+Morebits.status.actionCompleted = function ( text ) {
+	var node = document.createElement( "div" );
+	node.appendChild( document.createElement( "b" ) ).appendChild( document.createTextNode( text ) );
+	node.className = "morebits_status_info morebits_action_complete";
+	if ( Morebits.status.root ) {
+		Morebits.status.root.appendChild( node );
 	}
 };
 
@@ -4998,16 +4978,16 @@ Morebits.status.actionCompleted = function (text) {
  * @param {string} comments
  * @param {string} message
  */
-Morebits.status.printUserText = function (comments, message) {
-	var p = document.createElement('p');
+Morebits.status.printUserText = function ( comments, message ) {
+	var p = document.createElement( "p" );
 	p.innerHTML = message;
-	var div = document.createElement('div');
-	div.className = 'toccolours';
-	div.style.marginTop = '0';
-	div.style.whiteSpace = 'pre-wrap';
+	var div = document.createElement( "div" );
+	div.className = "toccolours";
+	div.style.marginTop = "0";
+	div.style.whiteSpace = "pre-wrap";
 	div.textContent = comments;
-	p.appendChild(div);
-	Morebits.status.root.appendChild(p);
+	p.appendChild( div );
+	Morebits.status.root.appendChild( p );
 };
 
 /**
@@ -5018,12 +4998,12 @@ Morebits.status.printUserText = function (comments, message) {
  * @param {string} [color] - Font color.
  * @returns {HTMLElement}
  */
-Morebits.htmlNode = function (type, content, color) {
-	var node = document.createElement(type);
-	if (color) {
+Morebits.htmlNode = function ( type, content, color ) {
+	var node = document.createElement( type );
+	if ( color ) {
 		node.style.color = color;
 	}
-	node.appendChild(document.createTextNode(content));
+	node.appendChild( document.createTextNode( content ) );
 	return node;
 };
 
@@ -5035,43 +5015,41 @@ Morebits.htmlNode = function (type, content, color) {
  * @param jQuerySelector
  * @param jQueryContext
  */
-Morebits.checkboxShiftClickSupport = function (jQuerySelector, jQueryContext) {
+Morebits.checkboxShiftClickSupport = function ( jQuerySelector, jQueryContext ) {
 	var lastCheckbox = null;
-	function clickHandler(event) {
+	function clickHandler( event ) {
 		var thisCb = this;
-		if (event.shiftKey && lastCheckbox !== null) {
-			var cbs = $(jQuerySelector, jQueryContext); // can't cache them, obviously, if we want to support resorting
-			var index = -1,
-				lastIndex = -1,
-				i;
-			for (i = 0; i < cbs.length; i++) {
-				if (cbs[i] === thisCb) {
+		if ( event.shiftKey && lastCheckbox !== null ) {
+			var cbs = $( jQuerySelector, jQueryContext ); // can't cache them, obviously, if we want to support resorting
+			var index = -1, lastIndex = -1, i;
+			for ( i = 0; i < cbs.length; i++ ) {
+				if ( cbs[ i ] === thisCb ) {
 					index = i;
-					if (lastIndex > -1) {
+					if ( lastIndex > -1 ) {
 						break;
 					}
 				}
-				if (cbs[i] === lastCheckbox) {
+				if ( cbs[ i ] === lastCheckbox ) {
 					lastIndex = i;
-					if (index > -1) {
+					if ( index > -1 ) {
 						break;
 					}
 				}
 			}
-			if (index > -1 && lastIndex > -1) {
+			if ( index > -1 && lastIndex > -1 ) {
 				// inspired by wikibits
 				var endState = thisCb.checked;
 				var start, finish;
-				if (index < lastIndex) {
+				if ( index < lastIndex ) {
 					start = index + 1;
 					finish = lastIndex;
 				} else {
 					start = lastIndex;
 					finish = index - 1;
 				}
-				for (i = start; i <= finish; i++) {
-					if (cbs[i].checked !== endState) {
-						cbs[i].click();
+				for ( i = start; i <= finish; i++ ) {
+					if ( cbs[ i ].checked !== endState ) {
+						cbs[ i ].click();
 					}
 				}
 			}
@@ -5079,7 +5057,7 @@ Morebits.checkboxShiftClickSupport = function (jQuerySelector, jQueryContext) {
 		lastCheckbox = thisCb;
 		return true;
 	}
-	$(jQuerySelector, jQueryContext).on('click', clickHandler);
+	$( jQuerySelector, jQueryContext ).on( "click", clickHandler );
 };
 
 /* **************** Morebits.batchOperation **************** */
@@ -5120,7 +5098,7 @@ Morebits.checkboxShiftClickSupport = function (jQuerySelector, jQueryContext) {
  * @class
  * @param {string} [currentAction]
  */
-Morebits.batchOperation = function (currentAction) {
+Morebits.batchOperation = function ( currentAction ) {
 	var ctx = {
 		// backing fields for public properties
 		pageList: null,
@@ -5129,7 +5107,7 @@ Morebits.batchOperation = function (currentAction) {
 			preserveIndividualStatusLines: false
 		},
 		// internal counters, etc.
-		statusElement: new Morebits.status(currentAction || '执行批量操作'),
+		statusElement: new Morebits.status( currentAction || "执行批量操作" ),
 		worker: null,
 		// function that executes for each item in pageList
 		postFinish: null,
@@ -5153,7 +5131,7 @@ Morebits.batchOperation = function (currentAction) {
 	 * @param {Array} pageList - Array of objects over which you wish to execute the worker function
 	 * This is usually the list of page names (strings).
 	 */
-	this.setPageList = function (pageList) {
+	this.setPageList = function ( pageList ) {
 		ctx.pageList = pageList;
 	};
 
@@ -5169,8 +5147,8 @@ Morebits.batchOperation = function (currentAction) {
 	 * to be set. Should be an integer for chunkSize and a boolean for
 	 * preserveIndividualStatusLines.
 	 */
-	this.setOption = function (optionName, optionValue) {
-		ctx.options[optionName] = optionValue;
+	this.setOption = function ( optionName, optionValue ) {
+		ctx.options[ optionName ] = optionValue;
 	};
 
 	/**
@@ -5181,9 +5159,9 @@ Morebits.batchOperation = function (currentAction) {
 	 * @param {Function} worker
 	 * @param {Function} [postFinish]
 	 */
-	this.run = function (worker, postFinish) {
-		if (ctx.running) {
-			ctx.statusElement.error('批量操作已在运行');
+	this.run = function ( worker, postFinish ) {
+		if ( ctx.running ) {
+			ctx.statusElement.error( "批量操作已在运行" );
 			return;
 		}
 		ctx.running = true;
@@ -5195,21 +5173,21 @@ Morebits.batchOperation = function (currentAction) {
 		ctx.currentChunkIndex = -1;
 		ctx.pageChunks = [];
 		var total = ctx.pageList.length;
-		if (!total) {
-			ctx.statusElement.info('没有指定页面');
+		if ( !total ) {
+			ctx.statusElement.info( "没有指定页面" );
 			ctx.running = false;
-			if (ctx.postFinish) {
+			if ( ctx.postFinish ) {
 				ctx.postFinish();
 			}
 			return;
 		}
 
 		// chunk page list into more manageable units
-		ctx.pageChunks = Morebits.array.chunk(ctx.pageList, ctx.options.chunkSize);
+		ctx.pageChunks = Morebits.array.chunk( ctx.pageList, ctx.options.chunkSize );
 
 		// start the process
 		Morebits.wiki.addCheckpoint();
-		ctx.statusElement.status('0%');
+		ctx.statusElement.status( "0%" );
 		fnStartNewChunk();
 	};
 
@@ -5222,25 +5200,25 @@ Morebits.batchOperation = function (currentAction) {
 	 * If no Morebits.wiki.* object is used (e.g. you're using `mw.Api()` or something else), and
 	 * `preserveIndividualStatusLines` option is on, give the page name (string) as argument.
 	 */
-	this.workerSuccess = function (arg) {
-		if (arg instanceof Morebits.wiki.api || arg instanceof Morebits.wiki.page) {
+	this.workerSuccess = function ( arg ) {
+		if ( arg instanceof Morebits.wiki.api || arg instanceof Morebits.wiki.page ) {
 			// update or remove status line
 			var statelem = arg.getStatusElement();
-			if (ctx.options.preserveIndividualStatusLines) {
-				if (arg.getPageName || arg.pageName || arg.query && arg.query.title) {
+			if ( ctx.options.preserveIndividualStatusLines ) {
+				if ( arg.getPageName || arg.pageName || arg.query && arg.query.title ) {
 					// we know the page title - display a relevant message
 					var pageName = arg.getPageName ? arg.getPageName() : arg.pageName || arg.query.title;
-					statelem.info('完成（[[' + pageName + ']]）');
+					statelem.info( `完成（[[${pageName}]]）` );
 				} else {
 					// we don't know the page title - just display a generic message
-					statelem.info('完成');
+					statelem.info( "完成" );
 				}
 			} else {
 				// remove the status line automatically produced by Morebits.wiki.*
 				statelem.unlink();
 			}
-		} else if (typeof arg === 'string' && ctx.options.preserveIndividualStatusLines) {
-			new Morebits.status(arg, '完成（[[' + arg + ']]）');
+		} else if ( typeof arg === "string" && ctx.options.preserveIndividualStatusLines ) {
+			new Morebits.status( arg, `完成（[[${arg}]]）` );
 		}
 		ctx.countFinishedSuccess++;
 		fnDoneOne();
@@ -5250,42 +5228,41 @@ Morebits.batchOperation = function (currentAction) {
 	};
 
 	// private functions
-
 	var thisProxy = this;
 	var fnStartNewChunk = function fnStartNewChunk() {
-		var chunk = ctx.pageChunks[++ctx.currentChunkIndex];
-		if (!chunk) {
+		var chunk = ctx.pageChunks[ ++ctx.currentChunkIndex ];
+		if ( !chunk ) {
 			return; // done! yay
 		}
 
 		// start workers for the current chunk
 		ctx.countStarted += chunk.length;
-		chunk.forEach(function (page) {
-			ctx.worker(page, thisProxy);
-		});
+		chunk.forEach( ( page ) => {
+			ctx.worker( page, thisProxy );
+		} );
 	};
 	var fnDoneOne = function fnDoneOne() {
 		ctx.countFinished++;
 
 		// update overall status line
 		var total = ctx.pageList.length;
-		if (ctx.countFinished < total) {
-			var progress = Math.round(100 * ctx.countFinished / total);
-			ctx.statusElement.status(progress + '%');
+		if ( ctx.countFinished < total ) {
+			var progress = Math.round( 100 * ctx.countFinished / total );
+			ctx.statusElement.status( `${progress}%` );
 
 			// start a new chunk if we're close enough to the end of the previous chunk, and
 			// we haven't already started the next one
-			if (ctx.countFinished >= ctx.countStarted - Math.max(ctx.options.chunkSize / 10, 2) && Math.floor(ctx.countFinished / ctx.options.chunkSize) > ctx.currentChunkIndex) {
+			if ( ctx.countFinished >= ctx.countStarted - Math.max( ctx.options.chunkSize / 10, 2 ) && Math.floor( ctx.countFinished / ctx.options.chunkSize ) > ctx.currentChunkIndex ) {
 				fnStartNewChunk();
 			}
-		} else if (ctx.countFinished === total) {
-			var statusString = '完成（' + ctx.countFinishedSuccess + '/' + ctx.countFinished + '操作成功完成）';
-			if (ctx.countFinishedSuccess < ctx.countFinished) {
-				ctx.statusElement.warn(statusString);
+		} else if ( ctx.countFinished === total ) {
+			var statusString = `完成（${ctx.countFinishedSuccess}/${ctx.countFinished}操作成功完成）`;
+			if ( ctx.countFinishedSuccess < ctx.countFinished ) {
+				ctx.statusElement.warn( statusString );
 			} else {
-				ctx.statusElement.info(statusString);
+				ctx.statusElement.info( statusString );
 			}
-			if (ctx.postFinish) {
+			if ( ctx.postFinish ) {
 				ctx.postFinish();
 			}
 			Morebits.wiki.removeCheckpoint();
@@ -5293,7 +5270,7 @@ Morebits.batchOperation = function (currentAction) {
 		} else {
 			// ctx.countFinished > total
 			// just for giggles! (well, serious debugging, actually)
-			ctx.statusElement.warn('完成（多执行了' + (ctx.countFinished - total) + '次）');
+			ctx.statusElement.warn( `完成（多执行了${ctx.countFinished - total}次）` );
 			Morebits.wiki.removeCheckpoint();
 			ctx.running = false;
 		}
@@ -5311,7 +5288,7 @@ Morebits.batchOperation = function (currentAction) {
  * @memberof Morebits
  * @class
  */
-Morebits.taskManager = function (context) {
+Morebits.taskManager = function ( context ) {
 	this.taskDependencyMap = new Map();
 	this.failureCallbackMap = new Map();
 	this.deferreds = new Map();
@@ -5329,12 +5306,12 @@ Morebits.taskManager = function (context) {
 	 * @param {Function} [onFailure] - a failure callback that's run if the task or any one
 	 * of its dependencies fail.
 	 */
-	this.add = function (func, deps, onFailure) {
-		this.taskDependencyMap.set(func, deps);
-		this.failureCallbackMap.set(func, onFailure || function () {});
+	this.add = function ( func, deps, onFailure ) {
+		this.taskDependencyMap.set( func, deps );
+		this.failureCallbackMap.set( func, onFailure || ( () => { } ) );
 		var deferred = $.Deferred();
-		this.deferreds.set(func, deferred);
-		this.allDeferreds.push(deferred);
+		this.deferreds.set( func, deferred );
+		this.allDeferreds.push( deferred );
 	};
 
 	/**
@@ -5344,31 +5321,31 @@ Morebits.taskManager = function (context) {
 	 */
 	this.execute = function () {
 		var self = this; // proxy for `this` for use inside functions where `this` is something else
-		this.taskDependencyMap.forEach(function (deps, task) {
-			var dependencyPromisesArray = deps.map(function (dep) {
-				return self.deferreds.get(dep);
-			});
-			$.when.apply(self.context, dependencyPromisesArray).then(function () {
-				var result = task.apply(self.context, arguments);
-				if (result === undefined) {
+		this.taskDependencyMap.forEach( ( deps, task ) => {
+			var dependencyPromisesArray = deps.map( ( dep ) => {
+				return self.deferreds.get( dep );
+			} );
+			$.when.apply( self.context, dependencyPromisesArray ).then( function () {
+				var result = task.apply( self.context, arguments );
+				if ( result === undefined ) {
 					// maybe the function threw, or it didn't return anything
-					mw.log.error('Morebits.taskManager: task returned undefined');
-					self.deferreds.get(task).reject.apply(self.context, arguments);
-					self.failureCallbackMap.get(task).apply(self.context, []);
+					mw.log.error( "Morebits.taskManager: task returned undefined" );
+					self.deferreds.get( task ).reject.apply( self.context, arguments );
+					self.failureCallbackMap.get( task ).apply( self.context, [] );
 				}
-				result.then(function () {
-					self.deferreds.get(task).resolve.apply(self.context, arguments);
+				result.then( function () {
+					self.deferreds.get( task ).resolve.apply( self.context, arguments );
 				}, function () {
 					// task failed
-					self.deferreds.get(task).reject.apply(self.context, arguments);
-					self.failureCallbackMap.get(task).apply(self.context, arguments);
-				});
+					self.deferreds.get( task ).reject.apply( self.context, arguments );
+					self.failureCallbackMap.get( task ).apply( self.context, arguments );
+				} );
 			}, function () {
 				// one or more of the dependencies failed
-				self.failureCallbackMap.get(task).apply(self.context, arguments);
-			});
-		});
-		return $.when.apply(null, this.allDeferreds); // resolved when everything is done!
+				self.failureCallbackMap.get( task ).apply( self.context, arguments );
+			} );
+		} );
+		return $.when.apply( null, this.allDeferreds ); // resolved when everything is done!
 	};
 };
 
@@ -5381,60 +5358,60 @@ Morebits.taskManager = function (context) {
  * @param {number} width
  * @param {number} height - The maximum allowable height for the content area.
  */
-Morebits.simpleWindow = function SimpleWindow(width, height) {
-	var content = document.createElement('div');
+Morebits.simpleWindow = function SimpleWindow( width, height ) {
+	var content = document.createElement( "div" );
 	this.content = content;
-	content.className = 'morebits-dialog-content';
-	content.id = 'morebits-dialog-content-' + Math.round(Math.random() * 1e15);
+	content.className = "morebits-dialog-content";
+	content.id = `morebits-dialog-content-${Math.round( Math.random() * 1e15 )}`;
 	this.height = height;
-	$(this.content).dialog({
+	$( this.content ).dialog( {
 		autoOpen: false,
 		buttons: {
-			'Placeholder button': function PlaceholderButton() {}
+			"Placeholder button": function PlaceholderButton() { }
 		},
-		dialogClass: 'morebits-dialog',
-		width: Math.min(parseInt(window.innerWidth, 10), parseInt(width || 800, 10)),
+		dialogClass: "morebits-dialog",
+		width: Math.min( parseInt( window.innerWidth, 10 ), parseInt( width || 800, 10 ) ),
 		// give jQuery the given height value (which represents the anticipated height of the dialog) here, so
 		// it can position the dialog appropriately
 		// the 20 pixels represents adjustment for the extra height of the jQuery dialog "chrome", compared
 		// to that of the old SimpleWindow
 		height: height + 20,
-		close: function close(event) {
+		close: function close( event ) {
 			// dialogs and their content can be destroyed once closed
-			$(event.target).dialog('destroy').remove();
+			$( event.target ).dialog( "destroy" ).remove();
 		},
 		resizeStart: function resizeStart() {
-			this.scrollbox = $(this).find('.morebits-scrollbox')[0];
-			if (this.scrollbox) {
-				this.scrollbox.style.maxHeight = 'none';
+			this.scrollbox = $( this ).find( ".morebits-scrollbox" )[ 0 ];
+			if ( this.scrollbox ) {
+				this.scrollbox.style.maxHeight = "none";
 			}
 		},
 		resizeStop: function resizeStop() {
 			this.scrollbox = null;
 		},
 		resize: function resize() {
-			this.style.maxHeight = '';
-			if (this.scrollbox) {
-				this.scrollbox.style.width = '';
+			this.style.maxHeight = "";
+			if ( this.scrollbox ) {
+				this.scrollbox.style.width = "";
 			}
 		}
-	});
-	var $widget = $(this.content).dialog('widget');
+	} );
+	var $widget = $( this.content ).dialog( "widget" );
 
 	// delete the placeholder button (it's only there so the buttonpane gets created)
-	$widget.find('button').each(function (key, value) {
-		value.parentNode.removeChild(value);
-	});
+	$widget.find( "button" ).each( ( key, value ) => {
+		value.parentNode.removeChild( value );
+	} );
 
 	// add container for the buttons we add, and the footer links (if any)
-	var buttonspan = document.createElement('span');
-	buttonspan.className = 'morebits-dialog-buttons';
-	var linksspan = document.createElement('span');
-	linksspan.className = 'morebits-dialog-footerlinks';
-	$widget.find('.ui-dialog-buttonpane').append(buttonspan, linksspan);
+	var buttonspan = document.createElement( "span" );
+	buttonspan.className = "morebits-dialog-buttons";
+	var linksspan = document.createElement( "span" );
+	linksspan.className = "morebits-dialog-footerlinks";
+	$widget.find( ".ui-dialog-buttonpane" ).append( buttonspan, linksspan );
 
 	// resize the scrollbox with the dialog, if one is present
-	$widget.resizable('option', 'alsoResize', '#' + this.content.id + ' .morebits-scrollbox, #' + this.content.id);
+	$widget.resizable( "option", "alsoResize", `#${this.content.id} .morebits-scrollbox, #${this.content.id}` );
 };
 Morebits.simpleWindow.prototype = {
 	buttons: [],
@@ -5447,7 +5424,7 @@ Morebits.simpleWindow.prototype = {
 	 * @returns {Morebits.simpleWindow}
 	 */
 	focus: function focus() {
-		$(this.content).dialog('moveToTop');
+		$( this.content ).dialog( "moveToTop" );
 		return this;
 	},
 	/**
@@ -5457,11 +5434,11 @@ Morebits.simpleWindow.prototype = {
 	 * @param {event} [event]
 	 * @returns {Morebits.simpleWindow}
 	 */
-	close: function close(event) {
-		if (event) {
+	close: function close( event ) {
+		if ( event ) {
 			event.preventDefault();
 		}
-		$(this.content).dialog('close');
+		$( this.content ).dialog( "close" );
 		return this;
 	},
 	/**
@@ -5471,21 +5448,21 @@ Morebits.simpleWindow.prototype = {
 	 * @returns {Morebits.simpleWindow}
 	 */
 	display: function display() {
-		if (this.scriptName) {
-			var $widget = $(this.content).dialog('widget');
-			$widget.find('.morebits-dialog-scriptname').remove();
-			var scriptnamespan = document.createElement('span');
-			scriptnamespan.className = 'morebits-dialog-scriptname';
-			scriptnamespan.textContent = this.scriptName + ' \xB7 '; // U+00B7 MIDDLE DOT = &middot;
-			$widget.find('.ui-dialog-title').prepend(scriptnamespan);
+		if ( this.scriptName ) {
+			var $widget = $( this.content ).dialog( "widget" );
+			$widget.find( ".morebits-dialog-scriptname" ).remove();
+			var scriptnamespan = document.createElement( "span" );
+			scriptnamespan.className = "morebits-dialog-scriptname";
+			scriptnamespan.textContent = `${this.scriptName} \xB7 `; // U+00B7 MIDDLE DOT = &middot;
+			$widget.find( ".ui-dialog-title" ).prepend( scriptnamespan );
 		}
-		var dialog = $(this.content).dialog('open');
-		if (window.setupTooltips && window.pg && window.pg.re && window.pg.re.diff) {
+		var dialog = $( this.content ).dialog( "open" );
+		if ( window.setupTooltips && window.pg && window.pg.re && window.pg.re.diff ) {
 			// tie in with NAVPOP
-			dialog.parent()[0].ranSetupTooltipsAlready = false;
-			window.setupTooltips(dialog.parent()[0]);
+			dialog.parent()[ 0 ].ranSetupTooltipsAlready = false;
+			window.setupTooltips( dialog.parent()[ 0 ] );
 		}
-		this.setHeight(this.height); // init height algorithm
+		this.setHeight( this.height ); // init height algorithm
 		return this;
 	},
 	/**
@@ -5494,8 +5471,8 @@ Morebits.simpleWindow.prototype = {
 	 * @param {string} title
 	 * @returns {Morebits.simpleWindow}
 	 */
-	setTitle: function setTitle(title) {
-		$(this.content).dialog('option', 'title', title);
+	setTitle: function setTitle( title ) {
+		$( this.content ).dialog( "option", "title", title );
 		return this;
 	},
 	/**
@@ -5505,7 +5482,7 @@ Morebits.simpleWindow.prototype = {
 	 * @param {string} name
 	 * @returns {Morebits.simpleWindow}
 	 */
-	setScriptName: function setScriptName(name) {
+	setScriptName: function setScriptName( name ) {
 		this.scriptName = name;
 		return this;
 	},
@@ -5515,8 +5492,8 @@ Morebits.simpleWindow.prototype = {
 	 * @param {number} width
 	 * @returns {Morebits.simpleWindow}
 	 */
-	setWidth: function setWidth(width) {
-		$(this.content).dialog('option', 'width', width);
+	setWidth: function setWidth( width ) {
+		$( this.content ).dialog( "option", "width", width );
 		return this;
 	},
 	/**
@@ -5526,7 +5503,7 @@ Morebits.simpleWindow.prototype = {
 	 * @param {number} height
 	 * @returns {Morebits.simpleWindow}
 	 */
-	setHeight: function setHeight(height) {
+	setHeight: function setHeight( height ) {
 		this.height = height;
 
 		// from display time onwards, let the browser determine the optimum height,
@@ -5534,12 +5511,12 @@ Morebits.simpleWindow.prototype = {
 		// note that the given height will exclude the approx. 20px that the jQuery UI
 		// chrome has in height in addition to the height of an equivalent "classic"
 		// Morebits.simpleWindow
-		if (parseInt(getComputedStyle($(this.content).dialog('widget')[0], null).height, 10) > window.innerHeight) {
-			$(this.content).dialog('option', 'height', window.innerHeight - 2).dialog('option', 'position', 'top');
+		if ( parseInt( getComputedStyle( $( this.content ).dialog( "widget" )[ 0 ], null ).height, 10 ) > window.innerHeight ) {
+			$( this.content ).dialog( "option", "height", window.innerHeight - 2 ).dialog( "option", "position", "top" );
 		} else {
-			$(this.content).dialog('option', 'height', 'auto');
+			$( this.content ).dialog( "option", "height", "auto" );
 		}
-		$(this.content).dialog('widget').find('.morebits-dialog-content')[0].style.maxHeight = parseInt(this.height - 30, 10) + 'px';
+		$( this.content ).dialog( "widget" ).find( ".morebits-dialog-content" )[ 0 ].style.maxHeight = `${parseInt( this.height - 30, 10 )}px`;
 		return this;
 	},
 	/**
@@ -5551,9 +5528,9 @@ Morebits.simpleWindow.prototype = {
 	 * @param {HTMLElement} content
 	 * @returns {Morebits.simpleWindow}
 	 */
-	setContent: function setContent(content) {
+	setContent: function setContent( content ) {
 		this.purgeContent();
-		this.addContent(content);
+		this.addContent( content );
 		return this;
 	},
 	/**
@@ -5562,27 +5539,27 @@ Morebits.simpleWindow.prototype = {
 	 * @param {HTMLElement} content
 	 * @returns {Morebits.simpleWindow}
 	 */
-	addContent: function addContent(content) {
-		this.content.appendChild(content);
+	addContent: function addContent( content ) {
+		this.content.appendChild( content );
 
 		// look for submit buttons in the content, hide them, and add a proxy button to the button pane
 		var thisproxy = this;
-		$(this.content).find('input[type="submit"], button[type="submit"]').each(function (key, value) {
-			value.style.display = 'none';
-			var button = document.createElement('button');
-			button.textContent = value.hasAttribute('value') ? value.getAttribute('value') : value.textContent ? value.textContent : '提交';
-			button.className = value.className || 'submitButtonProxy';
+		$( this.content ).find( 'input[type="submit"], button[type="submit"]' ).each( ( key, value ) => {
+			value.style.display = "none";
+			var button = document.createElement( "button" );
+			button.textContent = value.hasAttribute( "value" ) ? value.getAttribute( "value" ) : value.textContent ? value.textContent : "提交";
+			button.className = value.className || "submitButtonProxy";
 			// here is an instance of cheap coding, probably a memory-usage hit in using a closure here
-			button.addEventListener('click', function () {
+			button.addEventListener( "click", () => {
 				value.click();
-			}, false);
-			thisproxy.buttons.push(button);
-		});
+			}, false );
+			thisproxy.buttons.push( button );
+		} );
 		// remove all buttons from the button pane and re-add them
-		if (this.buttons.length > 0) {
-			$(this.content).dialog('widget').find('.morebits-dialog-buttons').empty().append(this.buttons)[0].removeAttribute('data-empty');
+		if ( this.buttons.length > 0 ) {
+			$( this.content ).dialog( "widget" ).find( ".morebits-dialog-buttons" ).empty().append( this.buttons )[ 0 ].removeAttribute( "data-empty" );
 		} else {
-			$(this.content).dialog('widget').find('.morebits-dialog-buttons')[0].setAttribute('data-empty', 'data-empty'); // used by CSS
+			$( this.content ).dialog( "widget" ).find( ".morebits-dialog-buttons" )[ 0 ].setAttribute( "data-empty", "data-empty" ); // used by CSS
 		}
 
 		return this;
@@ -5595,9 +5572,9 @@ Morebits.simpleWindow.prototype = {
 	purgeContent: function purgeContent() {
 		this.buttons = [];
 		// delete all buttons in the buttonpane
-		$(this.content).dialog('widget').find('.morebits-dialog-buttons').empty();
-		while (this.content.hasChildNodes()) {
-			this.content.removeChild(this.content.firstChild);
+		$( this.content ).dialog( "widget" ).find( ".morebits-dialog-buttons" ).empty();
+		while ( this.content.hasChildNodes() ) {
+			this.content.removeChild( this.content.firstChild );
 		}
 		return this;
 	},
@@ -5612,26 +5589,26 @@ Morebits.simpleWindow.prototype = {
 	 * @param {boolean} [prep=false] - Set true to prepend rather than append.
 	 * @returns {Morebits.simpleWindow}
 	 */
-	addFooterLink: function addFooterLink(text, wikiPage, prep) {
-		var $footerlinks = $(this.content).dialog('widget').find('.morebits-dialog-footerlinks');
-		if (this.hasFooterLinks) {
-			var bullet = document.createElement('span');
-			bullet.textContent = ' \u2022 '; // U+2022 BULLET
-			if (prep) {
-				$footerlinks.prepend(bullet);
+	addFooterLink: function addFooterLink( text, wikiPage, prep ) {
+		var $footerlinks = $( this.content ).dialog( "widget" ).find( ".morebits-dialog-footerlinks" );
+		if ( this.hasFooterLinks ) {
+			var bullet = document.createElement( "span" );
+			bullet.textContent = " \u2022 "; // U+2022 BULLET
+			if ( prep ) {
+				$footerlinks.prepend( bullet );
 			} else {
-				$footerlinks.append(bullet);
+				$footerlinks.append( bullet );
 			}
 		}
-		var link = document.createElement('a');
-		link.setAttribute('href', mw.util.getUrl(wikiPage));
-		link.setAttribute('title', wikiPage);
-		link.setAttribute('target', '_blank');
+		var link = document.createElement( "a" );
+		link.setAttribute( "href", mw.util.getUrl( wikiPage ) );
+		link.setAttribute( "title", wikiPage );
+		link.setAttribute( "target", "_blank" );
 		link.textContent = text;
-		if (prep) {
-			$footerlinks.prepend(link);
+		if ( prep ) {
+			$footerlinks.prepend( link );
 		} else {
-			$footerlinks.append(link);
+			$footerlinks.append( link );
 		}
 		this.hasFooterLinks = true;
 		return this;
@@ -5645,8 +5622,8 @@ Morebits.simpleWindow.prototype = {
 	 * page will be disabled, i.e., cannot be interacted with.
 	 * @returns {Morebits.simpleWindow}
 	 */
-	setModality: function setModality(modal) {
-		$(this.content).dialog('option', 'modal', modal);
+	setModality: function setModality( modal ) {
+		$( this.content ).dialog( "option", "modal", modal );
 		return this;
 	}
 };
@@ -5662,10 +5639,10 @@ Morebits.simpleWindow.prototype = {
  * @memberof Morebits.simpleWindow
  * @param {boolean} enabled
  */
-Morebits.simpleWindow.setButtonsEnabled = function (enabled) {
-	$('.morebits-dialog-buttons button').prop('disabled', !enabled);
+Morebits.simpleWindow.setButtonsEnabled = function ( enabled ) {
+	$( ".morebits-dialog-buttons button" ).prop( "disabled", !enabled );
 };
-}(window, document, jQuery)); // End wrap with anonymous function
+} )( window, document, jQuery ); // End wrap with anonymous function
 
 /**
  * If this script is being executed outside a ResourceLoader context, we add some
@@ -5676,7 +5653,7 @@ Morebits.simpleWindow.setButtonsEnabled = function (enabled) {
  * Thanks.
  */
 
-if (typeof arguments === 'undefined') {
+if ( typeof arguments === "undefined" ) {
 	// typeof is here for a reason...
 	/* global Morebits */
 	window.SimpleWindow = Morebits.simpleWindow;
