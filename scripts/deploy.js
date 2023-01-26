@@ -78,13 +78,13 @@ const minimist = require('minimist');
 // All file paths are with respect to repository root
 // Remove twinkle-pagestyles.css if deploying as user script
 const deployTargets = [{
-  file: 'twinkle.js',
+  file: 'dist/twinkle.js',
   target: 'MediaWiki:Gadget-Twinkle.js'
 }, {
   file: 'twinkle.css',
   target: 'MediaWiki:Gadget-Twinkle.css'
 }, {
-  file: 'morebits.js',
+  file: 'dist/morebits.js',
   target: 'MediaWiki:Gadget-morebits.js'
 }, {
   file: 'morebits.css',
@@ -93,61 +93,61 @@ const deployTargets = [{
   file: 'twinkle-pagestyles.css',
   target: 'MediaWiki:Gadget-Twinkle-pagestyles.css'
 }, {
-  file: 'modules/friendlytag.js',
+  file: 'dist/modules/friendlytag.js',
   target: 'MediaWiki:Gadget-friendlytag.js'
 }, {
-  file: 'modules/friendlytalkback.js',
+  file: 'dist/modules/friendlytalkback.js',
   target: 'MediaWiki:Gadget-friendlytalkback.js'
 }, {
-  file: 'modules/twinklearv.js',
+  file: 'dist/modules/twinklearv.js',
   target: 'MediaWiki:Gadget-twinklearv.js'
 }, {
-  file: 'modules/twinklebatchprotect.js',
+  file: 'dist/modules/twinklebatchprotect.js',
   target: 'MediaWiki:Gadget-twinklebatchprotect.js'
 }, {
-  file: 'modules/twinklebatchdelete.js',
+  file: 'dist/modules/twinklebatchdelete.js',
   target: 'MediaWiki:Gadget-twinklebatchdelete.js'
 }, {
-  file: 'modules/twinklebatchundelete.js',
+  file: 'dist/modules/twinklebatchundelete.js',
   target: 'MediaWiki:Gadget-twinklebatchundelete.js'
 }, {
-  file: 'modules/twinkleblock.js',
+  file: 'dist/modules/twinkleblock.js',
   target: 'MediaWiki:Gadget-twinkleblock.js'
 }, {
-  file: 'modules/twinkleclose.js',
+  file: 'dist/modules/twinkleclose.js',
   target: 'MediaWiki:Gadget-twinkleclose.js'
 }, {
-  file: 'modules/twinkleconfig.js',
+  file: 'dist/modules/twinkleconfig.js',
   target: 'MediaWiki:Gadget-twinkleconfig.js'
 }, {
-  file: 'modules/twinklecopyvio.js',
+  file: 'dist/modules/twinklecopyvio.js',
   target: 'MediaWiki:Gadget-twinklecopyvio.js'
 }, {
-  file: 'modules/twinklediff.js',
+  file: 'dist/modules/twinklediff.js',
   target: 'MediaWiki:Gadget-twinklediff.js'
 }, {
-  file: 'modules/twinklefluff.js',
+  file: 'dist/modules/twinklefluff.js',
   target: 'MediaWiki:Gadget-twinklefluff.js'
 }, {
-  file: 'modules/twinkleimage.js',
+  file: 'dist/modules/twinkleimage.js',
   target: 'MediaWiki:Gadget-twinkleimage.js'
 }, {
-  file: 'modules/twinkleprotect.js',
+  file: 'dist/modules/twinkleprotect.js',
   target: 'MediaWiki:Gadget-twinkleprotect.js'
 }, {
-  file: 'modules/twinklespeedy.js',
+  file: 'dist/modules/twinklespeedy.js',
   target: 'MediaWiki:Gadget-twinklespeedy.js'
 }, {
-  file: 'modules/twinklestub.js',
+  file: 'dist/modules/twinklestub.js',
   target: 'MediaWiki:Gadget-twinklestub.js'
 }, {
-  file: 'modules/twinkleunlink.js',
+  file: 'dist/modules/twinkleunlink.js',
   target: 'MediaWiki:Gadget-twinkleunlink.js'
 }, {
-  file: 'modules/twinklewarn.js',
+  file: 'dist/modules/twinklewarn.js',
   target: 'MediaWiki:Gadget-twinklewarn.js'
 }, {
-  file: 'modules/twinklexfd.js',
+  file: 'dist/modules/twinklexfd.js',
   target: 'MediaWiki:Gadget-twinklexfd.js'
 }];
 class Deploy {
