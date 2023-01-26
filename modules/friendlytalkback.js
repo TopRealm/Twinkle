@@ -71,10 +71,6 @@ Twinkle.talkback.callback = function () {
 		name: "work_area"
 	} );
 	var previewlink = document.createElement( "a" );
-	$( previewlink ).on( "click", () => {
-		Twinkle.talkback.callbacks.preview( result ); // |result| is defined below
-	} );
-
 	previewlink.style.cursor = "pointer";
 	previewlink.textContent = "预览";
 	form.append( {
@@ -94,6 +90,9 @@ Twinkle.talkback.callback = function () {
 	Window.setContent( result );
 	Window.display();
 	result.previewer = new Morebits.wiki.preview( $( result ).find( "div#friendlytalkback-previewbox" ).last()[ 0 ] );
+	$( previewlink ).on( "click", () => {
+		Twinkle.talkback.callbacks.preview( result ); // |result| is defined below
+	} );
 
 	// We must init the
 	var evt = document.createEvent( "Event" );
@@ -175,8 +174,8 @@ Twinkle.talkback.changeTarget = function ( e ) {
 				type: "select",
 				name: "noticeboard",
 				label: "通告板：",
-				event: function event( e ) {
-					if ( e.target.value === "afchd" ) {
+				event: function event( _e ) {
+					if ( _e.target.value === "afchd" ) {
 						Morebits.quickForm.overrideElementLabel( root.section, "标题或草稿名称（去除Draft前缀）：" );
 						Morebits.quickForm.setElementTooltipVisibility( root.section, false );
 					} else {
@@ -185,11 +184,11 @@ Twinkle.talkback.changeTarget = function ( e ) {
 					}
 				}
 			} );
-			$.each( Twinkle.talkback.noticeboards, ( value, data ) => {
+			$.each( Twinkle.talkback.noticeboards, ( _value, data ) => {
 				noticeboard.append( {
 					type: "option",
 					label: data.label,
-					value: value,
+					value: _value,
 					selected: !!data.defaultSelected
 				} );
 			} );
