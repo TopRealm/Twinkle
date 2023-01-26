@@ -969,7 +969,7 @@ Twinkle.block.transformBlockPresets = function twinkleblockTransformBlockPresets
 			if ( blockGroup.custom ) {
 				blockGroup.list = Twinkle.getPref( "customBlockReasonList" );
 			}
-			$.each( blockGroup.list, ( _, blockPreset ) => {
+			$.each( blockGroup.list, ( __, blockPreset ) => {
 				var value = blockPreset.value,
 					reason = blockPreset.label,
 					newPreset = `${value}:${reason}`;
@@ -1728,7 +1728,7 @@ Twinkle.block.callback.getBlockNoticeWikitext = function ( params, nosign ) {
 		// Building the template, however, takes a fair bit of logic
 		if ( params.partial ) {
 			if ( params.pagerestrictions.length || params.namespacerestrictions.length ) {
-				var makeSentence = function makeSentence( array ) {
+				var makeSentence = ( array ) => {
 					if ( array.length < 3 ) {
 						return array.join( "和" );
 					}
