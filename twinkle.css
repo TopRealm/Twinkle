@@ -61,6 +61,6 @@ a.twinkle-close-button-disabled {
 }
 
 /* H:TW/PREF */
-#twinkle-config-content input[ type='checkbox' ] {
+#twinkle-config-content input[type="checkbox"] {
 	margin-right: 2px;
 }

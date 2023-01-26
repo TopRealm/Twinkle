@@ -61,7 +61,7 @@ form.quickform legend {
 	font-weight: bold;
 }
 
-form.quickform input[ type='text' ],
+form.quickform input[type="text"],
 form.quickform select {
 	min-width: 15em;
 	font-size: 110%;
@@ -72,8 +72,8 @@ form.quickform select {
 	margin-left: 0.2em;
 }
 
-form.quickform input[ type='checkbox' ],
-form.quickform input[ type='radio' ] {
+form.quickform input[type="checkbox"],
+form.quickform input[type="radio"] {
 	height: 13px;
 	margin-top: 2px;
 	margin-right: 2px;
@@ -161,7 +161,7 @@ div.morebits-previewbox {
 	padding: 0.2em 0.4em;
 }
 
-div.morebits-previewbox *:not( img ) {
+div.morebits-previewbox *:not(img) {
 	vertical-align: baseline;
 }
 
@@ -245,7 +245,7 @@ body .ui-dialog.morebits-dialog .morebits-dialog-footerlinks a {
 	color: #3062ad;
 }
 
-.morebits-dialog-buttons[ data-empty ] + .morebits-dialog-footerlinks {
+.morebits-dialog-buttons[data-empty] + .morebits-dialog-footerlinks {
 	margin: 0.1em 0.4em -0.2em 0;
 }
 
