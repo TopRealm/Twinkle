@@ -1,3 +1,4 @@
+/* eslint-disable quote-props */
 "use strict";
 
 /**
@@ -188,10 +189,6 @@ Twinkle.warn.callback = function twinklewarnCallback() {
 		tooltip: "理由或是附加信息"
 	} );
 	var previewlink = document.createElement( "a" );
-	$( previewlink ).on( "click", () => {
-		Twinkle.warn.callbacks.preview( result ); // |result| is defined below
-	} );
-
 	previewlink.style.cursor = "pointer";
 	previewlink.textContent = "预览";
 	more.append( {
@@ -213,6 +210,9 @@ Twinkle.warn.callback = function twinklewarnCallback() {
 	Window.display();
 	result.main_group.root = result;
 	result.previewer = new Morebits.wiki.preview( $( result ).find( "div#twinklewarn-previewbox" ).last()[ 0 ] );
+	$( previewlink ).on( "click", () => {
+		Twinkle.warn.callbacks.preview( result ); // |result| is defined below
+	} );
 
 	// Potential notices for staleness and missed reverts
 	var message = "";
@@ -241,9 +241,9 @@ Twinkle.warn.callback = function twinklewarnCallback() {
 		}
 
 		// Confirm edit wasn't too old for a warning
-		var checkStale = function checkStale( vantimestamp ) {
-			var revDate = new Morebits.date( vantimestamp );
-			if ( vantimestamp && revDate.isValid() ) {
+		var checkStale = ( _vantimestamp ) => {
+			var revDate = new Morebits.date( _vantimestamp );
+			if ( _vantimestamp && revDate.isValid() ) {
 				if ( revDate.add( 24, "hours" ).isBefore( new Date() ) ) {
 					message += "这笔编辑是在24小时前做出的，现在警告可能已过时。";
 					$( "#twinkle-warn-warning-messages" ).text( `注意：${message}` );
@@ -299,7 +299,7 @@ Twinkle.warn.callback = function twinklewarnCallback() {
 //   suppressArticleInSummary (optional): Set to true to suppress showing the article name in the edit summary. Useful if the warning relates to attack pages, or some such.
 Twinkle.warn.messages = {
 	levels: {
-		不同类型的非建设编辑: {
+		"不同类型的非建设编辑": {
 			"uw-vandalism": {
 				level1: {
 					label: "明显的破坏",
@@ -527,7 +527,7 @@ Twinkle.warn.messages = {
 				}
 			}
 		},
-		增加商品或政治广告: {
+		"增加商品或政治广告": {
 			"uw-spam": {
 				level1: {
 					label: "增加不合适的外部链接",
@@ -661,7 +661,7 @@ Twinkle.warn.messages = {
 				}
 			}
 		},
-		翻译品质: {
+		"翻译品质": {
 			"uw-roughtranslation": {
 				level1: {
 					label: "您翻译的质量有待改善",
@@ -677,7 +677,7 @@ Twinkle.warn.messages = {
 				}
 			}
 		},
-		非能接受且违反方针或指引的单方面行为或操作: {
+		"非能接受且违反方针或指引的单方面行为或操作": {
 			"uw-notcensored": {
 				level1: {
 					label: "因为“内容使人反感”而删除条目内容",
@@ -815,7 +815,7 @@ Twinkle.warn.messages = {
 				}
 			}
 		},
-		对其他用户和条目的态度: {
+		"对其他用户和条目的态度": {
 			"uw-npa": {
 				level1: {
 					label: "针对用户的人身攻击",
@@ -1226,7 +1226,7 @@ Twinkle.warn.callback.change_category = function twinklewarnCallbackChangeCatego
 			break;
 		case "autolevel":
 			// Check user page to determine appropriate level
-			var autolevelProc = function autolevelProc() {
+			var autolevelProc = () => {
 				var wikitext = Twinkle.warn.talkpageObj.getPageText();
 				// history not needed for autolevel
 				var latest = Twinkle.warn.callbacks.dateProcessing( wikitext )[ 0 ];
