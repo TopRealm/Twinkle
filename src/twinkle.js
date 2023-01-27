@@ -534,5 +534,4 @@ Twinkle.generateBatchPageLinks = function (checkbox) {
 	$checkbox.next().prepend([ link, ' ' ]);
 };
 }(window, document, jQuery)); // End wrap with anonymous function
-
 /* </nowiki> */

@@ -14,10 +14,8 @@
 /* Twinkle.js - friendlytag.js */
 /* <nowiki> */
 (function ($) {
-/*
- ****************************************
- *** friendlytag.js: Tag module
- ****************************************
+/**
+ * friendlytag.js: Tag module
  * Mode of invocation:     Tab ("Tag")
  * Active on:              Existing articles and drafts; file pages with a corresponding file
  *                         which is local (not on Commons); all redirects
@@ -2426,5 +2424,4 @@ Twinkle.tag.callback.evaluate = function friendlytagCallbackEvaluate(e) {
 	qiuwen_page.load(Twinkle.tag.callbacks[Twinkle.tag.mode]);
 };
 Twinkle.addInitCallback(Twinkle.tag, 'tag');
-}(jQuery));
-/* </nowiki> */
+}(jQuery));/* </nowiki> */

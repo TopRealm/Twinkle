@@ -5682,5 +5682,4 @@ if (typeof arguments === 'undefined') {
 	window.QuickForm = Morebits.quickForm;
 	window.Status = Morebits.status;
 }
-
 /* </nowiki> */
