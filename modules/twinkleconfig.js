@@ -1058,7 +1058,7 @@ Twinkle.config.init = function twinkleconfigInit() {
 						input.setAttribute( "name", pref.name );
 						var optionExists = false;
 						$.each( pref.enumValues, ( enumvalue, enumdisplay ) => {
-							var option = document.createElement( "option" );
+							let option = document.createElement( "option" );
 							option.setAttribute( "value", enumvalue );
 							if ( gotPref === enumvalue ||
                 // Hack to convert old boolean watchlist prefs
@@ -1072,7 +1072,7 @@ Twinkle.config.init = function twinkleconfigInit() {
 						} );
 						// Append user-defined value to options
 						if ( !optionExists ) {
-							var option = document.createElement( "option" );
+							let option = document.createElement( "option" );
 							option.setAttribute( "value", gotPref );
 							option.setAttribute( "selected", "selected" );
 							option.appendChild( document.createTextNode( gotPref ) );
@@ -1089,7 +1089,7 @@ Twinkle.config.init = function twinkleconfigInit() {
 						cell.appendChild( label );
 						var checkdiv = document.createElement( "div" );
 						checkdiv.style.paddingLeft = "1em";
-						var worker = function worker( itemkey, itemvalue ) {
+						var worker = ( itemkey, itemvalue ) => {
 							var checklabel = document.createElement( "label" );
 							checklabel.style.marginRight = "0.7em";
 							checklabel.style.display = "inline-block";
@@ -1121,7 +1121,7 @@ Twinkle.config.init = function twinkleconfigInit() {
 						}
 						cell.appendChild( checkdiv );
 						break;
-					case "customList":
+					case "customList": {
 						// add label to first column
 						cell.style.textAlign = "right";
 						cell.style.paddingRight = "0.5em";
@@ -1134,19 +1134,20 @@ Twinkle.config.init = function twinkleconfigInit() {
 						// add button to second column
 						cell = document.createElement( "td" );
 						cell.style.paddingRight = "1em";
-						var button = document.createElement( "button" );
-						button.setAttribute( "id", pref.name );
-						button.setAttribute( "name", pref.name );
-						button.setAttribute( "type", "button" );
-						button.addEventListener( "click", Twinkle.config.listDialog.display, false );
+						let _button = document.createElement( "button" );
+						_button.setAttribute( "id", pref.name );
+						_button.setAttribute( "name", pref.name );
+						_button.setAttribute( "type", "button" );
+						_button.addEventListener( "click", Twinkle.config.listDialog.display, false );
 						// use jQuery data on the button to store the current config value
-						$( button ).data( {
+						$( _button ).data( {
 							value: gotPref,
 							pref: pref
 						} );
-						button.appendChild( document.createTextNode( "编辑项目" ) );
-						cell.appendChild( button );
+						_button.appendChild( document.createTextNode( "编辑项目" ) );
+						cell.appendChild( _button );
 						break;
+					}
 					default:
 						alert( `twinkleconfig: 未知类型的属性 ${pref.name}` );
 						break;

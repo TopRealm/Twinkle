@@ -140,7 +140,7 @@ Twinkle.stub.updateSortOrder = function ( e ) {
 	if ( sortorder === "cat" ) {
 		// function to iterate through the tags and create a checkbox for each one
 		var doCategoryCheckboxes = function ( subdiv, array ) {
-			var checkboxes = [];
+			let checkboxes = [];
 			$.each( array, ( k, tag ) => {
 				var description = Twinkle.stub.article.tags[ tag ];
 				checkboxes.push( makeCheckbox( tag, description ) );
@@ -177,7 +177,7 @@ Twinkle.stub.updateSortOrder = function ( e ) {
 		} );
 		// alphabetical sort order
 	} else {
-		var checkboxes = [];
+		let checkboxes = [];
 		$.each( Twinkle.stub.article.tags, ( tag, description ) => {
 			checkboxes.push( makeCheckbox( tag, description ) );
 		} );
