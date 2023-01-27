@@ -1,3 +1,4 @@
+/* eslint-disable prefer-spread */
 /* eslint-disable no-new */
 /* eslint-disable no-throw-literal */
 "use strict";
@@ -49,8 +50,9 @@
  * @namespace Morebits
  */
 
-( ( window, document, $ ) => {
+( function ( window, document, $ ) {
 // Wrap entire file with anonymous function
+
 /** @lends Morebits */
 var Morebits = {};
 window.Morebits = Morebits; // allow global access
@@ -137,7 +139,8 @@ Morebits.pageNameRegex = function ( pageName ) {
 	if ( pageName === "" ) {
 		return "";
 	}
-	var firstChar = pageName[ 0 ], remainder = Morebits.string.escapeRegExp( pageName.slice( 1 ) );
+	var firstChar = pageName[ 0 ],
+		remainder = Morebits.string.escapeRegExp( pageName.slice( 1 ) );
 	if ( mw.Title.phpCharToUpper( firstChar ) !== firstChar.toLowerCase() ) {
 		return `[${mw.Title.phpCharToUpper( firstChar )}${firstChar.toLowerCase()}]${remainder}`;
 	}
@@ -211,7 +214,8 @@ Morebits.namespaceRegex = function ( namespaces ) {
 	if ( !Array.isArray( namespaces ) ) {
 		namespaces = [ namespaces ];
 	}
-	var aliases = [], regex;
+	var aliases = [],
+		regex;
 	$.each( mw.config.get( "wgNamespaceIds" ), ( name, number ) => {
 		if ( namespaces.indexOf( number ) !== -1 ) {
 			// Namespaces are completely agnostic as to case,
@@ -872,6 +876,7 @@ Morebits.quickForm.element.generateTooltip = function QuickFormElementGenerateTo
 
 // Some utility methods for manipulating quickForms after their creation:
 // (None of these work for "dyninput" type fields at present)
+
 /**
  * Returns an object containing all filled form data entered by the user, with the object
  * keys being the form element names. Disabled fields will be ignored, but not hidden fields.
@@ -1235,13 +1240,11 @@ Morebits.ip = {
 				repeat = "0:";
 				extra = address === "::" ? "0" : ""; // for the address '::'
 				pad = 9; // 7+2 (due to '::')
-
 				// If the '::' is at the end...
 			} else if ( abbrevPos === addressEnd - 1 ) {
 				repeat = ":0";
 				extra = "";
 				pad = 9; // 7+2 (due to '::')
-
 				// If the '::' is in the middle...
 			} else {
 				repeat = ":0";
@@ -1410,7 +1413,8 @@ Morebits.string = {
 		unbinder.content = unbinder.content.replace( /\|/g, "{{subst:!}}" );
 		reason = unbinder.rebind();
 		if ( addSig ) {
-			var sig = "~~" + "~~", sigIndex = reason.lastIndexOf( sig );
+			var sig = "~~" + "~~",
+				sigIndex = reason.lastIndexOf( sig );
 			if ( sigIndex === -1 || sigIndex !== reason.length - sig.length ) {
 				reason += ` ${sig}`;
 			}
@@ -1427,9 +1431,9 @@ Morebits.string = {
 	 */
 	formatReasonForLog: function ( str ) {
 		return str
-		// handle line breaks, which otherwise break numbering
+			// handle line breaks, which otherwise break numbering
 			.replace( /\n+/g, "{{pb}}" )
-		// put an extra # in front before bulleted or numbered list items
+			// put an extra # in front before bulleted or numbered list items
 			.replace( /^(#+)/mg, "#$1" ).replace( /^(\*+)/mg, "#$1" );
 	},
 	/**
@@ -1977,9 +1981,15 @@ Morebits.date.prototype = {
 			len = len || 2; // Up to length of 00 + 1
 			return `00${num}`.toString().slice( 0 - len );
 		};
-		var h24 = udate.getHours(), m = udate.getMinutes(), s = udate.getSeconds(), ms = udate.getMilliseconds();
-		var D = udate.getDate(), M = udate.getMonth() + 1, Y = udate.getFullYear();
-		var h12 = h24 % 12 || 12, amOrPm = h24 >= 12 ? "下午" : "上午";
+		var h24 = udate.getHours(),
+			m = udate.getMinutes(),
+			s = udate.getSeconds(),
+			ms = udate.getMilliseconds();
+		var D = udate.getDate(),
+			M = udate.getMonth() + 1,
+			Y = udate.getFullYear();
+		var h12 = h24 % 12 || 12,
+			amOrPm = h24 >= 12 ? "下午" : "上午";
 		var replacementMap = {
 			HH: pad( h24 ),
 			H: h24,
@@ -2078,7 +2088,6 @@ Object.getOwnPropertyNames( Date.prototype ).forEach( ( func ) => {
 	// Exclude methods that collide with PageTriage's Date.js external, which clobbers native Date: [[phab:T268513]]
 	if ( [ "add", "getDayName", "getMonthName" ].indexOf( func ) === -1 ) {
 		Morebits.date.prototype[ func ] = function () {
-			// eslint-disable-next-line prefer-spread
 			return this._d[ func ].apply( this._d, Array.prototype.slice.call( arguments ) );
 		};
 	}
@@ -2267,6 +2276,7 @@ Morebits.wiki.api.prototype = {
 	// full error description, if any
 	badtokenRetry: false,
 	// set to true if this on a retry attempted after a badtoken error
+
 	/**
 	 * Keep track of parent object for callbacks.
 	 *
@@ -2297,6 +2307,7 @@ Morebits.wiki.api.prototype = {
 			}
 		} ).join( "&" ).replace( /^(.*?)(\btoken=[^&]*)&(.*)/, "$1$3&$2" );
 			// token should always be the last item in the query string (bug TW-B-0013)
+
 		var ajaxparams = $.extend( {}, {
 			context: this,
 			type: this.query.action === "query" ? "GET" : "POST",
@@ -2367,6 +2378,7 @@ Morebits.wiki.api.prototype = {
 			this.onError.call( this.parent, this );
 		}
 		// don't complete the action so that the error remains displayed
+
 		return $.Deferred().rejectWith( this.parent, [ this ] );
 	},
 	getStatusElement: function () {
@@ -2606,7 +2618,7 @@ Morebits.wiki.page = function ( pageName, status ) {
 		protectApi: null,
 		protectProcessApi: null
 	};
-	var emptyFunction = function () { };
+	var emptyFunction = function () {};
 
 	/**
 	 * Loads the text for the page.
@@ -3195,6 +3207,7 @@ Morebits.wiki.page = function ( pageName, status ) {
 	};
 
 	// Miscellaneous getters/setters:
+
 	/**
 	 * Define an object for use in a callback function.
 	 *
@@ -3502,9 +3515,10 @@ Morebits.wiki.page = function ( pageName, status ) {
 	};
 
 	/*
-				 * Private member functions
-				 * These are not exposed outside
-				 */
+			 * Private member functions
+			 * These are not exposed outside
+			 */
+
 	/**
 	 * Determines whether we can save an API call by using the csrf token
 	 * sent with the page HTML, or whether we need to ask the server for
@@ -3603,7 +3617,8 @@ Morebits.wiki.page = function ( pageName, status ) {
 			return; // abort
 		}
 
-		var page = response.pages[ 0 ], rev;
+		var page = response.pages[ 0 ],
+			rev;
 		ctx.pageExists = !page.missing;
 		if ( ctx.pageExists ) {
 			rev = page.revisions[ 0 ];
@@ -3834,8 +3849,8 @@ Morebits.wiki.page = function ( pageName, status ) {
 		} else {
 			var response = ctx.saveApi.getResponse();
 			var errorData = response.error ||
-					// bc error format
-					response.errors[ 0 ].data; // html/wikitext/plaintext error format
+			// bc error format
+			response.errors[ 0 ].data; // html/wikitext/plaintext error format
 
 			switch ( errorCode ) {
 				case "protectedpage":
@@ -4283,7 +4298,8 @@ Morebits.wiki.page = function ( pageName, status ) {
 		}
 
 		// Build protection levels and expirys (expiries?) for query
-		var protections = [], expirys = [];
+		var protections = [],
+			expirys = [];
 		if ( ctx.protectEdit ) {
 			protections.push( `edit=${ctx.protectEdit.level}` );
 			expirys.push( ctx.protectEdit.expiry );
@@ -4333,6 +4349,7 @@ Morebits.wiki.page = function ( pageName, status ) {
 			* - Deal with action.completed stuff
 			* - Need to reset all parameters once done (e.g. edit summary, move destination, etc.)
 			*/
+
 /* **************** Morebits.wiki.preview **************** */
 /**
  * Use the API to parse a fragment of wikitext and render it as HTML.
@@ -4416,6 +4433,7 @@ Morebits.wiki.preview = function ( previewbox ) {
 };
 
 /* **************** Morebits.wikitext **************** */
+
 /**
  * Wikitext manipulation.
  *
@@ -4690,25 +4708,25 @@ Morebits.wikitext.page.prototype = {
 		this.text = this.text.replace( new RegExp(
 			// leading whitespace
 			"^\\s*" +
-				// capture template(s)
-				`(?:((?:\\s*${
-				// Pre-template regex, such as leading html comments
-					preRegex}|` +
-				// begin template format
-				`\\{\\{\\s*(?:${
-				// Template regex
-					regex
-				// end main template name, optionally with a number
-				// Probably remove the (?:) though
-				})\\d*\\s*` +
-				// template parameters
-				"(\\|(?:\\{\\{[^{}]*\\}\\}|[^{}])*)?" +
-				// end template format
-				"\\}\\})+" +
-				// end capture
-				"(?:\\s*\\n)?)" +
-				// trailing whitespace
-				"\\s*)?", flags ), `$1${tag}` );
+			// capture template(s)
+			`(?:((?:\\s*${
+			// Pre-template regex, such as leading html comments
+				preRegex}|` +
+			// begin template format
+			`\\{\\{\\s*(?:${
+			// Template regex
+				regex
+			// end main template name, optionally with a number
+			// Probably remove the (?:) though
+			})\\d*\\s*` +
+			// template parameters
+			"(\\|(?:\\{\\{[^{}]*\\}\\}|[^{}])*)?" +
+			// end template format
+			"\\}\\})+" +
+			// end capture
+			"(?:\\s*\\n)?)" +
+			// trailing whitespace
+			"\\s*)?", flags ), `$1${tag}` );
 		return this;
 	},
 	/**
@@ -4794,6 +4812,7 @@ Morebits.userspaceLogger = function ( logPageName ) {
  * line, allowable values are: `status` (blue), `info` (green), `warn` (red),
  * or `error` (bold red).
  */
+
 Morebits.status = function Status( text, stat, type ) {
 	this.textRaw = text;
 	this.text = Morebits.createHtml( text );
@@ -5021,7 +5040,9 @@ Morebits.checkboxShiftClickSupport = function ( jQuerySelector, jQueryContext ) 
 		var thisCb = this;
 		if ( event.shiftKey && lastCheckbox !== null ) {
 			var cbs = $( jQuerySelector, jQueryContext ); // can't cache them, obviously, if we want to support resorting
-			var index = -1, lastIndex = -1, i;
+			var index = -1,
+				lastIndex = -1,
+				i;
 			for ( i = 0; i < cbs.length; i++ ) {
 				if ( cbs[ i ] === thisCb ) {
 					index = i;
@@ -5228,6 +5249,7 @@ Morebits.batchOperation = function ( currentAction ) {
 	};
 
 	// private functions
+
 	var thisProxy = this;
 	var fnStartNewChunk = function () {
 		var chunk = ctx.pageChunks[ ++ctx.currentChunkIndex ];
@@ -5308,7 +5330,7 @@ Morebits.taskManager = function ( context ) {
 	 */
 	this.add = function ( func, deps, onFailure ) {
 		this.taskDependencyMap.set( func, deps );
-		this.failureCallbackMap.set( func, onFailure || ( () => { } ) );
+		this.failureCallbackMap.set( func, onFailure || ( () => {} ) );
 		var deferred = $.Deferred();
 		this.deferreds.set( func, deferred );
 		this.allDeferreds.push( deferred );
@@ -5367,7 +5389,7 @@ Morebits.simpleWindow = function SimpleWindow( width, height ) {
 	$( this.content ).dialog( {
 		autoOpen: false,
 		buttons: {
-			"Placeholder button": function () { }
+			"Placeholder button": function () {}
 		},
 		dialogClass: "morebits-dialog",
 		width: Math.min( parseInt( window.innerWidth, 10 ), parseInt( width || 800, 10 ) ),
@@ -5642,7 +5664,7 @@ Morebits.simpleWindow.prototype = {
 Morebits.simpleWindow.setButtonsEnabled = function ( enabled ) {
 	$( ".morebits-dialog-buttons button" ).prop( "disabled", !enabled );
 };
-} )( window, document, jQuery ); // End wrap with anonymous function
+}( window, document, jQuery ) ); // End wrap with anonymous function
 
 /**
  * If this script is being executed outside a ResourceLoader context, we add some

@@ -13,15 +13,16 @@
  */
 /* Twinkle.js - twinklediff.js */
 /* <nowiki> */
-( ( $ ) => {
+( function ( $ ) {
 /*
-   ****************************************
-   *** twinklediff.js: Diff module
-   ****************************************
-   * Mode of invocation:  Tab on non-diff pages ("Last"); tabs on diff pages ("Since", "Since mine", "Current")
-   * Active on:           Existing non-special pages
-   */
-Twinkle.diff = () => {
+ ****************************************
+ *** twinklediff.js: Diff module
+ ****************************************
+ * Mode of invocation:  Tab on non-diff pages ("Last"); tabs on diff pages ("Since", "Since mine", "Current")
+ * Active on:           Existing non-special pages
+ */
+
+Twinkle.diff = function twinklediff() {
 	if ( mw.config.get( "wgNamespaceNumber" ) < 0 || !mw.config.get( "wgArticleId" ) ) {
 		return;
 	}
@@ -90,6 +91,6 @@ Twinkle.diff.callbacks = {
 	}
 };
 Twinkle.addInitCallback( Twinkle.diff, "diff" );
-} )( jQuery );
+}( jQuery ) );
 
 /* </nowiki> */

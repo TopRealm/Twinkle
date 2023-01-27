@@ -13,17 +13,17 @@
  */
 /* Twinkle.js - friendlytag.js */
 /* <nowiki> */
-( ( $ ) => {
+( function ( $ ) {
 /*
-   ****************************************
-   *** friendlytag.js: Tag module
-   ****************************************
-   * Mode of invocation:     Tab ("Tag")
-   * Active on:              Existing articles and drafts; file pages with a corresponding file
-   *                         which is local (not on Commons); all redirects
-   */
+ ****************************************
+ *** friendlytag.js: Tag module
+ ****************************************
+ * Mode of invocation:     Tab ("Tag")
+ * Active on:              Existing articles and drafts; file pages with a corresponding file
+ *                         which is local (not on Commons); all redirects
+ */
 
-Twinkle.tag = () => {
+Twinkle.tag = function friendlytag() {
 	// redirect tagging
 	if ( Morebits.isPageRedirect() ) {
 		Twinkle.tag.mode = "redirect";
@@ -44,7 +44,7 @@ Twinkle.tag = () => {
 	}
 };
 Twinkle.tag.checkedTags = [];
-Twinkle.tag.callback = () => {
+Twinkle.tag.callback = function friendlytagCallback() {
 	var Window = new Morebits.simpleWindow( 630, Twinkle.tag.mode === "article" ? 500 : 400 );
 	Window.setScriptName( "Twinkle" );
 	// anyone got a good policy/guideline/info page/instructional page link??
@@ -59,20 +59,17 @@ Twinkle.tag.callback = () => {
 		size: "30px",
 		event: function twinkletagquickfilter() {
 			// flush the DOM of all existing underline spans
-			$allCheckboxDivs.find( ".search-hit" ).each( ( _i, e ) => {
+			$allCheckboxDivs.find( ".search-hit" ).each( ( i, e ) => {
 				var label_element = e.parentNode;
 				// This would convert <label>Hello <span class=search-hit>wo</span>rld</label>
 				// to <label>Hello world</label>
 				label_element.innerHTML = label_element.textContent;
 			} );
 			if ( this.value ) {
-
 				$allCheckboxDivs.hide();
-
 				$allHeaders.hide();
 				var searchString = this.value;
 				var searchRegex = new RegExp( mw.util.escapeRegExp( searchString ), "i" );
-
 				$allCheckboxDivs.find( "label" ).each( function () {
 					var label_text = this.textContent;
 					var searchHit = searchRegex.exec( label_text );
@@ -88,9 +85,7 @@ Twinkle.tag.callback = () => {
 					}
 				} );
 			} else {
-
 				$allCheckboxDivs.show();
-
 				$allHeaders.show();
 			}
 		}
@@ -101,9 +96,12 @@ Twinkle.tag.callback = () => {
 
 			// Object.values is unavailable in IE 11
 			// eslint-disable-next-line es-x/no-object-values
-			var obj_values = Object.values || ( ( obj ) => Object.keys( obj ).map( ( key ) => {
-				return obj[ key ];
-			} ) );
+			var obj_values = Object.values || function ( obj ) {
+
+				return Object.keys( obj ).map( ( key ) => {
+					return obj[ key ];
+				} );
+			};
 
 			// Build sorting and lookup object flatObject, which is always
 			// needed but also used to generate the alphabetical list
@@ -263,7 +261,6 @@ Twinkle.tag.callback = () => {
 
 	// for quick filter:
 	$allCheckboxDivs = $( result ).find( "[name$=tags]" ).parent();
-
 	$allHeaders = $( result ).find( "h5, .quickformDescription" );
 	result.quickfilter.focus(); // place cursor in the quick filter field as soon as window is opened
 	result.quickfilter.autocomplete = "off"; // disable browser suggestions
@@ -278,9 +275,10 @@ Twinkle.tag.callback = () => {
 		Twinkle.tag.alreadyPresentTags = [];
 		if ( Twinkle.tag.canRemove ) {
 			// Look for existing maintenance tags in the lead section and put them in array
+
 			// All tags are HTML table elements that are direct children of .mw-parser-output,
 			// except when they are within {{multiple issues}}
-			$( ".mw-parser-output" ).children().each( ( _i, e ) => {
+			$( ".mw-parser-output" ).children().each( ( i, e ) => {
 				// break out on encountering the first heading, which means we are no
 				// longer in the lead section
 				if ( e.tagName === "H2" ) {
@@ -290,11 +288,11 @@ Twinkle.tag.callback = () => {
 				// The ability to remove tags depends on the template's {{ambox}} |name=
 				// parameter bearing the template's correct name (preferably) or a name that at
 				// least redirects to the actual name
+
 				// All tags have their first class name as "box-" + template name
 				if ( e.className.indexOf( "box-" ) === 0 ) {
 					if ( e.classList[ 0 ] === "box-Multiple_issues" ) {
-
-						$( e ).find( ".ambox" ).each( ( _idx, e ) => {
+						$( e ).find( ".ambox" ).each( ( idx, e ) => {
 							if ( e.classList[ 0 ].indexOf( "box-" ) === 0 ) {
 								var tag = e.classList[ 0 ].slice( "box-".length ).replace( /_/g, " " );
 								Twinkle.tag.alreadyPresentTags.push( tag );
@@ -341,7 +339,7 @@ Twinkle.tag.callback = () => {
 // $allCheckboxDivs and $allHeaders are defined globally, rather than in the
 // quickfilter event function, to avoid having to recompute them on every keydown
 var $allCheckboxDivs, $allHeaders;
-Twinkle.tag.updateSortOrder = ( e ) => {
+Twinkle.tag.updateSortOrder = function ( e ) {
 	var form = e.target.form;
 	var sortorder = e.target.value;
 	Twinkle.tag.checkedTags = form.getChecked( "tags" );
@@ -350,8 +348,9 @@ Twinkle.tag.updateSortOrder = ( e ) => {
 	} );
 
 	// function to generate a checkbox, with appropriate subgroup if needed
-	var makeCheckbox = ( item ) => {
-		var tag = item.tag, description = item.description;
+	var makeCheckbox = function ( item ) {
+		var tag = item.tag,
+			description = item.description;
 		var checkbox = {
 			value: tag,
 			label: `{{${tag}}}: ${description}`
@@ -362,7 +361,7 @@ Twinkle.tag.updateSortOrder = ( e ) => {
 		checkbox.subgroup = item.subgroup;
 		return checkbox;
 	};
-	var makeCheckboxesForAlreadyPresentTags = () => {
+	var makeCheckboxesForAlreadyPresentTags = function () {
 		container.append( {
 			type: "header",
 			id: "tagHeader0",
@@ -392,9 +391,9 @@ Twinkle.tag.updateSortOrder = ( e ) => {
 	if ( sortorder === "cat" ) {
 		// categorical sort order
 		// function to iterate through the tags and create a checkbox for each one
-		var doCategoryCheckboxes = ( subdiv, subgroup ) => {
+		var doCategoryCheckboxes = function ( subdiv, subgroup ) {
 			var checkboxes = [];
-			$.each( subgroup, ( _k, item ) => {
+			$.each( subgroup, ( k, item ) => {
 				if ( Twinkle.tag.alreadyPresentTags.indexOf( item.tag ) === -1 ) {
 					checkboxes.push( makeCheckbox( item ) );
 				}
@@ -444,6 +443,7 @@ Twinkle.tag.updateSortOrder = ( e ) => {
 		}
 
 		// Avoid repeatedly resorting
+
 		Twinkle.tag.article.alphabeticalList = Twinkle.tag.article.alphabeticalList || Object.keys( Twinkle.tag.article.flatObject ).sort();
 		var checkboxes = [];
 		Twinkle.tag.article.alphabeticalList.forEach( ( tag ) => {
@@ -515,13 +515,13 @@ Twinkle.tag.updateSortOrder = ( e ) => {
  *
  * @param {Morebits.quickForm.element} checkbox  associated with the template
  */
-var generateLinks = ( checkbox ) => {
+var generateLinks = function ( checkbox ) {
 	var link = Morebits.htmlNode( "a", ">" );
 	link.setAttribute( "class", "tag-template-link" );
 	var tagname = checkbox.values;
 	link.setAttribute( "href", mw.util.getUrl( ( tagname.indexOf( ":" ) === -1 ? "Template:" : "" ) + ( tagname.indexOf( "|" ) === -1 ? tagname : tagname.slice( 0, tagname.indexOf( "|" ) ) ) ) );
 	link.setAttribute( "target", "_blank" );
-	$( checkbox ).parent().append( [ "\xA0", link ] );
+	$( checkbox ).parent().append( [ "\u00A0", link ] );
 };
 
 // Tags for ARTICLES start here
@@ -549,7 +549,7 @@ var translationSubgroups = [ {
 } ] : [] );
 
 // Subgroups for {{merge}}, {{merge-to}} and {{merge-from}}
-var getMergeSubgroups = ( tag ) => {
+var getMergeSubgroups = function ( tag ) {
 	var otherTagName = "合并";
 	switch ( tag ) {
 		case "Merge from":
@@ -1665,7 +1665,7 @@ Twinkle.tag.fileList[ "Replacement tags" ].forEach( ( el ) => {
 	};
 } );
 Twinkle.tag.callbacks = {
-	article: ( pageobj ) => {
+	article: function articleCallback( pageobj ) {
 		// Remove tags that become superfluous with this action
 		var pageText = pageobj.getPageText().replace( /\{\{\s*([Uu]serspace draft)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/g, "" );
 		var params = pageobj.getCallbackParameters();
@@ -1674,7 +1674,7 @@ Twinkle.tag.callbacks = {
 		 * Saves the page following the removal of tags if any. The last step.
 		 * Called from removeTags()
 		 */
-		var postRemoval = () => {
+		var postRemoval = function () {
 			if ( params.tagsToRemove.length ) {
 				// Remove empty {{multiple issues}} if found
 				pageText = pageText.replace( /\{\{(multiple ?issues|article ?issues|mi)\s*\|\s*\}\}\n?/im, "" );
@@ -1683,14 +1683,14 @@ Twinkle.tag.callbacks = {
 			}
 
 			// Build edit summary
-			var makeSentence = ( array ) => {
+			var makeSentence = function ( array ) {
 				if ( array.length < 3 ) {
 					return array.join( " and " );
 				}
 				var last = array.pop();
 				return `${array.join( ", " )}, and ${last}`;
 			};
-			var makeTemplateLink = ( tag ) => {
+			var makeTemplateLink = function ( tag ) {
 				var text = "{{[[";
 				// if it is a custom tag with a parameter
 				if ( tag.indexOf( "|" ) !== -1 ) {
@@ -1832,13 +1832,12 @@ Twinkle.tag.callbacks = {
 		 * Removes the existing tags that were deselected (if any)
 		 * Calls postRemoval() when done
 		 */
-		var removeTags = () => {
+		var removeTags = function removeTags() {
 			if ( params.tagsToRemove.length === 0 ) {
 				postRemoval();
 				return;
 			}
 			Morebits.status.info( "Info", "Removing deselected tags that were already present" );
-
 			var getRedirectsFor = [];
 
 			// Remove the tags from the page text, if found in its proper name,
@@ -1898,21 +1897,27 @@ Twinkle.tag.callbacks = {
 			removeTags();
 			return;
 		}
-		var tagRe, tagText = "", tags = [], groupableTags = [], groupableExistingTags = [];
-		// Executes first: addition of selected tags
+		var tagRe,
+			tagText = "",
+			tags = [],
+			groupableTags = [],
+			groupableExistingTags = [];
+			// Executes first: addition of selected tags
+
 		/**
 		 * Updates `tagText` with the syntax of `tagName` template with its parameters
 		 *
-		 * @param {number} _tagIndex
+		 * @param {number} tagIndex
 		 * @param {string} tagName
 		 */
-		var addTag = ( _tagIndex, tagName ) => {
+		var addTag = function articleAddTag( tagIndex, tagName ) {
 			var currentTag = "";
 			if ( tagName === "Uncategorized" || tagName === "Improve categories" ) {
 				pageText += `\n\n{{${tagName}|date={{subst:CURRENTMONTHNAME}} {{subst:CURRENTYEAR}}}}`;
 			} else {
 				currentTag += `{{${tagName}`;
 				// fill in other parameters, based on the tag
+
 				var subgroupObj = Twinkle.tag.article.flatObject[ tagName ] && Twinkle.tag.article.flatObject[ tagName ].subgroup;
 				if ( subgroupObj ) {
 					var subgroups = Array.isArray( subgroupObj ) ? subgroupObj : [ subgroupObj ];
@@ -1964,21 +1969,21 @@ Twinkle.tag.callbacks = {
 		 * these tags aren't supported in {{multiple issues}} or because
 		 * {{multiple issues}} is not being added to the page at all
 		 */
-		var addUngroupedTags = () => {
+		var addUngroupedTags = function () {
 			$.each( tags, addTag );
 
 			// Insert tag after short description or any hatnotes,
 			// as well as deletion/protection-related templates
 			var wikipage = new Morebits.wikitext.page( pageText );
 			var templatesAfter = `${Twinkle.hatnoteRegex
-				// Protection templates
+			// Protection templates
 			}pp|pp-.*?|` +
-				// CSD
-				"db|delete|db-.*?|speedy deletion-.*?|" +
-				// not a hatnote, but sometimes under a CSD or AfD
-				"salt|proposed deletion endorsed";
-			// AfD is special, as the tag includes html comments before and after the actual template
-			// trailing whitespace/newline needed since this subst's a newline
+			// CSD
+			"db|delete|db-.*?|speedy deletion-.*?|" +
+			// not a hatnote, but sometimes under a CSD or AfD
+			"salt|proposed deletion endorsed";
+				// AfD is special, as the tag includes html comments before and after the actual template
+				// trailing whitespace/newline needed since this subst's a newline
 			var afdRegex = "(?:<!--.*AfD.*\\n\\{\\{(?:Article for deletion\\/dated|AfDM).*\\}\\}\\n<!--.*(?:\\n<!--.*)?AfD.*(?:\\s*\\n))?";
 			pageText = wikipage.insertAfterTemplates( tagText, templatesAfter, null, afdRegex ).getText();
 			removeTags();
@@ -2032,7 +2037,7 @@ Twinkle.tag.callbacks = {
 			/**
 			 * Adds newly added tags to MI
 			 */
-			var addNewTagsToMI = () => {
+			var addNewTagsToMI = function () {
 				$.each( groupableTags, addTag );
 				tagText += "}}\n";
 				addUngroupedTags();
@@ -2094,8 +2099,14 @@ Twinkle.tag.callbacks = {
 			addUngroupedTags();
 		}
 	},
-	redirect: ( pageobj ) => {
-		var params = pageobj.getCallbackParameters(), pageText = pageobj.getPageText(), tagRe, tagText = "", summaryText = "Added", tags = [], i;
+	redirect: function redirect( pageobj ) {
+		var params = pageobj.getCallbackParameters(),
+			pageText = pageobj.getPageText(),
+			tagRe,
+			tagText = "",
+			summaryText = "Added",
+			tags = [],
+			i;
 		for ( i = 0; i < params.tags.length; i++ ) {
 			tagRe = new RegExp( `(\\{\\{${params.tags[ i ]}(\\||\\}\\}))`, "im" );
 			if ( !tagRe.exec( pageText ) ) {
@@ -2104,7 +2115,7 @@ Twinkle.tag.callbacks = {
 				Morebits.status.warn( "Info", `Found {{${params.tags[ i ]}}} on the redirect already...excluding` );
 			}
 		}
-		var addTag = ( tagIndex, tagName ) => {
+		var addTag = function redirectAddTag( tagIndex, tagName ) {
 			tagText += `\n{{${tagName}`;
 			if ( tagName === "R from alternative language" ) {
 				if ( params.altLangFrom ) {
@@ -2139,7 +2150,7 @@ Twinkle.tag.callbacks = {
 			pageText = pageText.replace( oldTags[ 0 ], oldTags[ 1 ] + tagText + oldTags[ 2 ] + oldTags[ 3 ] );
 		} else {
 			// Fold any pre-existing Rcats into taglist and under Rcatshell
-			var pageTags = pageText.match( /\s*{{R(?:edirect)? .*?}}/gim );
+			var pageTags = pageText.match( /\s*{{R(?:edirect)? .*?}}/img );
 			var oldPageTags = "";
 			if ( pageTags ) {
 				pageTags.forEach( ( pageTag ) => {
@@ -2169,15 +2180,16 @@ Twinkle.tag.callbacks = {
 			pageobj.patrol();
 		}
 	},
-	file: ( pageobj ) => {
+	file: function friendlytagCallbacksFile( pageobj ) {
 		var text = pageobj.getPageText();
 		var params = pageobj.getCallbackParameters();
 		var summary = "加入";
 
 		// Add maintenance tags
 		if ( params.tags.length ) {
-			var tagtext = "", currentTag;
-			$.each( params.tags, ( _k, tag ) => {
+			var tagtext = "",
+				currentTag;
+			$.each( params.tags, ( k, tag ) => {
 				// when other commons-related tags are placed, remove "move to Commons" tag
 				if ( [ "Keep local", "Now Commons", "Do not move to Commons" ].indexOf( tag ) !== -1 ) {
 					text = text.replace( /\{\{(mtc|(copy |move )?to ?commons|move to wikimedia commons|copy to wikimedia commons)[^}]*\}\}/gi, "" );
@@ -2217,9 +2229,9 @@ Twinkle.tag.callbacks = {
 						break;
 					case "Vector version available":
 						text = text.replace( /\{\{((convert to |convertto|should be |shouldbe|to)?svg|badpng|vectorize)[^}]*\}\}/gi, "" );
-					/* falls through */
+						/* falls through */
 					case "PNG version available":
-					/* falls through */
+						/* falls through */
 					case "Obsolete":
 						currentTag += `|1=${params[ `${tag.replace( / /g, "_" )}File` ]}`;
 						break;
@@ -2231,9 +2243,8 @@ Twinkle.tag.callbacks = {
 						break;
 					case "Orphaned non-free revisions":
 						currentTag = `subst:${currentTag}`; // subst
-
 						// remove {{non-free reduce}} and redirects
-						text = text.replace( /\{\{\s*(Template\s*:\s*)?(Non-free reduce|FairUseReduce|Fairusereduce|Fair Use Reduce|Fair use reduce|Reduce size|Reduce|Fair-use reduce|Image-toobig|Comic-ovrsize-img|Non-free-reduce|Nfr|Smaller image|Nonfree reduce)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/gi, "" );
+						text = text.replace( /\{\{\s*(Template\s*:\s*)?(Non-free reduce|FairUseReduce|Fairusereduce|Fair Use Reduce|Fair use reduce|Reduce size|Reduce|Fair-use reduce|Image-toobig|Comic-ovrsize-img|Non-free-reduce|Nfr|Smaller image|Nonfree reduce)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/ig, "" );
 						currentTag += "|date={{subst:date}}";
 						break;
 					case "Copy to Commons":
@@ -2244,7 +2255,7 @@ Twinkle.tag.callbacks = {
 						break;
 					default:
 						break;
-					// don't care
+				// don't care
 				}
 
 				currentTag = `{{${currentTag}}}\n`;
@@ -2271,13 +2282,14 @@ Twinkle.tag.callbacks = {
 		}
 	}
 };
-Twinkle.tag.callback.evaluate = ( e ) => {
+Twinkle.tag.callback.evaluate = function friendlytagCallbackEvaluate( e ) {
 	var form = e.target;
 	var params = Morebits.quickForm.getInputData( form );
 
 	// Validation
+
 	// Given an array of incompatible tags, check if we have two or more selected
-	var checkIncompatible = ( conflicts, extra ) => {
+	var checkIncompatible = function ( conflicts, extra ) {
 		var count = conflicts.reduce( ( sum, tag ) => {
 			sum += params.tags.indexOf( tag ) !== -1;
 			return sum;
@@ -2338,6 +2350,7 @@ Twinkle.tag.callback.evaluate = ( e ) => {
 				}
 
 				// Check that selected templates make sense given the file's extension.
+
 				// Bad GIF|JPEG|SVG
 				var badIndex; // Keep track of where the offending template is so we can reference it below
 				if ( extensionUpper !== "GIF" && ( badIndex = params.tags.indexOf( "Bad GIF" ) ) !== -1 || extensionUpper !== "JPEG" && ( badIndex = params.tags.indexOf( "Bad JPEG" ) ) !== -1 || extensionUpper !== "SVG" && ( badIndex = params.tags.indexOf( "Bad SVG" ) ) !== -1 ) {
@@ -2412,5 +2425,5 @@ Twinkle.tag.callback.evaluate = ( e ) => {
 	qiuwen_page.load( Twinkle.tag.callbacks[ Twinkle.tag.mode ] );
 };
 Twinkle.addInitCallback( Twinkle.tag, "tag" );
-} )( jQuery );
+}( jQuery ) );
 /* </nowiki> */

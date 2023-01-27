@@ -13,22 +13,23 @@
  */
 /* Twinkle.js - twinklebatchprotect.js */
 /* <nowiki> */
-( ( $ ) => {
+( function ( $ ) {
 /*
-	   ****************************************
-	   *** twinklebatchprotect.js: Batch protect module (sysops only)
-	   ****************************************
-	   * Mode of invocation:     Tab ("P-batch")
-	   * Active on:              Existing project pages and user pages; existing and
-	   *                         non-existing categories; Special:PrefixIndex
-	   */
-Twinkle.batchprotect = () => {
+ ****************************************
+ *** twinklebatchprotect.js: Batch protect module (sysops only)
+ ****************************************
+ * Mode of invocation:     Tab ("P-batch")
+ * Active on:              Existing project pages and user pages; existing and
+ *                         non-existing categories; Special:PrefixIndex
+ */
+
+Twinkle.batchprotect = function twinklebatchprotect() {
 	if ( Morebits.userIsSysop && ( mw.config.get( "wgArticleId" ) > 0 && ( mw.config.get( "wgNamespaceNumber" ) === 2 || mw.config.get( "wgNamespaceNumber" ) === 4 ) || mw.config.get( "wgNamespaceNumber" ) === 14 || mw.config.get( "wgCanonicalSpecialPageName" ) === "Prefixindex" ) ) {
 		Twinkle.addPortletLink( Twinkle.batchprotect.callback, "批保", "tw-pbatch", "批量保护链出页面" );
 	}
 };
 Twinkle.batchprotect.unlinkCache = {};
-Twinkle.batchprotect.callback = () => {
+Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 	var Window = new Morebits.simpleWindow( 600, 400 );
 	Window.setTitle( "批保" );
 	Window.setScriptName( "Twinkle" );
@@ -58,7 +59,7 @@ Twinkle.batchprotect.callback = () => {
 		type: "select",
 		name: "editexpiry",
 		label: "终止时间：",
-		event: ( e ) => {
+		event: function event( e ) {
 			if ( e.target.value === "custom" ) {
 				Twinkle.protect.doCustomExpiry( e.target );
 			}
@@ -91,7 +92,7 @@ Twinkle.batchprotect.callback = () => {
 		type: "select",
 		name: "moveexpiry",
 		label: "终止时间：",
-		event: ( e ) => {
+		event: function event( e ) {
 			if ( e.target.value === "custom" ) {
 				Twinkle.protect.doCustomExpiry( e.target );
 			}
@@ -101,7 +102,7 @@ Twinkle.batchprotect.callback = () => {
 
 	form.append( {
 		type: "checkbox",
-		event: ( e ) => {
+		event: function twinklebatchprotectFormCreatemodifyEvent( e ) {
 			e.target.form.createlevel.disabled = !e.target.checked;
 			e.target.form.createexpiry.disabled = !e.target.checked || e.target.form.createlevel.value === "all";
 			e.target.form.createlevel.style.color = e.target.form.createexpiry.style.color = e.target.checked ? "" : "transparent";
@@ -125,7 +126,7 @@ Twinkle.batchprotect.callback = () => {
 		type: "select",
 		name: "createexpiry",
 		label: "终止时间：",
-		event: ( e ) => {
+		event: function event( e ) {
 			if ( e.target.value === "custom" ) {
 				Twinkle.protect.doCustomExpiry( e.target );
 			}
@@ -179,7 +180,8 @@ Twinkle.batchprotect.callback = () => {
 		pages.sort( Twinkle.sortByNamespace );
 		pages.forEach( ( page ) => {
 			var metadata = [];
-			var missing = !!page.missing, editProt;
+			var missing = !!page.missing,
+				editProt;
 			if ( missing ) {
 				metadata.push( "页面不存在" );
 				editProt = page.protection.filter( ( pr ) => {
@@ -217,14 +219,14 @@ Twinkle.batchprotect.callback = () => {
 		form.append( {
 			type: "button",
 			label: "全选",
-			event: ( e ) => {
+			event: function event( e ) {
 				$( Morebits.quickForm.getElements( e.target.form, "pages" ) ).prop( "checked", true );
 			}
 		} );
 		form.append( {
 			type: "button",
 			label: "全不选",
-			event: ( e ) => {
+			event: function event( e ) {
 				$( Morebits.quickForm.getElements( e.target.form, "pages" ) ).prop( "checked", false );
 			}
 		} );
@@ -250,7 +252,7 @@ Twinkle.batchprotect.callback = () => {
 };
 Twinkle.batchprotect.currentProtectCounter = 0;
 Twinkle.batchprotect.currentprotector = 0;
-Twinkle.batchprotect.callback.evaluate = ( event ) => {
+Twinkle.batchprotect.callback.evaluate = function twinklebatchprotectCallbackEvaluate( event ) {
 	Morebits.wiki.actionCompleted.notice = "批量保护完成";
 	var form = event.target;
 	var numProtected = $( Morebits.quickForm.getElements( form, "个页面" ) ).filter( ( index, element ) => {
@@ -289,7 +291,7 @@ Twinkle.batchprotect.callback.evaluate = ( event ) => {
 	} );
 };
 Twinkle.batchprotect.callbacks = {
-	main: ( apiobj ) => {
+	main: function main( apiobj ) {
 		var response = apiobj.getResponse();
 		if ( response.query.normalized ) {
 			apiobj.params.page = response.query.normalized[ 0 ].to;
@@ -320,6 +322,6 @@ Twinkle.batchprotect.callbacks = {
 	}
 };
 Twinkle.addInitCallback( Twinkle.batchprotect, "batchprotect" );
-} )( jQuery );
+}( jQuery ) );
 
 /* </nowiki> */

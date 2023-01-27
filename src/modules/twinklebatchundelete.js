@@ -13,22 +13,22 @@
  */
 /* Twinkle.js - twinklebatchundelete.js */
 /* <nowiki> */
-( ( $ ) => {
+( function ( $ ) {
 /*
-   ****************************************
-   *** twinklebatchundelete.js: Batch undelete module
-   ****************************************
-   * Mode of invocation:     Tab ("Und-batch")
-   * Active on:              Existing user and project pages
-   */
+ ****************************************
+ *** twinklebatchundelete.js: Batch undelete module
+ ****************************************
+ * Mode of invocation:     Tab ("Und-batch")
+ * Active on:              Existing user and project pages
+ */
 
-Twinkle.batchundelete = () => {
+Twinkle.batchundelete = function twinklebatchundelete() {
 	if ( !Morebits.userIsSysop || !mw.config.get( "wgArticleId" ) || mw.config.get( "wgNamespaceNumber" ) !== mw.config.get( "wgNamespaceIds" ).user && mw.config.get( "wgNamespaceNumber" ) !== mw.config.get( "wgNamespaceIds" ).project ) {
 		return;
 	}
 	Twinkle.addPortletLink( Twinkle.batchundelete.callback, "批复", "tw-batch-undel", "恢复页面" );
 };
-Twinkle.batchundelete.callback = () => {
+Twinkle.batchundelete.callback = function twinklebatchundeleteCallback() {
 	var Window = new Morebits.simpleWindow( 600, 400 );
 	Window.setScriptName( "Twinkle" );
 	Window.setTitle( "批量恢复" );
@@ -92,14 +92,14 @@ Twinkle.batchundelete.callback = () => {
 		apiobj.params.form.append( {
 			type: "button",
 			label: "全选",
-			event: ( e ) => {
+			event: function ( e ) {
 				$( Morebits.quickForm.getElements( e.target.form, "pages" ) ).prop( "checked", true );
 			}
 		} );
 		apiobj.params.form.append( {
 			type: "button",
 			label: "全不选",
-			event: ( e ) => {
+			event: function ( e ) {
 				$( Morebits.quickForm.getElements( e.target.form, "pages" ) ).prop( "checked", false );
 			}
 		} );
@@ -122,7 +122,7 @@ Twinkle.batchundelete.callback = () => {
 	};
 	qiuwen_api.post();
 };
-Twinkle.batchundelete.callback.evaluate = ( event ) => {
+Twinkle.batchundelete.callback.evaluate = function ( event ) {
 	Morebits.wiki.actionCompleted.notice = "恢复已完成";
 	var numProtected = Morebits.quickForm.getElements( event.target, "pages" ).filter( ( element ) => {
 		return element.checked && element.nextElementSibling.style.color === "red";
@@ -164,7 +164,7 @@ Twinkle.batchundelete.callback.evaluate = ( event ) => {
 Twinkle.batchundelete.callbacks = {
 	// this stupid parameter name is a temporary thing until I implement an overhaul
 	// of Morebits.wiki.* callback parameters
-	doExtras: ( thingWithParameters ) => {
+	doExtras: function ( thingWithParameters ) {
 		var params = thingWithParameters.parent ? thingWithParameters.parent.getCallbackParameters() : thingWithParameters.getCallbackParameters();
 		// the initial batch operation's job is to delete the page, and that has
 		// succeeded by now
@@ -188,7 +188,7 @@ Twinkle.batchundelete.callbacks = {
 			}
 		}
 	},
-	undeleteTalk: ( apiobj ) => {
+	undeleteTalk: function ( apiobj ) {
 		var page = apiobj.getResponse().query.pages[ 0 ];
 		var exists = !page.missing;
 		var delrevs = page.deletedrevisions && page.deletedrevisions[ 0 ].revid;
@@ -204,6 +204,6 @@ Twinkle.batchundelete.callbacks = {
 	}
 };
 Twinkle.addInitCallback( Twinkle.batchundelete, "batchundelete" );
-} )( jQuery );
+}( jQuery ) );
 
 /* </nowiki> */

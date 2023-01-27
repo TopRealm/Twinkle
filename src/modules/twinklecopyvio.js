@@ -14,17 +14,17 @@
 /* Twinkle.js - twinklecopyvio.js */
 /* <nowiki> */
 // eslint-disable-next-line no-unused-vars
-( ( $ ) => {
+( function ( $ ) {
 /*
-   ****************************************
-   *** twinklecopyvio.js: Copyvio module
-   ****************************************
-   * Mode of invocation:    Tab ("Copyvio")
-   * Active on:             Existing, non-special pages, except for file pages with no local (non-Commons) file which are not redirects
-   * Config directives in:  TwinkleConfig
-   */
+ ****************************************
+ *** twinklecopyvio.js: Copyvio module
+ ****************************************
+ * Mode of invocation:    Tab ("Copyvio")
+ * Active on:             Existing, non-special pages, except for file pages with no local (non-Commons) file which are not redirects
+ * Config directives in:  TwinkleConfig
+ */
 
-Twinkle.copyvio = () => {
+Twinkle.copyvio = function twinklecopyvio() {
 	// Disable on:
 	// * special pages
 	// * non-existent pages
@@ -35,7 +35,7 @@ Twinkle.copyvio = () => {
 	}
 	Twinkle.addPortletLink( Twinkle.copyvio.callback, "侵权", "tw-copyvio", "提报侵权页面", "" );
 };
-Twinkle.copyvio.callback = () => {
+Twinkle.copyvio.callback = function twinklecopyvioCallback() {
 	var Window = new Morebits.simpleWindow( 600, 350 );
 	Window.setTitle( "提报侵权页面" );
 	Window.setScriptName( "Twinkle" );
@@ -67,7 +67,7 @@ Twinkle.copyvio.callback = () => {
 	Window.display();
 };
 Twinkle.copyvio.callbacks = {
-	tryTagging: ( pageobj ) => {
+	tryTagging: function ( pageobj ) {
 		// 先尝试标记页面，如果发现已经标记则停止提报
 		var text = pageobj.getPageText();
 		if ( text.indexOf( "{{Copyvio|" ) === -1 ) {
@@ -81,7 +81,7 @@ Twinkle.copyvio.callbacks = {
 			Morebits.status.error( "错误", "页面已经标记侵权，请人工确认是否已经提报。" );
 		}
 	},
-	main: ( pageobj ) => {
+	main: function ( pageobj ) {
 		// this is coming in from lookupCreation...!
 		var params = pageobj.getCallbackParameters();
 		var initialContrib = pageobj.getCreator();
@@ -105,7 +105,7 @@ Twinkle.copyvio.callbacks = {
 			usertalkpage.append();
 		}
 	},
-	taggingArticle: ( pageobj ) => {
+	taggingArticle: function ( pageobj ) {
 		var params = pageobj.getCallbackParameters();
 		var revisionId = mw.config.get( "wgRevisionId" ) || mw.config.get( "wgDiffNewId" ) || mw.config.get( "wgCurRevisionId" );
 		var tag = `{{subst:Copyvio/auto|url=${params.source.replace( /http/g, "&#104;ttp" ).replace( /\n+/g, "\n" ).replace( /^\s*([^*])/gm, "* $1" ).replace( /^\* $/m, "" )}|OldRevision=${revisionId}}}`;
@@ -124,7 +124,7 @@ Twinkle.copyvio.callbacks = {
 			pageobj.patrol();
 		}
 	},
-	copyvioList: ( pageobj ) => {
+	copyvioList: function ( pageobj ) {
 		var text = pageobj.getPageText();
 		var output = "";
 		var date = new Date();
@@ -140,7 +140,7 @@ Twinkle.copyvio.callbacks = {
 		pageobj.append();
 	}
 };
-Twinkle.copyvio.callback.evaluate = ( e ) => {
+Twinkle.copyvio.callback.evaluate = function ( e ) {
 	mw.config.set( "wgPageName", mw.config.get( "wgPageName" ).replace( /_/g, " " ) );
 	var source = e.target.source.value;
 	var usertalk = e.target.notify.checked;
@@ -169,6 +169,6 @@ Twinkle.copyvio.callback.evaluate = ( e ) => {
 	Morebits.wiki.removeCheckpoint();
 };
 Twinkle.addInitCallback( Twinkle.copyvio, "copyvio" );
-} )( jQuery );
+}( jQuery ) );
 
 /* </nowiki> */
