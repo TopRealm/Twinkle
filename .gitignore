@@ -1,5 +1,6 @@
 .vscode/
 scripts/credentials.json
+dist/
 
 # Windows
 Thumbs.db

@@ -9,12 +9,12 @@
 	"scripts": {
 		"eslint": "eslint .",
 		"eslint:fix": "eslint . --fix",
-		"stylelint": "stylelint *.css",
-		"stylelint:fix": "stylelint *.css --fix",
-		"lint": "eslint . && stylelint *.css",
-		"lint:fix": "eslint . --fix && stylelint *.css --fix",
+		"stylelint": "stylelint src/*.css",
+		"stylelint:fix": "stylelint src/*.css --fix",
+		"lint": "eslint . && stylelint src/*.css",
+		"lint:fix": "eslint . --fix && stylelint src/*.css --fix",
 		"prettier": "npx prettier --write . && npm run lint:fix",
-		"babel": "babel -d dist src && eslint . --fix && stylelint *.css --fix",
+		"babel": "babel -d dist src && eslint . --fix && stylelint src/*.css --fix",
 		"deploy": "node scripts/deploy.js"
 	},
 	"devDependencies": {
