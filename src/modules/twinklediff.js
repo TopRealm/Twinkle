@@ -40,20 +40,6 @@ Twinkle.diff = () => {
 		} ), "当前", "tw-curdiff", "显示与当前版本间的差异" );
 	}
 };
-Twinkle.diff.callbacks = {
-	main: ( self ) => {
-		var rev = self.response.query.pages[ 0 ].revisions;
-		var revid = rev && rev[ 0 ].revid;
-		if ( !revid ) {
-			self.statelem.error( `未找到合适的早期版本，或 ${self.params.user} 是唯一贡献者。取消。` );
-			return;
-		}
-		window.location = mw.util.getUrl( mw.config.get( "wgPageName" ), {
-			diff: mw.config.get( "wgCurRevisionId" ),
-			oldid: revid
-		} );
-	}
-};
 Twinkle.addInitCallback( Twinkle.diff, "diff" );
 } )( jQuery );
 
