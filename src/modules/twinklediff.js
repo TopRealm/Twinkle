@@ -33,48 +33,12 @@ Twinkle.diff = () => {
 
 	// Show additional tabs only on diff pages
 	if ( mw.util.getParamValue( "diff" ) ) {
-		Twinkle.addPortletLink( () => {
-			Twinkle.diff.evaluate( false );
-		}, "上异", "tw-since", "显示与上一修订版本间的差异" );
-		Twinkle.addPortletLink( () => {
-			Twinkle.diff.evaluate( true );
-		}, "自异", "tw-sincemine", "显示与我做出的修订版本的差异" );
 		var oldid = /oldid=(.+)/.exec( $( "#mw-diff-ntitle1" ).find( "strong a" ).first().attr( "href" ) )[ 1 ];
 		Twinkle.addPortletLink( mw.util.getUrl( mw.config.get( "wgPageName" ), {
 			diff: "cur",
 			oldid: oldid
 		} ), "当前", "tw-curdiff", "显示与当前版本间的差异" );
 	}
-};
-Twinkle.diff.evaluate = ( me ) => {
-	var user;
-	if ( me ) {
-		user = mw.config.get( "wgUserName" );
-	} else {
-		var node = document.getElementById( "mw-diff-ntitle2" );
-		if ( !node ) {
-			// nothing to do?
-			return;
-		}
-		user = $( node ).find( "a" ).first().text();
-	}
-	var query = {
-		prop: "revisions",
-		action: "query",
-		titles: mw.config.get( "wgPageName" ),
-		rvlimit: 1,
-		rvprop: [ "ids", "user" ],
-		rvstartid: mw.config.get( "wgCurRevisionId" ) - 1,
-		// i.e. not the current one
-		rvuser: user,
-		format: "json"
-	};
-	Morebits.status.init( document.getElementById( "mw-content-text" ) );
-	var qiuwen_api = new Morebits.wiki.api( "抓取最初贡献者信息", query, Twinkle.diff.callbacks.main );
-	qiuwen_api.params = {
-		user: user
-	};
-	qiuwen_api.post();
 };
 Twinkle.diff.callbacks = {
 	main: ( self ) => {
