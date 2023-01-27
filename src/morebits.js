@@ -1,8 +1,3 @@
-/* eslint-disable no-new */
-/* eslint-disable no-throw-literal */
-
-'use strict';
-
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
  * _addText: '{{Twinkle Header}}'
@@ -15,6 +10,8 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - morebits.js */
+/* eslint-disable no-new */
+/* eslint-disable no-throw-literal */
 /* <nowiki> */
 /**
  * A library full of lots of goodness for user scripts on MediaWiki wikis.
@@ -2109,7 +2106,7 @@ Morebits.wiki = {};
  * @returns {boolean}
  */
 Morebits.wiki.isPageRedirect = function qiuwenIsPageRedirect() {
-	console.warn('NOTE: Morebits.wiki.isPageRedirect has been deprecated, use Morebits.isPageRedirect instead.'); // eslint-disable-line no-console
+	console.warn('NOTE: Morebits.wiki.isPageRedirect has been deprecated, use Morebits.isPageRedirect instead.');
 	return Morebits.isPageRedirect();
 };
 
@@ -3088,7 +3085,7 @@ Morebits.wiki.page = function (pageName, status) {
 	 * accept a string value of `default`.
 	 */
 	this.setWatchlistFromPreferences = function (watchlistOption) {
-		console.warn('NOTE: Morebits.wiki.page.setWatchlistFromPreferences was deprecated December 2020, please use setWatchlist'); // eslint-disable-line no-console
+		console.warn('NOTE: Morebits.wiki.page.setWatchlistFromPreferences was deprecated December 2020, please use setWatchlist');
 		if (watchlistOption) {
 			ctx.watchlistOption = 'preferences';
 		} else {
@@ -3514,10 +3511,7 @@ Morebits.wiki.page = function (pageName, status) {
 		ctx.protectApi.post();
 	};
 
-	/*
-	 * Private member functions
-	 * These are not exposed outside
-	 */
+	/* Private member functions: These are not exposed outside */
 
 	/**
 	 * Determines whether we can save an API call by using the csrf token
@@ -4343,13 +4337,6 @@ Morebits.wiki.page = function (pageName, status) {
 	};
 }; // end Morebits.wiki.page
 
-/* Morebits.wiki.page TODO: (XXX)
- * - Should we retry loads also?
- * - Need to reset current action before the save?
- * - Deal with action.completed stuff
- * - Need to reset all parameters once done (e.g. edit summary, move destination, etc.)
- */
-
 /* **************** Morebits.wiki.preview **************** */
 /**
  * Use the API to parse a fragment of wikitext and render it as HTML.
@@ -4899,7 +4886,7 @@ Morebits.status.prototype = {
 				}
 
 				// also log error messages in the browser console
-				console.error(this.textRaw + ': ' + this.statRaw); // eslint-disable-line no-console
+				console.error(this.textRaw + ': ' + this.statRaw);
 			}
 		}
 
