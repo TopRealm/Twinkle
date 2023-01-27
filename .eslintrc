@@ -93,8 +93,8 @@
 				"after": true
 			}
 		],
-		"prefer-arrow-callback": "error",
-		"prefer-spread": "error",
+		"prefer-arrow-callback": "off",
+		"prefer-spread": "off",
 		"prefer-template": "error",
 		"prefer-rest-params": "off",
 		"prefer-exponentiation-operator": "error",

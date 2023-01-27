@@ -91,7 +91,7 @@ form.quickform div {
 form.quickform h5 {
 	margin: 0.5em 0 0;
 	padding: 0.3em 0.2em 0.2em;
-	font-size: 108%; /* 100% is 12px => 108% is 12.96px */
+	font-size: 108%; /* 100% is 12px → 108% is 12.96px */
 }
 
 /* only give the top border to headers with something above them */
@@ -181,18 +181,18 @@ div.morebits-previewbox .mw-editsection {
 /* px translations in comments are w.r.t standard browser settings,
    in other settings, the sizes would be scaled accordingly */
 .skin-vector .morebits-dialog {
-	font-size: 75%; /* 100% is 16px => 75% is 12px */
+	font-size: 75%; /* 100% is 16px → 75% is 12px */
 }
 
 .skin-gongbi .morebits-dialog {
-	font-size: 79%; /* 100% is 15.2px => 79% is 12.008px */
+	font-size: 79%; /* 100% is 15.2px → 79% is 12.008px */
 }
 
 body .ui-dialog.morebits-dialog .ui-dialog-titlebar {
 	height: 1em;
 	background-color: #bccadf !important;
 	background-image: none !important;
-	font: bold 108% sans-serif; /* 100% is 12px (from above) => 108% is 12.96px */
+	font: bold 108% sans-serif; /* 100% is 12px (from above) → 108% is 12.96px */
 	overflow: hidden;
 	padding: 0.4em 0.3em 0.5em !important;
 	white-space: nowrap;
@@ -232,11 +232,11 @@ body .ui-dialog.morebits-dialog .ui-dialog-buttonpane button {
 }
 
 .morebits-dialog-buttons {
-	font-size: 108%; /* 100% is 12px => 108% is 12.96px */
+	font-size: 108%; /* 100% is 12px → 108% is 12.96px */
 }
 
 .morebits-dialog-footerlinks {
-	font-size: 97%; /* 100% is 12px (from above) => 97% is 11.64px */
+	font-size: 97%; /* 100% is 12px (from above) → 97% is 11.64px */
 	float: right;
 	margin: 0.7em 0.4em 0 0;
 }

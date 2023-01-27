@@ -46,7 +46,7 @@
  * 1) Changes committed and merged to master branch on GitHub repo
  * 2) Currently on master branch, and synced with GitHub repo
  * 3) Run a full build using "grunt build"
- * When all of the above are done ==> you are ready to proceed with deployment
+ * When all of the above are done → you are ready to proceed with deployment
  *
  * --------------------------------------------------------------------------
  *  Usage:
