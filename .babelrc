@@ -9,5 +9,5 @@
 		"@babel/preset-react"
 	],
 	"plugins": [],
-	"ignore": ["dist/", "scripts/", "lib/", "*.json"]
+	"ignore": ["dist/", "src/lib", "scripts/", "lib/", "*.json"]
 }

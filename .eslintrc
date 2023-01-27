@@ -13,7 +13,7 @@
 	"parserOptions": {
 		"ecmaVersion": "latest"
 	},
-	"ignorePatterns": ["scripts/", "lib/", "dist/", "*.json"],
+	"ignorePatterns": ["src/lib", "scripts/", "lib/", "dist/", "*.json"],
 	"rules": {
 		"logical-assignment-operators": "off",
 		"camelcase": "off",
