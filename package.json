@@ -14,7 +14,7 @@
 		"lint": "eslint . && stylelint src/*.css",
 		"lint:fix": "eslint . --fix && stylelint src/*.css --fix",
 		"prettier": "npx prettier --write . && npm run lint:fix",
-		"babel": "babel -d dist src && eslint . --fix && stylelint src/*.css --fix",
+		"babel": "babel -d dist src && stylelint src/*.css --fix",
 		"deploy": "node scripts/deploy.js"
 	},
 	"devDependencies": {
