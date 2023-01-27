@@ -1333,7 +1333,7 @@ Morebits.string = {
 	 */
 	toUpperCaseFirstChar: function (str) {
 		str = str.toString();
-		return str.slice(0, 1).toUpperCase() + str.slice(1);
+		return str.substr(0, 1).toUpperCase() + str.substr(1);
 	},
 	/**
 	 * @param {string} str
@@ -1341,7 +1341,7 @@ Morebits.string = {
 	 */
 	toLowerCaseFirstChar: function (str) {
 		str = str.toString();
-		return str.slice(0, 1).toLowerCase() + str.slice(1);
+		return str.substr(0, 1).toLowerCase() + str.substr(1);
 	},
 	/**
 	 * Gives an array of substrings of `str` - starting with `start` and
@@ -3515,9 +3515,9 @@ Morebits.wiki.page = function (pageName, status) {
 	};
 
 	/*
-			 * Private member functions
-			 * These are not exposed outside
-			 */
+	 * Private member functions
+	 * These are not exposed outside
+	 */
 
 	/**
 	 * Determines whether we can save an API call by using the csrf token
@@ -4472,14 +4472,14 @@ Morebits.wikitext.parseTemplate = function (text, start) {
 	function findParam(final) {
 		// Nothing found yet, this must be the template name
 		if (count === -1) {
-			result.name = current.slice(2).trim();
+			result.name = current.substring(2).trim();
 			++count;
 		} else {
 			// In a parameter
 			if (equals !== -1) {
 				// We found an equals, so save the parameter as key: value
-				key = current.slice(0, Math.max(0, equals)).trim();
-				value = final ? current.substring(equals + 1, current.length - 2).trim() : current.slice(Math.max(0, equals + 1)).trim();
+				key = current.substring(0, equals).trim();
+				value = final ? current.substring(equals + 1, current.length - 2).trim() : current.substring(equals + 1).trim();
 				result.parameters[key] = value;
 				equals = -1;
 			} else {
