@@ -1,4 +1,3 @@
-/* eslint-disable quote-props */
 "use strict";
 
 /**
@@ -16,13 +15,13 @@
 /* <nowiki> */
 ( function ( $ ) {
 /*
-	   ****************************************
-	   *** twinklewarn.js: Warn module
-	   ****************************************
-	   * Mode of invocation:  Tab ("Warn")
-	   * Active on:           Any page with relevant user name (userspace, contribs,
-	   *                      etc.), as well as the rollback success page
-	   */
+ ****************************************
+ *** twinklewarn.js: Warn module
+ ****************************************
+ * Mode of invocation:  Tab ("Warn")
+ * Active on:           Any page with relevant user name (userspace, contribs,
+ *                      etc.), as well as the rollback success page
+ */
 
 var relevantUserName = mw.config.get( "wgRelevantUserName" );
 Twinkle.warn = function twinklewarn() {
@@ -189,7 +188,7 @@ Twinkle.warn.callback = function twinklewarnCallback() {
 		tooltip: "理由或是附加信息"
 	} );
 	var previewlink = document.createElement( "a" );
-	$( previewlink ).on( "click", () => {
+	$( previewlink ).on( "click", function () {
 		Twinkle.warn.callbacks.preview( result ); // |result| is defined below
 	} );
 
@@ -232,7 +231,7 @@ Twinkle.warn.callback = function twinklewarnCallback() {
 				rvdir: "newer",
 				rvprop: "user"
 			};
-			new Morebits.wiki.api( "检查您是否成功回退该页面", query, ( apiobj ) => {
+			new Morebits.wiki.api( "检查您是否成功回退该页面", query, function ( apiobj ) {
 				var revertUser = $( apiobj.getResponse() ).find( "revisions rev" )[ 1 ].getAttribute( "user" );
 				if ( revertUser && revertUser !== mw.config.get( "wgUserName" ) ) {
 					message += "其他人回退了该页面，并可能已经警告该用户。";
@@ -262,7 +261,7 @@ Twinkle.warn.callback = function twinklewarnCallback() {
 				rvprop: "timestamp",
 				revids: vanrevid
 			};
-			new Morebits.wiki.api( "获取版本时间戳", query, ( apiobj ) => {
+			new Morebits.wiki.api( "获取版本时间戳", query, function ( apiobj ) {
 				vantimestamp = $( apiobj.getResponse() ).find( "revisions rev" ).attr( "timestamp" );
 				checkStale( vantimestamp );
 			} ).post();
@@ -277,7 +276,7 @@ Twinkle.warn.callback = function twinklewarnCallback() {
 			ucend: new Morebits.date().subtract( 30, "days" ).format( "YYYY-MM-DDTHH:MM:ssZ", "utc" ),
 			ucuser: relevantUserName
 		};
-		new Morebits.wiki.api( "检查该IP用户上一笔贡献时间", query, ( apiobj ) => {
+		new Morebits.wiki.api( "检查该IP用户上一笔贡献时间", query, function ( apiobj ) {
 			if ( apiobj.getResponse().query.usercontribs.length === 0 ) {
 				message += "此IP用户上一次编辑在30日之前，现在警告可能已过时。";
 				$( "#twinkle-warn-warning-messages" ).text( `注意：${message}` );
@@ -300,7 +299,7 @@ Twinkle.warn.callback = function twinklewarnCallback() {
 //   suppressArticleInSummary (optional): Set to true to suppress showing the article name in the edit summary. Useful if the warning relates to attack pages, or some such.
 Twinkle.warn.messages = {
 	levels: {
-		"不同类型的非建设编辑": {
+		不同类型的非建设编辑: {
 			"uw-vandalism": {
 				level1: {
 					label: "明显的破坏",
@@ -528,7 +527,7 @@ Twinkle.warn.messages = {
 				}
 			}
 		},
-		"增加商品或政治广告": {
+		增加商品或政治广告: {
 			"uw-spam": {
 				level1: {
 					label: "增加不合适的外部链接",
@@ -662,7 +661,7 @@ Twinkle.warn.messages = {
 				}
 			}
 		},
-		"翻译品质": {
+		翻译品质: {
 			"uw-roughtranslation": {
 				level1: {
 					label: "您翻译的质量有待改善",
@@ -678,7 +677,7 @@ Twinkle.warn.messages = {
 				}
 			}
 		},
-		"非能接受且违反方针或指引的单方面行为或操作": {
+		非能接受且违反方针或指引的单方面行为或操作: {
 			"uw-notcensored": {
 				level1: {
 					label: "因为“内容使人反感”而删除条目内容",
@@ -816,7 +815,7 @@ Twinkle.warn.messages = {
 				}
 			}
 		},
-		"对其他用户和条目的态度": {
+		对其他用户和条目的态度: {
 			"uw-npa": {
 				level1: {
 					label: "针对用户的人身攻击",
@@ -1159,7 +1158,7 @@ Twinkle.warn.callback.change_category = function twinklewarnCallbackChangeCatego
 			container.appendChild( wrapperOptgroup );
 			container = wrapperOptgroup;
 		}
-		$.each( contents, ( itemKey, itemProperties ) => {
+		$.each( contents, function ( itemKey, itemProperties ) {
 			// Skip if the current template doesn't have a version for the current level
 			if ( !!level && !itemProperties[ val ] ) {
 				return;
@@ -1189,7 +1188,7 @@ Twinkle.warn.callback.change_category = function twinklewarnCallbackChangeCatego
 			var unSortedSinglets = $.extend( {}, Twinkle.warn.messages.singlenotice, Twinkle.warn.messages.singlewarn );
 			var sortedSingletMessages = {};
 
-			Object.keys( unSortedSinglets ).sort().forEach( ( key ) => {
+			Object.keys( unSortedSinglets ).sort().forEach( function ( key ) {
 				sortedSingletMessages[ key ] = unSortedSinglets[ key ];
 			} );
 			createEntries( sortedSingletMessages, sub_group, true );
@@ -1198,8 +1197,8 @@ Twinkle.warn.callback.change_category = function twinklewarnCallbackChangeCatego
 			createEntries( Twinkle.getPref( "customWarningList" ), sub_group, true );
 			break;
 		case "kitchensink":
-			[ "level1", "level2", "level3", "level4", "level4im" ].forEach( ( lvl ) => {
-				$.each( Twinkle.warn.messages.levels, ( _, levelGroup ) => {
+			[ "level1", "level2", "level3", "level4", "level4im" ].forEach( function ( lvl ) {
+				$.each( Twinkle.warn.messages.levels, function ( _, levelGroup ) {
 					createEntries( levelGroup, sub_group, true, lvl );
 				} );
 			} );
@@ -1214,7 +1213,7 @@ Twinkle.warn.callback.change_category = function twinklewarnCallbackChangeCatego
 		case "level4im":
 			// Creates subgroup regardless of whether there is anything to place in it;
 			// leaves "Removal of deletion tags" empty for 4im
-			$.each( Twinkle.warn.messages.levels, ( groupLabel, groupContents ) => {
+			$.each( Twinkle.warn.messages.levels, function ( groupLabel, groupContents ) {
 				var optgroup = new Morebits.quickForm.element( {
 					type: "optgroup",
 					label: groupLabel
@@ -1239,7 +1238,7 @@ Twinkle.warn.callback.change_category = function twinklewarnCallbackChangeCatego
 				var lvl = `level${Twinkle.warn.callbacks.autolevelParseWikitext( wikitext, params, latest )[ 1 ]}`;
 
 				// Identical to level1, etc. above but explicitly provides the level
-				$.each( Twinkle.warn.messages.levels, ( groupLabel, groupContents ) => {
+				$.each( Twinkle.warn.messages.levels, function ( groupLabel, groupContents ) {
 					var optgroup = new Morebits.quickForm.element( {
 						type: "optgroup",
 						label: groupLabel
@@ -1258,10 +1257,10 @@ Twinkle.warn.callback.change_category = function twinklewarnCallbackChangeCatego
 			} else {
 				var usertalk_page = new Morebits.wiki.page( `User_talk:${relevantUserName}`, "加载上次警告" );
 				usertalk_page.setFollowRedirect( true, false );
-				usertalk_page.load( ( pageobj ) => {
+				usertalk_page.load( function ( pageobj ) {
 					Twinkle.warn.talkpageObj = pageobj; // Update talkpageObj
 					autolevelProc();
-				}, () => {
+				}, function () {
 					// Catch and warn if the talkpage can't load,
 					// most likely because it's a cross-namespace redirect
 					// Supersedes the typical $autolevelMessage added in autolevelParseWikitext
@@ -1401,7 +1400,7 @@ Twinkle.warn.callbacks = {
 			usertalk_page.setFollowRedirect( true, false );
 			// Will fail silently if the talk page is a cross-ns redirect,
 			// removal of the preview box handled when loading the menu
-			usertalk_page.load( ( pageobj ) => {
+			usertalk_page.load( function ( pageobj ) {
 				Twinkle.warn.talkpageObj = pageobj; // Update talkpageObj
 
 				var wikitext = pageobj.getPageText();
@@ -1685,7 +1684,7 @@ Twinkle.warn.callbacks = {
 				var dateHeaderRegex = now.monthHeaderRegex();
 				sectionNumber = 0;
 				// Find this month's section among L2 sections, preferring the bottom-most
-				sectionExists = sections.reverse().some( ( sec, idx ) => {
+				sectionExists = sections.reverse().some( function ( sec, idx ) {
 					return /^(==)[^=].+\1/m.test( sec ) && dateHeaderRegex.test( sec ) && typeof ( sectionNumber = sections.length - 1 - idx ) === "number";
 				} );
 			}

@@ -1,6 +1,5 @@
-/* eslint-disable prefer-spread */
-/* eslint-disable no-new */
 /* eslint-disable no-throw-literal */
+/* eslint-disable no-new */
 "use strict";
 
 /**
@@ -168,7 +167,7 @@ Morebits.createHtml = function ( input ) {
 		if ( input[ i ] instanceof Node ) {
 			fragment.appendChild( input[ i ] );
 		} else {
-			$.parseHTML( Morebits.createHtml.renderWikilinks( input[ i ] ) ).forEach( ( node ) => {
+			$.parseHTML( Morebits.createHtml.renderWikilinks( input[ i ] ) ).forEach( function ( node ) {
 				fragment.appendChild( node );
 			} );
 		}
@@ -186,7 +185,7 @@ Morebits.createHtml.renderWikilinks = function ( text ) {
 	var ub = new Morebits.unbinder( text );
 	// Don't convert wikilinks within code tags as they're used for displaying wiki-code
 	ub.unbind( "<code>", "</code>" );
-	ub.content = ub.content.replace( /\[\[:?(?:([^|\]]+?)\|)?([^\]|]+?)\]\]/g, ( _, target, text ) => {
+	ub.content = ub.content.replace( /\[\[:?(?:([^|\]]+?)\|)?([^\]|]+?)\]\]/g, function ( _, target, text ) {
 		if ( !target ) {
 			target = text;
 		}
@@ -216,12 +215,12 @@ Morebits.namespaceRegex = function ( namespaces ) {
 	}
 	var aliases = [],
 		regex;
-	$.each( mw.config.get( "wgNamespaceIds" ), ( name, number ) => {
+	$.each( mw.config.get( "wgNamespaceIds" ), function ( name, number ) {
 		if ( namespaces.indexOf( number ) !== -1 ) {
 			// Namespaces are completely agnostic as to case,
 			// and a regex string is more useful/compatible than a RegExp object,
 			// so we accept any casing for any letter.
-			aliases.push( name.split( "" ).map( ( char ) => {
+			aliases.push( name.split( "" ).map( function ( char ) {
 				return Morebits.pageNameRegex( char );
 			} ).join( "" ) );
 		}
@@ -545,7 +544,7 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
 							id: `${id}_${i}_subgroup`
 						} );
 							// eslint-disable-next-line no-loop-func
-						$.each( tmpgroup, ( idx, el ) => {
+						$.each( tmpgroup, function ( idx, el ) {
 							var newEl = $.extend( {}, el );
 							if ( !newEl.type ) {
 								newEl.type = data.type;
@@ -626,18 +625,18 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
 				subnode.setAttribute( "type", "text" );
 			} else {
 				subnode.setAttribute( "type", "number" );
-				[ "min", "max", "step", "list" ].forEach( ( att ) => {
+				[ "min", "max", "step", "list" ].forEach( function ( att ) {
 					if ( data[ att ] ) {
 						subnode.setAttribute( att, data[ att ] );
 					}
 				} );
 			}
-			[ "value", "size", "placeholder", "maxlength" ].forEach( ( att ) => {
+			[ "value", "size", "placeholder", "maxlength" ].forEach( function ( att ) {
 				if ( data[ att ] ) {
 					subnode.setAttribute( att, data[ att ] );
 				}
 			} );
-			[ "disabled", "required", "readonly" ].forEach( ( att ) => {
+			[ "disabled", "required", "readonly" ].forEach( function ( att ) {
 				if ( data[ att ] ) {
 					subnode.setAttribute( att, att );
 				}
@@ -959,7 +958,7 @@ Morebits.quickForm.getElements = function QuickFormGetElements( form, fieldName 
  * @returns {HTMLInputElement}
  */
 Morebits.quickForm.getCheckboxOrRadio = function QuickFormGetCheckboxOrRadio( elementArray, value ) {
-	var found = $.grep( elementArray, ( el ) => {
+	var found = $.grep( elementArray, function ( el ) {
 		return el.value === value;
 	} );
 	if ( found.length > 0 ) {
@@ -1542,7 +1541,7 @@ Morebits.array = {
 		if ( !Array.isArray( arr ) ) {
 			throw "A non-array object passed to Morebits.array.uniq";
 		}
-		return arr.filter( ( item, idx ) => {
+		return arr.filter( function ( item, idx ) {
 			return arr.indexOf( item ) === idx;
 		} );
 	},
@@ -1558,7 +1557,7 @@ Morebits.array = {
 		if ( !Array.isArray( arr ) ) {
 			throw "A non-array object passed to Morebits.array.dups";
 		}
-		return arr.filter( ( item, idx ) => {
+		return arr.filter( function ( item, idx ) {
 			return arr.indexOf( item ) !== idx;
 		} );
 	},
@@ -2021,7 +2020,7 @@ Morebits.date.prototype = {
 			 * d(d{2,3})? matches exactly 1, 3 or 4 occurrences of 'd' ('dd' is treated as a double match of 'd')
 			 * Y{1,2}(Y{2})? matches exactly 1, 2 or 4 occurrences of 'Y'
 			 */
-			/H{1,2}|h{1,2}|m{1,2}|s{1,2}|SSS|d(d{2,3})?|D{1,2}|M{1,4}|Y{1,2}(Y{2})?|A/g, ( match ) => {
+			/H{1,2}|h{1,2}|m{1,2}|s{1,2}|SSS|d(d{2,3})?|D{1,2}|M{1,4}|Y{1,2}(Y{2})?|A/g, function ( match ) {
 				return replacementMap[ match ];
 			} );
 		return unbinder.rebind().replace( /\[(.*?)\]/g, "$1" );
@@ -2084,7 +2083,7 @@ Morebits.date.prototype = {
 };
 
 // Allow native Date.prototype methods to be used on Morebits.date objects
-Object.getOwnPropertyNames( Date.prototype ).forEach( ( func ) => {
+Object.getOwnPropertyNames( Date.prototype ).forEach( function ( func ) {
 	// Exclude methods that collide with PageTriage's Date.js external, which clobbers native Date: [[phab:T268513]]
 	if ( [ "add", "getDayName", "getMonthName" ].indexOf( func ) === -1 ) {
 		Morebits.date.prototype[ func ] = function () {
@@ -2173,7 +2172,7 @@ Morebits.wiki.actionCompleted.event = function () {
 				Morebits.wiki.actionCompleted.redirect += "?redirect=no";
 			}
 		}
-		window.setTimeout( () => {
+		window.setTimeout( function () {
 			window.location = Morebits.wiki.actionCompleted.redirect;
 		}, Morebits.wiki.actionCompleted.timeOut );
 	}
@@ -2299,7 +2298,7 @@ Morebits.wiki.api.prototype = {
 	 */
 	post: function ( callerAjaxParameters ) {
 		++Morebits.wiki.numberOfActionsLeft;
-		var queryString = $.map( this.query, ( val, i ) => {
+		var queryString = $.map( this.query, function ( val, i ) {
 			if ( Array.isArray( val ) ) {
 				return `${encodeURIComponent( i )}=${val.map( encodeURIComponent ).join( "|" )}`;
 			} else if ( val !== undefined ) {
@@ -2364,10 +2363,10 @@ Morebits.wiki.api.prototype = {
 			this.badtokenRetry = true;
 			// Get a new CSRF token and retry. If the original action needs a different
 			// type of action than CSRF, we do one pointless retry before bailing out
-			return Morebits.wiki.api.getToken().then( ( token ) => {
+			return Morebits.wiki.api.getToken().then( function ( token ) {
 				this.query.token = token;
 				return this.post( callerAjaxParameters );
-			} );
+			}.bind( this ) );
 		}
 		this.statelem.error( `${this.errorText}（${this.errorCode}）` );
 
@@ -2413,7 +2412,7 @@ Morebits.wiki.getCachedJson = function ( title ) {
 		maxage: "86400" // cache for 1 day
 	};
 
-	return new Morebits.wiki.api( "", query ).post().then( ( apiobj ) => {
+	return new Morebits.wiki.api( "", query ).post().then( function ( apiobj ) {
 		apiobj.getStatusElement().unlink();
 		var response = apiobj.getResponse();
 		var wikitext = response.query.pages[ 0 ].revisions[ 0 ].slots.main.content;
@@ -2461,7 +2460,7 @@ Morebits.wiki.api.getToken = function () {
 		type: "csrf",
 		format: "json"
 	} );
-	return tokenApi.post().then( ( apiobj ) => {
+	return tokenApi.post().then( function ( apiobj ) {
 		return apiobj.response.query.tokens.csrftoken;
 	} );
 };
@@ -3648,7 +3647,7 @@ Morebits.wiki.page = function ( pageName, status ) {
 		// extract protection info, to alert admins when they are about to edit a protected page
 		// Includes cascading protection
 		if ( Morebits.userIsSysop ) {
-			var editProt = page.protection.filter( ( pr ) => {
+			var editProt = page.protection.filter( function ( pr ) {
 				return pr.type === "edit" && pr.level === "sysop";
 			} ).pop();
 			if ( editProt ) {
@@ -3660,7 +3659,7 @@ Morebits.wiki.page = function ( pageName, status ) {
 		ctx.revertCurID = page.lastrevid;
 		var testactions = page.actions;
 		ctx.testActions = []; // was null
-		Object.keys( testactions ).forEach( ( action ) => {
+		Object.keys( testactions ).forEach( function ( action ) {
 			if ( testactions[ action ] ) {
 				ctx.testActions.push( action );
 			}
@@ -3822,7 +3821,7 @@ Morebits.wiki.page = function ( pageName, status ) {
 				titles: ctx.pageName // redirects are already resolved
 			};
 
-			var purgeApi = new Morebits.wiki.api( "检测到编辑冲突，正在更新服务器缓存", purgeQuery, () => {
+			var purgeApi = new Morebits.wiki.api( "检测到编辑冲突，正在更新服务器缓存", purgeQuery, function () {
 				--Morebits.wiki.numberOfActionsLeft; // allow for normal completion if retry succeeds
 
 				ctx.statusElement.info( "检测到编辑冲突，重试修改" );
@@ -3841,7 +3840,7 @@ Morebits.wiki.page = function ( pageName, status ) {
 			--Morebits.wiki.numberOfActionsLeft; // allow for normal completion if retry succeeds
 
 			// wait for sometime for client to regain connectivity
-			sleep( 2000 ).then( () => {
+			sleep( 2000 ).then( function () {
 				ctx.saveApi.post(); // give it another go!
 			} );
 
@@ -3885,7 +3884,7 @@ Morebits.wiki.page = function ( pageName, status ) {
 			// no text - content empty or inaccessible (revdelled or suppressed)
 			return false;
 		}
-		return Morebits.l10n.redirectTagAliases.some( ( tag ) => {
+		return Morebits.l10n.redirectTagAliases.some( function ( tag ) {
 			return new RegExp( `^\\s*${tag}\\W`, "i" ).test( text );
 		} );
 	};
@@ -4003,11 +4002,11 @@ Morebits.wiki.page = function ( pageName, status ) {
 		// extract protection info
 		var editprot;
 		if ( action === "undelete" ) {
-			editprot = response.pages[ 0 ].protection.filter( ( pr ) => {
+			editprot = response.pages[ 0 ].protection.filter( function ( pr ) {
 				return pr.type === "create" && pr.level === "sysop";
 			} ).pop();
 		} else if ( action === "delete" || action === "move" ) {
-			editprot = response.pages[ 0 ].protection.filter( ( pr ) => {
+			editprot = response.pages[ 0 ].protection.filter( function ( pr ) {
 				return pr.type === "edit" && pr.level === "sysop";
 			} ).pop();
 		}
@@ -4241,7 +4240,7 @@ Morebits.wiki.page = function ( pageName, status ) {
 		// Fetch existing protection levels
 		var prs = response.pages[ 0 ].protection;
 		var editprot, moveprot, createprot;
-		prs.forEach( ( pr ) => {
+		prs.forEach( function ( pr ) {
 			// Filter out protection from cascading
 			if ( pr.type === "edit" && !pr.source ) {
 				editprot = pr;
@@ -4274,14 +4273,14 @@ Morebits.wiki.page = function ( pageName, status ) {
 
 		// Default to pre-existing cascading protection if unchanged (similar to above)
 		if ( ctx.protectCascade === null ) {
-			ctx.protectCascade = !!prs.filter( ( pr ) => {
+			ctx.protectCascade = !!prs.filter( function ( pr ) {
 				return pr.cascade;
 			} ).length;
 		}
 		// Warn if cascading protection being applied with an invalid protection level,
 		// which for edit protection will cause cascading to be silently stripped
 		if ( ctx.protectCascade === null ) {
-			ctx.protectCascade = !!prs.filter( ( pr ) => {
+			ctx.protectCascade = !!prs.filter( function ( pr ) {
 				return pr.cascade;
 			} ).length;
 		}
@@ -4779,7 +4778,7 @@ Morebits.userspaceLogger = function ( logPageName ) {
 			return def.reject();
 		}
 		var page = new Morebits.wiki.page( `User:${mw.config.get( "wgUserName" )}/${logPageName}`, "将项目加入到用户空间日志" ); // make this '... to ' + logPageName ?
-		page.load( ( pageobj ) => {
+		page.load( function ( pageobj ) {
 			// add blurb if log page doesn't exist or is blank
 			var text = pageobj.getPageText() || this.initialText;
 
@@ -4793,7 +4792,7 @@ Morebits.userspaceLogger = function ( logPageName ) {
 			pageobj.setChangeTags( this.changeTags );
 			pageobj.setCreateOption( "recreate" );
 			pageobj.save( def.resolve, def.reject );
-		} );
+		}.bind( this ) );
 		return def;
 	};
 };
@@ -5259,7 +5258,7 @@ Morebits.batchOperation = function ( currentAction ) {
 
 		// start workers for the current chunk
 		ctx.countStarted += chunk.length;
-		chunk.forEach( ( page ) => {
+		chunk.forEach( function ( page ) {
 			ctx.worker( page, thisProxy );
 		} );
 	};
@@ -5330,7 +5329,7 @@ Morebits.taskManager = function ( context ) {
 	 */
 	this.add = function ( func, deps, onFailure ) {
 		this.taskDependencyMap.set( func, deps );
-		this.failureCallbackMap.set( func, onFailure || ( () => {} ) );
+		this.failureCallbackMap.set( func, onFailure || function () {} );
 		var deferred = $.Deferred();
 		this.deferreds.set( func, deferred );
 		this.allDeferreds.push( deferred );
@@ -5343,8 +5342,8 @@ Morebits.taskManager = function ( context ) {
 	 */
 	this.execute = function () {
 		var self = this; // proxy for `this` for use inside functions where `this` is something else
-		this.taskDependencyMap.forEach( ( deps, task ) => {
-			var dependencyPromisesArray = deps.map( ( dep ) => {
+		this.taskDependencyMap.forEach( function ( deps, task ) {
+			var dependencyPromisesArray = deps.map( function ( dep ) {
 				return self.deferreds.get( dep );
 			} );
 			$.when.apply( self.context, dependencyPromisesArray ).then( function () {
@@ -5421,7 +5420,7 @@ Morebits.simpleWindow = function SimpleWindow( width, height ) {
 	var $widget = $( this.content ).dialog( "widget" );
 
 	// delete the placeholder button (it's only there so the buttonpane gets created)
-	$widget.find( "button" ).each( ( key, value ) => {
+	$widget.find( "button" ).each( function ( key, value ) {
 		value.parentNode.removeChild( value );
 	} );
 
@@ -5566,13 +5565,13 @@ Morebits.simpleWindow.prototype = {
 
 		// look for submit buttons in the content, hide them, and add a proxy button to the button pane
 		var thisproxy = this;
-		$( this.content ).find( 'input[type="submit"], button[type="submit"]' ).each( ( key, value ) => {
+		$( this.content ).find( 'input[type="submit"], button[type="submit"]' ).each( function ( key, value ) {
 			value.style.display = "none";
 			var button = document.createElement( "button" );
 			button.textContent = value.hasAttribute( "value" ) ? value.getAttribute( "value" ) : value.textContent ? value.textContent : "提交";
 			button.className = value.className || "submitButtonProxy";
 			// here is an instance of cheap coding, probably a memory-usage hit in using a closure here
-			button.addEventListener( "click", () => {
+			button.addEventListener( "click", function () {
 				value.click();
 			}, false );
 			thisproxy.buttons.push( button );

@@ -15,14 +15,14 @@
 /* <nowiki> */
 ( function ( $ ) {
 /*
-	   ****************************************
-	   *** twinklestub.js: Tag module
-	   ****************************************
-	   * Mode of invocation:   Tab ("Stub")
-	   * Active on:            Existing articles
-	   * Config directives in: FriendlyConfig
-	   * Note:                 customised friendlytag module
-	   */
+ ****************************************
+ *** twinklestub.js: Tag module
+ ****************************************
+ * Mode of invocation:   Tab ("Stub")
+ * Active on:            Existing articles
+ * Config directives in: FriendlyConfig
+ * Note:                 customised friendlytag module
+ */
 
 Twinkle.stub = function friendlytag() {
 	if ( Morebits.isPageRedirect() ) {
@@ -126,7 +126,7 @@ Twinkle.stub.updateSortOrder = function ( e ) {
 			label: "自定义模板"
 		} );
 		var customcheckboxes = [];
-		$.each( Twinkle.getPref( "customStubList" ), ( _, item ) => {
+		$.each( Twinkle.getPref( "customStubList" ), function ( _, item ) {
 			customcheckboxes.push( makeCheckbox( item.value, item.label ) );
 		} );
 		container.append( {
@@ -141,7 +141,7 @@ Twinkle.stub.updateSortOrder = function ( e ) {
 		// function to iterate through the tags and create a checkbox for each one
 		var doCategoryCheckboxes = function ( subdiv, array ) {
 			var checkboxes = [];
-			$.each( array, ( k, tag ) => {
+			$.each( array, function ( k, tag ) {
 				var description = Twinkle.stub.article.tags[ tag ];
 				checkboxes.push( makeCheckbox( tag, description ) );
 			} );
@@ -153,7 +153,7 @@ Twinkle.stub.updateSortOrder = function ( e ) {
 		};
 		var i = 0;
 		// go through each category and sub-category and append lists of checkboxes
-		$.each( Twinkle.stub.article.tagCategories, ( title, content ) => {
+		$.each( Twinkle.stub.article.tagCategories, function ( title, content ) {
 			container.append( {
 				type: "header",
 				id: `tagHeader${i}`,
@@ -166,7 +166,7 @@ Twinkle.stub.updateSortOrder = function ( e ) {
 			if ( Array.isArray( content ) ) {
 				doCategoryCheckboxes( subdiv, content );
 			} else {
-				$.each( content, ( subtitle, subcontent ) => {
+				$.each( content, function ( subtitle, subcontent ) {
 					subdiv.append( {
 						type: "div",
 						label: [ Morebits.htmlNode( "b", subtitle ) ]
@@ -178,7 +178,7 @@ Twinkle.stub.updateSortOrder = function ( e ) {
 		// alphabetical sort order
 	} else {
 		var checkboxes = [];
-		$.each( Twinkle.stub.article.tags, ( tag, description ) => {
+		$.each( Twinkle.stub.article.tags, function ( tag, description ) {
 			checkboxes.push( makeCheckbox( tag, description ) );
 		} );
 		container.append( {
@@ -203,7 +203,7 @@ Twinkle.stub.updateSortOrder = function ( e ) {
 	} );
 
 	// add a link to each template's description page
-	$.each( Morebits.quickForm.getElements( e.target.form, "articleTags" ), ( index, checkbox ) => {
+	$.each( Morebits.quickForm.getElements( e.target.form, "articleTags" ), function ( index, checkbox ) {
 		var $checkbox = $( checkbox );
 		var link = Morebits.htmlNode( "a", ">" );
 		link.setAttribute( "class", "tag-template-link" );

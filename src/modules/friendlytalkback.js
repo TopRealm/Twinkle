@@ -71,7 +71,7 @@ Twinkle.talkback.callback = function () {
 		name: "work_area"
 	} );
 	var previewlink = document.createElement( "a" );
-	$( previewlink ).on( "click", () => {
+	$( previewlink ).on( "click", function () {
 		Twinkle.talkback.callbacks.preview( result ); // |result| is defined below
 	} );
 
@@ -185,7 +185,7 @@ Twinkle.talkback.changeTarget = function ( e ) {
 					}
 				}
 			} );
-			$.each( Twinkle.talkback.noticeboards, ( value, data ) => {
+			$.each( Twinkle.talkback.noticeboards, function ( value, data ) {
 				noticeboard.append( {
 					type: "option",
 					label: data.label,

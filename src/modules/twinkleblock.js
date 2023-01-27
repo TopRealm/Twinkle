@@ -21,6 +21,7 @@
  * Mode of invocation:     Tab ("Block")
  * Active on:              Any page with relevant user name (userspace, contribs, etc.)
  */
+
 var api = new mw.Api(),
 	relevantUserName = mw.config.get( "wgRelevantUserName" );
 var menuFormattedNamespaces = $.extend( {}, mw.config.get( "wgFormattedNamespaces" ) );
@@ -128,7 +129,7 @@ Twinkle.block.callback = function twinkleblockCallback() {
 	Window.setContent( result );
 	Window.display();
 	result.root = result;
-	Twinkle.block.fetchUserInfo( () => {
+	Twinkle.block.fetchUserInfo( function () {
 		if ( Twinkle.block.isRegistered ) {
 			var $form = $( result );
 			Morebits.quickForm.setElementVisibility( $form.find( "[name=actiontype][value=tag]" ).parent(), true );
@@ -163,13 +164,13 @@ Twinkle.block.fetchUserInfo = function twinkleblockFetchUserInfo( fn ) {
 	} else {
 		query.bkusers = userName;
 	}
-	api.get( query ).then( ( data ) => {
+	api.get( query ).then( function ( data ) {
 		var blockinfo = data.query.blocks[ 0 ],
 			userinfo = data.query.users[ 0 ];
 		Twinkle.block.isRegistered = !!userinfo.userid;
 		if ( Twinkle.block.isRegistered ) {
 			relevantUserName = `User:${userName}`;
-			Twinkle.block.userIsBot = !!userinfo.groupmemberships && userinfo.groupmemberships.map( ( e ) => {
+			Twinkle.block.userIsBot = !!userinfo.groupmemberships && userinfo.groupmemberships.map( function ( e ) {
 				return e.group;
 			} ).indexOf( "bot" ) !== -1;
 		} else {
@@ -192,14 +193,14 @@ Twinkle.block.fetchUserInfo = function twinkleblockFetchUserInfo( fn ) {
 		if ( typeof fn === "function" ) {
 			return fn();
 		}
-	}, ( msg ) => {
+	}, function ( msg ) {
 		Morebits.status.init( $( 'div[name="currentblock"] span' ).last()[ 0 ] );
 		Morebits.status.warn( "抓取用户信息出错", msg );
 	} );
 };
 Twinkle.block.callback.saveFieldset = function twinkleblockCallbacksaveFieldset( fieldset ) {
 	Twinkle.block[ $( fieldset ).prop( "name" ) ] = {};
-	$( fieldset ).serializeArray().forEach( ( el ) => {
+	$( fieldset ).serializeArray().forEach( function ( el ) {
 		// namespaces and pages for partial blocks are overwritten
 		// here, but we're handling them elsewhere so that's fine
 		Twinkle.block[ $( fieldset ).prop( "name" ) ][ el.name ] = el.value;
@@ -352,7 +353,7 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 				value: "",
 				tooltip: "指定封禁的命名空间。"
 			} );
-			$.each( menuFormattedNamespaces, ( number, name ) => {
+			$.each( menuFormattedNamespaces, function ( number, name ) {
 				// Ignore -1: Special; -2: Media; and 2300-2303: Gadget (talk) and Gadget definition (talk)
 				if ( number >= 0 && number < 830 ) {
 					ns.append( {
@@ -559,7 +560,7 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 			} );
 		}
 		var $previewlink = $( '<a id="twinkleblock-preivew-link">预览</a>' );
-		$previewlink.off( "click" ).on( "click", () => {
+		$previewlink.off( "click" ).on( "click", function () {
 			Twinkle.block.callback.preview( $form[ 0 ] );
 		} );
 		$previewlink.css( {
@@ -692,7 +693,7 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 				},
 				processResults: function ( data ) {
 					return {
-						results: data.query.allpages.map( ( page ) => {
+						results: data.query.allpages.map( function ( page ) {
 							var title = mw.Title.newFromText( page.title, page.ns ).toText();
 							return {
 								id: title,
@@ -721,12 +722,12 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 		mw.util.addCSS(
 			// Reduce padding
 			".select2-results .select2-results__option { padding-top: 1px; padding-bottom: 1px; }" +
-				// Adjust font size
-				".select2-container .select2-dropdown .select2-results { font-size: 13px; } .select2-container .selection .select2-selection__rendered { font-size: 13px; }" +
-				// Remove black border
-				".select2-container--default.select2-container--focus .select2-selection--multiple { border: 1px solid #aaa; }" +
-				// Make the tiny cross larger
-				".select2-selection__choice__remove { font-size: 130%; }" );
+			// Adjust font size
+			".select2-container .select2-dropdown .select2-results { font-size: 13px; } .select2-container .selection .select2-selection__rendered { font-size: 13px; }" +
+			// Remove black border
+			".select2-container--default.select2-container--focus .select2-selection--multiple { border: 1px solid #aaa; }" +
+			// Make the tiny cross larger
+			".select2-selection__choice__remove { font-size: 130%; }" );
 	} else {
 		$form.find( 'fieldset[name="field_block_options"]' ).hide();
 		// Clear select2 options
@@ -791,35 +792,35 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 };
 
 /*
-			 * Keep alphabetized by key name, Twinkle.block.blockGroups establishes
-			 *  the order they will appear in the interface
-			 *
-			 * Block preset format, all keys accept only 'true' (omit for false) except where noted:
-			 * <title of block template> : {
-			 *   autoblock: <autoblock any IP addresses used (for registered users only)>
-			 *   disabletalk: <disable user from editing their own talk page while blocked>
-			 *   expiry: <string - expiry timestamp, can include relative times like "5 months", "2 weeks" etc, use "infinity" for indefinite>
-			 *   forAnonOnly: <show block option in the interface only if the relevant user is an IP>
-			 *   forRegisteredOnly: <show block option in the interface only if the relevant user is registered>
-			 *   label: <string - label for the option of the dropdown in the interface (keep brief)>
-			 *   noemail: prevent the user from sending email through Special:Emailuser
-			 *   pageParam: <set if the associated block template accepts a page parameter>
-			 *   prependReason: <string - prepends the value of 'reason' to the end of the existing reason, namely for when revoking talk page access>
-			 *   nocreate: <block account creation from the user's IP (for anonymous users only)>
-			 *   nonstandard: <template does not conform to stewardship of WikiProject User Warnings and may not accept standard parameters>
-			 *   reason: <string - block rationale, as would appear in the block log,
-			 *   and the edit summary for when adding block template, unless 'summary' is set>
-			 *   reasonParam: <set if the associated block template accepts a reason parameter>
-			 *   sig: <string - set to ~~ ~~ if block template does not accept "true" as the value, or set null to omit sig param altogether>
-			 *   summary: <string - edit summary for when adding block template to user's talk page, if not set, 'reason' is used>
-			 *   suppressArticleInSummary: <set to suppress showing the article name in the edit summary, as with attack pages>
-			 *   templateName: <string - name of template to use (instead of key name), entry will be omitted from the Templates list.
-			 *   (e.g. use another template but with different block options)>
-			 *   useInitialOptions: <when preset is chosen, only change given block options, leave others as they were>
-			 *
-			 * WARNING: 'anononly' and 'allowusertalk' are enabled by default.
-			 *   To disable, set 'hardblock' and 'disabletalk', respectively
-			 */
+		 * Keep alphabetized by key name, Twinkle.block.blockGroups establishes
+		 *  the order they will appear in the interface
+		 *
+		 * Block preset format, all keys accept only 'true' (omit for false) except where noted:
+		 * <title of block template> : {
+		 *   autoblock: <autoblock any IP addresses used (for registered users only)>
+		 *   disabletalk: <disable user from editing their own talk page while blocked>
+		 *   expiry: <string - expiry timestamp, can include relative times like "5 months", "2 weeks" etc, use "infinity" for indefinite>
+		 *   forAnonOnly: <show block option in the interface only if the relevant user is an IP>
+		 *   forRegisteredOnly: <show block option in the interface only if the relevant user is registered>
+		 *   label: <string - label for the option of the dropdown in the interface (keep brief)>
+		 *   noemail: prevent the user from sending email through Special:Emailuser
+		 *   pageParam: <set if the associated block template accepts a page parameter>
+		 *   prependReason: <string - prepends the value of 'reason' to the end of the existing reason, namely for when revoking talk page access>
+		 *   nocreate: <block account creation from the user's IP (for anonymous users only)>
+		 *   nonstandard: <template does not conform to stewardship of WikiProject User Warnings and may not accept standard parameters>
+		 *   reason: <string - block rationale, as would appear in the block log,
+		 *   and the edit summary for when adding block template, unless 'summary' is set>
+		 *   reasonParam: <set if the associated block template accepts a reason parameter>
+		 *   sig: <string - set to ~~ ~~ if block template does not accept "true" as the value, or set null to omit sig param altogether>
+		 *   summary: <string - edit summary for when adding block template to user's talk page, if not set, 'reason' is used>
+		 *   suppressArticleInSummary: <set to suppress showing the article name in the edit summary, as with attack pages>
+		 *   templateName: <string - name of template to use (instead of key name), entry will be omitted from the Templates list.
+		 *   (e.g. use another template but with different block options)>
+		 *   useInitialOptions: <when preset is chosen, only change given block options, leave others as they were>
+		 *
+		 * WARNING: 'anononly' and 'allowusertalk' are enabled by default.
+		 *   To disable, set 'hardblock' and 'disabletalk', respectively
+		 */
 Twinkle.block.blockPresetsInfo = {
 	anonblock: {
 		expiry: "3 days",
@@ -960,7 +961,7 @@ Twinkle.block.blockPresetsInfo = {
 Twinkle.block.blockGroupsUpdated = false;
 Twinkle.block.transformBlockPresets = function twinkleblockTransformBlockPresets() {
 	// supply sensible defaults
-	$.each( Twinkle.block.blockPresetsInfo, ( preset, settings ) => {
+	$.each( Twinkle.block.blockPresetsInfo, function ( preset, settings ) {
 		settings.summary = settings.summary || settings.reason;
 		settings.sig = settings.sig !== undefined ? settings.sig : "yes";
 		settings.indefinite = settings.indefinite || Morebits.string.isInfinity( settings.expiry );
@@ -972,11 +973,11 @@ Twinkle.block.transformBlockPresets = function twinkleblockTransformBlockPresets
 		Twinkle.block.blockPresetsInfo[ preset ] = settings;
 	} );
 	if ( !Twinkle.block.blockGroupsUpdated ) {
-		$.each( Twinkle.block.blockGroups.concat( Twinkle.block.blockGroupsPartial ), ( _, blockGroup ) => {
+		$.each( Twinkle.block.blockGroups.concat( Twinkle.block.blockGroupsPartial ), function ( _, blockGroup ) {
 			if ( blockGroup.custom ) {
 				blockGroup.list = Twinkle.getPref( "customBlockReasonList" );
 			}
-			$.each( blockGroup.list, ( _, blockPreset ) => {
+			$.each( blockGroup.list, function ( _, blockPreset ) {
 				var value = blockPreset.value,
 					reason = blockPreset.label,
 					newPreset = `${value}:${reason}`;
@@ -1152,11 +1153,11 @@ Twinkle.block.blockGroupsPartial = [ {
 	} ]
 } ];
 Twinkle.block.callback.filtered_block_groups = function twinkleblockCallbackFilteredBlockGroups( group, show_template ) {
-	return $.map( group, ( blockGroup ) => {
+	return $.map( group, function ( blockGroup ) {
 		if ( !show_template && blockGroup.meta ) {
 			return;
 		}
-		var list = $.map( blockGroup.list, ( blockPreset ) => {
+		var list = $.map( blockGroup.list, function ( blockPreset ) {
 			// only show uw-talkrevoked if reblocking
 			if ( !Twinkle.block.currentBlockInfo && blockPreset.value === "uw-talkrevoked" ) {
 				return;
@@ -1206,9 +1207,9 @@ Twinkle.block.callback.change_expiry = function twinkleblockCallbackChangeExpiry
 Twinkle.block.seeAlsos = [];
 Twinkle.block.callback.toggle_see_alsos = function twinkleblockCallbackToggleSeeAlso() {
 	var reason = this.form.reason.value.replace( new RegExp( `(<!-- )(参见|參見)${Twinkle.block.seeAlsos.join( "、" )}( -->)` ), "" );
-	Twinkle.block.seeAlsos = Twinkle.block.seeAlsos.filter( ( el ) => {
+	Twinkle.block.seeAlsos = Twinkle.block.seeAlsos.filter( function ( el ) {
 		return el !== this.value;
-	} );
+	}.bind( this ) );
 	if ( this.checked ) {
 		Twinkle.block.seeAlsos.push( this.value );
 	}
@@ -1247,7 +1248,7 @@ Twinkle.block.callback.update_form = function twinkleblockCallbackUpdateForm( e,
 	if ( Twinkle.block.userIsBot || relevantUserName.search( /bot\b/i ) > 0 ) {
 		data.autoblock = false;
 	}
-	$( form ).find( "[name=field_block_options]" ).find( ":checkbox" ).each( ( i, el ) => {
+	$( form ).find( "[name=field_block_options]" ).find( ":checkbox" ).each( function ( i, el ) {
 		// don't override original options if useInitialOptions is set
 		if ( data.useInitialOptions && data[ el.name ] === undefined ) {
 			return;
@@ -1376,7 +1377,7 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate( e ) {
 	// Check tags
 	// Given an array of incompatible tags, check if we have two or more selected
 	var checkIncompatible = function ( conflicts, extra ) {
-		var count = conflicts.reduce( ( sum, tag ) => {
+		var count = conflicts.reduce( function ( sum, tag ) {
 			sum += params.tag.indexOf( tag ) !== -1;
 			return sum;
 		}, 0 );
@@ -1445,29 +1446,29 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate( e ) {
 		}
 
 		/*
-				 * Check if block status changed while processing the form.
-				 *   There's a lot to consider here. list=blocks provides the
-				 * current block status, but there are at least two issues with
-				 * relying on it. First, the id doesn't update on a reblock,
-				 * meaning the individual parameters need to be compared. This
-				 * can be done roughly with JSON.stringify - we can thankfully
-				 * rely on order from the server, although sorting would be
-				 * fine if not - but falsey values are problematic and is
-				 * non-ideal. More importantly, list=blocks won't indicate if a
-				 * non-blocked user is blocked then unblocked. This should be
-				 * exceedingy rare, but regardless, we thus need to check
-				 * list=logevents, which has a nicely updating logid
-				 * parameter. We can't rely just on that, though, since it
-				 * doesn't account for blocks that have expired on their own.
-				 *    As such, we use both. Using some ternaries, the logid
-				 * variables are false if there's no logevents, so if they
-				 * aren't equal we defintely have a changed entry (send
-				 * confirmation). If they are equal, then either the user was
-				 * never blocked (the block statuses will be equal, no
-				 * confirmation) or there's no new block, in which case either
-				 * a block expired (different statuses, confirmation) or the
-				 * same block is still active (same status, no confirmation).
-				 */
+			 * Check if block status changed while processing the form.
+			 *   There's a lot to consider here. list=blocks provides the
+			 * current block status, but there are at least two issues with
+			 * relying on it. First, the id doesn't update on a reblock,
+			 * meaning the individual parameters need to be compared. This
+			 * can be done roughly with JSON.stringify - we can thankfully
+			 * rely on order from the server, although sorting would be
+			 * fine if not - but falsey values are problematic and is
+			 * non-ideal. More importantly, list=blocks won't indicate if a
+			 * non-blocked user is blocked then unblocked. This should be
+			 * exceedingy rare, but regardless, we thus need to check
+			 * list=logevents, which has a nicely updating logid
+			 * parameter. We can't rely just on that, though, since it
+			 * doesn't account for blocks that have expired on their own.
+			 *    As such, we use both. Using some ternaries, the logid
+			 * variables are false if there's no logevents, so if they
+			 * aren't equal we defintely have a changed entry (send
+			 * confirmation). If they are equal, then either the user was
+			 * never blocked (the block statuses will be equal, no
+			 * confirmation) or there's no new block, in which case either
+			 * a block expired (different statuses, confirmation) or the
+			 * same block is still active (same status, no confirmation).
+			 */
 		var query = {
 			format: "json",
 			action: "query",
@@ -1481,7 +1482,7 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate( e ) {
 		} else {
 			query.bkusers = blockoptions.user;
 		}
-		api.get( query ).then( ( data ) => {
+		api.get( query ).then( function ( data ) {
 			var block = data.query.blocks[ 0 ];
 			var logevents = data.query.logevents[ 0 ];
 			var logid = data.query.logevents.length ? logevents.logid : false;
@@ -1515,7 +1516,7 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate( e ) {
 			// execute block
 			blockoptions.tags = Twinkle.changeTags;
 			blockoptions.token = mw.user.tokens.get( "csrfToken" );
-			var mbApi = new Morebits.wiki.api( "执行封禁", blockoptions, () => {
+			var mbApi = new Morebits.wiki.api( "执行封禁", blockoptions, function () {
 				statusElement.info( "完成" );
 				if ( toWarn ) {
 					Twinkle.block.callback.issue_template( templateoptions );
@@ -1554,7 +1555,7 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate( e ) {
 		// execute unblock
 		unblockoptions.tags = Twinkle.changeTags;
 		unblockoptions.token = mw.user.tokens.get( "csrfToken" );
-		var unblockMbApi = new Morebits.wiki.api( "执行解除封禁", unblockoptions, () => {
+		var unblockMbApi = new Morebits.wiki.api( "执行解除封禁", unblockoptions, function () {
 			unblockStatusElement.info( "完成" );
 		} );
 		unblockMbApi.post();
@@ -1568,7 +1569,7 @@ Twinkle.block.callback.taguserpage = function twinkleblockCallbackTagUserpage( p
 	var statelem = pageobj.getStatusElement();
 	if ( params.actiontype.indexOf( "tag" ) > -1 ) {
 		var tags = [];
-		params.tag.forEach( ( tag ) => {
+		params.tag.forEach( function ( tag ) {
 			var tagtext = `{{${tag}`;
 			switch ( tag ) {
 				case "Blocked user":
@@ -1606,7 +1607,7 @@ Twinkle.block.callback.taguserpage = function twinkleblockCallbackTagUserpage( p
 		pageobj.setPageText( text );
 		pageobj.setEditSummary( "标记被永久封禁的用户页" );
 		pageobj.setChangeTags( Twinkle.changeTags );
-		pageobj.save( () => {
+		pageobj.save( function () {
 			Morebits.status.info( "标记用户页", "完成" );
 			statelem.status( "正在保护页面" );
 			pageobj.load( Twinkle.block.callback.protectuserpage );
@@ -1627,7 +1628,7 @@ Twinkle.block.callback.protectuserpage = function twinkleblockCallbackProtectUse
 		}
 		pageobj.setEditSummary( "被永久封禁的用户页" );
 		pageobj.setChangeTags( Twinkle.changeTags );
-		pageobj.protect( () => {
+		pageobj.protect( function () {
 			Morebits.status.info( "保护用户页", pageobj.exists() ? "已全保护" : "已白纸保护" );
 			statelem.info( "全部完成" );
 		} );
@@ -1744,14 +1745,14 @@ Twinkle.block.callback.getBlockNoticeWikitext = function ( params, nosign ) {
 				};
 				text += "|area=某些";
 				if ( params.pagerestrictions.length ) {
-					text += `頁面（${makeSentence( params.pagerestrictions.map( ( p ) => {
+					text += `頁面（${makeSentence( params.pagerestrictions.map( function ( p ) {
 						return `[[:${p}]]`;
 					} ) )}`;
 					text += params.namespacerestrictions.length ? "）和某些" : "）";
 				}
 				if ( params.namespacerestrictions.length ) {
-					// 1 => Talk, 2 => User, etc.
-					var namespaceNames = params.namespacerestrictions.map( ( id ) => {
+					// 1 → Talk, 2 → User, etc.
+					var namespaceNames = params.namespacerestrictions.map( function ( id ) {
 						return menuFormattedNamespaces[ id ];
 					} );
 					text += `[[Qiuwen:命名空间|命名空间]]（${makeSentence( namespaceNames )}）`;

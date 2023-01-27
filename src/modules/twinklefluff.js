@@ -21,6 +21,7 @@
  * Mode of invocation:  Links on contributions, recent changes, history, and diff pages
  * Active on:           Diff pages, history pages, Special:RecentChanges(Linked), and Special:Contributions
  */
+
 /**
  * Twinklefluff revert and antivandalism utility
  */
@@ -34,7 +35,7 @@ Twinkle.fluff = function twinklefluff() {
 		// wgDiffOldId included for clarity in if else loop
 		if ( mw.config.get( "wgDiffNewId" ) || mw.config.get( "wgDiffOldId" ) ) {
 			// Reload alongside the revision slider
-			mw.hook( "wikipage.diff" ).add( () => {
+			mw.hook( "wikipage.diff" ).add( function () {
 				Twinkle.fluff.addLinks.diff();
 			} );
 		} else if ( mw.config.get( "wgAction" ) === "view" && mw.config.get( "wgRevisionId" ) && mw.config.get( "wgCurRevisionId" ) !== mw.config.get( "wgRevisionId" ) ) {
@@ -50,7 +51,7 @@ Twinkle.fluff = function twinklefluff() {
 		} else if ( mw.config.get( "wgCanonicalSpecialPageName" ) === "Recentchanges" || mw.config.get( "wgCanonicalSpecialPageName" ) === "Recentchangeslinked" ) {
 			// Reload with recent changes updates
 			// structuredChangeFilters.ui.initialized is just on load
-			mw.hook( "wikipage.content" ).add( ( item ) => {
+			mw.hook( "wikipage.content" ).add( function ( item ) {
 				if ( item.is( "div" ) ) {
 					Twinkle.fluff.addLinks.recentchanges();
 				}
@@ -117,11 +118,11 @@ Twinkle.fluff.linkBuilder = {
 		var vandLink = Twinkle.fluff.linkBuilder.buildLink( "Red", "破坏" );
 		normLink.style.fontWeight = "bold";
 		vandLink.style.fontWeight = "bold";
-		$( normLink ).on( "click", () => {
+		$( normLink ).on( "click", function () {
 			Twinkle.fluff.revert( "norm", vandal, rev, page );
 			Twinkle.fluff.disableLinks( revNode );
 		} );
-		$( vandLink ).on( "click", () => {
+		$( vandLink ).on( "click", function () {
 			Twinkle.fluff.revert( "vand", vandal, rev, page );
 			Twinkle.fluff.disableLinks( revNode );
 		} );
@@ -134,7 +135,7 @@ Twinkle.fluff.linkBuilder = {
 		if ( !inline ) {
 			var agfNode = document.createElement( "span" );
 			var agfLink = Twinkle.fluff.linkBuilder.buildLink( "DarkOliveGreen", "回退（AGF）" );
-			$( agfLink ).on( "click", () => {
+			$( agfLink ).on( "click", function () {
 				Twinkle.fluff.revert( "agf", vandal, rev, page );
 				// Twinkle.fluff.disableLinks(revNode); // rollbackInPlace not relevant for any inline situations
 			} );
@@ -157,7 +158,7 @@ Twinkle.fluff.linkBuilder = {
 		revertToRevisionNode.setAttribute( "id", `tw-revert-to-${revisionRef}` );
 		revertToRevisionNode.style.fontWeight = "bold";
 		var revertToRevisionLink = Twinkle.fluff.linkBuilder.buildLink( "SaddleBrown", "恢复此版本" );
-		$( revertToRevisionLink ).on( "click", () => {
+		$( revertToRevisionLink ).on( "click", function () {
 			Twinkle.fluff.revertToRevision( revisionRef );
 		} );
 		if ( inline ) {
@@ -176,7 +177,7 @@ Twinkle.fluff.addLinks = {
 			var username = mw.config.get( "wgRelevantUserName" );
 			if ( Twinkle.getPref( "showRollbackLinks" ).indexOf( "contribs" ) !== -1 || mw.config.get( "wgUserName" ) !== username && Twinkle.getPref( "showRollbackLinks" ).indexOf( "others" ) !== -1 || mw.config.get( "wgUserName" ) === username && Twinkle.getPref( "showRollbackLinks" ).indexOf( "mine" ) !== -1 ) {
 				var $list = $( "#mw-content-text" ).find( "ul li:has(span.mw-uctop):has(.mw-changeslist-diff)" );
-				$list.each( ( key, current ) => {
+				$list.each( function ( key, current ) {
 					// revid is also available in the href of both
 					// .mw-changeslist-date or .mw-changeslist-diff
 					var page = $( current ).find( ".mw-contributions-title" ).text();
@@ -195,7 +196,7 @@ Twinkle.fluff.addLinks = {
 			// Exclude top-level header if "group changes" preference is used
 			// and find only individual lines or nested lines
 			$list = $list.not( ".mw-rcfilters-ui-highlights-enhanced-toplevel" ).find( ".mw-changeslist-line-inner, td.mw-enhanced-rc-nested" );
-			$list.each( ( key, current ) => {
+			$list.each( function ( key, current ) {
 				// The :not is possibly unnecessary, as it appears that
 				// .mw-userlink is simply not present if the username is hidden
 				var vandal = $( current ).find( ".mw-userlink:not(.history-deleted)" ).text();
@@ -229,7 +230,7 @@ Twinkle.fluff.addLinks = {
 			}
 
 			// oldid
-			histList.forEach( ( rev ) => {
+			histList.forEach( function ( rev ) {
 				// From restoreThisRevision, non-transferable
 				// If the text has been revdel'd, it gets wrapped in a span with .history-deleted,
 				// and href will be undefined (and thus oldid is NaN)
@@ -278,7 +279,7 @@ Twinkle.fluff.addLinks = {
 					label: "选择回退理由",
 					value: ""
 				} );
-				$( Twinkle.getPref( "customRevertSummary" ) ).each( ( _, e ) => {
+				$( Twinkle.getPref( "customRevertSummary" ) ).each( function ( _, e ) {
 					revertsummary.append( {
 						type: "option",
 						label: e.label,
@@ -329,7 +330,7 @@ Twinkle.fluff.addLinks = {
 };
 Twinkle.fluff.disableLinks = function disablelinks( parentNode ) {
 	// Array.from not available in IE11 :(
-	$( parentNode ).children().each( ( _ix, node ) => {
+	$( parentNode ).children().each( function ( _ix, node ) {
 		node.innerHTML = node.textContent; // Feels like cheating
 		$( node ).css( "font-weight", "normal" ).css( "color", "darkgray" );
 	} );

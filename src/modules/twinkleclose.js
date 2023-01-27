@@ -27,7 +27,7 @@ Twinkle.close = function twinkleclose() {
 	if ( Twinkle.getPref( "XfdClose" ) === "hide" || !/^Qiuwen:存废讨论\/记录\/\d+\/\d+\/\d+$/.test( mw.config.get( "wgPageName" ) ) ) {
 		return;
 	}
-	mw.hook( "wikipage.content" ).add( ( item ) => {
+	mw.hook( "wikipage.content" ).add( function ( item ) {
 		if ( item.attr( "id" ) === "mw-content-text" ) {
 			Twinkle.close.addLinks();
 		}
@@ -40,7 +40,7 @@ Twinkle.close.addLinks = function twinklecloseAddLinks() {
 		span.appendChild( document.createTextNode( content ) );
 		return span;
 	};
-	$( "h1:has(.mw-headline),h2:has(.mw-headline),h3:has(.mw-headline),h4:has(.mw-headline),h5:has(.mw-headline),h6:has(.mw-headline)", "#bodyContent" ).each( ( index, current ) => {
+	$( "h1:has(.mw-headline),h2:has(.mw-headline),h3:has(.mw-headline),h4:has(.mw-headline),h5:has(.mw-headline),h6:has(.mw-headline)", "#bodyContent" ).each( function ( index, current ) {
 		current.setAttribute( "data-section", index + 1 );
 	} );
 	var selector = ":has(.mw-headline a:only-of-type):not(:has(+ div.NavFrame))";
@@ -52,7 +52,7 @@ Twinkle.close.addLinks = function twinklecloseAddLinks() {
 	delLink.appendChild( spanTag( "Red", "关闭讨论" ) );
 	delLink.appendChild( spanTag( "Black", "]" ) );
 	delNode.appendChild( delLink );
-	titles.each( ( key, current ) => {
+	titles.each( function ( key, current ) {
 		var headlinehref = $( current ).find( ".mw-headline a" ).attr( "href" );
 		if ( headlinehref === undefined ) {
 			return;
@@ -77,7 +77,7 @@ Twinkle.close.addLinks = function twinklecloseAddLinks() {
 		node.appendChild( document.createTextNode( " " ) );
 		var tmpNode = delNode.cloneNode( true );
 		tmpNode.firstChild.href = `#${section}`;
-		$( tmpNode.firstChild ).on( "click", () => {
+		$( tmpNode.firstChild ).on( "click", function () {
 			Twinkle.close.callback( title, section, pagenotexist );
 			return false;
 		} );
@@ -297,7 +297,7 @@ Twinkle.close.callback = function twinklecloseCallback( title, section, noop ) {
 	$( result ).data( "resultData", resultData );
 	// worker function to create the combo box entries
 	var createEntries = function ( contents, container ) {
-		$.each( contents, ( itemKey, itemProperties ) => {
+		$.each( contents, function ( itemKey, itemProperties ) {
 			var key = typeof itemKey === "string" ? itemKey : itemProperties.value;
 			var elem = new Morebits.quickForm.element( {
 				type: "option",
@@ -310,7 +310,7 @@ Twinkle.close.callback = function twinklecloseCallback( title, section, noop ) {
 			$( elemRendered ).data( "messageData", itemProperties );
 		} );
 	};
-	$.each( Twinkle.close.codes, ( groupLabel, groupContents ) => {
+	$.each( Twinkle.close.codes, function ( groupLabel, groupContents ) {
 		var optgroup = new Morebits.quickForm.element( {
 			type: "optgroup",
 			label: groupLabel
@@ -429,7 +429,7 @@ Twinkle.close.callbacks = {
 		Morebits.wiki.addCheckpoint();
 		var page = new Morebits.wiki.page( params.title, "删除页面" );
 		if ( params.code === "sd" ) {
-			Twinkle.speedy.callbacks.parseWikitext( params.title, `{{delete|${params.sdreason}}}`, ( reason ) => {
+			Twinkle.speedy.callbacks.parseWikitext( params.title, `{{delete|${params.sdreason}}}`, function ( reason ) {
 				reason = prompt( "输入删除理由，或点击确定以接受自动生成的：", reason );
 				if ( reason === null ) {
 					page.getStatusElement().warn( "没有执行删除" );
@@ -437,7 +437,7 @@ Twinkle.close.callbacks = {
 				} else {
 					page.setEditSummary( reason );
 					page.setChangeTags( Twinkle.changeTags );
-					page.deletePage( () => {
+					page.deletePage( function () {
 						page.getStatusElement().info( "完成" );
 						Twinkle.close.callbacks.talkend( params );
 					} );
@@ -446,7 +446,7 @@ Twinkle.close.callbacks = {
 		} else {
 			page.setEditSummary( `存废讨论通过：[[${mw.config.get( "wgPageName" )}#${params.title}]]` );
 			page.setChangeTags( Twinkle.changeTags );
-			page.deletePage( () => {
+			page.deletePage( function () {
 				page.getStatusElement().info( "完成" );
 				Twinkle.close.callbacks.talkend( params );
 			} );
@@ -490,7 +490,7 @@ Twinkle.close.callbacks = {
 		var redirectDeleter = new Morebits.batchOperation( `正在删除到 ${apiobj.params.title} 的重定向` );
 		redirectDeleter.setOption( "chunkSize", Twinkle.getPref( "batchdeleteChunks" ) );
 		redirectDeleter.setPageList( pages );
-		redirectDeleter.run( ( pageName ) => {
+		redirectDeleter.run( function ( pageName ) {
 			var qiuwen_page = new Morebits.wiki.page( pageName, `正在删除 ${pageName}` );
 			qiuwen_page.setEditSummary( `[[QW:CSD#G5|G5]]: 指向已删页面“${apiobj.params.title}”的重定向` );
 			qiuwen_page.setChangeTags( Twinkle.changeTags );

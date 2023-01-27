@@ -15,12 +15,12 @@
 /* <nowiki> */
 ( function ( $ ) {
 /*
-	 ****************************************
-	 *** twinkleprotect.js: Protect/RPP module
-	 ****************************************
-	 * Mode of invocation:  Tab ("PP"/"RPP")
-	 * Active on:           Non-special, non-MediaWiki pages
-	 */
+ ****************************************
+ *** twinkleprotect.js: Protect/RPP module
+ ****************************************
+ * Mode of invocation:  Tab ("PP"/"RPP")
+ * Active on:           Non-special, non-MediaWiki pages
+ */
 
 // Note: a lot of code in this module is re-used/called by batchprotect.
 
@@ -142,7 +142,7 @@ Twinkle.protect.fetchProtectionLevel = function twinkleprotectFetchProtectionLev
 	} );
 
 	// eslint-disable-next-line no-useless-call
-	$.when.apply( $, [ protectDeferred ] ).done( ( protectData ) => {
+	$.when.apply( $, [ protectDeferred ] ).done( function ( protectData ) {
 		// $.when.apply is supposed to take an unknown number of promises
 		// via an array, which it does, but the type of data returned varies.
 		// If there are two or more deferreds, it returns an array (of objects),
@@ -156,7 +156,7 @@ Twinkle.protect.fetchProtectionLevel = function twinkleprotectFetchProtectionLev
 		// Save requested page's watched status for later in case needed when filing request
 		Twinkle.protect.watched = page.watchlistexpiry || page.watched === "";
 
-		$.each( page.protection, ( index, protection ) => {
+		$.each( page.protection, function ( index, protection ) {
 			if ( protection.type !== "aft" ) {
 				current[ protection.type ] = {
 					level: protection.level,
@@ -172,7 +172,7 @@ Twinkle.protect.fetchProtectionLevel = function twinkleprotectFetchProtectionLev
 			protectData.query.logevents.length >= 2 ? protectData.query.logevents[ 1 ] : null;
 
 		if ( Twinkle.protect.previousProtectionLog ) {
-			$.each( Twinkle.protect.previousProtectionLog.params.details, ( index, protection ) => {
+			$.each( Twinkle.protect.previousProtectionLog.params.details, function ( index, protection ) {
 				if ( protection.type !== "aft" ) {
 					previous[ protection.type ] = {
 						level: protection.level,
@@ -266,7 +266,7 @@ Twinkle.protect.callback.changeAction = function twinkleprotectCallbackChangeAct
 					name: "editlevel",
 					label: "编辑权限：",
 					event: Twinkle.protect.formevents.editlevel,
-					list: Twinkle.protect.protectionLevels.filter( ( level ) => {
+					list: Twinkle.protect.protectionLevels.filter( function ( level ) {
 						// Filter TE outside of templates and modules
 						return isTemplate || level.value !== "templateeditor";
 					} )
@@ -301,7 +301,7 @@ Twinkle.protect.callback.changeAction = function twinkleprotectCallbackChangeAct
 					name: "movelevel",
 					label: "移动权限：",
 					event: Twinkle.protect.formevents.movelevel,
-					list: Twinkle.protect.protectionLevels.filter( ( level ) => {
+					list: Twinkle.protect.protectionLevels.filter( function ( level ) {
 						// Autoconfirmed is required for a move, redundant
 						return level.value !== "autoconfirmed" && ( isTemplate || level.value !== "templateeditor" );
 					} )
@@ -324,7 +324,7 @@ Twinkle.protect.callback.changeAction = function twinkleprotectCallbackChangeAct
 					name: "createlevel",
 					label: "创建权限：",
 					event: Twinkle.protect.formevents.createlevel,
-					list: Twinkle.protect.protectionLevels.filter( ( level ) => {
+					list: Twinkle.protect.protectionLevels.filter( function ( level ) {
 						// Filter TE always, and autoconfirmed in mainspace
 						return level.value !== "templateeditor";
 					} )
@@ -585,7 +585,7 @@ Twinkle.protect.protectionTypesAdmin = [
 			{ label: "高风险页面（移动）", value: "pp-move-indef" }
 		]
 	}
-].filter( ( type ) => {
+].filter( function ( type ) {
 	// Filter for templates
 	return isTemplate || type.label !== "模板保护" && type.label !== "模板保護";
 } );
@@ -1032,7 +1032,7 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate( e )
 					typename = "白纸保护";
 					break;
 				case "unprotect":
-					var admins = $.map( Twinkle.protect.currentProtectionLevels, ( pl ) => {
+					var admins = $.map( Twinkle.protect.currentProtectionLevels, function ( pl ) {
 						if ( !pl.admin || Twinkle.protect.trustedBots.indexOf( pl.admin ) !== -1 ) {
 							return null;
 						}
@@ -1268,7 +1268,7 @@ Twinkle.protect.callbacks = {
 		rppPage.setChangeTags( Twinkle.changeTags );
 		rppPage.setPageText( text );
 		rppPage.setCreateOption( "recreate" );
-		rppPage.save( () => {
+		rppPage.save( function () {
 			// Watch the page being requested
 			var watchPref = Twinkle.getPref( "watchRequestedPages" );
 			// action=watch has no way to rely on user preferences (T262912), so we do it manually.
@@ -1396,7 +1396,7 @@ Twinkle.protect.formatProtectionDescription = function ( protectionLevels ) {
 	var protectionNode = [];
 
 	if ( !$.isEmptyObject( protectionLevels ) ) {
-		$.each( protectionLevels, ( type, settings ) => {
+		$.each( protectionLevels, function ( type, settings ) {
 			var label;
 			switch ( type ) {
 				case "edit":

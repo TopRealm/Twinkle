@@ -15,12 +15,12 @@
 /* <nowiki> */
 ( function ( $ ) {
 /*
-  ****************************************
-  *** twinklebatchdelete.js: Batch delete module (sysops only)
-  ****************************************
-  * Mode of invocation:     Tab ("D-batch")
-  * Active on:              Existing non-articles, and Special:PrefixIndex
-  */
+ ****************************************
+ *** twinklebatchdelete.js: Batch delete module (sysops only)
+ ****************************************
+ * Mode of invocation:     Tab ("D-batch")
+ * Active on:              Existing non-articles, and Special:PrefixIndex
+ */
 
 Twinkle.batchdelete = function twinklebatchdelete() {
 	if ( Morebits.userIsSysop && ( mw.config.get( "wgCurRevisionId" ) && mw.config.get( "wgNamespaceNumber" ) > 0 || mw.config.get( "wgCanonicalSpecialPageName" ) === "Prefixindex" || mw.config.get( "wgCanonicalSpecialPageName" ) === "BrokenRedirects" ) ) {
@@ -158,19 +158,19 @@ Twinkle.batchdelete.callback = function twinklebatchdeleteCallback() {
 	Window.display();
 	Twinkle.batchdelete.pages = {};
 	var statelem = new Morebits.status( "抓取页面列表" );
-	var qiuwen_api = new Morebits.wiki.api( "加载中……", query, ( apiobj ) => {
+	var qiuwen_api = new Morebits.wiki.api( "加载中……", query, function ( apiobj ) {
 		var response = apiobj.getResponse();
 		var pages = response.query && response.query.pages || [];
-		pages = pages.filter( ( page ) => {
+		pages = pages.filter( function ( page ) {
 			return !page.missing && page.imagerepository !== "shared";
 		} );
 		pages.sort( Twinkle.sortByNamespace );
-		pages.forEach( ( page ) => {
+		pages.forEach( function ( page ) {
 			var metadata = [];
 			if ( page.redirect ) {
 				metadata.push( "重定向" );
 			}
-			var editProt = page.protection.filter( ( pr ) => {
+			var editProt = page.protection.filter( function ( pr ) {
 				return pr.type === "edit" && pr.level === "sysop";
 			} ).pop();
 			if ( editProt ) {
@@ -199,7 +199,7 @@ Twinkle.batchdelete.callback = function twinklebatchdeleteCallback() {
 			type: "button",
 			label: "全选",
 			event: function dBatchSelectAll() {
-				$( result ).find( "input[name=pages]:not(:checked)" ).each( ( _, e ) => {
+				$( result ).find( "input[name=pages]:not(:checked)" ).each( function ( _, e ) {
 					e.click(); // check it, and invoke click event so that subgroup can be shown
 				} );
 
@@ -211,7 +211,7 @@ Twinkle.batchdelete.callback = function twinklebatchdeleteCallback() {
 			type: "button",
 			label: "全不选",
 			event: function dBatchDeselectAll() {
-				$( result ).find( "input[name=pages]:checked" ).each( ( _, e ) => {
+				$( result ).find( "input[name=pages]:checked" ).each( function ( _, e ) {
 					e.click(); // uncheck it, and invoke click event so that subgroup can be hidden
 				} );
 			}
@@ -222,7 +222,7 @@ Twinkle.batchdelete.callback = function twinklebatchdeleteCallback() {
 			name: "pages",
 			id: "tw-dbatch-pages",
 			shiftClickSupport: true,
-			list: $.map( Twinkle.batchdelete.pages, ( e ) => {
+			list: $.map( Twinkle.batchdelete.pages, function ( e ) {
 				return e;
 			} )
 		} );
@@ -256,7 +256,7 @@ Twinkle.batchdelete.generateNewPageList = function ( form ) {
 		name: "pages",
 		id: "tw-dbatch-pages",
 		shiftClickSupport: true,
-		list: $.map( Twinkle.batchdelete.pages, ( e ) => {
+		list: $.map( Twinkle.batchdelete.pages, function ( e ) {
 			return e;
 		} )
 	} ).render();
@@ -319,7 +319,7 @@ Twinkle.batchdelete.callback.toggleSubpages = function twDbatchToggleSubpages( e
 		// If lists of subpages were already loaded once, they are
 		// available without use of any API calls
 		if ( subpagesLoaded ) {
-			$.each( Twinkle.batchdelete.pages, ( i, el ) => {
+			$.each( Twinkle.batchdelete.pages, function ( i, el ) {
 				// Get back the subgroup from subgroup_, where we saved it
 				if ( el.subgroup === null && el.subgroup_ ) {
 					el.subgroup = el.subgroup_;
@@ -335,13 +335,13 @@ Twinkle.batchdelete.callback.toggleSubpages = function twDbatchToggleSubpages( e
 		// Proceed with API calls to get list of subpages
 		var loadingText = '<strong id="dbatch-subpage-loading">加载中...</strong>';
 		$( e.target ).after( loadingText );
-		var pages = $( form.pages ).map( ( i, el ) => {
+		var pages = $( form.pages ).map( function ( i, el ) {
 			return el.value;
 		} ).get();
 		var subpageLister = new Morebits.batchOperation();
 		subpageLister.setOption( "chunkSize", Twinkle.getPref( "batchChunks" ) );
 		subpageLister.setPageList( pages );
-		subpageLister.run( ( pageName ) => {
+		subpageLister.run( function worker( pageName ) {
 			var pageTitle = mw.Title.newFromText( pageName );
 
 			// No need to look for subpages in main/file/mediawiki space
@@ -360,17 +360,17 @@ Twinkle.batchdelete.callback.toggleSubpages = function twDbatchToggleSubpages( e
 				gaplimit: "max",
 				// 500 is max for normal users, 5000 for bots and sysops
 				format: "json"
-			}, ( apiobj ) => {
+			}, function onSuccess( apiobj ) {
 				var response = apiobj.getResponse();
 				var pages = response.query && response.query.pages || [];
 				var subpageList = [];
 				pages.sort( Twinkle.sortByNamespace );
-				pages.forEach( ( page ) => {
+				pages.forEach( function ( page ) {
 					var metadata = [];
 					if ( page.redirect ) {
 						metadata.push( "重定向" );
 					}
-					var editProt = page.protection.filter( ( pr ) => {
+					var editProt = page.protection.filter( function ( pr ) {
 						return pr.type === "edit" && pr.level === "sysop";
 					} ).pop();
 					if ( editProt ) {
@@ -401,14 +401,14 @@ Twinkle.batchdelete.callback.toggleSubpages = function twDbatchToggleSubpages( e
 					};
 				}
 				subpageLister.workerSuccess();
-			}, null /* statusElement */, () => {
+			}, null /* statusElement */, function onFailure() {
 				subpageLister.workerFailure();
 			} );
 			qiuwen_api.params = {
 				pageNameFull: pageName
 			}; // Used in onSuccess()
 			qiuwen_api.post();
-		}, () => {
+		}, function postFinish() {
 			// List 'em on the interface
 
 			newPageList = Twinkle.batchdelete.generateNewPageList( form );
@@ -421,7 +421,7 @@ Twinkle.batchdelete.callback.toggleSubpages = function twDbatchToggleSubpages( e
 			$( "#dbatch-subpage-loading" ).remove();
 		} );
 	} else if ( !e.target.checked ) {
-		$.each( Twinkle.batchdelete.pages, ( i, el ) => {
+		$.each( Twinkle.batchdelete.pages, function ( i, el ) {
 			if ( el.subgroup ) {
 				// Remove subgroup after saving its contents in subgroup_
 				// so that it can be retrieved easily if user decides to
@@ -438,7 +438,7 @@ Twinkle.batchdelete.callback.toggleSubpages = function twDbatchToggleSubpages( e
 Twinkle.batchdelete.callback.evaluate = function twinklebatchdeleteCallbackEvaluate( event ) {
 	Morebits.wiki.actionCompleted.notice = "批量删除已完成";
 	var form = event.target;
-	var numProtected = $( Morebits.quickForm.getElements( form, "pages" ) ).filter( ( index, element ) => {
+	var numProtected = $( Morebits.quickForm.getElements( form, "pages" ) ).filter( function ( index, element ) {
 		return element.checked && element.nextElementSibling.style.color === "red";
 	} ).length;
 	if ( numProtected > 0 && !confirm( `您将删除${mw.language.convertNumber( numProtected )}个全保护页面，您确定吗？` ) ) {
@@ -460,7 +460,7 @@ Twinkle.batchdelete.callback.evaluate = function twinklebatchdeleteCallbackEvalu
 	// we only need the initial status lines if we're deleting the pages in the pages array
 	pageDeleter.setOption( "preserveIndividualStatusLines", input.delete_page );
 	pageDeleter.setPageList( input.pages );
-	pageDeleter.run( ( pageName ) => {
+	pageDeleter.run( function worker( pageName ) {
 		var params = {
 			page: pageName,
 			delete_page: input.delete_page,
@@ -481,13 +481,13 @@ Twinkle.batchdelete.callback.evaluate = function twinklebatchdeleteCallbackEvalu
 		} else {
 			Twinkle.batchdelete.callbacks.doExtras( qiuwen_page );
 		}
-	}, () => {
+	}, function postFinish() {
 		if ( input.delete_subpages && input.subpages ) {
 			var subpageDeleter = new Morebits.batchOperation( "正在删除子页面" );
 			subpageDeleter.setOption( "chunkSize", Twinkle.getPref( "batchChunks" ) );
 			subpageDeleter.setOption( "preserveIndividualStatusLines", true );
 			subpageDeleter.setPageList( input.subpages );
-			subpageDeleter.run( ( pageName ) => {
+			subpageDeleter.run( function ( pageName ) {
 				var params = {
 					page: pageName,
 					delete_page: true,
@@ -581,7 +581,7 @@ Twinkle.batchdelete.callbacks = {
 	deleteRedirectsMain: function ( apiobj ) {
 		var response = apiobj.getResponse();
 		var pages = response.query.pages[ 0 ].redirects || [];
-		pages = pages.map( ( redirect ) => {
+		pages = pages.map( function ( redirect ) {
 			return redirect.title;
 		} );
 		if ( !pages.length ) {
@@ -590,7 +590,7 @@ Twinkle.batchdelete.callbacks = {
 		var redirectDeleter = new Morebits.batchOperation( `正在删除到${apiobj.params.page}的重定向` );
 		redirectDeleter.setOption( "chunkSize", Twinkle.getPref( "batchChunks" ) );
 		redirectDeleter.setPageList( pages );
-		redirectDeleter.run( ( pageName ) => {
+		redirectDeleter.run( function ( pageName ) {
 			var qiuwen_page = new Morebits.wiki.page( pageName, `正在删除 ${pageName}` );
 			qiuwen_page.setEditSummary( `[[QW:G9|G9]]：孤立页面（已删页面“${apiobj.params.page}”的讨论页）` );
 			qiuwen_page.setChangeTags( Twinkle.changeTags );
@@ -612,7 +612,7 @@ Twinkle.batchdelete.callbacks = {
 	unlinkBacklinksMain: function ( apiobj ) {
 		var response = apiobj.getResponse();
 		var pages = response.query.backlinks || [];
-		pages = pages.map( ( page ) => {
+		pages = pages.map( function ( page ) {
 			return page.title;
 		} );
 		if ( !pages.length ) {
@@ -621,7 +621,7 @@ Twinkle.batchdelete.callbacks = {
 		var unlinker = new Morebits.batchOperation( `正在取消到${apiobj.params.page}的链入` );
 		unlinker.setOption( "chunkSize", Twinkle.getPref( "batchChunks" ) );
 		unlinker.setPageList( pages );
-		unlinker.run( ( pageName ) => {
+		unlinker.run( function ( pageName ) {
 			var qiuwen_page = new Morebits.wiki.page( pageName, `正在取消${pageName}上的链入` );
 			var params = $.extend( {}, apiobj.params );
 			params.title = pageName;
@@ -662,7 +662,7 @@ Twinkle.batchdelete.callbacks = {
 	unlinkImageInstancesMain: function ( apiobj ) {
 		var response = apiobj.getResponse();
 		var pages = response.query.imageusage || [];
-		pages = pages.map( ( page ) => {
+		pages = pages.map( function ( page ) {
 			return page.title;
 		} );
 		if ( !pages.length ) {
@@ -671,7 +671,7 @@ Twinkle.batchdelete.callbacks = {
 		var unlinker = new Morebits.batchOperation( `正在取消到${apiobj.params.page}的链入` );
 		unlinker.setOption( "chunkSize", Twinkle.getPref( "batchChunks" ) );
 		unlinker.setPageList( pages );
-		unlinker.run( ( pageName ) => {
+		unlinker.run( function ( pageName ) {
 			var qiuwen_page = new Morebits.wiki.page( pageName, `取消${pageName}的文件使用` );
 			var params = $.extend( {}, apiobj.params );
 			params.title = pageName;

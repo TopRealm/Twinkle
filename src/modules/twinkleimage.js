@@ -265,7 +265,7 @@ Twinkle.image.callbacks = {
 		// If a logged file is deleted but exists on commons, the wikilink will be blue, so provide a link to the log
 		var fileLogLink = ` ([{{fullurl:Special:Log|page=${mw.util.wikiUrlencode( mw.config.get( "wgPageName" ) )}}} log])`;
 		var appendText = `# [[:${Morebits.pageNameNorm}]]${fileLogLink}: DI [[QW:CSD#${params.normalized.toUpperCase()}|CSD ${params.normalized.toUpperCase()}]] ({{tl|di-${params.templatename}}})`;
-		[ "reason", "replacement", "source" ].forEach( ( item ) => {
+		[ "reason", "replacement", "source" ].forEach( function ( item ) {
 			if ( params[ item ] ) {
 				extraInfo += formatParamLog( params.normalized.toUpperCase(), item, params[ item ] );
 				return false;

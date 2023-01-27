@@ -65,16 +65,16 @@ Twinkle.batchundelete.callback = function twinklebatchundeleteCallback() {
 		format: "json"
 	};
 	var statelem = new Morebits.status( "抓取页面列表" );
-	var qiuwen_api = new Morebits.wiki.api( "加载中……", query, ( apiobj ) => {
+	var qiuwen_api = new Morebits.wiki.api( "加载中……", query, function ( apiobj ) {
 		var response = apiobj.getResponse();
 		var pages = response.query && response.query.pages || [];
-		pages = pages.filter( ( page ) => {
+		pages = pages.filter( function ( page ) {
 			return page.missing;
 		} );
 		var list = [];
 		pages.sort( Twinkle.sortByNamespace );
-		pages.forEach( ( page ) => {
-			var editProt = page.protection.filter( ( pr ) => {
+		pages.forEach( function ( page ) {
+			var editProt = page.protection.filter( function ( pr ) {
 				return pr.type === "create" && pr.level === "sysop";
 			} ).pop();
 			var title = page.title;
@@ -124,7 +124,7 @@ Twinkle.batchundelete.callback = function twinklebatchundeleteCallback() {
 };
 Twinkle.batchundelete.callback.evaluate = function ( event ) {
 	Morebits.wiki.actionCompleted.notice = "恢复已完成";
-	var numProtected = Morebits.quickForm.getElements( event.target, "pages" ).filter( ( element ) => {
+	var numProtected = Morebits.quickForm.getElements( event.target, "pages" ).filter( function ( element ) {
 		return element.checked && element.nextElementSibling.style.color === "red";
 	} ).length;
 	if ( numProtected > 0 && !confirm( `您正要恢复 ${numProtected} 个全保护页面，您确定吗？` ) ) {
@@ -145,7 +145,7 @@ Twinkle.batchundelete.callback.evaluate = function ( event ) {
 	pageUndeleter.setOption( "chunkSize", Twinkle.getPref( "batchChunks" ) );
 	pageUndeleter.setOption( "preserveIndividualStatusLines", true );
 	pageUndeleter.setPageList( input.pages );
-	pageUndeleter.run( ( pageName ) => {
+	pageUndeleter.run( function ( pageName ) {
 		var params = {
 			page: pageName,
 			undel_talk: input.undel_talk,

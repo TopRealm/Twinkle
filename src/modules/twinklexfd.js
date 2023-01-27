@@ -15,12 +15,12 @@
 /* <nowiki> */
 ( function ( $ ) {
 /*
-	   ****************************************
-	   *** twinklexfd.js: XFD module
-	   ****************************************
-	   * Mode of invocation:  Tab ("XFD")
-	   * Active on:           Existing, non-special pages, except for file pages with no local (non-Commons) file which are not redirects
-	   */
+ ****************************************
+ *** twinklexfd.js: XFD module
+ ****************************************
+ * Mode of invocation:  Tab ("XFD")
+ * Active on:           Existing, non-special pages, except for file pages with no local (non-Commons) file which are not redirects
+ */
 
 Twinkle.xfd = function twinklexfd() {
 	// Disable on:
@@ -507,7 +507,7 @@ Twinkle.xfd.callbacks = {
 			pageobj.setChangeTags( Twinkle.changeTags );
 			pageobj.setWatchlist( Twinkle.getPref( "xfdWatchDiscussion" ) );
 			pageobj.setCreateOption( "recreate" );
-			pageobj.append( () => {
+			pageobj.append( function () {
 				Twinkle.xfd.currentRationale = null; // any errors from now on do not need to print the rationale, as it is safely saved on-wiki
 			} );
 		},

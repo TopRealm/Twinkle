@@ -352,7 +352,7 @@ Twinkle.addPortlet = function ( navigation, id, text, type, nextnodeid ) {
 			heading.appendChild( span );
 			var a = document.createElement( "a" );
 			a.href = "#";
-			$( a ).on( "click", ( e ) => {
+			$( a ).on( "click", function ( e ) {
 				e.preventDefault();
 			} );
 			heading.appendChild( a );
@@ -386,7 +386,7 @@ Twinkle.addPortletLink = function ( task, text, id, tooltip ) {
 	var link = mw.util.addPortletLink( Twinkle.getPref( "portletId" ), typeof task === "string" ? task : "#", text, id, tooltip );
 	$( ".client-js .skin-vector #p-cactions" ).css( "margin-right", "initial" );
 	if ( typeof task === "function" ) {
-		$( link ).find( "a" ).on( "click", ( ev ) => {
+		$( link ).find( "a" ).on( "click", function ( ev ) {
 			task();
 			ev.preventDefault();
 		} );
@@ -408,11 +408,11 @@ var scriptpathbefore = `${mw.util.wikiScript( "index" )}?title=`,
 $.ajax( {
 	url: `${scriptpathbefore}User:${encodeURIComponent( mw.config.get( "wgUserName" ) )}/twinkleoptions.js${scriptpathafter}`,
 	dataType: "text"
-} ).fail( () => {
+} ).fail( function () {
 	mw.notify( "未能加载您的Twinkle参数设置", {
 		type: "error"
 	} );
-} ).done( ( optionsText ) => {
+} ).done( function ( optionsText ) {
 	// Quick pass if user has no options
 	if ( optionsText === "" || optionsText === " " ) {
 		return;
@@ -441,7 +441,7 @@ $.ajax( {
 			type: "error"
 		} );
 	}
-} ).always( () => {
+} ).always( function () {
 	$( Twinkle.load );
 } );
 
@@ -476,7 +476,7 @@ Twinkle.load = function () {
 		}
 	};
 	// Initialise modules that were saved in initCallbacks array
-	Twinkle.initCallbacks.forEach( ( module ) => {
+	Twinkle.initCallbacks.forEach( function ( module ) {
 		Twinkle.addInitCallback( module.func, module.name );
 	} );
 
@@ -498,7 +498,7 @@ Twinkle.makeFindSourcesDiv = function makeSourcesDiv( divID ) {
 	}
 	if ( !Twinkle.findSources ) {
 		var parser = new Morebits.wiki.preview( $( divID )[ 0 ] );
-		parser.beginRender( `({{Find sources|${Morebits.pageNameNorm}}})`, "QW:AFD" ).then( () => {
+		parser.beginRender( `({{Find sources|${Morebits.pageNameNorm}}})`, "QW:AFD" ).then( function () {
 			// Save for second-time around
 			Twinkle.findSources = parser.previewbox.innerHTML;
 			$( divID ).removeClass( "morebits-previewbox" );

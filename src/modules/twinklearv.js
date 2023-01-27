@@ -28,7 +28,7 @@ Twinkle.arv = function twinklearv() {
 		return;
 	}
 	var windowTitle = mw.util.isIPAddress( username ) ? "报告IP地址给管理员" : "报告用户给管理员";
-	Twinkle.addPortletLink( () => {
+	Twinkle.addPortletLink( function () {
 		Twinkle.arv.callback( username );
 	}, "告状", "tw-arv", windowTitle );
 };
@@ -100,7 +100,7 @@ Twinkle.arv.callback = function ( uid ) {
 		format: "json"
 	};
 	query.bkusers = uid;
-	new Morebits.wiki.api( "检查用户的封禁状态", query, ( apiobj ) => {
+	new Morebits.wiki.api( "检查用户的封禁状态", query, function ( apiobj ) {
 		var blocklist = apiobj.getResponse().query.blocks;
 		if ( blocklist.length ) {
 			// If an IP is blocked *and* rangeblocked, only use whichever is more recent
@@ -325,7 +325,7 @@ Twinkle.arv.callback.evaluate = function ( e ) {
 				alert( "必须指定一个理由！" );
 				return;
 			}
-			types = types.map( ( v ) => {
+			types = types.map( function ( v ) {
 				switch ( v ) {
 					case "final":
 						return "已发出最后警告";
@@ -370,7 +370,7 @@ Twinkle.arv.callback.evaluate = function ( e ) {
 			var aivPage = new Morebits.wiki.page( "Qiuwen:当前的破坏", "处理VIP请求" );
 			aivPage.setPageSection( 1 );
 			aivPage.setFollowRedirect( true );
-			aivPage.load( () => {
+			aivPage.load( function () {
 				var text = aivPage.getPageText();
 				var $aivLink = '<a target="_blank" href="/wiki/QW:AIV">QW:AIV</a>';
 
@@ -424,7 +424,7 @@ Twinkle.arv.callback.evaluate = function ( e ) {
 			Morebits.wiki.actionCompleted.notice = "Reporting complete";
 			var uaaPage = new Morebits.wiki.page( "Qiuwen:Usernames for administrator attention", "Processing UAA request" );
 			uaaPage.setFollowRedirect( true );
-			uaaPage.load( () => {
+			uaaPage.load( function () {
 				var text = uaaPage.getPageText();
 
 				// check if user has already been reported
@@ -461,7 +461,7 @@ Twinkle.arv.callback.evaluate = function ( e ) {
 				return;
 			}
 			sockParameters.uid = puppetReport ? form.sockmaster.value.trim() : uid;
-			sockParameters.sockpuppets = puppetReport ? [ uid ] : Morebits.array.uniq( $.map( $( "input:text[name=sockpuppet]", form ), ( o ) => {
+			sockParameters.sockpuppets = puppetReport ? [ uid ] : Morebits.array.uniq( $.map( $( "input:text[name=sockpuppet]", form ), function ( o ) {
 				return $( o ).val() || null;
 			} ) );
 			Morebits.simpleWindow.setButtonsEnabled( false );
@@ -471,19 +471,19 @@ Twinkle.arv.callback.evaluate = function ( e ) {
 
 			// not using, but keeping for reference
 		case "an3":
-			var diffs = $.map( $( "input:checkbox[name=s_diffs]:checked", form ), ( o ) => {
+			var diffs = $.map( $( "input:checkbox[name=s_diffs]:checked", form ), function ( o ) {
 				return $( o ).data( "revinfo" );
 			} );
 			if ( diffs.length < 3 && !confirm( "You have selected fewer than three offending edits. Do you wish to make the report anyway?" ) ) {
 				return;
 			}
-			var warnings = $.map( $( "input:checkbox[name=s_warnings]:checked", form ), ( o ) => {
+			var warnings = $.map( $( "input:checkbox[name=s_warnings]:checked", form ), function ( o ) {
 				return $( o ).data( "revinfo" );
 			} );
 			if ( !warnings.length && !confirm( "You have not selected any edits where you warned the offender. Do you wish to make the report anyway?" ) ) {
 				return;
 			}
-			var resolves = $.map( $( "input:checkbox[name=s_resolves]:checked", form ), ( o ) => {
+			var resolves = $.map( $( "input:checkbox[name=s_resolves]:checked", form ), function ( o ) {
 				return $( o ).data( "revinfo" );
 			} );
 			var free_resolves = $( "input[name=s_resolves_free]" ).val();
@@ -572,7 +572,7 @@ Twinkle.arv.callback.evaluate = function ( e ) {
 						}
 					}
 				}
-				new mw.Api().get( query ).done( ( data ) => {
+				new mw.Api().get( query ).done( function ( data ) {
 					var page;
 					if ( data.compare && data.compare.fromtitle === data.compare.totitle ) {
 						page = data;
@@ -583,7 +583,7 @@ Twinkle.arv.callback.evaluate = function ( e ) {
 						return;
 					}
 					an3_next( page );
-				} ).fail( ( data ) => {
+				} ).fail( function ( data ) {
 					console.log( "API failed :(", data );
 				} );
 			} else {
@@ -596,7 +596,7 @@ Twinkle.arv.processSock = function ( params ) {
 	Morebits.wiki.addCheckpoint(); // prevent notification events from causing an erronous "action completed"
 
 	// prepare the SPI report
-	var text = `\n{{subst:SPI report|${params.sockpuppets.map( ( sock, index ) => {
+	var text = `\n{{subst:SPI report|${params.sockpuppets.map( function ( sock, index ) {
 		return `${index + 1}=${sock}`;
 	} ).join( "|" )}\n|evidence=${params.evidence} \n`;
 	if ( params.checkuser ) {
@@ -636,7 +636,7 @@ Twinkle.arv.processAN3 = function ( params ) {
 		rvexcludeuser: params.uid,
 		indexpageids: true,
 		titles: params.page
-	} ).done( ( data ) => {
+	} ).done( function ( data ) {
 		Morebits.wiki.addCheckpoint(); // prevent notification events from causing an erronous "action completed"
 
 		// In case an edit summary was revdel'd
@@ -674,7 +674,7 @@ Twinkle.arv.processAN3 = function ( params ) {
 			parentid = cur.parentid;
 			grouped_diffs[ lastid ].push( cur );
 		}
-		var difftext = $.map( grouped_diffs, ( sub ) => {
+		var difftext = $.map( grouped_diffs, function ( sub ) {
 			var ret = "";
 			if ( sub.length >= 2 ) {
 				var last = sub[ 0 ];
@@ -682,15 +682,15 @@ Twinkle.arv.processAN3 = function ( params ) {
 				var label = `Consecutive edits made from ${new Morebits.date( first.timestamp ).format( "HH:mm, D MMMM YYYY", "utc" )} (UTC) to ${new Morebits.date( last.timestamp ).format( "HH:mm, D MMMM YYYY", "utc" )} (UTC)`;
 				ret = `# {{diff|oldid=${first.parentid}|diff=${last.revid}|label=${label}}}\n`;
 			}
-			ret += sub.reverse().map( ( v ) => {
+			ret += sub.reverse().map( function ( v ) {
 				return `${sub.length >= 2 ? "#" : ""}# {{diff2|${v.revid}|${new Morebits.date( v.timestamp ).format( "HH:mm, D MMMM YYYY", "utc" )} (UTC)}} ${hasHiddenComment( v )}`;
 			} ).join( "\n" );
 			return ret;
 		} ).reverse().join( "\n" );
-		var warningtext = params.warnings.reverse().map( ( v ) => {
+		var warningtext = params.warnings.reverse().map( function ( v ) {
 			return `#  {{diff2|${v.revid}|${new Morebits.date( v.timestamp ).format( "HH:mm, D MMMM YYYY", "utc" )} (UTC)}} ${hasHiddenComment( v )}`;
 		} ).join( "\n" );
-		var resolvetext = params.resolves.reverse().map( ( v ) => {
+		var resolvetext = params.resolves.reverse().map( function ( v ) {
 			return `#  {{diff2|${v.revid}|${new Morebits.date( v.timestamp ).format( "HH:mm, D MMMM YYYY", "utc" )} (UTC)}} ${hasHiddenComment( v )}`;
 		} ).join( "\n" );
 		if ( params.free_resolves ) {
@@ -739,7 +739,7 @@ Twinkle.arv.processAN3 = function ( params ) {
 		talkPage.setAppendText( notifyText );
 		talkPage.append();
 		Morebits.wiki.removeCheckpoint(); // all page updates have been started
-	} ).fail( ( data ) => {
+	} ).fail( function ( data ) {
 		console.log( "API failed :(", data );
 	} );
 };
