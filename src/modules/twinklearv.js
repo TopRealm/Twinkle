@@ -13,7 +13,7 @@
  */
 /* Twinkle.js - twinklearv.js */
 /* <nowiki> */
-(function ($) {
+(($) => {
 /**
  * twinklearv.js: ARV module
  * Mode of invocation:  Tab ("ARV")
@@ -747,5 +747,5 @@ Twinkle.arv.processAN3 = function (params) {
 };
 
 Twinkle.addInitCallback(Twinkle.arv, 'arv');
-}(jQuery));
+})(jQuery);
 /* </nowiki> */

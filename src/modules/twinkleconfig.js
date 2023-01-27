@@ -14,7 +14,7 @@
 /* Twinkle.js - twinkleconfig.js */
 
 /* <nowiki> */
-(function ($) {
+(($) => {
 /**
  * twinkleconfig.js: Preferences module
  * Mode of invocation:  Adds configuration form to Help:Twinkle/参数设置,
@@ -1601,5 +1601,5 @@ Twinkle.config.saveSuccess = function twinkleconfigSaveSuccess(pageobj) {
 	Morebits.status.root.appendChild(noticeclear);
 };
 Twinkle.addInitCallback(Twinkle.config.init);
-}(jQuery));
+})(jQuery);
 /* </nowiki> */

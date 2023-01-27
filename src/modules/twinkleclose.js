@@ -13,7 +13,7 @@
  */
 /* Twinkle.js - twinkleclose.js */
 /* <nowiki> */
-(function ($) {
+(($) => {
 /**
  * twinkleclose.js: XFD closing module
  * Mode of invocation:    Links after section heading
@@ -610,5 +610,5 @@ Twinkle.close.callbacks = {
 	}
 };
 Twinkle.addInitCallback(Twinkle.close, 'close');
-}(jQuery));
+})(jQuery);
 /* </nowiki> */

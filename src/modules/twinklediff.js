@@ -13,7 +13,7 @@
  */
 /* Twinkle.js - twinklediff.js */
 /* <nowiki> */
-(function ($) {
+(($) => {
 /**
  * twinklediff.js: Diff module
  * Mode of invocation:  Tab on non-diff pages ("Last"); tabs on diff pages ("Since", "Since mine", "Current")
@@ -89,5 +89,5 @@ Twinkle.diff.callbacks = {
 	}
 };
 Twinkle.addInitCallback(Twinkle.diff, 'diff');
-}(jQuery));
+})(jQuery);
 /* </nowiki> */

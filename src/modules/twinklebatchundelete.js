@@ -13,7 +13,7 @@
  */
 /* Twinkle.js - twinklebatchundelete.js */
 /* <nowiki> */
-(function ($) {
+(($) => {
 /**
  * twinklebatchundelete.js: Batch undelete module
  * Mode of invocation:     Tab ("Und-batch")
@@ -202,5 +202,5 @@ Twinkle.batchundelete.callbacks = {
 	}
 };
 Twinkle.addInitCallback(Twinkle.batchundelete, 'batchundelete');
-}(jQuery));
+})(jQuery);
 /* </nowiki> */

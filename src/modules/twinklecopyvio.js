@@ -14,7 +14,7 @@
 /* Twinkle.js - twinklecopyvio.js */
 /* <nowiki> */
 // eslint-disable-next-line no-unused-vars
-(function ($) {
+(($) => {
 /**
  * twinklecopyvio.js: Copyvio module
  * Mode of invocation:    Tab ("Copyvio")
@@ -166,5 +166,5 @@ Twinkle.copyvio.callback.evaluate = function (e) {
 	Morebits.wiki.removeCheckpoint();
 };
 Twinkle.addInitCallback(Twinkle.copyvio, 'copyvio');
-}(jQuery));
+})(jQuery);
 /* </nowiki> */

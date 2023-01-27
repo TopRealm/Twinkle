@@ -13,7 +13,7 @@
  */
 /* Twinkle.js - twinkleblock.js */
 /* <nowiki> */
-(function ($) {
+(($) => {
 /**
  * twinklexfd.js: XFD module
  * Mode of invocation:  Tab ("XFD")
@@ -668,5 +668,5 @@ Twinkle.xfd.callback.evaluate = function (e) {
 	}
 };
 Twinkle.addInitCallback(Twinkle.xfd, 'xfd');
-}(jQuery));
+})(jQuery);
 /* </nowiki> */

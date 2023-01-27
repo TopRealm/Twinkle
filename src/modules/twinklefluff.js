@@ -13,7 +13,7 @@
  */
 /* Twinkle.js - twinklefluff.js */
 /* <nowiki> */
-(function ($) {
+(($) => {
 /**
  * twinklefluff.js: Revert/rollback module
  * Mode of invocation:  Links on contributions, recent changes, history, and diff pages
@@ -733,5 +733,5 @@ Twinkle.fluff.formatSummary = function (builtInString, userName, customString) {
 	return result;
 };
 Twinkle.addInitCallback(Twinkle.fluff, 'fluff');
-}(jQuery));
+})(jQuery);
 /* </nowiki> */

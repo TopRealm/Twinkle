@@ -13,7 +13,7 @@
  */
 /* Twinkle.js - twinklestub.js */
 /* <nowiki> */
-(function ($) {
+(($) => {
 /**
  * twinklestub.js: Tag module
  * Mode of invocation:   Tab ("Stub")
@@ -372,5 +372,5 @@ Twinkle.stub.callback.evaluate = function friendlytagCallbackEvaluate(e) {
 	}
 };
 Twinkle.addInitCallback(Twinkle.stub, 'stub');
-}(jQuery));
+})(jQuery);
 /* </nowiki> */

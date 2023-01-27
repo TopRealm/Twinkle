@@ -47,9 +47,8 @@
  * @namespace Morebits
  */
 
-(function (window, document, $) {
+((window, document, $) => {
 // Wrap entire file with anonymous function
-
 /** @lends Morebits */
 const Morebits = {};
 window.Morebits = Morebits; // allow global access
@@ -136,8 +135,7 @@ Morebits.pageNameRegex = function (pageName) {
 	if (pageName === '') {
 		return '';
 	}
-	const firstChar = pageName[0],
-		remainder = Morebits.string.escapeRegExp(pageName.slice(1));
+	const firstChar = pageName[0], remainder = Morebits.string.escapeRegExp(pageName.slice(1));
 	if (mw.Title.phpCharToUpper(firstChar) !== firstChar.toLowerCase()) {
 		return '[' + mw.Title.phpCharToUpper(firstChar) + firstChar.toLowerCase() + ']' + remainder;
 	}
@@ -542,7 +540,7 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
 							type: 'div',
 							id: id + '_' + i + '_subgroup'
 						});
-						// eslint-disable-next-line no-loop-func
+							// eslint-disable-next-line no-loop-func
 						$.each(tmpgroup, function (idx, el) {
 							const newEl = $.extend({}, el);
 							if (!newEl.type) {
@@ -875,7 +873,6 @@ Morebits.quickForm.element.generateTooltip = function QuickFormElementGenerateTo
 
 // Some utility methods for manipulating quickForms after their creation:
 // (None of these work for "dyninput" type fields at present)
-
 /**
  * Returns an object containing all filled form data entered by the user, with the object
  * keys being the form element names. Disabled fields will be ignored, but not hidden fields.
@@ -1239,11 +1236,13 @@ Morebits.ip = {
 				repeat = '0:';
 				extra = address === '::' ? '0' : ''; // for the address '::'
 				pad = 9; // 7+2 (due to '::')
+
 				// If the '::' is at the end...
 			} else if (abbrevPos === addressEnd - 1) {
 				repeat = ':0';
 				extra = '';
 				pad = 9; // 7+2 (due to '::')
+
 				// If the '::' is in the middle...
 			} else {
 				repeat = ':0';
@@ -1412,8 +1411,7 @@ Morebits.string = {
 		unbinder.content = unbinder.content.replace(/\|/g, '{{subst:!}}');
 		reason = unbinder.rebind();
 		if (addSig) {
-			const sig = '~~' + '~~',
-				sigIndex = reason.lastIndexOf(sig);
+			const sig = '~~' + '~~', sigIndex = reason.lastIndexOf(sig);
 			if (sigIndex === -1 || sigIndex !== reason.length - sig.length) {
 				reason += ' ' + sig;
 			}
@@ -1980,15 +1978,9 @@ Morebits.date.prototype = {
 			len = len || 2; // Up to length of 00 + 1
 			return ('00' + num).toString().slice(0 - len);
 		};
-		const h24 = udate.getHours(),
-			m = udate.getMinutes(),
-			s = udate.getSeconds(),
-			ms = udate.getMilliseconds();
-		const D = udate.getDate(),
-			M = udate.getMonth() + 1,
-			Y = udate.getFullYear();
-		const h12 = h24 % 12 || 12,
-			amOrPm = h24 >= 12 ? '下午' : '上午';
+		const h24 = udate.getHours(), m = udate.getMinutes(), s = udate.getSeconds(), ms = udate.getMilliseconds();
+		const D = udate.getDate(), M = udate.getMonth() + 1, Y = udate.getFullYear();
+		const h12 = h24 % 12 || 12, amOrPm = h24 >= 12 ? '下午' : '上午';
 		const replacementMap = {
 			HH: pad(h24),
 			H: h24,
@@ -2017,9 +2009,9 @@ Morebits.date.prototype = {
 		unbinder.unbind('\\[', '\\]');
 		unbinder.content = unbinder.content.replace(
 			/* Regex notes:
-  	 * d(d{2,3})? matches exactly 1, 3 or 4 occurrences of 'd' ('dd' is treated as a double match of 'd')
-  	 * Y{1,2}(Y{2})? matches exactly 1, 2 or 4 occurrences of 'Y'
-  	 */
+		 * d(d{2,3})? matches exactly 1, 3 or 4 occurrences of 'd' ('dd' is treated as a double match of 'd')
+		 * Y{1,2}(Y{2})? matches exactly 1, 2 or 4 occurrences of 'Y'
+		 */
 			/H{1,2}|h{1,2}|m{1,2}|s{1,2}|SSS|d(d{2,3})?|D{1,2}|M{1,4}|Y{1,2}(Y{2})?|A/g, function (match) {
 				return replacementMap[match];
 			});
@@ -2275,7 +2267,6 @@ Morebits.wiki.api.prototype = {
 	// full error description, if any
 	badtokenRetry: false,
 	// set to true if this on a retry attempted after a badtoken error
-
 	/**
 	 * Keep track of parent object for callbacks.
 	 *
@@ -2305,8 +2296,7 @@ Morebits.wiki.api.prototype = {
 				return encodeURIComponent(i) + '=' + encodeURIComponent(val);
 			}
 		}).join('&').replace(/^(.*?)(\btoken=[^&]*)&(.*)/, '$1$3&$2');
-		// token should always be the last item in the query string (bug TW-B-0013)
-
+			// token should always be the last item in the query string (bug TW-B-0013)
 		const ajaxparams = $.extend({}, {
 			context: this,
 			type: this.query.action === 'query' ? 'GET' : 'POST',
@@ -2377,7 +2367,6 @@ Morebits.wiki.api.prototype = {
 			this.onError.call(this.parent, this);
 		}
 		// don't complete the action so that the error remains displayed
-
 		return $.Deferred().rejectWith(this.parent, [ this ]);
 	},
 	getStatusElement: function () {
@@ -2617,7 +2606,7 @@ Morebits.wiki.page = function (pageName, status) {
 		protectApi: null,
 		protectProcessApi: null
 	};
-	const emptyFunction = function () {};
+	const emptyFunction = function () { };
 
 	/**
 	 * Loads the text for the page.
@@ -3206,7 +3195,6 @@ Morebits.wiki.page = function (pageName, status) {
 	};
 
 	// Miscellaneous getters/setters:
-
 	/**
 	 * Define an object for use in a callback function.
 	 *
@@ -3514,7 +3502,6 @@ Morebits.wiki.page = function (pageName, status) {
 	};
 
 	/* Private member functions: These are not exposed outside */
-
 	/**
 	 * Determines whether we can save an API call by using the csrf token
 	 * sent with the page HTML, or whether we need to ask the server for
@@ -3590,7 +3577,7 @@ Morebits.wiki.page = function (pageName, status) {
 			inprop: 'watched',
 			format: 'json'
 		};
-		// Protection not checked for flagged-revs or non-sysop moves
+			// Protection not checked for flagged-revs or non-sysop moves
 		if (action !== 'move' || Morebits.userIsSysop) {
 			query.inprop += '|protection';
 		}
@@ -3845,8 +3832,8 @@ Morebits.wiki.page = function (pageName, status) {
 		} else {
 			const response = ctx.saveApi.getResponse();
 			const errorData = response.error ||
-        // bc error format
-        response.errors[0].data; // html/wikitext/plaintext error format
+					// bc error format
+					response.errors[0].data; // html/wikitext/plaintext error format
 
 			switch (errorCode) {
 				case 'protectedpage':
@@ -4295,8 +4282,7 @@ Morebits.wiki.page = function (pageName, status) {
 		}
 
 		// Build protection levels and expirys (expiries?) for query
-		const protections = [],
-			expirys = [];
+		const protections = [], expirys = [];
 		if (ctx.protectEdit) {
 			protections.push('edit=' + ctx.protectEdit.level);
 			expirys.push(ctx.protectEdit.expiry);
@@ -4319,7 +4305,7 @@ Morebits.wiki.page = function (pageName, status) {
 			watchlist: ctx.watchlistOption,
 			format: 'json'
 		};
-		// Only shows up in logs, not page history [[phab:T259983]]
+			// Only shows up in logs, not page history [[phab:T259983]]
 		if (ctx.changeTags) {
 			query.tags = ctx.changeTags;
 		}
@@ -4423,7 +4409,6 @@ Morebits.wiki.preview = function (previewbox) {
 };
 
 /* **************** Morebits.wikitext **************** */
-
 /**
  * Wikitext manipulation.
  *
@@ -4698,25 +4683,25 @@ Morebits.wikitext.page.prototype = {
 		this.text = this.text.replace(new RegExp(
 			// leading whitespace
 			'^\\s*' +
-      // capture template(s)
-      '(?:((?:\\s*' +
-      // Pre-template regex, such as leading html comments
-      preRegex + '|' +
-      // begin template format
-      '\\{\\{\\s*(?:' +
-      // Template regex
-      regex +
-      // end main template name, optionally with a number
-      // Probably remove the (?:) though
-      ')\\d*\\s*' +
-      // template parameters
-      '(\\|(?:\\{\\{[^{}]*\\}\\}|[^{}])*)?' +
-      // end template format
-      '\\}\\})+' +
-      // end capture
-      '(?:\\s*\\n)?)' +
-      // trailing whitespace
-      '\\s*)?', flags), '$1' + tag);
+				// capture template(s)
+				'(?:((?:\\s*' +
+				// Pre-template regex, such as leading html comments
+				preRegex + '|' +
+				// begin template format
+				'\\{\\{\\s*(?:' +
+				// Template regex
+				regex +
+				// end main template name, optionally with a number
+				// Probably remove the (?:) though
+				')\\d*\\s*' +
+				// template parameters
+				'(\\|(?:\\{\\{[^{}]*\\}\\}|[^{}])*)?' +
+				// end template format
+				'\\}\\})+' +
+				// end capture
+				'(?:\\s*\\n)?)' +
+				// trailing whitespace
+				'\\s*)?', flags), '$1' + tag);
 		return this;
 	},
 	/**
@@ -4802,7 +4787,6 @@ Morebits.userspaceLogger = function (logPageName) {
  * line, allowable values are: `status` (blue), `info` (green), `warn` (red),
  * or `error` (bold red).
  */
-
 Morebits.status = function Status(text, stat, type) {
 	this.textRaw = text;
 	this.text = Morebits.createHtml(text);
@@ -5030,9 +5014,7 @@ Morebits.checkboxShiftClickSupport = function (jQuerySelector, jQueryContext) {
 		const thisCb = this;
 		if (event.shiftKey && lastCheckbox !== null) {
 			const cbs = $(jQuerySelector, jQueryContext); // can't cache them, obviously, if we want to support resorting
-			let index = -1,
-				lastIndex = -1,
-				i;
+			let index = -1, lastIndex = -1, i;
 			for (i = 0; i < cbs.length; i++) {
 				if (cbs[i] === thisCb) {
 					index = i;
@@ -5239,7 +5221,6 @@ Morebits.batchOperation = function (currentAction) {
 	};
 
 	// private functions
-
 	const thisProxy = this;
 	const fnStartNewChunk = function () {
 		const chunk = ctx.pageChunks[++ctx.currentChunkIndex];
@@ -5320,7 +5301,7 @@ Morebits.taskManager = function (context) {
 	 */
 	this.add = function (func, deps, onFailure) {
 		this.taskDependencyMap.set(func, deps);
-		this.failureCallbackMap.set(func, onFailure || function () {});
+		this.failureCallbackMap.set(func, onFailure || function () { });
 		const deferred = $.Deferred();
 		this.deferreds.set(func, deferred);
 		this.allDeferreds.push(deferred);
@@ -5379,7 +5360,7 @@ Morebits.simpleWindow = function SimpleWindow(width, height) {
 	$(this.content).dialog({
 		autoOpen: false,
 		buttons: {
-			'Placeholder button': function () {}
+			'Placeholder button': function () { }
 		},
 		dialogClass: 'morebits-dialog',
 		width: Math.min(parseInt(window.innerWidth, 10), parseInt(width || 800, 10)),
@@ -5654,7 +5635,7 @@ Morebits.simpleWindow.prototype = {
 Morebits.simpleWindow.setButtonsEnabled = function (enabled) {
 	$('.morebits-dialog-buttons button').prop('disabled', !enabled);
 };
-}(window, document, jQuery)); // End wrap with anonymous function
+})(window, document, jQuery); // End wrap with anonymous function
 
 /**
  * If this script is being executed outside a ResourceLoader context, we add some

@@ -13,7 +13,7 @@
  */
 /* Twinkle.js - twinkleprotect.js */
 /* <nowiki> */
-(function ($) {
+(($) => {
 /**
  * twinkleprotect.js: Protect/RPP module
  * Mode of invocation:  Tab ("PP"/"RPP")
@@ -1452,5 +1452,5 @@ Twinkle.protect.formatProtectionDescription = function (protectionLevels) {
 };
 
 Twinkle.addInitCallback(Twinkle.protect, 'protect');
-}(jQuery));
+})(jQuery);
 /* </nowiki> */

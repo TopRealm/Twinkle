@@ -13,7 +13,7 @@
  */
 /* Twinkle.js - twinkleunlink.js */
 /* <nowiki> */
-(function ($) {
+(($) => {
 /**
  * twinkleunlink.js: Unlink module
  * Mode of invocation:  Tab ("Unlink")
@@ -304,5 +304,5 @@ Twinkle.unlink.callbacks = {
 	}
 };
 Twinkle.addInitCallback(Twinkle.unlink, 'unlink');
-}(jQuery));
+})(jQuery);
 /* </nowiki> */

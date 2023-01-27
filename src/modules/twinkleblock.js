@@ -13,7 +13,7 @@
  */
 /* Twinkle.js - twinkleblock.js */
 /* <nowiki> */
-(function ($) {
+(($) => {
 /**
  * twinkleblock.js: Block module
  * Mode of invocation:     Tab ("Block")
@@ -1835,5 +1835,5 @@ Twinkle.block.callback.main_flow = function twinkleblockcallbackMain(flowobj) {
 	flowobj.newTopic();
 };
 Twinkle.addInitCallback(Twinkle.block, 'block');
-}(jQuery));
+})(jQuery);
 /* </nowiki> */

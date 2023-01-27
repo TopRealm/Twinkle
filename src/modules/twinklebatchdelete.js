@@ -13,7 +13,7 @@
  */
 /* Twinkle.js - twinklebatchdelete.js */
 /* <nowiki> */
-(function ($) {
+(($) => {
 /**
  * twinklebatchdelete.js: Batch delete module (sysops only)
  * Mode of invocation:     Tab ("D-batch")
@@ -710,5 +710,5 @@ Twinkle.batchdelete.callbacks = {
 	}
 };
 Twinkle.addInitCallback(Twinkle.batchdelete, 'batchdelete');
-}(jQuery));
+})(jQuery);
 /* </nowiki> */

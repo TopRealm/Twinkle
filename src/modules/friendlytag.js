@@ -13,14 +13,13 @@
  */
 /* Twinkle.js - friendlytag.js */
 /* <nowiki> */
-(function ($) {
+(($) => {
 /**
  * friendlytag.js: Tag module
  * Mode of invocation:     Tab ("Tag")
  * Active on:              Existing articles and drafts; file pages with a corresponding file
  *                         which is local (not on Commons); all redirects
  */
-
 Twinkle.tag = function friendlytag() {
 	// redirect tagging
 	if (Morebits.isPageRedirect()) {
@@ -35,9 +34,9 @@ Twinkle.tag = function friendlytag() {
 		Twinkle.tag.mode = 'article';
 		// Can't remove tags when not viewing current version
 		Twinkle.tag.canRemove = mw.config.get('wgCurRevisionId') === mw.config.get('wgRevisionId') &&
-			// Disabled on latest diff because the diff slider could be used to slide
-			// away from the latest diff without causing the script to reload
-			!mw.config.get('wgDiffNewId');
+				// Disabled on latest diff because the diff slider could be used to slide
+				// away from the latest diff without causing the script to reload
+				!mw.config.get('wgDiffNewId');
 		Twinkle.addPortletLink(Twinkle.tag.callback, '标记', 'friendly-tag', '为条目或移除添加标记');
 	}
 };
@@ -274,7 +273,6 @@ Twinkle.tag.callback = function friendlytagCallback() {
 		Twinkle.tag.alreadyPresentTags = [];
 		if (Twinkle.tag.canRemove) {
 			// Look for existing maintenance tags in the lead section and put them in array
-
 			// All tags are HTML table elements that are direct children of .mw-parser-output,
 			// except when they are within {{multiple issues}}
 			$('.mw-parser-output').children().each(function parsehtml(i, e) {
@@ -287,7 +285,6 @@ Twinkle.tag.callback = function friendlytagCallback() {
 				// The ability to remove tags depends on the template's {{ambox}} |name=
 				// parameter bearing the template's correct name (preferably) or a name that at
 				// least redirects to the actual name
-
 				// All tags have their first class name as "box-" + template name
 				if (e.className.indexOf('box-') === 0) {
 					if (e.classList[0] === 'box-Multiple_issues') {
@@ -348,8 +345,7 @@ Twinkle.tag.updateSortOrder = function (e) {
 
 	// function to generate a checkbox, with appropriate subgroup if needed
 	const makeCheckbox = function (item) {
-		const tag = item.tag,
-			description = item.description;
+		const tag = item.tag, description = item.description;
 		const checkbox = {
 			value: tag,
 			label: '{{' + tag + '}}: ' + description
@@ -442,7 +438,6 @@ Twinkle.tag.updateSortOrder = function (e) {
 		}
 
 		// Avoid repeatedly resorting
-
 		Twinkle.tag.article.alphabeticalList = Twinkle.tag.article.alphabeticalList || Object.keys(Twinkle.tag.article.flatObject).sort();
 		const checkboxes = [];
 		Twinkle.tag.article.alphabeticalList.forEach(function (tag) {
@@ -560,7 +555,6 @@ const getMergeSubgroups = function (tag) {
 			break;
 	}
 	// no default
-
 	return [ {
 		name: 'mergeTarget',
 		type: 'input',
@@ -1438,7 +1432,6 @@ Twinkle.tag.redirectList = {
 };
 
 // maintenance tags for FILES start here
-
 Twinkle.tag.fileList = {
 	'License and sourcing problem tags': [ {
 		label: '{{Better source requested}}: source info consists of bare image URL/generic base URL only',
@@ -1897,13 +1890,9 @@ Twinkle.tag.callbacks = {
 			removeTags();
 			return;
 		}
-		let tagRe,
-			tagText = '',
-			tags = [];
-		const groupableTags = [],
-			groupableExistingTags = [];
+		let tagRe, tagText = '', tags = [];
+		const groupableTags = [], groupableExistingTags = [];
 		// Executes first: addition of selected tags
-
 		/**
 		 * Updates `tagText` with the syntax of `tagName` template with its parameters
 		 *
@@ -1917,7 +1906,6 @@ Twinkle.tag.callbacks = {
 			} else {
 				currentTag += '{{' + tagName;
 				// fill in other parameters, based on the tag
-
 				const subgroupObj = Twinkle.tag.article.flatObject[tagName] && Twinkle.tag.article.flatObject[tagName].subgroup;
 				if (subgroupObj) {
 					const subgroups = Array.isArray(subgroupObj) ? subgroupObj : [ subgroupObj ];
@@ -1976,12 +1964,12 @@ Twinkle.tag.callbacks = {
 			// as well as deletion/protection-related templates
 			const wikipage = new Morebits.wikitext.page(pageText);
 			const templatesAfter = Twinkle.hatnoteRegex +
-			// Protection templates
-			'pp|pp-.*?|' +
-			// CSD
-			'db|delete|db-.*?|speedy deletion-.*?|' +
-			// not a hatnote, but sometimes under a CSD or AfD
-			'salt|proposed deletion endorsed';
+					// Protection templates
+					'pp|pp-.*?|' +
+					// CSD
+					'db|delete|db-.*?|speedy deletion-.*?|' +
+					// not a hatnote, but sometimes under a CSD or AfD
+					'salt|proposed deletion endorsed';
 				// AfD is special, as the tag includes html comments before and after the actual template
 				// trailing whitespace/newline needed since this subst's a newline
 			const afdRegex = '(?:<!--.*AfD.*\\n\\{\\{(?:Article for deletion\\/dated|AfDM).*\\}\\}\\n<!--.*(?:\\n<!--.*)?AfD.*(?:\\s*\\n))?';
@@ -2101,10 +2089,7 @@ Twinkle.tag.callbacks = {
 	},
 	redirect: function redirect(pageobj) {
 		const params = pageobj.getCallbackParameters();
-		let pageText = pageobj.getPageText(),
-			tagRe,
-			tagText = '',
-			summaryText = 'Added';
+		let pageText = pageobj.getPageText(), tagRe, tagText = '', summaryText = 'Added';
 		const tags = [];
 		let i;
 		for (i = 0; i < params.tags.length; i++) {
@@ -2187,8 +2172,7 @@ Twinkle.tag.callbacks = {
 
 		// Add maintenance tags
 		if (params.tags.length) {
-			let tagtext = '',
-				currentTag;
+			let tagtext = '', currentTag;
 			$.each(params.tags, function (k, tag) {
 				// when other commons-related tags are placed, remove "move to Commons" tag
 				if ([ 'Keep local', 'Now Commons', 'Do not move to Commons' ].indexOf(tag) !== -1) {
@@ -2243,6 +2227,7 @@ Twinkle.tag.callbacks = {
 						break;
 					case 'Orphaned non-free revisions':
 						currentTag = 'subst:' + currentTag; // subst
+
 						// remove {{non-free reduce}} and redirects
 						text = text.replace(/\{\{\s*(Template\s*:\s*)?(Non-free reduce|FairUseReduce|Fairusereduce|Fair Use Reduce|Fair use reduce|Reduce size|Reduce|Fair-use reduce|Image-toobig|Comic-ovrsize-img|Non-free-reduce|Nfr|Smaller image|Nonfree reduce)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/ig, '');
 						currentTag += '|date={{subst:date}}';
@@ -2255,7 +2240,7 @@ Twinkle.tag.callbacks = {
 						break;
 					default:
 						break;
-				// don't care
+						// don't care
 				}
 
 				currentTag = '{{' + currentTag + '}}\n';
@@ -2287,7 +2272,6 @@ Twinkle.tag.callback.evaluate = function friendlytagCallbackEvaluate(e) {
 	const params = Morebits.quickForm.getInputData(form);
 
 	// Validation
-
 	// Given an array of incompatible tags, check if we have two or more selected
 	const checkIncompatible = function (conflicts, extra) {
 		const count = conflicts.reduce(function (sum, tag) {
@@ -2350,7 +2334,6 @@ Twinkle.tag.callback.evaluate = function friendlytagCallbackEvaluate(e) {
 				}
 
 				// Check that selected templates make sense given the file's extension.
-
 				// Bad GIF|JPEG|SVG
 				let badIndex; // Keep track of where the offending template is so we can reference it below
 				if (extensionUpper !== 'GIF' && (badIndex = params.tags.indexOf('Bad GIF')) !== -1 || extensionUpper !== 'JPEG' && (badIndex = params.tags.indexOf('Bad JPEG')) !== -1 || extensionUpper !== 'SVG' && (badIndex = params.tags.indexOf('Bad SVG')) !== -1) {
@@ -2426,4 +2409,5 @@ Twinkle.tag.callback.evaluate = function friendlytagCallbackEvaluate(e) {
 	qiuwen_page.load(Twinkle.tag.callbacks[Twinkle.tag.mode]);
 };
 Twinkle.addInitCallback(Twinkle.tag, 'tag');
-}(jQuery));/* </nowiki> */
+})(jQuery);
+/* </nowiki> */

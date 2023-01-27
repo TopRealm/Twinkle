@@ -13,7 +13,7 @@
  */
 /* Twinkle.js - friendlytalkback.js */
 /* <nowiki> */
-(function ($) {
+(($) => {
 /**
  * friendlytalkback.js: Talkback module
  * Mode of invocation:     Tab ("TB")
@@ -375,5 +375,5 @@ Twinkle.talkback.callbacks = {
 	}
 };
 Twinkle.addInitCallback(Twinkle.talkback, 'talkback');
-}(jQuery));
+})(jQuery);
 /* </nowiki> */

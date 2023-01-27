@@ -13,7 +13,7 @@
  */
 /* Twinkle.js - twinkleimage.js */
 /* <nowiki> */
-(function ($) {
+(($) => {
 /**
  * twinkleimage.js: Image CSD module
  * Mode of invocation:  Tab ("DI")
@@ -283,5 +283,5 @@ Twinkle.image.callbacks = {
 	}
 };
 Twinkle.addInitCallback(Twinkle.image, 'image');
-}(jQuery));
+})(jQuery);
 /* </nowiki> */

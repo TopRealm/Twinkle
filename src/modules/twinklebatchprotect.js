@@ -13,7 +13,7 @@
  */
 /* Twinkle.js - twinklebatchprotect.js */
 /* <nowiki> */
-(function ($) {
+(($) => {
 /**
  * twinklebatchprotect.js: Batch protect module (sysops only)
  * Mode of invocation:     Tab ("P-batch")
@@ -320,5 +320,5 @@ Twinkle.batchprotect.callbacks = {
 	}
 };
 Twinkle.addInitCallback(Twinkle.batchprotect, 'batchprotect');
-}(jQuery));
+})(jQuery);
 /* </nowiki> */

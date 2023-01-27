@@ -13,7 +13,7 @@
  */
 /* Twinkle.js - twinklespeedy.js */
 /* <nowiki> */
-(function ($) {
+(($) => {
 /**
  * twinklespeedy.js: CSD module
  * Mode of invocation:  Tab ("CSD")
@@ -1500,5 +1500,5 @@ Twinkle.speedy.callback.evaluateUser = function twinklespeedyCallbackEvaluateUse
 	qiuwen_page.load(Twinkle.speedy.callbacks.user.main);
 };
 Twinkle.addInitCallback(Twinkle.speedy, 'speedy');
-}(jQuery));
+})(jQuery);
 /* </nowiki> */
