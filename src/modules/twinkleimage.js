@@ -11,7 +11,7 @@
  * @author © 2021-     Qiuwen Baike Contributors
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
-/* Twinkle.js - twinklefluff.js */
+/* Twinkle.js - twinkleimage.js */
 /* <nowiki> */
 ( function ( $ ) {
 /*
