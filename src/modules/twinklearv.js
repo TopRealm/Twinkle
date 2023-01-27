@@ -20,17 +20,17 @@
  * Active on:           Any page with relevant user name (userspace, contribs, etc.)
  */
 
-Twinkle.arv = function twinklearv() {
+Twinkle.arv = () => {
 	const username = mw.config.get('wgRelevantUserName');
 	if (!username || username === mw.config.get('wgUserName')) {
 		return;
 	}
 	const windowTitle = mw.util.isIPAddress(username) ? '报告IP地址给管理员' : '报告用户给管理员';
-	Twinkle.addPortletLink(function () {
+	Twinkle.addPortletLink(() => {
 		Twinkle.arv.callback(username);
 	}, '告状', 'tw-arv', windowTitle);
 };
-Twinkle.arv.callback = function (uid) {
+Twinkle.arv.callback = (uid) => {
 	if (uid === mw.config.get('wgUserName')) {
 		alert('不可以告自己的状哦！');
 		return;
@@ -98,7 +98,7 @@ Twinkle.arv.callback = function (uid) {
 		format: 'json'
 	};
 	query.bkusers = uid;
-	new Morebits.wiki.api('检查用户的封禁状态', query, function (apiobj) {
+	new Morebits.wiki.api('检查用户的封禁状态', query, (apiobj) => {
 		const blocklist = apiobj.getResponse().query.blocks;
 		if (blocklist.length) {
 			// If an IP is blocked *and* rangeblocked, only use whichever is more recent
@@ -119,14 +119,14 @@ Twinkle.arv.callback = function (uid) {
 	evt.initEvent('change', true, true);
 	result.category.dispatchEvent(evt);
 };
-Twinkle.arv.callback.changeCategory = function (e) {
+Twinkle.arv.callback.changeCategory = (e) => {
 	const value = e.target.value;
 	const root = e.target.form;
 	const old_area = Morebits.quickForm.getElements(root, 'work_area')[0];
 	let work_area = null;
 	switch (value) {
 		case 'aiv':
-			/* falls through */
+		/* falls through */
 		default:
 			work_area = new Morebits.quickForm.element({
 				type: 'field',
@@ -139,7 +139,7 @@ Twinkle.arv.callback.changeCategory = function (e) {
 				label: '相关页面',
 				tooltip: '如不希望让报告链接到页面，请留空',
 				value: mw.util.getParamValue('vanarticle') || '',
-				event: function (e) {
+				event: (e) => {
 					const value = e.target.value;
 					const root = e.target.form;
 					if (value === '') {
@@ -157,7 +157,7 @@ Twinkle.arv.callback.changeCategory = function (e) {
 				tooltip: '留空以略过差异',
 				value: mw.util.getParamValue('vanarticlerevid') || '',
 				disabled: !mw.util.getParamValue('vanarticle'),
-				event: function (e) {
+				event: (e) => {
 					const value = e.target.value;
 					const root = e.target.form;
 					root.goodid.disabled = value === '';
@@ -200,7 +200,7 @@ Twinkle.arv.callback.changeCategory = function (e) {
 			old_area.parentNode.replaceChild(work_area, old_area);
 			break;
 
-			// not using, but keeping it for reference
+		// not using, but keeping it for reference
 		case 'username':
 			work_area = new Morebits.quickForm.element({
 				type: 'field',
@@ -304,7 +304,7 @@ Twinkle.arv.callback.changeCategory = function (e) {
 			break;
 	}
 };
-Twinkle.arv.callback.evaluate = function (e) {
+Twinkle.arv.callback.evaluate = (e) => {
 	const form = e.target;
 	let reason = '';
 	let comment = '';
@@ -316,14 +316,14 @@ Twinkle.arv.callback.evaluate = function (e) {
 	switch (form.category.value) {
 		// Report user for vandalism
 		case 'aiv':
-			/* falls through */
+		/* falls through */
 		default: {
 			types = form.getChecked('arvtype');
 			if (!types.length && comment === '') {
 				alert('必须指定一个理由！');
 				return;
 			}
-			types = types.map(function (v) {
+			types = types.map((v) => {
 				switch (v) {
 					case 'final':
 						return '已发出最后警告';
@@ -368,7 +368,7 @@ Twinkle.arv.callback.evaluate = function (e) {
 			const aivPage = new Morebits.wiki.page('Qiuwen:当前的破坏', '处理VIP请求');
 			aivPage.setPageSection(1);
 			aivPage.setFollowRedirect(true);
-			aivPage.load(function () {
+			aivPage.load(() => {
 				const text = aivPage.getPageText();
 				const $aivLink = '<a target="_blank" href="/wiki/QW:AIV">QW:AIV</a>';
 
@@ -423,7 +423,7 @@ Twinkle.arv.callback.evaluate = function (e) {
 			Morebits.wiki.actionCompleted.notice = 'Reporting complete';
 			const uaaPage = new Morebits.wiki.page('Qiuwen:Usernames for administrator attention', 'Processing UAA request');
 			uaaPage.setFollowRedirect(true);
-			uaaPage.load(function () {
+			uaaPage.load(() => {
 				const text = uaaPage.getPageText();
 
 				// check if user has already been reported
@@ -446,7 +446,7 @@ Twinkle.arv.callback.evaluate = function (e) {
 			// QW:SPI
 		}
 		case 'sock':
-			/* falls through */
+		/* falls through */
 		case 'puppet': {
 			const sockParameters = {
 				evidence: form.evidence.value.trim(),
@@ -461,9 +461,7 @@ Twinkle.arv.callback.evaluate = function (e) {
 				return;
 			}
 			sockParameters.uid = puppetReport ? form.sockmaster.value.trim() : uid;
-			sockParameters.sockpuppets = puppetReport ? [ uid ] : Morebits.array.uniq($.map($('input:text[name=sockpuppet]', form), function (o) {
-				return $(o).val() || null;
-			}));
+			sockParameters.sockpuppets = puppetReport ? [ uid ] : Morebits.array.uniq($.map($('input:text[name=sockpuppet]', form), (o) => $(o).val() || null));
 			Morebits.simpleWindow.setButtonsEnabled(false);
 			Morebits.status.init(form);
 			Twinkle.arv.processSock(sockParameters);
@@ -472,23 +470,17 @@ Twinkle.arv.callback.evaluate = function (e) {
 			// not using, but keeping for reference
 		}
 		case 'an3': {
-			const diffs = $.map($('input:checkbox[name=s_diffs]:checked', form), function (o) {
-				return $(o).data('revinfo');
-			});
+			const diffs = $.map($('input:checkbox[name=s_diffs]:checked', form), (o) => $(o).data('revinfo'));
 			if (diffs.length < 3 && !confirm('You have selected fewer than three offending edits. Do you wish to make the report anyway?')) {
 				return;
 			}
-			const warnings = $.map($('input:checkbox[name=s_warnings]:checked', form), function (o) {
-				return $(o).data('revinfo');
-			});
+			const warnings = $.map($('input:checkbox[name=s_warnings]:checked', form), (o) => $(o).data('revinfo'));
 			if (!warnings.length && !confirm('You have not selected any edits where you warned the offender. Do you wish to make the report anyway?')) {
 				return;
 			}
-			const resolves = $.map($('input:checkbox[name=s_resolves]:checked', form), function (o) {
-				return $(o).data('revinfo');
-			});
+			const resolves = $.map($('input:checkbox[name=s_resolves]:checked', form), (o) => $(o).data('revinfo'));
 			const free_resolves = $('input[name=s_resolves_free]').val();
-			const an3_next = function (free_resolves) {
+			const an3_next = (free_resolves) => {
 				if (!resolves.length && !free_resolves && !confirm('You have not selected any edits where you tried to resolve the issue. Do you wish to make the report anyway?')) {
 					return;
 				}
@@ -573,7 +565,7 @@ Twinkle.arv.callback.evaluate = function (e) {
 						}
 					}
 				}
-				new mw.Api().get(query).done(function (data) {
+				new mw.Api().get(query).done((data) => {
 					let page;
 					if (data.compare && data.compare.fromtitle === data.compare.totitle) {
 						page = data;
@@ -584,7 +576,7 @@ Twinkle.arv.callback.evaluate = function (e) {
 						return;
 					}
 					an3_next(page);
-				}).fail(function (data) {
+				}).fail((data) => {
 					console.log('API failed :(', data);
 				});
 			} else {
@@ -594,13 +586,11 @@ Twinkle.arv.callback.evaluate = function (e) {
 		}
 	}
 };
-Twinkle.arv.processSock = function (params) {
+Twinkle.arv.processSock = (params) => {
 	Morebits.wiki.addCheckpoint(); // prevent notification events from causing an erronous "action completed"
 
 	// prepare the SPI report
-	let text = '\n{{subst:SPI report|' + params.sockpuppets.map(function (sock, index) {
-		return index + 1 + '=' + sock;
-	}).join('|') + '\n|evidence=' + params.evidence + ' \n';
+	let text = '\n{{subst:SPI report|' + params.sockpuppets.map((sock, index) => index + 1 + '=' + sock).join('|') + '\n|evidence=' + params.evidence + ' \n';
 	if (params.checkuser) {
 		text += '|checkuser=yes';
 	}
@@ -619,7 +609,7 @@ Twinkle.arv.processSock = function (params) {
 };
 
 // no need to call this func as no an3 now, hence not i18n
-Twinkle.arv.processAN3 = function (params) {
+Twinkle.arv.processAN3 = (params) => {
 	// prepare the AN3 report
 	let minid;
 	for (let i = 0; i < params.diffs.length; ++i) {
@@ -732,7 +722,6 @@ Twinkle.arv.processAN3 = function (params) {
 		an3Page.append();
 
 		// notify user
-
 		const notifyText = '\n\n{{subst:an3-notice|1=' + mw.util.wikiUrlencode(params.uid) + '|auto=1}} ~~' + '~~';
 		const talkPage = new Morebits.wiki.page('User talk:' + params.uid, 'Notifying edit warrior');
 		talkPage.setFollowRedirect(true);
@@ -741,7 +730,7 @@ Twinkle.arv.processAN3 = function (params) {
 		talkPage.setAppendText(notifyText);
 		talkPage.append();
 		Morebits.wiki.removeCheckpoint(); // all page updates have been started
-	}).fail(function (data) {
+	}).fail((data) => {
 		console.log('API failed :(', data);
 	});
 };
