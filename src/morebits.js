@@ -3514,10 +3514,7 @@ Morebits.wiki.page = function (pageName, status) {
 		ctx.protectApi.post();
 	};
 
-	/*
-	 * Private member functions
-	 * These are not exposed outside
-	 */
+	/* Private member functions: These are not exposed outside */
 
 	/**
 	 * Determines whether we can save an API call by using the csrf token
