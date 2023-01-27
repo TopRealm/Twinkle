@@ -20,7 +20,7 @@
  * Active on:           Existing non-special pages
  */
 
-Twinkle.diff = function twinklediff() {
+Twinkle.diff = () => {
 	if (mw.config.get('wgNamespaceNumber') < 0 || !mw.config.get('wgArticleId')) {
 		return;
 	}
@@ -31,10 +31,10 @@ Twinkle.diff = function twinklediff() {
 
 	// Show additional tabs only on diff pages
 	if (mw.util.getParamValue('diff')) {
-		Twinkle.addPortletLink(function () {
+		Twinkle.addPortletLink(() => {
 			Twinkle.diff.evaluate(false);
 		}, '上异', 'tw-since', '显示与上一修订版本间的差异');
-		Twinkle.addPortletLink(function () {
+		Twinkle.addPortletLink(() => {
 			Twinkle.diff.evaluate(true);
 		}, '自异', 'tw-sincemine', '显示与我做出的修订版本的差异');
 		const oldid = /oldid=(.+)/.exec($('#mw-diff-ntitle1').find('strong a').first().attr('href'))[1];
@@ -44,7 +44,7 @@ Twinkle.diff = function twinklediff() {
 		}), '当前', 'tw-curdiff', '显示与当前版本间的差异');
 	}
 };
-Twinkle.diff.evaluate = function twinklediffEvaluate(me) {
+Twinkle.diff.evaluate = (me) => {
 	let user;
 	if (me) {
 		user = mw.config.get('wgUserName');
@@ -75,7 +75,7 @@ Twinkle.diff.evaluate = function twinklediffEvaluate(me) {
 	qiuwen_api.post();
 };
 Twinkle.diff.callbacks = {
-	main: function (self) {
+	main: (self) => {
 		const rev = self.response.query.pages[0].revisions;
 		const revid = rev && rev[0].revid;
 		if (!revid) {
