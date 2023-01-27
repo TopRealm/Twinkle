@@ -81,16 +81,16 @@ const deployTargets = [{
   file: 'dist/twinkle.js',
   target: 'MediaWiki:Gadget-Twinkle.js'
 }, {
-  file: 'twinkle.css',
+  file: 'src/twinkle.css',
   target: 'MediaWiki:Gadget-Twinkle.css'
 }, {
   file: 'dist/morebits.js',
   target: 'MediaWiki:Gadget-morebits.js'
 }, {
-  file: 'morebits.css',
+  file: 'src/morebits.css',
   target: 'MediaWiki:Gadget-morebits.css'
 }, {
-  file: 'twinkle-pagestyles.css',
+  file: 'src/twinkle-pagestyles.css',
   target: 'MediaWiki:Gadget-Twinkle-pagestyles.css'
 }, {
   file: 'dist/modules/friendlytag.js',
