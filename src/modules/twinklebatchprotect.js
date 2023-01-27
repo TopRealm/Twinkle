@@ -28,13 +28,13 @@ Twinkle.batchprotect = function twinklebatchprotect() {
 };
 Twinkle.batchprotect.unlinkCache = {};
 Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
-	var Window = new Morebits.simpleWindow(600, 400);
+	const Window = new Morebits.simpleWindow(600, 400);
 	Window.setTitle('批保');
 	Window.setScriptName('Twinkle');
 	Window.addFooterLink('保护方针', 'QW:PROT');
 	Window.addFooterLink('帮助文档', 'H:TW/DOC#保护');
 	Window.addFooterLink('问题反馈', 'HT:TW');
-	var form = new Morebits.quickForm(Twinkle.batchprotect.callback.evaluate);
+	const form = new Morebits.quickForm(Twinkle.batchprotect.callback.evaluate);
 	form.append({
 		type: 'checkbox',
 		event: Twinkle.protect.formevents.editmodify,
@@ -143,7 +143,7 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 		label: '理由（保护日志）',
 		size: 60
 	});
-	var query = {
+	const query = {
 		action: 'query',
 		prop: 'revisions|info|imageinfo',
 		rvprop: 'size|user',
@@ -165,21 +165,21 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 		query.titles = mw.config.get('wgPageName');
 		query.gpllimit = Twinkle.getPref('batchMax');
 	}
-	var statusdiv = document.createElement('div');
+	const statusdiv = document.createElement('div');
 	statusdiv.style.padding = '15px'; // just so it doesn't look broken
 	Window.setContent(statusdiv);
 	Morebits.status.init(statusdiv);
 	Window.display();
-	var statelem = new Morebits.status('抓取页面列表');
-	var qiuwen_api = new Morebits.wiki.api('加载中……', query, function (apiobj) {
-		var response = apiobj.getResponse();
-		var pages = response.query && response.query.pages || [];
-		var list = [];
+	const statelem = new Morebits.status('抓取页面列表');
+	const qiuwen_api = new Morebits.wiki.api('加载中……', query, function (apiobj) {
+		const response = apiobj.getResponse();
+		const pages = response.query && response.query.pages || [];
+		const list = [];
 		pages.sort(Twinkle.sortByNamespace);
 		pages.forEach(function (page) {
-			var metadata = [];
-			var missing = !!page.missing,
-				editProt;
+			const metadata = [];
+			const missing = !!page.missing;
+			let editProt;
 			if (missing) {
 				metadata.push('页面不存在');
 				editProt = page.protection.filter(function (pr) {
@@ -202,7 +202,7 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 			if (editProt) {
 				metadata.push((missing ? '白纸' : '') + '全保护' + (editProt.expiry === 'infinity' ? '（永久）' : '（' + new Morebits.date(editProt.expiry).calendar('utc') + ' (UTC)过期）'));
 			}
-			var title = page.title;
+			const title = page.title;
 			list.push({
 				label: title + (metadata.length ? ' (' + metadata.join('; ') + ')' : ''),
 				value: title,
@@ -237,7 +237,7 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 		form.append({
 			type: 'submit'
 		});
-		var result = form.render();
+		const result = form.render();
 		Window.setContent(result);
 
 		// Set defaults
@@ -252,14 +252,14 @@ Twinkle.batchprotect.currentProtectCounter = 0;
 Twinkle.batchprotect.currentprotector = 0;
 Twinkle.batchprotect.callback.evaluate = function twinklebatchprotectCallbackEvaluate(event) {
 	Morebits.wiki.actionCompleted.notice = '批量保护完成';
-	var form = event.target;
-	var numProtected = $(Morebits.quickForm.getElements(form, '个页面')).filter(function (index, element) {
+	const form = event.target;
+	const numProtected = $(Morebits.quickForm.getElements(form, '个页面')).filter(function (index, element) {
 		return element.checked && element.nextElementSibling.style.color === 'red';
 	}).length;
 	if (numProtected > 0 && !confirm('您即将对' + mw.language.convertNumber(numProtected) + '个全保护页面进行操作。您确定吗？')) {
 		return;
 	}
-	var input = Morebits.quickForm.getInputData(form);
+	const input = Morebits.quickForm.getInputData(form);
 	if (!input.reason) {
 		alert('您必须给出一个理由。');
 		return;
@@ -270,17 +270,17 @@ Twinkle.batchprotect.callback.evaluate = function twinklebatchprotectCallbackEva
 		Morebits.status.error('Error', '待保护页面不存在，程序终止');
 		return;
 	}
-	var batchOperation = new Morebits.batchOperation('应用保护设置');
+	const batchOperation = new Morebits.batchOperation('应用保护设置');
 	batchOperation.setOption('chunkSize', Twinkle.getPref('batchChunks'));
 	batchOperation.setOption('preserveIndividualStatusLines', true);
 	batchOperation.setPageList(input.pages);
 	batchOperation.run(function (pageName) {
-		var query = {
+		const query = {
 			action: 'query',
 			titles: pageName,
 			format: 'json'
 		};
-		var qiuwen_api = new Morebits.wiki.api('正在检查页面“' + pageName + '”是否存在', query, Twinkle.batchprotect.callbacks.main, null, batchOperation.workerFailure);
+		const qiuwen_api = new Morebits.wiki.api('正在检查页面“' + pageName + '”是否存在', query, Twinkle.batchprotect.callbacks.main, null, batchOperation.workerFailure);
 		qiuwen_api.params = $.extend({
 			page: pageName,
 			batchOperation: batchOperation
@@ -290,13 +290,13 @@ Twinkle.batchprotect.callback.evaluate = function twinklebatchprotectCallbackEva
 };
 Twinkle.batchprotect.callbacks = {
 	main: function main(apiobj) {
-		var response = apiobj.getResponse();
+		const response = apiobj.getResponse();
 		if (response.query.normalized) {
 			apiobj.params.page = response.query.normalized[0].to;
 		}
-		var exists = !response.query.pages[0].missing;
-		var page = new Morebits.wiki.page(apiobj.params.page, '正在保护' + apiobj.params.page);
-		var takenAction = false;
+		const exists = !response.query.pages[0].missing;
+		const page = new Morebits.wiki.page(apiobj.params.page, '正在保护' + apiobj.params.page);
+		let takenAction = false;
 		if (exists && apiobj.params.editmodify) {
 			page.setEditProtection(apiobj.params.editlevel, apiobj.params.editexpiry);
 			takenAction = true;

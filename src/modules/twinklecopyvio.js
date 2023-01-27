@@ -34,14 +34,14 @@ Twinkle.copyvio = function twinklecopyvio() {
 	Twinkle.addPortletLink(Twinkle.copyvio.callback, '侵权', 'tw-copyvio', '提报侵权页面', '');
 };
 Twinkle.copyvio.callback = function twinklecopyvioCallback() {
-	var Window = new Morebits.simpleWindow(600, 350);
+	const Window = new Morebits.simpleWindow(600, 350);
 	Window.setTitle('提报侵权页面');
 	Window.setScriptName('Twinkle');
 	Window.addFooterLink('常见错误', 'Qiuwen:管理员错误自查表/侵权处理');
 	Window.addFooterLink('参数设置', 'H:TW/PREF#侵权');
 	Window.addFooterLink('帮助文档', 'H:TW/DOC#侵权');
 	Window.addFooterLink('问题反馈', 'HT:TW');
-	var form = new Morebits.quickForm(Twinkle.copyvio.callback.evaluate);
+	const form = new Morebits.quickForm(Twinkle.copyvio.callback.evaluate);
 	form.append({
 		type: 'textarea',
 		label: '侵权来源：',
@@ -60,19 +60,19 @@ Twinkle.copyvio.callback = function twinklecopyvioCallback() {
 	form.append({
 		type: 'submit'
 	});
-	var result = form.render();
+	const result = form.render();
 	Window.setContent(result);
 	Window.display();
 };
 Twinkle.copyvio.callbacks = {
 	tryTagging: function (pageobj) {
 		// 先尝试标记页面，如果发现已经标记则停止提报
-		var text = pageobj.getPageText();
+		const text = pageobj.getPageText();
 		if (text.indexOf('{{Copyvio|') === -1) {
 			Twinkle.copyvio.callbacks.taggingArticle(pageobj);
 
 			// Contributor specific edits
-			var qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'));
+			const qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'));
 			qiuwen_page.setCallbackParameters(pageobj.getCallbackParameters());
 			qiuwen_page.lookupCreation(Twinkle.copyvio.callbacks.main);
 		} else {
@@ -81,19 +81,19 @@ Twinkle.copyvio.callbacks = {
 	},
 	main: function (pageobj) {
 		// this is coming in from lookupCreation...!
-		var params = pageobj.getCallbackParameters();
-		var initialContrib = pageobj.getCreator();
+		const params = pageobj.getCallbackParameters();
+		const initialContrib = pageobj.getCreator();
 
 		// Adding discussion
-		var qiuwen_page = new Morebits.wiki.page(params.logpage, '加入侵权记录项');
+		const qiuwen_page = new Morebits.wiki.page(params.logpage, '加入侵权记录项');
 		qiuwen_page.setFollowRedirect(true);
 		qiuwen_page.setCallbackParameters(params);
 		qiuwen_page.load(Twinkle.copyvio.callbacks.copyvioList);
 
 		// Notification to first contributor
 		if (params.usertalk) {
-			var usertalkpage = new Morebits.wiki.page('User talk:' + initialContrib, '通知页面创建者（' + initialContrib + ')');
-			var notifytext = '\n{{subst:CopyvioNotice|' + mw.config.get('wgPageName') + '}}';
+			const usertalkpage = new Morebits.wiki.page('User talk:' + initialContrib, '通知页面创建者（' + initialContrib + ')');
+			const notifytext = '\n{{subst:CopyvioNotice|' + mw.config.get('wgPageName') + '}}';
 			usertalkpage.setAppendText(notifytext);
 			usertalkpage.setEditSummary('通知：页面[[' + mw.config.get('wgPageName') + ']]疑似侵犯著作权');
 			usertalkpage.setChangeTags(Twinkle.changeTags);
@@ -104,11 +104,11 @@ Twinkle.copyvio.callbacks = {
 		}
 	},
 	taggingArticle: function (pageobj) {
-		var params = pageobj.getCallbackParameters();
-		var revisionId = mw.config.get('wgRevisionId') || mw.config.get('wgDiffNewId') || mw.config.get('wgCurRevisionId');
-		var tag = '{{subst:Copyvio/auto|url=' + params.source.replace(/http/g, '&#104;ttp').replace(/\n+/g, '\n').replace(/^\s*([^*])/gm, '* $1').replace(/^\* $/m, '') + '|OldRevision=' + revisionId + '}}';
-		var text = pageobj.getPageText();
-		var oldcsd = text.match(/\{\{\s*(db(-\w*)?|d|delete)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}/i);
+		const params = pageobj.getCallbackParameters();
+		const revisionId = mw.config.get('wgRevisionId') || mw.config.get('wgDiffNewId') || mw.config.get('wgCurRevisionId');
+		let tag = '{{subst:Copyvio/auto|url=' + params.source.replace(/http/g, '&#104;ttp').replace(/\n+/g, '\n').replace(/^\s*([^*])/gm, '* $1').replace(/^\* $/m, '') + '|OldRevision=' + revisionId + '}}';
+		const text = pageobj.getPageText();
+		const oldcsd = text.match(/\{\{\s*(db(-\w*)?|d|delete)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}/i);
 		if (oldcsd && confirm('在页面上找到快速删除模板，要保留吗？\n\n当页面同时侵犯著作权又符合快速删除标准时，应使用快速删除程序。\n单击“确认”以保留快速删除模板，若您认为快速删除理由不合，单击“取消”以移除快速删除模板。')) {
 			tag = oldcsd[0] + '\n' + tag;
 		}
@@ -123,10 +123,10 @@ Twinkle.copyvio.callbacks = {
 		}
 	},
 	copyvioList: function (pageobj) {
-		var text = pageobj.getPageText();
-		var output = '';
-		var date = new Date();
-		var dateHeaderRegex = new RegExp('^===+\\s*' + (date.getUTCMonth() + 1) + '月' + date.getUTCDate() + '日\\s*===+', 'mg');
+		const text = pageobj.getPageText();
+		let output = '';
+		const date = new Date();
+		const dateHeaderRegex = new RegExp('^===+\\s*' + (date.getUTCMonth() + 1) + '月' + date.getUTCDate() + '日\\s*===+', 'mg');
 		if (!dateHeaderRegex.exec(text)) {
 			output = '\n\n===' + (date.getUTCMonth() + 1) + '月' + date.getUTCDate() + '日===';
 		}
@@ -140,17 +140,16 @@ Twinkle.copyvio.callbacks = {
 };
 Twinkle.copyvio.callback.evaluate = function (e) {
 	mw.config.set('wgPageName', mw.config.get('wgPageName').replace(/_/g, ' '));
-	var source = e.target.source.value;
-	var usertalk = e.target.notify.checked;
+	const source = e.target.source.value;
+	const usertalk = e.target.notify.checked;
 	Morebits.simpleWindow.setButtonsEnabled(false);
 	Morebits.status.init(e.target);
 	if (!source.trim()) {
 		Morebits.status.error('错误', '未指定侵权来源');
 		return;
 	}
-	var query, qiuwen_page, qiuwen_api, logpage, params; // eslint-disable-line no-unused-vars
-	logpage = 'Qiuwen:侵权提报';
-	params = {
+	const logpage = 'Qiuwen:侵权提报';
+	const params = {
 		source: source,
 		logpage: logpage,
 		usertalk: usertalk
@@ -161,7 +160,7 @@ Twinkle.copyvio.callback.evaluate = function (e) {
 	Morebits.wiki.actionCompleted.notice = '提报完成，将在几秒内刷新页面';
 
 	// Tagging file
-	qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'), '加入侵权模板到页面');
+	const qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'), '加入侵权模板到页面');
 	qiuwen_page.setCallbackParameters(params);
 	qiuwen_page.load(Twinkle.copyvio.callbacks.tryTagging);
 	Morebits.wiki.removeCheckpoint();

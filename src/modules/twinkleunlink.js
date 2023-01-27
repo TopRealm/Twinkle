@@ -29,21 +29,21 @@ Twinkle.unlink = function twinkleunlink() {
 
 // the parameter is used when invoking unlink from admin speedy
 Twinkle.unlink.callback = function (presetReason) {
-	var fileSpace = mw.config.get('wgNamespaceNumber') === 6;
-	var Window = new Morebits.simpleWindow(600, 440);
+	const fileSpace = mw.config.get('wgNamespaceNumber') === 6;
+	const Window = new Morebits.simpleWindow(600, 440);
 	Window.setTitle('取消页面链入' + (fileSpace ? '及文件使用' : ''));
 	Window.setScriptName('Twinkle');
 	Window.addFooterLink('参数设置', 'H:TW/PREF#消链');
 	Window.addFooterLink('帮助文档', 'H:TW/DOC#销链');
 	Window.addFooterLink('问题反馈', 'HT:TW');
-	var form = new Morebits.quickForm(Twinkle.unlink.callback.evaluate);
+	const form = new Morebits.quickForm(Twinkle.unlink.callback.evaluate);
 
 	// prepend some documentation: files are commented out, while any
 	// display text is preserved for links (otherwise the link itself is used)
-	var linkTextBefore = Morebits.htmlNode('code', '[[' + (fileSpace ? ':' : '') + Morebits.pageNameNorm + '|链接文字]]');
-	var linkTextAfter = Morebits.htmlNode('code', '链接文字');
-	var linkPlainBefore = Morebits.htmlNode('code', '[[' + Morebits.pageNameNorm + ']]');
-	var linkPlainAfter;
+	const linkTextBefore = Morebits.htmlNode('code', '[[' + (fileSpace ? ':' : '') + Morebits.pageNameNorm + '|链接文字]]');
+	const linkTextAfter = Morebits.htmlNode('code', '链接文字');
+	const linkPlainBefore = Morebits.htmlNode('code', '[[' + Morebits.pageNameNorm + ']]');
+	let linkPlainAfter;
 	if (fileSpace) {
 		linkPlainAfter = Morebits.htmlNode('code', '<!-- [[' + Morebits.pageNameNorm + ']] -->');
 	} else {
@@ -61,7 +61,7 @@ Twinkle.unlink.callback = function (presetReason) {
 		value: presetReason || '',
 		size: 60
 	});
-	var query = {
+	const query = {
 		action: 'query',
 		list: 'backlinks',
 		bltitle: mw.config.get('wgPageName'),
@@ -79,14 +79,14 @@ Twinkle.unlink.callback = function (presetReason) {
 	} else {
 		query.blfilterredir = 'nonredirects';
 	}
-	var qiuwen_api = new Morebits.wiki.api('抓取链入', query, Twinkle.unlink.callbacks.display.backlinks);
+	const qiuwen_api = new Morebits.wiki.api('抓取链入', query, Twinkle.unlink.callbacks.display.backlinks);
 	qiuwen_api.params = {
 		form: form,
 		Window: Window,
 		image: fileSpace
 	};
 	qiuwen_api.post();
-	var root = document.createElement('div');
+	const root = document.createElement('div');
 	root.style.padding = '15px'; // just so it doesn't look broken
 	Morebits.status.init(root);
 	qiuwen_api.statelem.status('加载中……');
@@ -94,30 +94,30 @@ Twinkle.unlink.callback = function (presetReason) {
 	Window.display();
 };
 Twinkle.unlink.callback.evaluate = function twinkleunlinkCallbackEvaluate(event) {
-	var form = event.target;
-	var input = Morebits.quickForm.getInputData(form);
+	const form = event.target;
+	const input = Morebits.quickForm.getInputData(form);
 	if (!input.reason) {
 		alert('您必须指定取消链入的理由。');
 		return;
 	}
 	input.backlinks = input.backlinks || [];
 	input.imageusage = input.imageusage || [];
-	var pages = Morebits.array.uniq(input.backlinks.concat(input.imageusage));
+	const pages = Morebits.array.uniq(input.backlinks.concat(input.imageusage));
 	if (!pages.length) {
 		alert('您必须至少选择一个要取消链入的页面。');
 		return;
 	}
 	Morebits.simpleWindow.setButtonsEnabled(false);
 	Morebits.status.init(form);
-	var unlinker = new Morebits.batchOperation('取消' + (input.backlinks.length ? '链入' + (input.imageusage.length ? '与文件使用' : '') : '文件使用'));
+	const unlinker = new Morebits.batchOperation('取消' + (input.backlinks.length ? '链入' + (input.imageusage.length ? '与文件使用' : '') : '文件使用'));
 	unlinker.setOption('preserveIndividualStatusLines', true);
 	unlinker.setPageList(pages);
-	var params = {
+	const params = {
 		reason: input.reason,
 		unlinker: unlinker
 	};
 	unlinker.run(function (pageName) {
-		var qiuwen_page = new Morebits.wiki.page(pageName, '在页面“' + pageName + '”中取消链入');
+		const qiuwen_page = new Morebits.wiki.page(pageName, '在页面“' + pageName + '”中取消链入');
 		qiuwen_page.setBotEdit(true); // unlink considered a floody operation
 		qiuwen_page.setCallbackParameters($.extend({
 			doBacklinks: input.backlinks.indexOf(pageName) !== -1,
@@ -129,11 +129,11 @@ Twinkle.unlink.callback.evaluate = function twinkleunlinkCallbackEvaluate(event)
 Twinkle.unlink.callbacks = {
 	display: {
 		backlinks: function twinkleunlinkCallbackDisplayBacklinks(apiobj) {
-			var response = apiobj.getResponse();
-			var havecontent = false;
-			var list, namespaces, i;
+			const response = apiobj.getResponse();
+			let havecontent = false;
+			let list, namespaces, i;
 			if (apiobj.params.image) {
-				var imageusage = response.query.imageusage.sort(Twinkle.sortByNamespace);
+				const imageusage = response.query.imageusage.sort(Twinkle.sortByNamespace);
 				list = [];
 				for (i = 0; i < imageusage.length; ++i) {
 					// Label made by Twinkle.generateBatchPageLinks
@@ -191,7 +191,7 @@ Twinkle.unlink.callbacks = {
 					havecontent = true;
 				}
 			}
-			var backlinks = response.query.backlinks.sort(Twinkle.sortByNamespace);
+			const backlinks = response.query.backlinks.sort(Twinkle.sortByNamespace);
 			if (backlinks.length > 0) {
 				list = [];
 				for (i = 0; i < backlinks.length; ++i) {
@@ -253,19 +253,19 @@ Twinkle.unlink.callbacks = {
 					type: 'submit'
 				});
 			}
-			var result = apiobj.params.form.render();
+			const result = apiobj.params.form.render();
 			apiobj.params.Window.setContent(result);
 			Morebits.quickForm.getElements(result, 'backlinks').forEach(Twinkle.generateBatchPageLinks);
 			Morebits.quickForm.getElements(result, 'imageusage').forEach(Twinkle.generateBatchPageLinks);
 		}
 	},
 	unlinkBacklinks: function twinkleunlinkCallbackUnlinkBacklinks(pageobj) {
-		var oldtext = pageobj.getPageText();
-		var params = pageobj.getCallbackParameters();
-		var wikiPage = new Morebits.wikitext.page(oldtext);
-		var summaryText = '',
+		let oldtext = pageobj.getPageText();
+		const params = pageobj.getCallbackParameters();
+		const wikiPage = new Morebits.wikitext.page(oldtext);
+		let summaryText = '',
 			warningString = false;
-		var text;
+		let text;
 
 		// remove image usages
 		if (params.doImageusage) {

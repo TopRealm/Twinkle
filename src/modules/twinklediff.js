@@ -37,7 +37,7 @@ Twinkle.diff = function twinklediff() {
 		Twinkle.addPortletLink(function () {
 			Twinkle.diff.evaluate(true);
 		}, '自异', 'tw-sincemine', '显示与我做出的修订版本的差异');
-		var oldid = /oldid=(.+)/.exec($('#mw-diff-ntitle1').find('strong a').first().attr('href'))[1];
+		const oldid = /oldid=(.+)/.exec($('#mw-diff-ntitle1').find('strong a').first().attr('href'))[1];
 		Twinkle.addPortletLink(mw.util.getUrl(mw.config.get('wgPageName'), {
 			diff: 'cur',
 			oldid: oldid
@@ -45,18 +45,18 @@ Twinkle.diff = function twinklediff() {
 	}
 };
 Twinkle.diff.evaluate = function twinklediffEvaluate(me) {
-	var user;
+	let user;
 	if (me) {
 		user = mw.config.get('wgUserName');
 	} else {
-		var node = document.getElementById('mw-diff-ntitle2');
+		const node = document.getElementById('mw-diff-ntitle2');
 		if (!node) {
 			// nothing to do?
 			return;
 		}
 		user = $(node).find('a').first().text();
 	}
-	var query = {
+	const query = {
 		prop: 'revisions',
 		action: 'query',
 		titles: mw.config.get('wgPageName'),
@@ -68,7 +68,7 @@ Twinkle.diff.evaluate = function twinklediffEvaluate(me) {
 		format: 'json'
 	};
 	Morebits.status.init(document.getElementById('mw-content-text'));
-	var qiuwen_api = new Morebits.wiki.api('抓取最初贡献者信息', query, Twinkle.diff.callbacks.main);
+	const qiuwen_api = new Morebits.wiki.api('抓取最初贡献者信息', query, Twinkle.diff.callbacks.main);
 	qiuwen_api.params = {
 		user: user
 	};
@@ -76,8 +76,8 @@ Twinkle.diff.evaluate = function twinklediffEvaluate(me) {
 };
 Twinkle.diff.callbacks = {
 	main: function (self) {
-		var rev = self.response.query.pages[0].revisions;
-		var revid = rev && rev[0].revid;
+		const rev = self.response.query.pages[0].revisions;
+		const revid = rev && rev[0].revid;
 		if (!revid) {
 			self.statelem.error('未找到合适的早期版本，或 ' + self.params.user + ' 是唯一贡献者。取消。');
 			return;

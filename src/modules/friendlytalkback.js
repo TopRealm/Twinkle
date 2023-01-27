@@ -30,13 +30,13 @@ Twinkle.talkback.callback = function () {
 	if (mw.config.get('wgRelevantUserName') === mw.config.get('wgUserName') && !confirm('您寂寞到了要自己回复自己的程度么？')) {
 		return;
 	}
-	var Window = new Morebits.simpleWindow(600, 350);
+	const Window = new Morebits.simpleWindow(600, 350);
 	Window.setTitle('通知');
 	Window.setScriptName('Twinkle');
 	Window.addFooterLink('参数设置', 'H:TW/PREF#talkback');
 	Window.addFooterLink('帮助文档', 'H:TW/DOC#talkback');
 	Window.addFooterLink('问题反馈', 'HT:TW');
-	var form = new Morebits.quickForm(Twinkle.talkback.evaluate);
+	const form = new Morebits.quickForm(Twinkle.talkback.evaluate);
 	form.append({
 		type: 'radio',
 		name: 'tbtarget',
@@ -67,7 +67,7 @@ Twinkle.talkback.callback = function () {
 		label: '工作区',
 		name: 'work_area'
 	});
-	var previewlink = document.createElement('a');
+	const previewlink = document.createElement('a');
 	$(previewlink).on('click', function () {
 		Twinkle.talkback.callbacks.preview(result); // |result| is defined below
 	});
@@ -87,18 +87,18 @@ Twinkle.talkback.callback = function () {
 	form.append({
 		type: 'submit'
 	});
-	var result = form.render();
+	const result = form.render();
 	Window.setContent(result);
 	Window.display();
 	result.previewer = new Morebits.wiki.preview($(result).find('div#friendlytalkback-previewbox').last()[0]);
 
 	// We must init the
-	var evt = document.createEvent('Event');
+	const evt = document.createEvent('Event');
 	evt.initEvent('change', true, true);
 	result.tbtarget[0].dispatchEvent(evt);
 
 	// Check whether the user has opted out from talkback
-	var query = {
+	const query = {
 		action: 'query',
 		prop: 'extlinks',
 		titles: 'User talk:' + mw.config.get('wgRelevantUserName'),
@@ -106,27 +106,27 @@ Twinkle.talkback.callback = function () {
 		ellimit: '1',
 		format: 'json'
 	};
-	var qwapi = new Morebits.wiki.api('抓取退出通告信息', query, Twinkle.talkback.callback.optoutStatus);
+	const qwapi = new Morebits.wiki.api('抓取退出通告信息', query, Twinkle.talkback.callback.optoutStatus);
 	qwapi.post();
 };
 Twinkle.talkback.optout = '';
 Twinkle.talkback.callback.optoutStatus = function (apiobj) {
-	var el = apiobj.getResponse().query.pages[0].extlinks;
+	const el = apiobj.getResponse().query.pages[0].extlinks;
 	if (el && el.length) {
 		Twinkle.talkback.optout = mw.config.get('wgRelevantUserName') + '不希望收到回复通告';
-		var url = el[0].url;
-		var reason = mw.util.getParamValue('reason', url);
+		const url = el[0].url;
+		const reason = mw.util.getParamValue('reason', url);
 		Twinkle.talkback.optout += reason ? ': ' + reason : '.';
 	}
 	$('#twinkle-talkback-optout-message').text(Twinkle.talkback.optout);
 };
-var prev_page = '';
-var prev_section = '';
-var prev_message = '';
+let prev_page = '';
+let prev_section = '';
+let prev_message = '';
 Twinkle.talkback.changeTarget = function (e) {
-	var value = e.target.values;
-	var root = e.target.form;
-	var old_area = Morebits.quickForm.getElements(root, 'work_area')[0];
+	const value = e.target.values;
+	const root = e.target.form;
+	const old_area = Morebits.quickForm.getElements(root, 'work_area')[0];
 	if (root.section) {
 		prev_section = root.section.value;
 	}
@@ -136,7 +136,7 @@ Twinkle.talkback.changeTarget = function (e) {
 	if (root.page) {
 		prev_page = root.page.value;
 	}
-	var work_area = new Morebits.quickForm.element({
+	let work_area = new Morebits.quickForm.element({
 		type: 'field',
 		label: '回复通告信息',
 		name: 'work_area'
@@ -167,8 +167,8 @@ Twinkle.talkback.changeTarget = function (e) {
 				value: prev_section
 			});
 			break;
-		case 'notice':
-			var noticeboard = work_area.append({
+		case 'notice': {
+			const noticeboard = work_area.append({
 				type: 'select',
 				name: 'noticeboard',
 				label: '通告板：',
@@ -197,7 +197,7 @@ Twinkle.talkback.changeTarget = function (e) {
 				tooltip: '章节标题，留空则不会产生章节链接。',
 				value: prev_section
 			});
-			break;
+			break; }
 		case 'other':
 			work_area.append({
 				type: 'div',
@@ -280,9 +280,9 @@ Twinkle.talkback.noticeboards = {
 	}
 };
 Twinkle.talkback.evaluate = function (e) {
-	var input = Morebits.quickForm.getInputData(e.target);
-	var fullUserTalkPageName = new mw.Title(mw.config.get('wgRelevantUserName'), 3).toText();
-	var talkpage = new Morebits.wiki.page(fullUserTalkPageName, '加入回复通告');
+	const input = Morebits.quickForm.getInputData(e.target);
+	const fullUserTalkPageName = new mw.Title(mw.config.get('wgRelevantUserName'), 3).toText();
+	const talkpage = new Morebits.wiki.page(fullUserTalkPageName, '加入回复通告');
 	Morebits.simpleWindow.setButtonsEnabled(false);
 	Morebits.status.init(e.target);
 	Morebits.wiki.actionCompleted.redirect = fullUserTalkPageName;
@@ -317,7 +317,7 @@ Twinkle.talkback.callbacks = {
 		page = page || mw.config.get('wgUserName');
 
 		// Assume no prefix is a username, convert to user talk space
-		var normal = mw.Title.newFromText(page, 3);
+		let normal = mw.Title.newFromText(page, 3);
 		// Normalize erroneous or likely mis-entered items
 		if (normal) {
 			// Only allow talks and WPspace, as well as Template-space for DYK
@@ -329,16 +329,16 @@ Twinkle.talkback.callbacks = {
 		return page;
 	},
 	preview: function (form) {
-		var input = Morebits.quickForm.getInputData(form);
+		const input = Morebits.quickForm.getInputData(form);
 		if (input.tbtarget === 'talkback' || input.tbtarget === 'see') {
 			input.page = Twinkle.talkback.callbacks.normalizeTalkbackPage(input.page);
 		}
-		var noticetext = Twinkle.talkback.callbacks.getNoticeWikitext(input);
+		const noticetext = Twinkle.talkback.callbacks.getNoticeWikitext(input);
 		form.previewer.beginRender(noticetext, 'User talk:' + mw.config.get('wgRelevantUserName')); // Force wikitext/correct username
 	},
 
 	getNoticeWikitext: function (input) {
-		var text;
+		let text;
 		switch (input.tbtarget) {
 			case 'notice':
 				text = Morebits.string.safeReplace(Twinkle.talkback.noticeboards[input.noticeboard].text, '$SECTION', input.section);
@@ -354,10 +354,11 @@ Twinkle.talkback.callbacks = {
 					text += '\n~~' + '~~';
 				}
 				break;
-			case 'see':
-				var heading = Twinkle.getPref('talkbackHeading');
+			case 'see': {
+				const heading = Twinkle.getPref('talkbackHeading');
 				text = '{{subst:Please see|location=' + input.page + (input.section ? '#' + input.section : '') + '|more=' + input.message + '|heading=' + heading + '}}';
 				break;
+			}
 			default:
 				// talkback
 

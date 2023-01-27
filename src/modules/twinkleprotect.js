@@ -31,7 +31,7 @@ Twinkle.protect = function twinkleprotect() {
 };
 
 Twinkle.protect.callback = function twinkleprotectCallback() {
-	var Window = new Morebits.simpleWindow(620, 530);
+	const Window = new Morebits.simpleWindow(620, 530);
 	Window.setTitle(Morebits.userIsSysop ? '实施页面保护或请求保护页面' : '请求保护页面');
 	Window.setScriptName('Twinkle');
 	Window.addFooterLink('保护模板', 'Template:Protection templates');
@@ -40,8 +40,8 @@ Twinkle.protect.callback = function twinkleprotectCallback() {
 	Window.addFooterLink('Twinkle帮助', 'H:TW/DOC#保护');
 	Window.addFooterLink('问题反馈', 'HT:TW');
 
-	var form = new Morebits.quickForm(Twinkle.protect.callback.evaluate);
-	var actionfield = form.append({
+	const form = new Morebits.quickForm(Twinkle.protect.callback.evaluate);
+	const actionfield = form.append({
 		type: 'field',
 		label: '操作类型'
 	});
@@ -97,12 +97,12 @@ Twinkle.protect.callback = function twinkleprotectCallback() {
 		type: 'submit'
 	});
 
-	var result = form.render();
+	const result = form.render();
 	Window.setContent(result);
 	Window.display();
 
 	// We must init the controls
-	var evt = document.createEvent('Event');
+	const evt = document.createEvent('Event');
 	evt.initEvent('change', true, true);
 	result.actiontype[0].dispatchEvent(evt);
 
@@ -116,7 +116,7 @@ Twinkle.protect.callback = function twinkleprotectCallback() {
 
 // Customizable namespace settings
 // Limit template editor; a Twinkle restriction, not a site setting
-var isTemplate = mw.config.get('wgNamespaceNumber') === 10 || mw.config.get('wgNamespaceNumber') === 828;
+const isTemplate = mw.config.get('wgNamespaceNumber') === 10 || mw.config.get('wgNamespaceNumber') === 828;
 
 // Contains the current protection level in an object
 // Once filled, it will look something like:
@@ -126,8 +126,8 @@ Twinkle.protect.previousProtectionLevels = {};
 
 Twinkle.protect.fetchProtectionLevel = function twinkleprotectFetchProtectionLevel() {
 
-	var api = new mw.Api();
-	var protectDeferred = api.get({
+	const api = new mw.Api();
+	const protectDeferred = api.get({
 		format: 'json',
 		indexpageids: true,
 		action: 'query',
@@ -146,10 +146,10 @@ Twinkle.protect.fetchProtectionLevel = function twinkleprotectFetchProtectionLev
 		// If there are two or more deferreds, it returns an array (of objects),
 		// but if there's just one deferred, it retuns a simple object.
 		// This is annoying.
-		var pageid = protectData.query.pageids[0];
-		var page = protectData.query.pages[pageid];
-		var current = {};
-		var previous = {};
+		const pageid = protectData.query.pageids[0];
+		const page = protectData.query.pages[pageid];
+		const current = {};
+		const previous = {};
 
 		// Save requested page's watched status for later in case needed when filing request
 		Twinkle.protect.watched = page.watchlistexpiry || page.watched === '';
@@ -190,10 +190,10 @@ Twinkle.protect.fetchProtectionLevel = function twinkleprotectFetchProtectionLev
 };
 
 Twinkle.protect.callback.showLogAndCurrentProtectInfo = function twinkleprotectCallbackShowLogAndCurrentProtectInfo() {
-	var currentlyProtected = !$.isEmptyObject(Twinkle.protect.currentProtectionLevels);
+	const currentlyProtected = !$.isEmptyObject(Twinkle.protect.currentProtectionLevels);
 
 	if (Twinkle.protect.hasProtectLog || Twinkle.protect.hasStableLog) {
-		var $linkMarkup = $('<span>');
+		const $linkMarkup = $('<span>');
 
 		if (Twinkle.protect.hasProtectLog) {
 			$linkMarkup.append(
@@ -216,7 +216,7 @@ Twinkle.protect.callback.showLogAndCurrentProtectInfo = function twinkleprotectC
 	}
 
 	Morebits.status.init($('div[name="currentprot"] span')[0]);
-	var protectionNode = [], statusLevel = 'info';
+	let protectionNode = [], statusLevel = 'info';
 
 	protectionNode = Twinkle.protect.formatProtectionDescription(Twinkle.protect.currentProtectionLevels);
 	if (currentlyProtected) {
@@ -227,9 +227,9 @@ Twinkle.protect.callback.showLogAndCurrentProtectInfo = function twinkleprotectC
 };
 
 Twinkle.protect.callback.changeAction = function twinkleprotectCallbackChangeAction(e) {
-	var field_preset;
-	var field1;
-	var field2;
+	let field_preset;
+	let field1;
+	let field2;
 
 	switch (e.target.values) {
 		case 'protect':
@@ -429,7 +429,7 @@ Twinkle.protect.callback.changeAction = function twinkleprotectCallbackChangeAct
 			break;
 	}
 
-	var oldfield;
+	let oldfield;
 
 	if (field_preset) {
 		oldfield = $(e.target.form).find('fieldset[name="field_preset"]')[0];
@@ -452,7 +452,7 @@ Twinkle.protect.callback.changeAction = function twinkleprotectCallbackChangeAct
 
 	if (e.target.values === 'protect') {
 		// fake a change event on the preset dropdown
-		var evt = document.createEvent('Event');
+		const evt = document.createEvent('Event');
 		evt.initEvent('change', true, true);
 		e.target.form.category.dispatchEvent(evt);
 
@@ -499,9 +499,9 @@ Twinkle.protect.formevents = {
 };
 
 Twinkle.protect.doCustomExpiry = function twinkleprotectDoCustomExpiry(target) {
-	var custom = prompt('输入自定义终止时间。\n您可以使用相对时间，如“1 minute”或“19 days”，或绝对时间“yyyymmddhhmm”（如“200602011405”是2006年02月01日14：05（UTC））', '');
+	const custom = prompt('输入自定义终止时间。\n您可以使用相对时间，如“1 minute”或“19 days”，或绝对时间“yyyymmddhhmm”（如“200602011405”是2006年02月01日14：05（UTC））', '');
 	if (custom) {
-		var option = document.createElement('option');
+		const option = document.createElement('option');
 		option.setAttribute('value', custom);
 		option.textContent = custom;
 		target.appendChild(option);
@@ -777,11 +777,11 @@ Twinkle.protect.protectionTags = [ {
 } ];
 
 Twinkle.protect.callback.changePreset = function twinkleprotectCallbackChangePreset(e) {
-	var form = e.target.form;
+	const form = e.target.form;
 
-	var actiontypes = form.actiontype;
-	var actiontype;
-	for (var i = 0; i < actiontypes.length; i++) {
+	const actiontypes = form.actiontype;
+	let actiontype;
+	for (let i = 0; i < actiontypes.length; i++) {
 		if (!actiontypes[i].checked) {
 			continue;
 		}
@@ -790,7 +790,7 @@ Twinkle.protect.callback.changePreset = function twinkleprotectCallbackChangePre
 	}
 
 	if (actiontype === 'protect') {  // actually protecting the page
-		var item = Twinkle.protect.protectionPresetsInfo[form.category.value];
+		const item = Twinkle.protect.protectionPresetsInfo[form.category.value];
 
 		if (mw.config.get('wgArticleId')) {
 			if (item.edit) {
@@ -823,7 +823,7 @@ Twinkle.protect.callback.changePreset = function twinkleprotectCallbackChangePre
 			form.createexpiry.value = item.expiry || '1 week';
 		}
 
-		var reasonField = actiontype === 'protect' ? form.protectReason : form.reason;
+		const reasonField = actiontype === 'protect' ? form.protectReason : form.reason;
 		if (item.reason) {
 			reasonField.value = item.reason;
 		} else {
@@ -858,10 +858,10 @@ Twinkle.protect.callback.changePreset = function twinkleprotectCallbackChangePre
 };
 
 Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
-	var form = e.target;
-	var input = Morebits.quickForm.getInputData(form);
+	const form = e.target;
+	const input = Morebits.quickForm.getInputData(form);
 
-	var tagparams;
+	let tagparams;
 	if (input.actiontype === 'tag' || (input.actiontype === 'protect' && mw.config.get('wgArticleId') && mw.config.get('wgPageContentModel') !== 'Scribunto')) {
 		tagparams = {
 			tag: input.tagtype,
@@ -876,7 +876,7 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 		};
 	}
 
-	var closeparams = {};
+	const closeparams = {};
 	if (input.close) {
 		if (input.category === 'unprotect') {
 			closeparams.type = 'unprotect';
@@ -911,16 +911,16 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 	}
 
 	switch (input.actiontype) {
-		case 'protect':
+		case 'protect': {
 			// protect the page
 
 			Morebits.wiki.actionCompleted.redirect = mw.config.get('wgPageName');
 			Morebits.wiki.actionCompleted.notice = '保护完成';
 
-			var statusInited = false;
-			var thispage;
+			let statusInited = false;
+			let thispage;
 
-			var allDone = function twinkleprotectCallbackAllDone() {
+			const allDone = function twinkleprotectCallbackAllDone() {
 				if (thispage) {
 					thispage.getStatusElement().info('完成');
 				}
@@ -928,14 +928,14 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 					Twinkle.protect.callbacks.taggingPageInitial(tagparams);
 				}
 				if (closeparams && closeparams.type) {
-					var rppPage = new Morebits.wiki.page('Qiuwen:页面保护请求', '关闭请求');
+					const rppPage = new Morebits.wiki.page('Qiuwen:页面保护请求', '关闭请求');
 					rppPage.setFollowRedirect(true);
 					rppPage.setCallbackParameters(closeparams);
 					rppPage.load(Twinkle.protect.callbacks.closeRequest);
 				}
 			};
 
-			var protectIt = function twinkleprotectCallbackProtectIt(next) {
+			const protectIt = function twinkleprotectCallbackProtectIt(next) {
 				thispage = new Morebits.wiki.page(mw.config.get('wgPageName'), '保护页面');
 				if (mw.config.get('wgArticleId')) {
 					if (input.editmodify) {
@@ -982,6 +982,7 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 
 			break;
 
+		}
 		case 'tag':
 			// apply a protection template
 
@@ -995,9 +996,9 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 			Twinkle.protect.callbacks.taggingPageInitial(tagparams);
 			break;
 
-		case 'request':
+		case 'request': {
 			// file request at RFPP
-			var typename, typereason;
+			let typename, typereason;
 			switch (input.category) {
 				case 'pp-dispute':
 				case 'pp-vandalism':
@@ -1029,8 +1030,8 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 				case 'pp-create-salt':
 					typename = '白纸保护';
 					break;
-				case 'unprotect':
-					var admins = $.map(Twinkle.protect.currentProtectionLevels, function (pl) {
+				case 'unprotect': {
+					const admins = $.map(Twinkle.protect.currentProtectionLevels, function (pl) {
 						if (!pl.admin || Twinkle.protect.trustedBots.indexOf(pl.admin) !== -1) {
 							return null;
 						}
@@ -1040,6 +1041,7 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 						return false;
 					}
 					// otherwise falls through
+				}
 				default:
 					alert('未知保护类型！');
 					break;
@@ -1079,7 +1081,7 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 					break;
 			}
 
-			var reason = typereason;
+			let reason = typereason;
 			if (input.reason !== '') {
 				if (typereason !== '') {
 					reason += '：';
@@ -1090,7 +1092,7 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 				reason = Morebits.string.appendPunctuation(reason);
 			}
 
-			var rppparams = {
+			const rppparams = {
 				reason: reason,
 				typename: typename,
 				category: input.category,
@@ -1100,17 +1102,18 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 			Morebits.simpleWindow.setButtonsEnabled(false);
 			Morebits.status.init(form);
 
-			var rppName = 'Qiuwen:页面保护请求';
+			const rppName = 'Qiuwen:页面保护请求';
 
 			// Updating data for the action completed event
 			Morebits.wiki.actionCompleted.redirect = rppName;
 			Morebits.wiki.actionCompleted.notice = '提名完成，重定向到讨论页';
 
-			var rppPage = new Morebits.wiki.page(rppName, '请求保护页面');
+			const rppPage = new Morebits.wiki.page(rppName, '请求保护页面');
 			rppPage.setFollowRedirect(true);
 			rppPage.setCallbackParameters(rppparams);
 			rppPage.load(Twinkle.protect.callbacks.fileRequest);
 			break;
+		}
 		default:
 			alert('twinkleprotect: 未知操作类型');
 			break;
@@ -1124,16 +1127,16 @@ Twinkle.protect.callbacks = {
 			return;
 		}
 
-		var pageName = mw.config.get('wgPageName');
-		var protectedPage = new Morebits.wiki.page(pageName, '标记页面');
+		const pageName = mw.config.get('wgPageName');
+		const protectedPage = new Morebits.wiki.page(pageName, '标记页面');
 		protectedPage.setCallbackParameters(tagparams);
 		protectedPage.load(Twinkle.protect.callbacks.taggingPage);
 	},
 	getTaggedPage: function (params, text) {
-		var tag, summary;
+		let tag, summary;
 
-		var oldtag_re = /(?:<noinclude>)?[ \t]*\{\{\s*(pp-[^{}]*?|protected|(?:t|v|s|p-|usertalk-v|usertalk-s|sb|move)protected(?:2)?|protected template|privacy protection)\s*?\}\}\s*(?:<\/noinclude>)?\s*/gi;
-		var re_result = oldtag_re.exec(text);
+		const oldtag_re = /(?:<noinclude>)?[ \t]*\{\{\s*(pp-[^{}]*?|protected|(?:t|v|s|p-|usertalk-v|usertalk-s|sb|move)protected(?:2)?|protected template|privacy protection)\s*?\}\}\s*(?:<\/noinclude>)?\s*/gi;
+		const re_result = oldtag_re.exec(text);
 		if (re_result) {
 			if (params.tag === 'none' || confirm('在页面上找到{{' + re_result[1] + '}}\n单击确定以移除，或单击取消以取消操作。')) {
 				text = text.replace(oldtag_re, '');
@@ -1175,7 +1178,7 @@ Twinkle.protect.callbacks = {
 				}
 
 				// Insert tag after short description or any hatnotes
-				var wikipage = new Morebits.wikitext.page(text);
+				const wikipage = new Morebits.wikitext.page(text);
 				text = wikipage.insertAfterTemplates(tag, Twinkle.hatnoteRegex).getText();
 			}
 			summary = '加入{{' + params.tag + '}}';
@@ -1187,9 +1190,9 @@ Twinkle.protect.callbacks = {
 		};
 	},
 	taggingPage: function (protectedPage) {
-		var params = protectedPage.getCallbackParameters();
-		var text = protectedPage.getPageText();
-		var newVersion = Twinkle.protect.callbacks.getTaggedPage(params, text);
+		const params = protectedPage.getCallbackParameters();
+		const text = protectedPage.getPageText();
+		const newVersion = Twinkle.protect.callbacks.getTaggedPage(params, text);
 		if (typeof newVersion === 'undefined') {
 			protectedPage.getStatusElement().info('完成');
 			return;
@@ -1205,14 +1208,14 @@ Twinkle.protect.callbacks = {
 	},
 
 	fileRequest: function (rppPage) {
-		var params = rppPage.getCallbackParameters();
-		var text = rppPage.getPageText();
-		var statusElement = rppPage.getStatusElement();
+		const params = rppPage.getCallbackParameters();
+		let text = rppPage.getPageText();
+		const statusElement = rppPage.getStatusElement();
 
-		var rppRe = new RegExp('===\\s*(\\[\\[)?\\s*:?\\s*' + Morebits.string.escapeRegExp(Morebits.pageNameNorm) + '\\s*(\\]\\])?\\s*===', 'm');
-		var tag = rppRe.exec(text);
+		const rppRe = new RegExp('===\\s*(\\[\\[)?\\s*:?\\s*' + Morebits.string.escapeRegExp(Morebits.pageNameNorm) + '\\s*(\\]\\])?\\s*===', 'm');
+		const tag = rppRe.exec(text);
 
-		var rppLink = document.createElement('a');
+		const rppLink = document.createElement('a');
 		rppLink.setAttribute('href', mw.util.getUrl(rppPage.getPageName()));
 		rppLink.appendChild(document.createTextNode(rppPage.getPageName()));
 
@@ -1221,13 +1224,13 @@ Twinkle.protect.callbacks = {
 			return;
 		}
 
-		var newtag = '=== [[:' + mw.config.get('wgPageName') + ']] ===\n';
+		let newtag = '=== [[:' + mw.config.get('wgPageName') + ']] ===\n';
 		if (new RegExp('^' + mw.util.escapeRegExp(newtag).replace(/\s+/g, '\\s*'), 'm').test(text)) {
 			statusElement.error([ rppLink, '已有对此页面的保护提名，取消操作。' ]);
 			return;
 		}
 
-		var words;
+		let words;
 		switch (params.expiry) {
 			case 'temporary':
 				words = '临时';
@@ -1247,7 +1250,7 @@ Twinkle.protect.callbacks = {
 
 			Morebits.string.formatReasonText(params.reason) : '。') + '--~~' + '~~';
 
-		var reg;
+		let reg;
 
 		if (params.category === 'unprotect') {
 			reg = /(==\s*请求解除保护\s*==)/;
@@ -1255,7 +1258,7 @@ Twinkle.protect.callbacks = {
 			reg = /({{\s*\/header\s*}})/;
 		}
 
-		var originalTextLength = text.length;
+		const originalTextLength = text.length;
 		text = text.replace(reg, '$1\n' + newtag + '\n');
 		if (text.length === originalTextLength) {
 			statusElement.error([ '无法在QW:RFPP上找到相关定位点标记。' ]);
@@ -1268,13 +1271,13 @@ Twinkle.protect.callbacks = {
 		rppPage.setCreateOption('recreate');
 		rppPage.save(function () {
 			// Watch the page being requested
-			var watchPref = Twinkle.getPref('watchRequestedPages');
+			const watchPref = Twinkle.getPref('watchRequestedPages');
 			// action=watch has no way to rely on user preferences (T262912), so we do it manually.
 			// The watchdefault pref appears to reliably return '1' (string),
 			// but that's not consistent among prefs so might as well be "correct"
-			var watch = watchPref !== 'no' && (watchPref !== 'default' || !!parseInt(mw.user.options.get('watchdefault'), 10));
+			const watch = watchPref !== 'no' && (watchPref !== 'default' || !!parseInt(mw.user.options.get('watchdefault'), 10));
 			if (watch) {
-				var watch_query = {
+				const watch_query = {
 					action: 'watch',
 					titles: mw.config.get('wgPageName'),
 					token: mw.user.tokens.get('watchToken')
@@ -1289,18 +1292,18 @@ Twinkle.protect.callbacks = {
 	},
 
 	closeRequest: function (rppPage) {
-		var params = rppPage.getCallbackParameters();
-		var text = rppPage.getPageText();
-		var statusElement = rppPage.getStatusElement();
+		const params = rppPage.getCallbackParameters();
+		let text = rppPage.getPageText();
+		const statusElement = rppPage.getStatusElement();
 
-		var sections = text.split(/(?=\n==\s*请求解除保护\s*==)/);
+		const sections = text.split(/(?=\n==\s*请求解除保护\s*==)/);
 
 		if (sections.length !== 2) {
 			statusElement.error([ '无法在QW:RFPP上找到相关定位点标记。' ]);
 			return;
 		}
 
-		var sectionText, expiryText = '';
+		let sectionText, expiryText = '';
 		if (params.type === 'unprotect') {
 			sectionText = sections[1];
 		} else {
@@ -1308,11 +1311,11 @@ Twinkle.protect.callbacks = {
 			expiryText = Morebits.string.formatTime(params.expiry);
 		}
 
-		var requestList = sectionText.split(/(?=\n===.+===\s*\n)/);
+		const requestList = sectionText.split(/(?=\n===.+===\s*\n)/);
 
-		var found = false;
-		var rppRe = new RegExp('===\\s*(\\[\\[)?\\s*:?\\s*' + Morebits.pageNameRegex(Morebits.pageNameNorm) + '\\s*(\\]\\])?\\s*===', 'm');
-		for (var i = 1; i < requestList.length; i++) {
+		let found = false;
+		const rppRe = new RegExp('===\\s*(\\[\\[)?\\s*:?\\s*' + Morebits.pageNameRegex(Morebits.pageNameNorm) + '\\s*(\\]\\])?\\s*===', 'm');
+		for (let i = 1; i < requestList.length; i++) {
 			if (rppRe.exec(requestList[i])) {
 				requestList[i] = requestList[i].trimRight();
 				if (params.type === 'unprotect') {
@@ -1340,7 +1343,7 @@ Twinkle.protect.callbacks = {
 			text = requestList.join('') + sections[1];
 		}
 
-		var summary = '';
+		let summary = '';
 
 		if (params.type === 'unprotect') {
 			sectionText = sections[1];
@@ -1391,11 +1394,11 @@ Twinkle.protect.callbacks = {
 };
 
 Twinkle.protect.formatProtectionDescription = function (protectionLevels) {
-	var protectionNode = [];
+	const protectionNode = [];
 
 	if (!$.isEmptyObject(protectionLevels)) {
 		$.each(protectionLevels, function (type, settings) {
-			var label;
+			let label;
 			switch (type) {
 				case 'edit':
 					label = '编辑';
@@ -1410,7 +1413,7 @@ Twinkle.protect.formatProtectionDescription = function (protectionLevels) {
 					label = type;
 					break;
 			}
-			var level;
+			let level;
 			switch (settings.level) {
 				case 'officialprotected':
 					level = '仅允许裁决委员';

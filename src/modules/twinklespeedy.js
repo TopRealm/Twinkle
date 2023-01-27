@@ -84,15 +84,14 @@ Twinkle.speedy.mode = {
 
 // Prepares the speedy deletion dialog and displays it
 Twinkle.speedy.initDialog = function twinklespeedyInitDialog(callbackfunc) {
-	var dialog;
 	Twinkle.speedy.dialog = new Morebits.simpleWindow(Twinkle.getPref('speedyWindowWidth'), Twinkle.getPref('speedyWindowHeight'));
-	dialog = Twinkle.speedy.dialog;
+	const dialog = Twinkle.speedy.dialog;
 	dialog.setTitle('选择快速删除理由');
 	dialog.setScriptName('Twinkle');
 	dialog.addFooterLink('快速删除方针', 'QW:CSD');
 	dialog.addFooterLink('速删设置', 'QW:TW/PREF#speedy');
 	dialog.addFooterLink('Twinkle帮助', 'QW:TW/DOC#speedy');
-	var form = new Morebits.quickForm(callbackfunc, Twinkle.getPref('speedySelectionStyle') === 'radioClick' ? 'change' : null);
+	const form = new Morebits.quickForm(callbackfunc, Twinkle.getPref('speedySelectionStyle') === 'radioClick' ? 'change' : null);
 	if (Morebits.userIsSysop) {
 		form.append({
 			type: 'checkbox',
@@ -103,8 +102,8 @@ Twinkle.speedy.initDialog = function twinklespeedyInitDialog(callbackfunc) {
 				tooltip: '如果您只想标记此页面而不是将其删除',
 				checked: !(Twinkle.speedy.hasCSD || Twinkle.getPref('deleteSysopDefaultToDelete')),
 				event: function (event) {
-					var cForm = event.target.form;
-					var cChecked = event.target.checked;
+					const cForm = event.target.form;
+					const cChecked = event.target.checked;
 					// enable/disable talk page checkbox
 					if (cForm.talkpage) {
 						cForm.talkpage.disabled = cChecked;
@@ -131,7 +130,7 @@ Twinkle.speedy.initDialog = function twinklespeedyInitDialog(callbackfunc) {
 				}
 			} ]
 		});
-		var deleteOptions = form.append({
+		const deleteOptions = form.append({
 			type: 'div',
 			name: 'delete_options'
 		});
@@ -192,7 +191,7 @@ Twinkle.speedy.initDialog = function twinklespeedyInitDialog(callbackfunc) {
 			} ]
 		});
 	}
-	var tagOptions = form.append({
+	const tagOptions = form.append({
 		type: 'div',
 		name: 'tag_options'
 	});
@@ -253,7 +252,7 @@ Twinkle.speedy.initDialog = function twinklespeedyInitDialog(callbackfunc) {
 		}); // Renamed in modeChanged
 	}
 
-	var result = form.render();
+	const result = form.render();
 	dialog.setContent(result);
 	dialog.display();
 	Twinkle.speedy.callback.modeChanged(result);
@@ -262,7 +261,7 @@ Twinkle.speedy.initDialog = function twinklespeedyInitDialog(callbackfunc) {
 	Twinkle.speedy.callback.priorDeletionCount();
 };
 Twinkle.speedy.callback.getMode = function twinklespeedyCallbackGetMode(form) {
-	var mode = Twinkle.speedy.mode.userSingleSubmit;
+	let mode = Twinkle.speedy.mode.userSingleSubmit;
 	if (form.tag_only && !form.tag_only.checked) {
 		if (form.delmultiple.checked) {
 			mode = Twinkle.speedy.mode.sysopMultipleSubmit;
@@ -282,11 +281,11 @@ Twinkle.speedy.callback.getMode = function twinklespeedyCallbackGetMode(form) {
 	return mode;
 };
 Twinkle.speedy.callback.modeChanged = function twinklespeedyCallbackModeChanged(form) {
-	var namespace = mw.config.get('wgNamespaceNumber');
+	const namespace = mw.config.get('wgNamespaceNumber');
 
 	// first figure out what mode we're in
-	var mode = Twinkle.speedy.callback.getMode(form);
-	var isSysopMode = Twinkle.speedy.mode.isSysop(mode);
+	const mode = Twinkle.speedy.callback.getMode(form);
+	const isSysopMode = Twinkle.speedy.mode.isSysop(mode);
 	if (isSysopMode) {
 		$('[name=delete_options]').show();
 		$('[name=tag_options]').hide();
@@ -296,12 +295,12 @@ Twinkle.speedy.callback.modeChanged = function twinklespeedyCallbackModeChanged(
 		$('[name=tag_options]').show();
 		$('button.tw-speedy-submit').text('标记页面');
 	}
-	var work_area = new Morebits.quickForm.element({
+	const work_area = new Morebits.quickForm.element({
 		type: 'div',
 		name: 'work_area'
 	});
 	if (mode === Twinkle.speedy.mode.userMultipleRadioClick || mode === Twinkle.speedy.mode.sysopMultipleRadioClick) {
-		var evaluateType = Twinkle.speedy.mode.isSysop(mode) ? 'evaluateSysop' : 'evaluateUser';
+		const evaluateType = Twinkle.speedy.mode.isSysop(mode) ? 'evaluateSysop' : 'evaluateUser';
 		work_area.append({
 			type: 'div',
 			label: '当选择完成后，单击：'
@@ -316,7 +315,7 @@ Twinkle.speedy.callback.modeChanged = function twinklespeedyCallbackModeChanged(
 			}
 		});
 	}
-	var radioOrCheckbox = Twinkle.speedy.mode.isMultiple(mode) ? 'checkbox' : 'radio';
+	const radioOrCheckbox = Twinkle.speedy.mode.isMultiple(mode) ? 'checkbox' : 'radio';
 	if (isSysopMode && !Twinkle.speedy.mode.isMultiple(mode)) {
 		work_area.append({
 			type: 'header',
@@ -426,7 +425,7 @@ Twinkle.speedy.callback.modeChanged = function twinklespeedyCallbackModeChanged(
 	}
 
 	// custom rationale lives under general criteria when tagging
-	var generalCriteria = Twinkle.speedy.generalList;
+	let generalCriteria = Twinkle.speedy.generalList;
 	if (!Twinkle.speedy.mode.isSysop(mode)) {
 		generalCriteria = Twinkle.speedy.customRationale.concat(generalCriteria);
 	}
@@ -456,12 +455,12 @@ Twinkle.speedy.callback.modeChanged = function twinklespeedyCallbackModeChanged(
 			list: Twinkle.speedy.generateCsdList(Twinkle.speedy.redirectList, mode)
 		});
 	}
-	var old_area = Morebits.quickForm.getElements(form, 'work_area')[0];
+	const old_area = Morebits.quickForm.getElements(form, 'work_area')[0];
 	form.replaceChild(work_area.render(), old_area);
 
 	// if sysop, check if CSD is already on the page and fill in custom rationale
 	if (isSysopMode && Twinkle.speedy.hasCSD) {
-		var customOption = $('input[name=csd][value=reason]')[0];
+		const customOption = $('input[name=csd][value=reason]')[0];
 		if (customOption) {
 			if (Twinkle.getPref('speedySelectionStyle') !== 'radioClick') {
 				// force listeners to re-init
@@ -480,7 +479,7 @@ Twinkle.speedy.callback.modeChanged = function twinklespeedyCallbackModeChanged(
 	if (!isSysopMode && mw.config.get('wgPageContentModel') !== 'wikitext') {
 		$('[name=tag_options]').hide();
 		$('[name=work_area]').empty();
-		var message = [ 'Twinkle不支持在页面内容模型为', mw.config.get('wgPageContentModel'), '的页面上挂上快速删除模板，请参见', $('<a>').attr({
+		const message = [ 'Twinkle不支持在页面内容模型为', mw.config.get('wgPageContentModel'), '的页面上挂上快速删除模板，请参见', $('<a>').attr({
 			target: '_blank',
 			href: mw.util.getUrl('QW:SPECIALSD')
 		}).text('手动放置模板时的注意事项')[0], '。' ];
@@ -491,7 +490,7 @@ Twinkle.speedy.callback.modeChanged = function twinklespeedyCallbackModeChanged(
 	}
 };
 Twinkle.speedy.callback.priorDeletionCount = function () {
-	var query = {
+	const query = {
 		action: 'query',
 		format: 'json',
 		list: 'logevents',
@@ -505,10 +504,10 @@ Twinkle.speedy.callback.priorDeletionCount = function () {
 	};
 
 	new Morebits.wiki.api('检查之前的删除', query, function (apiobj) {
-		var response = apiobj.getResponse();
-		var delCount = response.query.logevents.length;
+		const response = apiobj.getResponse();
+		const delCount = response.query.logevents.length;
 		if (delCount) {
-			var message = '被删除';
+			let message = '被删除';
 			if (response.continue) {
 				message += '超过';
 			}
@@ -520,7 +519,7 @@ Twinkle.speedy.callback.priorDeletionCount = function () {
 			}
 
 			// Provide a link to page logs (CSD templates have one for sysops)
-			var link = Morebits.htmlNode('a', '（日志）');
+			const link = Morebits.htmlNode('a', '（日志）');
 			link.setAttribute('href', mw.util.getUrl('Special:Log', {
 				page: mw.config.get('wgPageName')
 			}));
@@ -532,23 +531,23 @@ Twinkle.speedy.callback.priorDeletionCount = function () {
 };
 Twinkle.speedy.generateCsdList = function twinklespeedyGenerateCsdList(list, mode) {
 	// mode switches
-	var isSysopMode = Twinkle.speedy.mode.isSysop(mode);
-	var multiple = Twinkle.speedy.mode.isMultiple(mode);
-	var hasSubmitButton = Twinkle.speedy.mode.hasSubmitButton(mode);
-	var openSubgroupHandler = function (e) {
+	const isSysopMode = Twinkle.speedy.mode.isSysop(mode);
+	const multiple = Twinkle.speedy.mode.isMultiple(mode);
+	const hasSubmitButton = Twinkle.speedy.mode.hasSubmitButton(mode);
+	const openSubgroupHandler = function (e) {
 		$(e.target.form).find('input').prop('disabled', true);
 		$(e.target.form).children().css('color', 'gray');
 		$(e.target).parent().css('color', 'black').find('input').prop('disabled', false);
 		$(e.target).parent().find('input:text')[0].focus();
 		e.stopPropagation();
 	};
-	var submitSubgroupHandler = function (e) {
-		var evaluateType = Twinkle.speedy.mode.isSysop(mode) ? 'evaluateSysop' : 'evaluateUser';
+	const submitSubgroupHandler = function (e) {
+		const evaluateType = Twinkle.speedy.mode.isSysop(mode) ? 'evaluateSysop' : 'evaluateUser';
 		Twinkle.speedy.callback[evaluateType](e);
 		e.stopPropagation();
 	};
 	return $.map(list, function (critElement) {
-		var criterion = $.extend({}, critElement);
+		const criterion = $.extend({}, critElement);
 		if (multiple) {
 			if (criterion.hideWhenMultiple) {
 				return null;
@@ -805,7 +804,7 @@ Twinkle.speedy.normalizeHash = {
 };
 Twinkle.speedy.callbacks = {
 	getTemplateCodeAndParams: function (params) {
-		var code, parameters, i;
+		let code, parameters, i;
 		if (params.normalizeds.length > 1) {
 			code = '{{delete';
 			params.utparams = {};
@@ -814,7 +813,7 @@ Twinkle.speedy.callbacks = {
 					code += '|' + norm.toUpperCase();
 				}
 				parameters = params.templateParams[index] || [];
-				for (var i in parameters) {
+				for (const i in parameters) {
 					if (typeof parameters[i] === 'string') {
 						code += '|' + parameters[i];
 					}
@@ -839,7 +838,7 @@ Twinkle.speedy.callbacks = {
 		return [ code, params.utparams ];
 	},
 	parseWikitext: function (title, wikitext, callback) {
-		var query = {
+		const query = {
 			action: 'parse',
 			prop: 'text',
 			pst: 'true',
@@ -847,9 +846,9 @@ Twinkle.speedy.callbacks = {
 			contentmodel: 'wikitext',
 			title: title
 		};
-		var statusIndicator = new Morebits.status('构造删除理由');
-		var api = new Morebits.wiki.api('解析删除模板', query, function (apiobj) {
-			var reason = decodeURIComponent($(apiobj.getXML().querySelector('text').childNodes[0].nodeValue).find('#delete-reason').text().replace(/\+/g, ' '));
+		const statusIndicator = new Morebits.status('构造删除理由');
+		const api = new Morebits.wiki.api('解析删除模板', query, function (apiobj) {
+			const reason = decodeURIComponent($(apiobj.getXML().querySelector('text').childNodes[0].nodeValue).find('#delete-reason').text().replace(/\+/g, ' '));
 			if (!reason) {
 				statusIndicator.warn('未能从删除模板生成删除理由');
 			} else {
@@ -861,12 +860,12 @@ Twinkle.speedy.callbacks = {
 	},
 	sysop: {
 		main: function (params) {
-			var reason;
+			let reason;
 			if (!params.normalizeds.length && params.normalizeds[0] === 'db') {
 				reason = prompt('输入删除理由：', '');
 				Twinkle.speedy.callbacks.sysop.deletePage(reason, params);
 			} else {
-				var code = Twinkle.speedy.callbacks.getTemplateCodeAndParams(params)[0];
+				const code = Twinkle.speedy.callbacks.getTemplateCodeAndParams(params)[0];
 				Twinkle.speedy.callbacks.parseWikitext(mw.config.get('wgPageName'), code, function (reason) {
 					if (params.promptForSummary) {
 						reason = prompt('输入删除理由，或单击确定以接受自动生成的：', reason);
@@ -876,13 +875,13 @@ Twinkle.speedy.callbacks = {
 			}
 		},
 		deletePage: function (reason, params) {
-			var thispage = new Morebits.wiki.page(mw.config.get('wgPageName'), '删除页面');
+			const thispage = new Morebits.wiki.page(mw.config.get('wgPageName'), '删除页面');
 			if (reason === null) {
 				return Morebits.status.error('询问理由', '用户取消操作。');
 			} else if (!reason || !reason.replace(/^\s*/, '').replace(/\s*$/, '')) {
 				return Morebits.status.error('询问理由', '你不给我理由……我就……不管了……');
 			}
-			var deleteMain = function () {
+			const deleteMain = function () {
 				thispage.setEditSummary(reason);
 				thispage.setChangeTags(Twinkle.changeTags);
 				thispage.setWatchlist(params.watch);
@@ -907,7 +906,7 @@ Twinkle.speedy.callbacks = {
 		deleteTalk: function (params) {
 			// delete talk page
 			if (params.deleteTalkPage && params.normalized !== 'f7' && params.normalized !== 'o1' && !document.getElementById('ca-talk').classList.contains('new')) {
-				var talkpage = new Morebits.wiki.page(mw.config.get('wgFormattedNamespaces')[mw.config.get('wgNamespaceNumber') + 1] + ':' + mw.config.get('wgTitle'), '删除讨论页');
+				const talkpage = new Morebits.wiki.page(mw.config.get('wgFormattedNamespaces')[mw.config.get('wgNamespaceNumber') + 1] + ':' + mw.config.get('wgTitle'), '删除讨论页');
 				talkpage.setEditSummary('[[QW:CSD#G9|G9]]: 孤立页面: 已删除页面“' + Morebits.pageNameNorm + '”的讨论页');
 				talkpage.setChangeTags(Twinkle.changeTags);
 				talkpage.deletePage();
@@ -923,20 +922,20 @@ Twinkle.speedy.callbacks = {
 		deleteRedirects: function (params) {
 			// delete redirects
 			if (params.deleteRedirects) {
-				var query = {
+				const query = {
 					action: 'query',
 					titles: mw.config.get('wgPageName'),
 					prop: 'redirects',
 					rdlimit: 5000 // 500 is max for normal users, 5000 for bots and sysops
 				};
 
-				var qiuwen_api = new Morebits.wiki.api('获取重定向列表……', query, Twinkle.speedy.callbacks.sysop.deleteRedirectsMain, new Morebits.status('删除重定向'));
+				const qiuwen_api = new Morebits.wiki.api('获取重定向列表……', query, Twinkle.speedy.callbacks.sysop.deleteRedirectsMain, new Morebits.status('删除重定向'));
 				qiuwen_api.params = params;
 				qiuwen_api.post();
 			}
 
 			// prompt for protect on G7
-			var $link, $bigtext;
+			let $link, $bigtext;
 			if (params.normalized === 'g7') {
 				$link = $('<a>', {
 					href: '#',
@@ -1012,9 +1011,9 @@ Twinkle.speedy.callbacks = {
 		},
 		openUserTalkPage: function (pageobj) {
 			pageobj.getStatusElement().unlink(); // don't need it anymore
-			var user = pageobj.getCreator();
-			var params = pageobj.getCallbackParameters();
-			var query = {
+			const user = pageobj.getCreator();
+			const params = pageobj.getCallbackParameters();
+			const query = {
 				title: 'User talk:' + user,
 				action: 'edit',
 				preview: 'yes',
@@ -1022,8 +1021,7 @@ Twinkle.speedy.callbacks = {
 			};
 			if (params.normalized === 'db' || Twinkle.getPref('promptForSpeedyDeletionSummary').indexOf(params.normalized) !== -1) {
 				// provide a link to the user talk page
-				var $link, $bigtext;
-				$link = $('<a>', {
+				const $link = $('<a>', {
 					href: mw.util.wikiScript('index') + '?' + $.param(query),
 					text: '点此打开User talk:' + user,
 					target: '_blank',
@@ -1032,7 +1030,7 @@ Twinkle.speedy.callbacks = {
 						fontWeight: 'bold'
 					}
 				});
-				$bigtext = $('<span>', {
+				const $bigtext = $('<span>', {
 					text: '通知页面创建者',
 					css: {
 						fontSize: '130%',
@@ -1042,7 +1040,7 @@ Twinkle.speedy.callbacks = {
 				Morebits.status.info($bigtext[0], $link[0]);
 			} else {
 				// open the initial contributor's talk page
-				var statusIndicator = new Morebits.status('打开用户' + user + '的讨论页编辑窗口', '打开中……');
+				const statusIndicator = new Morebits.status('打开用户' + user + '的讨论页编辑窗口', '打开中……');
 				switch (Twinkle.getPref('userTalkPageMode')) {
 					case 'tab':
 						window.open(mw.util.wikiScript('index') + '?' + $.param(query), '_blank');
@@ -1060,18 +1058,18 @@ Twinkle.speedy.callbacks = {
 			}
 		},
 		deleteRedirectsMain: function (apiobj) {
-			var xmlDoc = apiobj.getXML();
-			var $snapshot = $(xmlDoc).find('redirects rd');
-			var total = $snapshot.length;
-			var statusIndicator = apiobj.statelem;
+			const xmlDoc = apiobj.getXML();
+			const $snapshot = $(xmlDoc).find('redirects rd');
+			const total = $snapshot.length;
+			const statusIndicator = apiobj.statelem;
 			if (!total) {
 				statusIndicator.info('未发现重定向');
 				return;
 			}
 			statusIndicator.status('0%');
-			var current = 0;
-			var onsuccess = function (apiobjInner) {
-				var now = parseInt(100 * ++current / total, 10) + '%';
+			let current = 0;
+			const onsuccess = function (apiobjInner) {
+				const now = parseInt(100 * ++current / total, 10) + '%';
 				statusIndicator.update(now);
 				apiobjInner.statelem.unlink();
 				if (current >= total) {
@@ -1081,8 +1079,8 @@ Twinkle.speedy.callbacks = {
 			};
 			Morebits.wiki.addCheckpoint();
 			$snapshot.each(function (_key, value) {
-				var title = $(value).attr('title');
-				var page = new Morebits.wiki.page(title, '删除重定向 "' + title + '"');
+				const title = $(value).attr('title');
+				const page = new Morebits.wiki.page(title, '删除重定向 "' + title + '"');
 				page.setEditSummary('[[QW:CSD#G9|G9]]: 孤立页面: 重定向到已删除页面“' + Morebits.pageNameNorm + '”');
 				page.setChangeTags(Twinkle.changeTags);
 				page.deletePage(onsuccess);
@@ -1091,28 +1089,28 @@ Twinkle.speedy.callbacks = {
 	},
 	user: {
 		main: function (pageobj) {
-			var statelem = pageobj.getStatusElement();
+			const statelem = pageobj.getStatusElement();
 			if (!pageobj.exists()) {
 				statelem.error('页面不存在，可能已被删除');
 				return;
 			}
-			var text = pageobj.getPageText();
-			var params = pageobj.getCallbackParameters();
+			let text = pageobj.getPageText();
+			const params = pageobj.getCallbackParameters();
 			statelem.status('检查页面已有标记……');
 
 			// check for existing deletion tags
-			var textNoSd = text.replace(/\{\{\s*(db(-\w*)?|d|delete|deletebecause|speedy|csd|速刪|速删|快删|快刪)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/ig, '');
+			const textNoSd = text.replace(/\{\{\s*(db(-\w*)?|d|delete|deletebecause|speedy|csd|速刪|速删|快删|快刪)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/ig, '');
 			if (text !== textNoSd && !confirm('在页面上找到快速删除模板，要移除并加入新的吗？')) {
 				statelem.error('快速删除模板已被置于页面中。');
 				return;
 			}
 			text = textNoSd;
-			var copyvio = /(?:\{\{\s*(copyvio|侵权|侵權)[^{}]*?\}\})/i.exec(text);
+			const copyvio = /(?:\{\{\s*(copyvio|侵权|侵權)[^{}]*?\}\})/i.exec(text);
 			if (copyvio && !confirm('著作权验证模板已被置于页面中，您是否仍想加入一个快速删除模板？')) {
 				statelem.error('页面中已有著作权验证模板。');
 				return;
 			}
-			var xfd = /(?:\{\{([rsaiftcmv]fd|md1|proposed deletion)[^{}]*?\}\})/i.exec(text);
+			const xfd = /(?:\{\{([rsaiftcmv]fd|md1|proposed deletion)[^{}]*?\}\})/i.exec(text);
 			if (xfd && !confirm('删除相关模板{{' + xfd[1] + '}}已被置于页面中，您是否仍想加入一个快速删除模板？')) {
 				statelem.error('页面已被提交至存废讨论。');
 				return;
@@ -1120,10 +1118,10 @@ Twinkle.speedy.callbacks = {
 
 			// given the params, builds the template and also adds the user talk page parameters to the params that were passed in
 			// returns => [<string> wikitext, <object> utparams]
-			var buildData = Twinkle.speedy.callbacks.getTemplateCodeAndParams(params),
-				code = buildData[0];
+			const buildData = Twinkle.speedy.callbacks.getTemplateCodeAndParams(params);
+			let code = buildData[0];
 			params.utparams = buildData[1];
-			var thispage = new Morebits.wiki.page(mw.config.get('wgPageName'));
+			const thispage = new Morebits.wiki.page(mw.config.get('wgPageName'));
 			// patrol the page, if reached from Special:NewPages
 			if (Twinkle.getPref('markSpeedyPagesAsPatrolled')) {
 				thispage.patrol();
@@ -1144,7 +1142,7 @@ Twinkle.speedy.callbacks = {
 			}
 
 			// Generate edit summary for edit
-			var editsummary;
+			let editsummary;
 			if (params.normalizeds.length > 1) {
 				editsummary = '请求快速删除（';
 				$.each(params.normalizeds, function (_index, norm) {
@@ -1165,7 +1163,7 @@ Twinkle.speedy.callbacks = {
 				text = code;
 			} else {
 				// Insert tag after short description or any hatnotes
-				var wikipage = new Morebits.wikitext.page(text);
+				const wikipage = new Morebits.wikitext.page(text);
 				text = wikipage.insertAfterTemplates(code + '\n', Twinkle.hatnoteRegex).getText();
 			}
 			pageobj.setPageText(text);
@@ -1175,12 +1173,12 @@ Twinkle.speedy.callbacks = {
 			pageobj.save(Twinkle.speedy.callbacks.user.tagComplete);
 		},
 		tagComplete: function (pageobj) {
-			var params = pageobj.getCallbackParameters();
+			const params = pageobj.getCallbackParameters();
 
 			// Notification to first contributor
 			if (params.usertalk) {
-				var callback = function (pageobj) {
-					var initialContrib = pageobj.getCreator();
+				const callback = function (pageobj) {
+					let initialContrib = pageobj.getCreator();
 
 					// disallow warning yourself
 					if (initialContrib === mw.config.get('wgUserName')) {
@@ -1197,19 +1195,19 @@ Twinkle.speedy.callbacks = {
 						Morebits.status.warn('通知页面创建者：由机器人创建，跳过通知');
 						initialContrib = null;
 					} else {
-						var talkPageName = 'User talk:' + initialContrib;
+						const talkPageName = 'User talk:' + initialContrib;
 						Morebits.wiki.flow.check(talkPageName, function () {
-							var flowpage = new Morebits.wiki.flow(talkPageName, '通知页面创建者（' + initialContrib + '）');
+							const flowpage = new Morebits.wiki.flow(talkPageName, '通知页面创建者（' + initialContrib + '）');
 							flowpage.setTopic('[[:' + Morebits.pageNameNorm + ']]的快速删除通知');
 							flowpage.setContent('{{subst:db-notice|target=' + Morebits.pageNameNorm + '|flow=yes}}');
 							flowpage.newTopic();
 						}, function () {
-							var usertalkpage = new Morebits.wiki.page(talkPageName, '通知页面创建者（' + initialContrib + '）'),
-								notifytext;
+							const usertalkpage = new Morebits.wiki.page(talkPageName, '通知页面创建者（' + initialContrib + '）');
+							let notifytext;
 							notifytext = '\n{{subst:db-notice|target=' + Morebits.pageNameNorm;
 
 							notifytext += '}}--~~' + '~~';
-							var editsummary = '通知：';
+							let editsummary = '通知：';
 							if (params.normalizeds.indexOf('g12') === -1) {
 								// no article name in summary for G10 deletions
 								editsummary += '页面[[' + Morebits.pageNameNorm + ']]';
@@ -1231,7 +1229,7 @@ Twinkle.speedy.callbacks = {
 						Twinkle.speedy.callbacks.user.addToLog(params, initialContrib);
 					}
 				};
-				var thispage = new Morebits.wiki.page(Morebits.pageNameNorm);
+				const thispage = new Morebits.wiki.page(Morebits.pageNameNorm);
 				thispage.lookupCreation(callback);
 				// or, if not notifying, add this nomination to the user's userspace log without the initial contributor's name
 			} else if (params.lognomination) {
@@ -1243,9 +1241,9 @@ Twinkle.speedy.callbacks = {
 		//   for CSD: params.values, params.normalizeds  (note: normalizeds is an array)
 		//   for DI: params.fromDI = true, params.templatename, params.normalized  (note: normalized is a string)
 		addToLog: function (params, initialContrib) {
-			var usl = new Morebits.userspaceLogger(Twinkle.getPref('speedyLogPageName'));
+			const usl = new Morebits.userspaceLogger(Twinkle.getPref('speedyLogPageName'));
 			usl.initialText = '这是该用户使用[[H:TW|Twinkle]]的速删模块做出的[[QW:CSD|快速删除]]提名列表。\n\n如果您不再想保留此日志，请在[[' + Twinkle.getPref('configPage') + '|参数设置]]中关掉，并使用[[QW:O1|CSD O1]]提交快速删除。' + (Morebits.userIsSysop ? '\n\n此日志并不记录用Twinkle直接执行的删除。' : '');
-			var appendText = '# [[:' + Morebits.pageNameNorm + ']]：';
+			let appendText = '# [[:' + Morebits.pageNameNorm + ']]：';
 			if (params.fromDI) {
 				if (params.normalized === 'f3 f4') {
 					appendText += '图版[[QW:F1|CSD F1]]（{{tl|no source no license/auto}}）';
@@ -1279,14 +1277,14 @@ Twinkle.speedy.callbacks = {
 
 // validate subgroups in the form passed into the speedy deletion tag
 Twinkle.speedy.getParameters = function twinklespeedyGetParameters(form, values) {
-	var parameters = [];
+	let parameters = [];
 	$.each(values, function (_index, value) {
-		var currentParams = [];
-		var redimage;
+		const currentParams = [];
+		let redimage;
 		switch (value) {
 			case 'reason':
 				if (form['csd.reason_1']) {
-					var dbrationale = form['csd.reason_1'].value;
+					const dbrationale = form['csd.reason_1'].value;
 					if (!dbrationale || !dbrationale.trim()) {
 						alert('自定义理由：请指定理由。');
 						parameters = null;
@@ -1297,7 +1295,7 @@ Twinkle.speedy.getParameters = function twinklespeedyGetParameters(form, values)
 				break;
 			case 'a2':
 				if (form['csd.a2_pagename']) {
-					var a2_otherpage = form['csd.a2_pagename'].value;
+					const a2_otherpage = form['csd.a2_pagename'].value;
 					if (!a2_otherpage || !a2_otherpage.trim()) {
 						alert('CSD A2：请提供现有条目的名称。');
 						parameters = null;
@@ -1308,7 +1306,7 @@ Twinkle.speedy.getParameters = function twinklespeedyGetParameters(form, values)
 				break;
 			case 'g4':
 				if (form['csd.g4_pagename']) {
-					var g4_otherpage = form['csd.g4_pagename'].value;
+					const g4_otherpage = form['csd.g4_pagename'].value;
 					if (!g4_otherpage || !g4_otherpage.trim()) {
 						alert('CSD G4：请提供已被删除页面的名称。');
 						parameters = null;
@@ -1330,7 +1328,7 @@ Twinkle.speedy.getParameters = function twinklespeedyGetParameters(form, values)
 				break;
 			case 'r1':
 				if (form['csd.r1_type']) {
-					var r1_redirtype = form['csd.r1_type'].value;
+					const r1_redirtype = form['csd.r1_type'].value;
 					if (!r1_redirtype) {
 						alert('CSD R1：请选择适用类型。');
 						parameters = null;
@@ -1341,7 +1339,7 @@ Twinkle.speedy.getParameters = function twinklespeedyGetParameters(form, values)
 				break;
 			case 'r2':
 				if (form['csd.r2_type']) {
-					var r2_redirtype = form['csd.r2_type'].value;
+					const r2_redirtype = form['csd.r2_type'].value;
 					if (!r2_redirtype) {
 						alert('CSD R2：请选择适用类型。');
 						parameters = null;
@@ -1361,7 +1359,7 @@ Twinkle.speedy.getParameters = function twinklespeedyGetParameters(form, values)
 // Function for processing talk page notification template parameters
 // eslint-disable-next-line no-unused-vars
 Twinkle.speedy.getUserTalkParameters = function twinklespeedyGetUserTalkParameters(normalized, _parameters) {
-	var utparams = [];
+	const utparams = [];
 	switch (normalized) {
 		default:
 			break;
@@ -1374,7 +1372,7 @@ Twinkle.speedy.getUserTalkParameters = function twinklespeedyGetUserTalkParamete
  * @returns {Array}
  */
 Twinkle.speedy.resolveCsdValues = function twinklespeedyResolveCsdValues(e) {
-	var values = (e.target.form ? e.target.form : e.target).getChecked('csd');
+	const values = (e.target.form ? e.target.form : e.target).getChecked('csd');
 	if (values.length === 0) {
 		alert('请选择一个理据。');
 		return null;
@@ -1382,29 +1380,29 @@ Twinkle.speedy.resolveCsdValues = function twinklespeedyResolveCsdValues(e) {
 	return values;
 };
 Twinkle.speedy.callback.evaluateSysop = function twinklespeedyCallbackEvaluateSysop(e) {
-	var form = e.target.form ? e.target.form : e.target;
+	const form = e.target.form ? e.target.form : e.target;
 	if (e.target.type === 'checkbox' || e.target.type === 'text' || e.target.type === 'select') {
 		return;
 	}
-	var tag_only = form.tag_only;
+	const tag_only = form.tag_only;
 	if (tag_only && tag_only.checked) {
 		Twinkle.speedy.callback.evaluateUser(e);
 		return;
 	}
-	var values = Twinkle.speedy.resolveCsdValues(e);
+	const values = Twinkle.speedy.resolveCsdValues(e);
 	if (!values) {
 		return;
 	}
-	var templateParams = Twinkle.speedy.getParameters(form, values);
+	const templateParams = Twinkle.speedy.getParameters(form, values);
 	if (!templateParams) {
 		return;
 	}
-	var normalizeds = values.map(function (value) {
+	const normalizeds = values.map(function (value) {
 		return Twinkle.speedy.normalizeHash[value];
 	});
 
 	// analyse each criterion to determine whether to watch the page, prompt for summary, or notify the creator
-	var watchPage, promptForSummary;
+	let watchPage, promptForSummary;
 	normalizeds.forEach(function (norm) {
 		if (Twinkle.getPref('watchSpeedyPages').indexOf(norm) !== -1) {
 			watchPage = Twinkle.getPref('watchSpeedyExpiry');
@@ -1413,7 +1411,7 @@ Twinkle.speedy.callback.evaluateSysop = function twinklespeedyCallbackEvaluateSy
 			promptForSummary = true;
 		}
 	});
-	var params = {
+	const params = {
 		values: values,
 		normalizeds: normalizeds,
 		watch: watchPage,
@@ -1431,27 +1429,27 @@ Twinkle.speedy.callback.evaluateSysop = function twinklespeedyCallbackEvaluateSy
 	Twinkle.speedy.callbacks.sysop.main(params);
 };
 Twinkle.speedy.callback.evaluateUser = function twinklespeedyCallbackEvaluateUser(e) {
-	var form = e.target.form ? e.target.form : e.target;
+	const form = e.target.form ? e.target.form : e.target;
 	if (e.target.type === 'checkbox' || e.target.type === 'text' || e.target.type === 'select') {
 		return;
 	}
-	var values = Twinkle.speedy.resolveCsdValues(e);
+	const values = Twinkle.speedy.resolveCsdValues(e);
 	if (!values) {
 		return;
 	}
-	var templateParams = Twinkle.speedy.getParameters(form, values);
+	const templateParams = Twinkle.speedy.getParameters(form, values);
 	if (!templateParams) {
 		return;
 	}
 	// var multiple = form.multiple.checked;
-	var normalizeds = [];
+	const normalizeds = [];
 	$.each(values, function (_index, value) {
-		var norm = Twinkle.speedy.normalizeHash[value];
+		const norm = Twinkle.speedy.normalizeHash[value];
 		normalizeds.push(norm);
 	});
 
 	// analyse each criterion to determine whether to watch the page/notify the creator
-	var watchPage = false;
+	let watchPage = false;
 	$.each(normalizeds, function (_index, norm) {
 		if (Twinkle.getPref('watchSpeedyPages').indexOf(norm) !== -1) {
 			watchPage = Twinkle.getPref('watchSpeedyExpiry');
@@ -1459,7 +1457,7 @@ Twinkle.speedy.callback.evaluateUser = function twinklespeedyCallbackEvaluateUse
 		}
 	});
 
-	var notifyuser = false;
+	let notifyuser = false;
 	if (form.notify.checked) {
 		$.each(normalizeds, function (_index, norm) {
 			if (Twinkle.getPref('notifyUserOnSpeedyDeletionNomination').indexOf(norm) !== -1) {
@@ -1469,7 +1467,7 @@ Twinkle.speedy.callback.evaluateUser = function twinklespeedyCallbackEvaluateUse
 		});
 	}
 
-	var csdlog = false;
+	let csdlog = false;
 	if (Twinkle.getPref('logSpeedyNominations')) {
 		$.each(normalizeds, function (_index, norm) {
 			if (Twinkle.getPref('noLogOnSpeedyNomination').indexOf(norm) === -1) {
@@ -1479,8 +1477,8 @@ Twinkle.speedy.callback.evaluateUser = function twinklespeedyCallbackEvaluateUse
 		});
 	}
 
-	var blank = form.blank.checked;
-	var params = {
+	const blank = form.blank.checked;
+	const params = {
 		values: values,
 		normalizeds: normalizeds,
 		watch: watchPage,
@@ -1496,7 +1494,7 @@ Twinkle.speedy.callback.evaluateUser = function twinklespeedyCallbackEvaluateUse
 	Morebits.status.init(form);
 	Morebits.wiki.actionCompleted.redirect = mw.config.get('wgPageName');
 	Morebits.wiki.actionCompleted.notice = '标记完成';
-	var qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'), '标记页面');
+	const qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'), '标记页面');
 	qiuwen_page.setChangeTags(Twinkle.changeTags);
 	qiuwen_page.setCallbackParameters(params);
 	qiuwen_page.load(Twinkle.speedy.callbacks.user.main);

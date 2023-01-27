@@ -32,8 +32,8 @@ Twinkle.close = function twinkleclose() {
 	});
 };
 Twinkle.close.addLinks = function twinklecloseAddLinks() {
-	var spanTag = function (color, content) {
-		var span = document.createElement('span');
+	const spanTag = function (color, content) {
+		const span = document.createElement('span');
 		span.style.color = color;
 		span.appendChild(document.createTextNode(content));
 		return span;
@@ -41,25 +41,25 @@ Twinkle.close.addLinks = function twinklecloseAddLinks() {
 	$('h1:has(.mw-headline),h2:has(.mw-headline),h3:has(.mw-headline),h4:has(.mw-headline),h5:has(.mw-headline),h6:has(.mw-headline)', '#bodyContent').each(function (index, current) {
 		current.setAttribute('data-section', index + 1);
 	});
-	var selector = ':has(.mw-headline a:only-of-type):not(:has(+ div.NavFrame))';
-	var titles = $('#bodyContent').find('h2' + selector + ':not(:has(+ p + h3)), h3' + selector); // really needs to work on
+	const selector = ':has(.mw-headline a:only-of-type):not(:has(+ div.NavFrame))';
+	const titles = $('#bodyContent').find('h2' + selector + ':not(:has(+ p + h3)), h3' + selector); // really needs to work on
 
-	var delNode = document.createElement('strong');
-	var delLink = document.createElement('a');
+	const delNode = document.createElement('strong');
+	const delLink = document.createElement('a');
 	delLink.appendChild(spanTag('Black', '['));
 	delLink.appendChild(spanTag('Red', '关闭讨论'));
 	delLink.appendChild(spanTag('Black', ']'));
 	delNode.appendChild(delLink);
 	titles.each(function (key, current) {
-		var headlinehref = $(current).find('.mw-headline a').attr('href');
+		const headlinehref = $(current).find('.mw-headline a').attr('href');
 		if (headlinehref === undefined) {
 			return;
 		}
-		var title = null;
+		let title = null;
 		if (headlinehref.indexOf('redlink=1') !== -1) {
 			title = headlinehref.slice(19, -22);
 		} else {
-			var m = headlinehref.match(/\/wiki\/([^?]+)/, '$1');
+			const m = headlinehref.match(/\/wiki\/([^?]+)/, '$1');
 			if (m !== null) {
 				title = m[1];
 			}
@@ -69,11 +69,11 @@ Twinkle.close.addLinks = function twinklecloseAddLinks() {
 		}
 		title = decodeURIComponent(title);
 		title = title.replace(/_/g, ' '); // Normalize for using in interface and summary
-		var pagenotexist = $(current).find('.mw-headline a').hasClass('new');
-		var section = current.getAttribute('data-section');
-		var node = current.getElementsByClassName('mw-headline')[0];
+		const pagenotexist = $(current).find('.mw-headline a').hasClass('new');
+		const section = current.getAttribute('data-section');
+		const node = current.getElementsByClassName('mw-headline')[0];
 		node.appendChild(document.createTextNode(' '));
-		var tmpNode = delNode.cloneNode(true);
+		const tmpNode = delNode.cloneNode(true);
 		tmpNode.firstChild.href = '#' + section;
 		$(tmpNode.firstChild).on('click', function () {
 			Twinkle.close.callback(title, section, pagenotexist);
@@ -216,12 +216,12 @@ Twinkle.close.codes = {
 /* eslint-enable quote-props */
 
 Twinkle.close.callback = function twinklecloseCallback(title, section, noop) {
-	var Window = new Morebits.simpleWindow(410, 200);
+	const Window = new Morebits.simpleWindow(410, 200);
 	Window.setTitle('关闭存废讨论 \u00B7 ' + title);
 	Window.setScriptName('Twinkle');
 	Window.addFooterLink('存废讨论设置', 'H:TW/PREF#关闭存废讨论');
 	Window.addFooterLink('Twinkle帮助', 'H:TW/DOC#关闭存废讨论');
-	var form = new Morebits.quickForm(Twinkle.close.callback.evaluate);
+	const form = new Morebits.quickForm(Twinkle.close.callback.evaluate);
 	form.append({
 		type: 'select',
 		label: '处理结果：',
@@ -282,34 +282,34 @@ Twinkle.close.callback = function twinklecloseCallback(title, section, noop) {
 	form.append({
 		type: 'submit'
 	});
-	var result = form.render();
+	const result = form.render();
 	Window.setContent(result);
 	Window.display();
-	var sub_group = result.getElementsByTagName('select')[0]; // hack
+	const sub_group = result.getElementsByTagName('select')[0]; // hack
 
-	var resultData = {
+	const resultData = {
 		title: title,
 		section: parseInt(section),
 		noop: noop
 	};
 	$(result).data('resultData', resultData);
 	// worker function to create the combo box entries
-	var createEntries = function (contents, container) {
+	const createEntries = function (contents, container) {
 		$.each(contents, function (itemKey, itemProperties) {
-			var key = typeof itemKey === 'string' ? itemKey : itemProperties.value;
-			var elem = new Morebits.quickForm.element({
+			const key = typeof itemKey === 'string' ? itemKey : itemProperties.value;
+			const elem = new Morebits.quickForm.element({
 				type: 'option',
 				label: key + '：' + itemProperties.label,
 				value: key,
 				selected: itemProperties.selected,
 				disabled: Twinkle.getPref('XfdClose') !== 'all' && itemProperties.adminonly
 			});
-			var elemRendered = container.appendChild(elem.render());
+			const elemRendered = container.appendChild(elem.render());
 			$(elemRendered).data('messageData', itemProperties);
 		});
 	};
 	$.each(Twinkle.close.codes, function (groupLabel, groupContents) {
-		var optgroup = new Morebits.quickForm.element({
+		let optgroup = new Morebits.quickForm.element({
 			type: 'optgroup',
 			label: groupLabel
 		});
@@ -318,16 +318,16 @@ Twinkle.close.callback = function twinklecloseCallback(title, section, noop) {
 		// create the options
 		createEntries(groupContents, optgroup);
 	});
-	var evt = document.createEvent('Event');
+	const evt = document.createEvent('Event');
 	evt.initEvent('change', true, true);
 	result.sub_group.dispatchEvent(evt);
 };
 Twinkle.close.callback.change_operation = function twinklecloseCallbackChangeOperation(e) {
-	var noop = e.target.checked;
-	var code = e.target.form.sub_group.value;
-	var messageData = $(e.target.form.sub_group).find('option[value="' + code + '"]').data('messageData');
-	var talkpage = e.target.form.talkpage;
-	var redirects = e.target.form.redirects;
+	const noop = e.target.checked;
+	const code = e.target.form.sub_group.value;
+	const messageData = $(e.target.form.sub_group).find('option[value="' + code + '"]').data('messageData');
+	const talkpage = e.target.form.talkpage;
+	const redirects = e.target.form.redirects;
 	if (noop || messageData.action === 'keep') {
 		if (talkpage) {
 			talkpage.checked = false;
@@ -345,11 +345,11 @@ Twinkle.close.callback.change_operation = function twinklecloseCallbackChangeOpe
 	}
 };
 Twinkle.close.callback.change_code = function twinklecloseCallbackChangeCode(e) {
-	var resultData = $(e.target.form).data('resultData');
-	var messageData = $(e.target).find('option[value="' + e.target.value + '"]').data('messageData');
-	var noop = e.target.form.noop;
-	var talkpage = e.target.form.talkpage;
-	var redirects = e.target.form.redirects;
+	const resultData = $(e.target.form).data('resultData');
+	const messageData = $(e.target).find('option[value="' + e.target.value + '"]').data('messageData');
+	const noop = e.target.form.noop;
+	const talkpage = e.target.form.talkpage;
+	const redirects = e.target.form.redirects;
 	if (resultData.noop || messageData.action === 'noop') {
 		noop.checked = true;
 		noop.disabled = true;
@@ -385,13 +385,13 @@ Twinkle.close.callback.change_code = function twinklecloseCallbackChangeCode(e) 
 	}
 };
 Twinkle.close.callback.evaluate = function twinklecloseCallbackEvaluate(e) {
-	var code = e.target.sub_group.value;
-	var resultData = $(e.target).data('resultData');
-	var messageData = $(e.target.sub_group).find('option[value="' + code + '"]').data('messageData');
-	var noop = e.target.noop.checked;
-	var talkpage = e.target.talkpage && e.target.talkpage.checked;
-	var redirects = e.target.redirects.checked;
-	var params = {
+	const code = e.target.sub_group.value;
+	const resultData = $(e.target).data('resultData');
+	const messageData = $(e.target.sub_group).find('option[value="' + code + '"]').data('messageData');
+	const noop = e.target.noop.checked;
+	const talkpage = e.target.talkpage && e.target.talkpage.checked;
+	const redirects = e.target.redirects.checked;
+	const params = {
 		title: resultData.title,
 		code: code,
 		remark: e.target.remark.value,
@@ -411,11 +411,12 @@ Twinkle.close.callback.evaluate = function twinklecloseCallbackEvaluate(e) {
 			case 'del':
 				Twinkle.close.callbacks.del(params);
 				break;
-			case 'keep':
-				var qiuwen_page = new Morebits.wiki.page(params.title, '移除存废讨论模板');
+			case 'keep': {
+				const qiuwen_page = new Morebits.wiki.page(params.title, '移除存废讨论模板');
 				qiuwen_page.setCallbackParameters(params);
 				qiuwen_page.load(Twinkle.close.callbacks.keep);
 				break;
+			}
 			default:
 				alert('关闭存废讨论：未定义 ' + code);
 		}
@@ -423,9 +424,9 @@ Twinkle.close.callback.evaluate = function twinklecloseCallbackEvaluate(e) {
 };
 Twinkle.close.callbacks = {
 	del: function (params) {
-		var query, qiuwen_api;
+		let query, qiuwen_api;
 		Morebits.wiki.addCheckpoint();
-		var page = new Morebits.wiki.page(params.title, '删除页面');
+		const page = new Morebits.wiki.page(params.title, '删除页面');
 		if (params.code === 'sd') {
 			Twinkle.speedy.callbacks.parseWikitext(params.title, '{{delete|' + params.sdreason + '}}', function (reason) {
 				reason = prompt('输入删除理由，或点击确定以接受自动生成的：', reason);
@@ -462,7 +463,7 @@ Twinkle.close.callbacks = {
 			qiuwen_api.post();
 		}
 		if (params.talkpage) {
-			var pageTitle = mw.Title.newFromText(params.title);
+			const pageTitle = mw.Title.newFromText(params.title);
 			if (pageTitle && pageTitle.namespace % 2 === 0 && pageTitle.namespace !== 2) {
 				pageTitle.namespace++; // now pageTitle is the talk page title!
 				query = {
@@ -478,65 +479,65 @@ Twinkle.close.callbacks = {
 		Morebits.wiki.removeCheckpoint();
 	},
 	deleteRedirectsMain: function (apiobj) {
-		var xml = apiobj.responseXML;
-		var pages = $(xml).find('rd').map(function () {
+		const xml = apiobj.responseXML;
+		const pages = $(xml).find('rd').map(function () {
 			return $(this).attr('title');
 		}).get();
 		if (!pages.length) {
 			return;
 		}
-		var redirectDeleter = new Morebits.batchOperation('正在删除到 ' + apiobj.params.title + ' 的重定向');
+		const redirectDeleter = new Morebits.batchOperation('正在删除到 ' + apiobj.params.title + ' 的重定向');
 		redirectDeleter.setOption('chunkSize', Twinkle.getPref('batchdeleteChunks'));
 		redirectDeleter.setPageList(pages);
 		redirectDeleter.run(function (pageName) {
-			var qiuwen_page = new Morebits.wiki.page(pageName, '正在删除 ' + pageName);
+			const qiuwen_page = new Morebits.wiki.page(pageName, '正在删除 ' + pageName);
 			qiuwen_page.setEditSummary('[[QW:CSD#G5|G5]]: 指向已删页面“' + apiobj.params.title + '”的重定向');
 			qiuwen_page.setChangeTags(Twinkle.changeTags);
 			qiuwen_page.deletePage(redirectDeleter.workerSuccess, redirectDeleter.workerFailure);
 		});
 	},
 	deleteTalk: function (apiobj) {
-		var xml = apiobj.responseXML;
-		var exists = $(xml).find('page:not([missing])').length > 0;
+		const xml = apiobj.responseXML;
+		const exists = $(xml).find('page:not([missing])').length > 0;
 		if (!exists) {
 			// no talk page; forget about it
 			return;
 		}
-		var page = new Morebits.wiki.page(apiobj.params.talkPage, '正在删除页面 ' + apiobj.params.title + ' 的讨论页');
+		const page = new Morebits.wiki.page(apiobj.params.talkPage, '正在删除页面 ' + apiobj.params.title + ' 的讨论页');
 		page.setEditSummary('[[QW:CSD#G5|G5]]: 已删页面“' + apiobj.params.title + '”的[[Qiuwen:讨论页|讨论页]]');
 		page.setChangeTags(Twinkle.changeTags);
 		page.deletePage();
 	},
 	keep: function (pageobj) {
-		var statelem = pageobj.getStatusElement();
+		const statelem = pageobj.getStatusElement();
 		if (!pageobj.exists()) {
 			statelem.error('页面不存在，可能已被删除');
 			return;
 		}
-		var text = pageobj.getPageText();
-		var params = pageobj.getCallbackParameters();
-		var pagetitle = mw.Title.newFromText(params.title);
+		const text = pageobj.getPageText();
+		const params = pageobj.getCallbackParameters();
+		const pagetitle = mw.Title.newFromText(params.title);
 		if (pagetitle.getNamespaceId() % 2 === 0) {
-			var talkpagetitle = new mw.Title(pagetitle.getMainText(), pagetitle.getNamespaceId() + 1);
-			var talkpage = new Morebits.wiki.page(talkpagetitle.toString(), '标记讨论页');
-			var vfdkept = '{{Old vfd multi|' + mw.config.get('wgPageName').split('/').slice(2).join('/') + '|' + params.messageData.label + '}}\n';
+			const talkpagetitle = new mw.Title(pagetitle.getMainText(), pagetitle.getNamespaceId() + 1);
+			const talkpage = new Morebits.wiki.page(talkpagetitle.toString(), '标记讨论页');
+			const vfdkept = '{{Old vfd multi|' + mw.config.get('wgPageName').split('/').slice(2).join('/') + '|' + params.messageData.label + '}}\n';
 			talkpage.setPrependText(vfdkept);
 			talkpage.setEditSummary('[[' + mw.config.get('wgPageName') + '#' + params.title + ']]：' + params.messageData.label);
 			talkpage.setChangeTags(Twinkle.changeTags);
 			talkpage.setCreateOption('recreate');
 			talkpage.prepend();
 		}
-		var newtext = text.replace(/<noinclude>\s*\{\{([rsaiftcmv]fd)(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*<\/noinclude>\s*/gi, '');
+		let newtext = text.replace(/<noinclude>\s*\{\{([rsaiftcmv]fd)(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*<\/noinclude>\s*/gi, '');
 		newtext = newtext.replace(/\{\{([rsaiftcmv]fd)(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/gi, '');
 		if (params.code !== 'tk') {
 			newtext = newtext.replace(/\{\{(notability|fame|mair|知名度|重要性|显著性|顯著性|知名度不足|人物重要性|重要性不足|notable|关注度|关注度不足|關注度|關注度不足|重要|重要度)(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\n*/gi, '');
 			newtext = newtext.replace(/\{\{(substub|小小作品|cod|小小條目|小小条目)(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\n*/gi, '');
 		}
 		if (params.code === 'mergeapproved') {
-			var tag = '{{subst:Merge approved/auto|discuss=' + mw.config.get('wgPageName') + '#' + params.title + '}}\n';
+			const tag = '{{subst:Merge approved/auto|discuss=' + mw.config.get('wgPageName') + '#' + params.title + '}}\n';
 
 			// Insert tag after short description or any hatnotes
-			var wikipage = new Morebits.wikitext.page(newtext);
+			const wikipage = new Morebits.wikitext.page(newtext);
 			newtext = wikipage.insertAfterTemplates(tag, Twinkle.hatnoteRegex).getText();
 		}
 		if (newtext === text) {
@@ -544,7 +545,7 @@ Twinkle.close.callbacks = {
 			Twinkle.close.callbacks.talkend(params);
 			return;
 		}
-		var editsummary = '存废讨论关闭：[[' + mw.config.get('wgPageName') + '#' + params.title + ']]';
+		const editsummary = '存废讨论关闭：[[' + mw.config.get('wgPageName') + '#' + params.title + ']]';
 		pageobj.setPageText(newtext);
 		pageobj.setEditSummary(editsummary);
 		pageobj.setChangeTags(Twinkle.changeTags);
@@ -552,29 +553,29 @@ Twinkle.close.callbacks = {
 		pageobj.save(Twinkle.close.callbacks.keepComplete);
 	},
 	keepComplete: function (pageobj) {
-		var params = pageobj.getCallbackParameters();
+		const params = pageobj.getCallbackParameters();
 		Twinkle.close.callbacks.talkend(params);
 	},
 	talkend: function (params) {
-		var qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'), '关闭讨论');
+		const qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'), '关闭讨论');
 		qiuwen_page.setCallbackParameters(params);
 		qiuwen_page.setPageSection(params.section);
 		qiuwen_page.load(Twinkle.close.callbacks.saveTalk);
 	},
 	saveTalk: function (pageobj) {
-		var statelem = pageobj.getStatusElement();
-		var text = pageobj.getPageText();
-		var params = pageobj.getCallbackParameters();
+		const statelem = pageobj.getStatusElement();
+		let text = pageobj.getPageText();
+		const params = pageobj.getCallbackParameters();
 		if (text.indexOf('{{delh') !== -1) {
 			statelem.error('讨论已被关闭');
 			return;
 		}
-		var sbegin = text.indexOf('<section begin=backlog />') !== -1;
-		var send = text.indexOf('<section end=backlog />') !== -1;
+		const sbegin = text.indexOf('<section begin=backlog />') !== -1;
+		const send = text.indexOf('<section end=backlog />') !== -1;
 		text = text.replace('\n<section begin=backlog />', '');
 		text = text.replace('\n<section end=backlog />', '');
-		var bar = text.split('\n----\n');
-		var split = bar[0].split('\n');
+		const bar = text.split('\n----\n');
+		const split = bar[0].split('\n');
 		text = split[0] + '\n{{delh|' + params.code + '}}\n' + split.slice(1).join('\n');
 		text += '\n<hr>\n: ' + params.messageData.label;
 		if (params.remark) {
@@ -604,7 +605,7 @@ Twinkle.close.callbacks = {
 		pageobj.save(Twinkle.close.callbacks.disableLink);
 	},
 	disableLink: function (pageobj) {
-		var params = pageobj.getCallbackParameters();
+		const params = pageobj.getCallbackParameters();
 		$('strong a[href=#' + params.section + '] span').css('color', 'grey');
 	}
 };

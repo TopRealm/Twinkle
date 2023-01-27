@@ -19,11 +19,11 @@
  * Mode of invocation:     Tab ("Block")
  * Active on:              Any page with relevant user name (userspace, contribs, etc.)
  */
-var api = new mw.Api(),
-	relevantUserName = mw.config.get('wgRelevantUserName');
-var menuFormattedNamespaces = $.extend({}, mw.config.get('wgFormattedNamespaces'));
+const api = new mw.Api();
+let relevantUserName = mw.config.get('wgRelevantUserName');
+const menuFormattedNamespaces = $.extend({}, mw.config.get('wgFormattedNamespaces'));
 menuFormattedNamespaces[0] = '（条目）';
-var blockActionText = {
+const blockActionText = {
 	block: '封禁',
 	reblock: '重新封禁',
 	unblock: '解除封禁'
@@ -41,15 +41,15 @@ Twinkle.block.callback = function twinkleblockCallback() {
 	Twinkle.block.currentBlockInfo = undefined;
 	Twinkle.block.field_block_options = {};
 	Twinkle.block.field_template_options = {};
-	var Window = new Morebits.simpleWindow(650, 530);
+	const Window = new Morebits.simpleWindow(650, 530);
 	// need to be verbose about who we're blocking
 	Window.setTitle('封禁或向' + relevantUserName + '发出封禁模板');
 	Window.setScriptName('Twinkle');
 	Window.addFooterLink('封禁方针', 'QW:BLOCK');
 	Window.addFooterLink('封禁设置', 'H:TW/PREF#封禁');
 	Window.addFooterLink('Twinkle帮助', 'H:TW/DOC#封禁');
-	var form = new Morebits.quickForm(Twinkle.block.callback.evaluate);
-	var actionfield = form.append({
+	const form = new Morebits.quickForm(Twinkle.block.callback.evaluate);
+	const actionfield = form.append({
 		type: 'field',
 		label: '操作类型'
 	});
@@ -122,13 +122,13 @@ Twinkle.block.callback = function twinkleblockCallback() {
 		type: 'submit',
 		label: '提交'
 	});
-	var result = form.render();
+	const result = form.render();
 	Window.setContent(result);
 	Window.display();
 	result.root = result;
 	Twinkle.block.fetchUserInfo(function () {
 		if (Twinkle.block.isRegistered) {
-			var $form = $(result);
+			const $form = $(result);
 			Morebits.quickForm.setElementVisibility($form.find('[name=actiontype][value=tag]').parent(), true);
 			if (Morebits.userIsSysop) {
 				Morebits.quickForm.setElementVisibility($form.find('[name=actiontype][value=protect]').parent(), true);
@@ -139,14 +139,14 @@ Twinkle.block.callback = function twinkleblockCallback() {
 		Twinkle.block.transformBlockPresets();
 
 		// init the controls after user and block info have been fetched
-		var evt = document.createEvent('Event');
+		const evt = document.createEvent('Event');
 		evt.initEvent('change', true, true);
 		result.actiontype[0].dispatchEvent(evt);
 	});
 };
 Twinkle.block.fetchUserInfo = function twinkleblockFetchUserInfo(fn) {
-	var userName = relevantUserName;
-	var query = {
+	const userName = relevantUserName;
+	const query = {
 		format: 'json',
 		action: 'query',
 		list: 'blocks|users|logevents',
@@ -162,7 +162,7 @@ Twinkle.block.fetchUserInfo = function twinkleblockFetchUserInfo(fn) {
 		query.bkusers = userName;
 	}
 	api.get(query).then(function (data) {
-		var blockinfo = data.query.blocks[0],
+		const blockinfo = data.query.blocks[0],
 			userinfo = data.query.users[0];
 		Twinkle.block.isRegistered = !!userinfo.userid;
 		if (Twinkle.block.isRegistered) {
@@ -204,23 +204,23 @@ Twinkle.block.callback.saveFieldset = function twinkleblockCallbacksaveFieldset(
 	});
 };
 Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction(e) {
-	var field_preset,
+	let field_preset,
 		field_template_options,
 		field_block_options,
 		field_tag_options,
-		field_unblock_options,
-		$form = $(e.target.form);
+		field_unblock_options;
+	const $form = $(e.target.form);
 	// Make ifs shorter
-	var block = $form.find('[name=actiontype][value=block]');
-	var blockBox = block.is(':checked');
-	var template = $form.find('[name=actiontype][value=template]');
-	var templateBox = template.is(':checked');
-	var tag = $form.find('[name=actiontype][value=tag]');
-	var protect = $form.find('[name=actiontype][value=protect]');
-	var partial = $form.find('[name=actiontype][value=partial]');
-	var partialBox = partial.is(':checked');
-	var unblock = $form.find('[name=actiontype][value=unblock]');
-	var blockGroup = partialBox ? Twinkle.block.blockGroupsPartial : Twinkle.block.blockGroups;
+	const block = $form.find('[name=actiontype][value=block]');
+	let blockBox = block.is(':checked');
+	const template = $form.find('[name=actiontype][value=template]');
+	let templateBox = template.is(':checked');
+	const tag = $form.find('[name=actiontype][value=tag]');
+	const protect = $form.find('[name=actiontype][value=protect]');
+	const partial = $form.find('[name=actiontype][value=partial]');
+	const partialBox = partial.is(':checked');
+	const unblock = $form.find('[name=actiontype][value=unblock]');
+	const blockGroup = partialBox ? Twinkle.block.blockGroupsPartial : Twinkle.block.blockGroups;
 	if (e.target.value === 'unblock') {
 		if (!Twinkle.block.currentBlockInfo) {
 			unblock.prop('checked', false);
@@ -342,7 +342,7 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 				value: '',
 				tooltip: '最多10页面。'
 			});
-			var ns = field_block_options.append({
+			const ns = field_block_options.append({
 				type: 'select',
 				multiple: true,
 				name: 'namespacerestrictions',
@@ -361,7 +361,7 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 				}
 			});
 		}
-		var blockoptions = [ {
+		const blockoptions = [ {
 			checked: Twinkle.block.field_block_options.nocreate,
 			label: '禁止创建账户',
 			name: 'nocreate',
@@ -556,7 +556,7 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 				} ]
 			});
 		}
-		var $previewlink = $('<a id="twinkleblock-preivew-link">预览</a>');
+		const $previewlink = $('<a id="twinkleblock-preivew-link">预览</a>');
 		$previewlink.off('click').on('click', function () {
 			Twinkle.block.callback.preview($form[0]);
 		});
@@ -648,7 +648,7 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 			value: Twinkle.block.field_unblock_options.reason
 		});
 	}
-	var oldfield;
+	let oldfield;
 	if (field_preset) {
 		oldfield = $form.find('fieldset[name="field_preset"]')[0];
 		oldfield.parentNode.replaceChild(field_preset.render(), oldfield);
@@ -675,7 +675,7 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 				dataType: 'json',
 				delay: 100,
 				data: function (params) {
-					var title = mw.Title.newFromText(params.term);
+					const title = mw.Title.newFromText(params.term);
 					if (!title) {
 						return;
 					}
@@ -691,7 +691,7 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 				processResults: function (data) {
 					return {
 						results: data.query.allpages.map(function (page) {
-							var title = mw.Title.newFromText(page.title, page.ns).toText();
+							const title = mw.Title.newFromText(page.title, page.ns).toText();
 							return {
 								id: title,
 								text: title
@@ -751,7 +751,7 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 		$form.find('fieldset[name="field_template_options"]').hide();
 	}
 	if (blockBox && Twinkle.block.hasBlockLog) {
-		var $blockloglink = $('<a target="_blank" href="' + mw.util.getUrl('Special:Log', {
+		const $blockloglink = $('<a target="_blank" href="' + mw.util.getUrl('Special:Log', {
 			action: 'view',
 			page: relevantUserName,
 			type: 'block'
@@ -763,13 +763,13 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 		Morebits.status.init($('div[name="currentblock"] span').last()[0]);
 		// list=blocks without bkprops (as we do in fetchUerInfo)
 		// returns partial: '' if the user is partially blocked
-		var statusStr = relevantUserName + (Twinkle.block.currentBlockInfo.partial === '' ? '已被部分封禁' : '已被全站封禁');
+		let statusStr = relevantUserName + (Twinkle.block.currentBlockInfo.partial === '' ? '已被部分封禁' : '已被全站封禁');
 		if (Twinkle.block.currentBlockInfo.expiry === 'infinity') {
 			statusStr += '（无限期）';
 		} else if (new Morebits.date(Twinkle.block.currentBlockInfo.expiry).isValid()) {
 			statusStr += '（终止于' + new Morebits.date(Twinkle.block.currentBlockInfo.expiry).calendar('utc') + '）';
 		}
-		var infoStr = '提交请求以变更封禁';
+		let infoStr = '提交请求以变更封禁';
 		if (Twinkle.block.currentBlockInfo.partial === undefined && partialBox) {
 			infoStr += '为部分封禁';
 		} else if (Twinkle.block.currentBlockInfo.partial === '' && !partialBox) {
@@ -975,7 +975,7 @@ Twinkle.block.transformBlockPresets = function twinkleblockTransformBlockPresets
 				blockGroup.list = Twinkle.getPref('customBlockReasonList');
 			}
 			$.each(blockGroup.list, function (_, blockPreset) {
-				var value = blockPreset.value,
+				const value = blockPreset.value,
 					reason = blockPreset.label,
 					newPreset = value + ':' + reason;
 				Twinkle.block.blockPresetsInfo[newPreset] = jQuery.extend(true, {}, Twinkle.block.blockPresetsInfo[value]);
@@ -1154,15 +1154,15 @@ Twinkle.block.callback.filtered_block_groups = function twinkleblockCallbackFilt
 		if (!show_template && blockGroup.meta) {
 			return;
 		}
-		var list = $.map(blockGroup.list, function (blockPreset) {
+		const list = $.map(blockGroup.list, function (blockPreset) {
 			// only show uw-talkrevoked if reblocking
 			if (!Twinkle.block.currentBlockInfo && blockPreset.value === 'uw-talkrevoked') {
 				return;
 			}
-			var blockSettings = Twinkle.block.blockPresetsInfo[blockPreset.value];
-			var registrationRestrict = blockPreset.forRegisteredOnly ? Twinkle.block.isRegistered : blockPreset.forAnonOnly ? !Twinkle.block.isRegistered : true;
+			const blockSettings = Twinkle.block.blockPresetsInfo[blockPreset.value];
+			const registrationRestrict = blockPreset.forRegisteredOnly ? Twinkle.block.isRegistered : blockPreset.forAnonOnly ? !Twinkle.block.isRegistered : true;
 			if (!(blockSettings.templateName && show_template) && registrationRestrict) {
-				var templateName = blockSettings.templateName || blockSettings.template || blockPreset.value;
+				const templateName = blockSettings.templateName || blockSettings.template || blockPreset.value;
 				return {
 					label: (show_template ? '{{' + templateName + '}}: ' : '') + (blockPreset.label || '{{' + templateName + '}}'),
 					value: blockPreset.value,
@@ -1183,7 +1183,7 @@ Twinkle.block.callback.filtered_block_groups = function twinkleblockCallbackFilt
 	});
 };
 Twinkle.block.callback.change_preset = function twinkleblockCallbackChangePreset(e) {
-	var key = e.target.form.preset.value;
+	const key = e.target.form.preset.value;
 	if (!key) {
 		return;
 	}
@@ -1193,7 +1193,7 @@ Twinkle.block.callback.change_preset = function twinkleblockCallbackChangePreset
 	Twinkle.block.callback.change_template(e);
 };
 Twinkle.block.callback.change_expiry = function twinkleblockCallbackChangeExpiry(e) {
-	var expiry = e.target.form.expiry;
+	const expiry = e.target.form.expiry;
 	if (e.target.value === 'custom') {
 		Morebits.quickForm.setElementVisibility(expiry.parentNode, true);
 	} else {
@@ -1203,14 +1203,14 @@ Twinkle.block.callback.change_expiry = function twinkleblockCallbackChangeExpiry
 };
 Twinkle.block.seeAlsos = [];
 Twinkle.block.callback.toggle_see_alsos = function twinkleblockCallbackToggleSeeAlso() {
-	var reason = this.form.reason.value.replace(new RegExp('(<!-- )(参见|參見)' + Twinkle.block.seeAlsos.join('、') + '( -->)'), '');
+	const reason = this.form.reason.value.replace(new RegExp('(<!-- )(参见|參見)' + Twinkle.block.seeAlsos.join('、') + '( -->)'), '');
 	Twinkle.block.seeAlsos = Twinkle.block.seeAlsos.filter(function (el) {
 		return el !== this.value;
 	}.bind(this));
 	if (this.checked) {
 		Twinkle.block.seeAlsos.push(this.value);
 	}
-	var seeAlsoMessage = Twinkle.block.seeAlsos.join('、');
+	const seeAlsoMessage = Twinkle.block.seeAlsos.join('、');
 	if (!Twinkle.block.seeAlsos.length) {
 		this.form.reason.value = reason;
 	} else {
@@ -1218,8 +1218,8 @@ Twinkle.block.callback.toggle_see_alsos = function twinkleblockCallbackToggleSee
 	}
 };
 Twinkle.block.callback.update_form = function twinkleblockCallbackUpdateForm(e, data) {
-	var form = e.target.form,
-		expiry = data.expiry;
+	const form = e.target.form;
+	let expiry = data.expiry;
 
 	// don't override original expiry if useInitialOptions is set
 	if (!data.useInitialOptions) {
@@ -1253,7 +1253,7 @@ Twinkle.block.callback.update_form = function twinkleblockCallbackUpdateForm(e, 
 		if (el.name === 'closevip') {
 			return;
 		}
-		var check = data[el.name] === '' || !!data[el.name];
+		const check = data[el.name] === '' || !!data[el.name];
 		$(el).prop('checked', check);
 	});
 	if (data.prependReason && data.reason) {
@@ -1263,12 +1263,12 @@ Twinkle.block.callback.update_form = function twinkleblockCallbackUpdateForm(e, 
 	}
 };
 Twinkle.block.callback.change_template = function twinkleblockcallbackChangeTemplate(e) {
-	var form = e.target.form,
+	const form = e.target.form,
 		value = form.template.value,
 		settings = Twinkle.block.blockPresetsInfo[value];
-	var blockBox = $(form).find('[name=actiontype][value=block]').is(':checked');
-	var partialBox = $(form).find('[name=actiontype][value=partial]').is(':checked');
-	var templateBox = $(form).find('[name=actiontype][value=template]').is(':checked');
+	const blockBox = $(form).find('[name=actiontype][value=block]').is(':checked');
+	const partialBox = $(form).find('[name=actiontype][value=partial]').is(':checked');
+	const templateBox = $(form).find('[name=actiontype][value=template]').is(':checked');
 
 	// Block form is not present
 	if (!blockBox) {
@@ -1311,7 +1311,7 @@ Twinkle.block.prev_block_reason = null;
 Twinkle.block.prev_article = null;
 Twinkle.block.prev_reason = null;
 Twinkle.block.callback.preview = function twinkleblockcallbackPreview(form) {
-	var params = {
+	const params = {
 		article: form.article.value,
 		blank_duration: form.blank_duration ? form.blank_duration.checked : false,
 		disabletalk: form.disabletalk.checked || (form.notalk ? form.notalk.checked : false),
@@ -1327,19 +1327,19 @@ Twinkle.block.callback.preview = function twinkleblockcallbackPreview(form) {
 		// nocreate: form.nocreate.checked || (form.nocreate_template ? form.nocreate_template.checked : false),
 		area: form.area.value
 	};
-	var templateText = Twinkle.block.callback.getBlockNoticeWikitext(params);
+	const templateText = Twinkle.block.callback.getBlockNoticeWikitext(params);
 	form.previewer.beginRender(templateText);
 };
 Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate(e) {
-	var params = Morebits.quickForm.getInputData(e.target);
-	var $form = $(e.target),
+	const params = Morebits.quickForm.getInputData(e.target);
+	const $form = $(e.target),
 		toBlock = $form.find('[name=actiontype][value=block]').is(':checked'),
 		toWarn = $form.find('[name=actiontype][value=template]').is(':checked'),
 		toPartial = $form.find('[name=actiontype][value=partial]').is(':checked'),
 		toTag = $form.find('[name=actiontype][value=tag]').is(':checked'),
 		toProtect = $form.find('[name=actiontype][value=protect]').is(':checked'),
-		toUnblock = $form.find('[name=actiontype][value=unblock]').is(':checked'),
-		blockoptions = {},
+		toUnblock = $form.find('[name=actiontype][value=unblock]').is(':checked');
+	let blockoptions = {},
 		templateoptions = {},
 		unblockoptions = {};
 	Twinkle.block.callback.saveFieldset($form.find('[name=field_block_options]'));
@@ -1348,7 +1348,7 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate(e) {
 	Twinkle.block.callback.saveFieldset($form.find('[name=field_unblock_options]'));
 	blockoptions = Twinkle.block.field_block_options;
 	unblockoptions = Twinkle.block.field_unblock_options;
-	var toClosevip = !!blockoptions.closevip;
+	const toClosevip = !!blockoptions.closevip;
 	templateoptions = Twinkle.block.field_template_options;
 	templateoptions.disabletalk = !!(templateoptions.disabletalk || blockoptions.disabletalk);
 	templateoptions.hardblock = !!blockoptions.hardblock;
@@ -1373,13 +1373,13 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate(e) {
 
 	// Check tags
 	// Given an array of incompatible tags, check if we have two or more selected
-	var checkIncompatible = function (conflicts, extra) {
-		var count = conflicts.reduce(function (sum, tag) {
+	const checkIncompatible = function (conflicts, extra) {
+		const count = conflicts.reduce(function (sum, tag) {
 			sum += params.tag.indexOf(tag) !== -1;
 			return sum;
 		}, 0);
 		if (count > 1) {
-			var message = '请在以下标签中择一使用：{{' + conflicts.join('}}、{{') + '}}。';
+			let message = '请在以下标签中择一使用：{{' + conflicts.join('}}、{{') + '}}。';
 			message += extra || '';
 			alert(message);
 			return true;
@@ -1429,7 +1429,7 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate(e) {
 		}
 		Morebits.simpleWindow.setButtonsEnabled(false);
 		Morebits.status.init(e.target);
-		var statusElement = new Morebits.status('执行封禁');
+		const statusElement = new Morebits.status('执行封禁');
 		blockoptions.action = 'block';
 		blockoptions.user = relevantUserName;
 
@@ -1466,7 +1466,7 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate(e) {
   	 * a block expired (different statuses, confirmation) or the
   	 * same block is still active (same status, no confirmation).
   	 */
-		var query = {
+		const query = {
 			format: 'json',
 			action: 'query',
 			list: 'blocks|logevents',
@@ -1480,22 +1480,22 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate(e) {
 			query.bkusers = blockoptions.user;
 		}
 		api.get(query).then(function (data) {
-			var block = data.query.blocks[0];
-			var logevents = data.query.logevents[0];
-			var logid = data.query.logevents.length ? logevents.logid : false;
+			const block = data.query.blocks[0];
+			const logevents = data.query.logevents[0];
+			const logid = data.query.logevents.length ? logevents.logid : false;
 			if (logid !== Twinkle.block.blockLogId || !!block !== !!Twinkle.block.currentBlockInfo) {
-				var message = mw.config.get('wgRelevantUserName') + '的封禁状态已被修改。';
+				let message = mw.config.get('wgRelevantUserName') + '的封禁状态已被修改。';
 				if (block) {
 					message += '新状态：';
 				} else {
 					message += '最新日志：';
 				}
-				var logExpiry = '';
+				let logExpiry = '';
 				if (logevents.params.duration) {
 					if (logevents.params.duration === 'infinity') {
 						logExpiry = '无限期';
 					} else {
-						var expiryDate = new Morebits.date(logevents.params.expiry);
+						const expiryDate = new Morebits.date(logevents.params.expiry);
 						logExpiry += '到' + expiryDate.calendar();
 					}
 				} else {
@@ -1513,13 +1513,13 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate(e) {
 			// execute block
 			blockoptions.tags = Twinkle.changeTags;
 			blockoptions.token = mw.user.tokens.get('csrfToken');
-			var mbApi = new Morebits.wiki.api('执行封禁', blockoptions, function () {
+			const mbApi = new Morebits.wiki.api('执行封禁', blockoptions, function () {
 				statusElement.info('完成');
 				if (toWarn) {
 					Twinkle.block.callback.issue_template(templateoptions);
 				}
 				if (toClosevip) {
-					var vipPage = new Morebits.wiki.page('Qiuwen:当前的破坏', '关闭请求');
+					const vipPage = new Morebits.wiki.page('Qiuwen:当前的破坏', '关闭请求');
 					vipPage.setFollowRedirect(true);
 					vipPage.setCallbackParameters(blockoptions);
 					vipPage.load(Twinkle.block.callback.closeRequest);
@@ -1535,8 +1535,8 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate(e) {
 	if (toTag || toProtect) {
 		Morebits.simpleWindow.setButtonsEnabled(false);
 		Morebits.status.init(e.target);
-		var userPage = 'User:' + relevantUserName;
-		var qiuwen_page = new Morebits.wiki.page(userPage, '标记或保护用户页');
+		const userPage = 'User:' + relevantUserName;
+		const qiuwen_page = new Morebits.wiki.page(userPage, '标记或保护用户页');
 		qiuwen_page.setCallbackParameters(params);
 		qiuwen_page.load(Twinkle.block.callback.taguserpage);
 	}
@@ -1546,13 +1546,13 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate(e) {
 		}
 		Morebits.simpleWindow.setButtonsEnabled(false);
 		Morebits.status.init(e.target);
-		var unblockStatusElement = new Morebits.status('执行解除封禁');
+		const unblockStatusElement = new Morebits.status('执行解除封禁');
 		unblockoptions.action = 'unblock';
 		unblockoptions.user = relevantUserName;
 		// execute unblock
 		unblockoptions.tags = Twinkle.changeTags;
 		unblockoptions.token = mw.user.tokens.get('csrfToken');
-		var unblockMbApi = new Morebits.wiki.api('执行解除封禁', unblockoptions, function () {
+		const unblockMbApi = new Morebits.wiki.api('执行解除封禁', unblockoptions, function () {
 			unblockStatusElement.info('完成');
 		});
 		unblockMbApi.post();
@@ -1562,12 +1562,12 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate(e) {
 	}
 };
 Twinkle.block.callback.taguserpage = function twinkleblockCallbackTagUserpage(pageobj) {
-	var params = pageobj.getCallbackParameters();
-	var statelem = pageobj.getStatusElement();
+	const params = pageobj.getCallbackParameters();
+	const statelem = pageobj.getStatusElement();
 	if (params.actiontype.indexOf('tag') > -1) {
-		var tags = [];
+		const tags = [];
 		params.tag.forEach(function (tag) {
-			var tagtext = '{{' + tag;
+			let tagtext = '{{' + tag;
 			switch (tag) {
 				case 'Blocked user':
 					break;
@@ -1597,7 +1597,7 @@ Twinkle.block.callback.taguserpage = function twinkleblockCallbackTagUserpage(pa
 			tagtext += '}}';
 			tags.push(tagtext);
 		});
-		var text = tags.join('\n');
+		let text = tags.join('\n');
 		if (params.category) {
 			text += '\n[[Category:' + params.category.trim() + '的用户分身]]';
 		}
@@ -1614,8 +1614,8 @@ Twinkle.block.callback.taguserpage = function twinkleblockCallbackTagUserpage(pa
 	}
 };
 Twinkle.block.callback.protectuserpage = function twinkleblockCallbackProtectUserpage(pageobj) {
-	var params = pageobj.getCallbackParameters();
-	var statelem = pageobj.getStatusElement();
+	const params = pageobj.getCallbackParameters();
+	const statelem = pageobj.getStatusElement();
 	if (params.actiontype.indexOf('protect') > -1) {
 		if (pageobj.exists()) {
 			pageobj.setEditProtection('sysop', 'indefinite');
@@ -1639,8 +1639,8 @@ Twinkle.block.callback.issue_template = function twinkleblockCallbackIssueTempla
 		new Morebits.status('信息', '由于封禁目标为IP段，加入封禁模板已略过', 'warn');
 		return;
 	}
-	var userTalkPage = 'User_talk:' + relevantUserName;
-	var params = $.extend(formData, {
+	const userTalkPage = 'User_talk:' + relevantUserName;
+	const params = $.extend(formData, {
 		messageData: Twinkle.block.blockPresetsInfo[formData.template],
 		reason: Twinkle.block.field_template_options.block_reason,
 		disabletalk: Twinkle.block.field_template_options.notalk
@@ -1651,28 +1651,28 @@ Twinkle.block.callback.issue_template = function twinkleblockCallbackIssueTempla
 	params.template = params.template.split(':', 1)[0];
 	Morebits.wiki.actionCompleted.redirect = userTalkPage;
 	Morebits.wiki.actionCompleted.notice = '完成，将在几秒后加载用户讨论页';
-	var qiuwen_page = new Morebits.wiki.page(userTalkPage, '用户讨论页修改');
+	const qiuwen_page = new Morebits.wiki.page(userTalkPage, '用户讨论页修改');
 	qiuwen_page.setCallbackParameters(params);
 	qiuwen_page.setFollowRedirect(true);
 	qiuwen_page.load(Twinkle.block.callback.main);
 };
 Twinkle.block.callback.closeRequest = function twinkleblockCallbackCloseRequest(vipPage) {
-	var params = vipPage.getCallbackParameters();
-	var text = vipPage.getPageText();
-	var statusElement = vipPage.getStatusElement();
-	var userName = relevantUserName;
-	var expiryText = Morebits.string.formatTime(params.expiry);
-	var comment = '{{Blocked|' + (Morebits.string.isInfinity(params.expiry) ? 'indef' : expiryText) + '}}。';
-	var requestList = text.split(/(?=\n===.+===\s*\n)/);
-	var found = false;
-	var hidename = false;
-	var vipRe = new RegExp('===\\s*{{\\s*[Vv]andal\\s*\\|\\s*(1\\s*=\\s*)?' + Morebits.pageNameRegex(userName) + '\\s*(\\|\\s*hidename\\s*=[^|]+)?}}\\s*===', 'm');
-	for (var i = 1; i < requestList.length; i++) {
+	const params = vipPage.getCallbackParameters();
+	let text = vipPage.getPageText();
+	const statusElement = vipPage.getStatusElement();
+	const userName = relevantUserName;
+	const expiryText = Morebits.string.formatTime(params.expiry);
+	const comment = '{{Blocked|' + (Morebits.string.isInfinity(params.expiry) ? 'indef' : expiryText) + '}}。';
+	const requestList = text.split(/(?=\n===.+===\s*\n)/);
+	let found = false;
+	let hidename = false;
+	const vipRe = new RegExp('===\\s*{{\\s*[Vv]andal\\s*\\|\\s*(1\\s*=\\s*)?' + Morebits.pageNameRegex(userName) + '\\s*(\\|\\s*hidename\\s*=[^|]+)?}}\\s*===', 'm');
+	for (let i = 1; i < requestList.length; i++) {
 		if (vipRe.exec(requestList[i])) {
 			hidename = /\|\s*hidename\s*=[^|]+/.test(requestList[i]);
 			requestList[i] = requestList[i].trimRight();
 
-			var newText = requestList[i].replace(/^(\*\s*处理：)[ \t]*(<!-- 非管理員僅可標記已執行的封禁，針對提報的意見請放在下一行 -->)?[ \t]*$/m, '$1' + comment + '--~~' + '~~');
+			let newText = requestList[i].replace(/^(\*\s*处理：)[ \t]*(<!-- 非管理員僅可標記已執行的封禁，針對提報的意見請放在下一行 -->)?[ \t]*$/m, '$1' + comment + '--~~' + '~~');
 			if (requestList[i] === newText) {
 
 				newText = requestList[i] + '\n* 处理：' + comment + '--~~' + '~~';
@@ -1687,7 +1687,7 @@ Twinkle.block.callback.closeRequest = function twinkleblockCallbackCloseRequest(
 		return;
 	}
 	text = requestList.join('');
-	var summary;
+	let summary;
 	if (hidename) {
 		summary = '标记为已处理';
 	} else {
@@ -1704,8 +1704,8 @@ Twinkle.block.callback.closeRequest = function twinkleblockCallbackCloseRequest(
 	vipPage.save();
 };
 Twinkle.block.callback.getBlockNoticeWikitext = function (params, nosign) {
-	var text = '{{',
-		settings = Twinkle.block.blockPresetsInfo[params.template];
+	let text = '{{';
+	const settings = Twinkle.block.blockPresetsInfo[params.template];
 	if (!settings.nonstandard) {
 		text += 'subst:' + params.template;
 		if (params.article && settings.pageParam) {
@@ -1733,11 +1733,11 @@ Twinkle.block.callback.getBlockNoticeWikitext = function (params, nosign) {
 		// Building the template, however, takes a fair bit of logic
 		if (params.partial) {
 			if (params.pagerestrictions.length || params.namespacerestrictions.length) {
-				var makeSentence = function (array) {
+				const makeSentence = function (array) {
 					if (array.length < 3) {
 						return array.join('和');
 					}
-					var last = array.pop();
+					const last = array.pop();
 					return array.join('、') + '和' + last;
 				};
 				text += '|area=某些';
@@ -1749,7 +1749,7 @@ Twinkle.block.callback.getBlockNoticeWikitext = function (params, nosign) {
 				}
 				if (params.namespacerestrictions.length) {
 					// 1 => Talk, 2 => User, etc.
-					var namespaceNames = params.namespacerestrictions.map(function (id) {
+					const namespaceNames = params.namespacerestrictions.map(function (id) {
 						return menuFormattedNamespaces[id];
 					});
 					text += '[[Qiuwen:命名空间|命名空间]]（' + makeSentence(namespaceNames) + '）';
@@ -1781,18 +1781,18 @@ Twinkle.block.callback.getBlockNoticeWikitext = function (params, nosign) {
 	return text;
 };
 Twinkle.block.callback.main = function twinkleblockcallbackMain(pageobj) {
-	var params = pageobj.getCallbackParameters(),
+	const params = pageobj.getCallbackParameters(),
 		date = new Morebits.date(pageobj.getLoadTime()),
-		messageData = params.messageData,
-		text;
+		messageData = params.messageData;
+	let text;
 	params.indefinite = Morebits.string.isInfinity(params.expiry);
 	if (Twinkle.getPref('blankTalkpageOnIndefBlock') && params.template !== 'uw-lblock' && params.indefinite) {
 		Morebits.status.info('信息', '根据参数设置清空讨论页并为日期创建新二级标题');
 		text = date.monthHeader() + '\n';
 	} else {
 		text = pageobj.getPageText();
-		var dateHeaderRegex = date.monthHeaderRegex(),
-			dateHeaderRegexLast,
+		const dateHeaderRegex = date.monthHeaderRegex();
+		let dateHeaderRegexLast,
 			dateHeaderRegexResult;
 		while ((dateHeaderRegexLast = dateHeaderRegex.exec(text)) !== null) {
 			dateHeaderRegexResult = dateHeaderRegexLast;
@@ -1800,7 +1800,7 @@ Twinkle.block.callback.main = function twinkleblockcallbackMain(pageobj) {
 		// If dateHeaderRegexResult is null then lastHeaderIndex is never checked. If it is not null but
 		// \n== is not found, then the date header must be at the very start of the page. lastIndexOf
 		// returns -1 in this case, so lastHeaderIndex gets set to 0 as desired.
-		var lastHeaderIndex = text.lastIndexOf('\n==') + 1;
+		const lastHeaderIndex = text.lastIndexOf('\n==') + 1;
 		if (text.length > 0) {
 			text += '\n\n';
 		}
@@ -1813,7 +1813,7 @@ Twinkle.block.callback.main = function twinkleblockcallbackMain(pageobj) {
 	text += Twinkle.block.callback.getBlockNoticeWikitext(params);
 
 	// build the edit summary
-	var summary = '封禁通知：';
+	let summary = '封禁通知：';
 	summary += messageData.summary || messageData.reason || params.reason;
 	if (messageData.suppressArticleInSummary !== true && params.article) {
 		summary += '，于[[' + params.article + ']]';
@@ -1825,11 +1825,11 @@ Twinkle.block.callback.main = function twinkleblockcallbackMain(pageobj) {
 	pageobj.save();
 };
 Twinkle.block.callback.main_flow = function twinkleblockcallbackMain(flowobj) {
-	var params = flowobj.getCallbackParameters();
+	const params = flowobj.getCallbackParameters();
 	params.indefinite = /indef|infinity|never|\*|max/.test(params.expiry);
 	params.expiry = typeof params.template_expiry !== 'undefined' ? params.template_expiry : params.expiry;
-	var title = '封禁通知';
-	var content = Twinkle.block.callback.getBlockNoticeWikitext(params, true);
+	const title = '封禁通知';
+	const content = Twinkle.block.callback.getBlockNoticeWikitext(params, true);
 	flowobj.setTopic(title);
 	flowobj.setContent(content);
 	flowobj.newTopic();

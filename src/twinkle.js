@@ -38,7 +38,7 @@
 if (!Morebits.userIsInGroup('autoconfirmed') && !Morebits.userIsInGroup('confirmed')) {
 	return;
 }
-var Twinkle = {};
+const Twinkle = {};
 window.Twinkle = Twinkle; // allow global access
 
 /**
@@ -265,29 +265,29 @@ Twinkle.getPref = function twinkleGetPref(name) {
  */
 Twinkle.addPortlet = function (navigation, id, text, type, nextnodeid) {
 	// sanity checks, and get required DOM nodes
-	var root = document.getElementById(navigation) || document.querySelector(navigation);
+	const root = document.getElementById(navigation) || document.querySelector(navigation);
 	if (!root) {
 		return null;
 	}
-	var item = document.getElementById(id);
+	const item = document.getElementById(id);
 	if (item) {
 		if (item.parentNode && item.parentNode === root) {
 			return item;
 		}
 		return null;
 	}
-	var nextnode;
+	let nextnode;
 	if (nextnodeid) {
 		nextnode = document.getElementById(nextnodeid);
 	}
 
 	// verify/normalize input
-	var skin = mw.config.get('skin');
+	const skin = mw.config.get('skin');
 	if (skin !== 'vector' && skin !== 'vector-2022' || navigation !== 'left-navigation' && navigation !== 'right-navigation') {
 		type = null; // menu supported only in vector's #left-navigation & #right-navigation
 	}
 
-	var outerNavClass, innerDivClass;
+	let outerNavClass, innerDivClass;
 	switch (skin) {
 		case 'vector':
 		case 'vector-2022':
@@ -313,7 +313,7 @@ Twinkle.addPortlet = function (navigation, id, text, type, nextnodeid) {
 	}
 
 	// Build the DOM elements.
-	var outerNav, heading;
+	let outerNav, heading;
 	if (skin === 'vector-2022') {
 		outerNav = document.createElement('div');
 		heading = document.createElement('label');
@@ -331,7 +331,7 @@ Twinkle.addPortlet = function (navigation, id, text, type, nextnodeid) {
 		root.appendChild(outerNav);
 	}
 	heading.id = id + '-label';
-	var ul = document.createElement('ul');
+	const ul = document.createElement('ul');
 	if (skin === 'vector' || skin === 'vector-2022') {
 		ul.className = 'vector-menu-content-list';
 		heading.className = 'vector-menu-heading';
@@ -339,7 +339,7 @@ Twinkle.addPortlet = function (navigation, id, text, type, nextnodeid) {
 		// add invisible checkbox to keep menu open when clicked
 		// similar to the p-cactions ("More") menu
 		if (outerNavClass.indexOf('vector-menu-dropdown') !== -1) {
-			var chkbox = document.createElement('input');
+			const chkbox = document.createElement('input');
 			chkbox.className = 'vector-menu-checkbox';
 			chkbox.setAttribute('type', 'checkbox');
 			chkbox.setAttribute('aria-labelledby', id + '-label');
@@ -347,10 +347,10 @@ Twinkle.addPortlet = function (navigation, id, text, type, nextnodeid) {
 
 			// Vector gets its title in a span; all others except
 			// gongbi have no title, and it has no span
-			var span = document.createElement('span');
+			const span = document.createElement('span');
 			span.appendChild(document.createTextNode(text));
 			heading.appendChild(span);
-			var a = document.createElement('a');
+			const a = document.createElement('a');
 			a.href = '#';
 			$(a).on('click', function (e) {
 				e.preventDefault();
@@ -363,7 +363,7 @@ Twinkle.addPortlet = function (navigation, id, text, type, nextnodeid) {
 	}
 	outerNav.appendChild(heading);
 	if (innerDivClass) {
-		var innerDiv = document.createElement('div');
+		const innerDiv = document.createElement('div');
 		innerDiv.className = innerDivClass;
 		innerDiv.appendChild(ul);
 		outerNav.appendChild(innerDiv);
@@ -383,7 +383,7 @@ Twinkle.addPortletLink = function (task, text, id, tooltip) {
 	if (Twinkle.getPref('portletArea') !== null) {
 		Twinkle.addPortlet(Twinkle.getPref('portletArea'), Twinkle.getPref('portletId'), Twinkle.getPref('portletName'), Twinkle.getPref('portletType'), Twinkle.getPref('portletNext'));
 	}
-	var link = mw.util.addPortletLink(Twinkle.getPref('portletId'), typeof task === 'string' ? task : '#', text, id, tooltip);
+	const link = mw.util.addPortletLink(Twinkle.getPref('portletId'), typeof task === 'string' ? task : '#', text, id, tooltip);
 	$('.client-js .skin-vector #p-cactions').css('margin-right', 'initial');
 	if (typeof task === 'function') {
 		$(link).find('a').on('click', function (ev) {
@@ -401,7 +401,7 @@ Twinkle.addPortletLink = function (task, text, id, tooltip) {
  * **************** General initialization code ****************
  */
 
-var scriptpathbefore = mw.util.wikiScript('index') + '?title=',
+const scriptpathbefore = mw.util.wikiScript('index') + '?title=',
 	scriptpathafter = '&action=raw&ctype=text/javascript&happy=yes';
 
 // Retrieve the user's Twinkle preferences
@@ -419,13 +419,13 @@ $.ajax({
 	}
 
 	// Twinkle options are basically a JSON object with some comments. Strip those:
-	var optionsText_nowiki = optionsText.replace(/^\s+|^\n$|\/(\*|\/)\s+?<\/?nowiki>\s+?(\*\/)?\n?/g, '');
-	var optionsText_nocomment = optionsText_nowiki.replace(/(?:^(?:\/\/[^\n]*\n)*\n*|(?:\/\/[^\n]*(?:\n|$))*$)/g, '');
+	const optionsText_nowiki = optionsText.replace(/^\s+|^\n$|\/(\*|\/)\s+?<\/?nowiki>\s+?(\*\/)?\n?/g, '');
+	const optionsText_nocomment = optionsText_nowiki.replace(/(?:^(?:\/\/[^\n]*\n)*\n*|(?:\/\/[^\n]*(?:\n|$))*$)/g, '');
 
 	// First version of options had some boilerplate code to make it eval-able -- strip that too. This part may become obsolete down the line.
-	var optionsText_nowindow = optionsText_nocomment.replace(/(?:^window.Twinkle.prefs = |;\n*$)/g, '');
+	const optionsText_nowindow = optionsText_nocomment.replace(/(?:^window.Twinkle.prefs = |;\n*$)/g, '');
 	try {
-		var options = JSON.parse(optionsText_nowindow);
+		const options = JSON.parse(optionsText_nowindow);
 		if (options) {
 			if (options.twinkle || options.friendly) {
 				// Old preferences format
@@ -451,7 +451,7 @@ $.ajax({
 Twinkle.load = function () {
 	// Don't activate on special pages other than those listed here, so
 	// that others load faster, especially the watchlist.
-	var activeSpecialPageList = [ 'Block', 'Contributions', 'AbuseLog', 'Recentchanges', 'Recentchangeslinked' ]; // wgRelevantUserName defined for non-sysops on Special:Block
+	let activeSpecialPageList = [ 'Block', 'Contributions', 'AbuseLog', 'Recentchanges', 'Recentchangeslinked' ]; // wgRelevantUserName defined for non-sysops on Special:Block
 	if (Morebits.userIsSysop) {
 		activeSpecialPageList = activeSpecialPageList.concat([ 'DeletedContributions', 'Prefixindex', 'BrokenRedirects' ]);
 	}
@@ -486,7 +486,7 @@ Twinkle.load = function () {
 	}
 
 	// Hide the lingering space if the TW menu is empty
-	var isVector = mw.config.get('skin') === 'vector' || mw.config.get('skin') === 'vector-2022';
+	const isVector = mw.config.get('skin') === 'vector' || mw.config.get('skin') === 'vector-2022';
 	if (isVector && Twinkle.getPref('portletType') === 'menu' && $('#p-twinkle').length === 0) {
 		$('#p-cactions').css('margin-right', 'initial');
 	}
@@ -497,7 +497,7 @@ Twinkle.makeFindSourcesDiv = function makeSourcesDiv(divID) {
 		return;
 	}
 	if (!Twinkle.findSources) {
-		var parser = new Morebits.wiki.preview($(divID)[0]);
+		const parser = new Morebits.wiki.preview($(divID)[0]);
 		parser.beginRender('({{Find sources|' + Morebits.pageNameNorm + '}})', 'QW:AFD').then(function () {
 			// Save for second-time around
 			Twinkle.findSources = parser.previewbox.innerHTML;
@@ -517,7 +517,7 @@ Twinkle.sortByNamespace = function (first, second) {
 
 // Used in batch listings to link to the page in question with >
 Twinkle.generateArrowLinks = function (checkbox) {
-	var link = Morebits.htmlNode('a', ' >');
+	const link = Morebits.htmlNode('a', ' >');
 	link.setAttribute('class', 'tw-arrowpage-link');
 	link.setAttribute('href', mw.util.getUrl(checkbox.value));
 	link.setAttribute('target', '_blank');
@@ -526,8 +526,8 @@ Twinkle.generateArrowLinks = function (checkbox) {
 
 // Used in unlink listings to link the page title
 Twinkle.generateBatchPageLinks = function (checkbox) {
-	var $checkbox = $(checkbox);
-	var link = Morebits.htmlNode('a', $checkbox.val());
+	const $checkbox = $(checkbox);
+	const link = Morebits.htmlNode('a', $checkbox.val());
 	link.setAttribute('class', 'tw-batchpage-link');
 	link.setAttribute('href', mw.util.getUrl($checkbox.val()));
 	link.setAttribute('target', '_blank');

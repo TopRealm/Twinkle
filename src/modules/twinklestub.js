@@ -32,13 +32,13 @@ Twinkle.stub = function friendlytag() {
 	}
 };
 Twinkle.stub.callback = function friendlytagCallback() {
-	var Window = new Morebits.simpleWindow(630, Twinkle.stub.mode === 'article' ? 450 : 400);
+	const Window = new Morebits.simpleWindow(630, Twinkle.stub.mode === 'article' ? 450 : 400);
 	Window.setScriptName('Twinkle');
 	Window.addFooterLink('小作品说明', 'Qiuwen:小作品');
 	Window.addFooterLink('参数设置', 'H:TW/PREF#小作品');
 	Window.addFooterLink('帮助文档', 'H:TW/DOC#小作品');
 	Window.addFooterLink('问题反馈', 'HT:TW');
-	var form = new Morebits.quickForm(Twinkle.stub.callback.evaluate);
+	const form = new Morebits.quickForm(Twinkle.stub.callback.evaluate);
 	if (document.getElementsByClassName('patrollink').length) {
 		form.append({
 			type: 'checkbox',
@@ -84,30 +84,30 @@ Twinkle.stub.callback = function friendlytagCallback() {
 	form.append({
 		type: 'submit'
 	});
-	var result = form.render();
+	const result = form.render();
 	Window.setContent(result);
 	Window.display();
 	if (Twinkle.stub.mode === '条目' || Twinkle.stub.mode === '條目') {
 		// fake a change event on the sort dropdown, to initialize the tag list
-		var evt = document.createEvent('Event');
+		const evt = document.createEvent('Event');
 		evt.initEvent('change', true, true);
 		result.sortorder.dispatchEvent(evt);
 	}
 };
 Twinkle.stub.checkedTags = [];
 Twinkle.stub.updateSortOrder = function (e) {
-	var sortorder = e.target.value;
+	const sortorder = e.target.value;
 	Twinkle.stub.checkedTags = e.target.form.getChecked('articleTags');
 	if (!Twinkle.stub.checkedTags) {
 		Twinkle.stub.checkedTags = [];
 	}
-	var container = new Morebits.quickForm.element({
+	const container = new Morebits.quickForm.element({
 		type: 'fragment'
 	});
 
 	// function to generate a checkbox, with appropriate subgroup if needed
-	var makeCheckbox = function (tag, description) {
-		var checkbox = {
+	const makeCheckbox = function (tag, description) {
+		const checkbox = {
 			value: tag,
 			label: '{{' + tag + '}}: ' + description
 		};
@@ -123,7 +123,7 @@ Twinkle.stub.updateSortOrder = function (e) {
 			type: 'header',
 			label: '自定义模板'
 		});
-		var customcheckboxes = [];
+		const customcheckboxes = [];
 		$.each(Twinkle.getPref('customStubList'), function (_, item) {
 			customcheckboxes.push(makeCheckbox(item.value, item.label));
 		});
@@ -137,10 +137,10 @@ Twinkle.stub.updateSortOrder = function (e) {
 	// categorical sort order
 	if (sortorder === 'cat') {
 		// function to iterate through the tags and create a checkbox for each one
-		var doCategoryCheckboxes = function (subdiv, array) {
-			var checkboxes = [];
+		const doCategoryCheckboxes = function (subdiv, array) {
+			const checkboxes = [];
 			$.each(array, function (k, tag) {
-				var description = Twinkle.stub.article.tags[tag];
+				const description = Twinkle.stub.article.tags[tag];
 				checkboxes.push(makeCheckbox(tag, description));
 			});
 			subdiv.append({
@@ -149,7 +149,7 @@ Twinkle.stub.updateSortOrder = function (e) {
 				list: checkboxes
 			});
 		};
-		var i = 0;
+		let i = 0;
 		// go through each category and sub-category and append lists of checkboxes
 		$.each(Twinkle.stub.article.tagCategories, function (title, content) {
 			container.append({
@@ -157,7 +157,7 @@ Twinkle.stub.updateSortOrder = function (e) {
 				id: 'tagHeader' + i,
 				label: title
 			});
-			var subdiv = container.append({
+			const subdiv = container.append({
 				type: 'div',
 				id: 'tagSubdiv' + i++
 			});
@@ -175,7 +175,7 @@ Twinkle.stub.updateSortOrder = function (e) {
 		});
 		// alphabetical sort order
 	} else {
-		var checkboxes = [];
+		const checkboxes = [];
 		$.each(Twinkle.stub.article.tags, function (tag, description) {
 			checkboxes.push(makeCheckbox(tag, description));
 		});
@@ -185,8 +185,8 @@ Twinkle.stub.updateSortOrder = function (e) {
 			list: checkboxes
 		});
 	}
-	var $workarea = $(e.target.form).find('div#tagWorkArea');
-	var rendered = container.render();
+	const $workarea = $(e.target.form).find('div#tagWorkArea');
+	const rendered = container.render();
 	$workarea.empty().append(rendered);
 
 	// style adjustments
@@ -202,8 +202,8 @@ Twinkle.stub.updateSortOrder = function (e) {
 
 	// add a link to each template's description page
 	$.each(Morebits.quickForm.getElements(e.target.form, 'articleTags'), function (index, checkbox) {
-		var $checkbox = $(checkbox);
-		var link = Morebits.htmlNode('a', '>');
+		const $checkbox = $(checkbox);
+		const link = Morebits.htmlNode('a', '>');
 		link.setAttribute('class', 'tag-template-link');
 		link.setAttribute('href', mw.util.getUrl('Template:' + Morebits.string.toUpperCaseFirstChar(checkbox.values)));
 		link.setAttribute('target', '_blank');
@@ -275,17 +275,18 @@ Twinkle.stub.article.tagCategories = {
 
 Twinkle.stub.callbacks = {
 	main: function (pageobj) {
-		var params = pageobj.getCallbackParameters(),
-			tagRe,
+		const params = pageobj.getCallbackParameters();
+		let tagRe,
 			summaryText = '加入',
-			tags = [],
-			groupableTags = [],
-			i,
-			totalTags;
+			tags = [];
+		const groupableTags = [];
+		let i;
+		// eslint-disable-next-line prefer-const
+		let totalTags;
 
 		// Remove tags that become superfluous with this action
-		var pageText = pageobj.getPageText();
-		var addTag = function friendlytagAddTag(tagIndex, tagName) {
+		let pageText = pageobj.getPageText();
+		const addTag = function friendlytagAddTag(tagIndex, tagName) {
 			pageText += '\n{{' + tagName + '}}';
 			if (tagIndex > 0) {
 				if (tagIndex === totalTags - 1) {
@@ -326,8 +327,8 @@ Twinkle.stub.callbacks = {
 	}
 };
 Twinkle.stub.callback.evaluate = function friendlytagCallbackEvaluate(e) {
-	var form = e.target;
-	var params = {};
+	const form = e.target;
+	const params = {};
 	if (form.patrolPage) {
 		params.patrol = form.patrolPage.checked;
 	}
@@ -352,7 +353,7 @@ Twinkle.stub.callback.evaluate = function friendlytagCallbackEvaluate(e) {
 	if (Twinkle.stub.mode === '重定向') {
 		Morebits.wiki.actionCompleted.followRedirect = false;
 	}
-	var qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'), '正在标记' + Twinkle.stub.mode);
+	const qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'), '正在标记' + Twinkle.stub.mode);
 	qiuwen_page.setCallbackParameters(params);
 	switch (Twinkle.stub.mode) {
 		case '条目':

@@ -21,11 +21,11 @@
  */
 
 Twinkle.arv = function twinklearv() {
-	var username = mw.config.get('wgRelevantUserName');
+	const username = mw.config.get('wgRelevantUserName');
 	if (!username || username === mw.config.get('wgUserName')) {
 		return;
 	}
-	var windowTitle = mw.util.isIPAddress(username) ? '报告IP地址给管理员' : '报告用户给管理员';
+	const windowTitle = mw.util.isIPAddress(username) ? '报告IP地址给管理员' : '报告用户给管理员';
 	Twinkle.addPortletLink(function () {
 		Twinkle.arv.callback(username);
 	}, '告状', 'tw-arv', windowTitle);
@@ -35,7 +35,7 @@ Twinkle.arv.callback = function (uid) {
 		alert('不可以告自己的状哦！');
 		return;
 	}
-	var Window = new Morebits.simpleWindow(600, 500);
+	const Window = new Morebits.simpleWindow(600, 500);
 	Window.setTitle('报告用户给管理员'); // Backronym
 	Window.setScriptName('Twinkle');
 	Window.addFooterLink('AIV指引', 'QW:GAIV');
@@ -44,8 +44,8 @@ Twinkle.arv.callback = function (uid) {
 	Window.addFooterLink('参数设置', 'H:TW/PREF#arv');
 	Window.addFooterLink('帮助文档', 'H:TW/DOC#arv');
 	Window.addFooterLink('问题反馈', 'HT:TW');
-	var form = new Morebits.quickForm(Twinkle.arv.callback.evaluate);
-	var categories = form.append({
+	const form = new Morebits.quickForm(Twinkle.arv.callback.evaluate);
+	const categories = form.append({
 		type: 'select',
 		name: 'category',
 		label: '选择报告类型：',
@@ -86,12 +86,12 @@ Twinkle.arv.callback = function (uid) {
 		name: 'uid',
 		value: uid
 	});
-	var result = form.render();
+	const result = form.render();
 	Window.setContent(result);
 	Window.display();
 
 	// Check if the user is blocked, update notice
-	var query = {
+	const query = {
 		action: 'query',
 		list: 'blocks',
 		bkprop: 'range|flags',
@@ -99,11 +99,11 @@ Twinkle.arv.callback = function (uid) {
 	};
 	query.bkusers = uid;
 	new Morebits.wiki.api('检查用户的封禁状态', query, function (apiobj) {
-		var blocklist = apiobj.getResponse().query.blocks;
+		const blocklist = apiobj.getResponse().query.blocks;
 		if (blocklist.length) {
 			// If an IP is blocked *and* rangeblocked, only use whichever is more recent
-			var block = blocklist[0];
-			var message = '此账户已经被' + (block.partial ? '部分' : '');
+			const block = blocklist[0];
+			let message = '此账户已经被' + (block.partial ? '部分' : '');
 			// Start and end differ, range blocked
 			message += block.rangestart !== block.rangeend ? '段封禁。' : '封禁。';
 			if (block.partial) {
@@ -115,15 +115,15 @@ Twinkle.arv.callback = function (uid) {
 	}).post();
 
 	// We must init the
-	var evt = document.createEvent('Event');
+	const evt = document.createEvent('Event');
 	evt.initEvent('change', true, true);
 	result.category.dispatchEvent(evt);
 };
 Twinkle.arv.callback.changeCategory = function (e) {
-	var value = e.target.value;
-	var root = e.target.form;
-	var old_area = Morebits.quickForm.getElements(root, 'work_area')[0];
-	var work_area = null;
+	const value = e.target.value;
+	const root = e.target.form;
+	const old_area = Morebits.quickForm.getElements(root, 'work_area')[0];
+	let work_area = null;
 	switch (value) {
 		case 'aiv':
 			/* falls through */
@@ -140,8 +140,8 @@ Twinkle.arv.callback.changeCategory = function (e) {
 				tooltip: '如不希望让报告链接到页面，请留空',
 				value: mw.util.getParamValue('vanarticle') || '',
 				event: function (e) {
-					var value = e.target.value;
-					var root = e.target.form;
+					const value = e.target.value;
+					const root = e.target.form;
 					if (value === '') {
 						root.badid.disabled = root.goodid.disabled = true;
 					} else {
@@ -158,8 +158,8 @@ Twinkle.arv.callback.changeCategory = function (e) {
 				value: mw.util.getParamValue('vanarticlerevid') || '',
 				disabled: !mw.util.getParamValue('vanarticle'),
 				event: function (e) {
-					var value = e.target.value;
-					var root = e.target.form;
+					const value = e.target.value;
+					const root = e.target.form;
 					root.goodid.disabled = value === '';
 				}
 			});
@@ -305,19 +305,19 @@ Twinkle.arv.callback.changeCategory = function (e) {
 	}
 };
 Twinkle.arv.callback.evaluate = function (e) {
-	var form = e.target;
-	var reason = '';
-	var comment = '';
+	const form = e.target;
+	let reason = '';
+	let comment = '';
 	if (form.reason) {
 		comment = form.reason.value;
 	}
-	var uid = form.uid.value;
-	var types;
+	const uid = form.uid.value;
+	let types;
 	switch (form.category.value) {
 		// Report user for vandalism
 		case 'aiv':
 			/* falls through */
-		default:
+		default: {
 			types = form.getChecked('arvtype');
 			if (!types.length && comment === '') {
 				alert('必须指定一个理由！');
@@ -365,12 +365,12 @@ Twinkle.arv.callback.evaluate = function (e) {
 			Morebits.status.init(form);
 			Morebits.wiki.actionCompleted.redirect = 'Qiuwen:当前的破坏';
 			Morebits.wiki.actionCompleted.notice = '提报完成';
-			var aivPage = new Morebits.wiki.page('Qiuwen:当前的破坏', '处理VIP请求');
+			const aivPage = new Morebits.wiki.page('Qiuwen:当前的破坏', '处理VIP请求');
 			aivPage.setPageSection(1);
 			aivPage.setFollowRedirect(true);
 			aivPage.load(function () {
-				var text = aivPage.getPageText();
-				var $aivLink = '<a target="_blank" href="/wiki/QW:AIV">QW:AIV</a>';
+				const text = aivPage.getPageText();
+				const $aivLink = '<a target="_blank" href="/wiki/QW:AIV">QW:AIV</a>';
 
 				// check if user has already been reported
 				if (new RegExp('\\{\\{\\s*(?:(?:[Ii][Pp])?[Vv]andal|[Uu]serlinks)\\s*\\|\\s*(?:1=)?\\s*' + Morebits.string.escapeRegExp(uid) + '\\s*\\}\\}').test(text)) {
@@ -389,9 +389,10 @@ Twinkle.arv.callback.evaluate = function (e) {
 
 			// Report inappropriate username
 			// **not** i18n to Chinese as we pre-verify usernames
-		case 'username':
+		}
+		case 'username': {
 			types = form.getChecked('arvtype').map(Morebits.string.toLowerCaseFirstChar);
-			var hasShared = types.indexOf('shared') > -1;
+			const hasShared = types.indexOf('shared') > -1;
 			if (hasShared) {
 				types.splice(types.indexOf('shared'), 1);
 			}
@@ -400,7 +401,7 @@ Twinkle.arv.callback.evaluate = function (e) {
 			} else {
 				types = [ types.slice(0, -1).join(', '), types.slice(-1) ].join(' and ');
 			}
-			var article = 'a';
+			let article = 'a';
 			if (/[aeiouwyh]/.test(types[0] || '')) {
 				// non 100% correct, but whatever, including 'h' for Cockney
 				article = 'an';
@@ -420,15 +421,15 @@ Twinkle.arv.callback.evaluate = function (e) {
 			Morebits.status.init(form);
 			Morebits.wiki.actionCompleted.redirect = 'Qiuwen:Usernames for administrator attention';
 			Morebits.wiki.actionCompleted.notice = 'Reporting complete';
-			var uaaPage = new Morebits.wiki.page('Qiuwen:Usernames for administrator attention', 'Processing UAA request');
+			const uaaPage = new Morebits.wiki.page('Qiuwen:Usernames for administrator attention', 'Processing UAA request');
 			uaaPage.setFollowRedirect(true);
 			uaaPage.load(function () {
-				var text = uaaPage.getPageText();
+				const text = uaaPage.getPageText();
 
 				// check if user has already been reported
 				if (new RegExp('\\{\\{\\s*user-uaa\\s*\\|\\s*(1\\s*=\\s*)?' + Morebits.string.escapeRegExp(uid) + '\\s*(\\||\\})').test(text)) {
 					uaaPage.getStatusElement().error('User is already listed.');
-					var $uaaLink = '<a target="_blank" href="/wiki/QW:UAA">QW:UAA</a>';
+					const $uaaLink = '<a target="_blank" href="/wiki/QW:UAA">QW:UAA</a>';
 					Morebits.status.printUserText(reason, 'The comments you typed are provided below, in case you wish to manually post them under the existing report for this user at ' + $uaaLink + ':');
 					return;
 				}
@@ -443,14 +444,15 @@ Twinkle.arv.callback.evaluate = function (e) {
 			break;
 
 			// QW:SPI
+		}
 		case 'sock':
 			/* falls through */
-		case 'puppet':
-			var sockParameters = {
+		case 'puppet': {
+			const sockParameters = {
 				evidence: form.evidence.value.trim(),
 				checkuser: form.checkuser.checked
 			};
-			var puppetReport = form.category.value === 'puppet';
+			const puppetReport = form.category.value === 'puppet';
 			if (puppetReport && !form.sockmaster.value.trim()) {
 				alert('未指定主账户！');
 				return;
@@ -468,28 +470,29 @@ Twinkle.arv.callback.evaluate = function (e) {
 			break;
 
 			// not using, but keeping for reference
-		case 'an3':
-			var diffs = $.map($('input:checkbox[name=s_diffs]:checked', form), function (o) {
+		}
+		case 'an3': {
+			const diffs = $.map($('input:checkbox[name=s_diffs]:checked', form), function (o) {
 				return $(o).data('revinfo');
 			});
 			if (diffs.length < 3 && !confirm('You have selected fewer than three offending edits. Do you wish to make the report anyway?')) {
 				return;
 			}
-			var warnings = $.map($('input:checkbox[name=s_warnings]:checked', form), function (o) {
+			const warnings = $.map($('input:checkbox[name=s_warnings]:checked', form), function (o) {
 				return $(o).data('revinfo');
 			});
 			if (!warnings.length && !confirm('You have not selected any edits where you warned the offender. Do you wish to make the report anyway?')) {
 				return;
 			}
-			var resolves = $.map($('input:checkbox[name=s_resolves]:checked', form), function (o) {
+			const resolves = $.map($('input:checkbox[name=s_resolves]:checked', form), function (o) {
 				return $(o).data('revinfo');
 			});
-			var free_resolves = $('input[name=s_resolves_free]').val();
-			var an3_next = function (free_resolves) {
+			const free_resolves = $('input[name=s_resolves_free]').val();
+			const an3_next = function (free_resolves) {
 				if (!resolves.length && !free_resolves && !confirm('You have not selected any edits where you tried to resolve the issue. Do you wish to make the report anyway?')) {
 					return;
 				}
-				var an3Parameters = {
+				const an3Parameters = {
 					uid: uid,
 					page: form.page.value.trim(),
 					comment: form.comment.value.trim(),
@@ -503,9 +506,9 @@ Twinkle.arv.callback.evaluate = function (e) {
 				Twinkle.arv.processAN3(an3Parameters);
 			};
 			if (free_resolves) {
-				var query;
-				var diff, oldid;
-				var specialDiff = /Special:Diff\/(\d+)(?:\/(\S+))?/i.exec(free_resolves);
+				let query;
+				let diff, oldid;
+				const specialDiff = /Special:Diff\/(\d+)(?:\/(\S+))?/i.exec(free_resolves);
 				if (specialDiff) {
 					if (specialDiff[2]) {
 						oldid = specialDiff[1];
@@ -517,8 +520,8 @@ Twinkle.arv.callback.evaluate = function (e) {
 					diff = mw.util.getParamValue('diff', free_resolves);
 					oldid = mw.util.getParamValue('oldid', free_resolves);
 				}
-				var title = mw.util.getParamValue('title', free_resolves);
-				var diffNum = /^\d+$/.test(diff); // used repeatedly
+				const title = mw.util.getParamValue('title', free_resolves);
+				const diffNum = /^\d+$/.test(diff); // used repeatedly
 
 				// rvdiffto in prop=revisions is deprecated, but action=compare doesn't return
 				// timestamps so we can't rely on it unless necessary.
@@ -571,11 +574,11 @@ Twinkle.arv.callback.evaluate = function (e) {
 					}
 				}
 				new mw.Api().get(query).done(function (data) {
-					var page;
+					let page;
 					if (data.compare && data.compare.fromtitle === data.compare.totitle) {
 						page = data;
 					} else if (data.query) {
-						var pageid = data.query.pageids[0];
+						const pageid = data.query.pageids[0];
 						page = data.query.pages[pageid];
 					} else {
 						return;
@@ -588,23 +591,24 @@ Twinkle.arv.callback.evaluate = function (e) {
 				an3_next();
 			}
 			break;
+		}
 	}
 };
 Twinkle.arv.processSock = function (params) {
 	Morebits.wiki.addCheckpoint(); // prevent notification events from causing an erronous "action completed"
 
 	// prepare the SPI report
-	var text = '\n{{subst:SPI report|' + params.sockpuppets.map(function (sock, index) {
+	let text = '\n{{subst:SPI report|' + params.sockpuppets.map(function (sock, index) {
 		return index + 1 + '=' + sock;
 	}).join('|') + '\n|evidence=' + params.evidence + ' \n';
 	if (params.checkuser) {
 		text += '|checkuser=yes';
 	}
 	text += '}}';
-	var reportpage = 'Qiuwen:傀儡调查/' + params.uid;
+	const reportpage = 'Qiuwen:傀儡调查/' + params.uid;
 	Morebits.wiki.actionCompleted.redirect = reportpage;
 	Morebits.wiki.actionCompleted.notice = '提报完成';
-	var spiPage = new Morebits.wiki.page(reportpage, '拉取讨论页面');
+	const spiPage = new Morebits.wiki.page(reportpage, '拉取讨论页面');
 	spiPage.setFollowRedirect(true);
 	spiPage.setEditSummary('加入对[[Special:Contributions/' + params.uid + '|' + params.uid + ']]的新提报');
 	spiPage.setChangeTags(Twinkle.changeTags);
@@ -617,8 +621,8 @@ Twinkle.arv.processSock = function (params) {
 // no need to call this func as no an3 now, hence not i18n
 Twinkle.arv.processAN3 = function (params) {
 	// prepare the AN3 report
-	var minid;
-	for (var i = 0; i < params.diffs.length; ++i) {
+	let minid;
+	for (let i = 0; i < params.diffs.length; ++i) {
 		if (params.diffs[i].parentid && (!minid || params.diffs[i].parentid < minid)) {
 			minid = params.diffs[i].parentid;
 		}
@@ -638,16 +642,16 @@ Twinkle.arv.processAN3 = function (params) {
 		Morebits.wiki.addCheckpoint(); // prevent notification events from causing an erronous "action completed"
 
 		// In case an edit summary was revdel'd
-		var hasHiddenComment = function (rev) {
+		const hasHiddenComment = function (rev) {
 			if (!rev.comment && typeof rev.commenthidden === 'string') {
 				return '(comment hidden)';
 			}
 			return '"' + rev.comment + '"';
 		};
-		var orig;
+		let orig;
 		if (data.length) {
-			var sha1 = data[0].sha1;
-			for (var i = 1; i < data.length; ++i) {
+			const sha1 = data[0].sha1;
+			for (let i = 1; i < data.length; ++i) {
 				if (data[i].sha1 === sha1) {
 					orig = data[i];
 					break;
@@ -657,14 +661,14 @@ Twinkle.arv.processAN3 = function (params) {
 				orig = data[0];
 			}
 		}
-		var origtext = '';
+		let origtext = '';
 		if (orig) {
 			origtext = '{{diff2|' + orig.revid + '|' + orig.timestamp + '}} ' + hasHiddenComment(orig);
 		}
-		var grouped_diffs = {};
-		var parentid, lastid;
-		for (var j = 0; j < params.diffs.length; ++j) {
-			var cur = params.diffs[j];
+		const grouped_diffs = {};
+		let parentid, lastid;
+		for (let j = 0; j < params.diffs.length; ++j) {
+			const cur = params.diffs[j];
 			if (cur.revid && cur.revid !== parentid || lastid === null) {
 				lastid = cur.revid;
 				grouped_diffs[lastid] = [];
@@ -672,12 +676,12 @@ Twinkle.arv.processAN3 = function (params) {
 			parentid = cur.parentid;
 			grouped_diffs[lastid].push(cur);
 		}
-		var difftext = $.map(grouped_diffs, function (sub) {
-			var ret = '';
+		const difftext = $.map(grouped_diffs, function (sub) {
+			let ret = '';
 			if (sub.length >= 2) {
-				var last = sub[0];
-				var first = sub.slice(-1)[0];
-				var label = 'Consecutive edits made from ' + new Morebits.date(first.timestamp).format('HH:mm, D MMMM YYYY', 'utc') + ' (UTC) to ' + new Morebits.date(last.timestamp).format('HH:mm, D MMMM YYYY', 'utc') + ' (UTC)';
+				const last = sub[0];
+				const first = sub.slice(-1)[0];
+				const label = 'Consecutive edits made from ' + new Morebits.date(first.timestamp).format('HH:mm, D MMMM YYYY', 'utc') + ' (UTC) to ' + new Morebits.date(last.timestamp).format('HH:mm, D MMMM YYYY', 'utc') + ' (UTC)';
 				ret = '# {{diff|oldid=' + first.parentid + '|diff=' + last.revid + '|label=' + label + '}}\n';
 			}
 			ret += sub.reverse().map(function (v) {
@@ -685,19 +689,19 @@ Twinkle.arv.processAN3 = function (params) {
 			}).join('\n');
 			return ret;
 		}).reverse().join('\n');
-		var warningtext = params.warnings.reverse().map(function (v) {
+		const warningtext = params.warnings.reverse().map(function (v) {
 			return '#  {{diff2|' + v.revid + '|' + new Morebits.date(v.timestamp).format('HH:mm, D MMMM YYYY', 'utc') + ' (UTC)}} ' + hasHiddenComment(v);
 		}).join('\n');
-		var resolvetext = params.resolves.reverse().map(function (v) {
+		let resolvetext = params.resolves.reverse().map(function (v) {
 			return '#  {{diff2|' + v.revid + '|' + new Morebits.date(v.timestamp).format('HH:mm, D MMMM YYYY', 'utc') + ' (UTC)}} ' + hasHiddenComment(v);
 		}).join('\n');
 		if (params.free_resolves) {
-			var page = params.free_resolves;
+			const page = params.free_resolves;
 			if (page.compare) {
 				resolvetext += '\n#  {{diff|oldid=' + page.compare.fromrevid + '|diff=' + page.compare.torevid + '|label=Consecutive edits on ' + page.compare.totitle + '}}';
 			} else if (page.revisions) {
-				var revCount = page.revisions.length;
-				var rev;
+				const revCount = page.revisions.length;
+				let rev;
 				if (revCount < 3) {
 					// diff=prev or next
 					rev = revCount === 1 ? page.revisions[0] : page.revisions[1];
@@ -705,22 +709,22 @@ Twinkle.arv.processAN3 = function (params) {
 				} else {
 					// diff and oldid are nonconsecutive
 					rev = page.revisions[0];
-					var revLatest = page.revisions[revCount - 1];
-					var label = 'Consecutive edits made from ' + new Morebits.date(rev.timestamp).format('HH:mm, D MMMM YYYY', 'utc') + ' (UTC) to ' + new Morebits.date(revLatest.timestamp).format('HH:mm, D MMMM YYYY', 'utc') + ' (UTC) on ' + page.title;
+					const revLatest = page.revisions[revCount - 1];
+					const label = 'Consecutive edits made from ' + new Morebits.date(rev.timestamp).format('HH:mm, D MMMM YYYY', 'utc') + ' (UTC) to ' + new Morebits.date(revLatest.timestamp).format('HH:mm, D MMMM YYYY', 'utc') + ' (UTC) on ' + page.title;
 					resolvetext += '\n# {{diff|oldid=' + rev.revid + '|diff=' + revLatest.revid + '|label=' + label + '}}\n';
 				}
 			}
 		}
-		var comment = params.comment.replace(/~*$/g, '').trim();
+		let comment = params.comment.replace(/~*$/g, '').trim();
 		if (comment) {
 
 			comment += ' ~~' + '~~';
 		}
-		var text = '\n\n{{subst:AN3 report|diffs=' + difftext + '|warnings=' + warningtext + '|resolves=' + resolvetext + '|pagename=' + params.page + '|orig=' + origtext + '|comment=' + comment + '|uid=' + params.uid + '}}';
-		var reportpage = 'Qiuwen:Administrators\' noticeboard/Edit warring';
+		const text = '\n\n{{subst:AN3 report|diffs=' + difftext + '|warnings=' + warningtext + '|resolves=' + resolvetext + '|pagename=' + params.page + '|orig=' + origtext + '|comment=' + comment + '|uid=' + params.uid + '}}';
+		const reportpage = 'Qiuwen:Administrators\' noticeboard/Edit warring';
 		Morebits.wiki.actionCompleted.redirect = reportpage;
 		Morebits.wiki.actionCompleted.notice = 'Reporting complete';
-		var an3Page = new Morebits.wiki.page(reportpage, 'Retrieving discussion page');
+		const an3Page = new Morebits.wiki.page(reportpage, 'Retrieving discussion page');
 		an3Page.setFollowRedirect(true);
 		an3Page.setEditSummary('Adding new report for [[Special:Contributions/' + params.uid + '|' + params.uid + ']].');
 		an3Page.setChangeTags(Twinkle.changeTags);
@@ -729,8 +733,8 @@ Twinkle.arv.processAN3 = function (params) {
 
 		// notify user
 
-		var notifyText = '\n\n{{subst:an3-notice|1=' + mw.util.wikiUrlencode(params.uid) + '|auto=1}} ~~' + '~~';
-		var talkPage = new Morebits.wiki.page('User talk:' + params.uid, 'Notifying edit warrior');
+		const notifyText = '\n\n{{subst:an3-notice|1=' + mw.util.wikiUrlencode(params.uid) + '|auto=1}} ~~' + '~~';
+		const talkPage = new Morebits.wiki.page('User talk:' + params.uid, 'Notifying edit warrior');
 		talkPage.setFollowRedirect(true);
 		talkPage.setEditSummary('Notifying about edit warring noticeboard discussion.');
 		talkPage.setChangeTags(Twinkle.changeTags);
