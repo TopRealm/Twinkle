@@ -2106,7 +2106,7 @@ Morebits.wiki = {};
  * @returns {boolean}
  */
 Morebits.wiki.isPageRedirect = function qiuwenIsPageRedirect() {
-	console.warn('NOTE: Morebits.wiki.isPageRedirect has been deprecated, use Morebits.isPageRedirect instead.'); // eslint-disable-line no-console
+	console.warn('NOTE: Morebits.wiki.isPageRedirect has been deprecated, use Morebits.isPageRedirect instead.');
 	return Morebits.isPageRedirect();
 };
 
@@ -3085,7 +3085,7 @@ Morebits.wiki.page = function (pageName, status) {
 	 * accept a string value of `default`.
 	 */
 	this.setWatchlistFromPreferences = function (watchlistOption) {
-		console.warn('NOTE: Morebits.wiki.page.setWatchlistFromPreferences was deprecated December 2020, please use setWatchlist'); // eslint-disable-line no-console
+		console.warn('NOTE: Morebits.wiki.page.setWatchlistFromPreferences was deprecated December 2020, please use setWatchlist');
 		if (watchlistOption) {
 			ctx.watchlistOption = 'preferences';
 		} else {
@@ -4886,7 +4886,7 @@ Morebits.status.prototype = {
 				}
 
 				// also log error messages in the browser console
-				console.error(this.textRaw + ': ' + this.statRaw); // eslint-disable-line no-console
+				console.error(this.textRaw + ': ' + this.statRaw);
 			}
 		}
 
