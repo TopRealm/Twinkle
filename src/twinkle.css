@@ -1,6 +1,6 @@
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
- * _addText: '{{Gadget Header|license=CC-BY-SA-4.0}}'
+ * _addText: '{{Twinkle Header}}'
  *
  * @source https://git.qiuwen.wiki/InterfaceAdmin/Twinkle
  * @source https://git.qiuwen.wiki/Mirror/xiplus-twinkle
