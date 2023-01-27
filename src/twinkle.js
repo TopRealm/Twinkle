@@ -31,9 +31,8 @@
 
 /* global Morebits */
 
-(function (window, document, $) {
+((window, document, $) => {
 // Wrap with anonymous function
-
 // Check if account is experienced enough to use Twinkle
 if (!Morebits.userIsInGroup('autoconfirmed') && !Morebits.userIsInGroup('confirmed')) {
 	return;
@@ -45,7 +44,6 @@ window.Twinkle = Twinkle; // allow global access
  * Twinkle-specific data shared by multiple modules
  * Likely customized per installation
  */
-
 // Custom change tag(s) to be applied to all Twinkle actions, create at Special:Tags
 Twinkle.changeTags = 'Twinkle';
 // Available for actions that don't (yet) support tags
@@ -400,9 +398,7 @@ Twinkle.addPortletLink = function (task, text, id, tooltip) {
 /**
  * **************** General initialization code ****************
  */
-
-const scriptpathbefore = mw.util.wikiScript('index') + '?title=',
-	scriptpathafter = '&action=raw&ctype=text/javascript&happy=yes';
+const scriptpathbefore = mw.util.wikiScript('index') + '?title=', scriptpathafter = '&action=raw&ctype=text/javascript&happy=yes';
 
 // Retrieve the user's Twinkle preferences
 $.ajax({
@@ -447,7 +443,6 @@ $.ajax({
 
 // Developers: you can import custom Twinkle modules here
 // For example, mw.loader.load(scriptpathbefore + "User:UncleDouggie/morebits-test.js" + scriptpathafter);
-
 Twinkle.load = function () {
 	// Don't activate on special pages other than those listed here, so
 	// that others load faster, especially the watchlist.
@@ -492,13 +487,13 @@ Twinkle.load = function () {
 	}
 };
 // Used in XFD
-Twinkle.makeFindSourcesDiv = function makeSourcesDiv(divID) {
+Twinkle.makeFindSourcesDiv = (divID) => {
 	if (!$(divID).length) {
 		return;
 	}
 	if (!Twinkle.findSources) {
 		const parser = new Morebits.wiki.preview($(divID)[0]);
-		parser.beginRender('({{Find sources|' + Morebits.pageNameNorm + '}})', 'QW:AFD').then(function () {
+		parser.beginRender('({{Find sources|' + Morebits.pageNameNorm + '}})', 'QW:AFD').then(() => {
 			// Save for second-time around
 			Twinkle.findSources = parser.previewbox.innerHTML;
 			$(divID).removeClass('morebits-previewbox');
@@ -516,7 +511,7 @@ Twinkle.sortByNamespace = function (first, second) {
 };
 
 // Used in batch listings to link to the page in question with >
-Twinkle.generateArrowLinks = function (checkbox) {
+Twinkle.generateArrowLinks = (checkbox) => {
 	const link = Morebits.htmlNode('a', ' >');
 	link.setAttribute('class', 'tw-arrowpage-link');
 	link.setAttribute('href', mw.util.getUrl(checkbox.value));
@@ -533,5 +528,5 @@ Twinkle.generateBatchPageLinks = function (checkbox) {
 	link.setAttribute('target', '_blank');
 	$checkbox.next().prepend([ link, ' ' ]);
 };
-}(window, document, jQuery)); // End wrap with anonymous function
+})(window, document, jQuery); // End wrap with anonymous function
 /* </nowiki> */
