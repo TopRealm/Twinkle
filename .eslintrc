@@ -134,6 +134,7 @@
 		"jQuery": "readonly",
 		"mw": "readonly",
 		"mediaWiki": "readonly",
-		"Map": "readonly"
+		"Map": "readonly",
+		"Twinkle": "readonly"
 	}
 }
