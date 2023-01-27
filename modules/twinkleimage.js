@@ -22,12 +22,12 @@
    * Active on:           Local nonredirect file pages (not on Commons)
    */
 
-Twinkle.image = function twinkleimage() {
+Twinkle.image = () => {
 	if ( mw.config.get( "wgNamespaceNumber" ) === 6 && !document.getElementById( "mw-sharedupload" ) && document.getElementById( "mw-imagepage-section-filehistory" ) ) {
 		Twinkle.addPortletLink( Twinkle.image.callback, "图权", "tw-di", "提交文件快速删除" );
 	}
 };
-Twinkle.image.callback = function twinkleimageCallback() {
+Twinkle.image.callback = () => {
 	var Window = new Morebits.simpleWindow( 600, 330 );
 	Window.setTitle( "文件快速删除" );
 	Window.setScriptName( "Twinkle" );
@@ -102,7 +102,7 @@ Twinkle.image.callback = function twinkleimageCallback() {
 	evt.initEvent( "change", true, true );
 	result.type[ 0 ].dispatchEvent( evt );
 };
-Twinkle.image.callback.choice = function twinkleimageCallbackChoose( event ) {
+Twinkle.image.callback.choice = ( event ) => {
 	var value = event.target.values;
 	var root = event.target.form;
 	var work_area = new Morebits.quickForm.element( {
@@ -119,7 +119,7 @@ Twinkle.image.callback.choice = function twinkleimageCallbackChoose( event ) {
 					name: "non_free"
 				} ]
 			} );
-			/* falls through */
+		/* falls through */
 		case "no license":
 			work_area.append( {
 				type: "checkbox",
@@ -142,7 +142,7 @@ Twinkle.image.callback.choice = function twinkleimageCallbackChoose( event ) {
 	}
 	root.replaceChild( work_area.render(), $( root ).find( 'div[name="work_area"]' )[ 0 ] );
 };
-Twinkle.image.callback.evaluate = function twinkleimageCallbackEvaluate( event ) {
+Twinkle.image.callback.evaluate = ( event ) => {
 	var input = Morebits.quickForm.getInputData( event.target );
 	if ( input.replacement ) {
 		input.replacement = ( new RegExp( `^${Morebits.namespaceRegex( 6 )}:`, "i" ).test( input.replacement ) ? "" : "File:" ) + input.replacement;
@@ -193,13 +193,12 @@ Twinkle.image.callback.evaluate = function twinkleimageCallbackEvaluate( event )
 	}
 };
 Twinkle.image.callbacks = {
-	taggingImage: function taggingImage( pageobj ) {
+	taggingImage: ( pageobj ) => {
 		var text = pageobj.getPageText();
 		var params = pageobj.getCallbackParameters();
 
 		// remove "move to Commons" tag - deletion-tagged files cannot be moved to Commons
 		// text = text.replace(/\{\{(mtc|(copy |move )?to ?commons|move to wikimedia commons|copy to wikimedia commons)[^}]*\}\}/gi, '');
-
 		var tag = `{{di-${params.templatename}|date={{subst:#time:c}}`;
 		switch ( params.type ) {
 			case "no source no license":
@@ -211,7 +210,7 @@ Twinkle.image.callbacks = {
 				break;
 			default:
 				break;
-        // doesn't matter
+			// doesn't matter
 		}
 
 		tag += "|help=off}}\n";
@@ -222,7 +221,7 @@ Twinkle.image.callbacks = {
 		pageobj.setCreateOption( "nocreate" );
 		pageobj.save();
 	},
-	userNotification: function userNotification( pageobj ) {
+	userNotification: ( pageobj ) => {
 		var params = pageobj.getCallbackParameters();
 		var initialContrib = pageobj.getCreator();
 
@@ -251,10 +250,10 @@ Twinkle.image.callbacks = {
 			Twinkle.image.callbacks.addToLog( params, initialContrib );
 		}
 	},
-	addToLog: function addToLog( params, initialContrib ) {
+	addToLog: ( params, initialContrib ) => {
 		var usl = new Morebits.userspaceLogger( Twinkle.getPref( "speedyLogPageName" ) );
 		usl.initialText = `这是该用户使用[[H:TW|Twinkle]]的速删模块做出的[[QW:CSD|快速删除]]提名列表。\n\n如果您不再想保留此日志，请在[[${Twinkle.getPref( "configPage" )}|参数设置]]中关掉，并使用[[QW:O1|CSD O1]]提交快速删除。${Morebits.userIsSysop ? "\n\n此日志并不记录用Twinkle直接执行的删除。" : ""}`;
-		var formatParamLog = function formatParamLog( normalize, csdparam, input ) {
+		var formatParamLog = ( normalize, csdparam, input ) => {
 			if ( normalize === "F5" && csdparam === "replacement" ) {
 				input = `[[:${input}]]`;
 			}

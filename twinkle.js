@@ -59,7 +59,7 @@ Twinkle.initCallbacks = [];
  * @param {string} [name] - name of module used to check if is disabled.
  * If name is not given, module is loaded unconditionally.
  */
-Twinkle.addInitCallback = function twinkleAddInitCallback( func, name ) {
+Twinkle.addInitCallback = ( func, name ) => {
 	Twinkle.initCallbacks.push( {
 		func: func,
 		name: name
@@ -224,7 +224,7 @@ switch ( mw.config.get( "skin" ) ) {
 		Twinkle.defaultConfig.portletType = null;
 		Twinkle.defaultConfig.portletNext = null;
 }
-Twinkle.getPref = function twinkleGetPref( name ) {
+Twinkle.getPref = ( name ) => {
 	if ( typeof Twinkle.prefs === "object" && Twinkle.prefs[ name ] !== undefined ) {
 		return Twinkle.prefs[ name ];
 	}
@@ -261,7 +261,7 @@ Twinkle.getPref = function twinkleGetPref( name ) {
  *
  * @return Node -- the DOM node of the new item (a DIV element) or null
  */
-Twinkle.addPortlet = function ( navigation, id, text, type, nextnodeid ) {
+Twinkle.addPortlet = ( navigation, id, text, type, nextnodeid ) => {
 	// sanity checks, and get required DOM nodes
 	var root = document.getElementById( navigation ) || document.querySelector( navigation );
 	if ( !root ) {
@@ -377,7 +377,7 @@ Twinkle.addPortlet = function ( navigation, id, text, type, nextnodeid ) {
  *
  * @param task: Either a URL for the portlet link or a function to execute.
  */
-Twinkle.addPortletLink = function ( task, text, id, tooltip ) {
+Twinkle.addPortletLink = ( task, text, id, tooltip ) => {
 	if ( Twinkle.getPref( "portletArea" ) !== null ) {
 		Twinkle.addPortlet( Twinkle.getPref( "portletArea" ), Twinkle.getPref( "portletId" ), Twinkle.getPref( "portletName" ), Twinkle.getPref( "portletType" ), Twinkle.getPref( "portletNext" ) );
 	}
@@ -448,7 +448,7 @@ $.ajax( {
 
 // Developers: you can import custom Twinkle modules here
 // For example, mw.loader.load(scriptpathbefore + "User:UncleDouggie/morebits-test.js" + scriptpathafter);
-Twinkle.load = function () {
+Twinkle.load = () => {
 	// Don't activate on special pages other than those listed here, so
 	// that others load faster, especially the watchlist.
 	var activeSpecialPageList = [ "Block", "Contributions", "AbuseLog", "Recentchanges", "Recentchangeslinked" ]; // wgRelevantUserName defined for non-sysops on Special:Block
@@ -470,7 +470,7 @@ Twinkle.load = function () {
 
 	// Redefine addInitCallback so that any modules being loaded now on are directly
 	// initialised rather than added to initCallbacks array
-	Twinkle.addInitCallback = function ( func, name ) {
+	Twinkle.addInitCallback = ( func, name ) => {
 		if ( !name || Twinkle.disabledModules.indexOf( name ) === -1 ) {
 			func();
 		}
@@ -494,7 +494,7 @@ Twinkle.load = function () {
 	}
 };
 // Used in XFD
-Twinkle.makeFindSourcesDiv = function makeSourcesDiv( divID ) {
+Twinkle.makeFindSourcesDiv = ( divID ) => {
 	if ( !$( divID ).length ) {
 		return;
 	}
@@ -513,12 +513,10 @@ Twinkle.makeFindSourcesDiv = function makeSourcesDiv( divID ) {
 /** Twinkle-specific utility functions shared by multiple modules */
 // Used in batch, unlink, and deprod to sort pages by namespace, as
 // json formatversion=2 sorts by pageid instead
-Twinkle.sortByNamespace = function ( first, second ) {
-	return first.ns - second.ns || ( first.title > second.title ? 1 : -1 );
-};
+Twinkle.sortByNamespace = ( first, second ) => first.ns - second.ns || ( first.title > second.title ? 1 : -1 );
 
 // Used in batch listings to link to the page in question with >
-Twinkle.generateArrowLinks = function ( checkbox ) {
+Twinkle.generateArrowLinks = ( checkbox ) => {
 	var link = Morebits.htmlNode( "a", " >" );
 	link.setAttribute( "class", "tw-arrowpage-link" );
 	link.setAttribute( "href", mw.util.getUrl( checkbox.value ) );
@@ -527,7 +525,7 @@ Twinkle.generateArrowLinks = function ( checkbox ) {
 };
 
 // Used in unlink listings to link the page title
-Twinkle.generateBatchPageLinks = function ( checkbox ) {
+Twinkle.generateBatchPageLinks = ( checkbox ) => {
 	var $checkbox = $( checkbox );
 	var link = Morebits.htmlNode( "a", $checkbox.val() );
 	link.setAttribute( "class", "tw-batchpage-link" );

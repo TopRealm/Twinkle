@@ -22,7 +22,7 @@
    * Active on:           Existing, non-special pages, except for file pages with no local (non-Commons) file which are not redirects
    */
 
-Twinkle.xfd = function twinklexfd() {
+Twinkle.xfd = () => {
 	// Disable on:
 	// * special pages
 	// * non-existent pages
@@ -36,14 +36,14 @@ Twinkle.xfd = function twinklexfd() {
 Twinkle.xfd.currentRationale = null;
 
 // error callback on Morebits.status.object
-Twinkle.xfd.printRationale = function twinklexfdPrintRationale() {
+Twinkle.xfd.printRationale = () => {
 	if ( Twinkle.xfd.currentRationale ) {
 		Morebits.status.printUserText( Twinkle.xfd.currentRationale, "您的理由已在下方提供，如果您想重新提交，请将其复制到一新窗口中：" );
 		// only need to print the rationale once
 		Twinkle.xfd.currentRationale = null;
 	}
 };
-Twinkle.xfd.callback = function twinklexfdCallback() {
+Twinkle.xfd.callback = () => {
 	var Window = new Morebits.simpleWindow( 600, 350 );
 	Window.setTitle( "提交存废讨论" );
 	Window.setScriptName( "Twinkle" );
@@ -98,14 +98,14 @@ Twinkle.xfd.callback = function twinklexfdCallback() {
 	evt.initEvent( "change", true, true );
 	result.category.dispatchEvent( evt );
 };
-Twinkle.xfd.callback.change_category = function twinklexfdCallbackChangeCategory( e ) {
+Twinkle.xfd.callback.change_category = ( e ) => {
 	var value = e.target.value;
 	var form = e.target.form;
 	var old_area = Morebits.quickForm.getElements( e.target.form, "work_area" )[ 0 ];
 	var work_area = null;
 	var oldreasontextbox = form.getElementsByTagName( "textarea" )[ 0 ];
 	var oldreason = oldreasontextbox ? oldreasontextbox.value : "";
-	var appendReasonBox = function twinklexfdAppendReasonBox( xfd_cat ) {
+	var appendReasonBox = ( xfd_cat ) => {
 		switch ( xfd_cat ) {
 			case "fwdcsd":
 				oldreason = decodeURIComponent( $( "#delete-reason" ).text() ).replace( /\+/g, " " );
@@ -246,7 +246,7 @@ Twinkle.xfd.callback.change_category = function twinklexfdCallbackChangeCategory
 	form.notify.checked = true;
 	form.notify.disabled = false;
 };
-Twinkle.xfd.callback.change_afd_category = function twinklexfdCallbackChangeAfdCategory( e ) {
+Twinkle.xfd.callback.change_afd_category = ( e ) => {
 	if ( e.target.value === "merge" ) {
 		e.target.form.mergeinto.parentNode.removeAttribute( "hidden" );
 		e.target.form.fwdcsdreason.parentNode.setAttribute( "hidden", "" );
@@ -274,7 +274,7 @@ Twinkle.xfd.callback.change_afd_category = function twinklexfdCallbackChangeAfdC
 };
 Twinkle.xfd.callbacks = {
 	afd: {
-		main: function main( pageobj ) {
+		main: ( pageobj ) => {
 			// this is coming in from lookupCreation...!
 			var params = pageobj.getCallbackParameters();
 
@@ -315,7 +315,7 @@ Twinkle.xfd.callbacks = {
 				Twinkle.xfd.callbacks.addToLog( params, null );
 			}
 		},
-		taggingArticle: function taggingArticle( pageobj ) {
+		taggingArticle: ( pageobj ) => {
 			var text = pageobj.getPageText();
 			var params = pageobj.getCallbackParameters();
 			var tag = `{{vfd|${Morebits.string.formatReasonText( params.reason )}`;
@@ -358,7 +358,7 @@ Twinkle.xfd.callbacks = {
 			pageobj.setWatchlist( Twinkle.getPref( "xfdWatchPage" ) );
 			pageobj.save();
 		},
-		todaysList: function todaysList( pageobj ) {
+		todaysList: ( pageobj ) => {
 			var text = pageobj.getPageText();
 			var params = pageobj.getCallbackParameters();
 			var type = "";
@@ -367,7 +367,7 @@ Twinkle.xfd.callbacks = {
 				case "fwdcsd":
 				case "merge":
 					to = params.mergeinto;
-					/* Fall through */
+				/* Fall through */
 				default:
 					type = params.xfdcat;
 					break;
@@ -395,7 +395,6 @@ Twinkle.xfd.callbacks = {
 							fame: "<u>不符合收录标准</u>条目",
 							substub: "<u>长度过短</u>条目",
 							batch: "页面"
-
 						}[ type ]}的用户及时间：<br id="no-new-title" />~~` + "~~";
 						pageobj.setAppendText( appendText );
 					}
@@ -417,7 +416,7 @@ Twinkle.xfd.callbacks = {
 			Twinkle.xfd.currentRationale = null; // any errors from now on do not need to print the rationale, as it is safely saved on-wiki
 		},
 
-		tryTagging: function tryTagging( pageobj ) {
+		tryTagging: ( pageobj ) => {
 			var statelem = pageobj.getStatusElement();
 			// defaults to /doc for lua modules, which may not exist
 			if ( !pageobj.exists() && mw.config.get( "wgPageContentModel" ) !== "Scribunto" ) {
@@ -448,7 +447,7 @@ Twinkle.xfd.callbacks = {
 		}
 	},
 	ffd: {
-		main: function main( pageobj ) {
+		main: ( pageobj ) => {
 			// this is coming in from lookupCreation...!
 			var params = pageobj.getCallbackParameters();
 			var initialContrib = pageobj.getCreator();
@@ -488,7 +487,7 @@ Twinkle.xfd.callbacks = {
 				Twinkle.xfd.callbacks.addToLog( params, null );
 			}
 		},
-		taggingImage: function taggingImage( pageobj ) {
+		taggingImage: ( pageobj ) => {
 			var text = pageobj.getPageText();
 			var params = pageobj.getCallbackParameters();
 			pageobj.setPageText( `{{ifd|${Morebits.string.formatReasonText( params.reason )}|date={{subst:#time:c}}}}\n${text}` );
@@ -498,7 +497,7 @@ Twinkle.xfd.callbacks = {
 			pageobj.setCreateOption( "recreate" ); // it might be possible for a file to exist without a description page
 			pageobj.save();
 		},
-		todaysList: function todaysList( pageobj ) {
+		todaysList: ( pageobj ) => {
 			// var text = pageobj.getPageText();
 			var params = pageobj.getCallbackParameters();
 
@@ -512,7 +511,7 @@ Twinkle.xfd.callbacks = {
 			} );
 		},
 
-		tryTagging: function tryTagging( pageobj ) {
+		tryTagging: ( pageobj ) => {
 			var statelem = pageobj.getStatusElement();
 			if ( !pageobj.exists() ) {
 				statelem.error( "页面不存在，可能已被删除" );
@@ -533,7 +532,7 @@ Twinkle.xfd.callbacks = {
 			qiuwen_page.lookupCreation( Twinkle.xfd.callbacks.ffd.main );
 		}
 	},
-	addToLog: function addToLog( params, initialContrib ) {
+	addToLog: ( params, initialContrib ) => {
 		var editsummary = `记录对[[${Morebits.pageNameNorm}]]的存废讨论提名`;
 		var usl = new Morebits.userspaceLogger( Twinkle.getPref( "xfdLogPageName" ) );
 		usl.initialText = `这是该用户使用[[H:TW|Twinkle]]的提删模块做出的[[QW:XFD|存废讨论]]提名列表。\n\n如果您不再想保留此日志，请在[[${Twinkle.getPref( "configPage" )}|参数设置]]中关掉，并使用[[QW:CSD#O1|CSD O1]]提交快速删除。`;
@@ -589,7 +588,7 @@ Twinkle.xfd.callbacks = {
 		usl.log( appendText, editsummary );
 	}
 };
-Twinkle.xfd.callback.evaluate = function ( e ) {
+Twinkle.xfd.callback.evaluate = ( e ) => {
 	var type = e.target.category.value;
 	var usertalk = e.target.notify.checked;
 	var reason = e.target.xfdreason.value;

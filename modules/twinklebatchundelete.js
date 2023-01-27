@@ -22,13 +22,13 @@
    * Active on:              Existing user and project pages
    */
 
-Twinkle.batchundelete = function twinklebatchundelete() {
+Twinkle.batchundelete = () => {
 	if ( !Morebits.userIsSysop || !mw.config.get( "wgArticleId" ) || mw.config.get( "wgNamespaceNumber" ) !== mw.config.get( "wgNamespaceIds" ).user && mw.config.get( "wgNamespaceNumber" ) !== mw.config.get( "wgNamespaceIds" ).project ) {
 		return;
 	}
 	Twinkle.addPortletLink( Twinkle.batchundelete.callback, "批复", "tw-batch-undel", "恢复页面" );
 };
-Twinkle.batchundelete.callback = function twinklebatchundeleteCallback() {
+Twinkle.batchundelete.callback = () => {
 	var Window = new Morebits.simpleWindow( 600, 400 );
 	Window.setScriptName( "Twinkle" );
 	Window.setTitle( "批量恢复" );
@@ -92,14 +92,14 @@ Twinkle.batchundelete.callback = function twinklebatchundeleteCallback() {
 		apiobj.params.form.append( {
 			type: "button",
 			label: "全选",
-			event: function event( e ) {
+			event: ( e ) => {
 				$( Morebits.quickForm.getElements( e.target.form, "pages" ) ).prop( "checked", true );
 			}
 		} );
 		apiobj.params.form.append( {
 			type: "button",
 			label: "全不选",
-			event: function event( e ) {
+			event: ( e ) => {
 				$( Morebits.quickForm.getElements( e.target.form, "pages" ) ).prop( "checked", false );
 			}
 		} );
@@ -122,7 +122,7 @@ Twinkle.batchundelete.callback = function twinklebatchundeleteCallback() {
 	};
 	qiuwen_api.post();
 };
-Twinkle.batchundelete.callback.evaluate = function ( event ) {
+Twinkle.batchundelete.callback.evaluate = ( event ) => {
 	Morebits.wiki.actionCompleted.notice = "恢复已完成";
 	var numProtected = Morebits.quickForm.getElements( event.target, "pages" ).filter( ( element ) => {
 		return element.checked && element.nextElementSibling.style.color === "red";
@@ -164,7 +164,7 @@ Twinkle.batchundelete.callback.evaluate = function ( event ) {
 Twinkle.batchundelete.callbacks = {
 	// this stupid parameter name is a temporary thing until I implement an overhaul
 	// of Morebits.wiki.* callback parameters
-	doExtras: function doExtras( thingWithParameters ) {
+	doExtras: ( thingWithParameters ) => {
 		var params = thingWithParameters.parent ? thingWithParameters.parent.getCallbackParameters() : thingWithParameters.getCallbackParameters();
 		// the initial batch operation's job is to delete the page, and that has
 		// succeeded by now
@@ -188,7 +188,7 @@ Twinkle.batchundelete.callbacks = {
 			}
 		}
 	},
-	undeleteTalk: function undeleteTalk( apiobj ) {
+	undeleteTalk: ( apiobj ) => {
 		var page = apiobj.getResponse().query.pages[ 0 ];
 		var exists = !page.missing;
 		var delrevs = page.deletedrevisions && page.deletedrevisions[ 0 ].revid;

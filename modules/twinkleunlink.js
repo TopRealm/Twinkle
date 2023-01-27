@@ -22,7 +22,7 @@
    * Active on:           Non-special pages, except Qiuwen:Sandbox
    */
 
-Twinkle.unlink = function twinkleunlink() {
+Twinkle.unlink = () => {
 	if ( mw.config.get( "wgNamespaceNumber" ) < 0 || mw.config.get( "wgPageName" ) === Twinkle.getPref( "sandboxPage" ) || !Morebits.userIsSysop ) {
 		return;
 	}
@@ -30,7 +30,7 @@ Twinkle.unlink = function twinkleunlink() {
 };
 
 // the parameter is used when invoking unlink from admin speedy
-Twinkle.unlink.callback = function ( presetReason ) {
+Twinkle.unlink.callback = ( presetReason ) => {
 	var fileSpace = mw.config.get( "wgNamespaceNumber" ) === 6;
 	var Window = new Morebits.simpleWindow( 600, 440 );
 	Window.setTitle( `取消页面链入${fileSpace ? "及文件使用" : ""}` );
@@ -95,7 +95,7 @@ Twinkle.unlink.callback = function ( presetReason ) {
 	Window.setContent( root );
 	Window.display();
 };
-Twinkle.unlink.callback.evaluate = function twinkleunlinkCallbackEvaluate( event ) {
+Twinkle.unlink.callback.evaluate = ( event ) => {
 	var form = event.target;
 	var input = Morebits.quickForm.getInputData( form );
 	if ( !input.reason ) {
@@ -130,7 +130,7 @@ Twinkle.unlink.callback.evaluate = function twinkleunlinkCallbackEvaluate( event
 };
 Twinkle.unlink.callbacks = {
 	display: {
-		backlinks: function twinkleunlinkCallbackDisplayBacklinks( apiobj ) {
+		backlinks: ( apiobj ) => {
 			var response = apiobj.getResponse();
 			var havecontent = false;
 			var list, namespaces, i;
@@ -173,14 +173,14 @@ Twinkle.unlink.callbacks = {
 					apiobj.params.form.append( {
 						type: "button",
 						label: "全选",
-						event: function event( e ) {
+						event: ( e ) => {
 							$( Morebits.quickForm.getElements( e.target.form, "imageusage" ) ).prop( "checked", true );
 						}
 					} );
 					apiobj.params.form.append( {
 						type: "button",
 						label: "全不选",
-						event: function event( e ) {
+						event: ( e ) => {
 							$( Morebits.quickForm.getElements( e.target.form, "imageusage" ) ).prop( "checked", false );
 						}
 					} );
@@ -226,14 +226,14 @@ Twinkle.unlink.callbacks = {
 				apiobj.params.form.append( {
 					type: "button",
 					label: "全选",
-					event: function event( e ) {
+					event: ( e ) => {
 						$( Morebits.quickForm.getElements( e.target.form, "backlinks" ) ).prop( "checked", true );
 					}
 				} );
 				apiobj.params.form.append( {
 					type: "button",
 					label: "全不选",
-					event: function event( e ) {
+					event: ( e ) => {
 						$( Morebits.quickForm.getElements( e.target.form, "backlinks" ) ).prop( "checked", false );
 					}
 				} );
@@ -261,12 +261,11 @@ Twinkle.unlink.callbacks = {
 			Morebits.quickForm.getElements( result, "imageusage" ).forEach( Twinkle.generateBatchPageLinks );
 		}
 	},
-	unlinkBacklinks: function twinkleunlinkCallbackUnlinkBacklinks( pageobj ) {
+	unlinkBacklinks: ( pageobj ) => {
 		var oldtext = pageobj.getPageText();
 		var params = pageobj.getCallbackParameters();
 		var wikiPage = new Morebits.wikitext.page( oldtext );
-		var summaryText = "",
-			warningString = false;
+		var summaryText = "", warningString = false;
 		var text;
 
 		// remove image usages

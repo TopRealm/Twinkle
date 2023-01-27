@@ -25,7 +25,7 @@
    */
 
 var relevantUserName = mw.config.get( "wgRelevantUserName" );
-Twinkle.warn = function twinklewarn() {
+Twinkle.warn = () => {
 	if ( relevantUserName ) {
 		Twinkle.addPortletLink( Twinkle.warn.callback, "警告", "tw-warn", "警告或提醒用户" );
 		if ( Twinkle.getPref( "autoMenuAfterRollback" ) && mw.config.get( "wgNamespaceNumber" ) === 3 && mw.util.getParamValue( "vanarticle" ) && !mw.util.getParamValue( "friendlywelcome" ) && !mw.util.getParamValue( "noautowarn" ) ) {
@@ -50,7 +50,7 @@ Twinkle.warn = function twinklewarn() {
 		}
 	}
 };
-Twinkle.warn.makeVandalTalkLink = function ( $vandalTalkLink, pagename ) {
+Twinkle.warn.makeVandalTalkLink = ( $vandalTalkLink, pagename ) => {
 	$vandalTalkLink.wrapInner( $( "<span>" ).attr( "title", "如果合适，您可以用Twinkle在该用户讨论页上做出警告。" ) );
 	var extraParam = `vanarticle=${mw.util.rawurlencode( pagename )}`;
 	var href = $vandalTalkLink.attr( "href" );
@@ -63,7 +63,7 @@ Twinkle.warn.makeVandalTalkLink = function ( $vandalTalkLink, pagename ) {
 
 // Used to close window when switching to ARV in autolevel
 Twinkle.warn.dialog = null;
-Twinkle.warn.callback = function twinklewarnCallback() {
+Twinkle.warn.callback = () => {
 	if ( relevantUserName === mw.config.get( "wgUserName" ) && !confirm( "您将要警告自己！您确定要继续吗？" ) ) {
 		return;
 	}
@@ -283,7 +283,7 @@ Twinkle.warn.callback = function twinklewarnCallback() {
 			}
 		} ).post();
 	}
-	var init = function init() {
+	var init = () => {
 		// We must init the first choice (General Note);
 		var evt = document.createEvent( "Event" );
 		evt.initEvent( "change", true, true );
@@ -1122,7 +1122,7 @@ Twinkle.warn.messages = {
 Twinkle.warn.prev_article = null;
 Twinkle.warn.prev_reason = null;
 Twinkle.warn.talkpageObj = null;
-Twinkle.warn.callback.change_category = function twinklewarnCallbackChangeCategory( e ) {
+Twinkle.warn.callback.change_category = ( e ) => {
 	var value = e.target.value;
 	var sub_group = e.target.root.sub_group;
 	sub_group.main_group = value;
@@ -1142,8 +1142,9 @@ Twinkle.warn.callback.change_category = function twinklewarnCallbackChangeCatego
 	}
 	var selected = false;
 	// worker function to create the combo box entries
-	var createEntries = function createEntries( contents, container, wrapInOptgroup, val ) {
+	var createEntries = ( contents, container, wrapInOptgroup, val ) => {
 		val = typeof val !== "undefined" ? val : value; // IE doesn't support default parameters
+
 		// level2->2, singlewarn->''; also used to distinguish the
 		// scaled levels from singlenotice, singlewarn, and custom
 		var level = val.replace( /^\D+/g, "" );
@@ -1291,7 +1292,7 @@ Twinkle.warn.callback.change_category = function twinklewarnCallbackChangeCatego
 		Twinkle.warn.callback.postCategoryCleanup( e );
 	}
 };
-Twinkle.warn.callback.postCategoryCleanup = function twinklewarnCallbackPostCategoryCleanup( e ) {
+Twinkle.warn.callback.postCategoryCleanup = ( e ) => {
 	// clear overridden label on article textbox
 	Morebits.quickForm.setElementTooltipVisibility( e.target.root.article, true );
 	Morebits.quickForm.resetElementLabel( e.target.root.article );
@@ -1312,13 +1313,13 @@ Twinkle.warn.callback.postCategoryCleanup = function twinklewarnCallbackPostCate
 		mw.util.addCSS(
 			// Increase height
 			".select2-container .select2-dropdown .select2-results > .select2-results__options { max-height: 350px; }" +
-      // Reduce padding
-      ".select2-results .select2-results__option { padding-top: 1px; padding-bottom: 1px; }.select2-results .select2-results__group { padding-top: 1px; padding-bottom: 1px; } " +
-      // Adjust font size
-      ".select2-container .select2-dropdown .select2-results { font-size: 13px; }.select2-container .selection .select2-selection__rendered { font-size: 13px; }" );
+			// Reduce padding
+			".select2-results .select2-results__option { padding-top: 1px; padding-bottom: 1px; }.select2-results .select2-results__group { padding-top: 1px; padding-bottom: 1px; } " +
+			// Adjust font size
+			".select2-container .select2-dropdown .select2-results { font-size: 13px; }.select2-container .selection .select2-selection__rendered { font-size: 13px; }" );
 	}
 };
-Twinkle.warn.callback.change_subcategory = function twinklewarnCallbackChangeSubcategory( e ) {
+Twinkle.warn.callback.change_subcategory = ( e ) => {
 	var main_group = e.target.form.main_group.value;
 	var value = e.target.form.sub_group.value;
 
@@ -1360,7 +1361,7 @@ Twinkle.warn.callback.change_subcategory = function twinklewarnCallbackChangeSub
 	}
 };
 Twinkle.warn.callbacks = {
-	getWarningWikitext: function getWarningWikitext( templateName, article, reason, isCustom, noSign ) {
+	getWarningWikitext: ( templateName, article, reason, isCustom, noSign ) => {
 		var text = `{{subst:${templateName}`;
 
 		// add linked article for user warnings
@@ -1382,7 +1383,7 @@ Twinkle.warn.callbacks = {
 		}
 		return text;
 	},
-	showPreview: function showPreview( form, templatename ) {
+	showPreview: ( form, templatename ) => {
 		var input = Morebits.quickForm.getInputData( form );
 		// Provided on autolevel, not otherwise
 		templatename = templatename || input.sub_group;
@@ -1393,7 +1394,7 @@ Twinkle.warn.callbacks = {
 	},
 
 	// Just a pass-through unless the autolevel option was selected
-	preview: function preview( form ) {
+	preview: ( form ) => {
 		if ( form.main_group.value === "autolevel" ) {
 			// Always get a new, updated talkpage for autolevel processing
 			var usertalk_page = new Morebits.wiki.page( `User_talk:${relevantUserName}`, "加载上次警告" );
@@ -1434,7 +1435,7 @@ Twinkle.warn.callbacks = {
 	 * @returns {Object[]} - Array of objects: latest contains most recent
 	 * warning and date; history lists all prior warnings
 	 */
-	dateProcessing: function dateProcessing( wikitext ) {
+	dateProcessing: ( wikitext ) => {
 		var history_re = /<!--\s?Template:([uU]w-.*?)\s?-->.*?(\d{4})年(\d{1,2})月(\d{1,2})日 \([日一二三四五六]\) (\d{1,2}):(\d{1,2}) \(UTC\)/g;
 		var history = {};
 		var latest = {
@@ -1473,7 +1474,7 @@ Twinkle.warn.callbacks = {
 	 *
 	 * @returns {Array} - Array that contains the full template and just the warning level
 	 */
-	autolevelParseWikitext: function autolevelParseWikitext( wikitext, params, latest, date, statelem ) {
+	autolevelParseWikitext: ( wikitext, params, latest, date, statelem ) => {
 		var level; // undefined rather than '' means the isNaN below will return true
 		if ( /\d(?:im)?$/.test( latest.type ) ) {
 			// level1-4im
@@ -1522,7 +1523,7 @@ Twinkle.warn.callbacks = {
 							css: {
 								fontWeight: "bold"
 							},
-							click: function click() {
+							click: () => {
 								Morebits.wiki.actionCompleted.redirect = null;
 								Twinkle.warn.dialog.close();
 								Twinkle.arv.callback( relevantUserName );
@@ -1563,7 +1564,7 @@ Twinkle.warn.callbacks = {
 		template += level;
 		return [ template, level ];
 	},
-	main: function main( pageobj ) {
+	main: ( pageobj ) => {
 		var text = pageobj.getPageText();
 		var statelem = pageobj.getStatusElement();
 		var params = pageobj.getCallbackParameters();
@@ -1606,7 +1607,7 @@ Twinkle.warn.callbacks = {
 
 		// build the edit summary
 		// Function to handle generation of summary prefix for custom templates
-		var customProcess = function customProcess( template ) {
+		var customProcess = ( template ) => {
 			template = template.split( "|" )[ 0 ];
 			var prefix;
 			switch ( template.slice( -1 ) ) {
@@ -1627,7 +1628,7 @@ Twinkle.warn.callbacks = {
 						prefix = "唯一警告";
 						break;
 					}
-					// falls through
+				// falls through
 				default:
 					prefix = "提醒";
 					break;
@@ -1673,8 +1674,7 @@ Twinkle.warn.callbacks = {
 
 		// Get actual warning text
 		var warningText = Twinkle.warn.callbacks.getWarningWikitext( params.sub_group, params.article, params.reason, params.main_group === "custom" );
-		var sectionExists = false,
-			sectionNumber = 0;
+		var sectionExists = false, sectionNumber = 0;
 		// Only check sections if there are sections or there's a chance we won't create our own
 		if ( !messageData.heading && text.length ) {
 			// Get all sections
@@ -1706,13 +1706,13 @@ Twinkle.warn.callbacks = {
 			pageobj.newSection();
 		}
 	},
-	main_flow: function main_flow( flowobj ) {
+	main_flow: ( flowobj ) => {
 		var params = flowobj.getCallbackParameters();
 		var messageData = params.messageData;
 
 		// build the edit summary
 		// Function to handle generation of summary prefix for custom templates
-		var customProcess = function customProcess( template ) {
+		var customProcess = ( template ) => {
 			template = template.split( "|" )[ 0 ];
 			var prefix;
 			switch ( template.slice( -1 ) ) {
@@ -1733,7 +1733,7 @@ Twinkle.warn.callbacks = {
 						prefix = "唯一警告";
 						break;
 					}
-					// falls through
+				// falls through
 				default:
 					prefix = "提醒";
 					break;
@@ -1768,7 +1768,7 @@ Twinkle.warn.callbacks = {
 		flowobj.newTopic();
 	}
 };
-Twinkle.warn.callback.evaluate = function twinklewarnCallbackEvaluate( e ) {
+Twinkle.warn.callback.evaluate = ( e ) => {
 	var userTalkPage = `User_talk:${relevantUserName}`;
 
 	// reason, main_group, sub_group, article
@@ -1802,7 +1802,6 @@ Twinkle.warn.callback.evaluate = function twinklewarnCallbackEvaluate( e ) {
 	// already ignored the bold red error above.  Moreover, they probably
 	// *don't* want to actually issue a warning, so the error handling
 	// after the form is submitted is probably preferable
-
 	// Find the selected <option> element so we can fetch the data structure
 	var $selectedEl = $( e.target.sub_group ).find( `option[value="${$( e.target.sub_group ).val()}"]` );
 	params.messageData = $selectedEl.data( "messageData" );

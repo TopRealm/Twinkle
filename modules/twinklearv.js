@@ -22,7 +22,7 @@
    * Active on:           Any page with relevant user name (userspace, contribs, etc.)
    */
 
-Twinkle.arv = function twinklearv() {
+Twinkle.arv = () => {
 	var username = mw.config.get( "wgRelevantUserName" );
 	if ( !username || username === mw.config.get( "wgUserName" ) ) {
 		return;
@@ -32,7 +32,7 @@ Twinkle.arv = function twinklearv() {
 		Twinkle.arv.callback( username );
 	}, "告状", "tw-arv", windowTitle );
 };
-Twinkle.arv.callback = function ( uid ) {
+Twinkle.arv.callback = ( uid ) => {
 	if ( uid === mw.config.get( "wgUserName" ) ) {
 		alert( "不可以告自己的状哦！" );
 		return;
@@ -121,14 +121,14 @@ Twinkle.arv.callback = function ( uid ) {
 	evt.initEvent( "change", true, true );
 	result.category.dispatchEvent( evt );
 };
-Twinkle.arv.callback.changeCategory = function ( e ) {
+Twinkle.arv.callback.changeCategory = ( e ) => {
 	var value = e.target.value;
 	var root = e.target.form;
 	var old_area = Morebits.quickForm.getElements( root, "work_area" )[ 0 ];
 	var work_area = null;
 	switch ( value ) {
 		case "aiv":
-			/* falls through */
+		/* falls through */
 		default:
 			work_area = new Morebits.quickForm.element( {
 				type: "field",
@@ -141,7 +141,7 @@ Twinkle.arv.callback.changeCategory = function ( e ) {
 				label: "相关页面",
 				tooltip: "如不希望让报告链接到页面，请留空",
 				value: mw.util.getParamValue( "vanarticle" ) || "",
-				event: function event( e ) {
+				event: ( e ) => {
 					var value = e.target.value;
 					var root = e.target.form;
 					if ( value === "" ) {
@@ -159,7 +159,7 @@ Twinkle.arv.callback.changeCategory = function ( e ) {
 				tooltip: "留空以略过差异",
 				value: mw.util.getParamValue( "vanarticlerevid" ) || "",
 				disabled: !mw.util.getParamValue( "vanarticle" ),
-				event: function event( e ) {
+				event: ( e ) => {
 					var value = e.target.value;
 					var root = e.target.form;
 					root.goodid.disabled = value === "";
@@ -202,7 +202,7 @@ Twinkle.arv.callback.changeCategory = function ( e ) {
 			old_area.parentNode.replaceChild( work_area, old_area );
 			break;
 
-			// not using, but keeping it for reference
+		// not using, but keeping it for reference
 		case "username":
 			work_area = new Morebits.quickForm.element( {
 				type: "field",
@@ -306,7 +306,7 @@ Twinkle.arv.callback.changeCategory = function ( e ) {
 			break;
 	}
 };
-Twinkle.arv.callback.evaluate = function ( e ) {
+Twinkle.arv.callback.evaluate = ( e ) => {
 	var form = e.target;
 	var reason = "";
 	var comment = "";
@@ -318,7 +318,7 @@ Twinkle.arv.callback.evaluate = function ( e ) {
 	switch ( form.category.value ) {
 		// Report user for vandalism
 		case "aiv":
-			/* falls through */
+		/* falls through */
 		default:
 			types = form.getChecked( "arvtype" );
 			if ( !types.length && comment === "" ) {
@@ -389,8 +389,8 @@ Twinkle.arv.callback.evaluate = function ( e ) {
 			} );
 			break;
 
-			// Report inappropriate username
-			// **not** i18n to Chinese as we pre-verify usernames
+		// Report inappropriate username
+		// **not** i18n to Chinese as we pre-verify usernames
 		case "username":
 			types = form.getChecked( "arvtype" ).map( Morebits.string.toLowerCaseFirstChar );
 			var hasShared = types.indexOf( "shared" ) > -1;
@@ -444,9 +444,9 @@ Twinkle.arv.callback.evaluate = function ( e ) {
 			} );
 			break;
 
-			// QW:SPI
+		// QW:SPI
 		case "sock":
-			/* falls through */
+		/* falls through */
 		case "puppet":
 			var sockParameters = {
 				evidence: form.evidence.value.trim(),
@@ -469,7 +469,7 @@ Twinkle.arv.callback.evaluate = function ( e ) {
 			Twinkle.arv.processSock( sockParameters );
 			break;
 
-			// not using, but keeping for reference
+		// not using, but keeping for reference
 		case "an3":
 			var diffs = $.map( $( "input:checkbox[name=s_diffs]:checked", form ), ( o ) => {
 				return $( o ).data( "revinfo" );
@@ -487,7 +487,7 @@ Twinkle.arv.callback.evaluate = function ( e ) {
 				return $( o ).data( "revinfo" );
 			} );
 			var free_resolves = $( "input[name=s_resolves_free]" ).val();
-			var an3_next = function an3_next( free_resolves ) {
+			var an3_next = ( free_resolves ) => {
 				if ( !resolves.length && !free_resolves && !confirm( "You have not selected any edits where you tried to resolve the issue. Do you wish to make the report anyway?" ) ) {
 					return;
 				}
@@ -592,7 +592,7 @@ Twinkle.arv.callback.evaluate = function ( e ) {
 			break;
 	}
 };
-Twinkle.arv.processSock = function ( params ) {
+Twinkle.arv.processSock = ( params ) => {
 	Morebits.wiki.addCheckpoint(); // prevent notification events from causing an erronous "action completed"
 
 	// prepare the SPI report
@@ -617,7 +617,7 @@ Twinkle.arv.processSock = function ( params ) {
 };
 
 // no need to call this func as no an3 now, hence not i18n
-Twinkle.arv.processAN3 = function ( params ) {
+Twinkle.arv.processAN3 = ( params ) => {
 	// prepare the AN3 report
 	var minid;
 	for ( var i = 0; i < params.diffs.length; ++i ) {
@@ -640,7 +640,7 @@ Twinkle.arv.processAN3 = function ( params ) {
 		Morebits.wiki.addCheckpoint(); // prevent notification events from causing an erronous "action completed"
 
 		// In case an edit summary was revdel'd
-		var hasHiddenComment = function hasHiddenComment( rev ) {
+		var hasHiddenComment = ( rev ) => {
 			if ( !rev.comment && typeof rev.commenthidden === "string" ) {
 				return "(comment hidden)";
 			}
@@ -730,7 +730,6 @@ Twinkle.arv.processAN3 = function ( params ) {
 		an3Page.append();
 
 		// notify user
-
 		var notifyText = `\n\n{{subst:an3-notice|1=${mw.util.wikiUrlencode( params.uid )}|auto=1}} ~~` + "~~";
 		var talkPage = new Morebits.wiki.page( `User talk:${params.uid}`, "Notifying edit warrior" );
 		talkPage.setFollowRedirect( true );

@@ -22,7 +22,7 @@
    * Active on:           Existing non-special pages
    */
 
-Twinkle.diff = function twinklediff() {
+Twinkle.diff = () => {
 	if ( mw.config.get( "wgNamespaceNumber" ) < 0 || !mw.config.get( "wgArticleId" ) ) {
 		return;
 	}
@@ -46,7 +46,7 @@ Twinkle.diff = function twinklediff() {
 		} ), "当前", "tw-curdiff", "显示与当前版本间的差异" );
 	}
 };
-Twinkle.diff.evaluate = function twinklediffEvaluate( me ) {
+Twinkle.diff.evaluate = ( me ) => {
 	var user;
 	if ( me ) {
 		user = mw.config.get( "wgUserName" );
@@ -77,7 +77,7 @@ Twinkle.diff.evaluate = function twinklediffEvaluate( me ) {
 	qiuwen_api.post();
 };
 Twinkle.diff.callbacks = {
-	main: function main( self ) {
+	main: ( self ) => {
 		var rev = self.response.query.pages[ 0 ].revisions;
 		var revid = rev && rev[ 0 ].revid;
 		if ( !revid ) {

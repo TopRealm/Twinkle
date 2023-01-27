@@ -23,13 +23,13 @@
    * Config directives in:   FriendlyConfig
    */
 
-Twinkle.talkback = function () {
+Twinkle.talkback = () => {
 	if ( !mw.config.exists( "wgRelevantUserName" ) ) {
 		return;
 	}
 	Twinkle.addPortletLink( Twinkle.talkback.callback, "通知", "friendly-talkback", "回复通知" );
 };
-Twinkle.talkback.callback = function () {
+Twinkle.talkback.callback = () => {
 	if ( mw.config.get( "wgRelevantUserName" ) === mw.config.get( "wgUserName" ) && !confirm( "您寂寞到了要自己回复自己的程度么？" ) ) {
 		return;
 	}
@@ -112,7 +112,7 @@ Twinkle.talkback.callback = function () {
 	qwapi.post();
 };
 Twinkle.talkback.optout = "";
-Twinkle.talkback.callback.optoutStatus = function ( apiobj ) {
+Twinkle.talkback.callback.optoutStatus = ( apiobj ) => {
 	var el = apiobj.getResponse().query.pages[ 0 ].extlinks;
 	if ( el && el.length ) {
 		Twinkle.talkback.optout = `${mw.config.get( "wgRelevantUserName" )}不希望收到回复通告`;
@@ -125,7 +125,7 @@ Twinkle.talkback.callback.optoutStatus = function ( apiobj ) {
 var prev_page = "";
 var prev_section = "";
 var prev_message = "";
-Twinkle.talkback.changeTarget = function ( e ) {
+Twinkle.talkback.changeTarget = ( e ) => {
 	var value = e.target.values;
 	var root = e.target.form;
 	var old_area = Morebits.quickForm.getElements( root, "work_area" )[ 0 ];
@@ -146,7 +146,7 @@ Twinkle.talkback.changeTarget = function ( e ) {
 	root.previewer.closePreview();
 	switch ( value ) {
 		case "talkback":
-			/* falls through */
+		/* falls through */
 		default:
 			work_area.append( {
 				type: "div",
@@ -174,7 +174,7 @@ Twinkle.talkback.changeTarget = function ( e ) {
 				type: "select",
 				name: "noticeboard",
 				label: "通告板：",
-				event: function event( _e ) {
+				event: ( _e ) => {
 					if ( _e.target.value === "afchd" ) {
 						Morebits.quickForm.overrideElementLabel( root.section, "标题或草稿名称（去除Draft前缀）：" );
 						Morebits.quickForm.setElementTooltipVisibility( root.section, false );
@@ -281,7 +281,7 @@ Twinkle.talkback.noticeboards = {
 		editSummary: "您在[[Qiuwen:AFCHD|条目创建帮助]]页面的提问已有回复，请前往查看。"
 	}
 };
-Twinkle.talkback.evaluate = function ( e ) {
+Twinkle.talkback.evaluate = ( e ) => {
 	var input = Morebits.quickForm.getInputData( e.target );
 	var fullUserTalkPageName = new mw.Title( mw.config.get( "wgRelevantUserName" ), 3 ).toText();
 	var talkpage = new Morebits.wiki.page( fullUserTalkPageName, "加入回复通告" );
@@ -315,7 +315,7 @@ Twinkle.talkback.evaluate = function ( e ) {
 };
 Twinkle.talkback.callbacks = {
 	// Not used for notice or mail, default to user page
-	normalizeTalkbackPage: function normalizeTalkbackPage( page ) {
+	normalizeTalkbackPage: ( page ) => {
 		page = page || mw.config.get( "wgUserName" );
 
 		// Assume no prefix is a username, convert to user talk space
@@ -330,7 +330,7 @@ Twinkle.talkback.callbacks = {
 		}
 		return page;
 	},
-	preview: function preview( form ) {
+	preview: ( form ) => {
 		var input = Morebits.quickForm.getInputData( form );
 		if ( input.tbtarget === "talkback" || input.tbtarget === "see" ) {
 			input.page = Twinkle.talkback.callbacks.normalizeTalkbackPage( input.page );
@@ -339,7 +339,7 @@ Twinkle.talkback.callbacks = {
 		form.previewer.beginRender( noticetext, `User talk:${mw.config.get( "wgRelevantUserName" )}` ); // Force wikitext/correct username
 	},
 
-	getNoticeWikitext: function getNoticeWikitext( input ) {
+	getNoticeWikitext: ( input ) => {
 		var text;
 		switch ( input.tbtarget ) {
 			case "notice":
@@ -362,7 +362,6 @@ Twinkle.talkback.callbacks = {
 				break;
 			default:
 				// talkback
-
 				text = `==${Twinkle.getPref( "talkbackHeading" )}==\n{{talkback|${input.page}${input.section ? `|${input.section}` : ""}|ts=~~` + "~" + "~~}}";
 				if ( input.message ) {
 

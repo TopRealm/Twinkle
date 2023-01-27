@@ -23,13 +23,13 @@ var blockActionText = {
 	reblock: "重新封禁",
 	unblock: "解除封禁"
 };
-Twinkle.block = function twinkleblock() {
+Twinkle.block = () => {
 	// should show on Contributions or Block pages, anywhere there's a relevant user
 	if ( relevantUserName && ( Morebits.userIsSysop || !mw.util.isIPAddress( relevantUserName, true ) ) ) {
 		Twinkle.addPortletLink( Twinkle.block.callback, "封禁", "tw-block", "封禁相关用户" );
 	}
 };
-Twinkle.block.callback = function twinkleblockCallback() {
+Twinkle.block.callback = () => {
 	if ( relevantUserName === mw.config.get( "wgUserName" ) && !confirm( "您即将对自己执行封禁相关操作！确认要继续吗？" ) ) {
 		return;
 	}
@@ -139,7 +139,7 @@ Twinkle.block.callback = function twinkleblockCallback() {
 		result.actiontype[ 0 ].dispatchEvent( evt );
 	} );
 };
-Twinkle.block.fetchUserInfo = function twinkleblockFetchUserInfo( fn ) {
+Twinkle.block.fetchUserInfo = ( fn ) => {
 	var userName = relevantUserName;
 	var query = {
 		format: "json",
@@ -157,8 +157,7 @@ Twinkle.block.fetchUserInfo = function twinkleblockFetchUserInfo( fn ) {
 		query.bkusers = userName;
 	}
 	api.get( query ).then( ( data ) => {
-		var blockinfo = data.query.blocks[ 0 ],
-			userinfo = data.query.users[ 0 ];
+		var blockinfo = data.query.blocks[ 0 ], userinfo = data.query.users[ 0 ];
 		Twinkle.block.isRegistered = !!userinfo.userid;
 		if ( Twinkle.block.isRegistered ) {
 			relevantUserName = `User:${userName}`;
@@ -190,7 +189,7 @@ Twinkle.block.fetchUserInfo = function twinkleblockFetchUserInfo( fn ) {
 		Morebits.status.warn( "抓取用户信息出错", msg );
 	} );
 };
-Twinkle.block.callback.saveFieldset = function twinkleblockCallbacksaveFieldset( fieldset ) {
+Twinkle.block.callback.saveFieldset = ( fieldset ) => {
 	Twinkle.block[ $( fieldset ).prop( "name" ) ] = {};
 	$( fieldset ).serializeArray().forEach( ( el ) => {
 		// namespaces and pages for partial blocks are overwritten
@@ -198,13 +197,8 @@ Twinkle.block.callback.saveFieldset = function twinkleblockCallbacksaveFieldset(
 		Twinkle.block[ $( fieldset ).prop( "name" ) ][ el.name ] = el.value;
 	} );
 };
-Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction( e ) {
-	var field_preset,
-		field_template_options,
-		field_block_options,
-		field_tag_options,
-		field_unblock_options,
-		$form = $( e.target.form );
+Twinkle.block.callback.change_action = ( e ) => {
+	var field_preset, field_template_options, field_block_options, field_tag_options, field_unblock_options, $form = $( e.target.form );
 	// Make ifs shorter
 	var block = $form.find( "[name=actiontype][value=block]" );
 	var blockBox = block.is( ":checked" );
@@ -657,9 +651,7 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 			width: "100%",
 			placeholder: "输入要阻止用户编辑的页面",
 			language: {
-				errorLoading: function errorLoading() {
-					return "搜索词汇不完整或无效";
-				}
+				errorLoading: () => "搜索词汇不完整或无效"
 			},
 			maximumSelectionLength: 10,
 			// Software limitation
@@ -669,7 +661,7 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 				url: mw.util.wikiScript( "api" ),
 				dataType: "json",
 				delay: 100,
-				data: function data( params ) {
+				data: ( params ) => {
 					var title = mw.Title.newFromText( params.term );
 					if ( !title ) {
 						return;
@@ -683,24 +675,20 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 						aplimit: "10"
 					};
 				},
-				processResults: function processResults( data ) {
-					return {
-						results: data.query.allpages.map( ( page ) => {
-							var title = mw.Title.newFromText( page.title, page.ns ).toText();
-							return {
-								id: title,
-								text: title
-							};
-						} )
-					};
-				}
+				processResults: ( data ) => ( {
+					results: data.query.allpages.map( ( page ) => {
+						var title = mw.Title.newFromText( page.title, page.ns ).toText();
+						return {
+							id: title,
+							text: title
+						};
+					} )
+				} )
 			},
-			templateSelection: function templateSelection( choice ) {
-				return $( "<a>" ).text( choice.text ).attr( {
-					href: mw.util.getUrl( choice.text ),
-					target: "_blank"
-				} );
-			}
+			templateSelection: ( choice ) => $( "<a>" ).text( choice.text ).attr( {
+				href: mw.util.getUrl( choice.text ),
+				target: "_blank"
+			} )
 		} );
 		$form.find( "[name=namespacerestrictions]" ).select2( {
 			width: "100%",
@@ -714,12 +702,12 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 		mw.util.addCSS(
 			// Reduce padding
 			".select2-results .select2-results__option { padding-top: 1px; padding-bottom: 1px; }" +
-      // Adjust font size
-      ".select2-container .select2-dropdown .select2-results { font-size: 13px; } .select2-container .selection .select2-selection__rendered { font-size: 13px; }" +
-      // Remove black border
-      ".select2-container--default.select2-container--focus .select2-selection--multiple { border: 1px solid #aaa; }" +
-      // Make the tiny cross larger
-      ".select2-selection__choice__remove { font-size: 130%; }" );
+			// Adjust font size
+			".select2-container .select2-dropdown .select2-results { font-size: 13px; } .select2-container .selection .select2-selection__rendered { font-size: 13px; }" +
+			// Remove black border
+			".select2-container--default.select2-container--focus .select2-selection--multiple { border: 1px solid #aaa; }" +
+			// Make the tiny cross larger
+			".select2-selection__choice__remove { font-size: 130%; }" );
 	} else {
 		$form.find( 'fieldset[name="field_block_options"]' ).hide();
 		// Clear select2 options
@@ -951,7 +939,7 @@ Twinkle.block.blockPresetsInfo = {
 	}
 };
 Twinkle.block.blockGroupsUpdated = false;
-Twinkle.block.transformBlockPresets = function twinkleblockTransformBlockPresets() {
+Twinkle.block.transformBlockPresets = () => {
 	// supply sensible defaults
 	$.each( Twinkle.block.blockPresetsInfo, ( preset, settings ) => {
 		settings.summary = settings.summary || settings.reason;
@@ -970,9 +958,7 @@ Twinkle.block.transformBlockPresets = function twinkleblockTransformBlockPresets
 				blockGroup.list = Twinkle.getPref( "customBlockReasonList" );
 			}
 			$.each( blockGroup.list, ( __, blockPreset ) => {
-				var value = blockPreset.value,
-					reason = blockPreset.label,
-					newPreset = `${value}:${reason}`;
+				var value = blockPreset.value, reason = blockPreset.label, newPreset = `${value}:${reason}`;
 				Twinkle.block.blockPresetsInfo[ newPreset ] = jQuery.extend( true, {}, Twinkle.block.blockPresetsInfo[ value ] );
 				Twinkle.block.blockPresetsInfo[ newPreset ].template = value;
 				if ( blockGroup.meta ) {
@@ -1144,40 +1130,38 @@ Twinkle.block.blockGroupsPartial = [ {
 		selected: true
 	} ]
 } ];
-Twinkle.block.callback.filtered_block_groups = function twinkleblockCallbackFilteredBlockGroups( group, show_template ) {
-	return $.map( group, ( blockGroup ) => {
-		if ( !show_template && blockGroup.meta ) {
+Twinkle.block.callback.filtered_block_groups = ( group, show_template ) => $.map( group, ( blockGroup ) => {
+	if ( !show_template && blockGroup.meta ) {
+		return;
+	}
+	var list = $.map( blockGroup.list, ( blockPreset ) => {
+		// only show uw-talkrevoked if reblocking
+		if ( !Twinkle.block.currentBlockInfo && blockPreset.value === "uw-talkrevoked" ) {
 			return;
 		}
-		var list = $.map( blockGroup.list, ( blockPreset ) => {
-			// only show uw-talkrevoked if reblocking
-			if ( !Twinkle.block.currentBlockInfo && blockPreset.value === "uw-talkrevoked" ) {
-				return;
-			}
-			var blockSettings = Twinkle.block.blockPresetsInfo[ blockPreset.value ];
-			var registrationRestrict = blockPreset.forRegisteredOnly ? Twinkle.block.isRegistered : blockPreset.forAnonOnly ? !Twinkle.block.isRegistered : true;
-			if ( !( blockSettings.templateName && show_template ) && registrationRestrict ) {
-				var templateName = blockSettings.templateName || blockSettings.template || blockPreset.value;
-				return {
-					label: ( show_template ? `{{${templateName}}}: ` : "" ) + ( blockPreset.label || `{{${templateName}}}` ),
-					value: blockPreset.value,
-					data: [ {
-						name: "template-name",
-						value: templateName
-					} ],
-					selected: !!blockPreset.selected
-				};
-			}
-		} );
-		if ( list.length ) {
+		var blockSettings = Twinkle.block.blockPresetsInfo[ blockPreset.value ];
+		var registrationRestrict = blockPreset.forRegisteredOnly ? Twinkle.block.isRegistered : blockPreset.forAnonOnly ? !Twinkle.block.isRegistered : true;
+		if ( !( blockSettings.templateName && show_template ) && registrationRestrict ) {
+			var templateName = blockSettings.templateName || blockSettings.template || blockPreset.value;
 			return {
-				label: blockGroup.label,
-				list: list
+				label: ( show_template ? `{{${templateName}}}: ` : "" ) + ( blockPreset.label || `{{${templateName}}}` ),
+				value: blockPreset.value,
+				data: [ {
+					name: "template-name",
+					value: templateName
+				} ],
+				selected: !!blockPreset.selected
 			};
 		}
 	} );
-};
-Twinkle.block.callback.change_preset = function twinkleblockCallbackChangePreset( e ) {
+	if ( list.length ) {
+		return {
+			label: blockGroup.label,
+			list: list
+		};
+	}
+} );
+Twinkle.block.callback.change_preset = ( e ) => {
 	var key = e.target.form.preset.value;
 	if ( !key ) {
 		return;
@@ -1187,7 +1171,7 @@ Twinkle.block.callback.change_preset = function twinkleblockCallbackChangePreset
 	Twinkle.block.callback.update_form( e, Twinkle.block.blockPresetsInfo[ key ] );
 	Twinkle.block.callback.change_template( e );
 };
-Twinkle.block.callback.change_expiry = function twinkleblockCallbackChangeExpiry( e ) {
+Twinkle.block.callback.change_expiry = ( e ) => {
 	var expiry = e.target.form.expiry;
 	if ( e.target.value === "custom" ) {
 		Morebits.quickForm.setElementVisibility( expiry.parentNode, true );
@@ -1212,9 +1196,8 @@ Twinkle.block.callback.toggle_see_alsos = function twinkleblockCallbackToggleSee
 		this.form.reason.value = `${reason}<!-- 参见${seeAlsoMessage} -->`;
 	}
 };
-Twinkle.block.callback.update_form = function twinkleblockCallbackUpdateForm( e, data ) {
-	var form = e.target.form,
-		expiry = data.expiry;
+Twinkle.block.callback.update_form = ( e, data ) => {
+	var form = e.target.form, expiry = data.expiry;
 
 	// don't override original expiry if useInitialOptions is set
 	if ( !data.useInitialOptions ) {
@@ -1257,10 +1240,8 @@ Twinkle.block.callback.update_form = function twinkleblockCallbackUpdateForm( e,
 		form.reason.value = data.reason || "";
 	}
 };
-Twinkle.block.callback.change_template = function twinkleblockcallbackChangeTemplate( e ) {
-	var form = e.target.form,
-		value = form.template.value,
-		settings = Twinkle.block.blockPresetsInfo[ value ];
+Twinkle.block.callback.change_template = ( e ) => {
+	var form = e.target.form, value = form.template.value, settings = Twinkle.block.blockPresetsInfo[ value ];
 	var blockBox = $( form ).find( "[name=actiontype][value=block]" ).is( ":checked" );
 	var partialBox = $( form ).find( "[name=actiontype][value=partial]" ).is( ":checked" );
 	var templateBox = $( form ).find( "[name=actiontype][value=template]" ).is( ":checked" );
@@ -1305,7 +1286,7 @@ Twinkle.block.prev_template_expiry = null;
 Twinkle.block.prev_block_reason = null;
 Twinkle.block.prev_article = null;
 Twinkle.block.prev_reason = null;
-Twinkle.block.callback.preview = function twinkleblockcallbackPreview( form ) {
+Twinkle.block.callback.preview = ( form ) => {
 	var params = {
 		article: form.article.value,
 		blank_duration: form.blank_duration ? form.blank_duration.checked : false,
@@ -1325,18 +1306,9 @@ Twinkle.block.callback.preview = function twinkleblockcallbackPreview( form ) {
 	var templateText = Twinkle.block.callback.getBlockNoticeWikitext( params );
 	form.previewer.beginRender( templateText );
 };
-Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate( e ) {
+Twinkle.block.callback.evaluate = ( e ) => {
 	var params = Morebits.quickForm.getInputData( e.target );
-	var $form = $( e.target ),
-		toBlock = $form.find( "[name=actiontype][value=block]" ).is( ":checked" ),
-		toWarn = $form.find( "[name=actiontype][value=template]" ).is( ":checked" ),
-		toPartial = $form.find( "[name=actiontype][value=partial]" ).is( ":checked" ),
-		toTag = $form.find( "[name=actiontype][value=tag]" ).is( ":checked" ),
-		toProtect = $form.find( "[name=actiontype][value=protect]" ).is( ":checked" ),
-		toUnblock = $form.find( "[name=actiontype][value=unblock]" ).is( ":checked" ),
-		blockoptions = {},
-		templateoptions = {},
-		unblockoptions = {};
+	var $form = $( e.target ), toBlock = $form.find( "[name=actiontype][value=block]" ).is( ":checked" ), toWarn = $form.find( "[name=actiontype][value=template]" ).is( ":checked" ), toPartial = $form.find( "[name=actiontype][value=partial]" ).is( ":checked" ), toTag = $form.find( "[name=actiontype][value=tag]" ).is( ":checked" ), toProtect = $form.find( "[name=actiontype][value=protect]" ).is( ":checked" ), toUnblock = $form.find( "[name=actiontype][value=unblock]" ).is( ":checked" ), blockoptions = {}, templateoptions = {}, unblockoptions = {};
 	Twinkle.block.callback.saveFieldset( $form.find( "[name=field_block_options]" ) );
 	Twinkle.block.callback.saveFieldset( $form.find( "[name=field_template_options]" ) );
 	Twinkle.block.callback.saveFieldset( $form.find( "[name=field_tag_options]" ) );
@@ -1368,7 +1340,7 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate( e ) {
 
 	// Check tags
 	// Given an array of incompatible tags, check if we have two or more selected
-	var checkIncompatible = function checkIncompatible( conflicts, extra ) {
+	var checkIncompatible = ( conflicts, extra ) => {
 		var count = conflicts.reduce( ( sum, tag ) => {
 			sum += params.tag.indexOf( tag ) !== -1;
 			return sum;
@@ -1438,29 +1410,29 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate( e ) {
 		}
 
 		/*
-       * Check if block status changed while processing the form.
-       *   There's a lot to consider here. list=blocks provides the
-       * current block status, but there are at least two issues with
-       * relying on it. First, the id doesn't update on a reblock,
-       * meaning the individual parameters need to be compared. This
-       * can be done roughly with JSON.stringify - we can thankfully
-       * rely on order from the server, although sorting would be
-       * fine if not - but falsey values are problematic and is
-       * non-ideal. More importantly, list=blocks won't indicate if a
-       * non-blocked user is blocked then unblocked. This should be
-       * exceedingy rare, but regardless, we thus need to check
-       * list=logevents, which has a nicely updating logid
-       * parameter. We can't rely just on that, though, since it
-       * doesn't account for blocks that have expired on their own.
-       *    As such, we use both. Using some ternaries, the logid
-       * variables are false if there's no logevents, so if they
-       * aren't equal we defintely have a changed entry (send
-       * confirmation). If they are equal, then either the user was
-       * never blocked (the block statuses will be equal, no
-       * confirmation) or there's no new block, in which case either
-       * a block expired (different statuses, confirmation) or the
-       * same block is still active (same status, no confirmation).
-       */
+	   * Check if block status changed while processing the form.
+	   *   There's a lot to consider here. list=blocks provides the
+	   * current block status, but there are at least two issues with
+	   * relying on it. First, the id doesn't update on a reblock,
+	   * meaning the individual parameters need to be compared. This
+	   * can be done roughly with JSON.stringify - we can thankfully
+	   * rely on order from the server, although sorting would be
+	   * fine if not - but falsey values are problematic and is
+	   * non-ideal. More importantly, list=blocks won't indicate if a
+	   * non-blocked user is blocked then unblocked. This should be
+	   * exceedingy rare, but regardless, we thus need to check
+	   * list=logevents, which has a nicely updating logid
+	   * parameter. We can't rely just on that, though, since it
+	   * doesn't account for blocks that have expired on their own.
+	   *    As such, we use both. Using some ternaries, the logid
+	   * variables are false if there's no logevents, so if they
+	   * aren't equal we defintely have a changed entry (send
+	   * confirmation). If they are equal, then either the user was
+	   * never blocked (the block statuses will be equal, no
+	   * confirmation) or there's no new block, in which case either
+	   * a block expired (different statuses, confirmation) or the
+	   * same block is still active (same status, no confirmation).
+	   */
 		var query = {
 			format: "json",
 			action: "query",
@@ -1556,7 +1528,7 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate( e ) {
 		return alert( "Twinkle没有要执行的任务！" );
 	}
 };
-Twinkle.block.callback.taguserpage = function twinkleblockCallbackTagUserpage( pageobj ) {
+Twinkle.block.callback.taguserpage = ( pageobj ) => {
 	var params = pageobj.getCallbackParameters();
 	var statelem = pageobj.getStatusElement();
 	if ( params.actiontype.indexOf( "tag" ) > -1 ) {
@@ -1608,7 +1580,7 @@ Twinkle.block.callback.taguserpage = function twinkleblockCallbackTagUserpage( p
 		Twinkle.block.callback.protectuserpage( pageobj );
 	}
 };
-Twinkle.block.callback.protectuserpage = function twinkleblockCallbackProtectUserpage( pageobj ) {
+Twinkle.block.callback.protectuserpage = ( pageobj ) => {
 	var params = pageobj.getCallbackParameters();
 	var statelem = pageobj.getStatusElement();
 	if ( params.actiontype.indexOf( "protect" ) > -1 ) {
@@ -1628,7 +1600,7 @@ Twinkle.block.callback.protectuserpage = function twinkleblockCallbackProtectUse
 		statelem.info( "全部完成" );
 	}
 };
-Twinkle.block.callback.issue_template = function twinkleblockCallbackIssueTemplate( formData ) {
+Twinkle.block.callback.issue_template = ( formData ) => {
 	if ( Morebits.ip.isRange( relevantUserName ) ) {
 		// eslint-disable-next-line no-new
 		new Morebits.status( "信息", "由于封禁目标为IP段，加入封禁模板已略过", "warn" );
@@ -1651,7 +1623,7 @@ Twinkle.block.callback.issue_template = function twinkleblockCallbackIssueTempla
 	qiuwen_page.setFollowRedirect( true );
 	qiuwen_page.load( Twinkle.block.callback.main );
 };
-Twinkle.block.callback.closeRequest = function twinkleblockCallbackCloseRequest( vipPage ) {
+Twinkle.block.callback.closeRequest = ( vipPage ) => {
 	var params = vipPage.getCallbackParameters();
 	var text = vipPage.getPageText();
 	var statusElement = vipPage.getStatusElement();
@@ -1698,9 +1670,8 @@ Twinkle.block.callback.closeRequest = function twinkleblockCallbackCloseRequest(
 	vipPage.setPageText( text );
 	vipPage.save();
 };
-Twinkle.block.callback.getBlockNoticeWikitext = function ( params, nosign ) {
-	var text = "{{",
-		settings = Twinkle.block.blockPresetsInfo[ params.template ];
+Twinkle.block.callback.getBlockNoticeWikitext = ( params, nosign ) => {
+	var text = "{{", settings = Twinkle.block.blockPresetsInfo[ params.template ];
 	if ( !settings.nonstandard ) {
 		text += `subst:${params.template}`;
 		if ( params.article && settings.pageParam ) {
@@ -1775,20 +1746,15 @@ Twinkle.block.callback.getBlockNoticeWikitext = function ( params, nosign ) {
 	}
 	return text;
 };
-Twinkle.block.callback.main = function twinkleblockcallbackMain( pageobj ) {
-	var params = pageobj.getCallbackParameters(),
-		date = new Morebits.date( pageobj.getLoadTime() ),
-		messageData = params.messageData,
-		text;
+Twinkle.block.callback.main = ( pageobj ) => {
+	var params = pageobj.getCallbackParameters(), date = new Morebits.date( pageobj.getLoadTime() ), messageData = params.messageData, text;
 	params.indefinite = Morebits.string.isInfinity( params.expiry );
 	if ( Twinkle.getPref( "blankTalkpageOnIndefBlock" ) && params.template !== "uw-lblock" && params.indefinite ) {
 		Morebits.status.info( "信息", "根据参数设置清空讨论页并为日期创建新二级标题" );
 		text = `${date.monthHeader()}\n`;
 	} else {
 		text = pageobj.getPageText();
-		var dateHeaderRegex = date.monthHeaderRegex(),
-			dateHeaderRegexLast,
-			dateHeaderRegexResult;
+		var dateHeaderRegex = date.monthHeaderRegex(), dateHeaderRegexLast, dateHeaderRegexResult;
 		while ( ( dateHeaderRegexLast = dateHeaderRegex.exec( text ) ) !== null ) {
 			dateHeaderRegexResult = dateHeaderRegexLast;
 		}
@@ -1819,7 +1785,7 @@ Twinkle.block.callback.main = function twinkleblockcallbackMain( pageobj ) {
 	pageobj.setWatchlist( Twinkle.getPref( "watchWarnings" ) );
 	pageobj.save();
 };
-Twinkle.block.callback.main_flow = function twinkleblockcallbackMain( flowobj ) {
+Twinkle.block.callback.main_flow = ( flowobj ) => {
 	var params = flowobj.getCallbackParameters();
 	params.indefinite = /indef|infinity|never|\*|max/.test( params.expiry );
 	params.expiry = typeof params.template_expiry !== "undefined" ? params.template_expiry : params.expiry;

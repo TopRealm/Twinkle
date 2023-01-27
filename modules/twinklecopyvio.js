@@ -24,7 +24,7 @@
    * Config directives in:  TwinkleConfig
    */
 
-Twinkle.copyvio = function twinklecopyvio() {
+Twinkle.copyvio = () => {
 	// Disable on:
 	// * special pages
 	// * non-existent pages
@@ -35,7 +35,7 @@ Twinkle.copyvio = function twinklecopyvio() {
 	}
 	Twinkle.addPortletLink( Twinkle.copyvio.callback, "侵权", "tw-copyvio", "提报侵权页面", "" );
 };
-Twinkle.copyvio.callback = function twinklecopyvioCallback() {
+Twinkle.copyvio.callback = () => {
 	var Window = new Morebits.simpleWindow( 600, 350 );
 	Window.setTitle( "提报侵权页面" );
 	Window.setScriptName( "Twinkle" );
@@ -67,7 +67,7 @@ Twinkle.copyvio.callback = function twinklecopyvioCallback() {
 	Window.display();
 };
 Twinkle.copyvio.callbacks = {
-	tryTagging: function tryTagging( pageobj ) {
+	tryTagging: ( pageobj ) => {
 		// 先尝试标记页面，如果发现已经标记则停止提报
 		var text = pageobj.getPageText();
 		if ( text.indexOf( "{{Copyvio|" ) === -1 ) {
@@ -81,7 +81,7 @@ Twinkle.copyvio.callbacks = {
 			Morebits.status.error( "错误", "页面已经标记侵权，请人工确认是否已经提报。" );
 		}
 	},
-	main: function main( pageobj ) {
+	main: ( pageobj ) => {
 		// this is coming in from lookupCreation...!
 		var params = pageobj.getCallbackParameters();
 		var initialContrib = pageobj.getCreator();
@@ -105,7 +105,7 @@ Twinkle.copyvio.callbacks = {
 			usertalkpage.append();
 		}
 	},
-	taggingArticle: function taggingArticle( pageobj ) {
+	taggingArticle: ( pageobj ) => {
 		var params = pageobj.getCallbackParameters();
 		var revisionId = mw.config.get( "wgRevisionId" ) || mw.config.get( "wgDiffNewId" ) || mw.config.get( "wgCurRevisionId" );
 		var tag = `{{subst:Copyvio/auto|url=${params.source.replace( /http/g, "&#104;ttp" ).replace( /\n+/g, "\n" ).replace( /^\s*([^*])/gm, "* $1" ).replace( /^\* $/m, "" )}|OldRevision=${revisionId}}}`;
@@ -124,7 +124,7 @@ Twinkle.copyvio.callbacks = {
 			pageobj.patrol();
 		}
 	},
-	copyvioList: function copyvioList( pageobj ) {
+	copyvioList: ( pageobj ) => {
 		var text = pageobj.getPageText();
 		var output = "";
 		var date = new Date();
@@ -140,7 +140,7 @@ Twinkle.copyvio.callbacks = {
 		pageobj.append();
 	}
 };
-Twinkle.copyvio.callback.evaluate = function ( e ) {
+Twinkle.copyvio.callback.evaluate = ( e ) => {
 	mw.config.set( "wgPageName", mw.config.get( "wgPageName" ).replace( /_/g, " " ) );
 	var source = e.target.source.value;
 	var usertalk = e.target.notify.checked;

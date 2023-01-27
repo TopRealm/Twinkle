@@ -24,7 +24,7 @@
    * Note:                 customised friendlytag module
    */
 
-Twinkle.stub = function friendlytag() {
+Twinkle.stub = () => {
 	if ( Morebits.isPageRedirect() ) {
 		// Skip
 		// article/draft article tagging
@@ -33,7 +33,7 @@ Twinkle.stub = function friendlytag() {
 		Twinkle.addPortletLink( Twinkle.stub.callback, "小作品", "friendly-tag", "标记小作品" );
 	}
 };
-Twinkle.stub.callback = function friendlytagCallback() {
+Twinkle.stub.callback = () => {
 	var Window = new Morebits.simpleWindow( 630, Twinkle.stub.mode === "article" ? 450 : 400 );
 	Window.setScriptName( "Twinkle" );
 	Window.addFooterLink( "小作品说明", "Qiuwen:小作品" );
@@ -97,7 +97,7 @@ Twinkle.stub.callback = function friendlytagCallback() {
 	}
 };
 Twinkle.stub.checkedTags = [];
-Twinkle.stub.updateSortOrder = function ( e ) {
+Twinkle.stub.updateSortOrder = ( e ) => {
 	var sortorder = e.target.value;
 	Twinkle.stub.checkedTags = e.target.form.getChecked( "articleTags" );
 	if ( !Twinkle.stub.checkedTags ) {
@@ -108,7 +108,7 @@ Twinkle.stub.updateSortOrder = function ( e ) {
 	} );
 
 	// function to generate a checkbox, with appropriate subgroup if needed
-	var makeCheckbox = function makeCheckbox( tag, description ) {
+	var makeCheckbox = ( tag, description ) => {
 		var checkbox = {
 			value: tag,
 			label: `{{${tag}}}: ${description}`
@@ -139,7 +139,7 @@ Twinkle.stub.updateSortOrder = function ( e ) {
 	// categorical sort order
 	if ( sortorder === "cat" ) {
 		// function to iterate through the tags and create a checkbox for each one
-		var doCategoryCheckboxes = function ( subdiv, array ) {
+		var doCategoryCheckboxes = ( subdiv, array ) => {
 			let checkboxes = [];
 			$.each( array, ( k, tag ) => {
 				var description = Twinkle.stub.article.tags[ tag ];
@@ -275,18 +275,12 @@ Twinkle.stub.article.tagCategories = {
 // Tags for REDIRECTS start here
 
 Twinkle.stub.callbacks = {
-	main: function main( pageobj ) {
-		var params = pageobj.getCallbackParameters(),
-			tagRe,
-			summaryText = "加入",
-			tags = [],
-			groupableTags = [],
-			i,
-			totalTags;
+	main: ( pageobj ) => {
+		var params = pageobj.getCallbackParameters(), tagRe, summaryText = "加入", tags = [], groupableTags = [], i, totalTags;
 
 		// Remove tags that become superfluous with this action
 		var pageText = pageobj.getPageText();
-		var addTag = function friendlytagAddTag( tagIndex, tagName ) {
+		var addTag = ( tagIndex, tagName ) => {
 			pageText += `\n{{${tagName}}}`;
 			if ( tagIndex > 0 ) {
 				if ( tagIndex === totalTags - 1 ) {
@@ -326,7 +320,7 @@ Twinkle.stub.callbacks = {
 		}
 	}
 };
-Twinkle.stub.callback.evaluate = function friendlytagCallbackEvaluate( e ) {
+Twinkle.stub.callback.evaluate = ( e ) => {
 	var form = e.target;
 	var params = {};
 	if ( form.patrolPage ) {
@@ -358,7 +352,7 @@ Twinkle.stub.callback.evaluate = function friendlytagCallbackEvaluate( e ) {
 	switch ( Twinkle.stub.mode ) {
 		case "条目":
 		case "條目":
-			/* falls through */
+		/* falls through */
 		case "重定向":
 			qiuwen_page.load( Twinkle.stub.callbacks.main );
 			return;

@@ -877,7 +877,7 @@ Morebits.quickForm.element.generateTooltip = function QuickFormElementGenerateTo
  * @param {HTMLFormElement} form
  * @returns {Object} With field names as keys, input data as values.
  */
-Morebits.quickForm.getInputData = function ( form ) {
+Morebits.quickForm.getInputData = ( form ) => {
 	var result = {};
 	for ( var i = 0; i < form.elements.length; i++ ) {
 		var field = form.elements[ i ];
@@ -1041,7 +1041,7 @@ Morebits.quickForm.setElementLabel = function QuickFormSetElementLabel( element,
  * @param {string} temporaryLabelText
  * @returns {boolean} `true` if succeeded, `false` if the label element is unavailable.
  */
-Morebits.quickForm.overrideElementLabel = function QuickFormOverrideElementLabel( element, temporaryLabelText ) {
+Morebits.quickForm.overrideElementLabel = ( element, temporaryLabelText ) => {
 	if ( !element.hasAttribute( "data-oldlabel" ) ) {
 		element.setAttribute( "data-oldlabel", Morebits.quickForm.getElementLabel( element ) );
 	}
@@ -1055,7 +1055,7 @@ Morebits.quickForm.overrideElementLabel = function QuickFormOverrideElementLabel
  * @param {(HTMLElement|Morebits.quickForm.element)} element
  * @returns {boolean} True if succeeded, false if the label element is unavailable.
  */
-Morebits.quickForm.resetElementLabel = function QuickFormResetElementLabel( element ) {
+Morebits.quickForm.resetElementLabel = ( element ) => {
 	if ( element.hasAttribute( "data-oldlabel" ) ) {
 		return Morebits.quickForm.setElementLabel( element, element.getAttribute( "data-oldlabel" ) );
 	}
@@ -1069,7 +1069,7 @@ Morebits.quickForm.resetElementLabel = function QuickFormResetElementLabel( elem
  * @param {(HTMLElement|jQuery|string)} element - HTML/jQuery element, or jQuery selector string.
  * @param {boolean} [visibility] - Skip this to toggle visibility.
  */
-Morebits.quickForm.setElementVisibility = function QuickFormSetElementVisibility( element, visibility ) {
+Morebits.quickForm.setElementVisibility = ( element, visibility ) => {
 	$( element ).toggle( visibility );
 };
 
@@ -2063,7 +2063,7 @@ Object.getOwnPropertyNames( Date.prototype ).forEach( ( func ) => {
 	// Exclude methods that collide with PageTriage's Date.js external, which clobbers native Date: [[phab:T268513]]
 	if ( [ "add", "getDayName", "getMonthName" ].indexOf( func ) === -1 ) {
 		Morebits.date.prototype[ func ] = function () {
-			return this._d[ func ].apply( this._d, Array.prototype.slice.call( arguments ) );
+			return this._d[ func ].apply( ...Array.prototype.slice.call( arguments ) );
 		};
 	}
 } );
@@ -2128,7 +2128,7 @@ Morebits.wiki.nbrOfCheckpointsLeft = 0;
  *
  * @memberof Morebits.wiki
  */
-Morebits.wiki.actionCompleted = function ( self ) {
+Morebits.wiki.actionCompleted = ( self ) => {
 	if ( --Morebits.wiki.numberOfActionsLeft <= 0 && Morebits.wiki.nbrOfCheckpointsLeft <= 0 ) {
 		Morebits.wiki.actionCompleted.event( self );
 	}
@@ -2162,12 +2162,12 @@ Morebits.wiki.actionCompleted.redirect = null;
 Morebits.wiki.actionCompleted.notice = null;
 
 /** @memberof Morebits.wiki */
-Morebits.wiki.addCheckpoint = function () {
+Morebits.wiki.addCheckpoint = () => {
 	++Morebits.wiki.nbrOfCheckpointsLeft;
 };
 
 /** @memberof Morebits.wiki */
-Morebits.wiki.removeCheckpoint = function () {
+Morebits.wiki.removeCheckpoint = () => {
 	if ( --Morebits.wiki.nbrOfCheckpointsLeft <= 0 && Morebits.wiki.numberOfActionsLeft <= 0 ) {
 		Morebits.wiki.actionCompleted.event();
 	}
@@ -2372,7 +2372,7 @@ Morebits.wiki.api.prototype = {
 };
 
 /** Retrieves wikitext from a page. Caching enabled, duration 1 day. */
-Morebits.wiki.getCachedJson = function ( title ) {
+Morebits.wiki.getCachedJson = ( title ) => {
 	var query = {
 		action: "query",
 		prop: "revisions",
@@ -2406,7 +2406,7 @@ var morebitsWikiApiUserAgent = "Qiuwen/1.1 morebits.js";
  * value of `morebits.js` will be appended to any provided
  * value.
  */
-Morebits.wiki.api.setApiUserAgent = function ( ua ) {
+Morebits.wiki.api.setApiUserAgent = ( ua ) => {
 	morebitsWikiApiUserAgent = `Qiuwen/1.1 morebits.js${ua ? `; ${ua}` : ""}`;
 };
 
@@ -2426,7 +2426,7 @@ var morebitsWikiChangeTag = "";
  * @memberof Morebits.wiki.api
  * @returns {string} MediaWiki CSRF token.
  */
-Morebits.wiki.api.getToken = function () {
+Morebits.wiki.api.getToken = () => {
 	var tokenApi = new Morebits.wiki.api( "获取令牌", {
 		action: "query",
 		meta: "tokens",
@@ -2590,7 +2590,7 @@ Morebits.wiki.page = function ( pageName, status ) {
 		protectApi: null,
 		protectProcessApi: null
 	};
-	var emptyFunction = function emptyFunction() { };
+	var emptyFunction = () => { };
 
 	/**
 	 * Loads the text for the page.
@@ -2836,35 +2836,31 @@ Morebits.wiki.page = function ( pageName, status ) {
 	};
 
 	/** @returns {string} The name of the loaded page, including the namespace */
-	this.getPageName = function () {
-		return ctx.pageName;
-	};
+	this.getPageName = () => ctx.pageName;
 
 	/** @returns {string} The text of the page after a successful load() */
-	this.getPageText = function () {
-		return ctx.pageText;
-	};
+	this.getPageText = () => ctx.pageText;
 
 	/** @param {string} pageText - Updated page text that will be saved when `save()` is called */
-	this.setPageText = function ( pageText ) {
+	this.setPageText = ( pageText ) => {
 		ctx.editMode = "all";
 		ctx.pageText = pageText;
 	};
 
 	/** @param {string} appendText - Text that will be appended to the page when `append()` is called */
-	this.setAppendText = function ( appendText ) {
+	this.setAppendText = ( appendText ) => {
 		ctx.editMode = "append";
 		ctx.appendText = appendText;
 	};
 
 	/** @param {string} prependText - Text that will be prepended to the page when `prepend()` is called */
-	this.setPrependText = function ( prependText ) {
+	this.setPrependText = ( prependText ) => {
 		ctx.editMode = "prepend";
 		ctx.prependText = prependText;
 	};
 
 	/** @param {string} newSectionText - Text that will be added in a new section on the page when `newSection()` is called */
-	this.setNewSectionText = function ( newSectionText ) {
+	this.setNewSectionText = ( newSectionText ) => {
 		ctx.editMode = "new";
 		ctx.newSectionText = newSectionText;
 	};
@@ -2873,7 +2869,7 @@ Morebits.wiki.page = function ( pageName, status ) {
 	 * @param {string} newSectionTitle - Title for the new section created when `newSection()` is called
 	 * If missing, `ctx.editSummary` will be used. Issues may occur if a substituted template is used.
 	 */
-	this.setNewSectionTitle = function ( newSectionTitle ) {
+	this.setNewSectionTitle = ( newSectionTitle ) => {
 		ctx.editMode = "new";
 		ctx.newSectionTitle = newSectionTitle;
 	};
@@ -2885,7 +2881,7 @@ Morebits.wiki.page = function ( pageName, status ) {
 	 *
 	 * @param {string} summary
 	 */
-	this.setEditSummary = function ( summary ) {
+	this.setEditSummary = ( summary ) => {
 		ctx.editSummary = summary;
 	};
 
@@ -2909,17 +2905,17 @@ Morebits.wiki.page = function ( pageName, status ) {
 	 * in the moment between loading the page and saving the edit (default).
 	 *
 	 */
-	this.setCreateOption = function ( createOption ) {
+	this.setCreateOption = ( createOption ) => {
 		ctx.createOption = createOption;
 	};
 
 	/** @param {boolean} minorEdit - Set true to mark the edit as a minor edit. */
-	this.setMinorEdit = function ( minorEdit ) {
+	this.setMinorEdit = ( minorEdit ) => {
 		ctx.minorEdit = minorEdit;
 	};
 
 	/** @param {boolean} botEdit - Set true to mark the edit as a bot edit */
-	this.setBotEdit = function ( botEdit ) {
+	this.setBotEdit = ( botEdit ) => {
 		ctx.botEdit = botEdit;
 	};
 
@@ -2927,7 +2923,7 @@ Morebits.wiki.page = function ( pageName, status ) {
 	 * @param {number} pageSection - Integer specifying the section number to load or save.
 	 * If specified as `null`, the entire page will be retrieved.
 	 */
-	this.setPageSection = function ( pageSection ) {
+	this.setPageSection = ( pageSection ) => {
 		ctx.pageSection = pageSection;
 	};
 
@@ -2935,7 +2931,7 @@ Morebits.wiki.page = function ( pageName, status ) {
 	 * @param {number} maxConflictRetries - Number of retries for save errors involving an edit conflict or
 	 * loss of token. Default: 2.
 	 */
-	this.setMaxConflictRetries = function ( maxConflictRetries ) {
+	this.setMaxConflictRetries = ( maxConflictRetries ) => {
 		ctx.maxConflictRetries = maxConflictRetries;
 	};
 
@@ -2943,7 +2939,7 @@ Morebits.wiki.page = function ( pageName, status ) {
 	 * @param {number} maxRetries - Number of retries for save errors not involving an edit conflict or
 	 * loss of token. Default: 2.
 	 */
-	this.setMaxRetries = function ( maxRetries ) {
+	this.setMaxRetries = ( maxRetries ) => {
 		ctx.maxRetries = maxRetries;
 	};
 
@@ -2974,7 +2970,7 @@ Morebits.wiki.page = function ( pageName, status ) {
 	 * Can also be `infinity` or infinity-like (`infinite`, `indefinite`, and `never`).
 	 * See {@link phabricator.wikimedia.org/source/mediawiki-libs-Timestamp/browse/master/src/ConvertibleTimestamp.php;4e53b859a9580c55958078f46dd4f3a44d0fcaa0$57-109?as=source&blame=off}
 	 */
-	this.setWatchlist = function ( watchlistOption, watchlistExpiry ) {
+	this.setWatchlist = ( watchlistOption, watchlistExpiry ) => {
 		if ( watchlistOption instanceof Morebits.date || watchlistOption instanceof Date ) {
 			watchlistOption = watchlistOption.toISOString();
 		}
@@ -3033,7 +3029,7 @@ Morebits.wiki.page = function ( pageName, status ) {
 	 * Can also be `infinity` or infinity-like (`infinite`, `indefinite`, and `never`).
 	 * See {@link phabricator.wikimedia.org/source/mediawiki-libs-Timestamp/browse/master/src/ConvertibleTimestamp.php;4e53b859a9580c55958078f46dd4f3a44d0fcaa0$57-109?as=source&blame=off}
 	 */
-	this.setWatchlistExpiry = function ( watchlistExpiry ) {
+	this.setWatchlistExpiry = ( watchlistExpiry ) => {
 		if ( typeof watchlistExpiry === "undefined" ) {
 			watchlistExpiry = "infinity";
 		} else if ( watchlistExpiry instanceof Morebits.date || watchlistExpiry instanceof Date ) {
@@ -3059,7 +3055,7 @@ Morebits.wiki.page = function ( pageName, status ) {
 	 * is only needed for the few Twinkle watchlist preferences that
 	 * accept a string value of `default`.
 	 */
-	this.setWatchlistFromPreferences = function ( watchlistOption ) {
+	this.setWatchlistFromPreferences = ( watchlistOption ) => {
 		console.warn( "NOTE: Morebits.wiki.page.setWatchlistFromPreferences was deprecated December 2020, please use setWatchlist" );
 		if ( watchlistOption ) {
 			ctx.watchlistOption = "preferences";
@@ -3101,28 +3097,28 @@ Morebits.wiki.page = function ( pageName, status ) {
 	 * 3. Must not be used when the page has a non-wikitext contentmodel
 	 * such as Modulespace Lua or user JavaScript/CSS.
 	 */
-	this.setLookupNonRedirectCreator = function ( flag ) {
+	this.setLookupNonRedirectCreator = ( flag ) => {
 		ctx.lookupNonRedirectCreator = flag;
 	};
 
 	// Move-related setter functions
 	/** @param {string} destination */
-	this.setMoveDestination = function ( destination ) {
+	this.setMoveDestination = ( destination ) => {
 		ctx.moveDestination = destination;
 	};
 
 	/** @param {boolean} flag */
-	this.setMoveTalkPage = function ( flag ) {
+	this.setMoveTalkPage = ( flag ) => {
 		ctx.moveTalkPage = !!flag;
 	};
 
 	/** @param {boolean} flag */
-	this.setMoveSubpages = function ( flag ) {
+	this.setMoveSubpages = ( flag ) => {
 		ctx.moveSubpages = !!flag;
 	};
 
 	/** @param {boolean} flag */
-	this.setMoveSuppressRedirect = function ( flag ) {
+	this.setMoveSuppressRedirect = ( flag ) => {
 		ctx.moveSuppressRedirect = !!flag;
 	};
 
@@ -3133,50 +3129,44 @@ Morebits.wiki.page = function ( pageName, status ) {
 	 * (enWiki-only).
 	 * @param {string} [expiry=infinity]
 	 */
-	this.setEditProtection = function ( level, expiry ) {
+	this.setEditProtection = ( level, expiry ) => {
 		ctx.protectEdit = {
 			level: level,
 			expiry: expiry || "infinity"
 		};
 	};
-	this.setMoveProtection = function ( level, expiry ) {
+	this.setMoveProtection = ( level, expiry ) => {
 		ctx.protectMove = {
 			level: level,
 			expiry: expiry || "infinity"
 		};
 	};
-	this.setCreateProtection = function ( level, expiry ) {
+	this.setCreateProtection = ( level, expiry ) => {
 		ctx.protectCreate = {
 			level: level,
 			expiry: expiry || "infinity"
 		};
 	};
-	this.setCascadingProtection = function ( flag ) {
+	this.setCascadingProtection = ( flag ) => {
 		ctx.protectCascade = !!flag;
 	};
-	this.suppressProtectWarning = function () {
+	this.suppressProtectWarning = () => {
 		ctx.suppressProtectWarning = true;
 	};
 
 	// Revert-related getters/setters:
-	this.setOldID = function ( oldID ) {
+	this.setOldID = ( oldID ) => {
 		ctx.revertOldID = oldID;
 	};
 
 	/** @returns {string} The current revision ID of the page */
-	this.getCurrentID = function () {
-		return ctx.revertCurID;
-	};
+	this.getCurrentID = () => ctx.revertCurID;
 
 	/** @returns {string} Last editor of the page */
-	this.getRevisionUser = function () {
-		return ctx.revertUser;
-	};
+	this.getRevisionUser = () => ctx.revertUser;
 
 	/** @returns {string} ISO 8601 timestamp at which the page was last edited. */
-	this.getLastEditTime = function () {
-		return ctx.lastEditTime;
-	};
+	this.getLastEditTime = () => ctx.lastEditTime;
 
 	// Miscellaneous getters/setters:
 	/**
@@ -3191,45 +3181,37 @@ Morebits.wiki.page = function ( pageName, status ) {
 	 *
 	 * @param {Object} callbackParameters
 	 */
-	this.setCallbackParameters = function ( callbackParameters ) {
+	this.setCallbackParameters = ( callbackParameters ) => {
 		ctx.callbackParameters = callbackParameters;
 	};
 
 	/**
 	 * @returns {Object} - The object previously set by `setCallbackParameters()`.
 	 */
-	this.getCallbackParameters = function () {
-		return ctx.callbackParameters;
-	};
+	this.getCallbackParameters = () => ctx.callbackParameters;
 
 	/**
 	 * @param {Morebits.status} statusElement
 	 */
-	this.setStatusElement = function ( statusElement ) {
+	this.setStatusElement = ( statusElement ) => {
 		ctx.statusElement = statusElement;
 	};
 
 	/**
 	 * @returns {Morebits.status} Status element created by the constructor.
 	 */
-	this.getStatusElement = function () {
-		return ctx.statusElement;
-	};
+	this.getStatusElement = () => ctx.statusElement;
 
 	/**
 	 * @returns {boolean} True if the page existed on the wiki when it was last loaded.
 	 */
-	this.exists = function () {
-		return ctx.pageExists;
-	};
+	this.exists = () => ctx.pageExists;
 
 	/**
 	 * @returns {string} Page ID of the page loaded. 0 if the page doesn't
 	 * exist.
 	 */
-	this.getPageID = function () {
-		return ctx.pageID;
-	};
+	this.getPageID = () => ctx.pageID;
 
 	/**
 	 * @returns {string} - Content model of the page.  Possible values
@@ -3237,44 +3219,32 @@ Morebits.wiki.page = function ( pageName, status ) {
 	 * `css`, `json`, `Scribunto`, `sanitized-css`, `MassMessageListContent`.
 	 * Also gettable via `mw.config.get('wgPageContentModel')`.
 	 */
-	this.getContentModel = function () {
-		return ctx.contentModel;
-	};
+	this.getContentModel = () => ctx.contentModel;
 
 	/**
 	 * @returns {boolean|string} - Watched status of the page. Boolean
 	 * unless it's being watched temporarily, in which case returns the
 	 * expiry string.
 	 */
-	this.getWatched = function () {
-		return ctx.watched;
-	};
+	this.getWatched = () => ctx.watched;
 
 	/**
 	 * @returns {string} ISO 8601 timestamp at which the page was last loaded.
 	 */
-	this.getLoadTime = function () {
-		return ctx.loadTime;
-	};
+	this.getLoadTime = () => ctx.loadTime;
 
 	/**
 	 * @returns {string} The user who created the page following `lookupCreation()`.
 	 */
-	this.getCreator = function () {
-		return ctx.creator;
-	};
+	this.getCreator = () => ctx.creator;
 
 	/**
 	 * @returns {string} The ISOString timestamp of page creation following `lookupCreation()`.
 	 */
-	this.getCreationTimestamp = function () {
-		return ctx.timestamp;
-	};
+	this.getCreationTimestamp = () => ctx.timestamp;
 
 	/** @returns {boolean} whether or not you can edit the page */
-	this.canEdit = function () {
-		return !!ctx.testActions && ctx.testActions.indexOf( "edit" ) !== -1;
-	};
+	this.canEdit = () => !!ctx.testActions && ctx.testActions.indexOf( "edit" ) !== -1;
 
 	/**
 	 * Retrieves the username of the user who created the page as well as
@@ -3502,7 +3472,7 @@ Morebits.wiki.page = function ( pageName, status ) {
 	 * "edit" or "delete". In practice, only "edit" or "notedit" matters.
 	 * @returns {boolean}
 	 */
-	var fnCanUseMwUserToken = function fnCanUseMwUserToken( action ) {
+	var fnCanUseMwUserToken = ( action ) => {
 		action = typeof action !== "undefined" ? action : "edit"; // IE doesn't support default parameters
 
 		// If a watchlist expiry is set, we must always load the page
@@ -3554,7 +3524,7 @@ Morebits.wiki.page = function ( pageName, status ) {
 	 * "delete".
 	 * @returns {Object} Appropriate query.
 	 */
-	var fnNeedTokenInfoQuery = function fnNeedTokenInfoQuery( action ) {
+	var fnNeedTokenInfoQuery = ( action ) => {
 		var query = {
 			action: "query",
 			meta: "tokens",
@@ -3564,7 +3534,7 @@ Morebits.wiki.page = function ( pageName, status ) {
 			inprop: "watched",
 			format: "json"
 		};
-			// Protection not checked for flagged-revs or non-sysop moves
+		// Protection not checked for flagged-revs or non-sysop moves
 		if ( action !== "move" || Morebits.userIsSysop ) {
 			query.inprop += "|protection";
 		}
@@ -3576,7 +3546,7 @@ Morebits.wiki.page = function ( pageName, status ) {
 	};
 
 	// callback from loadSuccess() for append(), prepend(), and newSection() threads
-	var fnAutoSave = function fnAutoSave( pageobj ) {
+	var fnAutoSave = ( pageobj ) => {
 		pageobj.save( ctx.onSaveSuccess, ctx.onSaveFailure );
 	};
 
@@ -4795,7 +4765,7 @@ Morebits.status = function Status( text, stat, type ) {
  * @param {HTMLElement} root - Usually a div element.
  * @throws If `root` is not an `HTMLElement`.
  */
-Morebits.status.init = function ( root ) {
+Morebits.status.init = ( root ) => {
 	if ( !( root instanceof Element ) ) {
 		throw new Error( "object not an instance of Element" );
 	}
@@ -4812,7 +4782,7 @@ Morebits.status.root = null;
  * @param {Function} handler - Function to execute on error.
  * @throws When `handler` is not a function.
  */
-Morebits.status.onError = function ( handler ) {
+Morebits.status.onError = ( handler ) => {
 	if ( typeof handler === "function" ) {
 		Morebits.status.errorEvent = handler;
 	} else {
@@ -5174,7 +5144,7 @@ Morebits.batchOperation = function ( currentAction ) {
 	 * If no Morebits.wiki.* object is used (e.g. you're using `mw.Api()` or something else), and
 	 * `preserveIndividualStatusLines` option is on, give the page name (string) as argument.
 	 */
-	this.workerSuccess = function ( arg ) {
+	this.workerSuccess = ( arg ) => {
 		if ( arg instanceof Morebits.wiki.api || arg instanceof Morebits.wiki.page ) {
 			// update or remove status line
 			var statelem = arg.getStatusElement();

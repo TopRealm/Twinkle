@@ -22,7 +22,7 @@
    * Active on:              Existing non-articles, and Special:PrefixIndex
    */
 
-Twinkle.batchdelete = function twinklebatchdelete() {
+Twinkle.batchdelete = () => {
 	if ( Morebits.userIsSysop && ( mw.config.get( "wgCurRevisionId" ) && mw.config.get( "wgNamespaceNumber" ) > 0 || mw.config.get( "wgCanonicalSpecialPageName" ) === "Prefixindex" || mw.config.get( "wgCanonicalSpecialPageName" ) === "BrokenRedirects" ) ) {
 		Twinkle.addPortletLink( Twinkle.batchdelete.callback, "批删", "tw-batch", "删除此分类或页面中的所有链接" );
 	}
@@ -31,7 +31,7 @@ Twinkle.batchdelete.unlinkCache = {};
 
 // Has the subpages list been loaded?
 var subpagesLoaded;
-Twinkle.batchdelete.callback = function twinklebatchdeleteCallback() {
+Twinkle.batchdelete.callback = () => {
 	subpagesLoaded = false;
 	var Window = new Morebits.simpleWindow( 600, 400 );
 	Window.setTitle( "批量删除" );
@@ -198,7 +198,8 @@ Twinkle.batchdelete.callback = function twinklebatchdeleteCallback() {
 		_form.append( {
 			type: "button",
 			label: "全选",
-			event: function dBatchSelectAll() {
+			event: () => {
+
 				$( result ).find( "input[name=pages]:not(:checked)" ).each( ( _, e ) => {
 					e.click(); // check it, and invoke click event so that subgroup can be shown
 				} );
@@ -210,7 +211,8 @@ Twinkle.batchdelete.callback = function twinklebatchdeleteCallback() {
 		_form.append( {
 			type: "button",
 			label: "全不选",
-			event: function dBatchDeselectAll() {
+			event: () => {
+
 				$( result ).find( "input[name=pages]:checked" ).each( ( _, e ) => {
 					e.click(); // uncheck it, and invoke click event so that subgroup can be hidden
 				} );
@@ -238,7 +240,7 @@ Twinkle.batchdelete.callback = function twinklebatchdeleteCallback() {
 	};
 	qiuwen_api.post();
 };
-Twinkle.batchdelete.generateNewPageList = function ( form ) {
+Twinkle.batchdelete.generateNewPageList = ( form ) => {
 	// Update the list of checked pages in Twinkle.batchdelete.pages object
 	var elements = form.elements.pages;
 	if ( elements instanceof NodeList ) {
@@ -300,14 +302,14 @@ Twinkle.batchdelete.deletereasonlist = [ {
 	label: "O3：废弃草稿",
 	value: "[[QW:O3|O3]]：废弃草稿"
 } ];
-Twinkle.batchdelete.callback.change_common_reason = function twinklebatchdeleteCallbackChangeCustomReason( e ) {
+Twinkle.batchdelete.callback.change_common_reason = ( e ) => {
 	if ( e.target.form.reason.value !== "" ) {
 		e.target.form.reason.value = Morebits.string.appendPunctuation( e.target.form.reason.value );
 	}
 	e.target.form.reason.value += e.target.value;
 	e.target.value = "";
 };
-Twinkle.batchdelete.callback.toggleSubpages = function twDbatchToggleSubpages( e ) {
+Twinkle.batchdelete.callback.toggleSubpages = ( e ) => {
 	var form = e.target.form;
 	var newPageList;
 	if ( e.target.checked ) {
@@ -409,7 +411,6 @@ Twinkle.batchdelete.callback.toggleSubpages = function twDbatchToggleSubpages( e
 			qiuwen_api.post();
 		}, () => {
 			// List 'em on the interface
-
 			newPageList = Twinkle.batchdelete.generateNewPageList( form );
 			$( "#tw-dbatch-pages" ).replaceWith( newPageList );
 			Morebits.quickForm.getElements( newPageList, "pages" ).forEach( Twinkle.generateArrowLinks );
@@ -434,7 +435,7 @@ Twinkle.batchdelete.callback.toggleSubpages = function twDbatchToggleSubpages( e
 		Morebits.quickForm.getElements( newPageList, "pages" ).forEach( Twinkle.generateArrowLinks );
 	}
 };
-Twinkle.batchdelete.callback.evaluate = function twinklebatchdeleteCallbackEvaluate( event ) {
+Twinkle.batchdelete.callback.evaluate = ( event ) => {
 	Morebits.wiki.actionCompleted.notice = "批量删除已完成";
 	var form = event.target;
 	var numProtected = $( Morebits.quickForm.getElements( form, "pages" ) ).filter( ( index, element ) => {
@@ -510,7 +511,7 @@ Twinkle.batchdelete.callback.evaluate = function twinklebatchdeleteCallbackEvalu
 Twinkle.batchdelete.callbacks = {
 	// this stupid parameter name is a temporary thing until I implement an overhaul
 	// of Morebits.wiki.* callback parameters
-	doExtras: function doExtras( thingWithParameters ) {
+	doExtras: ( thingWithParameters ) => {
 		var params = thingWithParameters.parent ? thingWithParameters.parent.getCallbackParameters() : thingWithParameters.getCallbackParameters();
 		// the initial batch operation's job is to delete the page, and that has
 		// succeeded by now
@@ -577,7 +578,7 @@ Twinkle.batchdelete.callbacks = {
 			}
 		}
 	},
-	deleteRedirectsMain: function deleteRedirectsMain( apiobj ) {
+	deleteRedirectsMain: ( apiobj ) => {
 		var response = apiobj.getResponse();
 		var pages = response.query.pages[ 0 ].redirects || [];
 		pages = pages.map( ( redirect ) => {
@@ -596,7 +597,7 @@ Twinkle.batchdelete.callbacks = {
 			qiuwen_page.deletePage( redirectDeleter.workerSuccess, redirectDeleter.workerFailure );
 		} );
 	},
-	deleteTalk: function deleteTalk( apiobj ) {
+	deleteTalk: ( apiobj ) => {
 		var response = apiobj.getResponse();
 
 		// no talk page; forget about it
@@ -608,7 +609,7 @@ Twinkle.batchdelete.callbacks = {
 		page.setChangeTags( Twinkle.changeTags );
 		page.deletePage();
 	},
-	unlinkBacklinksMain: function unlinkBacklinksMain( apiobj ) {
+	unlinkBacklinksMain: ( apiobj ) => {
 		var response = apiobj.getResponse();
 		var pages = response.query.backlinks || [];
 		pages = pages.map( ( page ) => {
@@ -629,7 +630,7 @@ Twinkle.batchdelete.callbacks = {
 			qiuwen_page.load( Twinkle.batchdelete.callbacks.unlinkBacklinks );
 		} );
 	},
-	unlinkBacklinks: function unlinkBacklinks( pageobj ) {
+	unlinkBacklinks: ( pageobj ) => {
 		var params = pageobj.getCallbackParameters();
 		if ( !pageobj.exists() ) {
 			// we probably just deleted it, as a recursive backlink
@@ -658,7 +659,7 @@ Twinkle.batchdelete.callbacks = {
 		pageobj.setMaxConflictRetries( 10 );
 		pageobj.save( params.unlinker.workerSuccess, params.unlinker.workerFailure );
 	},
-	unlinkImageInstancesMain: function unlinkImageInstancesMain( apiobj ) {
+	unlinkImageInstancesMain: ( apiobj ) => {
 		var response = apiobj.getResponse();
 		var pages = response.query.imageusage || [];
 		pages = pages.map( ( page ) => {
@@ -679,7 +680,7 @@ Twinkle.batchdelete.callbacks = {
 			qiuwen_page.load( Twinkle.batchdelete.callbacks.unlinkImageInstances );
 		} );
 	},
-	unlinkImageInstances: function unlinkImageInstances( pageobj ) {
+	unlinkImageInstances: ( pageobj ) => {
 		var params = pageobj.getCallbackParameters();
 		if ( !pageobj.exists() ) {
 			// we probably just deleted it, as a recursive backlink
