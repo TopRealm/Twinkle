@@ -9,9 +9,6 @@
 		"es2020": false,
 		"es2021": false
 	},
-	"parserOptions": {
-		"ecmaVersion": "latest"
-	},
 	"ignorePatterns": ["src/lib", "scripts/", "lib/", "dist/", "*.json"],
 	"rules": {
 		"logical-assignment-operators": "off",
