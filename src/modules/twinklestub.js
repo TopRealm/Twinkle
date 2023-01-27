@@ -13,18 +13,18 @@
  */
 /* Twinkle.js - twinklestub.js */
 /* <nowiki> */
-( ( $ ) => {
+( function ( $ ) {
 /*
-   ****************************************
-   *** twinklestub.js: Tag module
-   ****************************************
-   * Mode of invocation:   Tab ("Stub")
-   * Active on:            Existing articles
-   * Config directives in: FriendlyConfig
-   * Note:                 customised friendlytag module
-   */
+	   ****************************************
+	   *** twinklestub.js: Tag module
+	   ****************************************
+	   * Mode of invocation:   Tab ("Stub")
+	   * Active on:            Existing articles
+	   * Config directives in: FriendlyConfig
+	   * Note:                 customised friendlytag module
+	   */
 
-Twinkle.stub = () => {
+Twinkle.stub = function friendlytag() {
 	if ( Morebits.isPageRedirect() ) {
 		// Skip
 		// article/draft article tagging
@@ -33,7 +33,7 @@ Twinkle.stub = () => {
 		Twinkle.addPortletLink( Twinkle.stub.callback, "小作品", "friendly-tag", "标记小作品" );
 	}
 };
-Twinkle.stub.callback = () => {
+Twinkle.stub.callback = function friendlytagCallback() {
 	var Window = new Morebits.simpleWindow( 630, Twinkle.stub.mode === "article" ? 450 : 400 );
 	Window.setScriptName( "Twinkle" );
 	Window.addFooterLink( "小作品说明", "Qiuwen:小作品" );
@@ -97,7 +97,7 @@ Twinkle.stub.callback = () => {
 	}
 };
 Twinkle.stub.checkedTags = [];
-Twinkle.stub.updateSortOrder = ( e ) => {
+Twinkle.stub.updateSortOrder = function ( e ) {
 	var sortorder = e.target.value;
 	Twinkle.stub.checkedTags = e.target.form.getChecked( "articleTags" );
 	if ( !Twinkle.stub.checkedTags ) {
@@ -108,7 +108,7 @@ Twinkle.stub.updateSortOrder = ( e ) => {
 	} );
 
 	// function to generate a checkbox, with appropriate subgroup if needed
-	var makeCheckbox = ( tag, description ) => {
+	var makeCheckbox = function ( tag, description ) {
 		var checkbox = {
 			value: tag,
 			label: `{{${tag}}}: ${description}`
@@ -139,8 +139,8 @@ Twinkle.stub.updateSortOrder = ( e ) => {
 	// categorical sort order
 	if ( sortorder === "cat" ) {
 		// function to iterate through the tags and create a checkbox for each one
-		var doCategoryCheckboxes = ( subdiv, array ) => {
-			let checkboxes = [];
+		var doCategoryCheckboxes = function ( subdiv, array ) {
+			var checkboxes = [];
 			$.each( array, ( k, tag ) => {
 				var description = Twinkle.stub.article.tags[ tag ];
 				checkboxes.push( makeCheckbox( tag, description ) );
@@ -177,7 +177,7 @@ Twinkle.stub.updateSortOrder = ( e ) => {
 		} );
 		// alphabetical sort order
 	} else {
-		let checkboxes = [];
+		var checkboxes = [];
 		$.each( Twinkle.stub.article.tags, ( tag, description ) => {
 			checkboxes.push( makeCheckbox( tag, description ) );
 		} );
@@ -209,7 +209,7 @@ Twinkle.stub.updateSortOrder = ( e ) => {
 		link.setAttribute( "class", "tag-template-link" );
 		link.setAttribute( "href", mw.util.getUrl( `Template:${Morebits.string.toUpperCaseFirstChar( checkbox.values )}` ) );
 		link.setAttribute( "target", "_blank" );
-		$checkbox.parent().append( [ "\xA0", link ] );
+		$checkbox.parent().append( [ "\u00A0", link ] );
 	} );
 };
 
@@ -260,27 +260,34 @@ Twinkle.stub.article.tags = {
 // Tags should be in alphabetical order within the categories
 // Add new categories with discretion - the list is long enough as is!
 
+/* eslint-disable quote-props */
 Twinkle.stub.article.tagCategories = {
-	通用模板: [ "stub", "expand list" ],
-	国家和地理: [ "asia-stub", "europe-stub", "france-geo-stub", "geo-stub", "JP-stub", "switzerland-stub", "UK-stub", "US-bio-stub", "US-geo-stub", "US-stub" ],
-	杂项: [ "food-stub", "hist-stub", "mil-stub", "politic-stub", "religion-stub", "transp-stub" ],
-	人物: [ "actor-stub", "bio-stub", "US-bio-stub" ],
-	科学: [ "biology-stub", "chem-stub", "math-stub", "med-stub", "physics-stub", "science-stub", "weather-stub" ],
-	体育: [ "sport-stub" ],
-	技术: [ "tech-stub" ],
-	艺术: [ "actor-stub", "lit-stub", "movie-stub", "music-stub", "TV-stub" ]
+	"通用模板": [ "stub", "expand list" ],
+	"国家和地理": [ "asia-stub", "europe-stub", "france-geo-stub", "geo-stub", "JP-stub", "switzerland-stub", "UK-stub", "US-bio-stub", "US-geo-stub", "US-stub" ],
+	"杂项": [ "food-stub", "hist-stub", "mil-stub", "politic-stub", "religion-stub", "transp-stub" ],
+	"人物": [ "actor-stub", "bio-stub", "US-bio-stub" ],
+	"科学": [ "biology-stub", "chem-stub", "math-stub", "med-stub", "physics-stub", "science-stub", "weather-stub" ],
+	"体育": [ "sport-stub" ],
+	"技术": [ "tech-stub" ],
+	"艺术": [ "actor-stub", "lit-stub", "movie-stub", "music-stub", "TV-stub" ]
 };
 /* eslint-enable quote-props */
 
 // Tags for REDIRECTS start here
 
 Twinkle.stub.callbacks = {
-	main: ( pageobj ) => {
-		var params = pageobj.getCallbackParameters(), tagRe, summaryText = "加入", tags = [], groupableTags = [], i, totalTags;
+	main: function ( pageobj ) {
+		var params = pageobj.getCallbackParameters(),
+			tagRe,
+			summaryText = "加入",
+			tags = [],
+			groupableTags = [],
+			i,
+			totalTags;
 
 		// Remove tags that become superfluous with this action
 		var pageText = pageobj.getPageText();
-		var addTag = ( tagIndex, tagName ) => {
+		var addTag = function friendlytagAddTag( tagIndex, tagName ) {
 			pageText += `\n{{${tagName}}}`;
 			if ( tagIndex > 0 ) {
 				if ( tagIndex === totalTags - 1 ) {
@@ -320,7 +327,7 @@ Twinkle.stub.callbacks = {
 		}
 	}
 };
-Twinkle.stub.callback.evaluate = ( e ) => {
+Twinkle.stub.callback.evaluate = function friendlytagCallbackEvaluate( e ) {
 	var form = e.target;
 	var params = {};
 	if ( form.patrolPage ) {
@@ -352,7 +359,7 @@ Twinkle.stub.callback.evaluate = ( e ) => {
 	switch ( Twinkle.stub.mode ) {
 		case "条目":
 		case "條目":
-		/* falls through */
+			/* falls through */
 		case "重定向":
 			qiuwen_page.load( Twinkle.stub.callbacks.main );
 			return;
@@ -366,6 +373,6 @@ Twinkle.stub.callback.evaluate = ( e ) => {
 	}
 };
 Twinkle.addInitCallback( Twinkle.stub, "stub" );
-} )( jQuery );
+}( jQuery ) );
 
 /* </nowiki> */

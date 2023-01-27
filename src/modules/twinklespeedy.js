@@ -13,24 +13,24 @@
  */
 /* Twinkle.js - twinklespeedy.js */
 /* <nowiki> */
-( ( $ ) => {
+( function ( $ ) {
 /*
-   ****************************************
-   *** twinklespeedy.js: CSD module
-   ****************************************
-   * Mode of invocation:  Tab ("CSD")
-   * Active on:           Non-special, existing pages
-   * Mode of invocation:  Tab ("CSD")
-   * Active on:           Non-special, existing pages
-   *
-   * NOTE FOR DEVELOPERS:
-   *   If adding a new criterion, add it to the appropriate places at the top of
-   *   twinkleconfig.js.  Also check out the default values of the CSD preferences
-   *   in twinkle.js, and add your new criterion to those if you think it would be
-   *   good.
-   */
+	   ****************************************
+	   *** twinklespeedy.js: CSD module
+	   ****************************************
+	   * Mode of invocation:  Tab ("CSD")
+	   * Active on:           Non-special, existing pages
+	   * Mode of invocation:  Tab ("CSD")
+	   * Active on:           Non-special, existing pages
+	   *
+	   * NOTE FOR DEVELOPERS:
+	   *   If adding a new criterion, add it to the appropriate places at the top of
+	   *   twinkleconfig.js.  Also check out the default values of the CSD preferences
+	   *   in twinkle.js, and add your new criterion to those if you think it would be
+	   *   good.
+	   */
 
-Twinkle.speedy = () => {
+Twinkle.speedy = function twinklespeedy() {
 	// Disable on:
 	// * special pages
 	// * non-existent pages
@@ -41,7 +41,7 @@ Twinkle.speedy = () => {
 };
 
 // This function is run when the CSD tab/header link is clicked
-Twinkle.speedy.callback = () => {
+Twinkle.speedy.callback = function twinklespeedyCallback() {
 	Twinkle.speedy.initDialog( Morebits.userIsSysop ? Twinkle.speedy.callback.evaluateSysop : Twinkle.speedy.callback.evaluateUser, true );
 };
 
@@ -71,15 +71,21 @@ Twinkle.speedy.mode = {
 
 	// are we in "delete page" mode?
 	// (sysops can access both "delete page" [sysop] and "tag page only" [user] modes)
-	isSysop: ( mode ) => mode === Twinkle.speedy.mode.sysopSingleSubmit || mode === Twinkle.speedy.mode.sysopMultipleSubmit || mode === Twinkle.speedy.mode.sysopRadioClick || mode === Twinkle.speedy.mode.sysopMultipleRadioClick,
+	isSysop: function twinklespeedyModeIsSysop( mode ) {
+		return mode === Twinkle.speedy.mode.sysopSingleSubmit || mode === Twinkle.speedy.mode.sysopMultipleSubmit || mode === Twinkle.speedy.mode.sysopRadioClick || mode === Twinkle.speedy.mode.sysopMultipleRadioClick;
+	},
 	// do we have a "Submit" button once the form is created?
-	hasSubmitButton: ( mode ) => mode === Twinkle.speedy.mode.sysopSingleSubmit || mode === Twinkle.speedy.mode.sysopMultipleSubmit || mode === Twinkle.speedy.mode.sysopMultipleRadioClick || mode === Twinkle.speedy.mode.userMultipleSubmit || mode === Twinkle.speedy.mode.userMultipleRadioClick || mode === Twinkle.speedy.mode.userSingleSubmit,
+	hasSubmitButton: function twinklespeedyModeHasSubmitButton( mode ) {
+		return mode === Twinkle.speedy.mode.sysopSingleSubmit || mode === Twinkle.speedy.mode.sysopMultipleSubmit || mode === Twinkle.speedy.mode.sysopMultipleRadioClick || mode === Twinkle.speedy.mode.userMultipleSubmit || mode === Twinkle.speedy.mode.userMultipleRadioClick || mode === Twinkle.speedy.mode.userSingleSubmit;
+	},
 	// is db-multiple the outcome here?
-	isMultiple: ( mode ) => mode === Twinkle.speedy.mode.userMultipleSubmit || mode === Twinkle.speedy.mode.sysopMultipleSubmit || mode === Twinkle.speedy.mode.userMultipleRadioClick || mode === Twinkle.speedy.mode.sysopMultipleRadioClick
+	isMultiple: function twinklespeedyModeIsMultiple( mode ) {
+		return mode === Twinkle.speedy.mode.userMultipleSubmit || mode === Twinkle.speedy.mode.sysopMultipleSubmit || mode === Twinkle.speedy.mode.userMultipleRadioClick || mode === Twinkle.speedy.mode.sysopMultipleRadioClick;
+	}
 };
 
 // Prepares the speedy deletion dialog and displays it
-Twinkle.speedy.initDialog = ( callbackfunc ) => {
+Twinkle.speedy.initDialog = function twinklespeedyInitDialog( callbackfunc ) {
 	var dialog;
 	Twinkle.speedy.dialog = new Morebits.simpleWindow( Twinkle.getPref( "speedyWindowWidth" ), Twinkle.getPref( "speedyWindowHeight" ) );
 	dialog = Twinkle.speedy.dialog;
@@ -98,9 +104,9 @@ Twinkle.speedy.initDialog = ( callbackfunc ) => {
 				name: "tag_only",
 				tooltip: "如果您只想标记此页面而不是将其删除",
 				checked: !( Twinkle.speedy.hasCSD || Twinkle.getPref( "deleteSysopDefaultToDelete" ) ),
-				event: ( _event ) => {
-					var cForm = _event.target.form;
-					var cChecked = _event.target.checked;
+				event: function ( event ) {
+					var cForm = event.target.form;
+					var cChecked = event.target.checked;
 					// enable/disable talk page checkbox
 					if ( cForm.talkpage ) {
 						cForm.talkpage.disabled = cChecked;
@@ -123,7 +129,7 @@ Twinkle.speedy.initDialog = ( callbackfunc ) => {
 					cForm.multiple.disabled = !cChecked;
 					cForm.multiple.checked = false;
 					Twinkle.speedy.callback.modeChanged( cForm );
-					_event.stopPropagation();
+					event.stopPropagation();
 				}
 			} ]
 		} );
@@ -145,8 +151,8 @@ Twinkle.speedy.initDialog = ( callbackfunc ) => {
 					name: "talkpage",
 					tooltip: "删除时附带删除此页面的讨论页。",
 					checked: Twinkle.getPref( "deleteTalkPageOnDelete" ),
-					event: ( _event2 ) => {
-						_event2.stopPropagation();
+					event: function ( event ) {
+						event.stopPropagation();
 					}
 				} ]
 			} );
@@ -159,8 +165,8 @@ Twinkle.speedy.initDialog = ( callbackfunc ) => {
 				name: "redirects",
 				tooltip: "删除到此页的重定向。",
 				checked: Twinkle.getPref( "deleteRedirectsOnDelete" ),
-				event: ( _event3 ) => {
-					_event3.stopPropagation();
+				event: function ( event ) {
+					event.stopPropagation();
 				}
 			} ]
 		} );
@@ -171,9 +177,9 @@ Twinkle.speedy.initDialog = ( callbackfunc ) => {
 				value: "delmultiple",
 				name: "delmultiple",
 				tooltip: "您可选择应用于该页的多个理由。",
-				event: ( _event4 ) => {
-					Twinkle.speedy.callback.modeChanged( _event4.target.form );
-					_event4.stopPropagation();
+				event: function ( event ) {
+					Twinkle.speedy.callback.modeChanged( event.target.form );
+					event.stopPropagation();
 				}
 			} ]
 		} );
@@ -206,8 +212,8 @@ Twinkle.speedy.initDialog = ( callbackfunc ) => {
 			name: "notify",
 			tooltip: "一个通知模板将会被加入创建者的讨论页，如果您启用了该理据的通知。",
 			checked: !Morebits.userIsSysop || !( Twinkle.speedy.hasCSD || Twinkle.getPref( "deleteSysopDefaultToDelete" ) ),
-			event: ( _event5 ) => {
-				_event5.stopPropagation();
+			event: function ( event ) {
+				event.stopPropagation();
 			}
 		} ]
 	} );
@@ -218,9 +224,9 @@ Twinkle.speedy.initDialog = ( callbackfunc ) => {
 			value: "multiple",
 			name: "multiple",
 			tooltip: "您可选择应用于该页的多个理由。",
-			event: ( _event6 ) => {
-				Twinkle.speedy.callback.modeChanged( _event6.target.form );
-				_event6.stopPropagation();
+			event: function ( event ) {
+				Twinkle.speedy.callback.modeChanged( event.target.form );
+				event.stopPropagation();
 			}
 		} ]
 	} );
@@ -257,7 +263,7 @@ Twinkle.speedy.initDialog = ( callbackfunc ) => {
 	// Check for prior deletions.  Just once, upon init
 	Twinkle.speedy.callback.priorDeletionCount();
 };
-Twinkle.speedy.callback.getMode = ( form ) => {
+Twinkle.speedy.callback.getMode = function twinklespeedyCallbackGetMode( form ) {
 	var mode = Twinkle.speedy.mode.userSingleSubmit;
 	if ( form.tag_only && !form.tag_only.checked ) {
 		if ( form.delmultiple.checked ) {
@@ -277,7 +283,7 @@ Twinkle.speedy.callback.getMode = ( form ) => {
 	}
 	return mode;
 };
-Twinkle.speedy.callback.modeChanged = ( form ) => {
+Twinkle.speedy.callback.modeChanged = function twinklespeedyCallbackModeChanged( form ) {
 	var namespace = mw.config.get( "wgNamespaceNumber" );
 
 	// first figure out what mode we're in
@@ -306,9 +312,9 @@ Twinkle.speedy.callback.modeChanged = ( form ) => {
 			type: "button",
 			name: "submit-multiple",
 			label: isSysopMode ? "删除页面" : "标记页面",
-			event: ( _event7 ) => {
-				Twinkle.speedy.callback[ evaluateType ]( _event7 );
-				_event7.stopPropagation();
+			event: function ( event ) {
+				Twinkle.speedy.callback[ evaluateType ]( event );
+				event.stopPropagation();
 			}
 		} );
 	}
@@ -486,7 +492,7 @@ Twinkle.speedy.callback.modeChanged = ( form ) => {
 		Morebits.simpleWindow.setButtonsEnabled( true );
 	}
 };
-Twinkle.speedy.callback.priorDeletionCount = () => {
+Twinkle.speedy.callback.priorDeletionCount = function () {
 	var query = {
 		action: "query",
 		format: "json",
@@ -526,19 +532,19 @@ Twinkle.speedy.callback.priorDeletionCount = () => {
 		}
 	} ).post();
 };
-Twinkle.speedy.generateCsdList = ( list, mode ) => {
+Twinkle.speedy.generateCsdList = function twinklespeedyGenerateCsdList( list, mode ) {
 	// mode switches
 	var isSysopMode = Twinkle.speedy.mode.isSysop( mode );
 	var multiple = Twinkle.speedy.mode.isMultiple( mode );
 	var hasSubmitButton = Twinkle.speedy.mode.hasSubmitButton( mode );
-	var openSubgroupHandler = ( e ) => {
+	var openSubgroupHandler = function ( e ) {
 		$( e.target.form ).find( "input" ).prop( "disabled", true );
 		$( e.target.form ).children().css( "color", "gray" );
 		$( e.target ).parent().css( "color", "black" ).find( "input" ).prop( "disabled", false );
 		$( e.target ).parent().find( "input:text" )[ 0 ].focus();
 		e.stopPropagation();
 	};
-	var submitSubgroupHandler = ( e ) => {
+	var submitSubgroupHandler = function ( e ) {
 		var evaluateType = Twinkle.speedy.mode.isSysop( mode ) ? "evaluateSysop" : "evaluateUser";
 		Twinkle.speedy.callback[ evaluateType ]( e );
 		e.stopPropagation();
@@ -800,8 +806,8 @@ Twinkle.speedy.normalizeHash = {
 	o3: "o3"
 };
 Twinkle.speedy.callbacks = {
-	getTemplateCodeAndParams: ( params ) => {
-		var code, parameters;
+	getTemplateCodeAndParams: function ( params ) {
+		var code, parameters, i;
 		if ( params.normalizeds.length > 1 ) {
 			code = "{{delete";
 			params.utparams = {};
@@ -810,7 +816,7 @@ Twinkle.speedy.callbacks = {
 					code += `|${norm.toUpperCase()}`;
 				}
 				parameters = params.templateParams[ index ] || [];
-				for ( let i in parameters ) {
+				for ( var i in parameters ) {
 					if ( typeof parameters[ i ] === "string" ) {
 						code += `|${parameters[ i ]}`;
 					}
@@ -824,7 +830,7 @@ Twinkle.speedy.callbacks = {
 			if ( params.values[ 0 ] !== "reason" ) {
 				code += `|${params.values[ 0 ]}`;
 			}
-			for ( let i in parameters ) {
+			for ( i in parameters ) {
 				if ( typeof parameters[ i ] === "string" ) {
 					code += `|${parameters[ i ]}`;
 				}
@@ -834,7 +840,7 @@ Twinkle.speedy.callbacks = {
 		}
 		return [ code, params.utparams ];
 	},
-	parseWikitext: ( title, wikitext, callback ) => {
+	parseWikitext: function ( title, wikitext, callback ) {
 		var query = {
 			action: "parse",
 			prop: "text",
@@ -856,9 +862,10 @@ Twinkle.speedy.callbacks = {
 		api.post();
 	},
 	sysop: {
-		main: ( params ) => {
+		main: function ( params ) {
+			var reason;
 			if ( !params.normalizeds.length && params.normalizeds[ 0 ] === "db" ) {
-				let reason = prompt( "输入删除理由：", "" );
+				reason = prompt( "输入删除理由：", "" );
 				Twinkle.speedy.callbacks.sysop.deletePage( reason, params );
 			} else {
 				var code = Twinkle.speedy.callbacks.getTemplateCodeAndParams( params )[ 0 ];
@@ -870,14 +877,14 @@ Twinkle.speedy.callbacks = {
 				} );
 			}
 		},
-		deletePage: ( reason, params ) => {
+		deletePage: function ( reason, params ) {
 			var thispage = new Morebits.wiki.page( mw.config.get( "wgPageName" ), "删除页面" );
 			if ( reason === null ) {
 				return Morebits.status.error( "询问理由", "用户取消操作。" );
 			} else if ( !reason || !reason.replace( /^\s*/, "" ).replace( /\s*$/, "" ) ) {
 				return Morebits.status.error( "询问理由", "你不给我理由……我就……不管了……" );
 			}
-			var deleteMain = () => {
+			var deleteMain = function () {
 				thispage.setEditSummary( reason );
 				thispage.setChangeTags( Twinkle.changeTags );
 				thispage.setWatchlist( params.watch );
@@ -899,7 +906,7 @@ Twinkle.speedy.callbacks = {
 				deleteMain();
 			}
 		},
-		deleteTalk: ( params ) => {
+		deleteTalk: function ( params ) {
 			// delete talk page
 			if ( params.deleteTalkPage && params.normalized !== "f7" && params.normalized !== "o1" && !document.getElementById( "ca-talk" ).classList.contains( "new" ) ) {
 				var talkpage = new Morebits.wiki.page( `${mw.config.get( "wgFormattedNamespaces" )[ mw.config.get( "wgNamespaceNumber" ) + 1 ]}:${mw.config.get( "wgTitle" )}`, "删除讨论页" );
@@ -915,7 +922,7 @@ Twinkle.speedy.callbacks = {
 				Twinkle.speedy.callbacks.sysop.deleteRedirects( params );
 			}
 		},
-		deleteRedirects: ( params ) => {
+		deleteRedirects: function ( params ) {
 			// delete redirects
 			if ( params.deleteRedirects ) {
 				var query = {
@@ -940,7 +947,7 @@ Twinkle.speedy.callbacks = {
 						fontSize: "130%",
 						fontWeight: "bold"
 					},
-					click: () => {
+					click: function () {
 						Morebits.wiki.actionCompleted.redirect = null;
 						Twinkle.speedy.dialog.close();
 						mw.config.set( "wgArticleId", 0 );
@@ -965,7 +972,7 @@ Twinkle.speedy.callbacks = {
 					css: {
 						fontWeight: "bold"
 					},
-					click: () => {
+					click: function () {
 						Morebits.wiki.actionCompleted.redirect = null;
 						Twinkle.speedy.dialog.close();
 						Twinkle.unlink.callback( `取消对已删除文件 ${Morebits.pageNameNorm} 的使用` );
@@ -985,7 +992,7 @@ Twinkle.speedy.callbacks = {
 					css: {
 						fontWeight: "bold"
 					},
-					click: () => {
+					click: function () {
 						Morebits.wiki.actionCompleted.redirect = null;
 						Twinkle.speedy.dialog.close();
 						Twinkle.unlink.callback( `取消对已删除页面 ${Morebits.pageNameNorm} 的链接` );
@@ -1005,7 +1012,7 @@ Twinkle.speedy.callbacks = {
 			} );
 			Morebits.status.info( "工具", $link[ 0 ] );
 		},
-		openUserTalkPage: ( pageobj ) => {
+		openUserTalkPage: function ( pageobj ) {
 			pageobj.getStatusElement().unlink(); // don't need it anymore
 			var user = pageobj.getCreator();
 			var params = pageobj.getCallbackParameters();
@@ -1046,7 +1053,7 @@ Twinkle.speedy.callbacks = {
 						window.open( `${mw.util.wikiScript( "index" )}?${$.param( query )}`, "_blank", "location=no,toolbar=no,status=no,directories=no,scrollbars=yes,width=1200,height=800" );
 						break;
 					case "window":
-					/* falls through */
+						/* falls through */
 					default:
 						window.open( `${mw.util.wikiScript( "index" )}?${$.param( query )}`, window.name === "twinklewarnwindow" ? "_blank" : "twinklewarnwindow", "location=no,toolbar=no,status=no,directories=no,scrollbars=yes,width=1200,height=800" );
 						break;
@@ -1054,7 +1061,7 @@ Twinkle.speedy.callbacks = {
 				statusIndicator.info( "完成" );
 			}
 		},
-		deleteRedirectsMain: ( apiobj ) => {
+		deleteRedirectsMain: function ( apiobj ) {
 			var xmlDoc = apiobj.getXML();
 			var $snapshot = $( xmlDoc ).find( "redirects rd" );
 			var total = $snapshot.length;
@@ -1065,7 +1072,7 @@ Twinkle.speedy.callbacks = {
 			}
 			statusIndicator.status( "0%" );
 			var current = 0;
-			var onsuccess = ( apiobjInner ) => {
+			var onsuccess = function ( apiobjInner ) {
 				var now = `${parseInt( 100 * ++current / total, 10 )}%`;
 				statusIndicator.update( now );
 				apiobjInner.statelem.unlink();
@@ -1085,7 +1092,7 @@ Twinkle.speedy.callbacks = {
 		}
 	},
 	user: {
-		main: ( pageobj ) => {
+		main: function ( pageobj ) {
 			var statelem = pageobj.getStatusElement();
 			if ( !pageobj.exists() ) {
 				statelem.error( "页面不存在，可能已被删除" );
@@ -1096,7 +1103,7 @@ Twinkle.speedy.callbacks = {
 			statelem.status( "检查页面已有标记……" );
 
 			// check for existing deletion tags
-			var textNoSd = text.replace( /\{\{\s*(db(-\w*)?|d|delete|deletebecause|speedy|csd|速刪|速删|快删|快刪)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/gi, "" );
+			var textNoSd = text.replace( /\{\{\s*(db(-\w*)?|d|delete|deletebecause|speedy|csd|速刪|速删|快删|快刪)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/ig, "" );
 			if ( text !== textNoSd && !confirm( "在页面上找到快速删除模板，要移除并加入新的吗？" ) ) {
 				statelem.error( "快速删除模板已被置于页面中。" );
 				return;
@@ -1115,7 +1122,8 @@ Twinkle.speedy.callbacks = {
 
 			// given the params, builds the template and also adds the user talk page parameters to the params that were passed in
 			// returns => [<string> wikitext, <object> utparams]
-			var buildData = Twinkle.speedy.callbacks.getTemplateCodeAndParams( params ), code = buildData[ 0 ];
+			var buildData = Twinkle.speedy.callbacks.getTemplateCodeAndParams( params ),
+				code = buildData[ 0 ];
 			params.utparams = buildData[ 1 ];
 			var thispage = new Morebits.wiki.page( mw.config.get( "wgPageName" ) );
 			// patrol the page, if reached from Special:NewPages
@@ -1168,13 +1176,13 @@ Twinkle.speedy.callbacks = {
 			pageobj.setWatchlist( params.watch );
 			pageobj.save( Twinkle.speedy.callbacks.user.tagComplete );
 		},
-		tagComplete: ( pageobj ) => {
+		tagComplete: function ( pageobj ) {
 			var params = pageobj.getCallbackParameters();
 
 			// Notification to first contributor
 			if ( params.usertalk ) {
-				var callback = ( _pageobj ) => {
-					var initialContrib = _pageobj.getCreator();
+				var callback = function ( pageobj ) {
+					var initialContrib = pageobj.getCreator();
 
 					// disallow warning yourself
 					if ( initialContrib === mw.config.get( "wgUserName" ) ) {
@@ -1198,7 +1206,8 @@ Twinkle.speedy.callbacks = {
 							flowpage.setContent( `{{subst:db-notice|target=${Morebits.pageNameNorm}|flow=yes}}` );
 							flowpage.newTopic();
 						}, () => {
-							var usertalkpage = new Morebits.wiki.page( talkPageName, `通知页面创建者（${initialContrib}）` ), notifytext;
+							var usertalkpage = new Morebits.wiki.page( talkPageName, `通知页面创建者（${initialContrib}）` ),
+								notifytext;
 							notifytext = `\n{{subst:db-notice|target=${Morebits.pageNameNorm}`;
 
 							notifytext += "}}--~~" + "~~";
@@ -1235,7 +1244,7 @@ Twinkle.speedy.callbacks = {
 		// the params used are:
 		//   for CSD: params.values, params.normalizeds  (note: normalizeds is an array)
 		//   for DI: params.fromDI = true, params.templatename, params.normalized  (note: normalized is a string)
-		addToLog: ( params, initialContrib ) => {
+		addToLog: function ( params, initialContrib ) {
 			var usl = new Morebits.userspaceLogger( Twinkle.getPref( "speedyLogPageName" ) );
 			usl.initialText = `这是该用户使用[[H:TW|Twinkle]]的速删模块做出的[[QW:CSD|快速删除]]提名列表。\n\n如果您不再想保留此日志，请在[[${Twinkle.getPref( "configPage" )}|参数设置]]中关掉，并使用[[QW:O1|CSD O1]]提交快速删除。${Morebits.userIsSysop ? "\n\n此日志并不记录用Twinkle直接执行的删除。" : ""}`;
 			var appendText = `# [[:${Morebits.pageNameNorm}]]：`;
@@ -1271,7 +1280,7 @@ Twinkle.speedy.callbacks = {
 };
 
 // validate subgroups in the form passed into the speedy deletion tag
-Twinkle.speedy.getParameters = ( form, values ) => {
+Twinkle.speedy.getParameters = function twinklespeedyGetParameters( form, values ) {
 	var parameters = [];
 	$.each( values, ( _index, value ) => {
 		var currentParams = [];
@@ -1353,7 +1362,7 @@ Twinkle.speedy.getParameters = ( form, values ) => {
 
 // Function for processing talk page notification template parameters
 // eslint-disable-next-line no-unused-vars
-Twinkle.speedy.getUserTalkParameters = ( normalized, _parameters ) => {
+Twinkle.speedy.getUserTalkParameters = function twinklespeedyGetUserTalkParameters( normalized, _parameters ) {
 	var utparams = [];
 	switch ( normalized ) {
 		default:
@@ -1366,7 +1375,7 @@ Twinkle.speedy.getUserTalkParameters = ( normalized, _parameters ) => {
  * @param {Event} e
  * @returns {Array}
  */
-Twinkle.speedy.resolveCsdValues = ( e ) => {
+Twinkle.speedy.resolveCsdValues = function twinklespeedyResolveCsdValues( e ) {
 	var values = ( e.target.form ? e.target.form : e.target ).getChecked( "csd" );
 	if ( values.length === 0 ) {
 		alert( "请选择一个理据。" );
@@ -1374,7 +1383,7 @@ Twinkle.speedy.resolveCsdValues = ( e ) => {
 	}
 	return values;
 };
-Twinkle.speedy.callback.evaluateSysop = ( e ) => {
+Twinkle.speedy.callback.evaluateSysop = function twinklespeedyCallbackEvaluateSysop( e ) {
 	var form = e.target.form ? e.target.form : e.target;
 	if ( e.target.type === "checkbox" || e.target.type === "text" || e.target.type === "select" ) {
 		return;
@@ -1423,7 +1432,7 @@ Twinkle.speedy.callback.evaluateSysop = ( e ) => {
 	Morebits.status.init( form );
 	Twinkle.speedy.callbacks.sysop.main( params );
 };
-Twinkle.speedy.callback.evaluateUser = ( e ) => {
+Twinkle.speedy.callback.evaluateUser = function twinklespeedyCallbackEvaluateUser( e ) {
 	var form = e.target.form ? e.target.form : e.target;
 	if ( e.target.type === "checkbox" || e.target.type === "text" || e.target.type === "select" ) {
 		return;
@@ -1495,6 +1504,6 @@ Twinkle.speedy.callback.evaluateUser = ( e ) => {
 	qiuwen_page.load( Twinkle.speedy.callbacks.user.main );
 };
 Twinkle.addInitCallback( Twinkle.speedy, "speedy" );
-} )( jQuery );
+}( jQuery ) );
 
 /* </nowiki> */
