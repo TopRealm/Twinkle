@@ -1,5 +1,5 @@
-/* eslint-disable no-throw-literal */
 /* eslint-disable no-new */
+/* eslint-disable no-throw-literal */
 "use strict";
 
 /**
@@ -1412,7 +1412,7 @@ Morebits.string = {
 		unbinder.content = unbinder.content.replace( /\|/g, "{{subst:!}}" );
 		reason = unbinder.rebind();
 		if ( addSig ) {
-			var sig = "~~" + "~~",
+			var sig = "~~~~",
 				sigIndex = reason.lastIndexOf( sig );
 			if ( sigIndex === -1 || sigIndex !== reason.length - sig.length ) {
 				reason += ` ${sig}`;
@@ -1453,7 +1453,7 @@ Morebits.string = {
 	 * Determine if the user-provided expiration will be considered an
 	 * infinite-length by MW.
 	 *
-	 * @see {@link phabricator.wikimedia.org/T68646}
+	 * @see {@link https://phabricator.wikimedia.org/T68646}
 	 *
 	 * @param {string} expiry
 	 * @returns {boolean}
@@ -2999,7 +2999,7 @@ Morebits.wiki.page = function ( pageName, status ) {
 	 * UNIX: 2147483647
 	 * SQL: 2038-01-09 03:14:07
 	 * Can also be `infinity` or infinity-like (`infinite`, `indefinite`, and `never`).
-	 * See {@link phabricator.wikimedia.org/source/mediawiki-libs-Timestamp/browse/master/src/ConvertibleTimestamp.php;4e53b859a9580c55958078f46dd4f3a44d0fcaa0$57-109?as=source&blame=off}
+	 * See {@link https://phabricator.wikimedia.org/source/mediawiki-libs-Timestamp/browse/master/src/ConvertibleTimestamp.php;4e53b859a9580c55958078f46dd4f3a44d0fcaa0$57-109?as=source&blame=off}
 	 */
 	this.setWatchlist = function ( watchlistOption, watchlistExpiry ) {
 		if ( watchlistOption instanceof Morebits.date || watchlistOption instanceof Date ) {
