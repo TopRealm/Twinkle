@@ -1,5 +1,3 @@
-/* eslint-disable no-new */
-/* eslint-disable no-throw-literal */
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
  * _addText: '{{Twinkle Header}}'
@@ -12,6 +10,8 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - morebits.js */
+/* eslint-disable no-new */
+/* eslint-disable no-throw-literal */
 /* <nowiki> */
 /**
  * A library full of lots of goodness for user scripts on MediaWiki wikis.
@@ -4336,13 +4336,6 @@ Morebits.wiki.page = function (pageName, status) {
 		return deferred;
 	};
 }; // end Morebits.wiki.page
-
-/* Morebits.wiki.page TODO: (XXX)
- * - Should we retry loads also?
- * - Need to reset current action before the save?
- * - Deal with action.completed stuff
- * - Need to reset all parameters once done (e.g. edit summary, move destination, etc.)
- */
 
 /* **************** Morebits.wiki.preview **************** */
 /**
