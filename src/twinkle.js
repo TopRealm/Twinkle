@@ -59,7 +59,7 @@ Twinkle.initCallbacks = [];
  * @param {string} [name] - name of module used to check if is disabled.
  * If name is not given, module is loaded unconditionally.
  */
-Twinkle.addInitCallback = function twinkleAddInitCallback(func, name) {
+Twinkle.addInitCallback = (func, name) => {
 	Twinkle.initCallbacks.push({
 		func: func,
 		name: name
@@ -224,7 +224,7 @@ switch (mw.config.get('skin')) {
 		Twinkle.defaultConfig.portletType = null;
 		Twinkle.defaultConfig.portletNext = null;
 }
-Twinkle.getPref = function twinkleGetPref(name) {
+Twinkle.getPref = (name) => {
 	if (typeof Twinkle.prefs === 'object' && Twinkle.prefs[name] !== undefined) {
 		return Twinkle.prefs[name];
 	}
@@ -261,7 +261,7 @@ Twinkle.getPref = function twinkleGetPref(name) {
  *
  * @return Node -- the DOM node of the new item (a DIV element) or null
  */
-Twinkle.addPortlet = function (navigation, id, text, type, nextnodeid) {
+Twinkle.addPortlet = (navigation, id, text, type, nextnodeid) => {
 	// sanity checks, and get required DOM nodes
 	const root = document.getElementById(navigation) || document.querySelector(navigation);
 	if (!root) {
@@ -350,7 +350,7 @@ Twinkle.addPortlet = function (navigation, id, text, type, nextnodeid) {
 			heading.appendChild(span);
 			const a = document.createElement('a');
 			a.href = '#';
-			$(a).on('click', function (e) {
+			$(a).on('click', (e) => {
 				e.preventDefault();
 			});
 			heading.appendChild(a);
@@ -377,14 +377,14 @@ Twinkle.addPortlet = function (navigation, id, text, type, nextnodeid) {
  *
  * @param task: Either a URL for the portlet link or a function to execute.
  */
-Twinkle.addPortletLink = function (task, text, id, tooltip) {
+Twinkle.addPortletLink = (task, text, id, tooltip) => {
 	if (Twinkle.getPref('portletArea') !== null) {
 		Twinkle.addPortlet(Twinkle.getPref('portletArea'), Twinkle.getPref('portletId'), Twinkle.getPref('portletName'), Twinkle.getPref('portletType'), Twinkle.getPref('portletNext'));
 	}
 	const link = mw.util.addPortletLink(Twinkle.getPref('portletId'), typeof task === 'string' ? task : '#', text, id, tooltip);
 	$('.client-js .skin-vector #p-cactions').css('margin-right', 'initial');
 	if (typeof task === 'function') {
-		$(link).find('a').on('click', function (ev) {
+		$(link).find('a').on('click', (ev) => {
 			task();
 			ev.preventDefault();
 		});
@@ -404,11 +404,11 @@ const scriptpathbefore = mw.util.wikiScript('index') + '?title=', scriptpathafte
 $.ajax({
 	url: scriptpathbefore + 'User:' + encodeURIComponent(mw.config.get('wgUserName')) + '/twinkleoptions.js' + scriptpathafter,
 	dataType: 'text'
-}).fail(function () {
+}).fail(() => {
 	mw.notify('未能加载您的Twinkle参数设置', {
 		type: 'error'
 	});
-}).done(function (optionsText) {
+}).done((optionsText) => {
 	// Quick pass if user has no options
 	if (optionsText === '' || optionsText === ' ') {
 		return;
@@ -437,13 +437,13 @@ $.ajax({
 			type: 'error'
 		});
 	}
-}).always(function () {
+}).always(() => {
 	$(Twinkle.load);
 });
 
 // Developers: you can import custom Twinkle modules here
 // For example, mw.loader.load(scriptpathbefore + "User:UncleDouggie/morebits-test.js" + scriptpathafter);
-Twinkle.load = function () {
+Twinkle.load = () => {
 	// Don't activate on special pages other than those listed here, so
 	// that others load faster, especially the watchlist.
 	let activeSpecialPageList = [ 'Block', 'Contributions', 'AbuseLog', 'Recentchanges', 'Recentchangeslinked' ]; // wgRelevantUserName defined for non-sysops on Special:Block
@@ -465,13 +465,13 @@ Twinkle.load = function () {
 
 	// Redefine addInitCallback so that any modules being loaded now on are directly
 	// initialised rather than added to initCallbacks array
-	Twinkle.addInitCallback = function (func, name) {
+	Twinkle.addInitCallback = (func, name) => {
 		if (!name || Twinkle.disabledModules.indexOf(name) === -1) {
 			func();
 		}
 	};
 	// Initialise modules that were saved in initCallbacks array
-	Twinkle.initCallbacks.forEach(function (module) {
+	Twinkle.initCallbacks.forEach((module) => {
 		Twinkle.addInitCallback(module.func, module.name);
 	});
 
@@ -506,7 +506,7 @@ Twinkle.makeFindSourcesDiv = (divID) => {
 /** Twinkle-specific utility functions shared by multiple modules */
 // Used in batch, unlink, and deprod to sort pages by namespace, as
 // json formatversion=2 sorts by pageid instead
-Twinkle.sortByNamespace = function (first, second) {
+Twinkle.sortByNamespace = (first, second) => {
 	return first.ns - second.ns || (first.title > second.title ? 1 : -1);
 };
 
@@ -520,7 +520,7 @@ Twinkle.generateArrowLinks = (checkbox) => {
 };
 
 // Used in unlink listings to link the page title
-Twinkle.generateBatchPageLinks = function (checkbox) {
+Twinkle.generateBatchPageLinks = (checkbox) => {
 	const $checkbox = $(checkbox);
 	const link = Morebits.htmlNode('a', $checkbox.val());
 	link.setAttribute('class', 'tw-batchpage-link');
