@@ -5,7 +5,6 @@
 	"env": {
 		"browser": true,
 		"jquery": true,
-		"es5": true,
 		"es6": false,
 		"es2020": false,
 		"es2021": false
