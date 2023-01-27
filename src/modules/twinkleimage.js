@@ -11,23 +11,23 @@
  * @author © 2021-     Qiuwen Baike Contributors
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
-/* Twinkle.js - twinkleimage.js */
+/* Twinkle.js - twinklefluff.js */
 /* <nowiki> */
-( ( $ ) => {
+( function ( $ ) {
 /*
-   ****************************************
-   *** twinkleimage.js: Image CSD module
-   ****************************************
-   * Mode of invocation:  Tab ("DI")
-   * Active on:           Local nonredirect file pages (not on Commons)
-   */
+ ****************************************
+ *** twinkleimage.js: Image CSD module
+ ****************************************
+ * Mode of invocation:  Tab ("DI")
+ * Active on:           Local nonredirect file pages (not on Commons)
+ */
 
-Twinkle.image = () => {
+Twinkle.image = function twinkleimage() {
 	if ( mw.config.get( "wgNamespaceNumber" ) === 6 && !document.getElementById( "mw-sharedupload" ) && document.getElementById( "mw-imagepage-section-filehistory" ) ) {
 		Twinkle.addPortletLink( Twinkle.image.callback, "图权", "tw-di", "提交文件快速删除" );
 	}
 };
-Twinkle.image.callback = () => {
+Twinkle.image.callback = function twinkleimageCallback() {
 	var Window = new Morebits.simpleWindow( 600, 330 );
 	Window.setTitle( "文件快速删除" );
 	Window.setScriptName( "Twinkle" );
@@ -102,7 +102,7 @@ Twinkle.image.callback = () => {
 	evt.initEvent( "change", true, true );
 	result.type[ 0 ].dispatchEvent( evt );
 };
-Twinkle.image.callback.choice = ( event ) => {
+Twinkle.image.callback.choice = function twinkleimageCallbackChoose( event ) {
 	var value = event.target.values;
 	var root = event.target.form;
 	var work_area = new Morebits.quickForm.element( {
@@ -119,7 +119,7 @@ Twinkle.image.callback.choice = ( event ) => {
 					name: "non_free"
 				} ]
 			} );
-		/* falls through */
+			/* falls through */
 		case "no license":
 			work_area.append( {
 				type: "checkbox",
@@ -142,7 +142,7 @@ Twinkle.image.callback.choice = ( event ) => {
 	}
 	root.replaceChild( work_area.render(), $( root ).find( 'div[name="work_area"]' )[ 0 ] );
 };
-Twinkle.image.callback.evaluate = ( event ) => {
+Twinkle.image.callback.evaluate = function twinkleimageCallbackEvaluate( event ) {
 	var input = Morebits.quickForm.getInputData( event.target );
 	if ( input.replacement ) {
 		input.replacement = ( new RegExp( `^${Morebits.namespaceRegex( 6 )}:`, "i" ).test( input.replacement ) ? "" : "File:" ) + input.replacement;
@@ -193,12 +193,13 @@ Twinkle.image.callback.evaluate = ( event ) => {
 	}
 };
 Twinkle.image.callbacks = {
-	taggingImage: ( pageobj ) => {
+	taggingImage: function ( pageobj ) {
 		var text = pageobj.getPageText();
 		var params = pageobj.getCallbackParameters();
 
 		// remove "move to Commons" tag - deletion-tagged files cannot be moved to Commons
 		// text = text.replace(/\{\{(mtc|(copy |move )?to ?commons|move to wikimedia commons|copy to wikimedia commons)[^}]*\}\}/gi, '');
+
 		var tag = `{{di-${params.templatename}|date={{subst:#time:c}}`;
 		switch ( params.type ) {
 			case "no source no license":
@@ -221,7 +222,7 @@ Twinkle.image.callbacks = {
 		pageobj.setCreateOption( "nocreate" );
 		pageobj.save();
 	},
-	userNotification: ( pageobj ) => {
+	userNotification: function ( pageobj ) {
 		var params = pageobj.getCallbackParameters();
 		var initialContrib = pageobj.getCreator();
 
@@ -250,10 +251,10 @@ Twinkle.image.callbacks = {
 			Twinkle.image.callbacks.addToLog( params, initialContrib );
 		}
 	},
-	addToLog: ( params, initialContrib ) => {
+	addToLog: function ( params, initialContrib ) {
 		var usl = new Morebits.userspaceLogger( Twinkle.getPref( "speedyLogPageName" ) );
 		usl.initialText = `这是该用户使用[[H:TW|Twinkle]]的速删模块做出的[[QW:CSD|快速删除]]提名列表。\n\n如果您不再想保留此日志，请在[[${Twinkle.getPref( "configPage" )}|参数设置]]中关掉，并使用[[QW:O1|CSD O1]]提交快速删除。${Morebits.userIsSysop ? "\n\n此日志并不记录用Twinkle直接执行的删除。" : ""}`;
-		var formatParamLog = ( normalize, csdparam, input ) => {
+		var formatParamLog = function ( normalize, csdparam, input ) {
 			if ( normalize === "F5" && csdparam === "replacement" ) {
 				input = `[[:${input}]]`;
 			}
@@ -284,6 +285,6 @@ Twinkle.image.callbacks = {
 	}
 };
 Twinkle.addInitCallback( Twinkle.image, "image" );
-} )( jQuery );
+}( jQuery ) );
 
 /* </nowiki> */
