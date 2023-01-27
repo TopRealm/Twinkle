@@ -13,7 +13,7 @@
 		"stylelint:fix": "stylelint src/*.css --fix",
 		"lint": "eslint . && stylelint src/*.css",
 		"lint:fix": "eslint . --fix && stylelint src/*.css --fix",
-		"babel": "babel -d dist src && eslint . --fix",
+		"babel": "babel -d dist src",
 		"prettier": "npx prettier --write . && npm run lint:fix",
 		"deploy": "node scripts/deploy.js"
 	},
