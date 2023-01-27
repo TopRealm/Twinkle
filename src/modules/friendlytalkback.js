@@ -20,13 +20,13 @@
  * Active on:              Any page with relevant user name (userspace, contribs, etc.) except IP ranges
  * Config directives in:   FriendlyConfig
  */
-Twinkle.talkback = function () {
+Twinkle.talkback = () => {
 	if (!mw.config.exists('wgRelevantUserName')) {
 		return;
 	}
 	Twinkle.addPortletLink(Twinkle.talkback.callback, '通知', 'friendly-talkback', '回复通知');
 };
-Twinkle.talkback.callback = function () {
+Twinkle.talkback.callback = () => {
 	if (mw.config.get('wgRelevantUserName') === mw.config.get('wgUserName') && !confirm('您寂寞到了要自己回复自己的程度么？')) {
 		return;
 	}
@@ -68,7 +68,7 @@ Twinkle.talkback.callback = function () {
 		name: 'work_area'
 	});
 	const previewlink = document.createElement('a');
-	$(previewlink).on('click', function () {
+	$(previewlink).on('click', () => {
 		Twinkle.talkback.callbacks.preview(result); // |result| is defined below
 	});
 
@@ -110,7 +110,7 @@ Twinkle.talkback.callback = function () {
 	qwapi.post();
 };
 Twinkle.talkback.optout = '';
-Twinkle.talkback.callback.optoutStatus = function (apiobj) {
+Twinkle.talkback.callback.optoutStatus = (apiobj) => {
 	const el = apiobj.getResponse().query.pages[0].extlinks;
 	if (el && el.length) {
 		Twinkle.talkback.optout = mw.config.get('wgRelevantUserName') + '不希望收到回复通告';
@@ -123,7 +123,7 @@ Twinkle.talkback.callback.optoutStatus = function (apiobj) {
 let prev_page = '';
 let prev_section = '';
 let prev_message = '';
-Twinkle.talkback.changeTarget = function (e) {
+Twinkle.talkback.changeTarget = (e) => {
 	const value = e.target.values;
 	const root = e.target.form;
 	const old_area = Morebits.quickForm.getElements(root, 'work_area')[0];
@@ -144,7 +144,7 @@ Twinkle.talkback.changeTarget = function (e) {
 	root.previewer.closePreview();
 	switch (value) {
 		case 'talkback':
-			/* falls through */
+		/* falls through */
 		default:
 			work_area.append({
 				type: 'div',
@@ -172,7 +172,7 @@ Twinkle.talkback.changeTarget = function (e) {
 				type: 'select',
 				name: 'noticeboard',
 				label: '通告板：',
-				event: function (e) {
+				event: (e) => {
 					if (e.target.value === 'afchd') {
 						Morebits.quickForm.overrideElementLabel(root.section, '标题或草稿名称（去除Draft前缀）：');
 						Morebits.quickForm.setElementTooltipVisibility(root.section, false);
@@ -182,7 +182,7 @@ Twinkle.talkback.changeTarget = function (e) {
 					}
 				}
 			});
-			$.each(Twinkle.talkback.noticeboards, function (value, data) {
+			$.each(Twinkle.talkback.noticeboards, (value, data) => {
 				noticeboard.append({
 					type: 'option',
 					label: data.label,
@@ -197,7 +197,8 @@ Twinkle.talkback.changeTarget = function (e) {
 				tooltip: '章节标题，留空则不会产生章节链接。',
 				value: prev_section
 			});
-			break; }
+			break;
+		}
 		case 'other':
 			work_area.append({
 				type: 'div',
@@ -279,7 +280,7 @@ Twinkle.talkback.noticeboards = {
 		editSummary: '您在[[Qiuwen:AFCHD|条目创建帮助]]页面的提问已有回复，请前往查看。'
 	}
 };
-Twinkle.talkback.evaluate = function (e) {
+Twinkle.talkback.evaluate = (e) => {
 	const input = Morebits.quickForm.getInputData(e.target);
 	const fullUserTalkPageName = new mw.Title(mw.config.get('wgRelevantUserName'), 3).toText();
 	const talkpage = new Morebits.wiki.page(fullUserTalkPageName, '加入回复通告');
@@ -313,7 +314,7 @@ Twinkle.talkback.evaluate = function (e) {
 };
 Twinkle.talkback.callbacks = {
 	// Not used for notice or mail, default to user page
-	normalizeTalkbackPage: function (page) {
+	normalizeTalkbackPage: (page) => {
 		page = page || mw.config.get('wgUserName');
 
 		// Assume no prefix is a username, convert to user talk space
@@ -328,7 +329,7 @@ Twinkle.talkback.callbacks = {
 		}
 		return page;
 	},
-	preview: function (form) {
+	preview: (form) => {
 		const input = Morebits.quickForm.getInputData(form);
 		if (input.tbtarget === 'talkback' || input.tbtarget === 'see') {
 			input.page = Twinkle.talkback.callbacks.normalizeTalkbackPage(input.page);
@@ -337,7 +338,7 @@ Twinkle.talkback.callbacks = {
 		form.previewer.beginRender(noticetext, 'User talk:' + mw.config.get('wgRelevantUserName')); // Force wikitext/correct username
 	},
 
-	getNoticeWikitext: function (input) {
+	getNoticeWikitext: (input) => {
 		let text;
 		switch (input.tbtarget) {
 			case 'notice':
@@ -361,7 +362,6 @@ Twinkle.talkback.callbacks = {
 			}
 			default:
 				// talkback
-
 				text = '==' + Twinkle.getPref('talkbackHeading') + '==\n{{talkback|' + input.page + (input.section ? '|' + input.section : '') + '|ts=~~' + '~' + '~~}}';
 				if (input.message) {
 
