@@ -59,7 +59,7 @@ Twinkle.tag.callback = function friendlytagCallback() {
 		size: "30px",
 		event: function twinkletagquickfilter() {
 			// flush the DOM of all existing underline spans
-			$allCheckboxDivs.find( ".search-hit" ).each( ( i, e ) => {
+			$allCheckboxDivs.find( ".search-hit" ).each( ( _i, e ) => {
 				var label_element = e.parentNode;
 				// This would convert <label>Hello <span class=search-hit>wo</span>rld</label>
 				// to <label>Hello world</label>
@@ -278,7 +278,7 @@ Twinkle.tag.callback = function friendlytagCallback() {
 
 			// All tags are HTML table elements that are direct children of .mw-parser-output,
 			// except when they are within {{multiple issues}}
-			$( ".mw-parser-output" ).children().each( ( i, e ) => {
+			$( ".mw-parser-output" ).children().each( ( _i, e ) => {
 				// break out on encountering the first heading, which means we are no
 				// longer in the lead section
 				if ( e.tagName === "H2" ) {
@@ -292,7 +292,7 @@ Twinkle.tag.callback = function friendlytagCallback() {
 				// All tags have their first class name as "box-" + template name
 				if ( e.className.indexOf( "box-" ) === 0 ) {
 					if ( e.classList[ 0 ] === "box-Multiple_issues" ) {
-						$( e ).find( ".ambox" ).each( ( idx, e ) => {
+						$( e ).find( ".ambox" ).each( ( _idx, e ) => {
 							if ( e.classList[ 0 ].indexOf( "box-" ) === 0 ) {
 								var tag = e.classList[ 0 ].slice( "box-".length ).replace( /_/g, " " );
 								Twinkle.tag.alreadyPresentTags.push( tag );
@@ -393,7 +393,7 @@ Twinkle.tag.updateSortOrder = function ( e ) {
 		// function to iterate through the tags and create a checkbox for each one
 		var doCategoryCheckboxes = function doCategoryCheckboxes( subdiv, subgroup ) {
 			var checkboxes = [];
-			$.each( subgroup, ( k, item ) => {
+			$.each( subgroup, ( _k, item ) => {
 				if ( Twinkle.tag.alreadyPresentTags.indexOf( item.tag ) === -1 ) {
 					checkboxes.push( makeCheckbox( item ) );
 				}
@@ -1907,10 +1907,10 @@ Twinkle.tag.callbacks = {
 		/**
 		 * Updates `tagText` with the syntax of `tagName` template with its parameters
 		 *
-		 * @param {number} tagIndex
+		 * @param {number} _tagIndex
 		 * @param {string} tagName
 		 */
-		var addTag = function articleAddTag( tagIndex, tagName ) {
+		var addTag = function articleAddTag( _tagIndex, tagName ) {
 			var currentTag = "";
 			if ( tagName === "Uncategorized" || tagName === "Improve categories" ) {
 				pageText += `\n\n{{${tagName}|date={{subst:CURRENTMONTHNAME}} {{subst:CURRENTYEAR}}}}`;
@@ -2189,7 +2189,7 @@ Twinkle.tag.callbacks = {
 		if ( params.tags.length ) {
 			var tagtext = "",
 				currentTag;
-			$.each( params.tags, ( k, tag ) => {
+			$.each( params.tags, ( _k, tag ) => {
 				// when other commons-related tags are placed, remove "move to Commons" tag
 				if ( [ "Keep local", "Now Commons", "Do not move to Commons" ].indexOf( tag ) !== -1 ) {
 					text = text.replace( /\{\{(mtc|(copy |move )?to ?commons|move to wikimedia commons|copy to wikimedia commons)[^}]*\}\}/gi, "" );

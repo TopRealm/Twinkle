@@ -807,7 +807,7 @@ Twinkle.speedy.normalizeHash = {
 };
 Twinkle.speedy.callbacks = {
 	getTemplateCodeAndParams: function getTemplateCodeAndParams( params ) {
-		var code, parameters, i;
+		var code, parameters;
 		if ( params.normalizeds.length > 1 ) {
 			code = "{{delete";
 			params.utparams = {};
@@ -816,7 +816,7 @@ Twinkle.speedy.callbacks = {
 					code += `|${norm.toUpperCase()}`;
 				}
 				parameters = params.templateParams[ index ] || [];
-				for ( var i in parameters ) {
+				for ( let i in parameters ) {
 					if ( typeof parameters[ i ] === "string" ) {
 						code += `|${parameters[ i ]}`;
 					}
@@ -830,7 +830,7 @@ Twinkle.speedy.callbacks = {
 			if ( params.values[ 0 ] !== "reason" ) {
 				code += `|${params.values[ 0 ]}`;
 			}
-			for ( i in parameters ) {
+			for ( let i in parameters ) {
 				if ( typeof parameters[ i ] === "string" ) {
 					code += `|${parameters[ i ]}`;
 				}
@@ -863,9 +863,8 @@ Twinkle.speedy.callbacks = {
 	},
 	sysop: {
 		main: function main( params ) {
-			var reason;
 			if ( !params.normalizeds.length && params.normalizeds[ 0 ] === "db" ) {
-				reason = prompt( "输入删除理由：", "" );
+				let reason = prompt( "输入删除理由：", "" );
 				Twinkle.speedy.callbacks.sysop.deletePage( reason, params );
 			} else {
 				var code = Twinkle.speedy.callbacks.getTemplateCodeAndParams( params )[ 0 ];
@@ -1181,8 +1180,8 @@ Twinkle.speedy.callbacks = {
 
 			// Notification to first contributor
 			if ( params.usertalk ) {
-				var callback = function callback( pageobj ) {
-					var initialContrib = pageobj.getCreator();
+				var callback = ( _pageobj ) => {
+					var initialContrib = _pageobj.getCreator();
 
 					// disallow warning yourself
 					if ( initialContrib === mw.config.get( "wgUserName" ) ) {
@@ -1206,8 +1205,7 @@ Twinkle.speedy.callbacks = {
 							flowpage.setContent( `{{subst:db-notice|target=${Morebits.pageNameNorm}|flow=yes}}` );
 							flowpage.newTopic();
 						}, () => {
-							var usertalkpage = new Morebits.wiki.page( talkPageName, `通知页面创建者（${initialContrib}）` ),
-								notifytext;
+							var usertalkpage = new Morebits.wiki.page( talkPageName, `通知页面创建者（${initialContrib}）` ), notifytext;
 							notifytext = `\n{{subst:db-notice|target=${Morebits.pageNameNorm}`;
 
 							notifytext += "}}--~~" + "~~";

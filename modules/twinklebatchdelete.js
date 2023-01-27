@@ -190,12 +190,12 @@ Twinkle.batchdelete.callback = function twinklebatchdeleteCallback() {
 				style: editProt ? "color:red" : ""
 			};
 		} );
-		var form = apiobj.params.form;
-		form.append( {
+		var _form = apiobj.params.form;
+		_form.append( {
 			type: "header",
 			label: "待删除页面"
 		} );
-		form.append( {
+		_form.append( {
 			type: "button",
 			label: "全选",
 			event: function dBatchSelectAll() {
@@ -207,7 +207,7 @@ Twinkle.batchdelete.callback = function twinklebatchdeleteCallback() {
 				$( 'input[name="pages.subpages"]' ).prop( "checked", true );
 			}
 		} );
-		form.append( {
+		_form.append( {
 			type: "button",
 			label: "全不选",
 			event: function dBatchDeselectAll() {
@@ -216,8 +216,7 @@ Twinkle.batchdelete.callback = function twinklebatchdeleteCallback() {
 				} );
 			}
 		} );
-
-		form.append( {
+		_form.append( {
 			type: "checkbox",
 			name: "pages",
 			id: "tw-dbatch-pages",
@@ -226,10 +225,10 @@ Twinkle.batchdelete.callback = function twinklebatchdeleteCallback() {
 				return e;
 			} )
 		} );
-		form.append( {
+		_form.append( {
 			type: "submit"
 		} );
-		var result = form.render();
+		var result = _form.render();
 		apiobj.params.Window.setContent( result );
 		Morebits.quickForm.getElements( result, "pages" ).forEach( Twinkle.generateArrowLinks );
 	}, statelem );
@@ -362,10 +361,10 @@ Twinkle.batchdelete.callback.toggleSubpages = function twDbatchToggleSubpages( e
 				format: "json"
 			}, ( apiobj ) => {
 				var response = apiobj.getResponse();
-				var pages = response.query && response.query.pages || [];
+				var _pages = response.query && response.query.pages || [];
 				var subpageList = [];
-				pages.sort( Twinkle.sortByNamespace );
-				pages.forEach( ( page ) => {
+				_pages.sort( Twinkle.sortByNamespace );
+				_pages.forEach( ( page ) => {
 					var metadata = [];
 					if ( page.redirect ) {
 						metadata.push( "重定向" );
@@ -391,8 +390,8 @@ Twinkle.batchdelete.callback.toggleSubpages = function twDbatchToggleSubpages( e
 					} );
 				} );
 				if ( subpageList.length ) {
-					var pageName = apiobj.params.pageNameFull;
-					Twinkle.batchdelete.pages[ pageName ].subgroup = {
+					var _pageName = apiobj.params.pageNameFull;
+					Twinkle.batchdelete.pages[ _pageName ].subgroup = {
 						type: "checkbox",
 						name: "subpages",
 						className: "dbatch-subpages",

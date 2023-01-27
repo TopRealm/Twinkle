@@ -258,11 +258,11 @@ Twinkle.protect.callback.changeAction = function twinkleprotectCallbackChangeAct
 					type: "select",
 					name: "editexpiry",
 					label: "终止时间：",
-					event: function event( e ) {
-						if ( e.target.value === "custom" ) {
-							Twinkle.protect.doCustomExpiry( e.target );
+					event: ( _e ) => {
+						if ( _e.target.value === "custom" ) {
+							Twinkle.protect.doCustomExpiry( _e.target );
 						}
-						$( "input[name=small]", $( e.target ).closest( "form" ) )[ 0 ].checked = e.target.selectedIndex >= 4; // 1 month
+						$( "input[name=small]", $( _e.target ).closest( "form" ) )[ 0 ].checked = _e.target.selectedIndex >= 4; // 1 month
 					},
 
 					// default expiry selection (2 days) is conditionally set in Twinkle.protect.callback.changePreset
@@ -292,9 +292,9 @@ Twinkle.protect.callback.changeAction = function twinkleprotectCallbackChangeAct
 					type: "select",
 					name: "moveexpiry",
 					label: "终止时间：",
-					event: function event( e ) {
-						if ( e.target.value === "custom" ) {
-							Twinkle.protect.doCustomExpiry( e.target );
+					event: ( _e ) => {
+						if ( _e.target.value === "custom" ) {
+							Twinkle.protect.doCustomExpiry( _e.target );
 						}
 					},
 					// default expiry selection (2 days) is conditionally set in Twinkle.protect.callback.changePreset
@@ -316,9 +316,9 @@ Twinkle.protect.callback.changeAction = function twinkleprotectCallbackChangeAct
 					type: "select",
 					name: "createexpiry",
 					label: "终止时间：",
-					event: function event( e ) {
-						if ( e.target.value === "custom" ) {
-							Twinkle.protect.doCustomExpiry( e.target );
+					event: ( _e ) => {
+						if ( _e.target.value === "custom" ) {
+							Twinkle.protect.doCustomExpiry( _e.target );
 						}
 					},
 					// default expiry selection (indefinite) is conditionally set in Twinkle.protect.callback.changePreset
@@ -977,7 +977,7 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate( e )
 					Twinkle.protect.callbacks.taggingPageInitial( tagparams );
 				}
 				if ( closeparams && closeparams.type ) {
-					var rppPage = new Morebits.wiki.page( "Qiuwen:页面保护请求", "关闭请求" );
+					let rppPage = new Morebits.wiki.page( "Qiuwen:页面保护请求", "关闭请求" );
 					rppPage.setFollowRedirect( true );
 					rppPage.setCallbackParameters( closeparams );
 					rppPage.load( Twinkle.protect.callbacks.closeRequest );
@@ -1034,7 +1034,7 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate( e )
 			Morebits.wiki.actionCompleted.notice = "标记完成";
 			Twinkle.protect.callbacks.taggingPageInitial( tagparams );
 			break;
-		case "request":
+		case "request": {
 			// file request at RFPP
 			var typename, typereason;
 			switch ( input.category ) {
@@ -1140,11 +1140,12 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate( e )
 			// Updating data for the action completed event
 			Morebits.wiki.actionCompleted.redirect = rppName;
 			Morebits.wiki.actionCompleted.notice = "提名完成，重定向到讨论页";
-			var rppPage = new Morebits.wiki.page( rppName, "请求保护页面" );
+			let rppPage = new Morebits.wiki.page( rppName, "请求保护页面" );
 			rppPage.setFollowRedirect( true );
 			rppPage.setCallbackParameters( rppparams );
 			rppPage.load( Twinkle.protect.callbacks.fileRequest );
 			break;
+		}
 		default:
 			alert( "twinkleprotect: 未知操作类型" );
 			break;
