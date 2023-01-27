@@ -544,7 +544,7 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
 							type: 'div',
 							id: id + '_' + i + '_subgroup'
 						});
-							// eslint-disable-next-line no-loop-func
+						// eslint-disable-next-line no-loop-func
 						$.each(tmpgroup, function (idx, el) {
 							var newEl = $.extend({}, el);
 							if (!newEl.type) {
@@ -1431,9 +1431,9 @@ Morebits.string = {
 	 */
 	formatReasonForLog: function (str) {
 		return str
-			// handle line breaks, which otherwise break numbering
+		// handle line breaks, which otherwise break numbering
 			.replace(/\n+/g, '{{pb}}')
-			// put an extra # in front before bulleted or numbered list items
+		// put an extra # in front before bulleted or numbered list items
 			.replace(/^(#+)/mg, '#$1').replace(/^(\*+)/mg, '#$1');
 	},
 	/**
@@ -2018,9 +2018,9 @@ Morebits.date.prototype = {
 		unbinder.unbind('\\[', '\\]');
 		unbinder.content = unbinder.content.replace(
 			/* Regex notes:
-			 * d(d{2,3})? matches exactly 1, 3 or 4 occurrences of 'd' ('dd' is treated as a double match of 'd')
-			 * Y{1,2}(Y{2})? matches exactly 1, 2 or 4 occurrences of 'Y'
-			 */
+  	 * d(d{2,3})? matches exactly 1, 3 or 4 occurrences of 'd' ('dd' is treated as a double match of 'd')
+  	 * Y{1,2}(Y{2})? matches exactly 1, 2 or 4 occurrences of 'Y'
+  	 */
 			/H{1,2}|h{1,2}|m{1,2}|s{1,2}|SSS|d(d{2,3})?|D{1,2}|M{1,4}|Y{1,2}(Y{2})?|A/g, function (match) {
 				return replacementMap[match];
 			});
@@ -2109,7 +2109,7 @@ Morebits.wiki = {};
  * @returns {boolean}
  */
 Morebits.wiki.isPageRedirect = function qiuwenIsPageRedirect() {
-	console.warn('NOTE: Morebits.wiki.isPageRedirect has been deprecated, use Morebits.isPageRedirect instead.');
+	console.warn('NOTE: Morebits.wiki.isPageRedirect has been deprecated, use Morebits.isPageRedirect instead.'); // eslint-disable-line no-console
 	return Morebits.isPageRedirect();
 };
 
@@ -2306,7 +2306,7 @@ Morebits.wiki.api.prototype = {
 				return encodeURIComponent(i) + '=' + encodeURIComponent(val);
 			}
 		}).join('&').replace(/^(.*?)(\btoken=[^&]*)&(.*)/, '$1$3&$2');
-			// token should always be the last item in the query string (bug TW-B-0013)
+		// token should always be the last item in the query string (bug TW-B-0013)
 
 		var ajaxparams = $.extend({}, {
 			context: this,
@@ -3088,7 +3088,7 @@ Morebits.wiki.page = function (pageName, status) {
 	 * accept a string value of `default`.
 	 */
 	this.setWatchlistFromPreferences = function (watchlistOption) {
-		console.warn('NOTE: Morebits.wiki.page.setWatchlistFromPreferences was deprecated December 2020, please use setWatchlist');
+		console.warn('NOTE: Morebits.wiki.page.setWatchlistFromPreferences was deprecated December 2020, please use setWatchlist'); // eslint-disable-line no-console
 		if (watchlistOption) {
 			ctx.watchlistOption = 'preferences';
 		} else {
@@ -3594,7 +3594,7 @@ Morebits.wiki.page = function (pageName, status) {
 			inprop: 'watched',
 			format: 'json'
 		};
-			// Protection not checked for flagged-revs or non-sysop moves
+		// Protection not checked for flagged-revs or non-sysop moves
 		if (action !== 'move' || Morebits.userIsSysop) {
 			query.inprop += '|protection';
 		}
@@ -3849,8 +3849,8 @@ Morebits.wiki.page = function (pageName, status) {
 		} else {
 			var response = ctx.saveApi.getResponse();
 			var errorData = response.error ||
-			// bc error format
-			response.errors[0].data; // html/wikitext/plaintext error format
+        // bc error format
+        response.errors[0].data; // html/wikitext/plaintext error format
 
 			switch (errorCode) {
 				case 'protectedpage':
@@ -4322,7 +4322,7 @@ Morebits.wiki.page = function (pageName, status) {
 			watchlist: ctx.watchlistOption,
 			format: 'json'
 		};
-			// Only shows up in logs, not page history [[phab:T259983]]
+		// Only shows up in logs, not page history [[phab:T259983]]
 		if (ctx.changeTags) {
 			query.tags = ctx.changeTags;
 		}
@@ -4344,11 +4344,11 @@ Morebits.wiki.page = function (pageName, status) {
 }; // end Morebits.wiki.page
 
 /* Morebits.wiki.page TODO: (XXX)
-			* - Should we retry loads also?
-			* - Need to reset current action before the save?
-			* - Deal with action.completed stuff
-			* - Need to reset all parameters once done (e.g. edit summary, move destination, etc.)
-			*/
+ * - Should we retry loads also?
+ * - Need to reset current action before the save?
+ * - Deal with action.completed stuff
+ * - Need to reset all parameters once done (e.g. edit summary, move destination, etc.)
+ */
 
 /* **************** Morebits.wiki.preview **************** */
 /**
@@ -4708,25 +4708,25 @@ Morebits.wikitext.page.prototype = {
 		this.text = this.text.replace(new RegExp(
 			// leading whitespace
 			'^\\s*' +
-			// capture template(s)
-			'(?:((?:\\s*' +
-			// Pre-template regex, such as leading html comments
-			preRegex + '|' +
-			// begin template format
-			'\\{\\{\\s*(?:' +
-			// Template regex
-			regex +
-			// end main template name, optionally with a number
-			// Probably remove the (?:) though
-			')\\d*\\s*' +
-			// template parameters
-			'(\\|(?:\\{\\{[^{}]*\\}\\}|[^{}])*)?' +
-			// end template format
-			'\\}\\})+' +
-			// end capture
-			'(?:\\s*\\n)?)' +
-			// trailing whitespace
-			'\\s*)?', flags), '$1' + tag);
+      // capture template(s)
+      '(?:((?:\\s*' +
+      // Pre-template regex, such as leading html comments
+      preRegex + '|' +
+      // begin template format
+      '\\{\\{\\s*(?:' +
+      // Template regex
+      regex +
+      // end main template name, optionally with a number
+      // Probably remove the (?:) though
+      ')\\d*\\s*' +
+      // template parameters
+      '(\\|(?:\\{\\{[^{}]*\\}\\}|[^{}])*)?' +
+      // end template format
+      '\\}\\})+' +
+      // end capture
+      '(?:\\s*\\n)?)' +
+      // trailing whitespace
+      '\\s*)?', flags), '$1' + tag);
 		return this;
 	},
 	/**
@@ -4899,7 +4899,7 @@ Morebits.status.prototype = {
 				}
 
 				// also log error messages in the browser console
-				console.error(this.textRaw + ': ' + this.statRaw);
+				console.error(this.textRaw + ': ' + this.statRaw); // eslint-disable-line no-console
 			}
 		}
 
@@ -5682,4 +5682,5 @@ if (typeof arguments === 'undefined') {
 	window.QuickForm = Morebits.quickForm;
 	window.Status = Morebits.status;
 }
+
 /* </nowiki> */

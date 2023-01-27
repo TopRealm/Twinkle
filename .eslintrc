@@ -9,7 +9,7 @@
 		"es2020": false,
 		"es2021": false
 	},
-	"ignorePatterns": ["src/lib", "scripts/", "lib/", "dist/", "*.json"],
+	"ignorePatterns": ["src/morebit.js", "src/lib", "scripts/", "lib/", "dist/", "*.json"],
 	"rules": {
 		"block-scoped-var": "error",
 		"camelcase": "off",
