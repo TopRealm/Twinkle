@@ -1,14 +1,14 @@
 {
 	"root": true,
-	"plugins": ["es5", "es6", "compat"],
-	"extends": ["eslint:recommended", "plugin:compat/recommended", "wikimedia/client-es6", "wikimedia/jquery", "wikimedia/mediawiki"],
+	"plugins": ["es5", "compat"],
+	"extends": ["eslint:recommended", "plugin:compat/recommended", "wikimedia/client-es5", "wikimedia/jquery", "wikimedia/mediawiki"],
 	"env": {
 		"browser": true,
 		"jquery": true,
-		"es6": true,
-		"es2015": true,
-		"es2020": true,
-		"es2021": true
+		"es5": true,
+		"es6": false,
+		"es2020": false,
+		"es2021": false
 	},
 	"parserOptions": {
 		"ecmaVersion": "latest"
