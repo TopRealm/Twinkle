@@ -1529,19 +1529,19 @@ Twinkle.config.listDialog.reset = (button, tbody) => {
 
 	// add the new values
 	const curvalue = $button.data('value');
-	$.each(curvalue, function (_k, v) {
+	$.each(curvalue, (_k, v) => {
 		Twinkle.config.listDialog.addRow(tbody, v.value, v.label);
 	});
 
 	// save the old value
 	$button.data('value', oldvalue);
 };
-Twinkle.config.listDialog.save = function twinkleconfigListDialogSave(button, tbody) {
+Twinkle.config.listDialog.save = (button, tbody) => {
 	const result = [];
 	let current = {};
 	$(tbody)
 		.find('input[type="text"]')
-		.each(function (_inputkey, input) {
+		.each((_inputkey, input) => {
 			if ($(input).hasClass('twinkle-config-customlist-value')) {
 				current = {
 					value: input.value
@@ -1559,17 +1559,17 @@ Twinkle.config.listDialog.save = function twinkleconfigListDialogSave(button, tb
 
 // reset/restore defaults
 
-Twinkle.config.resetPrefLink = function twinkleconfigResetPrefLink(e) {
+Twinkle.config.resetPrefLink = (e) => {
 	const wantedpref = e.target.id.substring(21); // "twinkle-config-reset-" prefix is stripped
 
 	// search tactics
-	$(Twinkle.config.sections).each(function (_sectionkey, section) {
+	$(Twinkle.config.sections).each((_sectionkey, section) => {
 		if (section.hidden || (section.adminOnly && !Morebits.userIsSysop)) {
 			return true; // continue: skip impossibilities
 		}
 
 		let foundit = false;
-		$(section.preferences).each(function (_prefkey, pref) {
+		$(section.preferences).each((_prefkey, pref) => {
 			if (pref.name !== wantedpref) {
 				return true; // continue
 			}
@@ -1587,7 +1587,7 @@ Twinkle.config.resetPrefLink = function twinkleconfigResetPrefLink(e) {
 	return false; // stop link from scrolling page
 };
 
-Twinkle.config.resetPref = function twinkleconfigResetPref(pref) {
+Twinkle.config.resetPref = (pref) => {
 	switch (pref.type) {
 		case 'boolean':
 			document.getElementById(pref.name).checked = Twinkle.defaultConfig[pref.name];
@@ -1598,7 +1598,7 @@ Twinkle.config.resetPref = function twinkleconfigResetPref(pref) {
 			document.getElementById(pref.name).value = Twinkle.defaultConfig[pref.name];
 			break;
 		case 'set':
-			$.each(pref.setValues, function (itemkey) {
+			$.each(pref.setValues, (itemkey) => {
 				if (document.getElementById(pref.name + '_' + itemkey)) {
 					document.getElementById(pref.name + '_' + itemkey).checked = Twinkle.defaultConfig[pref.name].indexOf(itemkey) !== -1;
 				}
@@ -1612,14 +1612,14 @@ Twinkle.config.resetPref = function twinkleconfigResetPref(pref) {
 			break;
 	}
 };
-Twinkle.config.resetAllPrefs = function twinkleconfigResetAllPrefs() {
+Twinkle.config.resetAllPrefs = () => {
 	// no confirmation message - the user can just refresh/close the page to abort
-	$(Twinkle.config.sections).each(function (_sectionkey, section) {
+	$(Twinkle.config.sections).each((_sectionkey, section) => {
 		if (section.hidden || (section.adminOnly && !Morebits.userIsSysop)) {
 			return true; // continue: skip impossibilities
 		}
 
-		$(section.preferences).each(function (_prefkey, pref) {
+		$(section.preferences).each((_prefkey, pref) => {
 			if (!pref.adminOnly || Morebits.userIsSysop) {
 				Twinkle.config.resetPref(pref);
 			}
@@ -1629,7 +1629,7 @@ Twinkle.config.resetAllPrefs = function twinkleconfigResetAllPrefs() {
 	return false; // stop link from scrolling page
 };
 
-Twinkle.config.save = function twinkleconfigSave(e) {
+Twinkle.config.save = (e) => {
 	Morebits.status.init(document.getElementById('twinkle-config-content'));
 	const userjs = mw.config.get('wgFormattedNamespaces')[mw.config.get('wgNamespaceIds').user] + ':' + mw.config.get('wgUserName') + '/twinkleoptions.js';
 	const qiuwen_page = new Morebits.wiki.page(userjs, '保存参数设置到 ' + userjs);
@@ -1637,7 +1637,7 @@ Twinkle.config.save = function twinkleconfigSave(e) {
 	qiuwen_page.load(Twinkle.config.writePrefs);
 	return false;
 };
-Twinkle.config.writePrefs = function twinkleconfigWritePrefs(pageobj) {
+Twinkle.config.writePrefs = (pageobj) => {
 	const form = pageobj.getCallbackParameters();
 
 	// this is the object which gets serialized into JSON; only
@@ -1645,13 +1645,13 @@ Twinkle.config.writePrefs = function twinkleconfigWritePrefs(pageobj) {
 	const newConfig = {
 		optionsVersion: 2.1
 	};
-	$(Twinkle.config.sections).each(function (_sectionkey, section) {
+	$(Twinkle.config.sections).each((_sectionkey, section) => {
 		if (section.adminOnly && !Morebits.userIsSysop) {
 			return; // i.e. "continue" in this context
 		}
 
 		// reach each of the preferences from the form
-		$(section.preferences).each(function (_prefkey, pref) {
+		$(section.preferences).each((_prefkey, pref) => {
 			let userValue; // = undefined
 
 			// only read form values for those prefs that have them
@@ -1679,14 +1679,14 @@ Twinkle.config.writePrefs = function twinkleconfigWritePrefs(pageobj) {
 							userValue = [];
 							if (pref.setDisplayOrder) {
 								// read only those keys specified in the display order
-								$.each(pref.setDisplayOrder, function (_itemkey, item) {
+								$.each(pref.setDisplayOrder, (_itemkey, item) => {
 									if (form[pref.name + '_' + item].checked) {
 										userValue.push(item);
 									}
 								});
 							} else {
 								// read all the keys in the list of values
-								$.each(pref.setValues, function (itemkey) {
+								$.each(pref.setValues, (itemkey) => {
 									if (form[pref.name + '_' + itemkey].checked) {
 										userValue.push(itemkey);
 									}
@@ -1712,21 +1712,20 @@ Twinkle.config.writePrefs = function twinkleconfigWritePrefs(pageobj) {
 			}
 		});
 	});
-	let text =
-			'// <nowiki>\n' +
-			'// twinkleoptions.js：用户Twinkle参数设置文件\n' +
-			'//\n' +
-			'// 注：修改您的参数设置最简单的办法是使用\n' +
-			'// Twinkle参数设置面板，在[[' +
-			Morebits.pageNameNorm +
-			']]。\n' +
-			'//\n' +
-			'// 这个文件是自动生成的，您所做的任何修改（除了\n' +
-			'// 以一种合法的JavaScript的方式来修改这些属性值）会\n' +
-			'// 在下一次您点击“保存”时被覆盖。\n' +
-			'// 修改此文件时，请记得使用合法的JavaScript。\n' +
-			'\n' +
-			'window.Twinkle.prefs = ';
+	let text = '// <nowiki>\n' +
+		'// twinkleoptions.js：用户Twinkle参数设置文件\n' +
+		'//\n' +
+		'// 注：修改您的参数设置最简单的办法是使用\n' +
+		'// Twinkle参数设置面板，在[[' +
+		Morebits.pageNameNorm +
+		']]。\n' +
+		'//\n' +
+		'// 这个文件是自动生成的，您所做的任何修改（除了\n' +
+		'// 以一种合法的JavaScript的方式来修改这些属性值）会\n' +
+		'// 在下一次您点击“保存”时被覆盖。\n' +
+		'// 修改此文件时，请记得使用合法的JavaScript。\n' +
+		'\n' +
+		'window.Twinkle.prefs = ';
 	text += JSON.stringify(newConfig, null, 2);
 	text += ';\n' + '\n' + '// twinkleoptions.js到此为止\n' + '// </nowiki>';
 	pageobj.setPageText(text);
@@ -1735,22 +1734,22 @@ Twinkle.config.writePrefs = function twinkleconfigWritePrefs(pageobj) {
 	pageobj.setCreateOption('recreate');
 	pageobj.save(Twinkle.config.saveSuccess);
 };
-Twinkle.config.saveSuccess = function twinkleconfigSaveSuccess(pageobj) {
+Twinkle.config.saveSuccess = (pageobj) => {
 	pageobj.getStatusElement().info('成功');
 	const noticebox = document.createElement('div');
 	noticebox.className = 'mw-message-box mw-message-box-success';
 	noticebox.style.fontSize = '100%';
 	noticebox.style.marginTop = '2em';
 	noticebox.innerHTML =
-			'<p><b>' +
-			'您的Twinkle参数设置已被保存。' +
-			'</b></p><p>' +
-			'要看到这些更改，您可能需要' +
-			'<a href="' +
-			mw.util.getUrl('QW:BYPASS') +
-			'" title="QW:BYPASS"><b>' +
-			'绕过浏览器缓存' +
-			'</b></a>。</p>';
+		'<p><b>' +
+		'您的Twinkle参数设置已被保存。' +
+		'</b></p><p>' +
+		'要看到这些更改，您可能需要' +
+		'<a href="' +
+		mw.util.getUrl('QW:BYPASS') +
+		'" title="QW:BYPASS"><b>' +
+		'绕过浏览器缓存' +
+		'</b></a>。</p>';
 	Morebits.status.root.appendChild(noticebox);
 	const noticeclear = document.createElement('br');
 	noticeclear.style.clear = 'both';
