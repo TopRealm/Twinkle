@@ -970,7 +970,7 @@ Twinkle.config.init = () => {
 
 		// set style (the url() CSS function doesn't seem to work from wikicode - ?!)
 		document.getElementById('twinkle-config-titlebar').style.backgroundImage =
-			'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAkCAMAAAB%2FqqA%2BAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAEhQTFRFr73ZobTPusjdsMHZp7nVwtDhzNbnwM3fu8jdq7vUt8nbxtDkw9DhpbfSvMrfssPZqLvVztbno7bRrr7W1d%2Fs1N7qydXk0NjpkW7Q%2BgAAADVJREFUeNoMwgESQCAAAMGLkEIi%2FP%2BnbnbpdB59app5Vdg0sXAoMZCpGoFbK6ciuy6FX4ABAEyoAef0BXOXAAAAAElFTkSuQmCC)';
+			'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAkBAMAAAC6Wk0/AAAAKlBMVEXV3+upu9XN1ufD0OG+zN+xwtmvvtiitdDQ2OnJ1eS7yN2lt9LG0OS3ydtM59+7AAAAKklEQVQI12OAgQYgVADDCUB4gMEADB3AcAEQXmAIAMMEMBSAwg1AWACCAHCXC6FA1k76AAAAAElFTkSuQmCC)';
 		const contentdiv = document.getElementById('twinkle-config-content');
 		contentdiv.textContent = ''; // clear children
 
