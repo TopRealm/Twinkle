@@ -1265,11 +1265,11 @@ Twinkle.warn.callback.change_category = function twinklewarnCallbackChangeCatego
 				const usertalk_page = new Morebits.wiki.page('User_talk:' + relevantUserName, '加载上次警告');
 				usertalk_page.setFollowRedirect(true, false);
 				usertalk_page.load(
-					function (pageobj) {
+					(pageobj) => {
 						Twinkle.warn.talkpageObj = pageobj; // Update talkpageObj
 						autolevelProc();
 					},
-					function () {
+					() => {
 						// Catch and warn if the talkpage can't load,
 						// most likely because it's a cross-namespace redirect
 						// Supersedes the typical $autolevelMessage added in autolevelParseWikitext

@@ -21,24 +21,24 @@
  * Config directives in:  TwinkleConfig
  */
 
-Twinkle.close = function twinkleclose() {
+Twinkle.close = () => {
 	if (Twinkle.getPref('XfdClose') === 'hide' || !/^Qiuwen:存废讨论\/记录\/\d+\/\d+\/\d+$/.test(mw.config.get('wgPageName'))) {
 		return;
 	}
-	mw.hook('wikipage.content').add(function (item) {
+	mw.hook('wikipage.content').add((item) => {
 		if (item.attr('id') === 'mw-content-text') {
 			Twinkle.close.addLinks();
 		}
 	});
 };
-Twinkle.close.addLinks = function twinklecloseAddLinks() {
-	const spanTag = function (color, content) {
+Twinkle.close.addLinks = () => {
+	const spanTag = (color, content) => {
 		const span = document.createElement('span');
 		span.style.color = color;
 		span.appendChild(document.createTextNode(content));
 		return span;
 	};
-	$('h1:has(.mw-headline),h2:has(.mw-headline),h3:has(.mw-headline),h4:has(.mw-headline),h5:has(.mw-headline),h6:has(.mw-headline)', '#bodyContent').each(function (index, current) {
+	$('h1:has(.mw-headline),h2:has(.mw-headline),h3:has(.mw-headline),h4:has(.mw-headline),h5:has(.mw-headline),h6:has(.mw-headline)', '#bodyContent').each((index, current) => {
 		current.setAttribute('data-section', index + 1);
 	});
 	const selector = ':has(.mw-headline a:only-of-type):not(:has(+ div.NavFrame))';
@@ -50,7 +50,7 @@ Twinkle.close.addLinks = function twinklecloseAddLinks() {
 	delLink.appendChild(spanTag('Red', '关闭讨论'));
 	delLink.appendChild(spanTag('Black', ']'));
 	delNode.appendChild(delLink);
-	titles.each(function (key, current) {
+	titles.each((_key, current) => {
 		const headlinehref = $(current).find('.mw-headline a').attr('href');
 		if (headlinehref === undefined) {
 			return;
@@ -75,7 +75,7 @@ Twinkle.close.addLinks = function twinklecloseAddLinks() {
 		node.appendChild(document.createTextNode(' '));
 		const tmpNode = delNode.cloneNode(true);
 		tmpNode.firstChild.href = '#' + section;
-		$(tmpNode.firstChild).on('click', function () {
+		$(tmpNode.firstChild).on('click', () => {
 			Twinkle.close.callback(title, section, pagenotexist);
 			return false;
 		});
@@ -215,7 +215,7 @@ Twinkle.close.codes = {
 };
 /* eslint-enable quote-props */
 
-Twinkle.close.callback = function twinklecloseCallback(title, section, noop) {
+Twinkle.close.callback = (title, section, noop) => {
 	const Window = new Morebits.simpleWindow(410, 200);
 	Window.setTitle('关闭存废讨论 \u00B7 ' + title);
 	Window.setScriptName('Twinkle');
@@ -263,7 +263,7 @@ Twinkle.close.callback = function twinklecloseCallback(title, section, noop) {
 					name: 'talkpage',
 					tooltip: '删除时附带删除此页面的讨论页。',
 					checked: true,
-					event: function (event) {
+					event: (event) => {
 						event.stopPropagation();
 					}
 				}
@@ -279,7 +279,7 @@ Twinkle.close.callback = function twinklecloseCallback(title, section, noop) {
 				name: 'redirects',
 				tooltip: '删除到此页的重定向。',
 				checked: true,
-				event: function (event) {
+				event: (event) => {
 					event.stopPropagation();
 				}
 			}
@@ -300,8 +300,8 @@ Twinkle.close.callback = function twinklecloseCallback(title, section, noop) {
 	};
 	$(result).data('resultData', resultData);
 	// worker function to create the combo box entries
-	const createEntries = function (contents, container) {
-		$.each(contents, function (itemKey, itemProperties) {
+	const createEntries = (contents, container) => {
+		$.each(contents, (itemKey, itemProperties) => {
 			const key = typeof itemKey === 'string' ? itemKey : itemProperties.value;
 			const elem = new Morebits.quickForm.element({
 				type: 'option',
@@ -314,7 +314,7 @@ Twinkle.close.callback = function twinklecloseCallback(title, section, noop) {
 			$(elemRendered).data('messageData', itemProperties);
 		});
 	};
-	$.each(Twinkle.close.codes, function (groupLabel, groupContents) {
+	$.each(Twinkle.close.codes, (groupLabel, groupContents) => {
 		let optgroup = new Morebits.quickForm.element({
 			type: 'optgroup',
 			label: groupLabel
@@ -328,7 +328,7 @@ Twinkle.close.callback = function twinklecloseCallback(title, section, noop) {
 	evt.initEvent('change', true, true);
 	result.sub_group.dispatchEvent(evt);
 };
-Twinkle.close.callback.change_operation = function twinklecloseCallbackChangeOperation(e) {
+Twinkle.close.callback.change_operation = (e) => {
 	const noop = e.target.checked;
 	const code = e.target.form.sub_group.value;
 	const messageData = $(e.target.form.sub_group)
@@ -352,7 +352,7 @@ Twinkle.close.callback.change_operation = function twinklecloseCallbackChangeOpe
 		redirects.disabled = false;
 	}
 };
-Twinkle.close.callback.change_code = function twinklecloseCallbackChangeCode(e) {
+Twinkle.close.callback.change_code = (e) => {
 	const resultData = $(e.target.form).data('resultData');
 	const messageData = $(e.target)
 		.find('option[value="' + e.target.value + '"]')
@@ -394,7 +394,7 @@ Twinkle.close.callback.change_code = function twinklecloseCallbackChangeCode(e) 
 		}
 	}
 };
-Twinkle.close.callback.evaluate = function twinklecloseCallbackEvaluate(e) {
+Twinkle.close.callback.evaluate = (e) => {
 	const code = e.target.sub_group.value;
 	const resultData = $(e.target).data('resultData');
 	const messageData = $(e.target.sub_group)
@@ -435,12 +435,12 @@ Twinkle.close.callback.evaluate = function twinklecloseCallbackEvaluate(e) {
 	}
 };
 Twinkle.close.callbacks = {
-	del: function (params) {
+	del: (params) => {
 		let query, qiuwen_api;
 		Morebits.wiki.addCheckpoint();
 		const page = new Morebits.wiki.page(params.title, '删除页面');
 		if (params.code === 'sd') {
-			Twinkle.speedy.callbacks.parseWikitext(params.title, '{{delete|' + params.sdreason + '}}', function (reason) {
+			Twinkle.speedy.callbacks.parseWikitext(params.title, '{{delete|' + params.sdreason + '}}', (reason) => {
 				reason = prompt('输入删除理由，或点击确定以接受自动生成的：', reason);
 				if (reason === null) {
 					page.getStatusElement().warn('没有执行删除');
@@ -448,7 +448,7 @@ Twinkle.close.callbacks = {
 				} else {
 					page.setEditSummary(reason);
 					page.setChangeTags(Twinkle.changeTags);
-					page.deletePage(function () {
+					page.deletePage(() => {
 						page.getStatusElement().info('完成');
 						Twinkle.close.callbacks.talkend(params);
 					});

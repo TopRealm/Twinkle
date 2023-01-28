@@ -961,7 +961,7 @@ Twinkle.config.sections = [
 	}
 ]; // end of Twinkle.config.sections
 
-Twinkle.config.init = function twinkleconfigInit() {
+Twinkle.config.init = () => {
 	// create the config page at Twinkle.getPref('configPage')
 	if (mw.config.get('wgPageName') === Twinkle.getPref('configPage') && mw.config.get('wgAction') === 'view') {
 		if (!document.getElementById('twinkle-config')) {
@@ -970,7 +970,7 @@ Twinkle.config.init = function twinkleconfigInit() {
 
 		// set style (the url() CSS function doesn't seem to work from wikicode - ?!)
 		document.getElementById('twinkle-config-titlebar').style.backgroundImage =
-				'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAkCAMAAAB%2FqqA%2BAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAEhQTFRFr73ZobTPusjdsMHZp7nVwtDhzNbnwM3fu8jdq7vUt8nbxtDkw9DhpbfSvMrfssPZqLvVztbno7bRrr7W1d%2Fs1N7qydXk0NjpkW7Q%2BgAAADVJREFUeNoMwgESQCAAAMGLkEIi%2FP%2BnbnbpdB59app5Vdg0sXAoMZCpGoFbK6ciuy6FX4ABAEyoAef0BXOXAAAAAElFTkSuQmCC)';
+			'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAkCAMAAAB%2FqqA%2BAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAEhQTFRFr73ZobTPusjdsMHZp7nVwtDhzNbnwM3fu8jdq7vUt8nbxtDkw9DhpbfSvMrfssPZqLvVztbno7bRrr7W1d%2Fs1N7qydXk0NjpkW7Q%2BgAAADVJREFUeNoMwgESQCAAAMGLkEIi%2FP%2BnbnbpdB59app5Vdg0sXAoMZCpGoFbK6ciuy6FX4ABAEyoAef0BXOXAAAAAElFTkSuQmCC)';
 		const contentdiv = document.getElementById('twinkle-config-content');
 		contentdiv.textContent = ''; // clear children
 
@@ -979,18 +979,18 @@ Twinkle.config.init = function twinkleconfigInit() {
 		const contentnotice = document.createElement('p');
 		// I hate innerHTML, but this is one thing it *is* good for...
 		contentnotice.innerHTML =
-				'<b>' +
-				'在这里修改您的参数设置之前，' +
-				'</b>' +
-				'确认您已移除了' +
-				'<a href="' +
-				mw.util.getUrl('Special:MyPage/skin.js') +
-				'" title="Special:MyPage/skin.js">' +
-				'用户JavaScript文件' +
-				'</a>' +
-				'中任何旧的' +
-				'<code>FriendlyConfig</code>' +
-				'设置。';
+			'<b>' +
+			'在这里修改您的参数设置之前，' +
+			'</b>' +
+			'确认您已移除了' +
+			'<a href="' +
+			mw.util.getUrl('Special:MyPage/skin.js') +
+			'" title="Special:MyPage/skin.js">' +
+			'用户JavaScript文件' +
+			'</a>' +
+			'中任何旧的' +
+			'<code>FriendlyConfig</code>' +
+			'设置。';
 		contentdiv.appendChild(contentnotice);
 
 		// look and see if the user does in fact have any old settings in their skin JS file
@@ -1024,7 +1024,7 @@ Twinkle.config.init = function twinkleconfigInit() {
 		const tocul = document.createElement('ul');
 		toctogglelink.addEventListener(
 			'click',
-			function twinkleconfigTocToggle() {
+			() => {
 				const $tocul = $(tocul);
 				$tocul.toggle();
 				if ($tocul.find(':visible').length) {
@@ -1045,7 +1045,7 @@ Twinkle.config.init = function twinkleconfigInit() {
 		const container = document.createElement('table');
 		container.style.width = '100%';
 		contentform.appendChild(container);
-		$(Twinkle.config.sections).each(function (sectionkey, section) {
+		$(Twinkle.config.sections).each((_sectionkey, section) => {
 			if (section.hidden || (section.adminOnly && !Morebits.userIsSysop)) {
 				return true; // i.e. "continue" in this context
 			}
@@ -1072,7 +1072,7 @@ Twinkle.config.init = function twinkleconfigInit() {
 			let rowcount = 1; // for row banding
 
 			// add each of the preferences to the form
-			$(section.preferences).each(function (prefkey, pref) {
+			$(section.preferences).each((_prefkey, pref) => {
 				if (pref.adminOnly && !Morebits.userIsSysop) {
 					return true; // i.e. "continue" in this context
 				}
@@ -1150,15 +1150,13 @@ Twinkle.config.init = function twinkleconfigInit() {
 						input.setAttribute('id', pref.name);
 						input.setAttribute('name', pref.name);
 						let optionExists = false;
-						$.each(pref.enumValues, function (enumvalue, enumdisplay) {
+						$.each(pref.enumValues, (enumvalue, enumdisplay) => {
 							const option = document.createElement('option');
 							option.setAttribute('value', enumvalue);
-							if (
-								gotPref === enumvalue ||
+							if (gotPref === enumvalue ||
 									// Hack to convert old boolean watchlist prefs
 									// to corresponding enums (added in v2.1)
-									(typeof gotPref === 'boolean' && ((gotPref && enumvalue === 'yes') || (!gotPref && enumvalue === 'no')))
-							) {
+									(typeof gotPref === 'boolean' && ((gotPref && enumvalue === 'yes') || (!gotPref && enumvalue === 'no')))) {
 								option.setAttribute('selected', 'selected');
 								optionExists = true;
 							}
@@ -1185,7 +1183,7 @@ Twinkle.config.init = function twinkleconfigInit() {
 						cell.appendChild(label);
 						const checkdiv = document.createElement('div');
 						checkdiv.style.paddingLeft = '1em';
-						const worker = function (itemkey, itemvalue) {
+						const worker = (itemkey, itemvalue) => {
 							const checklabel = document.createElement('label');
 							checklabel.style.marginRight = '0.7em';
 							checklabel.style.display = 'inline-block';
@@ -1208,7 +1206,7 @@ Twinkle.config.init = function twinkleconfigInit() {
 						};
 						if (pref.setDisplayOrder) {
 							// add check boxes according to the given display order
-							$.each(pref.setDisplayOrder, function (itemkey, item) {
+							$.each(pref.setDisplayOrder, (_itemkey, item) => {
 								worker(item, pref.setValues[item]);
 							});
 						} else {
@@ -1306,11 +1304,9 @@ Twinkle.config.init = function twinkleconfigInit() {
 			window.location.hash = '';
 			window.location.hash = loc;
 		}
-	} else if (
-		mw.config.get('wgNamespaceNumber') === mw.config.get('wgNamespaceIds').user &&
-			mw.config.get('wgTitle').indexOf(mw.config.get('wgUserName')) === 0 &&
-			mw.config.get('wgPageName').slice(-3) === '.js'
-	) {
+	} else if (mw.config.get('wgNamespaceNumber') === mw.config.get('wgNamespaceIds').user &&
+		mw.config.get('wgTitle').indexOf(mw.config.get('wgUserName')) === 0 &&
+		mw.config.get('wgPageName').slice(-3) === '.js') {
 		const box = document.createElement('div');
 		// Styled in twinkle.css
 		box.setAttribute('id', 'twinkle-config-headerbox');
@@ -1347,22 +1343,22 @@ Twinkle.config.init = function twinkleconfigInit() {
 };
 
 // Morebits.wiki.page callback from init code
-Twinkle.config.legacyPrefsNotice = function twinkleconfigLegacyPrefsNotice(pageobj) {
+Twinkle.config.legacyPrefsNotice = (pageobj) => {
 	const text = pageobj.getPageText();
 	const contentnotice = pageobj.getCallbackParameters();
 	if (text.indexOf('TwinkleConfig') !== -1 || text.indexOf('FriendlyConfig') !== -1) {
 		contentnotice.innerHTML =
-				'<table class="plainlinks ombox ombox-content"><tr><td class="mbox-image">' +
-				'<img alt="" src="https://tu.zhongwen.wiki/images/thumb/8/8f/Alert_Mark_%28Orange%29.svg/40px-Alert_Mark_%28Orange%29.svg.png" /></td>' +
-				'<td class="mbox-text"><p><big><b>在这里修改您的参数设置之前，</b>您必须移除在用户JavaScript文件中任何旧的Friendly设置。</big></p>' +
-				'<p>要这样做，您可以<a href="' +
-				mw.config.get('wgScript') +
-				'?title=User:' +
-				encodeURIComponent(mw.config.get('wgUserName')) +
-				'/' +
-				mw.config.get('skin') +
-				'.js&action=edit" target="_blank"><b>编辑您的个人JavaScript</b></a>。删除提到<code>FriendlyConfig</code>的代码。</p>' +
-				'</td></tr></table>';
+			'<table class="plainlinks ombox ombox-content"><tr><td class="mbox-image">' +
+			'<img alt="" src="https://tu.zhongwen.wiki/images/thumb/8/8f/Alert_Mark_%28Orange%29.svg/40px-Alert_Mark_%28Orange%29.svg.png" /></td>' +
+			'<td class="mbox-text"><p><big><b>在这里修改您的参数设置之前，</b>您必须移除在用户JavaScript文件中任何旧的Friendly设置。</big></p>' +
+			'<p>要这样做，您可以<a href="' +
+			mw.config.get('wgScript') +
+			'?title=User:' +
+			encodeURIComponent(mw.config.get('wgUserName')) +
+			'/' +
+			mw.config.get('skin') +
+			'.js&action=edit" target="_blank"><b>编辑您的个人JavaScript</b></a>。删除提到<code>FriendlyConfig</code>的代码。</p>' +
+			'</td></tr></table>';
 	} else {
 		$(contentnotice).remove();
 	}
@@ -1371,7 +1367,7 @@ Twinkle.config.legacyPrefsNotice = function twinkleconfigLegacyPrefsNotice(pageo
 // custom list-related stuff
 
 Twinkle.config.listDialog = {};
-Twinkle.config.listDialog.addRow = function twinkleconfigListDialogAddRow(dlgtable, value, label) {
+Twinkle.config.listDialog.addRow = (dlgtable, value, label) => {
 	const contenttr = document.createElement('tr');
 	// "remove" button
 	let contenttd = document.createElement('td');
@@ -1379,7 +1375,7 @@ Twinkle.config.listDialog.addRow = function twinkleconfigListDialogAddRow(dlgtab
 	removeButton.setAttribute('type', 'button');
 	removeButton.addEventListener(
 		'click',
-		function () {
+		() => {
 			$(contenttr).remove();
 		},
 		false
@@ -1413,7 +1409,7 @@ Twinkle.config.listDialog.addRow = function twinkleconfigListDialogAddRow(dlgtab
 	contenttr.appendChild(contenttd);
 	dlgtable.appendChild(contenttr);
 };
-Twinkle.config.listDialog.display = function twinkleconfigListDialogDisplay(e) {
+Twinkle.config.listDialog.display = (e) => {
 	const $prefbutton = $(e.target);
 	const curvalue = $prefbutton.data('value');
 	const curpref = $prefbutton.data('pref');
@@ -1447,7 +1443,7 @@ Twinkle.config.listDialog.display = function twinkleconfigListDialogDisplay(e) {
 
 	// content rows
 	let gotRow = false;
-	$.each(curvalue, function (k, v) {
+	$.each(curvalue, (_k, v) => {
 		gotRow = true;
 		Twinkle.config.listDialog.addRow(dlgtbody, v.value, v.label);
 	});
@@ -1466,7 +1462,7 @@ Twinkle.config.listDialog.display = function twinkleconfigListDialogDisplay(e) {
 	addButton.setAttribute('type', 'button');
 	addButton.addEventListener(
 		'click',
-		function () {
+		() => {
 			Twinkle.config.listDialog.addRow(dlgtbody);
 		},
 		false
@@ -1484,7 +1480,7 @@ Twinkle.config.listDialog.display = function twinkleconfigListDialogDisplay(e) {
 	button.setAttribute('type', 'submit'); // so Morebits.simpleWindow puts the button in the button pane
 	button.addEventListener(
 		'click',
-		function () {
+		() => {
 			Twinkle.config.listDialog.save($prefbutton, dlgtbody);
 			dialog.close();
 		},
@@ -1496,7 +1492,7 @@ Twinkle.config.listDialog.display = function twinkleconfigListDialogDisplay(e) {
 	button.setAttribute('type', 'submit'); // so Morebits.simpleWindow puts the button in the button pane
 	button.addEventListener(
 		'click',
-		function () {
+		() => {
 			Twinkle.config.listDialog.reset($prefbutton, dlgtbody);
 		},
 		false
@@ -1507,7 +1503,7 @@ Twinkle.config.listDialog.display = function twinkleconfigListDialogDisplay(e) {
 	button.setAttribute('type', 'submit'); // so Morebits.simpleWindow puts the button in the button pane
 	button.addEventListener(
 		'click',
-		function () {
+		() => {
 			dialog.close(); // the event parameter on this function seems to be broken
 		},
 		false
@@ -1520,7 +1516,7 @@ Twinkle.config.listDialog.display = function twinkleconfigListDialogDisplay(e) {
 
 // Resets the data value, re-populates based on the new (default) value, then saves the
 // old data value again (less surprising behaviour)
-Twinkle.config.listDialog.reset = function twinkleconfigListDialogReset(button, tbody) {
+Twinkle.config.listDialog.reset = (button, tbody) => {
 	// reset value on button
 	const $button = $(button);
 	const curpref = $button.data('pref');
@@ -1530,9 +1526,10 @@ Twinkle.config.listDialog.reset = function twinkleconfigListDialogReset(button, 
 	// reset form
 	const $tbody = $(tbody);
 	$tbody.find('tr').slice(1).remove(); // all rows except the first (header) row
+
 	// add the new values
 	const curvalue = $button.data('value');
-	$.each(curvalue, function (k, v) {
+	$.each(curvalue, function (_k, v) {
 		Twinkle.config.listDialog.addRow(tbody, v.value, v.label);
 	});
 
@@ -1544,7 +1541,7 @@ Twinkle.config.listDialog.save = function twinkleconfigListDialogSave(button, tb
 	let current = {};
 	$(tbody)
 		.find('input[type="text"]')
-		.each(function (inputkey, input) {
+		.each(function (_inputkey, input) {
 			if ($(input).hasClass('twinkle-config-customlist-value')) {
 				current = {
 					value: input.value
@@ -1566,13 +1563,13 @@ Twinkle.config.resetPrefLink = function twinkleconfigResetPrefLink(e) {
 	const wantedpref = e.target.id.substring(21); // "twinkle-config-reset-" prefix is stripped
 
 	// search tactics
-	$(Twinkle.config.sections).each(function (sectionkey, section) {
+	$(Twinkle.config.sections).each(function (_sectionkey, section) {
 		if (section.hidden || (section.adminOnly && !Morebits.userIsSysop)) {
 			return true; // continue: skip impossibilities
 		}
 
 		let foundit = false;
-		$(section.preferences).each(function (prefkey, pref) {
+		$(section.preferences).each(function (_prefkey, pref) {
 			if (pref.name !== wantedpref) {
 				return true; // continue
 			}
@@ -1617,12 +1614,12 @@ Twinkle.config.resetPref = function twinkleconfigResetPref(pref) {
 };
 Twinkle.config.resetAllPrefs = function twinkleconfigResetAllPrefs() {
 	// no confirmation message - the user can just refresh/close the page to abort
-	$(Twinkle.config.sections).each(function (sectionkey, section) {
+	$(Twinkle.config.sections).each(function (_sectionkey, section) {
 		if (section.hidden || (section.adminOnly && !Morebits.userIsSysop)) {
 			return true; // continue: skip impossibilities
 		}
 
-		$(section.preferences).each(function (prefkey, pref) {
+		$(section.preferences).each(function (_prefkey, pref) {
 			if (!pref.adminOnly || Morebits.userIsSysop) {
 				Twinkle.config.resetPref(pref);
 			}
@@ -1648,13 +1645,13 @@ Twinkle.config.writePrefs = function twinkleconfigWritePrefs(pageobj) {
 	const newConfig = {
 		optionsVersion: 2.1
 	};
-	$(Twinkle.config.sections).each(function (sectionkey, section) {
+	$(Twinkle.config.sections).each(function (_sectionkey, section) {
 		if (section.adminOnly && !Morebits.userIsSysop) {
 			return; // i.e. "continue" in this context
 		}
 
 		// reach each of the preferences from the form
-		$(section.preferences).each(function (prefkey, pref) {
+		$(section.preferences).each(function (_prefkey, pref) {
 			let userValue; // = undefined
 
 			// only read form values for those prefs that have them
@@ -1682,7 +1679,7 @@ Twinkle.config.writePrefs = function twinkleconfigWritePrefs(pageobj) {
 							userValue = [];
 							if (pref.setDisplayOrder) {
 								// read only those keys specified in the display order
-								$.each(pref.setDisplayOrder, function (itemkey, item) {
+								$.each(pref.setDisplayOrder, function (_itemkey, item) {
 									if (form[pref.name + '_' + item].checked) {
 										userValue.push(item);
 									}
