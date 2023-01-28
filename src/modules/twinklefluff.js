@@ -24,7 +24,7 @@
  * Twinklefluff revert and antivandalism utility
  */
 
-Twinkle.fluff = function twinklefluff() {
+Twinkle.fluff = () => {
 	// Only proceed if the user can actually edit the page in question
 	// (see #632 for contribs issue).  wgIsProbablyEditable should take
 	// care of namespace/contentModel restrictions as well as explicit
@@ -33,7 +33,7 @@ Twinkle.fluff = function twinklefluff() {
 		// wgDiffOldId included for clarity in if else loop
 		if (mw.config.get('wgDiffNewId') || mw.config.get('wgDiffOldId')) {
 			// Reload alongside the revision slider
-			mw.hook('wikipage.diff').add(function () {
+			mw.hook('wikipage.diff').add(() => {
 				Twinkle.fluff.addLinks.diff();
 			});
 		} else if (mw.config.get('wgAction') === 'view' && mw.config.get('wgRevisionId') && mw.config.get('wgCurRevisionId') !== mw.config.get('wgRevisionId')) {
@@ -49,7 +49,7 @@ Twinkle.fluff = function twinklefluff() {
 		} else if (mw.config.get('wgCanonicalSpecialPageName') === 'Recentchanges' || mw.config.get('wgCanonicalSpecialPageName') === 'Recentchangeslinked') {
 			// Reload with recent changes updates
 			// structuredChangeFilters.ui.initialized is just on load
-			mw.hook('wikipage.content').add(function (item) {
+			mw.hook('wikipage.content').add((item) => {
 				if (item.is('div')) {
 					Twinkle.fluff.addLinks.recentchanges();
 				}
@@ -72,13 +72,13 @@ Twinkle.fluff.hiddenName = '已隐藏的用户';
 
 // Consolidated construction of fluff links
 Twinkle.fluff.linkBuilder = {
-	spanTag: function (color, content) {
+	spanTag: (color, content) => {
 		const span = document.createElement('span');
 		span.style.color = color;
 		span.appendChild(document.createTextNode(content));
 		return span;
 	},
-	buildLink: function (color, text) {
+	buildLink: (color, text) => {
 		const link = document.createElement('a');
 		link.appendChild(Twinkle.fluff.linkBuilder.spanTag('Black', '['));
 		link.appendChild(Twinkle.fluff.linkBuilder.spanTag(color, text));
@@ -94,7 +94,7 @@ Twinkle.fluff.linkBuilder = {
 	 * @param {number|string} [rev=wgCurRevisionId] - Revision ID being reverted (optional)
 	 * @param {string} [page=wgPageName] - Page being reverted (optional)
 	 */
-	rollbackLinks: function (vandal, inline, rev, page) {
+	rollbackLinks: (vandal, inline, rev, page) => {
 		vandal = vandal || null;
 		const elem = inline ? 'span' : 'div';
 		const revNode = document.createElement(elem);
@@ -116,11 +116,11 @@ Twinkle.fluff.linkBuilder = {
 		const vandLink = Twinkle.fluff.linkBuilder.buildLink('Red', '破坏');
 		normLink.style.fontWeight = 'bold';
 		vandLink.style.fontWeight = 'bold';
-		$(normLink).on('click', function () {
+		$(normLink).on('click', () => {
 			Twinkle.fluff.revert('norm', vandal, rev, page);
 			Twinkle.fluff.disableLinks(revNode);
 		});
-		$(vandLink).on('click', function () {
+		$(vandLink).on('click', () => {
 			Twinkle.fluff.revert('vand', vandal, rev, page);
 			Twinkle.fluff.disableLinks(revNode);
 		});
@@ -133,7 +133,7 @@ Twinkle.fluff.linkBuilder = {
 		if (!inline) {
 			const agfNode = document.createElement('span');
 			const agfLink = Twinkle.fluff.linkBuilder.buildLink('DarkOliveGreen', '回退（AGF）');
-			$(agfLink).on('click', function () {
+			$(agfLink).on('click', () => {
 				Twinkle.fluff.revert('agf', vandal, rev, page);
 				// Twinkle.fluff.disableLinks(revNode); // rollbackInPlace not relevant for any inline situations
 			});
@@ -148,7 +148,7 @@ Twinkle.fluff.linkBuilder = {
 		return revNode;
 	},
 	// Build [restore this revision] links
-	restoreThisRevisionLink: function (revisionRef, inline) {
+	restoreThisRevisionLink: (revisionRef, inline) => {
 		// If not a specific revision number, should be wgDiffNewId/wgDiffOldId/wgRevisionId
 		revisionRef = typeof revisionRef === 'number' ? revisionRef : mw.config.get(revisionRef);
 		const elem = inline ? 'span' : 'div';
@@ -156,7 +156,7 @@ Twinkle.fluff.linkBuilder = {
 		revertToRevisionNode.setAttribute('id', 'tw-revert-to-' + revisionRef);
 		revertToRevisionNode.style.fontWeight = 'bold';
 		const revertToRevisionLink = Twinkle.fluff.linkBuilder.buildLink('SaddleBrown', '恢复此版本');
-		$(revertToRevisionLink).on('click', function () {
+		$(revertToRevisionLink).on('click', () => {
 			Twinkle.fluff.revertToRevision(revisionRef);
 		});
 		if (inline) {
@@ -167,19 +167,17 @@ Twinkle.fluff.linkBuilder = {
 	}
 };
 Twinkle.fluff.addLinks = {
-	contributions: function () {
+	contributions: () => {
 		// $('sp-contributions-footer-anon-range') relies on the fmbox
 		// id in [[MediaWiki:Sp-contributions-footer-anon-range]]
 		if (mw.config.exists('wgRelevantUserName')) {
 			// Get the username these contributions are for
 			const username = mw.config.get('wgRelevantUserName');
-			if (
-				Twinkle.getPref('showRollbackLinks').indexOf('contribs') !== -1 ||
-					(mw.config.get('wgUserName') !== username && Twinkle.getPref('showRollbackLinks').indexOf('others') !== -1) ||
-					(mw.config.get('wgUserName') === username && Twinkle.getPref('showRollbackLinks').indexOf('mine') !== -1)
-			) {
+			if (Twinkle.getPref('showRollbackLinks').indexOf('contribs') !== -1 ||
+				(mw.config.get('wgUserName') !== username && Twinkle.getPref('showRollbackLinks').indexOf('others') !== -1) ||
+				(mw.config.get('wgUserName') === username && Twinkle.getPref('showRollbackLinks').indexOf('mine') !== -1)) {
 				const $list = $('#mw-content-text').find('ul li:has(span.mw-uctop):has(.mw-changeslist-diff)');
-				$list.each(function (key, current) {
+				$list.each((_key, current) => {
 					// revid is also available in the href of both
 					// .mw-changeslist-date or .mw-changeslist-diff
 					const page = $(current).find('.mw-contributions-title').text();
@@ -191,14 +189,14 @@ Twinkle.fluff.addLinks = {
 			}
 		}
 	},
-	recentchanges: function () {
+	recentchanges: () => {
 		if (Twinkle.getPref('showRollbackLinks').indexOf('recent') !== -1) {
 			// Latest and revertable (not page creations, logs, categorizations, etc.)
 			let $list = $('.mw-changeslist .mw-changeslist-last.mw-changeslist-src-mw-edit');
 			// Exclude top-level header if "group changes" preference is used
 			// and find only individual lines or nested lines
 			$list = $list.not('.mw-rcfilters-ui-highlights-enhanced-toplevel').find('.mw-changeslist-line-inner, td.mw-enhanced-rc-nested');
-			$list.each(function (key, current) {
+			$list.each((_key, current) => {
 				// The :not is possibly unnecessary, as it appears that
 				// .mw-userlink is simply not present if the username is hidden
 				const vandal = $(current).find('.mw-userlink:not(.history-deleted)').text();
@@ -209,7 +207,7 @@ Twinkle.fluff.addLinks = {
 			});
 		}
 	},
-	history: function () {
+	history: () => {
 		if (Twinkle.getPref('showRollbackLinks').indexOf('history') !== -1) {
 			// All revs
 			const histList = $('#pagehistory li').toArray();
@@ -232,7 +230,7 @@ Twinkle.fluff.addLinks = {
 			}
 
 			// oldid
-			histList.forEach(function (rev) {
+			histList.forEach((rev) => {
 				// From restoreThisRevision, non-transferable
 				// If the text has been revdel'd, it gets wrapped in a span with .history-deleted,
 				// and href will be undefined (and thus oldid is NaN)
@@ -244,9 +242,9 @@ Twinkle.fluff.addLinks = {
 			});
 		}
 	},
-	diff: function () {
+	diff: () => {
 		// Autofill user talk links on diffs with vanarticle for easy warning, but don't autowarn
-		const warnFromTalk = function (xtitle) {
+		const warnFromTalk = (xtitle) => {
 			const talkLink = $('#mw-diff-' + xtitle + '2 .mw-usertoollinks a').first();
 			if (talkLink.length) {
 				let extraParams = 'vanarticle=' + mw.util.rawurlencode(Morebits.pageNameNorm) + '&noautowarn=true';
@@ -264,6 +262,7 @@ Twinkle.fluff.addLinks = {
 
 		// Older revision
 		warnFromTalk('otitle'); // Add quick-warn link to user talk link
+
 		// Don't load if there's a single revision or weird diff (cur on latest)
 		if (mw.config.get('wgDiffOldId') && mw.config.get('wgDiffOldId') !== mw.config.get('wgDiffNewId')) {
 			// Add a [restore this revision] link to the older revision
@@ -281,7 +280,7 @@ Twinkle.fluff.addLinks = {
 					label: '选择回退理由',
 					value: ''
 				});
-				$(Twinkle.getPref('customRevertSummary')).each(function (_, e) {
+				$(Twinkle.getPref('customRevertSummary')).each((_, e) => {
 					revertsummary.append({
 						type: 'option',
 						label: e.label,
@@ -294,17 +293,16 @@ Twinkle.fluff.addLinks = {
 
 		// Newer revision
 		warnFromTalk('ntitle'); // Add quick-warn link to user talk link
+
 		// Add either restore or rollback links to the newer revision
 		// Don't show if there's a single revision or weird diff (prev on first)
 		if (document.getElementById('differences-nextlink')) {
 			// Not latest revision, add [restore this revision] link to newer revision
 			const newTitle = document.getElementById('mw-diff-ntitle1').parentNode;
 			newTitle.insertBefore(Twinkle.fluff.linkBuilder.restoreThisRevisionLink('wgDiffNewId'), newTitle.firstChild);
-		} else if (
-			Twinkle.getPref('showRollbackLinks').indexOf('diff') !== -1 &&
-				mw.config.get('wgDiffOldId') &&
-				(mw.config.get('wgDiffOldId') !== mw.config.get('wgDiffNewId') || document.getElementById('differences-prevlink'))
-		) {
+		} else if (Twinkle.getPref('showRollbackLinks').indexOf('diff') !== -1 &&
+			mw.config.get('wgDiffOldId') &&
+			(mw.config.get('wgDiffOldId') !== mw.config.get('wgDiffNewId') || document.getElementById('differences-prevlink'))) {
 			// Normally .mw-userlink is a link, but if the
 			// username is hidden, it will be a span with
 			// .history-deleted as well. When a sysop views the
@@ -325,7 +323,7 @@ Twinkle.fluff.addLinks = {
 			ntitle.insertBefore(Twinkle.fluff.linkBuilder.rollbackLinks(vandal), ntitle.firstChild);
 		}
 	},
-	oldid: function () {
+	oldid: () => {
 		// Add a [restore this revision] link on old revisions
 		const revisionInfo = document.getElementById('mw-revision-info');
 		if (revisionInfo) {
@@ -334,16 +332,16 @@ Twinkle.fluff.addLinks = {
 		}
 	}
 };
-Twinkle.fluff.disableLinks = function disablelinks(parentNode) {
+Twinkle.fluff.disableLinks = (parentNode) => {
 	// Array.from not available in IE11 :(
 	$(parentNode)
 		.children()
-		.each(function (_ix, node) {
+		.each((_ix, node) => {
 			node.innerHTML = node.textContent; // Feels like cheating
 			$(node).css('font-weight', 'normal').css('color', 'darkgray');
 		});
 };
-Twinkle.fluff.revert = function revertPage(type, vandal, rev, page) {
+Twinkle.fluff.revert = (type, vandal, rev, page) => {
 	const pagename = page || mw.config.get('wgPageName');
 	const revid = rev || mw.config.get('wgCurRevisionId');
 	if (Twinkle.fluff.rollbackInPlace) {
@@ -384,7 +382,7 @@ Twinkle.fluff.revert = function revertPage(type, vandal, rev, page) {
 	qiuwen_api.params = params;
 	qiuwen_api.post();
 };
-Twinkle.fluff.revertToRevision = function revertToRevision(oldrev) {
+Twinkle.fluff.revertToRevision = (oldrev) => {
 	Morebits.status.init(document.getElementById('mw-content-text'));
 	const query = {
 		action: 'query',
@@ -406,7 +404,7 @@ Twinkle.fluff.revertToRevision = function revertToRevision(oldrev) {
 	qiuwen_api.post();
 };
 Twinkle.fluff.callbacks = {
-	toRevision: function (apiobj) {
+	toRevision: (apiobj) => {
 		const response = apiobj.getResponse();
 		const loadtimestamp = response.curtimestamp;
 		const csrftoken = response.query.tokens.csrftoken;
@@ -441,7 +439,7 @@ Twinkle.fluff.callbacks = {
 			minor: Twinkle.getPref('markRevertedPagesAsMinor').indexOf('torev') !== -1 ? true : undefined,
 			format: 'json'
 		};
-			// Handle watching, possible expiry
+		// Handle watching, possible expiry
 		if (Twinkle.getPref('watchRevertedPages').indexOf('torev') !== -1) {
 			const watchOrExpiry = Twinkle.getPref('watchRevertedExpiry');
 			if (!watchOrExpiry || watchOrExpiry === 'no') {
@@ -462,7 +460,7 @@ Twinkle.fluff.callbacks = {
 		qiuwen_api.params = apiobj.params;
 		qiuwen_api.post();
 	},
-	main: function (apiobj) {
+	main: (apiobj) => {
 		const response = apiobj.getResponse();
 		const loadtimestamp = response.curtimestamp;
 		const csrftoken = response.query.tokens.csrftoken;
@@ -508,14 +506,12 @@ Twinkle.fluff.callbacks = {
 						Morebits.status.warn('提示', [ '最新修订版本由 ', Morebits.htmlNode('strong', userNorm), ' 做出，但我们还是不回退了。' ]);
 						return;
 				}
-			} else if (
-				params.type === 'vand' &&
-					// Okay to test on user since it will either fail or sysop will correctly access it
-					// Besides, none of the trusted bots are going to be revdel'd
-					Twinkle.fluff.trustedBots.indexOf(top.getAttribute('user')) !== -1 &&
-					revs.length > 1 &&
-					revs[1].getAttribute('revid') === params.revid
-			) {
+			} else if (params.type === 'vand' &&
+				// Okay to test on user since it will either fail or sysop will correctly access it
+				// Besides, none of the trusted bots are going to be revdel'd
+				Twinkle.fluff.trustedBots.indexOf(top.getAttribute('user')) !== -1 &&
+				revs.length > 1 &&
+				revs[1].getAttribute('revid') === params.revid) {
 				Morebits.status.info('信息', [ '最新修订版本由 ', Morebits.htmlNode('strong', lastuser), '，一个可信的机器人做出，但之前的版本被认为是破坏，继续回退操作。' ]);
 				index = 2;
 			} else {
@@ -540,7 +536,7 @@ Twinkle.fluff.callbacks = {
 					Morebits.status.warn('提示', [ '将对 ', Morebits.htmlNode('strong', userNorm), ' 执行善意回退，但这是一个可信的机器人，取消回退操作。' ]);
 					return;
 				case 'norm':
-					/* falls through */
+				/* falls through */
 				default: {
 					const cont = confirm('选择了常规回退，但最新修改是由一个可信的机器人（' + userNorm + '）做出的。确定以回退前一个修订版本，取消以回退机器人的修改');
 					if (cont) {
@@ -616,7 +612,7 @@ Twinkle.fluff.callbacks = {
 				);
 				break;
 			case 'norm':
-				/* falls through */
+			/* falls through */
 			default:
 				if (Twinkle.getPref('offerReasonOnNormalRevert')) {
 					// eslint-disable-next-line no-tabs
@@ -630,13 +626,11 @@ Twinkle.fluff.callbacks = {
 				summary = Twinkle.fluff.formatSummary('回退$USER做出的' + params.count + '次编辑', params.userHidden ? null : params.user, extra_summary);
 				break;
 		}
-		if (
-			(Twinkle.getPref('confirmOnFluff') ||
-					// Mobile user agent taken from [[en:MediaWiki:Gadget-confirmationRollback-mobile.js]]
-					(Twinkle.getPref('confirmOnMobileFluff') && /Android|webOS|iPhone|iPad|iPod|BlackBerry|Mobile|Opera Mini/i.test(navigator.userAgent))) &&
-				!userHasAlreadyConfirmedAction &&
-				!confirm('回退页面：您确定吗？')
-		) {
+		if ((Twinkle.getPref('confirmOnFluff') ||
+			// Mobile user agent taken from [[en:MediaWiki:Gadget-confirmationRollback-mobile.js]]
+			(Twinkle.getPref('confirmOnMobileFluff') && /Android|webOS|iPhone|iPad|iPod|BlackBerry|Mobile|Opera Mini/i.test(navigator.userAgent))) &&
+			!userHasAlreadyConfirmedAction &&
+			!confirm('回退页面：您确定吗？')) {
 			statelem.error('用户取消操作。');
 			return;
 		}
@@ -667,7 +661,7 @@ Twinkle.fluff.callbacks = {
 			minor: Twinkle.getPref('markRevertedPagesAsMinor').indexOf(params.type) !== -1 ? true : undefined,
 			format: 'json'
 		};
-			// Handle watching, possible expiry
+		// Handle watching, possible expiry
 		if (Twinkle.getPref('watchRevertedPages').indexOf(params.type) !== -1) {
 			const watchOrExpiry = Twinkle.getPref('watchRevertedExpiry');
 			if (!watchOrExpiry || watchOrExpiry === 'no') {
@@ -690,7 +684,7 @@ Twinkle.fluff.callbacks = {
 		qiuwen_api.params = params;
 		qiuwen_api.post();
 	},
-	complete: function (apiobj) {
+	complete: (apiobj) => {
 		// TODO Most of this is copy-pasted from Morebits.wiki.page#fnSaveSuccess. Unify it
 		const response = apiobj.getResponse();
 		const edit = response.edit;
@@ -723,7 +717,7 @@ Twinkle.fluff.callbacks = {
 						window.open(mw.util.getUrl('', windowQuery), '_blank', 'location=no,toolbar=no,status=no,directories=no,scrollbars=yes,width=1200,height=800');
 						break;
 					case 'window':
-						/* falls through */
+					/* falls through */
 					default:
 						window.open(
 							mw.util.getUrl('', windowQuery),
@@ -739,7 +733,7 @@ Twinkle.fluff.callbacks = {
 
 // If builtInString contains the string "$USER", it will be replaced
 // by an appropriate user link if a user name is provided
-Twinkle.fluff.formatSummary = function (builtInString, userName, customString) {
+Twinkle.fluff.formatSummary = (builtInString, userName, customString) => {
 	let result = builtInString;
 
 	// append user's custom reason
