@@ -618,7 +618,7 @@ Twinkle.batchdelete.callbacks = {
 				action: 'query',
 				list: 'backlinks',
 				blfilterredir: 'nonredirects',
-				blnamespace: [ 0, 100 ],
+				blnamespace: [ 0 ],
 				bltitle: params.page,
 				bllimit: 'max' // 500 is max for normal users, 5000 for bots and sysops
 			};
