@@ -170,17 +170,18 @@ Twinkle.block.fetchUserInfo = (fn) => {
 	}
 	api.get(query).then(
 		(data) => {
-			const blockinfo = data.query.blocks[0], userinfo = data.query.users[0];
+			const blockinfo = data.query.blocks[0],
+				userinfo = data.query.users[0];
 			Twinkle.block.isRegistered = !!userinfo.userid;
 			if (Twinkle.block.isRegistered) {
 				relevantUserName = 'User:' + userName;
 				Twinkle.block.userIsBot =
-					!!userinfo.groupmemberships &&
-					userinfo.groupmemberships
-						.map((e) => {
-							return e.group;
-						})
-						.indexOf('bot') !== -1;
+						!!userinfo.groupmemberships &&
+						userinfo.groupmemberships
+							.map((e) => {
+								return e.group;
+							})
+							.indexOf('bot') !== -1;
 			} else {
 				relevantUserName = userName;
 				Twinkle.block.userIsBot = false;
@@ -196,7 +197,7 @@ Twinkle.block.fetchUserInfo = (fn) => {
 			Twinkle.block.blockLogId = Twinkle.block.hasBlockLog ? data.query.logevents[0].logid : false;
 			// Only use block or reblock log
 			Twinkle.block.recentBlockLog =
-				data.query.logevents.length >= 1 && data.query.logevents[0].action !== 'unblock' ? data.query.logevents[0] : data.query.logevents.length >= 2 ? data.query.logevents[1] : null;
+					data.query.logevents.length >= 1 && data.query.logevents[0].action !== 'unblock' ? data.query.logevents[0] : data.query.logevents.length >= 2 ? data.query.logevents[1] : null;
 			// Only ongoing block could be unblocked
 			Twinkle.block.manualUnblock = Twinkle.block.hasBlockLog && data.query.logevents[0].action === 'unblock';
 			if (typeof fn === 'function') {
@@ -760,12 +761,13 @@ Twinkle.block.callback.change_action = (e) => {
 					})
 				})
 			},
-			templateSelection: (choice) => $('<a>')
-				.text(choice.text)
-				.attr({
-					href: mw.util.getUrl(choice.text),
-					target: '_blank'
-				})
+			templateSelection: (choice) =>
+				$('<a>')
+					.text(choice.text)
+					.attr({
+						href: mw.util.getUrl(choice.text),
+						target: '_blank'
+					})
 		});
 		$form.find('[name=namespacerestrictions]').select2({
 			width: '100%',
@@ -779,12 +781,12 @@ Twinkle.block.callback.change_action = (e) => {
 		mw.util.addCSS(
 			// Reduce padding
 			'.select2-results .select2-results__option { padding-top: 1px; padding-bottom: 1px; }' +
-			// Adjust font size
-			'.select2-container .select2-dropdown .select2-results { font-size: 13px; } .select2-container .selection .select2-selection__rendered { font-size: 13px; }' +
-			// Remove black border
-			'.select2-container--default.select2-container--focus .select2-selection--multiple { border: 1px solid #aaa; }' +
-			// Make the tiny cross larger
-			'.select2-selection__choice__remove { font-size: 130%; }'
+					// Adjust font size
+					'.select2-container .select2-dropdown .select2-results { font-size: 13px; } .select2-container .selection .select2-selection__rendered { font-size: 13px; }' +
+					// Remove black border
+					'.select2-container--default.select2-container--focus .select2-selection--multiple { border: 1px solid #aaa; }' +
+					// Make the tiny cross larger
+					'.select2-selection__choice__remove { font-size: 130%; }'
 		);
 	} else {
 		$form.find('fieldset[name="field_block_options"]').hide();
@@ -814,12 +816,12 @@ Twinkle.block.callback.change_action = (e) => {
 	if (blockBox && Twinkle.block.hasBlockLog) {
 		const $blockloglink = $(
 			'<a target="_blank" href="' +
-			mw.util.getUrl('Special:Log', {
-				action: 'view',
-				page: relevantUserName,
-				type: 'block'
-			}) +
-			'">封禁日志</a>)'
+					mw.util.getUrl('Special:Log', {
+						action: 'view',
+						page: relevantUserName,
+						type: 'block'
+					}) +
+					'">封禁日志</a>)'
 		);
 		Morebits.status.init($('div[name="hasblocklog"] span').last()[0]);
 		Morebits.status.warn(
@@ -1050,7 +1052,9 @@ Twinkle.block.transformBlockPresets = () => {
 				blockGroup.list = Twinkle.getPref('customBlockReasonList');
 			}
 			$.each(blockGroup.list, (_, blockPreset) => {
-				const value = blockPreset.value, reason = blockPreset.label, newPreset = value + ':' + reason;
+				const value = blockPreset.value,
+					reason = blockPreset.label,
+					newPreset = value + ':' + reason;
 				Twinkle.block.blockPresetsInfo[newPreset] = jQuery.extend(true, {}, Twinkle.block.blockPresetsInfo[value]);
 				Twinkle.block.blockPresetsInfo[newPreset].template = value;
 				if (blockGroup.meta) {
@@ -1268,39 +1272,40 @@ Twinkle.block.blockGroupsPartial = [
 		]
 	}
 ];
-Twinkle.block.callback.filtered_block_groups = (group, show_template) => $.map(group, (blockGroup) => {
-	if (!show_template && blockGroup.meta) {
-		return;
-	}
-	const list = $.map(blockGroup.list, (blockPreset) => {
-		// only show uw-talkrevoked if reblocking
-		if (!Twinkle.block.currentBlockInfo && blockPreset.value === 'uw-talkrevoked') {
+Twinkle.block.callback.filtered_block_groups = (group, show_template) =>
+	$.map(group, (blockGroup) => {
+		if (!show_template && blockGroup.meta) {
 			return;
 		}
-		const blockSettings = Twinkle.block.blockPresetsInfo[blockPreset.value];
-		const registrationRestrict = blockPreset.forRegisteredOnly ? Twinkle.block.isRegistered : blockPreset.forAnonOnly ? !Twinkle.block.isRegistered : true;
-		if (!(blockSettings.templateName && show_template) && registrationRestrict) {
-			const templateName = blockSettings.templateName || blockSettings.template || blockPreset.value;
+		const list = $.map(blockGroup.list, (blockPreset) => {
+			// only show uw-talkrevoked if reblocking
+			if (!Twinkle.block.currentBlockInfo && blockPreset.value === 'uw-talkrevoked') {
+				return;
+			}
+			const blockSettings = Twinkle.block.blockPresetsInfo[blockPreset.value];
+			const registrationRestrict = blockPreset.forRegisteredOnly ? Twinkle.block.isRegistered : blockPreset.forAnonOnly ? !Twinkle.block.isRegistered : true;
+			if (!(blockSettings.templateName && show_template) && registrationRestrict) {
+				const templateName = blockSettings.templateName || blockSettings.template || blockPreset.value;
+				return {
+					label: (show_template ? '{{' + templateName + '}}: ' : '') + (blockPreset.label || '{{' + templateName + '}}'),
+					value: blockPreset.value,
+					data: [
+						{
+							name: 'template-name',
+							value: templateName
+						}
+					],
+					selected: !!blockPreset.selected
+				};
+			}
+		});
+		if (list.length) {
 			return {
-				label: (show_template ? '{{' + templateName + '}}: ' : '') + (blockPreset.label || '{{' + templateName + '}}'),
-				value: blockPreset.value,
-				data: [
-					{
-						name: 'template-name',
-						value: templateName
-					}
-				],
-				selected: !!blockPreset.selected
+				label: blockGroup.label,
+				list: list
 			};
 		}
 	});
-	if (list.length) {
-		return {
-			label: blockGroup.label,
-			list: list
-		};
-	}
-});
 Twinkle.block.callback.change_preset = (e) => {
 	const key = e.target.form.preset.value;
 	if (!key) {
@@ -1387,7 +1392,9 @@ Twinkle.block.callback.update_form = (e, data) => {
 	}
 };
 Twinkle.block.callback.change_template = (e) => {
-	const form = e.target.form, value = form.template.value, settings = Twinkle.block.blockPresetsInfo[value];
+	const form = e.target.form,
+		value = form.template.value,
+		settings = Twinkle.block.blockPresetsInfo[value];
 	const blockBox = $(form).find('[name=actiontype][value=block]').is(':checked');
 	const partialBox = $(form).find('[name=actiontype][value=partial]').is(':checked');
 	const templateBox = $(form).find('[name=actiontype][value=template]').is(':checked');
@@ -1454,8 +1461,16 @@ Twinkle.block.callback.preview = (form) => {
 };
 Twinkle.block.callback.evaluate = (e) => {
 	const params = Morebits.quickForm.getInputData(e.target);
-	const $form = $(e.target), toBlock = $form.find('[name=actiontype][value=block]').is(':checked'), toWarn = $form.find('[name=actiontype][value=template]').is(':checked'), toPartial = $form.find('[name=actiontype][value=partial]').is(':checked'), toTag = $form.find('[name=actiontype][value=tag]').is(':checked'), toProtect = $form.find('[name=actiontype][value=protect]').is(':checked'), toUnblock = $form.find('[name=actiontype][value=unblock]').is(':checked');
-	let blockoptions = {}, templateoptions = {}, unblockoptions = {};
+	const $form = $(e.target),
+		toBlock = $form.find('[name=actiontype][value=block]').is(':checked'),
+		toWarn = $form.find('[name=actiontype][value=template]').is(':checked'),
+		toPartial = $form.find('[name=actiontype][value=partial]').is(':checked'),
+		toTag = $form.find('[name=actiontype][value=tag]').is(':checked'),
+		toProtect = $form.find('[name=actiontype][value=protect]').is(':checked'),
+		toUnblock = $form.find('[name=actiontype][value=unblock]').is(':checked');
+	let blockoptions = {},
+		templateoptions = {},
+		unblockoptions = {};
 	Twinkle.block.callback.saveFieldset($form.find('[name=field_block_options]'));
 	Twinkle.block.callback.saveFieldset($form.find('[name=field_template_options]'));
 	Twinkle.block.callback.saveFieldset($form.find('[name=field_tag_options]'));
@@ -1855,11 +1870,7 @@ Twinkle.block.callback.getBlockNoticeWikitext = (params, nosign) => {
 				};
 				text += '|area=某些';
 				if (params.pagerestrictions.length) {
-					text +=
-						'頁面（' +
-						makeSentence(
-							params.pagerestrictions.map((p) => '[[:' + p + ']]')
-						);
+					text += '頁面（' + makeSentence(params.pagerestrictions.map((p) => '[[:' + p + ']]'));
 					text += params.namespacerestrictions.length ? '）和某些' : '）';
 				}
 				if (params.namespacerestrictions.length) {
@@ -1893,7 +1904,9 @@ Twinkle.block.callback.getBlockNoticeWikitext = (params, nosign) => {
 	return text;
 };
 Twinkle.block.callback.main = (pageobj) => {
-	const params = pageobj.getCallbackParameters(), date = new Morebits.date(pageobj.getLoadTime()), messageData = params.messageData;
+	const params = pageobj.getCallbackParameters(),
+		date = new Morebits.date(pageobj.getLoadTime()),
+		messageData = params.messageData;
 	let text;
 	params.indefinite = Morebits.string.isInfinity(params.expiry);
 	if (Twinkle.getPref('blankTalkpageOnIndefBlock') && params.template !== 'uw-lblock' && params.indefinite) {

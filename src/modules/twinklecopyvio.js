@@ -28,9 +28,11 @@ Twinkle.copyvio = () => {
 	// * non-existent pages
 	// * files on Commons, whether there is a local page or not (unneeded local pages of files on Commons are eligible for CSD F2)
 	// * file pages without actual files (these are eligible for CSD G8)
-	if (mw.config.get('wgNamespaceNumber') < 0 ||
-		!mw.config.get('wgArticleId') ||
-		(mw.config.get('wgNamespaceNumber') === 6 && (document.getElementById('mw-sharedupload') || (!document.getElementById('mw-imagepage-section-filehistory') && !Morebits.isPageRedirect())))) {
+	if (
+		mw.config.get('wgNamespaceNumber') < 0 ||
+			!mw.config.get('wgArticleId') ||
+			(mw.config.get('wgNamespaceNumber') === 6 && (document.getElementById('mw-sharedupload') || (!document.getElementById('mw-imagepage-section-filehistory') && !Morebits.isPageRedirect())))
+	) {
 		return;
 	}
 	Twinkle.addPortletLink(Twinkle.copyvio.callback, '侵权', 'tw-copyvio', '提报侵权页面', '');
@@ -110,21 +112,24 @@ Twinkle.copyvio.callbacks = {
 	taggingArticle: (pageobj) => {
 		const params = pageobj.getCallbackParameters();
 		const revisionId = mw.config.get('wgRevisionId') || mw.config.get('wgDiffNewId') || mw.config.get('wgCurRevisionId');
-		let tag = '{{subst:Copyvio/auto|url=' +
-			params.source
-				.replace(/http/g, '&#104;ttp')
-				.replace(/\n+/g, '\n')
-				.replace(/^\s*([^*])/gm, '* $1')
-				.replace(/^\* $/m, '') +
-			'|OldRevision=' +
-			revisionId +
-			'}}';
+		let tag =
+				'{{subst:Copyvio/auto|url=' +
+				params.source
+					.replace(/http/g, '&#104;ttp')
+					.replace(/\n+/g, '\n')
+					.replace(/^\s*([^*])/gm, '* $1')
+					.replace(/^\* $/m, '') +
+				'|OldRevision=' +
+				revisionId +
+				'}}';
 		const text = pageobj.getPageText();
 		const oldcsd = text.match(/\{\{\s*(db(-\w*)?|d|delete)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}/i);
-		if (oldcsd &&
-			confirm(
-				'在页面上找到快速删除模板，要保留吗？\n\n当页面同时侵犯著作权又符合快速删除标准时，应使用快速删除程序。\n单击“确认”以保留快速删除模板，若您认为快速删除理由不合，单击“取消”以移除快速删除模板。'
-			)) {
+		if (
+			oldcsd &&
+				confirm(
+					'在页面上找到快速删除模板，要保留吗？\n\n当页面同时侵犯著作权又符合快速删除标准时，应使用快速删除程序。\n单击“确认”以保留快速删除模板，若您认为快速删除理由不合，单击“取消”以移除快速删除模板。'
+				)
+		) {
 			tag = oldcsd[0] + '\n' + tag;
 		}
 		pageobj.setPageText(tag);

@@ -26,8 +26,10 @@ Twinkle.stub = () => {
 	if (Morebits.isPageRedirect()) {
 		// Skip
 		// article/draft article tagging
-	} else if (((mw.config.get('wgNamespaceNumber') === 0 || mw.config.get('wgNamespaceNumber') === 118) && mw.config.get('wgCurRevisionId')) ||
-		Morebits.pageNameNorm === Twinkle.getPref('sandboxPage')) {
+	} else if (
+		((mw.config.get('wgNamespaceNumber') === 0 || mw.config.get('wgNamespaceNumber') === 118) && mw.config.get('wgCurRevisionId')) ||
+			Morebits.pageNameNorm === Twinkle.getPref('sandboxPage')
+	) {
 		Twinkle.stub.mode = '条目';
 		Twinkle.addPortletLink(Twinkle.stub.callback, '小作品', 'friendly-tag', '标记小作品');
 	}
@@ -281,7 +283,9 @@ Twinkle.stub.article.tagCategories = {
 Twinkle.stub.callbacks = {
 	main: (pageobj) => {
 		const params = pageobj.getCallbackParameters();
-		let tagRe, summaryText = '加入', tags = [];
+		let tagRe,
+			summaryText = '加入',
+			tags = [];
 		const groupableTags = [];
 		let i;
 		// eslint-disable-next-line prefer-const
@@ -361,7 +365,7 @@ Twinkle.stub.callback.evaluate = (e) => {
 	switch (Twinkle.stub.mode) {
 		case '条目':
 		case '條目':
-		/* falls through */
+			/* falls through */
 		case '重定向':
 			qiuwen_page.load(Twinkle.stub.callbacks.main);
 			return;

@@ -71,24 +71,23 @@ Twinkle.speedy.mode = {
 	// (sysops can access both "delete page" [sysop] and "tag page only" [user] modes)
 	isSysop: (mode) =>
 		mode === Twinkle.speedy.mode.sysopSingleSubmit ||
-		mode === Twinkle.speedy.mode.sysopMultipleSubmit ||
-		mode === Twinkle.speedy.mode.sysopRadioClick ||
-		mode === Twinkle.speedy.mode.sysopMultipleRadioClick,
+			mode === Twinkle.speedy.mode.sysopMultipleSubmit ||
+			mode === Twinkle.speedy.mode.sysopRadioClick ||
+			mode === Twinkle.speedy.mode.sysopMultipleRadioClick,
 	// do we have a "Submit" button once the form is created?
 	hasSubmitButton: (mode) =>
 		mode === Twinkle.speedy.mode.sysopSingleSubmit ||
-		mode === Twinkle.speedy.mode.sysopMultipleSubmit ||
-		mode === Twinkle.speedy.mode.sysopMultipleRadioClick ||
-		mode === Twinkle.speedy.mode.userMultipleSubmit ||
-		mode === Twinkle.speedy.mode.userMultipleRadioClick ||
-		mode === Twinkle.speedy.mode.userSingleSubmit,
+			mode === Twinkle.speedy.mode.sysopMultipleSubmit ||
+			mode === Twinkle.speedy.mode.sysopMultipleRadioClick ||
+			mode === Twinkle.speedy.mode.userMultipleSubmit ||
+			mode === Twinkle.speedy.mode.userMultipleRadioClick ||
+			mode === Twinkle.speedy.mode.userSingleSubmit,
 	// is db-multiple the outcome here?
 	isMultiple: (mode) =>
 		mode === Twinkle.speedy.mode.userMultipleSubmit ||
-		mode === Twinkle.speedy.mode.sysopMultipleSubmit ||
-		mode === Twinkle.speedy.mode.userMultipleRadioClick ||
-		mode === Twinkle.speedy.mode.sysopMultipleRadioClick
-
+			mode === Twinkle.speedy.mode.sysopMultipleSubmit ||
+			mode === Twinkle.speedy.mode.userMultipleRadioClick ||
+			mode === Twinkle.speedy.mode.sysopMultipleRadioClick
 };
 
 // Prepares the speedy deletion dialog and displays it
@@ -1147,7 +1146,7 @@ Twinkle.speedy.callbacks = {
 						window.open(mw.util.wikiScript('index') + '?' + $.param(query), '_blank', 'location=no,toolbar=no,status=no,directories=no,scrollbars=yes,width=1200,height=800');
 						break;
 					case 'window':
-					/* falls through */
+						/* falls through */
 					default:
 						window.open(
 							mw.util.wikiScript('index') + '?' + $.param(query),
@@ -1349,10 +1348,10 @@ Twinkle.speedy.callbacks = {
 		addToLog: (params, initialContrib) => {
 			const usl = new Morebits.userspaceLogger(Twinkle.getPref('speedyLogPageName'));
 			usl.initialText =
-				'这是该用户使用[[H:TW|Twinkle]]的速删模块做出的[[QW:CSD|快速删除]]提名列表。\n\n如果您不再想保留此日志，请在[[' +
-				Twinkle.getPref('configPage') +
-				'|参数设置]]中关掉，并使用[[QW:O1|CSD O1]]提交快速删除。' +
-				(Morebits.userIsSysop ? '\n\n此日志并不记录用Twinkle直接执行的删除。' : '');
+					'这是该用户使用[[H:TW|Twinkle]]的速删模块做出的[[QW:CSD|快速删除]]提名列表。\n\n如果您不再想保留此日志，请在[[' +
+					Twinkle.getPref('configPage') +
+					'|参数设置]]中关掉，并使用[[QW:O1|CSD O1]]提交快速删除。' +
+					(Morebits.userIsSysop ? '\n\n此日志并不记录用Twinkle直接执行的删除。' : '');
 			let appendText = '# [[:' + Morebits.pageNameNorm + ']]：';
 			if (params.fromDI) {
 				if (params.normalized === 'f3 f4') {

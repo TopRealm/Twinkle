@@ -25,11 +25,13 @@ const relevantUserName = mw.config.get('wgRelevantUserName');
 Twinkle.warn = () => {
 	if (relevantUserName) {
 		Twinkle.addPortletLink(Twinkle.warn.callback, '警告', 'tw-warn', '警告或提醒用户');
-		if (Twinkle.getPref('autoMenuAfterRollback') &&
-			mw.config.get('wgNamespaceNumber') === 3 &&
-			mw.util.getParamValue('vanarticle') &&
-			!mw.util.getParamValue('friendlywelcome') &&
-			!mw.util.getParamValue('noautowarn')) {
+		if (
+			Twinkle.getPref('autoMenuAfterRollback') &&
+				mw.config.get('wgNamespaceNumber') === 3 &&
+				mw.util.getParamValue('vanarticle') &&
+				!mw.util.getParamValue('friendlywelcome') &&
+				!mw.util.getParamValue('noautowarn')
+		) {
 			Twinkle.warn.callback();
 		}
 	}
@@ -1324,10 +1326,10 @@ Twinkle.warn.callback.postCategoryCleanup = (e) => {
 		mw.util.addCSS(
 			// Increase height
 			'.select2-container .select2-dropdown .select2-results > .select2-results__options { max-height: 350px; }' +
-			// Reduce padding
-			'.select2-results .select2-results__option { padding-top: 1px; padding-bottom: 1px; }.select2-results .select2-results__group { padding-top: 1px; padding-bottom: 1px; } ' +
-			// Adjust font size
-			'.select2-container .select2-dropdown .select2-results { font-size: 13px; }.select2-container .selection .select2-selection__rendered { font-size: 13px; }'
+					// Reduce padding
+					'.select2-results .select2-results__option { padding-top: 1px; padding-bottom: 1px; }.select2-results .select2-results__group { padding-top: 1px; padding-bottom: 1px; } ' +
+					// Adjust font size
+					'.select2-container .select2-dropdown .select2-results { font-size: 13px; }.select2-container .selection .select2-selection__rendered { font-size: 13px; }'
 		);
 	}
 };
@@ -1642,7 +1644,7 @@ Twinkle.warn.callbacks = {
 						prefix = '唯一警告';
 						break;
 					}
-				// falls through
+					// falls through
 				default:
 					prefix = '提醒';
 					break;
@@ -1688,8 +1690,9 @@ Twinkle.warn.callbacks = {
 
 		// Get actual warning text
 		const warningText = Twinkle.warn.callbacks.getWarningWikitext(params.sub_group, params.article, params.reason, params.main_group === 'custom');
-		let sectionExists = false, sectionNumber = 0;
-		// Only check sections if there are sections or there's a chance we won't create our own
+		let sectionExists = false,
+			sectionNumber = 0;
+			// Only check sections if there are sections or there's a chance we won't create our own
 		if (!messageData.heading && text.length) {
 			// Get all sections
 			const sections = text.match(/^(==*).+\1/gm);
@@ -1747,7 +1750,7 @@ Twinkle.warn.callbacks = {
 						prefix = '唯一警告';
 						break;
 					}
-				// falls through
+					// falls through
 				default:
 					prefix = '提醒';
 					break;

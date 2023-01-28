@@ -1374,18 +1374,21 @@ Morebits.string = {
 		}
 		for (let i = 0; i < str.length; ++i) {
 			for (let j = 0; j < skiplist.length; ++j) {
-				if (str.slice(i, i + skiplist[j].length) === skiplist[j]) { // str.substr(i, skiplist[j].length) === skiplist[j]
+				if (str.slice(i, i + skiplist[j].length) === skiplist[j]) {
+					// str.substr(i, skiplist[j].length) === skiplist[j]
 					i += skiplist[j].length - 1;
 					continue;
 				}
 			}
-			if (str.slice(i, i + start.length) === start) { // str.substr(i, start.length) === start
+			if (str.slice(i, i + start.length) === start) {
+				// str.substr(i, start.length) === start
 				if (initial === null) {
 					initial = i;
 				}
 				++level;
 				i += start.length - 1;
-			} else if (str.slice(i, i + end.length) === end) { // str.substr(i, end.length
+			} else if (str.slice(i, i + end.length) === end) {
+				// str.substr(i, end.length
 				--level;
 				i += end.length - 1;
 			}
@@ -1413,7 +1416,8 @@ Morebits.string = {
 		unbinder.content = unbinder.content.replace(/\|/g, '{{subst:!}}');
 		reason = unbinder.rebind();
 		if (addSig) {
-			const sig = '~~' + '~~', sigIndex = reason.lastIndexOf(sig);
+			const sig = '~~' + '~~',
+				sigIndex = reason.lastIndexOf(sig);
 			if (sigIndex === -1 || sigIndex !== reason.length - sig.length) {
 				reason += ' ' + sig;
 			}
@@ -1430,9 +1434,9 @@ Morebits.string = {
 	 */
 	formatReasonForLog: (str) =>
 		str
-			// handle line breaks, which otherwise break numbering
+		// handle line breaks, which otherwise break numbering
 			.replace(/\n+/g, '{{pb}}')
-			// put an extra # in front before bulleted or numbered list items
+		// put an extra # in front before bulleted or numbered list items
 			.replace(/^(#+)/gm, '#$1')
 			.replace(/^(\*+)/gm, '#$1'),
 	/**
@@ -2618,7 +2622,7 @@ Morebits.wiki.page = function (pageName, status) {
 		protectApi: null,
 		protectProcessApi: null
 	};
-	const emptyFunction = () => { };
+	const emptyFunction = () => {};
 
 	/**
 	 * Loads the text for the page.
@@ -3571,7 +3575,7 @@ Morebits.wiki.page = function (pageName, status) {
 			inprop: 'watched',
 			format: 'json'
 		};
-		// Protection not checked for flagged-revs or non-sysop moves
+			// Protection not checked for flagged-revs or non-sysop moves
 		if (action !== 'move' || Morebits.userIsSysop) {
 			query.inprop += '|protection';
 		}
@@ -3625,9 +3629,7 @@ Morebits.wiki.page = function (pageName, status) {
 		// extract protection info, to alert admins when they are about to edit a protected page
 		// Includes cascading protection
 		if (Morebits.userIsSysop) {
-			const editProt = page.protection
-				.filter((pr) => pr.type === 'edit' && pr.level === 'sysop')
-				.pop();
+			const editProt = page.protection.filter((pr) => pr.type === 'edit' && pr.level === 'sysop').pop();
 			if (editProt) {
 				ctx.fullyProtected = editProt.expiry;
 			} else {
@@ -3989,13 +3991,9 @@ Morebits.wiki.page = function (pageName, status) {
 		// extract protection info
 		let editprot;
 		if (action === 'undelete') {
-			editprot = response.pages[0].protection
-				.filter((pr) => pr.type === 'create' && pr.level === 'sysop')
-				.pop();
+			editprot = response.pages[0].protection.filter((pr) => pr.type === 'create' && pr.level === 'sysop').pop();
 		} else if (action === 'delete' || action === 'move') {
-			editprot = response.pages[0].protection
-				.filter((pr) => pr.type === 'edit' && pr.level === 'sysop')
-				.pop();
+			editprot = response.pages[0].protection.filter((pr) => pr.type === 'edit' && pr.level === 'sysop').pop();
 		}
 		if (
 			editprot &&
@@ -5029,7 +5027,9 @@ Morebits.checkboxShiftClickSupport = (jQuerySelector, jQueryContext) => {
 		const thisCb = this;
 		if (event.shiftKey && lastCheckbox !== null) {
 			const cbs = $(jQuerySelector, jQueryContext); // can't cache them, obviously, if we want to support resorting
-			let index = -1, lastIndex = -1, i;
+			let index = -1,
+				lastIndex = -1,
+				i;
 			for (i = 0; i < cbs.length; i++) {
 				if (cbs[i] === thisCb) {
 					index = i;
@@ -5379,7 +5379,7 @@ Morebits.simpleWindow = function SimpleWindow(width, height) {
 	$(this.content).dialog({
 		autoOpen: false,
 		buttons: {
-			'Placeholder button': () => { }
+			'Placeholder button': () => {}
 		},
 		dialogClass: 'morebits-dialog',
 		width: Math.min(parseInt(window.innerWidth, 10), parseInt(width || 800, 10)),

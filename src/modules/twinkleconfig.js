@@ -970,7 +970,7 @@ Twinkle.config.init = () => {
 
 		// set style (the url() CSS function doesn't seem to work from wikicode - ?!)
 		document.getElementById('twinkle-config-titlebar').style.backgroundImage =
-			'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAkBAMAAAC6Wk0/AAAAKlBMVEXV3+upu9XN1ufD0OG+zN+xwtmvvtiitdDQ2OnJ1eS7yN2lt9LG0OS3ydtM59+7AAAAKklEQVQI12OAgQYgVADDCUB4gMEADB3AcAEQXmAIAMMEMBSAwg1AWACCAHCXC6FA1k76AAAAAElFTkSuQmCC)';
+				'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAkBAMAAAC6Wk0/AAAAKlBMVEXV3+upu9XN1ufD0OG+zN+xwtmvvtiitdDQ2OnJ1eS7yN2lt9LG0OS3ydtM59+7AAAAKklEQVQI12OAgQYgVADDCUB4gMEADB3AcAEQXmAIAMMEMBSAwg1AWACCAHCXC6FA1k76AAAAAElFTkSuQmCC)';
 		const contentdiv = document.getElementById('twinkle-config-content');
 		contentdiv.textContent = ''; // clear children
 
@@ -979,18 +979,18 @@ Twinkle.config.init = () => {
 		const contentnotice = document.createElement('p');
 		// I hate innerHTML, but this is one thing it *is* good for...
 		contentnotice.innerHTML =
-			'<b>' +
-			'在这里修改您的参数设置之前，' +
-			'</b>' +
-			'确认您已移除了' +
-			'<a href="' +
-			mw.util.getUrl('Special:MyPage/skin.js') +
-			'" title="Special:MyPage/skin.js">' +
-			'用户JavaScript文件' +
-			'</a>' +
-			'中任何旧的' +
-			'<code>FriendlyConfig</code>' +
-			'设置。';
+				'<b>' +
+				'在这里修改您的参数设置之前，' +
+				'</b>' +
+				'确认您已移除了' +
+				'<a href="' +
+				mw.util.getUrl('Special:MyPage/skin.js') +
+				'" title="Special:MyPage/skin.js">' +
+				'用户JavaScript文件' +
+				'</a>' +
+				'中任何旧的' +
+				'<code>FriendlyConfig</code>' +
+				'设置。';
 		contentdiv.appendChild(contentnotice);
 
 		// look and see if the user does in fact have any old settings in their skin JS file
@@ -1153,10 +1153,12 @@ Twinkle.config.init = () => {
 						$.each(pref.enumValues, (enumvalue, enumdisplay) => {
 							const option = document.createElement('option');
 							option.setAttribute('value', enumvalue);
-							if (gotPref === enumvalue ||
+							if (
+								gotPref === enumvalue ||
 									// Hack to convert old boolean watchlist prefs
 									// to corresponding enums (added in v2.1)
-									(typeof gotPref === 'boolean' && ((gotPref && enumvalue === 'yes') || (!gotPref && enumvalue === 'no')))) {
+									(typeof gotPref === 'boolean' && ((gotPref && enumvalue === 'yes') || (!gotPref && enumvalue === 'no')))
+							) {
 								option.setAttribute('selected', 'selected');
 								optionExists = true;
 							}
@@ -1304,9 +1306,11 @@ Twinkle.config.init = () => {
 			window.location.hash = '';
 			window.location.hash = loc;
 		}
-	} else if (mw.config.get('wgNamespaceNumber') === mw.config.get('wgNamespaceIds').user &&
-		mw.config.get('wgTitle').indexOf(mw.config.get('wgUserName')) === 0 &&
-		mw.config.get('wgPageName').slice(-3) === '.js') {
+	} else if (
+		mw.config.get('wgNamespaceNumber') === mw.config.get('wgNamespaceIds').user &&
+			mw.config.get('wgTitle').indexOf(mw.config.get('wgUserName')) === 0 &&
+			mw.config.get('wgPageName').slice(-3) === '.js'
+	) {
 		const box = document.createElement('div');
 		// Styled in twinkle.css
 		box.setAttribute('id', 'twinkle-config-headerbox');
@@ -1348,17 +1352,17 @@ Twinkle.config.legacyPrefsNotice = (pageobj) => {
 	const contentnotice = pageobj.getCallbackParameters();
 	if (text.indexOf('TwinkleConfig') !== -1 || text.indexOf('FriendlyConfig') !== -1) {
 		contentnotice.innerHTML =
-			'<table class="plainlinks ombox ombox-content"><tr><td class="mbox-image">' +
-			'<img alt="" src="https://tu.zhongwen.wiki/images/thumb/8/8f/Alert_Mark_%28Orange%29.svg/40px-Alert_Mark_%28Orange%29.svg.png" /></td>' +
-			'<td class="mbox-text"><p><big><b>在这里修改您的参数设置之前，</b>您必须移除在用户JavaScript文件中任何旧的Friendly设置。</big></p>' +
-			'<p>要这样做，您可以<a href="' +
-			mw.config.get('wgScript') +
-			'?title=User:' +
-			encodeURIComponent(mw.config.get('wgUserName')) +
-			'/' +
-			mw.config.get('skin') +
-			'.js&action=edit" target="_blank"><b>编辑您的个人JavaScript</b></a>。删除提到<code>FriendlyConfig</code>的代码。</p>' +
-			'</td></tr></table>';
+				'<table class="plainlinks ombox ombox-content"><tr><td class="mbox-image">' +
+				'<img alt="" src="https://tu.zhongwen.wiki/images/thumb/8/8f/Alert_Mark_%28Orange%29.svg/40px-Alert_Mark_%28Orange%29.svg.png" /></td>' +
+				'<td class="mbox-text"><p><big><b>在这里修改您的参数设置之前，</b>您必须移除在用户JavaScript文件中任何旧的Friendly设置。</big></p>' +
+				'<p>要这样做，您可以<a href="' +
+				mw.config.get('wgScript') +
+				'?title=User:' +
+				encodeURIComponent(mw.config.get('wgUserName')) +
+				'/' +
+				mw.config.get('skin') +
+				'.js&action=edit" target="_blank"><b>编辑您的个人JavaScript</b></a>。删除提到<code>FriendlyConfig</code>的代码。</p>' +
+				'</td></tr></table>';
 	} else {
 		$(contentnotice).remove();
 	}
@@ -1712,20 +1716,21 @@ Twinkle.config.writePrefs = (pageobj) => {
 			}
 		});
 	});
-	let text = '// <nowiki>\n' +
-		'// twinkleoptions.js：用户Twinkle参数设置文件\n' +
-		'//\n' +
-		'// 注：修改您的参数设置最简单的办法是使用\n' +
-		'// Twinkle参数设置面板，在[[' +
-		Morebits.pageNameNorm +
-		']]。\n' +
-		'//\n' +
-		'// 这个文件是自动生成的，您所做的任何修改（除了\n' +
-		'// 以一种合法的JavaScript的方式来修改这些属性值）会\n' +
-		'// 在下一次您点击“保存”时被覆盖。\n' +
-		'// 修改此文件时，请记得使用合法的JavaScript。\n' +
-		'\n' +
-		'window.Twinkle.prefs = ';
+	let text =
+			'// <nowiki>\n' +
+			'// twinkleoptions.js：用户Twinkle参数设置文件\n' +
+			'//\n' +
+			'// 注：修改您的参数设置最简单的办法是使用\n' +
+			'// Twinkle参数设置面板，在[[' +
+			Morebits.pageNameNorm +
+			']]。\n' +
+			'//\n' +
+			'// 这个文件是自动生成的，您所做的任何修改（除了\n' +
+			'// 以一种合法的JavaScript的方式来修改这些属性值）会\n' +
+			'// 在下一次您点击“保存”时被覆盖。\n' +
+			'// 修改此文件时，请记得使用合法的JavaScript。\n' +
+			'\n' +
+			'window.Twinkle.prefs = ';
 	text += JSON.stringify(newConfig, null, 2);
 	text += ';\n' + '\n' + '// twinkleoptions.js到此为止\n' + '// </nowiki>';
 	pageobj.setPageText(text);
@@ -1741,15 +1746,15 @@ Twinkle.config.saveSuccess = (pageobj) => {
 	noticebox.style.fontSize = '100%';
 	noticebox.style.marginTop = '2em';
 	noticebox.innerHTML =
-		'<p><b>' +
-		'您的Twinkle参数设置已被保存。' +
-		'</b></p><p>' +
-		'要看到这些更改，您可能需要' +
-		'<a href="' +
-		mw.util.getUrl('QW:BYPASS') +
-		'" title="QW:BYPASS"><b>' +
-		'绕过浏览器缓存' +
-		'</b></a>。</p>';
+			'<p><b>' +
+			'您的Twinkle参数设置已被保存。' +
+			'</b></p><p>' +
+			'要看到这些更改，您可能需要' +
+			'<a href="' +
+			mw.util.getUrl('QW:BYPASS') +
+			'" title="QW:BYPASS"><b>' +
+			'绕过浏览器缓存' +
+			'</b></a>。</p>';
 	Morebits.status.root.appendChild(noticebox);
 	const noticeclear = document.createElement('br');
 	noticeclear.style.clear = 'both';

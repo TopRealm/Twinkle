@@ -300,46 +300,60 @@ Twinkle.batchdelete.generateNewPageList = (form) => {
 	}).render();
 };
 
-Twinkle.batchdelete.deletereasonlist = [ {
-	label: '请选择',
-	value: ''
-}, {
-	label: 'G1：明显违反法律法规或违背公序良俗的页面',
-	value: '[[QW:G1|G1]]：明显违反法律法规或违背公序良俗的页面'
-}, {
-	label: 'G2：没有实际内容的页面',
-	value: '[[QW:G2|G2]]：没有实际内容的页面'
-}, {
-	label: 'G3：纯粹破坏',
-	value: '[[QW:G3|G3]]：纯粹[[QW:VAN|破坏]]'
-}, {
-	label: 'G5：因技术原因删除页面',
-	value: '[[QW:G5|G5]]：因技术原因删除页面'
-}, {
-	label: 'G6：原作者提请删除或清空页面，且页面原作者仅有一人',
-	value: '[[QW:G6|G6]]：原作者提请删除或清空页面，且页面原作者仅有一人'
-}, {
-	label: 'G9：孤立页面',
-	value: '[[QW:G9|G9]]：孤立页面'
-}, {
-	label: 'R1：不能发挥实际作用的重定向',
-	value: '[[QW:R1|R1]]：不能发挥实际作用的重定向'
-}, {
-	label: 'R2：名称与导向目标代表事物不一致或不完全一致的重定向',
-	value: '[[QW:R2|R2]]：名称与导向目标代表事物不一致或不完全一致的重定向'
-}, {
-	label: 'F1：不符合本站著作权方针的文件',
-	value: '[[QW:F1|F1]]：不符合本站著作权方针的文件'
-}, {
-	label: 'O1：用户请求删除自己的用户页',
-	value: '[[QW:O1|O1]]：用户请求删除自己的用户页'
-}, {
-	label: 'O2：空分类',
-	value: '[[QW:O2|O2]]：空分类'
-}, {
-	label: 'O3：废弃草稿',
-	value: '[[QW:O3|O3]]：废弃草稿'
-} ];
+Twinkle.batchdelete.deletereasonlist = [
+	{
+		label: '请选择',
+		value: ''
+	},
+	{
+		label: 'G1：明显违反法律法规或违背公序良俗的页面',
+		value: '[[QW:G1|G1]]：明显违反法律法规或违背公序良俗的页面'
+	},
+	{
+		label: 'G2：没有实际内容的页面',
+		value: '[[QW:G2|G2]]：没有实际内容的页面'
+	},
+	{
+		label: 'G3：纯粹破坏',
+		value: '[[QW:G3|G3]]：纯粹[[QW:VAN|破坏]]'
+	},
+	{
+		label: 'G5：因技术原因删除页面',
+		value: '[[QW:G5|G5]]：因技术原因删除页面'
+	},
+	{
+		label: 'G6：原作者提请删除或清空页面，且页面原作者仅有一人',
+		value: '[[QW:G6|G6]]：原作者提请删除或清空页面，且页面原作者仅有一人'
+	},
+	{
+		label: 'G9：孤立页面',
+		value: '[[QW:G9|G9]]：孤立页面'
+	},
+	{
+		label: 'R1：不能发挥实际作用的重定向',
+		value: '[[QW:R1|R1]]：不能发挥实际作用的重定向'
+	},
+	{
+		label: 'R2：名称与导向目标代表事物不一致或不完全一致的重定向',
+		value: '[[QW:R2|R2]]：名称与导向目标代表事物不一致或不完全一致的重定向'
+	},
+	{
+		label: 'F1：不符合本站著作权方针的文件',
+		value: '[[QW:F1|F1]]：不符合本站著作权方针的文件'
+	},
+	{
+		label: 'O1：用户请求删除自己的用户页',
+		value: '[[QW:O1|O1]]：用户请求删除自己的用户页'
+	},
+	{
+		label: 'O2：空分类',
+		value: '[[QW:O2|O2]]：空分类'
+	},
+	{
+		label: 'O3：废弃草稿',
+		value: '[[QW:O3|O3]]：废弃草稿'
+	}
+];
 
 Twinkle.batchdelete.callback.change_common_reason = (e) => {
 	if (e.target.form.reason.value !== '') {
