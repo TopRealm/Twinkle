@@ -9,6 +9,9 @@
 		"es2020": true,
 		"es2021": true
 	},
+	"parserOptions": {
+		"ecmaVersion": "latest"
+	},
 	"ignorePatterns": ["src/lib/", "scripts/", "dist/", "*.json"],
 	"rules": {
 		"block-scoped-var": "error",
