@@ -22,19 +22,17 @@
  * Note:                 customised friendlytag module
  */
 
-Twinkle.stub = function friendlytag() {
+Twinkle.stub = () => {
 	if (Morebits.isPageRedirect()) {
 		// Skip
 		// article/draft article tagging
-	} else if (
-		((mw.config.get('wgNamespaceNumber') === 0 || mw.config.get('wgNamespaceNumber') === 118) && mw.config.get('wgCurRevisionId')) ||
-			Morebits.pageNameNorm === Twinkle.getPref('sandboxPage')
-	) {
+	} else if (((mw.config.get('wgNamespaceNumber') === 0 || mw.config.get('wgNamespaceNumber') === 118) && mw.config.get('wgCurRevisionId')) ||
+		Morebits.pageNameNorm === Twinkle.getPref('sandboxPage')) {
 		Twinkle.stub.mode = '条目';
 		Twinkle.addPortletLink(Twinkle.stub.callback, '小作品', 'friendly-tag', '标记小作品');
 	}
 };
-Twinkle.stub.callback = function friendlytagCallback() {
+Twinkle.stub.callback = () => {
 	const Window = new Morebits.simpleWindow(630, Twinkle.stub.mode === 'article' ? 450 : 400);
 	Window.setScriptName('Twinkle');
 	Window.addFooterLink('小作品说明', 'Qiuwen:小作品');
@@ -103,7 +101,7 @@ Twinkle.stub.callback = function friendlytagCallback() {
 	}
 };
 Twinkle.stub.checkedTags = [];
-Twinkle.stub.updateSortOrder = function (e) {
+Twinkle.stub.updateSortOrder = (e) => {
 	const sortorder = e.target.value;
 	Twinkle.stub.checkedTags = e.target.form.getChecked('articleTags');
 	if (!Twinkle.stub.checkedTags) {
@@ -114,7 +112,7 @@ Twinkle.stub.updateSortOrder = function (e) {
 	});
 
 	// function to generate a checkbox, with appropriate subgroup if needed
-	const makeCheckbox = function (tag, description) {
+	const makeCheckbox = (tag, description) => {
 		const checkbox = {
 			value: tag,
 			label: '{{' + tag + '}}: ' + description
@@ -132,7 +130,7 @@ Twinkle.stub.updateSortOrder = function (e) {
 			label: '自定义模板'
 		});
 		const customcheckboxes = [];
-		$.each(Twinkle.getPref('customStubList'), function (_, item) {
+		$.each(Twinkle.getPref('customStubList'), (_, item) => {
 			customcheckboxes.push(makeCheckbox(item.value, item.label));
 		});
 		container.append({
@@ -145,9 +143,9 @@ Twinkle.stub.updateSortOrder = function (e) {
 	// categorical sort order
 	if (sortorder === 'cat') {
 		// function to iterate through the tags and create a checkbox for each one
-		const doCategoryCheckboxes = function (subdiv, array) {
+		const doCategoryCheckboxes = (subdiv, array) => {
 			const checkboxes = [];
-			$.each(array, function (k, tag) {
+			$.each(array, (_k, tag) => {
 				const description = Twinkle.stub.article.tags[tag];
 				checkboxes.push(makeCheckbox(tag, description));
 			});
@@ -159,7 +157,7 @@ Twinkle.stub.updateSortOrder = function (e) {
 		};
 		let i = 0;
 		// go through each category and sub-category and append lists of checkboxes
-		$.each(Twinkle.stub.article.tagCategories, function (title, content) {
+		$.each(Twinkle.stub.article.tagCategories, (title, content) => {
 			container.append({
 				type: 'header',
 				id: 'tagHeader' + i,
@@ -172,7 +170,7 @@ Twinkle.stub.updateSortOrder = function (e) {
 			if (Array.isArray(content)) {
 				doCategoryCheckboxes(subdiv, content);
 			} else {
-				$.each(content, function (subtitle, subcontent) {
+				$.each(content, (subtitle, subcontent) => {
 					subdiv.append({
 						type: 'div',
 						label: [ Morebits.htmlNode('b', subtitle) ]
@@ -184,7 +182,7 @@ Twinkle.stub.updateSortOrder = function (e) {
 		// alphabetical sort order
 	} else {
 		const checkboxes = [];
-		$.each(Twinkle.stub.article.tags, function (tag, description) {
+		$.each(Twinkle.stub.article.tags, (tag, description) => {
 			checkboxes.push(makeCheckbox(tag, description));
 		});
 		container.append({
@@ -209,7 +207,7 @@ Twinkle.stub.updateSortOrder = function (e) {
 	});
 
 	// add a link to each template's description page
-	$.each(Morebits.quickForm.getElements(e.target.form, 'articleTags'), function (index, checkbox) {
+	$.each(Morebits.quickForm.getElements(e.target.form, 'articleTags'), (_index, checkbox) => {
 		const $checkbox = $(checkbox);
 		const link = Morebits.htmlNode('a', '>');
 		link.setAttribute('class', 'tag-template-link');
@@ -281,11 +279,9 @@ Twinkle.stub.article.tagCategories = {
 // Tags for REDIRECTS start here
 
 Twinkle.stub.callbacks = {
-	main: function (pageobj) {
+	main: (pageobj) => {
 		const params = pageobj.getCallbackParameters();
-		let tagRe,
-			summaryText = '加入',
-			tags = [];
+		let tagRe, summaryText = '加入', tags = [];
 		const groupableTags = [];
 		let i;
 		// eslint-disable-next-line prefer-const
@@ -293,7 +289,7 @@ Twinkle.stub.callbacks = {
 
 		// Remove tags that become superfluous with this action
 		let pageText = pageobj.getPageText();
-		const addTag = function friendlytagAddTag(tagIndex, tagName) {
+		const addTag = (tagIndex, tagName) => {
 			pageText += '\n{{' + tagName + '}}';
 			if (tagIndex > 0) {
 				if (tagIndex === totalTags - 1) {
@@ -333,7 +329,7 @@ Twinkle.stub.callbacks = {
 		}
 	}
 };
-Twinkle.stub.callback.evaluate = function friendlytagCallbackEvaluate(e) {
+Twinkle.stub.callback.evaluate = (e) => {
 	const form = e.target;
 	const params = {};
 	if (form.patrolPage) {
@@ -365,7 +361,7 @@ Twinkle.stub.callback.evaluate = function friendlytagCallbackEvaluate(e) {
 	switch (Twinkle.stub.mode) {
 		case '条目':
 		case '條目':
-			/* falls through */
+		/* falls through */
 		case '重定向':
 			qiuwen_page.load(Twinkle.stub.callbacks.main);
 			return;
