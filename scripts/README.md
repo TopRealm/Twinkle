@@ -10,9 +10,9 @@ Set up a bot password via [[Special:BotPasswords]]
 
 ```json
 {
-	"apiUrl": "https://www.qiuwen.wiki/api.php",
-	"username": "",
-	"password": ""
+ "apiUrl": "https://www.qiuwen.wiki/api.php",
+ "username": "",
+ "password": ""
 }
 ```
 
