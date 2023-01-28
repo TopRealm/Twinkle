@@ -4480,7 +4480,7 @@ Morebits.wikitext.parseTemplate = function (text, start) {
 		}
 	};
 	for (let i = start; i < text.length; ++i) {
-		const test3 = text.slice(i, i + 3);
+		const test3 = text.slice(i, i + 2); // text.substr(i, 3)
 		if (test3 === '{{{' || (test3 === '}}}' && level[level.length - 1] === 3)) {
 			current += test3;
 			i += 2;
@@ -4491,7 +4491,7 @@ Morebits.wikitext.parseTemplate = function (text, start) {
 			}
 			continue;
 		}
-		const test2 = text.slice(i, i + 2);
+		const test2 = text.slice(i, i + 1); // text.substr(i, 2)
 		// Entering a template (or link)
 		if (test2 === '{{' || test2 === '[[') {
 			current += test2;
