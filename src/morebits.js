@@ -4417,7 +4417,7 @@ Morebits.wiki.preview = function (previewbox) {
 	};
 
 	/** Hides the preview box and clears it. */
-	this.closePreview = function () {
+	this.closePreview = () => {
 		$(previewbox).empty().hide();
 	};
 };
@@ -4439,7 +4439,7 @@ Morebits.wikitext = {};
  * @param {number} [start=0] - Index noting where in the text the template begins.
  * @returns {Object} `{name: templateName, parameters: {key: value}}`.
  */
-Morebits.wikitext.parseTemplate = function (text, start) {
+Morebits.wikitext.parseTemplate = (text, start) => {
 	start = start || 0;
 	const level = []; // Track of how deep we are ({{, {{{, or [[)
 	let count = -1; // Number of parameters found
@@ -4494,6 +4494,7 @@ Morebits.wikitext.parseTemplate = function (text, start) {
 			continue;
 		}
 		const test2 = text.slice(i, i + 2); // text.substr(i, 2)
+
 		// Entering a template (or link)
 		if (test2 === '{{' || test2 === '[[') {
 			current += test2;
@@ -5387,7 +5388,7 @@ Morebits.simpleWindow = function SimpleWindow(width, height) {
 		// the 20 pixels represents adjustment for the extra height of the jQuery dialog "chrome", compared
 		// to that of the old SimpleWindow
 		height: height + 20,
-		close: function (event) {
+		close: (event) => {
 			// dialogs and their content can be destroyed once closed
 			$(event.target).dialog('destroy').remove();
 		},
