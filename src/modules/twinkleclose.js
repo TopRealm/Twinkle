@@ -457,7 +457,7 @@ Twinkle.close.callbacks = {
 		} else {
 			page.setEditSummary('存废讨论通过：[[' + mw.config.get('wgPageName') + '#' + params.title + ']]');
 			page.setChangeTags(Twinkle.changeTags);
-			page.deletePage(function () {
+			page.deletePage(() => {
 				page.getStatusElement().info('完成');
 				Twinkle.close.callbacks.talkend(params);
 			});
@@ -490,7 +490,7 @@ Twinkle.close.callbacks = {
 		}
 		Morebits.wiki.removeCheckpoint();
 	},
-	deleteRedirectsMain: function (apiobj) {
+	deleteRedirectsMain: (apiobj) => {
 		const xml = apiobj.responseXML;
 		const pages = $(xml)
 			.find('rd')
@@ -504,14 +504,14 @@ Twinkle.close.callbacks = {
 		const redirectDeleter = new Morebits.batchOperation('正在删除到 ' + apiobj.params.title + ' 的重定向');
 		redirectDeleter.setOption('chunkSize', Twinkle.getPref('batchdeleteChunks'));
 		redirectDeleter.setPageList(pages);
-		redirectDeleter.run(function (pageName) {
+		redirectDeleter.run((pageName) => {
 			const qiuwen_page = new Morebits.wiki.page(pageName, '正在删除 ' + pageName);
 			qiuwen_page.setEditSummary('[[QW:CSD#G5|G5]]: 指向已删页面“' + apiobj.params.title + '”的重定向');
 			qiuwen_page.setChangeTags(Twinkle.changeTags);
 			qiuwen_page.deletePage(redirectDeleter.workerSuccess, redirectDeleter.workerFailure);
 		});
 	},
-	deleteTalk: function (apiobj) {
+	deleteTalk: (apiobj) => {
 		const xml = apiobj.responseXML;
 		const exists = $(xml).find('page:not([missing])').length > 0;
 		if (!exists) {
@@ -523,7 +523,7 @@ Twinkle.close.callbacks = {
 		page.setChangeTags(Twinkle.changeTags);
 		page.deletePage();
 	},
-	keep: function (pageobj) {
+	keep: (pageobj) => {
 		const statelem = pageobj.getStatusElement();
 		if (!pageobj.exists()) {
 			statelem.error('页面不存在，可能已被删除');
@@ -570,17 +570,17 @@ Twinkle.close.callbacks = {
 		pageobj.setCreateOption('nocreate');
 		pageobj.save(Twinkle.close.callbacks.keepComplete);
 	},
-	keepComplete: function (pageobj) {
+	keepComplete: (pageobj) => {
 		const params = pageobj.getCallbackParameters();
 		Twinkle.close.callbacks.talkend(params);
 	},
-	talkend: function (params) {
+	talkend: (params) => {
 		const qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'), '关闭讨论');
 		qiuwen_page.setCallbackParameters(params);
 		qiuwen_page.setPageSection(params.section);
 		qiuwen_page.load(Twinkle.close.callbacks.saveTalk);
 	},
-	saveTalk: function (pageobj) {
+	saveTalk: (pageobj) => {
 		const statelem = pageobj.getStatusElement();
 		let text = pageobj.getPageText();
 		const params = pageobj.getCallbackParameters();
@@ -622,7 +622,7 @@ Twinkle.close.callbacks = {
 		pageobj.setCreateOption('nocreate');
 		pageobj.save(Twinkle.close.callbacks.disableLink);
 	},
-	disableLink: function (pageobj) {
+	disableLink: (pageobj) => {
 		const params = pageobj.getCallbackParameters();
 		$('strong a[href=#' + params.section + '] span').css('color', 'grey');
 	}
