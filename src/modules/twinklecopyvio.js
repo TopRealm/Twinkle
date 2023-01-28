@@ -22,22 +22,20 @@
  * Config directives in:  TwinkleConfig
  */
 
-Twinkle.copyvio = function twinklecopyvio() {
+Twinkle.copyvio = () => {
 	// Disable on:
 	// * special pages
 	// * non-existent pages
 	// * files on Commons, whether there is a local page or not (unneeded local pages of files on Commons are eligible for CSD F2)
 	// * file pages without actual files (these are eligible for CSD G8)
-	if (
-		mw.config.get('wgNamespaceNumber') < 0 ||
-			!mw.config.get('wgArticleId') ||
-			(mw.config.get('wgNamespaceNumber') === 6 && (document.getElementById('mw-sharedupload') || (!document.getElementById('mw-imagepage-section-filehistory') && !Morebits.isPageRedirect())))
-	) {
+	if (mw.config.get('wgNamespaceNumber') < 0 ||
+		!mw.config.get('wgArticleId') ||
+		(mw.config.get('wgNamespaceNumber') === 6 && (document.getElementById('mw-sharedupload') || (!document.getElementById('mw-imagepage-section-filehistory') && !Morebits.isPageRedirect())))) {
 		return;
 	}
 	Twinkle.addPortletLink(Twinkle.copyvio.callback, '侵权', 'tw-copyvio', '提报侵权页面', '');
 };
-Twinkle.copyvio.callback = function twinklecopyvioCallback() {
+Twinkle.copyvio.callback = () => {
 	const Window = new Morebits.simpleWindow(600, 350);
 	Window.setTitle('提报侵权页面');
 	Window.setScriptName('Twinkle');
@@ -71,7 +69,7 @@ Twinkle.copyvio.callback = function twinklecopyvioCallback() {
 	Window.display();
 };
 Twinkle.copyvio.callbacks = {
-	tryTagging: function (pageobj) {
+	tryTagging: (pageobj) => {
 		// 先尝试标记页面，如果发现已经标记则停止提报
 		const text = pageobj.getPageText();
 		if (text.indexOf('{{Copyvio|') === -1) {
@@ -85,7 +83,7 @@ Twinkle.copyvio.callbacks = {
 			Morebits.status.error('错误', '页面已经标记侵权，请人工确认是否已经提报。');
 		}
 	},
-	main: function (pageobj) {
+	main: (pageobj) => {
 		// this is coming in from lookupCreation...!
 		const params = pageobj.getCallbackParameters();
 		const initialContrib = pageobj.getCreator();
@@ -109,27 +107,24 @@ Twinkle.copyvio.callbacks = {
 			usertalkpage.append();
 		}
 	},
-	taggingArticle: function (pageobj) {
+	taggingArticle: (pageobj) => {
 		const params = pageobj.getCallbackParameters();
 		const revisionId = mw.config.get('wgRevisionId') || mw.config.get('wgDiffNewId') || mw.config.get('wgCurRevisionId');
-		let tag =
-				'{{subst:Copyvio/auto|url=' +
-				params.source
-					.replace(/http/g, '&#104;ttp')
-					.replace(/\n+/g, '\n')
-					.replace(/^\s*([^*])/gm, '* $1')
-					.replace(/^\* $/m, '') +
-				'|OldRevision=' +
-				revisionId +
-				'}}';
+		let tag = '{{subst:Copyvio/auto|url=' +
+			params.source
+				.replace(/http/g, '&#104;ttp')
+				.replace(/\n+/g, '\n')
+				.replace(/^\s*([^*])/gm, '* $1')
+				.replace(/^\* $/m, '') +
+			'|OldRevision=' +
+			revisionId +
+			'}}';
 		const text = pageobj.getPageText();
 		const oldcsd = text.match(/\{\{\s*(db(-\w*)?|d|delete)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}/i);
-		if (
-			oldcsd &&
-				confirm(
-					'在页面上找到快速删除模板，要保留吗？\n\n当页面同时侵犯著作权又符合快速删除标准时，应使用快速删除程序。\n单击“确认”以保留快速删除模板，若您认为快速删除理由不合，单击“取消”以移除快速删除模板。'
-				)
-		) {
+		if (oldcsd &&
+			confirm(
+				'在页面上找到快速删除模板，要保留吗？\n\n当页面同时侵犯著作权又符合快速删除标准时，应使用快速删除程序。\n单击“确认”以保留快速删除模板，若您认为快速删除理由不合，单击“取消”以移除快速删除模板。'
+			)) {
 			tag = oldcsd[0] + '\n' + tag;
 		}
 		pageobj.setPageText(tag);
@@ -142,7 +137,7 @@ Twinkle.copyvio.callbacks = {
 			pageobj.patrol();
 		}
 	},
-	copyvioList: function (pageobj) {
+	copyvioList: (pageobj) => {
 		const text = pageobj.getPageText();
 		let output = '';
 		const date = new Date();
@@ -158,7 +153,7 @@ Twinkle.copyvio.callbacks = {
 		pageobj.append();
 	}
 };
-Twinkle.copyvio.callback.evaluate = function (e) {
+Twinkle.copyvio.callback.evaluate = (e) => {
 	mw.config.set('wgPageName', mw.config.get('wgPageName').replace(/_/g, ' '));
 	const source = e.target.source.value;
 	const usertalk = e.target.notify.checked;
