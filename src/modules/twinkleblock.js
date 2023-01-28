@@ -1757,9 +1757,9 @@ Twinkle.block.callback.issue_template = (formData) => {
 	const params = $.extend(formData, {
 		messageData: Twinkle.block.blockPresetsInfo[formData.template],
 		reason: Twinkle.block.field_template_options.block_reason,
-		disabletalk: Twinkle.block.field_template_options.notalk
-		// noemail: Twinkle.block.field_template_options.noemail_template,
-		// nocreate: Twinkle.block.field_template_options.nocreate_template
+		disabletalk: Twinkle.block.field_template_options.notalk,
+		noemail: Twinkle.block.field_template_options.noemail_template,
+		nocreate: Twinkle.block.field_template_options.nocreate_template
 	});
 
 	params.template = params.template.split(':', 1)[0];
