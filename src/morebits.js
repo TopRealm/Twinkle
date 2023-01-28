@@ -1335,7 +1335,7 @@ Morebits.string = {
 	 */
 	toUpperCaseFirstChar: function (str) {
 		str = str.toString();
-		return str.substr(0, 1).toUpperCase() + str.substr(1);
+		return str.slice(0, 1).toUpperCase() + str.slice(1);
 	},
 	/**
 	 * @param {string} str
@@ -1343,7 +1343,7 @@ Morebits.string = {
 	 */
 	toLowerCaseFirstChar: function (str) {
 		str = str.toString();
-		return str.substr(0, 1).toLowerCase() + str.substr(1);
+		return str.slice(0, 1).toLowerCase() + str.slice(1);
 	},
 	/**
 	 * Gives an array of substrings of `str` - starting with `start` and
@@ -1376,18 +1376,18 @@ Morebits.string = {
 		}
 		for (let i = 0; i < str.length; ++i) {
 			for (let j = 0; j < skiplist.length; ++j) {
-				if (str.substr(i, skiplist[j].length) === skiplist[j]) {
+				if (str.slice(i, i + skiplist[j].length) === skiplist[j]) {
 					i += skiplist[j].length - 1;
 					continue;
 				}
 			}
-			if (str.substr(i, start.length) === start) {
+			if (str.slice(i, i + start.length) === start) {
 				if (initial === null) {
 					initial = i;
 				}
 				++level;
 				i += start.length - 1;
-			} else if (str.substr(i, end.length) === end) {
+			} else if (str.slice(i, i + end.length) === end) {
 				--level;
 				i += end.length - 1;
 			}
@@ -4531,7 +4531,7 @@ Morebits.wikitext.parseTemplate = function (text, start) {
 		}
 	}
 	for (let i = start; i < text.length; ++i) {
-		const test3 = text.substr(i, 3);
+		const test3 = text.slice(i, i + 3);
 		if (test3 === '{{{' || (test3 === '}}}' && level[level.length - 1] === 3)) {
 			current += test3;
 			i += 2;
@@ -4542,7 +4542,7 @@ Morebits.wikitext.parseTemplate = function (text, start) {
 			}
 			continue;
 		}
-		const test2 = text.substr(i, 2);
+		const test2 = text.slice(i, i + 2);
 		// Entering a template (or link)
 		if (test2 === '{{' || test2 === '[[') {
 			current += test2;
