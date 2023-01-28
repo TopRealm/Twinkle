@@ -570,7 +570,7 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
 							subnode.parentNode.appendChild(subgroup);
 						}
 					} else if (data.type === 'radio') {
-						event = function (e) {
+						event = (e) => {
 							if (e.target.checked) {
 								const name = e.target.name;
 								if (e.target.form.names[name] !== undefined) {
