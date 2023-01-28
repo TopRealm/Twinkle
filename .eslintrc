@@ -9,7 +9,7 @@
 		"es2020": true,
 		"es2021": true
 	},
-	"ignorePatterns": ["src/lib", "scripts/", "lib/", "dist/", "*.json"],
+	"ignorePatterns": ["src/lib/", "scripts/", "dist/", "*.json"],
 	"rules": {
 		"block-scoped-var": "error",
 		"camelcase": "off",

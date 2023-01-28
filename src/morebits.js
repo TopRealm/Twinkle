@@ -1358,7 +1358,7 @@ Morebits.string = {
 	 * @throws If the `start` and `end` strings aren't of the same length.
 	 * @throws If `skiplist` isn't an array or string
 	 */
-	splitWeightedByKeys: function (str, start, end, skiplist) {
+	splitWeightedByKeys: (str, start, end, skiplist) => {
 		if (start.length !== end.length) {
 			throw new Error('start marker and end marker must be of the same length');
 		}
@@ -1369,7 +1369,7 @@ Morebits.string = {
 			if (skiplist === undefined) {
 				skiplist = [];
 			} else if (typeof skiplist === 'string') {
-				skiplist = [ skiplist ];
+				skiplist = [skiplist];
 			} else {
 				throw new Error('non-applicable skiplist parameter');
 			}
@@ -1408,15 +1408,14 @@ Morebits.string = {
 	 * @param {boolean} [addSig]
 	 * @returns {string}
 	 */
-	formatReasonText: function (str, addSig) {
+	formatReasonText: (str, addSig) => {
 		let reason = (str || '').toString().trim();
 		const unbinder = new Morebits.unbinder(reason);
 		unbinder.unbind('<no' + 'wiki>', '</no' + 'wiki>');
 		unbinder.content = unbinder.content.replace(/\|/g, '{{subst:!}}');
 		reason = unbinder.rebind();
 		if (addSig) {
-			const sig = '~~' + '~~',
-				sigIndex = reason.lastIndexOf(sig);
+			const sig = '~~' + '~~', sigIndex = reason.lastIndexOf(sig);
 			if (sigIndex === -1 || sigIndex !== reason.length - sig.length) {
 				reason += ' ' + sig;
 			}
@@ -1431,16 +1430,14 @@ Morebits.string = {
 	 * @param {string} str
 	 * @returns {string}
 	 */
-	formatReasonForLog: function (str) {
-		return (
-			str
+	formatReasonForLog: (str) => (
+		str
 			// handle line breaks, which otherwise break numbering
-				.replace(/\n+/g, '{{pb}}')
+			.replace(/\n+/g, '{{pb}}')
 			// put an extra # in front before bulleted or numbered list items
-				.replace(/^(#+)/gm, '#$1')
-				.replace(/^(\*+)/gm, '#$1')
-		);
-	},
+			.replace(/^(#+)/gm, '#$1')
+			.replace(/^(\*+)/gm, '#$1')
+	),
 	/**
 	 * Like `String.prototype.replace()`, but escapes any dollar signs in
 	 * the replacement string.  Useful when the the replacement string is
@@ -1452,9 +1449,7 @@ Morebits.string = {
 	 * @param {string} replacement
 	 * @returns {string}
 	 */
-	safeReplace: function morebitsStringSafeReplace(string, pattern, replacement) {
-		return string.replace(pattern, replacement.replace(/\$/g, '$$$$'));
-	},
+	safeReplace: (string, pattern, replacement) => string.replace(pattern, replacement.replace(/\$/g, '$$$$')),
 	/**
 	 * Determine if the user-provided expiration will be considered an
 	 * infinite-length by MW.
@@ -1464,9 +1459,7 @@ Morebits.string = {
 	 * @param {string} expiry
 	 * @returns {boolean}
 	 */
-	isInfinity: function morebitsStringIsInfinity(expiry) {
-		return [ 'indefinite', 'infinity', 'infinite', 'never' ].indexOf(expiry) !== -1;
-	},
+	isInfinity: (expiry) => ['indefinite', 'infinity', 'infinite', 'never'].indexOf(expiry) !== -1,
 	/**
 	 * Escapes a string to be used in a RegExp, replacing spaces and
 	 * underscores with `[_ ]` as they are often equivalent.
@@ -1474,16 +1467,14 @@ Morebits.string = {
 	 * @param {string} text - String to be escaped.
 	 * @returns {string} - The escaped text.
 	 */
-	escapeRegExp: function (text) {
-		return mw.util.escapeRegExp(text).replace(/ |_/g, '[_ ]');
-	},
+	escapeRegExp: (text) => mw.util.escapeRegExp(text).replace(/ |_/g, '[_ ]'),
 	/**
 	 * formatTime
 	 *
 	 * @param {*} time The string to foramt
 	 * @returns {string}
 	 */
-	formatTime: function morebitsStringFormatTime(time) {
+	formatTime: (time) => {
 		let m;
 		if ((m = time.match(/^\s*(\d+)\s*sec(ond)?s?\s*$/)) !== null) {
 			return m[1] + '秒';
@@ -1518,7 +1509,7 @@ Morebits.string = {
 	 * @param {string} punctuation
 	 * @returns {string}
 	 */
-	appendPunctuation: function (str, punctuation) {
+	appendPunctuation: (str, punctuation) => {
 		if (punctuation === undefined) {
 			punctuation = '。';
 		}
@@ -1543,13 +1534,11 @@ Morebits.array = {
 	 * @returns {Array} A copy of the array with duplicates removed.
 	 * @throws When provided a non-array.
 	 */
-	uniq: function (arr) {
+	uniq: (arr) => {
 		if (!Array.isArray(arr)) {
 			throw 'A non-array object passed to Morebits.array.uniq';
 		}
-		return arr.filter(function (item, idx) {
-			return arr.indexOf(item) === idx;
-		});
+		return arr.filter((item, idx) => arr.indexOf(item) === idx);
 	},
 	/**
 	 * Remove non-duplicated items from an array.
@@ -1559,13 +1548,11 @@ Morebits.array = {
 	 * removed; subsequent instances of those values (duplicates) remain.
 	 * @throws When provided a non-array.
 	 */
-	dups: function (arr) {
+	dups: (arr) => {
 		if (!Array.isArray(arr)) {
 			throw 'A non-array object passed to Morebits.array.dups';
 		}
-		return arr.filter(function (item, idx) {
-			return arr.indexOf(item) !== idx;
-		});
+		return arr.filter((item, idx) => arr.indexOf(item) !== idx);
 	},
 	/**
 	 * Break up an array into smaller arrays.
@@ -1575,13 +1562,13 @@ Morebits.array = {
 	 * @returns {Array[]} An array containing the smaller, chunked arrays.
 	 * @throws When provided a non-array.
 	 */
-	chunk: function (arr, size) {
+	chunk: (arr, size) => {
 		if (!Array.isArray(arr)) {
 			throw 'A non-array object passed to Morebits.array.chunk';
 		}
 		if (typeof size !== 'number' || size <= 0) {
 			// pretty impossible to do anything :)
-			return [ arr ]; // we return an array consisting of this array.
+			return [arr]; // we return an array consisting of this array.
 		}
 
 		const numChunks = Math.ceil(arr.length / size);
@@ -1618,7 +1605,7 @@ Morebits.select2 = {
 			return result;
 		},
 		/** Custom matcher that matches from the beginning of words only. */
-		wordBeginning: function (params, data) {
+		wordBeginning: (params, data) => {
 			const originalMatcher = $.fn.select2.defaults.defaults.matcher;
 			const result = originalMatcher(params, data);
 			if (!params.term || (result && new RegExp('\\b' + mw.util.escapeRegExp(params.term), 'i').test(result.text))) {
@@ -1628,7 +1615,7 @@ Morebits.select2 = {
 		}
 	},
 	/** Underline matched part of options. */
-	highlightSearchMatches: function (data) {
+	highlightSearchMatches: (data) => {
 		const searchTerm = Morebits.select2SearchQuery;
 		if (!searchTerm || data.loading) {
 			return data.text;
@@ -1646,7 +1633,7 @@ Morebits.select2 = {
 		);
 	},
 	/** Intercept query as it is happening, for use in highlightSearchMatches. */
-	queryInterceptor: function (params) {
+	queryInterceptor: (params) => {
 		Morebits.select2SearchQuery = params && params.term;
 	},
 	/**
@@ -1655,7 +1642,7 @@ Morebits.select2 = {
 	 *
 	 * @see {@link https://github.com/select2/select2/issues/3279#issuecomment-442524147}
 	 */
-	autoStart: function (ev) {
+	autoStart: (ev) => {
 		if (ev.which < 48) {
 			return;
 		}
@@ -1738,7 +1725,7 @@ Morebits.unbinder.prototype = {
 };
 /** @memberof Morebits.unbinder */
 Morebits.unbinder.getCallback = function UnbinderGetCallback(self) {
-	return function UnbinderCallback(match) {
+	return (match) => {
 		const current = self.prefix + self.counter + self.postfix;
 		self.history[current] = match;
 		++self.counter;
