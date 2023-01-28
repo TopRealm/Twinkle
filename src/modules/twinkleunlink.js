@@ -20,7 +20,7 @@
  * Active on:           Non-special pages, except Qiuwen:Sandbox
  */
 
-Twinkle.unlink = function twinkleunlink() {
+Twinkle.unlink = () => {
 	if (mw.config.get('wgNamespaceNumber') < 0 || mw.config.get('wgPageName') === Twinkle.getPref('sandboxPage') || !Morebits.userIsSysop) {
 		return;
 	}
@@ -28,7 +28,7 @@ Twinkle.unlink = function twinkleunlink() {
 };
 
 // the parameter is used when invoking unlink from admin speedy
-Twinkle.unlink.callback = function (presetReason) {
+Twinkle.unlink.callback = (presetReason) => {
 	const fileSpace = mw.config.get('wgNamespaceNumber') === 6;
 	const Window = new Morebits.simpleWindow(600, 440);
 	Window.setTitle('取消页面链入' + (fileSpace ? '及文件使用' : ''));
@@ -93,7 +93,7 @@ Twinkle.unlink.callback = function (presetReason) {
 	Window.setContent(root);
 	Window.display();
 };
-Twinkle.unlink.callback.evaluate = function twinkleunlinkCallbackEvaluate(event) {
+Twinkle.unlink.callback.evaluate = (event) => {
 	const form = event.target;
 	const input = Morebits.quickForm.getInputData(form);
 	if (!input.reason) {
@@ -116,7 +116,7 @@ Twinkle.unlink.callback.evaluate = function twinkleunlinkCallbackEvaluate(event)
 		reason: input.reason,
 		unlinker: unlinker
 	};
-	unlinker.run(function (pageName) {
+	unlinker.run((pageName) => {
 		const qiuwen_page = new Morebits.wiki.page(pageName, '在页面“' + pageName + '”中取消链入');
 		qiuwen_page.setBotEdit(true); // unlink considered a floody operation
 		qiuwen_page.setCallbackParameters($.extend({
@@ -128,7 +128,7 @@ Twinkle.unlink.callback.evaluate = function twinkleunlinkCallbackEvaluate(event)
 };
 Twinkle.unlink.callbacks = {
 	display: {
-		backlinks: function twinkleunlinkCallbackDisplayBacklinks(apiobj) {
+		backlinks: (apiobj) => {
 			const response = apiobj.getResponse();
 			let havecontent = false;
 			let list, namespaces, i;
@@ -154,7 +154,7 @@ Twinkle.unlink.callbacks = {
 						label: '文件使用'
 					});
 					namespaces = [];
-					$.each(Twinkle.getPref('unlinkNamespaces'), function (k, v) {
+					$.each(Twinkle.getPref('unlinkNamespaces'), (k, v) => {
 						namespaces.push(v === '0' ? '（条目）' : mw.config.get('wgFormattedNamespaces')[v]);
 					});
 					apiobj.params.form.append({
@@ -171,14 +171,14 @@ Twinkle.unlink.callbacks = {
 					apiobj.params.form.append({
 						type: 'button',
 						label: '全选',
-						event: function (e) {
+						event: (e) => {
 							$(Morebits.quickForm.getElements(e.target.form, 'imageusage')).prop('checked', true);
 						}
 					});
 					apiobj.params.form.append({
 						type: 'button',
 						label: '全不选',
-						event: function (e) {
+						event: (e) => {
 							$(Morebits.quickForm.getElements(e.target.form, 'imageusage')).prop('checked', false);
 						}
 					});
@@ -207,7 +207,7 @@ Twinkle.unlink.callbacks = {
 					label: '链入'
 				});
 				namespaces = [];
-				$.each(Twinkle.getPref('unlinkNamespaces'), function (k, v) {
+				$.each(Twinkle.getPref('unlinkNamespaces'), (k, v) => {
 					namespaces.push(v === '0' ? '（条目）' : mw.config.get('wgFormattedNamespaces')[v]);
 				});
 				apiobj.params.form.append({
@@ -224,14 +224,14 @@ Twinkle.unlink.callbacks = {
 				apiobj.params.form.append({
 					type: 'button',
 					label: '全选',
-					event: function (e) {
+					event: (e) => {
 						$(Morebits.quickForm.getElements(e.target.form, 'backlinks')).prop('checked', true);
 					}
 				});
 				apiobj.params.form.append({
 					type: 'button',
 					label: '全不选',
-					event: function (e) {
+					event: (e) => {
 						$(Morebits.quickForm.getElements(e.target.form, 'backlinks')).prop('checked', false);
 					}
 				});
@@ -259,12 +259,11 @@ Twinkle.unlink.callbacks = {
 			Morebits.quickForm.getElements(result, 'imageusage').forEach(Twinkle.generateBatchPageLinks);
 		}
 	},
-	unlinkBacklinks: function twinkleunlinkCallbackUnlinkBacklinks(pageobj) {
+	unlinkBacklinks: (pageobj) => {
 		let oldtext = pageobj.getPageText();
 		const params = pageobj.getCallbackParameters();
 		const wikiPage = new Morebits.wikitext.page(oldtext);
-		let summaryText = '',
-			warningString = false;
+		let summaryText = '', warningString = false;
 		let text;
 
 		// remove image usages

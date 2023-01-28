@@ -20,7 +20,7 @@
  * Active on:              Existing non-articles, and Special:PrefixIndex
  */
 
-Twinkle.batchdelete = function twinklebatchdelete() {
+Twinkle.batchdelete = () => {
 	if (Morebits.userIsSysop && (mw.config.get('wgCurRevisionId') && mw.config.get('wgNamespaceNumber') > 0 || mw.config.get('wgCanonicalSpecialPageName') === 'Prefixindex' || mw.config.get('wgCanonicalSpecialPageName') === 'BrokenRedirects')) {
 		Twinkle.addPortletLink(Twinkle.batchdelete.callback, '批删', 'tw-batch', '删除此分类或页面中的所有链接');
 	}
@@ -29,7 +29,7 @@ Twinkle.batchdelete.unlinkCache = {};
 
 // Has the subpages list been loaded?
 let subpagesLoaded;
-Twinkle.batchdelete.callback = function twinklebatchdeleteCallback() {
+Twinkle.batchdelete.callback = () => {
 	subpagesLoaded = false;
 	const Window = new Morebits.simpleWindow(600, 400);
 	Window.setTitle('批量删除');
@@ -156,19 +156,19 @@ Twinkle.batchdelete.callback = function twinklebatchdeleteCallback() {
 	Window.display();
 	Twinkle.batchdelete.pages = {};
 	const statelem = new Morebits.status('抓取页面列表');
-	const qiuwen_api = new Morebits.wiki.api('加载中……', query, function (apiobj) {
+	const qiuwen_api = new Morebits.wiki.api('加载中……', query, (apiobj) => {
 		const response = apiobj.getResponse();
 		let pages = response.query && response.query.pages || [];
-		pages = pages.filter(function (page) {
+		pages = pages.filter((page) => {
 			return !page.missing && page.imagerepository !== 'shared';
 		});
 		pages.sort(Twinkle.sortByNamespace);
-		pages.forEach(function (page) {
+		pages.forEach((page) => {
 			const metadata = [];
 			if (page.redirect) {
 				metadata.push('重定向');
 			}
-			const editProt = page.protection.filter(function (pr) {
+			const editProt = page.protection.filter((pr) => {
 				return pr.type === 'edit' && pr.level === 'sysop';
 			}).pop();
 			if (editProt) {
@@ -196,8 +196,8 @@ Twinkle.batchdelete.callback = function twinklebatchdeleteCallback() {
 		form.append({
 			type: 'button',
 			label: '全选',
-			event: function dBatchSelectAll() {
-				$(result).find('input[name=pages]:not(:checked)').each(function (_, e) {
+			event: () => {
+				$(result).find('input[name=pages]:not(:checked)').each((_, e) => {
 					e.click(); // check it, and invoke click event so that subgroup can be shown
 				});
 
@@ -209,7 +209,7 @@ Twinkle.batchdelete.callback = function twinklebatchdeleteCallback() {
 			type: 'button',
 			label: '全不选',
 			event: function dBatchDeselectAll() {
-				$(result).find('input[name=pages]:checked').each(function (_, e) {
+				$(result).find('input[name=pages]:checked').each((_, e) => {
 					e.click(); // uncheck it, and invoke click event so that subgroup can be hidden
 				});
 			}
@@ -220,7 +220,7 @@ Twinkle.batchdelete.callback = function twinklebatchdeleteCallback() {
 			name: 'pages',
 			id: 'tw-dbatch-pages',
 			shiftClickSupport: true,
-			list: $.map(Twinkle.batchdelete.pages, function (e) {
+			list: $.map(Twinkle.batchdelete.pages, (e) => {
 				return e;
 			})
 		});

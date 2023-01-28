@@ -628,11 +628,11 @@ Twinkle.arv.processAN3 = (params) => {
 		rvexcludeuser: params.uid,
 		indexpageids: true,
 		titles: params.page
-	}).done(function (data) {
+	}).done((data) => {
 		Morebits.wiki.addCheckpoint(); // prevent notification events from causing an erronous "action completed"
 
 		// In case an edit summary was revdel'd
-		const hasHiddenComment = function (rev) {
+		const hasHiddenComment = (rev) => {
 			if (!rev.comment && typeof rev.commenthidden === 'string') {
 				return '(comment hidden)';
 			}
@@ -666,7 +666,7 @@ Twinkle.arv.processAN3 = (params) => {
 			parentid = cur.parentid;
 			grouped_diffs[lastid].push(cur);
 		}
-		const difftext = $.map(grouped_diffs, function (sub) {
+		const difftext = $.map(grouped_diffs, (sub) => {
 			let ret = '';
 			if (sub.length >= 2) {
 				const last = sub[0];
@@ -674,15 +674,15 @@ Twinkle.arv.processAN3 = (params) => {
 				const label = 'Consecutive edits made from ' + new Morebits.date(first.timestamp).format('HH:mm, D MMMM YYYY', 'utc') + ' (UTC) to ' + new Morebits.date(last.timestamp).format('HH:mm, D MMMM YYYY', 'utc') + ' (UTC)';
 				ret = '# {{diff|oldid=' + first.parentid + '|diff=' + last.revid + '|label=' + label + '}}\n';
 			}
-			ret += sub.reverse().map(function (v) {
+			ret += sub.reverse().map((v) => {
 				return (sub.length >= 2 ? '#' : '') + '# {{diff2|' + v.revid + '|' + new Morebits.date(v.timestamp).format('HH:mm, D MMMM YYYY', 'utc') + ' (UTC)}} ' + hasHiddenComment(v);
 			}).join('\n');
 			return ret;
 		}).reverse().join('\n');
-		const warningtext = params.warnings.reverse().map(function (v) {
+		const warningtext = params.warnings.reverse().map((v) => {
 			return '#  {{diff2|' + v.revid + '|' + new Morebits.date(v.timestamp).format('HH:mm, D MMMM YYYY', 'utc') + ' (UTC)}} ' + hasHiddenComment(v);
 		}).join('\n');
-		let resolvetext = params.resolves.reverse().map(function (v) {
+		let resolvetext = params.resolves.reverse().map((v) => {
 			return '#  {{diff2|' + v.revid + '|' + new Morebits.date(v.timestamp).format('HH:mm, D MMMM YYYY', 'utc') + ' (UTC)}} ' + hasHiddenComment(v);
 		}).join('\n');
 		if (params.free_resolves) {
