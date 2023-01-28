@@ -21,13 +21,13 @@
  *                         non-existing categories; Special:PrefixIndex
  */
 
-Twinkle.batchprotect = function twinklebatchprotect() {
+Twinkle.batchprotect = () => {
 	if (Morebits.userIsSysop && (mw.config.get('wgArticleId') > 0 && (mw.config.get('wgNamespaceNumber') === 2 || mw.config.get('wgNamespaceNumber') === 4) || mw.config.get('wgNamespaceNumber') === 14 || mw.config.get('wgCanonicalSpecialPageName') === 'Prefixindex')) {
 		Twinkle.addPortletLink(Twinkle.batchprotect.callback, '批保', 'tw-pbatch', '批量保护链出页面');
 	}
 };
 Twinkle.batchprotect.unlinkCache = {};
-Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
+Twinkle.batchprotect.callback = () => {
 	const Window = new Morebits.simpleWindow(600, 400);
 	Window.setTitle('批保');
 	Window.setScriptName('Twinkle');
@@ -57,7 +57,7 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 		type: 'select',
 		name: 'editexpiry',
 		label: '终止时间：',
-		event: function event(e) {
+		event: (e) => {
 			if (e.target.value === 'custom') {
 				Twinkle.protect.doCustomExpiry(e.target);
 			}
@@ -81,16 +81,15 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 		name: 'movelevel',
 		label: '移动权限：',
 		event: Twinkle.protect.formevents.movelevel,
-		list: Twinkle.protect.protectionLevels.filter(function (level) {
+		list: Twinkle.protect.protectionLevels.filter((level) =>
 			// Autoconfirmed is required for a move, redundant
-			return level.value !== 'autoconfirmed';
-		})
+			level.value !== 'autoconfirmed')
 	});
 	form.append({
 		type: 'select',
 		name: 'moveexpiry',
 		label: '终止时间：',
-		event: function event(e) {
+		event: (e) => {
 			if (e.target.value === 'custom') {
 				Twinkle.protect.doCustomExpiry(e.target);
 			}
@@ -100,7 +99,7 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 
 	form.append({
 		type: 'checkbox',
-		event: function twinklebatchprotectFormCreatemodifyEvent(e) {
+		event: (e) => {
 			e.target.form.createlevel.disabled = !e.target.checked;
 			e.target.form.createexpiry.disabled = !e.target.checked || e.target.form.createlevel.value === 'all';
 			e.target.form.createlevel.style.color = e.target.form.createexpiry.style.color = e.target.checked ? '' : 'transparent';
@@ -124,7 +123,7 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 		type: 'select',
 		name: 'createexpiry',
 		label: '终止时间：',
-		event: function event(e) {
+		event: (e) => {
 			if (e.target.value === 'custom') {
 				Twinkle.protect.doCustomExpiry(e.target);
 			}
@@ -171,20 +170,18 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 	Morebits.status.init(statusdiv);
 	Window.display();
 	const statelem = new Morebits.status('抓取页面列表');
-	const qiuwen_api = new Morebits.wiki.api('加载中……', query, function (apiobj) {
+	const qiuwen_api = new Morebits.wiki.api('加载中……', query, (apiobj) => {
 		const response = apiobj.getResponse();
 		const pages = response.query && response.query.pages || [];
 		const list = [];
 		pages.sort(Twinkle.sortByNamespace);
-		pages.forEach(function (page) {
+		pages.forEach((page) => {
 			const metadata = [];
 			const missing = !!page.missing;
 			let editProt;
 			if (missing) {
 				metadata.push('页面不存在');
-				editProt = page.protection.filter(function (pr) {
-					return pr.type === 'create' && pr.level === 'sysop';
-				}).pop();
+				editProt = page.protection.filter((pr) => pr.type === 'create' && pr.level === 'sysop').pop();
 			} else {
 				if (page.redirect) {
 					metadata.push('重定向');
@@ -195,7 +192,7 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 				} else {
 					metadata.push(mw.language.convertNumber(page.revisions[0].size) + '字节');
 				}
-				editProt = page.protection.filter(function (pr) {
+				editProt = page.protection.filter((pr) => {
 					return pr.type === 'edit' && pr.level === 'sysop';
 				}).pop();
 			}
@@ -217,14 +214,14 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 		form.append({
 			type: 'button',
 			label: '全选',
-			event: function event(e) {
+			event: (e) => {
 				$(Morebits.quickForm.getElements(e.target.form, 'pages')).prop('checked', true);
 			}
 		});
 		form.append({
 			type: 'button',
 			label: '全不选',
-			event: function event(e) {
+			event: (e) => {
 				$(Morebits.quickForm.getElements(e.target.form, 'pages')).prop('checked', false);
 			}
 		});
@@ -250,10 +247,10 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 };
 Twinkle.batchprotect.currentProtectCounter = 0;
 Twinkle.batchprotect.currentprotector = 0;
-Twinkle.batchprotect.callback.evaluate = function twinklebatchprotectCallbackEvaluate(event) {
+Twinkle.batchprotect.callback.evaluate = (event) => {
 	Morebits.wiki.actionCompleted.notice = '批量保护完成';
 	const form = event.target;
-	const numProtected = $(Morebits.quickForm.getElements(form, '个页面')).filter(function (index, element) {
+	const numProtected = $(Morebits.quickForm.getElements(form, '个页面')).filter((index, element) => {
 		return element.checked && element.nextElementSibling.style.color === 'red';
 	}).length;
 	if (numProtected > 0 && !confirm('您即将对' + mw.language.convertNumber(numProtected) + '个全保护页面进行操作。您确定吗？')) {
@@ -274,7 +271,7 @@ Twinkle.batchprotect.callback.evaluate = function twinklebatchprotectCallbackEva
 	batchOperation.setOption('chunkSize', Twinkle.getPref('batchChunks'));
 	batchOperation.setOption('preserveIndividualStatusLines', true);
 	batchOperation.setPageList(input.pages);
-	batchOperation.run(function (pageName) {
+	batchOperation.run((pageName) => {
 		const query = {
 			action: 'query',
 			titles: pageName,
@@ -289,7 +286,7 @@ Twinkle.batchprotect.callback.evaluate = function twinklebatchprotectCallbackEva
 	});
 };
 Twinkle.batchprotect.callbacks = {
-	main: function main(apiobj) {
+	main: (apiobj) => {
 		const response = apiobj.getResponse();
 		if (response.query.normalized) {
 			apiobj.params.page = response.query.normalized[0].to;

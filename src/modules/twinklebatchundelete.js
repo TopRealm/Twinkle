@@ -20,13 +20,13 @@
  * Active on:              Existing user and project pages
  */
 
-Twinkle.batchundelete = function twinklebatchundelete() {
+Twinkle.batchundelete = () => {
 	if (!Morebits.userIsSysop || !mw.config.get('wgArticleId') || mw.config.get('wgNamespaceNumber') !== mw.config.get('wgNamespaceIds').user && mw.config.get('wgNamespaceNumber') !== mw.config.get('wgNamespaceIds').project) {
 		return;
 	}
 	Twinkle.addPortletLink(Twinkle.batchundelete.callback, '批复', 'tw-batch-undel', '恢复页面');
 };
-Twinkle.batchundelete.callback = function twinklebatchundeleteCallback() {
+Twinkle.batchundelete.callback = () => {
 	const Window = new Morebits.simpleWindow(600, 400);
 	Window.setScriptName('Twinkle');
 	Window.setTitle('批量恢复');
@@ -63,18 +63,16 @@ Twinkle.batchundelete.callback = function twinklebatchundeleteCallback() {
 		format: 'json'
 	};
 	const statelem = new Morebits.status('抓取页面列表');
-	const qiuwen_api = new Morebits.wiki.api('加载中……', query, function (apiobj) {
+	const qiuwen_api = new Morebits.wiki.api('加载中……', query, (apiobj) => {
 		const response = apiobj.getResponse();
 		let pages = response.query && response.query.pages || [];
-		pages = pages.filter(function (page) {
+		pages = pages.filter((page) => {
 			return page.missing;
 		});
 		const list = [];
 		pages.sort(Twinkle.sortByNamespace);
-		pages.forEach(function (page) {
-			const editProt = page.protection.filter(function (pr) {
-				return pr.type === 'create' && pr.level === 'sysop';
-			}).pop();
+		pages.forEach((page) => {
+			const editProt = page.protection.filter((pr) => pr.type === 'create' && pr.level === 'sysop').pop();
 			const title = page.title;
 			list.push({
 				label: title + (editProt ? '（全保护' + (editProt.expiry === 'infinity' ? '无限期' : '，' + new Morebits.date(editProt.expiry).calendar('utc') + ' (UTC) 过期') + ')' : ''),
@@ -90,14 +88,14 @@ Twinkle.batchundelete.callback = function twinklebatchundeleteCallback() {
 		apiobj.params.form.append({
 			type: 'button',
 			label: '全选',
-			event: function (e) {
+			event: (e) => {
 				$(Morebits.quickForm.getElements(e.target.form, 'pages')).prop('checked', true);
 			}
 		});
 		apiobj.params.form.append({
 			type: 'button',
 			label: '全不选',
-			event: function (e) {
+			event: (e) => {
 				$(Morebits.quickForm.getElements(e.target.form, 'pages')).prop('checked', false);
 			}
 		});
@@ -120,11 +118,9 @@ Twinkle.batchundelete.callback = function twinklebatchundeleteCallback() {
 	};
 	qiuwen_api.post();
 };
-Twinkle.batchundelete.callback.evaluate = function (event) {
+Twinkle.batchundelete.callback.evaluate = (event) => {
 	Morebits.wiki.actionCompleted.notice = '恢复已完成';
-	const numProtected = Morebits.quickForm.getElements(event.target, 'pages').filter(function (element) {
-		return element.checked && element.nextElementSibling.style.color === 'red';
-	}).length;
+	const numProtected = Morebits.quickForm.getElements(event.target, 'pages').filter((element) => element.checked && element.nextElementSibling.style.color === 'red').length;
 	if (numProtected > 0 && !confirm('您正要恢复 ' + numProtected + ' 个全保护页面，您确定吗？')) {
 		return;
 	}
@@ -143,7 +139,7 @@ Twinkle.batchundelete.callback.evaluate = function (event) {
 	pageUndeleter.setOption('chunkSize', Twinkle.getPref('batchChunks'));
 	pageUndeleter.setOption('preserveIndividualStatusLines', true);
 	pageUndeleter.setPageList(input.pages);
-	pageUndeleter.run(function (pageName) {
+	pageUndeleter.run((pageName) => {
 		const params = {
 			page: pageName,
 			undel_talk: input.undel_talk,
@@ -162,7 +158,7 @@ Twinkle.batchundelete.callback.evaluate = function (event) {
 Twinkle.batchundelete.callbacks = {
 	// this stupid parameter name is a temporary thing until I implement an overhaul
 	// of Morebits.wiki.* callback parameters
-	doExtras: function (thingWithParameters) {
+	doExtras: (thingWithParameters) => {
 		const params = thingWithParameters.parent ? thingWithParameters.parent.getCallbackParameters() : thingWithParameters.getCallbackParameters();
 		// the initial batch operation's job is to delete the page, and that has
 		// succeeded by now
@@ -186,7 +182,7 @@ Twinkle.batchundelete.callbacks = {
 			}
 		}
 	},
-	undeleteTalk: function (apiobj) {
+	undeleteTalk: (apiobj) => {
 		const page = apiobj.getResponse().query.pages[0];
 		const exists = !page.missing;
 		const delrevs = page.deletedrevisions && page.deletedrevisions[0].revid;

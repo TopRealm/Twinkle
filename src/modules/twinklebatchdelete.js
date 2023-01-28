@@ -206,7 +206,7 @@ Twinkle.batchdelete.callback = () => {
 		form.append({
 			type: 'button',
 			label: '全不选',
-			event: function dBatchDeselectAll() {
+			event: () => {
 				$(result).find('input[name=pages]:checked').each((_, e) => {
 					e.click(); // uncheck it, and invoke click event so that subgroup can be hidden
 				});
@@ -235,7 +235,7 @@ Twinkle.batchdelete.callback = () => {
 	};
 	qiuwen_api.post();
 };
-Twinkle.batchdelete.generateNewPageList = function (form) {
+Twinkle.batchdelete.generateNewPageList = (form) => {
 	// Update the list of checked pages in Twinkle.batchdelete.pages object
 	const elements = form.elements.pages;
 	if (elements instanceof NodeList) {
@@ -252,9 +252,7 @@ Twinkle.batchdelete.generateNewPageList = function (form) {
 		name: 'pages',
 		id: 'tw-dbatch-pages',
 		shiftClickSupport: true,
-		list: $.map(Twinkle.batchdelete.pages, function (e) {
-			return e;
-		})
+		list: $.map(Twinkle.batchdelete.pages, (e) => e)
 	}).render();
 };
 Twinkle.batchdelete.deletereasonlist = [ {
@@ -297,14 +295,14 @@ Twinkle.batchdelete.deletereasonlist = [ {
 	label: 'O3：废弃草稿',
 	value: '[[QW:O3|O3]]：废弃草稿'
 } ];
-Twinkle.batchdelete.callback.change_common_reason = function twinklebatchdeleteCallbackChangeCustomReason(e) {
+Twinkle.batchdelete.callback.change_common_reason = (e) => {
 	if (e.target.form.reason.value !== '') {
 		e.target.form.reason.value = Morebits.string.appendPunctuation(e.target.form.reason.value);
 	}
 	e.target.form.reason.value += e.target.value;
 	e.target.value = '';
 };
-Twinkle.batchdelete.callback.toggleSubpages = function twDbatchToggleSubpages(e) {
+Twinkle.batchdelete.callback.toggleSubpages = (e) => {
 	const form = e.target.form;
 	let newPageList;
 	if (e.target.checked) {
@@ -315,7 +313,7 @@ Twinkle.batchdelete.callback.toggleSubpages = function twDbatchToggleSubpages(e)
 		// If lists of subpages were already loaded once, they are
 		// available without use of any API calls
 		if (subpagesLoaded) {
-			$.each(Twinkle.batchdelete.pages, function (i, el) {
+			$.each(Twinkle.batchdelete.pages, (i, el) => {
 				// Get back the subgroup from subgroup_, where we saved it
 				if (el.subgroup === null && el.subgroup_) {
 					el.subgroup = el.subgroup_;
@@ -331,13 +329,11 @@ Twinkle.batchdelete.callback.toggleSubpages = function twDbatchToggleSubpages(e)
 		// Proceed with API calls to get list of subpages
 		const loadingText = '<strong id="dbatch-subpage-loading">加载中...</strong>';
 		$(e.target).after(loadingText);
-		const pages = $(form.pages).map(function (i, el) {
-			return el.value;
-		}).get();
+		const pages = $(form.pages).map((i, el) => el.value).get();
 		const subpageLister = new Morebits.batchOperation();
 		subpageLister.setOption('chunkSize', Twinkle.getPref('batchChunks'));
 		subpageLister.setPageList(pages);
-		subpageLister.run(function worker(pageName) {
+		subpageLister.run((pageName) => {
 			const pageTitle = mw.Title.newFromText(pageName);
 
 			// No need to look for subpages in main/file/mediawiki space
@@ -356,19 +352,17 @@ Twinkle.batchdelete.callback.toggleSubpages = function twDbatchToggleSubpages(e)
 				gaplimit: 'max',
 				// 500 is max for normal users, 5000 for bots and sysops
 				format: 'json'
-			}, function onSuccess(apiobj) {
+			}, (apiobj) => {
 				const response = apiobj.getResponse();
 				const pages = response.query && response.query.pages || [];
 				const subpageList = [];
 				pages.sort(Twinkle.sortByNamespace);
-				pages.forEach(function (page) {
+				pages.forEach((page) => {
 					const metadata = [];
 					if (page.redirect) {
 						metadata.push('重定向');
 					}
-					const editProt = page.protection.filter(function (pr) {
-						return pr.type === 'edit' && pr.level === 'sysop';
-					}).pop();
+					const editProt = page.protection.filter((pr) => pr.type === 'edit' && pr.level === 'sysop').pop();
 					if (editProt) {
 						metadata.push('全保护（' + (editProt.expiry === 'infinity' ? '永久' : '至' + new Morebits.date(editProt.expiry).calendar('utc') + ' (UTC)过期'));
 					}
@@ -397,16 +391,15 @@ Twinkle.batchdelete.callback.toggleSubpages = function twDbatchToggleSubpages(e)
 					};
 				}
 				subpageLister.workerSuccess();
-			}, null /* statusElement */, function onFailure() {
+			}, null /* statusElement */, () => {
 				subpageLister.workerFailure();
 			});
 			qiuwen_api.params = {
 				pageNameFull: pageName
 			}; // Used in onSuccess()
 			qiuwen_api.post();
-		}, function postFinish() {
+		}, () => {
 			// List 'em on the interface
-
 			newPageList = Twinkle.batchdelete.generateNewPageList(form);
 			$('#tw-dbatch-pages').replaceWith(newPageList);
 			Morebits.quickForm.getElements(newPageList, 'pages').forEach(Twinkle.generateArrowLinks);
@@ -417,7 +410,7 @@ Twinkle.batchdelete.callback.toggleSubpages = function twDbatchToggleSubpages(e)
 			$('#dbatch-subpage-loading').remove();
 		});
 	} else if (!e.target.checked) {
-		$.each(Twinkle.batchdelete.pages, function (i, el) {
+		$.each(Twinkle.batchdelete.pages, (i, el) => {
 			if (el.subgroup) {
 				// Remove subgroup after saving its contents in subgroup_
 				// so that it can be retrieved easily if user decides to

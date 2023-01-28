@@ -541,7 +541,7 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
 							id: id + '_' + i + '_subgroup'
 						});
 							// eslint-disable-next-line no-loop-func
-						$.each(tmpgroup, function (idx, el) {
+						$.each(tmpgroup, (idx, el) => {
 							const newEl = $.extend({}, el);
 							if (!newEl.type) {
 								newEl.type = data.type;
@@ -553,7 +553,7 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
 						subgroup.className = 'quickformSubgroup';
 						subnode.subgroup = subgroup;
 						subnode.shown = false;
-						event = function (e) {
+						event = (e) => {
 							if (e.target.checked) {
 								e.target.parentNode.appendChild(e.target.subgroup);
 								if (e.target.type === 'radio') {
@@ -654,7 +654,7 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
 				type: 'button',
 				label: '更多',
 				disabled: min >= max,
-				event: function (e) {
+				event: (e) => {
 					const new_node = new Morebits.quickForm.element(e.target.sublist);
 					e.target.area.appendChild(new_node.render());
 					if (++e.target.counter >= e.target.max) {
@@ -715,7 +715,7 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
 				const remove = this.compute({
 					type: 'button',
 					label: '移除',
-					event: function (e) {
+					event: (e) => {
 						const list = e.target.listnode;
 						const node = e.target.inputnode;
 						const more = e.target.morebutton;
