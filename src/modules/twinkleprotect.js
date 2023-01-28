@@ -22,7 +22,7 @@
 
 // Note: a lot of code in this module is re-used/called by batchprotect.
 
-Twinkle.protect = function twinkleprotect() {
+Twinkle.protect = () => {
 	if (mw.config.get('wgNamespaceNumber') < 0 || mw.config.get('wgNamespaceNumber') === 8) {
 		return;
 	}
@@ -30,7 +30,7 @@ Twinkle.protect = function twinkleprotect() {
 	Twinkle.addPortletLink(Twinkle.protect.callback, '保护', 'tw-rpp', Morebits.userIsSysop ? '保护页面' : '请求保护页面');
 };
 
-Twinkle.protect.callback = function twinkleprotectCallback() {
+Twinkle.protect.callback = () => {
 	const Window = new Morebits.simpleWindow(620, 530);
 	Window.setTitle(Morebits.userIsSysop ? '实施页面保护或请求保护页面' : '请求保护页面');
 	Window.setScriptName('Twinkle');
@@ -126,7 +126,7 @@ const isTemplate = mw.config.get('wgNamespaceNumber') === 10 || mw.config.get('w
 Twinkle.protect.currentProtectionLevels = {};
 Twinkle.protect.previousProtectionLevels = {};
 
-Twinkle.protect.fetchProtectionLevel = function twinkleprotectFetchProtectionLevel() {
+Twinkle.protect.fetchProtectionLevel = () => {
 	const api = new mw.Api();
 	const protectDeferred = api.get({
 		format: 'json',
@@ -141,7 +141,7 @@ Twinkle.protect.fetchProtectionLevel = function twinkleprotectFetchProtectionLev
 	});
 
 	// eslint-disable-next-line no-useless-call
-	$.when.apply($, [ protectDeferred ]).done(function (protectData) {
+	$.when.apply($, [ protectDeferred ]).done((protectData) => {
 		// $.when.apply is supposed to take an unknown number of promises
 		// via an array, which it does, but the type of data returned varies.
 		// If there are two or more deferreds, it returns an array (of objects),
@@ -155,7 +155,7 @@ Twinkle.protect.fetchProtectionLevel = function twinkleprotectFetchProtectionLev
 		// Save requested page's watched status for later in case needed when filing request
 		Twinkle.protect.watched = page.watchlistexpiry || page.watched === '';
 
-		$.each(page.protection, function (index, protection) {
+		$.each(page.protection, (_index, protection) => {
 			if (protection.type !== 'aft') {
 				current[protection.type] = {
 					level: protection.level,
@@ -167,14 +167,14 @@ Twinkle.protect.fetchProtectionLevel = function twinkleprotectFetchProtectionLev
 
 		// Only use the log except unprotect
 		Twinkle.protect.previousProtectionLog =
-				protectData.query.logevents.length >= 1 && protectData.query.logevents[0].action !== 'unprotect' ?
-					protectData.query.logevents[0] :
-					protectData.query.logevents.length >= 2 ?
-						protectData.query.logevents[1] :
-						null;
+			protectData.query.logevents.length >= 1 && protectData.query.logevents[0].action !== 'unprotect' ?
+				protectData.query.logevents[0] :
+				protectData.query.logevents.length >= 2 ?
+					protectData.query.logevents[1] :
+					null;
 
 		if (Twinkle.protect.previousProtectionLog) {
-			$.each(Twinkle.protect.previousProtectionLog.params.details, function (index, protection) {
+			$.each(Twinkle.protect.previousProtectionLog.params.details, (_index, protection) => {
 				if (protection.type !== 'aft') {
 					previous[protection.type] = {
 						level: protection.level,
@@ -193,7 +193,7 @@ Twinkle.protect.fetchProtectionLevel = function twinkleprotectFetchProtectionLev
 	});
 };
 
-Twinkle.protect.callback.showLogAndCurrentProtectInfo = function twinkleprotectCallbackShowLogAndCurrentProtectInfo() {
+Twinkle.protect.callback.showLogAndCurrentProtectInfo = () => {
 	const currentlyProtected = !$.isEmptyObject(Twinkle.protect.currentProtectionLevels);
 
 	if (Twinkle.protect.hasProtectLog || Twinkle.protect.hasStableLog) {
@@ -219,8 +219,7 @@ Twinkle.protect.callback.showLogAndCurrentProtectInfo = function twinkleprotectC
 	}
 
 	Morebits.status.init($('div[name="currentprot"] span')[0]);
-	let protectionNode = [],
-		statusLevel = 'info';
+	let protectionNode = [], statusLevel = 'info';
 
 	protectionNode = Twinkle.protect.formatProtectionDescription(Twinkle.protect.currentProtectionLevels);
 	if (currentlyProtected) {
@@ -230,7 +229,7 @@ Twinkle.protect.callback.showLogAndCurrentProtectInfo = function twinkleprotectC
 	Morebits.status[statusLevel]('当前保护等级', protectionNode);
 };
 
-Twinkle.protect.callback.changeAction = function twinkleprotectCallbackChangeAction(e) {
+Twinkle.protect.callback.changeAction = (e) => {
 	let field_preset;
 	let field1;
 	let field2;
@@ -268,16 +267,15 @@ Twinkle.protect.callback.changeAction = function twinkleprotectCallbackChangeAct
 					name: 'editlevel',
 					label: '编辑权限：',
 					event: Twinkle.protect.formevents.editlevel,
-					list: Twinkle.protect.protectionLevels.filter(function (level) {
+					list: Twinkle.protect.protectionLevels.filter((level) =>
 						// Filter TE outside of templates and modules
-						return isTemplate || level.value !== 'templateeditor';
-					})
+						isTemplate || level.value !== 'templateeditor')
 				});
 				field2.append({
 					type: 'select',
 					name: 'editexpiry',
 					label: '终止时间：',
-					event: function (e) {
+					event: (e) => {
 						if (e.target.value === 'custom') {
 							Twinkle.protect.doCustomExpiry(e.target);
 						}
@@ -303,16 +301,15 @@ Twinkle.protect.callback.changeAction = function twinkleprotectCallbackChangeAct
 					name: 'movelevel',
 					label: '移动权限：',
 					event: Twinkle.protect.formevents.movelevel,
-					list: Twinkle.protect.protectionLevels.filter(function (level) {
+					list: Twinkle.protect.protectionLevels.filter((level) =>
 						// Autoconfirmed is required for a move, redundant
-						return level.value !== 'autoconfirmed' && (isTemplate || level.value !== 'templateeditor');
-					})
+						level.value !== 'autoconfirmed' && (isTemplate || level.value !== 'templateeditor'))
 				});
 				field2.append({
 					type: 'select',
 					name: 'moveexpiry',
 					label: '终止时间：',
-					event: function (e) {
+					event: (e) => {
 						if (e.target.value === 'custom') {
 							Twinkle.protect.doCustomExpiry(e.target);
 						}
@@ -327,16 +324,15 @@ Twinkle.protect.callback.changeAction = function twinkleprotectCallbackChangeAct
 					name: 'createlevel',
 					label: '创建权限：',
 					event: Twinkle.protect.formevents.createlevel,
-					list: Twinkle.protect.protectionLevels.filter(function (level) {
+					list: Twinkle.protect.protectionLevels.filter((level) =>
 						// Filter TE always, and autoconfirmed in mainspace
-						return level.value !== 'templateeditor';
-					})
+						level.value !== 'templateeditor')
 				});
 				field2.append({
 					type: 'select',
 					name: 'createexpiry',
 					label: '终止时间：',
-					event: function (e) {
+					event: (e) => {
 						if (e.target.value === 'custom') {
 							Twinkle.protect.doCustomExpiry(e.target);
 						}
@@ -364,7 +360,7 @@ Twinkle.protect.callback.changeAction = function twinkleprotectCallbackChangeAct
 				// tagging isn't relevant for non-existing or module pages
 				break;
 			}
-			/* falls through */
+		/* falls through */
 		case 'tag':
 			field1 = new Morebits.quickForm.element({ type: 'field', label: '标记选项', name: 'field1' });
 			field1.append({ type: 'div', name: 'currentprot', label: ' ' }); // holds the current protection level, as filled out by the async callback
@@ -472,15 +468,15 @@ Twinkle.protect.callback.changeAction = function twinkleprotectCallbackChangeAct
 
 // NOTE: This function is used by batchprotect as well
 Twinkle.protect.formevents = {
-	editmodify: function twinkleprotectFormEditmodifyEvent(e) {
+	editmodify: (e) => {
 		e.target.form.editlevel.disabled = !e.target.checked;
 		e.target.form.editexpiry.disabled = !e.target.checked || e.target.form.editlevel.value === 'all';
 		e.target.form.editlevel.style.color = e.target.form.editexpiry.style.color = e.target.checked ? '' : 'transparent';
 	},
-	editlevel: function twinkleprotectFormEditlevelEvent(e) {
+	editlevel: (e) => {
 		e.target.form.editexpiry.disabled = e.target.value === 'all';
 	},
-	movemodify: function twinkleprotectFormMovemodifyEvent(e) {
+	movemodify: (e) => {
 		// sync move settings with edit settings if applicable
 		if (e.target.form.movelevel.disabled && !e.target.form.editlevel.disabled) {
 			e.target.form.movelevel.value = e.target.form.editlevel.value;
@@ -493,18 +489,18 @@ Twinkle.protect.formevents = {
 		e.target.form.moveexpiry.disabled = !e.target.checked || e.target.form.movelevel.value === 'all';
 		e.target.form.movelevel.style.color = e.target.form.moveexpiry.style.color = e.target.checked ? '' : 'transparent';
 	},
-	movelevel: function twinkleprotectFormMovelevelEvent(e) {
+	movelevel: (e) => {
 		e.target.form.moveexpiry.disabled = e.target.value === 'all';
 	},
-	createlevel: function twinkleprotectFormCreatelevelEvent(e) {
+	createlevel: (e) => {
 		e.target.form.createexpiry.disabled = e.target.value === 'all';
 	},
-	tagtype: function twinkleprotectFormTagtypeEvent(e) {
+	tagtype: (e) => {
 		e.target.form.small.disabled = e.target.form.noinclude.disabled = e.target.form.showexpiry.disabled = e.target.value === 'none' || e.target.value === 'noop';
 	}
 };
 
-Twinkle.protect.doCustomExpiry = function twinkleprotectDoCustomExpiry(target) {
+Twinkle.protect.doCustomExpiry = (target) => {
 	const custom = prompt('输入自定义终止时间。\n您可以使用相对时间，如“1 minute”或“19 days”，或绝对时间“yyyymmddhhmm”（如“200602011405”是2006年02月01日14：05（UTC））', '');
 	if (custom) {
 		const option = document.createElement('option');
@@ -594,10 +590,9 @@ Twinkle.protect.protectionTypesAdmin = [
 			{ label: '高风险页面（移动）', value: 'pp-move-indef' }
 		]
 	}
-].filter(function (type) {
+].filter((type) =>
 	// Filter for templates
-	return isTemplate || (type.label !== '模板保护' && type.label !== '模板保護');
-});
+	isTemplate || (type.label !== '模板保护' && type.label !== '模板保護'));
 
 Twinkle.protect.protectionTypesCreateOnly = [
 	{
@@ -804,7 +799,7 @@ Twinkle.protect.protectionTags = [
 	}
 ];
 
-Twinkle.protect.callback.changePreset = function twinkleprotectCallbackChangePreset(e) {
+Twinkle.protect.callback.changePreset = (e) => {
 	const form = e.target.form;
 
 	const actiontypes = form.actiontype;
@@ -886,7 +881,7 @@ Twinkle.protect.callback.changePreset = function twinkleprotectCallbackChangePre
 	}
 };
 
-Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
+Twinkle.protect.callback.evaluate = (e) => {
 	const form = e.target;
 	const input = Morebits.quickForm.getInputData(form);
 
@@ -939,14 +934,13 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 	switch (input.actiontype) {
 		case 'protect': {
 			// protect the page
-
 			Morebits.wiki.actionCompleted.redirect = mw.config.get('wgPageName');
 			Morebits.wiki.actionCompleted.notice = '保护完成';
 
 			let statusInited = false;
 			let thispage;
 
-			const allDone = function twinkleprotectCallbackAllDone() {
+			const allDone = () => {
 				if (thispage) {
 					thispage.getStatusElement().info('完成');
 				}
@@ -961,7 +955,7 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 				}
 			};
 
-			const protectIt = function twinkleprotectCallbackProtectIt(next) {
+			const protectIt = (next) => {
 				thispage = new Morebits.wiki.page(mw.config.get('wgPageName'), '保护页面');
 				if (mw.config.get('wgArticleId')) {
 					if (input.editmodify) {
@@ -1010,7 +1004,6 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 		}
 		case 'tag':
 			// apply a protection template
-
 			Morebits.simpleWindow.setButtonsEnabled(false);
 			Morebits.status.init(form);
 
@@ -1056,7 +1049,7 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 					typename = '白纸保护';
 					break;
 				case 'unprotect': {
-					const admins = $.map(Twinkle.protect.currentProtectionLevels, function (pl) {
+					const admins = $.map(Twinkle.protect.currentProtectionLevels, (pl) => {
 						if (!pl.admin || Twinkle.protect.trustedBots.indexOf(pl.admin) !== -1) {
 							return null;
 						}
@@ -1146,7 +1139,7 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 };
 
 Twinkle.protect.callbacks = {
-	taggingPageInitial: function (tagparams) {
+	taggingPageInitial: (tagparams) => {
 		if (tagparams.tag === 'noop') {
 			Morebits.status.info('应用保护模板', '没什么要做的');
 			return;
@@ -1157,11 +1150,10 @@ Twinkle.protect.callbacks = {
 		protectedPage.setCallbackParameters(tagparams);
 		protectedPage.load(Twinkle.protect.callbacks.taggingPage);
 	},
-	getTaggedPage: function (params, text) {
+	getTaggedPage: (params, text) => {
 		let tag, summary;
 
-		const oldtag_re =
-				/(?:<noinclude>)?[ \t]*\{\{\s*(pp-[^{}]*?|protected|(?:t|v|s|p-|usertalk-v|usertalk-s|sb|move)protected(?:2)?|protected template|privacy protection)\s*?\}\}\s*(?:<\/noinclude>)?\s*/gi;
+		const oldtag_re = /(?:<noinclude>)?[ \t]*\{\{\s*(pp-[^{}]*?|protected|(?:t|v|s|p-|usertalk-v|usertalk-s|sb|move)protected(?:2)?|protected template|privacy protection)\s*?\}\}\s*(?:<\/noinclude>)?\s*/gi;
 		const re_result = oldtag_re.exec(text);
 		if (re_result) {
 			if (params.tag === 'none' || confirm('在页面上找到{{' + re_result[1] + '}}\n单击确定以移除，或单击取消以取消操作。')) {
@@ -1186,11 +1178,9 @@ Twinkle.protect.callbacks = {
 			if (/^\s*#(?:redirect|重定向|重新導向)/i.test(text)) {
 				// redirect page
 				// Only tag if no {{rcat shell}} is found
-				if (
-					!text.match(
-						/{{(?:Redirect[ _]category shell|Rcat[ _]shell|This[ _]is a redirect|多种类型重定向|多種類型重定向|多種類型重新導向|多种类型重新导向|R0|其他重定向|RCS|Redirect[ _]shell)/i
-					)
-				) {
+				if (!text.match(
+					/{{(?:Redirect[ _]category shell|Rcat[ _]shell|This[ _]is a redirect|多种类型重定向|多種類型重定向|多種類型重新導向|多种类型重新导向|R0|其他重定向|RCS|Redirect[ _]shell)/i
+				)) {
 					text = text.replace(/#(?:redirect|重定向|重新導向) ?(\[\[.*?\]\])(.*)/i, '#REDIRECT $1$2\n\n{{' + tag + '}}');
 				} else {
 					Morebits.status.info('已存在Redirect category shell', '没什么可做的');
@@ -1220,7 +1210,7 @@ Twinkle.protect.callbacks = {
 			summary: summary
 		};
 	},
-	taggingPage: function (protectedPage) {
+	taggingPage: (protectedPage) => {
 		const params = protectedPage.getCallbackParameters();
 		const text = protectedPage.getPageText();
 		const newVersion = Twinkle.protect.callbacks.getTaggedPage(params, text);
@@ -1238,7 +1228,7 @@ Twinkle.protect.callbacks = {
 		protectedPage.save();
 	},
 
-	fileRequest: function (rppPage) {
+	fileRequest: (rppPage) => {
 		const params = rppPage.getCallbackParameters();
 		let text = rppPage.getPageText();
 		const statusElement = rppPage.getStatusElement();
@@ -1298,7 +1288,7 @@ Twinkle.protect.callbacks = {
 		rppPage.setChangeTags(Twinkle.changeTags);
 		rppPage.setPageText(text);
 		rppPage.setCreateOption('recreate');
-		rppPage.save(function () {
+		rppPage.save(() => {
 			// Watch the page being requested
 			const watchPref = Twinkle.getPref('watchRequestedPages');
 			// action=watch has no way to rely on user preferences (T262912), so we do it manually.
@@ -1311,7 +1301,7 @@ Twinkle.protect.callbacks = {
 					titles: mw.config.get('wgPageName'),
 					token: mw.user.tokens.get('watchToken')
 				};
-					// Only add the expiry if page is unwatched or already temporarily watched
+				// Only add the expiry if page is unwatched or already temporarily watched
 				if (Twinkle.protect.watched !== true && watchPref !== 'default' && watchPref !== 'yes') {
 					watch_query.expiry = watchPref;
 				}
@@ -1320,7 +1310,7 @@ Twinkle.protect.callbacks = {
 		});
 	},
 
-	closeRequest: function (rppPage) {
+	closeRequest: (rppPage) => {
 		const params = rppPage.getCallbackParameters();
 		let text = rppPage.getPageText();
 		const statusElement = rppPage.getStatusElement();
@@ -1332,8 +1322,7 @@ Twinkle.protect.callbacks = {
 			return;
 		}
 
-		let sectionText,
-			expiryText = '';
+		let sectionText, expiryText = '';
 		if (params.type === 'unprotect') {
 			sectionText = sections[1];
 		} else {
@@ -1419,11 +1408,11 @@ Twinkle.protect.callbacks = {
 	}
 };
 
-Twinkle.protect.formatProtectionDescription = function (protectionLevels) {
+Twinkle.protect.formatProtectionDescription = (protectionLevels) => {
 	const protectionNode = [];
 
 	if (!$.isEmptyObject(protectionLevels)) {
-		$.each(protectionLevels, function (type, settings) {
+		$.each(protectionLevels, (type, settings) => {
 			let label;
 			switch (type) {
 				case 'edit':
