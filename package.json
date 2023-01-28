@@ -15,7 +15,8 @@
 		"lint:fix": "eslint . --fix && stylelint src/*.css --fix",
 		"babel": "babel -d dist src",
 		"prettier": "npx prettier --write . && npm run lint:fix",
-		"deploy": "node scripts/deploy.js"
+		"deploy": "node scripts/deploy.js",
+		"deploy:usepage": "node scripts/deploy_up.js"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.20.2",

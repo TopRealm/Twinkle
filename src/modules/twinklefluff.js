@@ -173,7 +173,11 @@ Twinkle.fluff.addLinks = {
 		if (mw.config.exists('wgRelevantUserName')) {
 			// Get the username these contributions are for
 			const username = mw.config.get('wgRelevantUserName');
-			if (Twinkle.getPref('showRollbackLinks').indexOf('contribs') !== -1 || mw.config.get('wgUserName') !== username && Twinkle.getPref('showRollbackLinks').indexOf('others') !== -1 || mw.config.get('wgUserName') === username && Twinkle.getPref('showRollbackLinks').indexOf('mine') !== -1) {
+			if (
+				Twinkle.getPref('showRollbackLinks').indexOf('contribs') !== -1 ||
+					(mw.config.get('wgUserName') !== username && Twinkle.getPref('showRollbackLinks').indexOf('others') !== -1) ||
+					(mw.config.get('wgUserName') === username && Twinkle.getPref('showRollbackLinks').indexOf('mine') !== -1)
+			) {
 				const $list = $('#mw-content-text').find('ul li:has(span.mw-uctop):has(.mw-changeslist-diff)');
 				$list.each(function (key, current) {
 					// revid is also available in the href of both
@@ -296,7 +300,11 @@ Twinkle.fluff.addLinks = {
 			// Not latest revision, add [restore this revision] link to newer revision
 			const newTitle = document.getElementById('mw-diff-ntitle1').parentNode;
 			newTitle.insertBefore(Twinkle.fluff.linkBuilder.restoreThisRevisionLink('wgDiffNewId'), newTitle.firstChild);
-		} else if (Twinkle.getPref('showRollbackLinks').indexOf('diff') !== -1 && mw.config.get('wgDiffOldId') && (mw.config.get('wgDiffOldId') !== mw.config.get('wgDiffNewId') || document.getElementById('differences-prevlink'))) {
+		} else if (
+			Twinkle.getPref('showRollbackLinks').indexOf('diff') !== -1 &&
+				mw.config.get('wgDiffOldId') &&
+				(mw.config.get('wgDiffOldId') !== mw.config.get('wgDiffNewId') || document.getElementById('differences-prevlink'))
+		) {
 			// Normally .mw-userlink is a link, but if the
 			// username is hidden, it will be a span with
 			// .history-deleted as well. When a sysop views the
@@ -328,10 +336,12 @@ Twinkle.fluff.addLinks = {
 };
 Twinkle.fluff.disableLinks = function disablelinks(parentNode) {
 	// Array.from not available in IE11 :(
-	$(parentNode).children().each(function (_ix, node) {
-		node.innerHTML = node.textContent; // Feels like cheating
-		$(node).css('font-weight', 'normal').css('color', 'darkgray');
-	});
+	$(parentNode)
+		.children()
+		.each(function (_ix, node) {
+			node.innerHTML = node.textContent; // Feels like cheating
+			$(node).css('font-weight', 'normal').css('color', 'darkgray');
+		});
 };
 Twinkle.fluff.revert = function revertPage(type, vandal, rev, page) {
 	const pagename = page || mw.config.get('wgPageName');
@@ -431,7 +441,7 @@ Twinkle.fluff.callbacks = {
 			minor: Twinkle.getPref('markRevertedPagesAsMinor').indexOf('torev') !== -1 ? true : undefined,
 			format: 'json'
 		};
-		// Handle watching, possible expiry
+			// Handle watching, possible expiry
 		if (Twinkle.getPref('watchRevertedPages').indexOf('torev') !== -1) {
 			const watchOrExpiry = Twinkle.getPref('watchRevertedExpiry');
 			if (!watchOrExpiry || watchOrExpiry === 'no') {
@@ -473,7 +483,11 @@ Twinkle.fluff.callbacks = {
 		const top = revs[0];
 		const lastuser = top.user;
 		if (lastrevid < params.revid) {
-			Morebits.status.error('错误', [ '从服务器获取的最新修订版本ID ', Morebits.htmlNode('strong', lastrevid), ' 小于目前所显示的修订版本ID。这可能意味着当前修订版本已被删除、服务器延迟、或抓取到的信息有错误。取消。' ]);
+			Morebits.status.error('错误', [
+				'从服务器获取的最新修订版本ID ',
+				Morebits.htmlNode('strong', lastrevid),
+				' 小于目前所显示的修订版本ID。这可能意味着当前修订版本已被删除、服务器延迟、或抓取到的信息有错误。取消。'
+			]);
 			return;
 		}
 
@@ -494,10 +508,14 @@ Twinkle.fluff.callbacks = {
 						Morebits.status.warn('提示', [ '最新修订版本由 ', Morebits.htmlNode('strong', userNorm), ' 做出，但我们还是不回退了。' ]);
 						return;
 				}
-			} else if (params.type === 'vand' &&
-        // Okay to test on user since it will either fail or sysop will correctly access it
-        // Besides, none of the trusted bots are going to be revdel'd
-        Twinkle.fluff.trustedBots.indexOf(top.getAttribute('user')) !== -1 && revs.length > 1 && revs[1].getAttribute('revid') === params.revid) {
+			} else if (
+				params.type === 'vand' &&
+					// Okay to test on user since it will either fail or sysop will correctly access it
+					// Besides, none of the trusted bots are going to be revdel'd
+					Twinkle.fluff.trustedBots.indexOf(top.getAttribute('user')) !== -1 &&
+					revs.length > 1 &&
+					revs[1].getAttribute('revid') === params.revid
+			) {
 				Morebits.status.info('信息', [ '最新修订版本由 ', Morebits.htmlNode('strong', lastuser), '，一个可信的机器人做出，但之前的版本被认为是破坏，继续回退操作。' ]);
 				index = 2;
 			} else {
@@ -548,7 +566,11 @@ Twinkle.fluff.callbacks = {
 			}
 		}
 		if (!found) {
-			statelem.error([ '未找到之前的修订版本，可能 ', Morebits.htmlNode('strong', userNorm), ' 是唯一贡献者，或这个用户连续做出了超过 ' + mw.language.convertNumber(Twinkle.getPref('revertMaxRevisions')) + ' 次编辑。' ]);
+			statelem.error([
+				'未找到之前的修订版本，可能 ',
+				Morebits.htmlNode('strong', userNorm),
+				' 是唯一贡献者，或这个用户连续做出了超过 ' + mw.language.convertNumber(Twinkle.getPref('revertMaxRevisions')) + ' 次编辑。'
+			]);
 			return;
 		}
 		if (!count) {
@@ -568,7 +590,13 @@ Twinkle.fluff.callbacks = {
 		params.goodid = good_revision.revid;
 		params.gooduser = good_revision.user;
 		params.gooduserHidden = !!good_revision.userhidden;
-		statelem.status([ Morebits.htmlNode('strong', mw.language.convertNumber(count)), ' 个修订版本之前由 ', Morebits.htmlNode('strong', params.gooduserHidden ? Twinkle.fluff.hiddenName : params.gooduser), ' 做出的修订版本 ', Morebits.htmlNode('strong', params.goodid) ]);
+		statelem.status([
+			Morebits.htmlNode('strong', mw.language.convertNumber(count)),
+			' 个修订版本之前由 ',
+			Morebits.htmlNode('strong', params.gooduserHidden ? Twinkle.fluff.hiddenName : params.gooduser),
+			' 做出的修订版本 ',
+			Morebits.htmlNode('strong', params.goodid)
+		]);
 		let summary, extra_summary;
 		switch (params.type) {
 			case 'agf':
@@ -582,7 +610,10 @@ Twinkle.fluff.callbacks = {
 				summary = Twinkle.fluff.formatSummary('回退$USER做出的出于善意的编辑', params.userHidden ? null : params.user, extra_summary);
 				break;
 			case 'vand':
-				summary = Twinkle.fluff.formatSummary('回退$USER做出的' + params.count + '次编辑，到由' + (params.gooduserHidden ? Twinkle.fluff.hiddenName : params.gooduser) + '做出的最后修订版本 ', params.userHidden ? null : params.user);
+				summary = Twinkle.fluff.formatSummary(
+					'回退$USER做出的' + params.count + '次编辑，到由' + (params.gooduserHidden ? Twinkle.fluff.hiddenName : params.gooduser) + '做出的最后修订版本 ',
+					params.userHidden ? null : params.user
+				);
 				break;
 			case 'norm':
 				/* falls through */
@@ -599,9 +630,13 @@ Twinkle.fluff.callbacks = {
 				summary = Twinkle.fluff.formatSummary('回退$USER做出的' + params.count + '次编辑', params.userHidden ? null : params.user, extra_summary);
 				break;
 		}
-		if ((Twinkle.getPref('confirmOnFluff') ||
-      // Mobile user agent taken from [[en:MediaWiki:Gadget-confirmationRollback-mobile.js]]
-      Twinkle.getPref('confirmOnMobileFluff') && /Android|webOS|iPhone|iPad|iPod|BlackBerry|Mobile|Opera Mini/i.test(navigator.userAgent)) && !userHasAlreadyConfirmedAction && !confirm('回退页面：您确定吗？')) {
+		if (
+			(Twinkle.getPref('confirmOnFluff') ||
+					// Mobile user agent taken from [[en:MediaWiki:Gadget-confirmationRollback-mobile.js]]
+					(Twinkle.getPref('confirmOnMobileFluff') && /Android|webOS|iPhone|iPad|iPod|BlackBerry|Mobile|Opera Mini/i.test(navigator.userAgent))) &&
+				!userHasAlreadyConfirmedAction &&
+				!confirm('回退页面：您确定吗？')
+		) {
 			statelem.error('用户取消操作。');
 			return;
 		}
@@ -632,7 +667,7 @@ Twinkle.fluff.callbacks = {
 			minor: Twinkle.getPref('markRevertedPagesAsMinor').indexOf(params.type) !== -1 ? true : undefined,
 			format: 'json'
 		};
-		// Handle watching, possible expiry
+			// Handle watching, possible expiry
 		if (Twinkle.getPref('watchRevertedPages').indexOf(params.type) !== -1) {
 			const watchOrExpiry = Twinkle.getPref('watchRevertedExpiry');
 			if (!watchOrExpiry || watchOrExpiry === 'no') {
@@ -690,7 +725,11 @@ Twinkle.fluff.callbacks = {
 					case 'window':
 						/* falls through */
 					default:
-						window.open(mw.util.getUrl('', windowQuery), window.name === 'twinklewarnwindow' ? '_blank' : 'twinklewarnwindow', 'location=no,toolbar=no,status=no,directories=no,scrollbars=yes,width=1200,height=800');
+						window.open(
+							mw.util.getUrl('', windowQuery),
+							window.name === 'twinklewarnwindow' ? '_blank' : 'twinklewarnwindow',
+							'location=no,toolbar=no,status=no,directories=no,scrollbars=yes,width=1200,height=800'
+						);
 						break;
 				}
 			}

@@ -50,7 +50,8 @@ Twinkle.changeTags = 'Twinkle';
 Twinkle.summaryAd = '（[[H:TW|Twinkle]]）';
 
 // Various hatnote templates, used when tagging (csd/xfd/tag/protect) to
-Twinkle.hatnoteRegex = '(?:Short[ _]description)|(?:Rellink|Hatnote|HAT)|(?:Main|细节|細節|Main[ _]articles|主条目|主條目|Hurricane[ _]main|条目|條目|主|頁面|页面|主頁面|主页面|主頁|主页|主題目|主题目|Main[ _]article|AP)|(?:Wrongtitle|Correct[ _]title)|(?:主条目消歧义|主條目消歧義|消歧义链接|消歧義鏈接|消歧義連結|消连|消連|消歧义连结|DisambLink|Noteref|Dablink)|(?:Distinguish|不是|Not|提示|混淆|分別|分别|區別|区别|本条目的主题不是|本條目的主題不是|本条目主题不是|本條目主題不是|条目主题不是|條目主題不是|主题不是|主題不是|Confused|区分|區分|Confusion|Confuse|RedirectNOT|Misspelling)|(?:Distinguish2|SelfDistinguish|Not2|不是2)|(?:For)|(?:Details|Further|See|另见|另見|More|相關條目|相关条目|Detail|见|見|更多资料|更多資料|Further[ _]information|更多资讯|更多資訊|More[ _]information|更多信息)|(?:Selfref)|(?:About|Otheruses4|关于|關於)|(?:Other[ _]uses|Otheruse|条目消歧义|條目消歧義|他用|Otheruses)|(?:Other[ _]uses list|Otheruselist|主條目消歧義列表|主条目消歧义列表|Otheruseslist|Aboutlist|About[ _]list|Otheruses[ _]list)|(?:Redirect|重定向至此|Redirects[ _]here|Redirect[ _]to)|(?:Redirect2|主條目消歧義2|主条目消歧义2|Redir|重定向至此2)|(?:Redirect3)|(?:Redirect4)|(?:Redirect-distinguish)|(?:Redirect-synonym)|(?:Redirect-multi)|(?:Seealso|参看|參看|See[ _]also|参见|參見|Also)|(?:See[ _]also2|Seealso2|不轉換參見|不转换参见)|(?:Other[ _]places)|(?:Contrast|對比|对比)';
+Twinkle.hatnoteRegex =
+		'(?:Short[ _]description)|(?:Rellink|Hatnote|HAT)|(?:Main|细节|細節|Main[ _]articles|主条目|主條目|Hurricane[ _]main|条目|條目|主|頁面|页面|主頁面|主页面|主頁|主页|主題目|主题目|Main[ _]article|AP)|(?:Wrongtitle|Correct[ _]title)|(?:主条目消歧义|主條目消歧義|消歧义链接|消歧義鏈接|消歧義連結|消连|消連|消歧义连结|DisambLink|Noteref|Dablink)|(?:Distinguish|不是|Not|提示|混淆|分別|分别|區別|区别|本条目的主题不是|本條目的主題不是|本条目主题不是|本條目主題不是|条目主题不是|條目主題不是|主题不是|主題不是|Confused|区分|區分|Confusion|Confuse|RedirectNOT|Misspelling)|(?:Distinguish2|SelfDistinguish|Not2|不是2)|(?:For)|(?:Details|Further|See|另见|另見|More|相關條目|相关条目|Detail|见|見|更多资料|更多資料|Further[ _]information|更多资讯|更多資訊|More[ _]information|更多信息)|(?:Selfref)|(?:About|Otheruses4|关于|關於)|(?:Other[ _]uses|Otheruse|条目消歧义|條目消歧義|他用|Otheruses)|(?:Other[ _]uses list|Otheruselist|主條目消歧義列表|主条目消歧义列表|Otheruseslist|Aboutlist|About[ _]list|Otheruses[ _]list)|(?:Redirect|重定向至此|Redirects[ _]here|Redirect[ _]to)|(?:Redirect2|主條目消歧義2|主条目消歧义2|Redir|重定向至此2)|(?:Redirect3)|(?:Redirect4)|(?:Redirect-distinguish)|(?:Redirect-synonym)|(?:Redirect-multi)|(?:Seealso|参看|參看|See[ _]also|参见|參見|Also)|(?:See[ _]also2|Seealso2|不轉換參見|不转换参见)|(?:Other[ _]places)|(?:Contrast|對比|对比)';
 Twinkle.initCallbacks = [];
 /**
  * Adds a callback to execute when Twinkle has loaded.
@@ -281,7 +282,7 @@ Twinkle.addPortlet = (navigation, id, text, type, nextnodeid) => {
 
 	// verify/normalize input
 	const skin = mw.config.get('skin');
-	if (skin !== 'vector' && skin !== 'vector-2022' || navigation !== 'left-navigation' && navigation !== 'right-navigation') {
+	if ((skin !== 'vector' && skin !== 'vector-2022') || (navigation !== 'left-navigation' && navigation !== 'right-navigation')) {
 		type = null; // menu supported only in vector's #left-navigation & #right-navigation
 	}
 
@@ -384,10 +385,12 @@ Twinkle.addPortletLink = (task, text, id, tooltip) => {
 	const link = mw.util.addPortletLink(Twinkle.getPref('portletId'), typeof task === 'string' ? task : '#', text, id, tooltip);
 	$('.client-js .skin-vector #p-cactions').css('margin-right', 'initial');
 	if (typeof task === 'function') {
-		$(link).find('a').on('click', (ev) => {
-			task();
-			ev.preventDefault();
-		});
+		$(link)
+			.find('a')
+			.on('click', (ev) => {
+				task();
+				ev.preventDefault();
+			});
 	}
 	if ($.collapsibleTabs) {
 		$.collapsibleTabs.handleResize();
@@ -398,48 +401,52 @@ Twinkle.addPortletLink = (task, text, id, tooltip) => {
 /**
  * **************** General initialization code ****************
  */
-const scriptpathbefore = mw.util.wikiScript('index') + '?title=', scriptpathafter = '&action=raw&ctype=text/javascript&happy=yes';
+const scriptpathbefore = mw.util.wikiScript('index') + '?title=',
+	scriptpathafter = '&action=raw&ctype=text/javascript&happy=yes';
 
 // Retrieve the user's Twinkle preferences
 $.ajax({
 	url: scriptpathbefore + 'User:' + encodeURIComponent(mw.config.get('wgUserName')) + '/twinkleoptions.js' + scriptpathafter,
 	dataType: 'text'
-}).fail(() => {
-	mw.notify('未能加载您的Twinkle参数设置', {
-		type: 'error'
-	});
-}).done((optionsText) => {
-	// Quick pass if user has no options
-	if (optionsText === '' || optionsText === ' ') {
-		return;
-	}
-
-	// Twinkle options are basically a JSON object with some comments. Strip those:
-	const optionsText_nowiki = optionsText.replace(/^\s+|^\n$|\/(\*|\/)\s+?<\/?nowiki>\s+?(\*\/)?\n?/g, '');
-	const optionsText_nocomment = optionsText_nowiki.replace(/(?:^(?:\/\/[^\n]*\n)*\n*|(?:\/\/[^\n]*(?:\n|$))*$)/g, '');
-
-	// First version of options had some boilerplate code to make it eval-able -- strip that too. This part may become obsolete down the line.
-	const optionsText_nowindow = optionsText_nocomment.replace(/(?:^window.Twinkle.prefs = |;\n*$)/g, '');
-	try {
-		const options = JSON.parse(optionsText_nowindow);
-		if (options) {
-			if (options.twinkle || options.friendly) {
-				// Old preferences format
-				Twinkle.prefs = $.extend(options.twinkle, options.friendly);
-			} else {
-				Twinkle.prefs = options;
-			}
-			// v2 established after unification of Twinkle/Friendly objects
-			Twinkle.prefs.optionsVersion = Twinkle.prefs.optionsVersion || 1;
-		}
-	} catch (e) {
-		mw.notify('未能解析您的Twinkle参数设置', {
+})
+	.fail(() => {
+		mw.notify('未能加载您的Twinkle参数设置', {
 			type: 'error'
 		});
-	}
-}).always(() => {
-	$(Twinkle.load);
-});
+	})
+	.done((optionsText) => {
+		// Quick pass if user has no options
+		if (optionsText === '' || optionsText === ' ') {
+			return;
+		}
+
+		// Twinkle options are basically a JSON object with some comments. Strip those:
+		const optionsText_nowiki = optionsText.replace(/^\s+|^\n$|\/(\*|\/)\s+?<\/?nowiki>\s+?(\*\/)?\n?/g, '');
+		const optionsText_nocomment = optionsText_nowiki.replace(/(?:^(?:\/\/[^\n]*\n)*\n*|(?:\/\/[^\n]*(?:\n|$))*$)/g, '');
+
+		// First version of options had some boilerplate code to make it eval-able -- strip that too. This part may become obsolete down the line.
+		const optionsText_nowindow = optionsText_nocomment.replace(/(?:^window.Twinkle.prefs = |;\n*$)/g, '');
+		try {
+			const options = JSON.parse(optionsText_nowindow);
+			if (options) {
+				if (options.twinkle || options.friendly) {
+					// Old preferences format
+					Twinkle.prefs = $.extend(options.twinkle, options.friendly);
+				} else {
+					Twinkle.prefs = options;
+				}
+				// v2 established after unification of Twinkle/Friendly objects
+				Twinkle.prefs.optionsVersion = Twinkle.prefs.optionsVersion || 1;
+			}
+		} catch (e) {
+			mw.notify('未能解析您的Twinkle参数设置', {
+				type: 'error'
+			});
+		}
+	})
+	.always(() => {
+		$(Twinkle.load);
+	});
 
 // Developers: you can import custom Twinkle modules here
 // For example, mw.loader.load(scriptpathbefore + "User:UncleDouggie/morebits-test.js" + scriptpathafter);
@@ -477,7 +484,9 @@ Twinkle.load = () => {
 
 	// Increases text size in Twinkle dialogs, if so configured
 	if (Twinkle.getPref('dialogLargeFont')) {
-		mw.util.addCSS('.morebits-dialog-content, .morebits-dialog-footerlinks { font-size: 100% !important; } .morebits-dialog input, .morebits-dialog select, .morebits-dialog-content button { font-size: inherit !important; }');
+		mw.util.addCSS(
+			'.morebits-dialog-content, .morebits-dialog-footerlinks { font-size: 100% !important; } .morebits-dialog input, .morebits-dialog select, .morebits-dialog-content button { font-size: inherit !important; }'
+		);
 	}
 
 	// Hide the lingering space if the TW menu is empty

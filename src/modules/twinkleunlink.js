@@ -52,7 +52,17 @@ Twinkle.unlink.callback = (presetReason) => {
 	form.append({
 		type: 'div',
 		style: 'margin-bottom: 0.5em; font-style: normal;',
-		label: [ '这个工具可以取消所有指向该页的链接（“链入”）' + (fileSpace ? '，或通过加入<!-- -->注释标记隐藏所有对此文件的使用' : '') + '。例如：', linkTextBefore, '将会变成', linkTextAfter, '，', linkPlainBefore, '将会变成', linkPlainAfter, '。请小心使用。' ]
+		label: [
+			'这个工具可以取消所有指向该页的链接（“链入”）' + (fileSpace ? '，或通过加入<!-- -->注释标记隐藏所有对此文件的使用' : '') + '。例如：',
+			linkTextBefore,
+			'将会变成',
+			linkTextAfter,
+			'，',
+			linkPlainBefore,
+			'将会变成',
+			linkPlainAfter,
+			'。请小心使用。'
+		]
 	});
 	form.append({
 		type: 'input',
@@ -119,10 +129,15 @@ Twinkle.unlink.callback.evaluate = (event) => {
 	unlinker.run((pageName) => {
 		const qiuwen_page = new Morebits.wiki.page(pageName, '在页面“' + pageName + '”中取消链入');
 		qiuwen_page.setBotEdit(true); // unlink considered a floody operation
-		qiuwen_page.setCallbackParameters($.extend({
-			doBacklinks: input.backlinks.indexOf(pageName) !== -1,
-			doImageusage: input.imageusage.indexOf(pageName) !== -1
-		}, params));
+		qiuwen_page.setCallbackParameters(
+			$.extend(
+				{
+					doBacklinks: input.backlinks.indexOf(pageName) !== -1,
+					doImageusage: input.imageusage.indexOf(pageName) !== -1
+				},
+				params
+			)
+		);
 		qiuwen_page.load(Twinkle.unlink.callbacks.unlinkBacklinks);
 	});
 };
@@ -263,7 +278,8 @@ Twinkle.unlink.callbacks = {
 		let oldtext = pageobj.getPageText();
 		const params = pageobj.getCallbackParameters();
 		const wikiPage = new Morebits.wikitext.page(oldtext);
-		let summaryText = '', warningString = false;
+		let summaryText = '',
+			warningString = false;
 		let text;
 
 		// remove image usages

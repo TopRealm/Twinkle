@@ -40,26 +40,33 @@ Twinkle.talkback.callback = () => {
 	form.append({
 		type: 'radio',
 		name: 'tbtarget',
-		list: [ {
-			label: '回复：我的讨论页',
-			value: 'mytalk',
-			checked: 'true'
-		}, {
-			label: '回复：其他用户的讨论页',
-			value: 'usertalk'
-		}, {
-			label: '回复：其它页面',
-			value: 'other'
-		}, {
-			label: '邀请讨论',
-			value: 'see'
-		}, {
-			label: '通告板通知',
-			value: 'notice'
-		}, {
-			label: '“有新邮件”',
-			value: 'mail'
-		} ],
+		list: [
+			{
+				label: '回复：我的讨论页',
+				value: 'mytalk',
+				checked: 'true'
+			},
+			{
+				label: '回复：其他用户的讨论页',
+				value: 'usertalk'
+			},
+			{
+				label: '回复：其它页面',
+				value: 'other'
+			},
+			{
+				label: '邀请讨论',
+				value: 'see'
+			},
+			{
+				label: '通告板通知',
+				value: 'notice'
+			},
+			{
+				label: '“有新邮件”',
+				value: 'mail'
+			}
+		],
 		event: Twinkle.talkback.changeTarget
 	});
 	form.append({
@@ -144,7 +151,7 @@ Twinkle.talkback.changeTarget = (e) => {
 	root.previewer.closePreview();
 	switch (value) {
 		case 'talkback':
-		/* falls through */
+			/* falls through */
 		default:
 			work_area.append({
 				type: 'div',
@@ -345,13 +352,10 @@ Twinkle.talkback.callbacks = {
 				text = Morebits.string.safeReplace(Twinkle.talkback.noticeboards[input.noticeboard].text, '$SECTION', input.section);
 				break;
 			case 'mail':
-
 				text = '==' + Twinkle.getPref('mailHeading') + '==\n{{YGM|subject=' + input.section + '|ts=~~' + '~' + '~~}}';
 				if (input.message) {
-
 					text += '\n' + input.message + '  ~~' + '~~';
 				} else if (Twinkle.getPref('insertTalkbackSignature')) {
-
 					text += '\n~~' + '~~';
 				}
 				break;
@@ -364,10 +368,8 @@ Twinkle.talkback.callbacks = {
 				// talkback
 				text = '==' + Twinkle.getPref('talkbackHeading') + '==\n{{talkback|' + input.page + (input.section ? '|' + input.section : '') + '|ts=~~' + '~' + '~~}}';
 				if (input.message) {
-
 					text += '\n' + input.message + ' ~~' + '~~';
 				} else if (Twinkle.getPref('insertTalkbackSignature')) {
-
 					text += '\n~~' + '~~';
 				}
 		}

@@ -6,9 +6,9 @@ AzaToth 是该工具的原作者和维护者，也是`morebits.js`库小工具�
 
 ## 本代码库布局
 
-- `morebits.js`: Twinkle 和许多其他脚本所使用的中心库。包含与 MediaWiki API 交互的代码，显示表单和对话框，生成状态日志，并做其他各种有用的事情。这里的绝大部分代码都不是针对 Twinkle 的，请看文档（[1](https://wikimedia-gadgets.github.io/twinkle/Morebits.html)和[2](https://github.com/wikimedia-gadgets/twinkle/wiki/morebits))
-- `twinkle.js`: 一般的 Twinkle 专用代码，主要与偏好和在用户界面中公开 Twinkle 有关。重要的是，它包含了 Twinkle 的默认偏好集。
-- `modules`: 包含各个 Twinkle 模块。
+-   `morebits.js`: Twinkle 和许多其他脚本所使用的中心库。包含与 MediaWiki API 交互的代码，显示表单和对话框，生成状态日志，并做其他各种有用的事情。这里的绝大部分代码都不是针对 Twinkle 的，请看文档（[1](https://wikimedia-gadgets.github.io/twinkle/Morebits.html)和[2](https://github.com/wikimedia-gadgets/twinkle/wiki/morebits))
+-   `twinkle.js`: 一般的 Twinkle 专用代码，主要与偏好和在用户界面中公开 Twinkle 有关。重要的是，它包含了 Twinkle 的默认偏好集。
+-   `modules`: 包含各个 Twinkle 模块。
 
 [select2][]采用[MIT 许可证][select2license]。
 

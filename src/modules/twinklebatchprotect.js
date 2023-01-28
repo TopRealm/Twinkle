@@ -22,7 +22,12 @@
  */
 
 Twinkle.batchprotect = () => {
-	if (Morebits.userIsSysop && (mw.config.get('wgArticleId') > 0 && (mw.config.get('wgNamespaceNumber') === 2 || mw.config.get('wgNamespaceNumber') === 4) || mw.config.get('wgNamespaceNumber') === 14 || mw.config.get('wgCanonicalSpecialPageName') === 'Prefixindex')) {
+	if (
+		Morebits.userIsSysop &&
+			((mw.config.get('wgArticleId') > 0 && (mw.config.get('wgNamespaceNumber') === 2 || mw.config.get('wgNamespaceNumber') === 4)) ||
+				mw.config.get('wgNamespaceNumber') === 14 ||
+				mw.config.get('wgCanonicalSpecialPageName') === 'Prefixindex')
+	) {
 		Twinkle.addPortletLink(Twinkle.batchprotect.callback, '批保', 'tw-pbatch', '批量保护链出页面');
 	}
 };
@@ -38,13 +43,15 @@ Twinkle.batchprotect.callback = () => {
 	form.append({
 		type: 'checkbox',
 		event: Twinkle.protect.formevents.editmodify,
-		list: [ {
-			label: '修改编辑保护',
-			value: 'editmodify',
-			name: 'editmodify',
-			tooltip: '仅限现有页面。',
-			checked: true
-		} ]
+		list: [
+			{
+				label: '修改编辑保护',
+				value: 'editmodify',
+				name: 'editmodify',
+				tooltip: '仅限现有页面。',
+				checked: true
+			}
+		]
 	});
 	form.append({
 		type: 'select',
@@ -68,22 +75,26 @@ Twinkle.batchprotect.callback = () => {
 	form.append({
 		type: 'checkbox',
 		event: Twinkle.protect.formevents.movemodify,
-		list: [ {
-			label: '修改移动保护',
-			value: 'movemodify',
-			name: 'movemodify',
-			tooltip: '仅限现有页面。',
-			checked: true
-		} ]
+		list: [
+			{
+				label: '修改移动保护',
+				value: 'movemodify',
+				name: 'movemodify',
+				tooltip: '仅限现有页面。',
+				checked: true
+			}
+		]
 	});
 	form.append({
 		type: 'select',
 		name: 'movelevel',
 		label: '移动权限：',
 		event: Twinkle.protect.formevents.movelevel,
-		list: Twinkle.protect.protectionLevels.filter((level) =>
+		list: Twinkle.protect.protectionLevels.filter(
+			(level) =>
 			// Autoconfirmed is required for a move, redundant
-			level.value !== 'autoconfirmed')
+				level.value !== 'autoconfirmed'
+		)
 	});
 	form.append({
 		type: 'select',
@@ -104,13 +115,15 @@ Twinkle.batchprotect.callback = () => {
 			e.target.form.createexpiry.disabled = !e.target.checked || e.target.form.createlevel.value === 'all';
 			e.target.form.createlevel.style.color = e.target.form.createexpiry.style.color = e.target.checked ? '' : 'transparent';
 		},
-		list: [ {
-			label: '修改创建保护',
-			value: 'createmodify',
-			name: 'createmodify',
-			tooltip: '仅限不存在的页面。',
-			checked: true
-		} ]
+		list: [
+			{
+				label: '修改创建保护',
+				value: 'createmodify',
+				name: 'createmodify',
+				tooltip: '仅限不存在的页面。',
+				checked: true
+			}
+		]
 	});
 	form.append({
 		type: 'select',
@@ -170,79 +183,86 @@ Twinkle.batchprotect.callback = () => {
 	Morebits.status.init(statusdiv);
 	Window.display();
 	const statelem = new Morebits.status('抓取页面列表');
-	const qiuwen_api = new Morebits.wiki.api('加载中……', query, (apiobj) => {
-		const response = apiobj.getResponse();
-		const pages = response.query && response.query.pages || [];
-		const list = [];
-		pages.sort(Twinkle.sortByNamespace);
-		pages.forEach((page) => {
-			const metadata = [];
-			const missing = !!page.missing;
-			let editProt;
-			if (missing) {
-				metadata.push('页面不存在');
-				editProt = page.protection.filter((pr) => pr.type === 'create' && pr.level === 'sysop').pop();
-			} else {
-				if (page.redirect) {
-					metadata.push('重定向');
-				}
-				if (page.ns === 6) {
-					metadata.push('上传者：' + page.imageinfo[0].user);
-					metadata.push('最后编辑者：' + page.revisions[0].user);
+	const qiuwen_api = new Morebits.wiki.api(
+		'加载中……',
+		query,
+		(apiobj) => {
+			const response = apiobj.getResponse();
+			const pages = (response.query && response.query.pages) || [];
+			const list = [];
+			pages.sort(Twinkle.sortByNamespace);
+			pages.forEach((page) => {
+				const metadata = [];
+				const missing = !!page.missing;
+				let editProt;
+				if (missing) {
+					metadata.push('页面不存在');
+					editProt = page.protection.filter((pr) => pr.type === 'create' && pr.level === 'sysop').pop();
 				} else {
-					metadata.push(mw.language.convertNumber(page.revisions[0].size) + '字节');
+					if (page.redirect) {
+						metadata.push('重定向');
+					}
+					if (page.ns === 6) {
+						metadata.push('上传者：' + page.imageinfo[0].user);
+						metadata.push('最后编辑者：' + page.revisions[0].user);
+					} else {
+						metadata.push(mw.language.convertNumber(page.revisions[0].size) + '字节');
+					}
+					editProt = page.protection
+						.filter((pr) => {
+							return pr.type === 'edit' && pr.level === 'sysop';
+						})
+						.pop();
 				}
-				editProt = page.protection.filter((pr) => {
-					return pr.type === 'edit' && pr.level === 'sysop';
-				}).pop();
-			}
-			if (editProt) {
-				metadata.push((missing ? '白纸' : '') + '全保护' + (editProt.expiry === 'infinity' ? '（永久）' : '（' + new Morebits.date(editProt.expiry).calendar('utc') + ' (UTC)过期）'));
-			}
-			const title = page.title;
-			list.push({
-				label: title + (metadata.length ? ' (' + metadata.join('; ') + ')' : ''),
-				value: title,
-				checked: true,
-				style: editProt ? 'color:red' : ''
+				if (editProt) {
+					metadata.push((missing ? '白纸' : '') + '全保护' + (editProt.expiry === 'infinity' ? '（永久）' : '（' + new Morebits.date(editProt.expiry).calendar('utc') + ' (UTC)过期）'));
+				}
+				const title = page.title;
+				list.push({
+					label: title + (metadata.length ? ' (' + metadata.join('; ') + ')' : ''),
+					value: title,
+					checked: true,
+					style: editProt ? 'color:red' : ''
+				});
 			});
-		});
-		form.append({
-			type: 'header',
-			label: '待保护页面'
-		});
-		form.append({
-			type: 'button',
-			label: '全选',
-			event: (e) => {
-				$(Morebits.quickForm.getElements(e.target.form, 'pages')).prop('checked', true);
-			}
-		});
-		form.append({
-			type: 'button',
-			label: '全不选',
-			event: (e) => {
-				$(Morebits.quickForm.getElements(e.target.form, 'pages')).prop('checked', false);
-			}
-		});
-		form.append({
-			type: 'checkbox',
-			name: 'pages',
-			shiftClickSupport: true,
-			list: list
-		});
-		form.append({
-			type: 'submit'
-		});
-		const result = form.render();
-		Window.setContent(result);
+			form.append({
+				type: 'header',
+				label: '待保护页面'
+			});
+			form.append({
+				type: 'button',
+				label: '全选',
+				event: (e) => {
+					$(Morebits.quickForm.getElements(e.target.form, 'pages')).prop('checked', true);
+				}
+			});
+			form.append({
+				type: 'button',
+				label: '全不选',
+				event: (e) => {
+					$(Morebits.quickForm.getElements(e.target.form, 'pages')).prop('checked', false);
+				}
+			});
+			form.append({
+				type: 'checkbox',
+				name: 'pages',
+				shiftClickSupport: true,
+				list: list
+			});
+			form.append({
+				type: 'submit'
+			});
+			const result = form.render();
+			Window.setContent(result);
 
-		// Set defaults
-		result.editexpiry.value = '2 days';
-		result.moveexpiry.value = '2 days';
-		result.createexpiry.value = 'infinity';
-		Morebits.quickForm.getElements(result, '个页面').forEach(Twinkle.generateArrowLinks);
-	}, statelem);
+			// Set defaults
+			result.editexpiry.value = '2 days';
+			result.moveexpiry.value = '2 days';
+			result.createexpiry.value = 'infinity';
+			Morebits.quickForm.getElements(result, '个页面').forEach(Twinkle.generateArrowLinks);
+		},
+		statelem
+	);
 	qiuwen_api.post();
 };
 Twinkle.batchprotect.currentProtectCounter = 0;
@@ -278,10 +298,13 @@ Twinkle.batchprotect.callback.evaluate = (event) => {
 			format: 'json'
 		};
 		const qiuwen_api = new Morebits.wiki.api('正在检查页面“' + pageName + '”是否存在', query, Twinkle.batchprotect.callbacks.main, null, batchOperation.workerFailure);
-		qiuwen_api.params = $.extend({
-			page: pageName,
-			batchOperation: batchOperation
-		}, input);
+		qiuwen_api.params = $.extend(
+			{
+				page: pageName,
+				batchOperation: batchOperation
+			},
+			input
+		);
 		qiuwen_api.post();
 	});
 };

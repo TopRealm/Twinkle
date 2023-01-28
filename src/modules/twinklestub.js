@@ -26,7 +26,10 @@ Twinkle.stub = function friendlytag() {
 	if (Morebits.isPageRedirect()) {
 		// Skip
 		// article/draft article tagging
-	} else if ((mw.config.get('wgNamespaceNumber') === 0 || mw.config.get('wgNamespaceNumber') === 118) && mw.config.get('wgCurRevisionId') || Morebits.pageNameNorm === Twinkle.getPref('sandboxPage')) {
+	} else if (
+		((mw.config.get('wgNamespaceNumber') === 0 || mw.config.get('wgNamespaceNumber') === 118) && mw.config.get('wgCurRevisionId')) ||
+			Morebits.pageNameNorm === Twinkle.getPref('sandboxPage')
+	) {
 		Twinkle.stub.mode = '条目';
 		Twinkle.addPortletLink(Twinkle.stub.callback, '小作品', 'friendly-tag', '标记小作品');
 	}
@@ -42,12 +45,14 @@ Twinkle.stub.callback = function friendlytagCallback() {
 	if (document.getElementsByClassName('patrollink').length) {
 		form.append({
 			type: 'checkbox',
-			list: [ {
-				label: '标记页面为已巡查',
-				value: 'patrolPage',
-				name: 'patrolPage',
-				checked: Twinkle.getPref('markStubbedPagesAsPatrolled')
-			} ]
+			list: [
+				{
+					label: '标记页面为已巡查',
+					value: 'patrolPage',
+					name: 'patrolPage',
+					checked: Twinkle.getPref('markStubbedPagesAsPatrolled')
+				}
+			]
 		});
 	}
 	switch (Twinkle.stub.mode) {
@@ -60,17 +65,20 @@ Twinkle.stub.callback = function friendlytagCallback() {
 				label: '查看列表：',
 				tooltip: '您可以在Twinkle参数设置（H:TW/PREF）中更改此项。',
 				event: Twinkle.stub.updateSortOrder,
-				list: [ {
-					type: 'option',
-					value: 'cat',
-					label: '按类型',
-					selected: Twinkle.getPref('stubArticleSortOrder') === 'cat'
-				}, {
-					type: 'option',
-					value: 'alpha',
-					label: '按字母',
-					selected: Twinkle.getPref('stubArticleSortOrder') === 'alpha'
-				} ]
+				list: [
+					{
+						type: 'option',
+						value: 'cat',
+						label: '按类型',
+						selected: Twinkle.getPref('stubArticleSortOrder') === 'cat'
+					},
+					{
+						type: 'option',
+						value: 'alpha',
+						label: '按字母',
+						selected: Twinkle.getPref('stubArticleSortOrder') === 'alpha'
+					}
+				]
 			});
 			form.append({
 				type: 'div',
@@ -258,16 +266,15 @@ Twinkle.stub.article.tags = {
 // Tags should be in alphabetical order within the categories
 // Add new categories with discretion - the list is long enough as is!
 
-/* eslint-disable quote-props */
 Twinkle.stub.article.tagCategories = {
-	'通用模板': [ 'stub', 'expand list' ],
-	'国家和地理': [ 'asia-stub', 'europe-stub', 'france-geo-stub', 'geo-stub', 'JP-stub', 'switzerland-stub', 'UK-stub', 'US-bio-stub', 'US-geo-stub', 'US-stub' ],
-	'杂项': [ 'food-stub', 'hist-stub', 'mil-stub', 'politic-stub', 'religion-stub', 'transp-stub' ],
-	'人物': [ 'actor-stub', 'bio-stub', 'US-bio-stub' ],
-	'科学': [ 'biology-stub', 'chem-stub', 'math-stub', 'med-stub', 'physics-stub', 'science-stub', 'weather-stub' ],
-	'体育': [ 'sport-stub' ],
-	'技术': [ 'tech-stub' ],
-	'艺术': [ 'actor-stub', 'lit-stub', 'movie-stub', 'music-stub', 'TV-stub' ]
+	通用模板: [ 'stub', 'expand list' ],
+	国家和地理: [ 'asia-stub', 'europe-stub', 'france-geo-stub', 'geo-stub', 'JP-stub', 'switzerland-stub', 'UK-stub', 'US-bio-stub', 'US-geo-stub', 'US-stub' ],
+	杂项: [ 'food-stub', 'hist-stub', 'mil-stub', 'politic-stub', 'religion-stub', 'transp-stub' ],
+	人物: [ 'actor-stub', 'bio-stub', 'US-bio-stub' ],
+	科学: [ 'biology-stub', 'chem-stub', 'math-stub', 'med-stub', 'physics-stub', 'science-stub', 'weather-stub' ],
+	体育: [ 'sport-stub' ],
+	技术: [ 'tech-stub' ],
+	艺术: [ 'actor-stub', 'lit-stub', 'movie-stub', 'music-stub', 'TV-stub' ]
 };
 /* eslint-enable quote-props */
 

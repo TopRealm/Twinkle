@@ -36,13 +36,15 @@ Twinkle.image.callback = () => {
 	const form = new Morebits.quickForm(Twinkle.image.callback.evaluate);
 	form.append({
 		type: 'checkbox',
-		list: [ {
-			label: '通知上传者',
-			value: 'notify',
-			name: 'notify',
-			tooltip: '如果您在标记同一用户的很多文件，请取消此复选框以避免发送过多消息。',
-			checked: Twinkle.getPref('notifyUserOnDeli')
-		} ]
+		list: [
+			{
+				label: '通知上传者',
+				value: 'notify',
+				name: 'notify',
+				tooltip: '如果您在标记同一用户的很多文件，请取消此复选框以避免发送过多消息。',
+				checked: Twinkle.getPref('notifyUserOnDeli')
+			}
+		]
 	});
 	const field = form.append({
 		type: 'field',
@@ -52,36 +54,44 @@ Twinkle.image.callback = () => {
 		type: 'radio',
 		name: 'type',
 		event: Twinkle.image.callback.choice,
-		list: [ {
-			label: '来源不明（CSD F1）',
-			value: 'no source',
-			checked: true,
-			tooltip: '上传后3天内仍然来源不明、著作权不明'
-		}, {
-			label: '著作权不明（CSD F1）',
-			value: 'no license',
-			tooltip: '上传后3天内仍著作权情况不明'
-		}, {
-			label: '来源、著作权均不明（CSD F1）',
-			value: 'no source no license',
-			tooltip: '上传后3天内仍然来源不明、著作权不明'
-		}, {
-			label: '其他来源找到的文件（CSD F1）',
-			value: 'no permission',
-			tooltip: '上传者宣称拥有，而在其他来源找到的文件'
-		}, {
-			label: '无法找到作者授权的文件（CSD F1）',
-			value: 'no permission',
-			tooltip: '文件宣称由某作者依据某自由著作权协议发布，但找不到该自由协议的声明'
-		}, {
-			label: '其他明显侵权的文件（CSD F1）',
-			value: 'no permission',
-			tooltip: '其他明显侵权的文件'
-		}, {
-			label: '重复且不再使用的文件（CSD F2）',
-			value: 'duplicate',
-			tooltip: '包括以下情况：与现有文件完全相同（或与现有文件内容一致但尺寸较小），且没有客观需要（如某些场合需使用小尺寸图片）的文件；被更加清晰的文件、SVG格式文件所取代的文件。'
-		} ]
+		list: [
+			{
+				label: '来源不明（CSD F1）',
+				value: 'no source',
+				checked: true,
+				tooltip: '上传后3天内仍然来源不明、著作权不明'
+			},
+			{
+				label: '著作权不明（CSD F1）',
+				value: 'no license',
+				tooltip: '上传后3天内仍著作权情况不明'
+			},
+			{
+				label: '来源、著作权均不明（CSD F1）',
+				value: 'no source no license',
+				tooltip: '上传后3天内仍然来源不明、著作权不明'
+			},
+			{
+				label: '其他来源找到的文件（CSD F1）',
+				value: 'no permission',
+				tooltip: '上传者宣称拥有，而在其他来源找到的文件'
+			},
+			{
+				label: '无法找到作者授权的文件（CSD F1）',
+				value: 'no permission',
+				tooltip: '文件宣称由某作者依据某自由著作权协议发布，但找不到该自由协议的声明'
+			},
+			{
+				label: '其他明显侵权的文件（CSD F1）',
+				value: 'no permission',
+				tooltip: '其他明显侵权的文件'
+			},
+			{
+				label: '重复且不再使用的文件（CSD F2）',
+				value: 'duplicate',
+				tooltip: '包括以下情况：与现有文件完全相同（或与现有文件内容一致但尺寸较小），且没有客观需要（如某些场合需使用小尺寸图片）的文件；被更加清晰的文件、SVG格式文件所取代的文件。'
+			}
+		]
 	});
 	form.append({
 		type: 'div',
@@ -112,20 +122,24 @@ Twinkle.image.callback.choice = (event) => {
 		case 'no source':
 			work_area.append({
 				type: 'checkbox',
-				list: [ {
-					label: '非自由版权文件',
-					name: 'non_free'
-				} ]
+				list: [
+					{
+						label: '非自由版权文件',
+						name: 'non_free'
+					}
+				]
 			});
-		/* falls through */
+			/* falls through */
 		case 'no license':
 			work_area.append({
 				type: 'checkbox',
-				list: [ {
-					name: 'derivative',
-					label: '未知来源的媒体衍生物',
-					tooltip: '文件是若干个未指明来源媒体的衍生物'
-				} ]
+				list: [
+					{
+						name: 'derivative',
+						label: '未知来源的媒体衍生物',
+						tooltip: '文件是若干个未指明来源媒体的衍生物'
+					}
+				]
 			});
 			break;
 		case 'no permission':
@@ -160,11 +174,14 @@ Twinkle.image.callback.evaluate = (event) => {
 	}
 	const lognomination = Twinkle.getPref('logSpeedyNominations') && Twinkle.getPref('noLogOnSpeedyNomination').indexOf(csdcrit.toLowerCase()) === -1;
 	const templatename = input.derivative ? 'dw ' + input.type : input.type;
-	const params = $.extend({
-		templatename: templatename,
-		normalized: csdcrit,
-		lognomination: lognomination
-	}, input);
+	const params = $.extend(
+		{
+			templatename: templatename,
+			normalized: csdcrit,
+			lognomination: lognomination
+		},
+		input
+	);
 	Morebits.simpleWindow.setButtonsEnabled(false);
 	Morebits.status.init(event.target);
 	Morebits.wiki.actionCompleted.redirect = mw.config.get('wgPageName');
@@ -208,7 +225,7 @@ Twinkle.image.callbacks = {
 				break;
 			default:
 				break;
-			// doesn't matter
+				// doesn't matter
 		}
 
 		tag += '|help=off}}\n';
@@ -250,7 +267,11 @@ Twinkle.image.callbacks = {
 	},
 	addToLog: (params, initialContrib) => {
 		const usl = new Morebits.userspaceLogger(Twinkle.getPref('speedyLogPageName'));
-		usl.initialText = '这是该用户使用[[H:TW|Twinkle]]的速删模块做出的[[QW:CSD|快速删除]]提名列表。\n\n如果您不再想保留此日志，请在[[' + Twinkle.getPref('configPage') + '|参数设置]]中关掉，并使用[[QW:O1|CSD O1]]提交快速删除。' + (Morebits.userIsSysop ? '\n\n此日志并不记录用Twinkle直接执行的删除。' : '');
+		usl.initialText =
+				'这是该用户使用[[H:TW|Twinkle]]的速删模块做出的[[QW:CSD|快速删除]]提名列表。\n\n如果您不再想保留此日志，请在[[' +
+				Twinkle.getPref('configPage') +
+				'|参数设置]]中关掉，并使用[[QW:O1|CSD O1]]提交快速删除。' +
+				(Morebits.userIsSysop ? '\n\n此日志并不记录用Twinkle直接执行的删除。' : '');
 		const formatParamLog = (normalize, csdparam, input) => {
 			if (normalize === 'F5' && csdparam === 'replacement') {
 				input = '[[:' + input + ']]';
@@ -261,7 +282,18 @@ Twinkle.image.callbacks = {
 
 		// If a logged file is deleted but exists on commons, the wikilink will be blue, so provide a link to the log
 		const fileLogLink = ' ([{{fullurl:Special:Log|page=' + mw.util.wikiUrlencode(mw.config.get('wgPageName')) + '}} log])';
-		let appendText = '# [[:' + Morebits.pageNameNorm + ']]' + fileLogLink + ': DI [[QW:CSD#' + params.normalized.toUpperCase() + '|CSD ' + params.normalized.toUpperCase() + ']] ({{tl|di-' + params.templatename + '}})';
+		let appendText =
+				'# [[:' +
+				Morebits.pageNameNorm +
+				']]' +
+				fileLogLink +
+				': DI [[QW:CSD#' +
+				params.normalized.toUpperCase() +
+				'|CSD ' +
+				params.normalized.toUpperCase() +
+				']] ({{tl|di-' +
+				params.templatename +
+				'}})';
 		[ 'reason', 'replacement', 'source' ].forEach((item) => {
 			if (params[item]) {
 				extraInfo += formatParamLog(params.normalized.toUpperCase(), item, params[item]);

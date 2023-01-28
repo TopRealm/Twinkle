@@ -24,24 +24,44 @@ Twinkle.diff = () => {
 	if (mw.config.get('wgNamespaceNumber') < 0 || !mw.config.get('wgArticleId')) {
 		return;
 	}
-	Twinkle.addPortletLink(mw.util.getUrl(mw.config.get('wgPageName'), {
-		diff: 'cur',
-		oldid: 'prev'
-	}), '最后', 'tw-lastdiff', '显示最后一次差异');
+	Twinkle.addPortletLink(
+		mw.util.getUrl(mw.config.get('wgPageName'), {
+			diff: 'cur',
+			oldid: 'prev'
+		}),
+		'最后',
+		'tw-lastdiff',
+		'显示最后一次差异'
+	);
 
 	// Show additional tabs only on diff pages
 	if (mw.util.getParamValue('diff')) {
-		Twinkle.addPortletLink(() => {
-			Twinkle.diff.evaluate(false);
-		}, '上异', 'tw-since', '显示与上一修订版本间的差异');
-		Twinkle.addPortletLink(() => {
-			Twinkle.diff.evaluate(true);
-		}, '自异', 'tw-sincemine', '显示与我做出的修订版本的差异');
+		Twinkle.addPortletLink(
+			() => {
+				Twinkle.diff.evaluate(false);
+			},
+			'上异',
+			'tw-since',
+			'显示与上一修订版本间的差异'
+		);
+		Twinkle.addPortletLink(
+			() => {
+				Twinkle.diff.evaluate(true);
+			},
+			'自异',
+			'tw-sincemine',
+			'显示与我做出的修订版本的差异'
+		);
 		const oldid = /oldid=(.+)/.exec($('#mw-diff-ntitle1').find('strong a').first().attr('href'))[1];
-		Twinkle.addPortletLink(mw.util.getUrl(mw.config.get('wgPageName'), {
-			diff: 'cur',
-			oldid: oldid
-		}), '当前', 'tw-curdiff', '显示与当前版本间的差异');
+		Twinkle.addPortletLink(
+			mw.util.getUrl(mw.config.get('wgPageName'), {
+				diff: 'cur',
+				oldid: oldid
+			}),
+			'当前',
+			'tw-curdiff',
+			'显示与当前版本间的差异'
+		);
 	}
 };
 Twinkle.diff.evaluate = (me) => {

@@ -25,7 +25,13 @@ const relevantUserName = mw.config.get('wgRelevantUserName');
 Twinkle.warn = function twinklewarn() {
 	if (relevantUserName) {
 		Twinkle.addPortletLink(Twinkle.warn.callback, '警告', 'tw-warn', '警告或提醒用户');
-		if (Twinkle.getPref('autoMenuAfterRollback') && mw.config.get('wgNamespaceNumber') === 3 && mw.util.getParamValue('vanarticle') && !mw.util.getParamValue('friendlywelcome') && !mw.util.getParamValue('noautowarn')) {
+		if (
+			Twinkle.getPref('autoMenuAfterRollback') &&
+				mw.config.get('wgNamespaceNumber') === 3 &&
+				mw.util.getParamValue('vanarticle') &&
+				!mw.util.getParamValue('friendlywelcome') &&
+				!mw.util.getParamValue('noautowarn')
+		) {
 			Twinkle.warn.callback();
 		}
 	}
@@ -1186,9 +1192,11 @@ Twinkle.warn.callback.change_category = function twinklewarnCallbackChangeCatego
 			const unSortedSinglets = $.extend({}, Twinkle.warn.messages.singlenotice, Twinkle.warn.messages.singlewarn);
 			const sortedSingletMessages = {};
 
-			Object.keys(unSortedSinglets).sort().forEach(function (key) {
-				sortedSingletMessages[key] = unSortedSinglets[key];
-			});
+			Object.keys(unSortedSinglets)
+				.sort()
+				.forEach(function (key) {
+					sortedSingletMessages[key] = unSortedSinglets[key];
+				});
 			createEntries(sortedSingletMessages, sub_group, true);
 			break;
 		}
@@ -1256,25 +1264,28 @@ Twinkle.warn.callback.change_category = function twinklewarnCallbackChangeCatego
 			} else {
 				const usertalk_page = new Morebits.wiki.page('User_talk:' + relevantUserName, '加载上次警告');
 				usertalk_page.setFollowRedirect(true, false);
-				usertalk_page.load(function (pageobj) {
-					Twinkle.warn.talkpageObj = pageobj; // Update talkpageObj
-					autolevelProc();
-				}, function () {
-					// Catch and warn if the talkpage can't load,
-					// most likely because it's a cross-namespace redirect
-					// Supersedes the typical $autolevelMessage added in autolevelParseWikitext
-					const $noTalkPageNode = $('<strong>', {
-						text: '无法加载用户讨论页，这可能是因为它是跨命名空间重定向，自动选择警告级别将不会运作。',
-						id: 'twinkle-warn-autolevel-message',
-						css: {
-							color: 'red'
-						}
-					});
-					$noTalkPageNode.insertBefore($('#twinkle-warn-warning-messages'));
-					// If a preview was opened while in a different mode, close it
-					// Should nullify the need to catch the error in preview callback
-					e.target.root.previewer.closePreview();
-				});
+				usertalk_page.load(
+					function (pageobj) {
+						Twinkle.warn.talkpageObj = pageobj; // Update talkpageObj
+						autolevelProc();
+					},
+					function () {
+						// Catch and warn if the talkpage can't load,
+						// most likely because it's a cross-namespace redirect
+						// Supersedes the typical $autolevelMessage added in autolevelParseWikitext
+						const $noTalkPageNode = $('<strong>', {
+							text: '无法加载用户讨论页，这可能是因为它是跨命名空间重定向，自动选择警告级别将不会运作。',
+							id: 'twinkle-warn-autolevel-message',
+							css: {
+								color: 'red'
+							}
+						});
+						$noTalkPageNode.insertBefore($('#twinkle-warn-warning-messages'));
+						// If a preview was opened while in a different mode, close it
+						// Should nullify the need to catch the error in preview callback
+						e.target.root.previewer.closePreview();
+					}
+				);
 			}
 			break;
 		}
@@ -1300,22 +1311,25 @@ Twinkle.warn.callback.postCategoryCleanup = function twinklewarnCallbackPostCate
 
 	// Use select2 to make the select menu searchable
 	if (!Twinkle.getPref('oldSelect')) {
-		$('select[name=sub_group]').select2({
-			width: '100%',
-			matcher: Morebits.select2.matchers.optgroupFull,
-			templateResult: Morebits.select2.highlightSearchMatches,
-			language: {
-				searching: Morebits.select2.queryInterceptor
-			}
-		}).change(Twinkle.warn.callback.change_subcategory);
+		$('select[name=sub_group]')
+			.select2({
+				width: '100%',
+				matcher: Morebits.select2.matchers.optgroupFull,
+				templateResult: Morebits.select2.highlightSearchMatches,
+				language: {
+					searching: Morebits.select2.queryInterceptor
+				}
+			})
+			.change(Twinkle.warn.callback.change_subcategory);
 		$('.select2-selection').on('keydown', Morebits.select2.autoStart).trigger('focus');
 		mw.util.addCSS(
 			// Increase height
 			'.select2-container .select2-dropdown .select2-results > .select2-results__options { max-height: 350px; }' +
-      // Reduce padding
-      '.select2-results .select2-results__option { padding-top: 1px; padding-bottom: 1px; }.select2-results .select2-results__group { padding-top: 1px; padding-bottom: 1px; } ' +
-      // Adjust font size
-      '.select2-container .select2-dropdown .select2-results { font-size: 13px; }.select2-container .selection .select2-selection__rendered { font-size: 13px; }');
+					// Reduce padding
+					'.select2-results .select2-results__option { padding-top: 1px; padding-bottom: 1px; }.select2-results .select2-results__group { padding-top: 1px; padding-bottom: 1px; } ' +
+					// Adjust font size
+					'.select2-container .select2-dropdown .select2-results { font-size: 13px; }.select2-container .selection .select2-selection__rendered { font-size: 13px; }'
+		);
 	}
 };
 Twinkle.warn.callback.change_subcategory = function twinklewarnCallbackChangeSubcategory(e) {
@@ -1355,7 +1369,9 @@ Twinkle.warn.callback.change_subcategory = function twinklewarnCallbackChangeSub
 	$('#tw-warn-red-notice').remove();
 	let $redWarning;
 	if (value === 'uw-username') {
-		$redWarning = $("<div style='color: red;' id='tw-warn-red-notice'>{{uw-username}}<b>不应</b>被用于<b>明显</b>违反用户名方针的用户。明显的违反方针应被报告给UAA。{{uw-username}}应只被用在边界情况下需要与用户讨论时。</div>");
+		$redWarning = $(
+			"<div style='color: red;' id='tw-warn-red-notice'>{{uw-username}}<b>不应</b>被用于<b>明显</b>违反用户名方针的用户。明显的违反方针应被报告给UAA。{{uw-username}}应只被用在边界情况下需要与用户讨论时。</div>"
+		);
 		$redWarning.insertAfter(Morebits.quickForm.getElementLabelObject(e.target.form.reasonGroup));
 	}
 };
@@ -1377,7 +1393,6 @@ Twinkle.warn.callbacks = {
 		}
 		text += '|subst=subst:}}';
 		if (!noSign) {
-
 			text += ' ~~' + '~~';
 		}
 		return text;
@@ -1408,7 +1423,9 @@ Twinkle.warn.callbacks = {
 				const params = {
 					sub_group: form.sub_group.value,
 					article: form.article.value,
-					messageData: $(form.sub_group).find('option[value="' + $(form.sub_group).val() + '"]').data('messageData')
+					messageData: $(form.sub_group)
+						.find('option[value="' + $(form.sub_group).val() + '"]')
+						.data('messageData')
 				};
 				const template = Twinkle.warn.callbacks.autolevelParseWikitext(wikitext, params, latest)[0];
 				Twinkle.warn.callbacks.showPreview(form, template);
@@ -1649,7 +1666,7 @@ Twinkle.warn.callbacks = {
 				}
 			}
 			// singlet || level1-4im, no need to /^\D+$/.test(params.main_group)
-			summary = messageData.summary || messageData[params.main_group] && messageData[params.main_group].summary;
+			summary = messageData.summary || (messageData[params.main_group] && messageData[params.main_group].summary);
 			// Not in Twinkle.warn.messages, assume custom template
 			if (!summary) {
 				summary = customProcess(params.sub_group);
@@ -1674,7 +1691,7 @@ Twinkle.warn.callbacks = {
 		const warningText = Twinkle.warn.callbacks.getWarningWikitext(params.sub_group, params.article, params.reason, params.main_group === 'custom');
 		let sectionExists = false,
 			sectionNumber = 0;
-		// Only check sections if there are sections or there's a chance we won't create our own
+			// Only check sections if there are sections or there's a chance we won't create our own
 		if (!messageData.heading && text.length) {
 			// Get all sections
 			const sections = text.match(/^(==*).+\1/gm);
@@ -1755,7 +1772,7 @@ Twinkle.warn.callbacks = {
 				}
 			}
 			// singlet || level1-4im, no need to /^\D+$/.test(params.main_group)
-			topic = messageData.summary || messageData[params.main_group] && messageData[params.main_group].summary;
+			topic = messageData.summary || (messageData[params.main_group] && messageData[params.main_group].summary);
 			// Not in Twinkle.warn.messages, assume custom template
 			if (!topic) {
 				topic = customProcess(params.sub_group);

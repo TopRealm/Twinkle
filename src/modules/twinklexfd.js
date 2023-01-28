@@ -26,7 +26,11 @@ Twinkle.xfd = () => {
 	// * non-existent pages
 	// * files on Commons, whether there is a local page or not (unneeded local pages of files on Commons are eligible for CSD F2)
 	// * file pages without actual files (these are eligible for CSD G8)
-	if (mw.config.get('wgNamespaceNumber') < 0 || !mw.config.get('wgArticleId') || mw.config.get('wgNamespaceNumber') === 6 && (document.getElementById('mw-sharedupload') || !document.getElementById('mw-imagepage-section-filehistory') && !Morebits.isPageRedirect())) {
+	if (
+		mw.config.get('wgNamespaceNumber') < 0 ||
+			!mw.config.get('wgArticleId') ||
+			(mw.config.get('wgNamespaceNumber') === 6 && (document.getElementById('mw-sharedupload') || (!document.getElementById('mw-imagepage-section-filehistory') && !Morebits.isPageRedirect())))
+	) {
 		return;
 	}
 	Twinkle.addPortletLink(Twinkle.xfd.callback, '提删', 'tw-xfd', '提交删除讨论');
@@ -71,13 +75,15 @@ Twinkle.xfd.callback = () => {
 	});
 	form.append({
 		type: 'checkbox',
-		list: [ {
-			label: '如可能，通知页面创建者或文件最初上传者',
-			value: 'notify',
-			name: 'notify',
-			tooltip: '在页面创建者讨论页上放置一通知模板。',
-			checked: true
-		} ]
+		list: [
+			{
+				label: '如可能，通知页面创建者或文件最初上传者',
+				value: 'notify',
+				name: 'notify',
+				tooltip: '在页面创建者讨论页上放置一通知模板。',
+				checked: true
+			}
+		]
 	});
 	form.append({
 		type: 'field',
@@ -137,15 +143,17 @@ Twinkle.xfd.callback.change_category = (e) => {
 			});
 			work_area.append({
 				type: 'checkbox',
-				list: [ {
-					label: '使用&lt;noinclude&gt;包裹模板',
-					value: 'noinclude',
-					name: 'noinclude',
-					checked: mw.config.get('wgNamespaceNumber') === 10 && mw.config.get('wgPageContentModel') !== 'Scribunto',
-					// Template namespace
-					tooltip: '使其不会在被包含时出现。',
-					disabled: mw.config.get('wgPageContentModel') === 'Scribunto'
-				} ]
+				list: [
+					{
+						label: '使用&lt;noinclude&gt;包裹模板',
+						value: 'noinclude',
+						name: 'noinclude',
+						checked: mw.config.get('wgNamespaceNumber') === 10 && mw.config.get('wgPageContentModel') !== 'Scribunto',
+						// Template namespace
+						tooltip: '使其不会在被包含时出现。',
+						disabled: mw.config.get('wgPageContentModel') === 'Scribunto'
+					}
+				]
 			});
 			const afd_category = work_area.append({
 				type: 'select',
@@ -334,11 +342,11 @@ Twinkle.xfd.callbacks = {
 			}
 
 			// Then, test if there are speedy deletion-related templates on the article.
-			const textNoSd = text.replace(/\{\{\s*(db(-\w*)?|d|delete|(?:hang|hold)[- ]?on)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/ig, '');
+			const textNoSd = text.replace(/\{\{\s*(db(-\w*)?|d|delete|(?:hang|hold)[- ]?on)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/gi, '');
 			if (text !== textNoSd && confirm('在页面上找到快速删除模板，要移除吗？')) {
 				text = textNoSd;
 			}
-			const textNoNotMandarin = text.replace(/\{\{\s*(NotMandarin|Notchinese|非中文|非現代漢語|非现代汉语|非現代標準漢語|非现代标准汉语)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/ig, '');
+			const textNoNotMandarin = text.replace(/\{\{\s*(NotMandarin|Notchinese|非中文|非現代漢語|非现代汉语|非現代標準漢語|非现代标准汉语)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/gi, '');
 			if (text !== textNoNotMandarin && confirm('在页面上找到非现代标准汉语模板，要移除吗？')) {
 				text = textNoNotMandarin;
 			}
@@ -366,7 +374,7 @@ Twinkle.xfd.callbacks = {
 				case 'fwdcsd':
 				case 'merge':
 					to = params.mergeinto;
-				/* Fall through */
+					/* Fall through */
 				default:
 					type = params.xfdcat;
 					break;
@@ -386,21 +394,45 @@ Twinkle.xfd.callbacks = {
 						pageobj.setPageText(text);
 						append = false;
 					} else {
-						const appendText = '\n{{safesubst:SafeAfdHead}}\n' + {
-							fame: '== 30天后仍挂有{{tl|notability}}模板的条目 ==\n<span style="font-size:smaller;">（已挂[[Template:notability|不符收录标准模板]]30天）</span>',
-							substub: '== 30天后仍挂有{{tl|substub}}模板的条目 ==\n<span style="font-size:smaller;">（已挂[[Template:substub|小小条目模板]]30天）</span>',
-							batch: '== 批量提删 =='
-						}[type] + '\n' + newText + '\n\n' + commentText + '\n----\n:建议：删除前述页面；理由：' + Morebits.string.formatReasonText(params.reason) + '\n提报以上' + {
-							fame: '<u>不符合收录标准</u>条目',
-							substub: '<u>长度过短</u>条目',
-							batch: '页面'
-						}[type] + '的用户及时间：<br id="no-new-title" />~~' + '~~';
+						const appendText =
+								'\n{{safesubst:SafeAfdHead}}\n' +
+								{
+									fame: '== 30天后仍挂有{{tl|notability}}模板的条目 ==\n<span style="font-size:smaller;">（已挂[[Template:notability|不符收录标准模板]]30天）</span>',
+									substub: '== 30天后仍挂有{{tl|substub}}模板的条目 ==\n<span style="font-size:smaller;">（已挂[[Template:substub|小小条目模板]]30天）</span>',
+									batch: '== 批量提删 =='
+								}[type] +
+								'\n' +
+								newText +
+								'\n\n' +
+								commentText +
+								'\n----\n:建议：删除前述页面；理由：' +
+								Morebits.string.formatReasonText(params.reason) +
+								'\n提报以上' +
+								{
+									fame: '<u>不符合收录标准</u>条目',
+									substub: '<u>长度过短</u>条目',
+									batch: '页面'
+								}[type] +
+								'的用户及时间：<br id="no-new-title" />~~' +
+								'~~';
 						pageobj.setAppendText(appendText);
 					}
 					break;
 				}
 				default:
-					pageobj.setAppendText('\n{{subst:DRItem|Type=' + type + '|DRarticles=' + Morebits.pageNameNorm + '|Reason=' + Morebits.string.formatReasonText(params.reason) + (params.fwdcsdreason.trim() !== '' ? '<br>\n转交理由：' + params.fwdcsdreason : '') + '|To=' + to + '}}~~' + '~~');
+					pageobj.setAppendText(
+						'\n{{subst:DRItem|Type=' +
+								type +
+								'|DRarticles=' +
+								Morebits.pageNameNorm +
+								'|Reason=' +
+								Morebits.string.formatReasonText(params.reason) +
+								(params.fwdcsdreason.trim() !== '' ? '<br>\n转交理由：' + params.fwdcsdreason : '') +
+								'|To=' +
+								to +
+								'}}~~' +
+								'~~'
+					);
 					break;
 			}
 			pageobj.setEditSummary('加入[[' + Morebits.pageNameNorm + ']]');
@@ -500,7 +532,9 @@ Twinkle.xfd.callbacks = {
 			// var text = pageobj.getPageText();
 			const params = pageobj.getCallbackParameters();
 
-			pageobj.setAppendText('\n{{subst:IfdItem|Filename=' + mw.config.get('wgTitle') + '|Uploader=' + params.uploader + '|Reason=' + Morebits.string.formatReasonText(params.reason) + '}}--~~' + '~~');
+			pageobj.setAppendText(
+				'\n{{subst:IfdItem|Filename=' + mw.config.get('wgTitle') + '|Uploader=' + params.uploader + '|Reason=' + Morebits.string.formatReasonText(params.reason) + '}}--~~' + '~~'
+			);
 			pageobj.setEditSummary('加入[[' + Morebits.pageNameNorm + ']]');
 			pageobj.setChangeTags(Twinkle.changeTags);
 			pageobj.setWatchlist(Twinkle.getPref('xfdWatchDiscussion'));
@@ -534,7 +568,10 @@ Twinkle.xfd.callbacks = {
 	addToLog: (params, initialContrib) => {
 		const editsummary = '记录对[[' + Morebits.pageNameNorm + ']]的存废讨论提名';
 		const usl = new Morebits.userspaceLogger(Twinkle.getPref('xfdLogPageName'));
-		usl.initialText = '这是该用户使用[[H:TW|Twinkle]]的提删模块做出的[[QW:XFD|存废讨论]]提名列表。\n\n如果您不再想保留此日志，请在[[' + Twinkle.getPref('configPage') + '|参数设置]]中关掉，并使用[[QW:CSD#O1|CSD O1]]提交快速删除。';
+		usl.initialText =
+				'这是该用户使用[[H:TW|Twinkle]]的提删模块做出的[[QW:XFD|存废讨论]]提名列表。\n\n如果您不再想保留此日志，请在[[' +
+				Twinkle.getPref('configPage') +
+				'|参数设置]]中关掉，并使用[[QW:CSD#O1|CSD O1]]提交快速删除。';
 		let xfdCatName;
 		switch (params.xfdcat) {
 			case 'delete':
@@ -634,7 +671,9 @@ Twinkle.xfd.callback.evaluate = (e) => {
 
 			// Tagging page
 			const isScribunto = mw.config.get('wgPageContentModel') === 'Scribunto';
-			qiuwen_page = isScribunto ? new Morebits.wiki.page(mw.config.get('wgPageName') + '/doc', '加入存废讨论模板到模块文件页') : new Morebits.wiki.page(mw.config.get('wgPageName'), '加入存废讨论模板到页面');
+			qiuwen_page = isScribunto ?
+				new Morebits.wiki.page(mw.config.get('wgPageName') + '/doc', '加入存废讨论模板到模块文件页') :
+				new Morebits.wiki.page(mw.config.get('wgPageName'), '加入存废讨论模板到页面');
 			qiuwen_page.setFollowRedirect(false);
 			qiuwen_page.setCallbackParameters(params);
 			qiuwen_page.load(Twinkle.xfd.callbacks.afd.tryTagging);

@@ -84,9 +84,9 @@ Twinkle.close.addLinks = function twinklecloseAddLinks() {
 };
 
 // Keep this synchronized with {{delh}}
-/* eslint-disable quote-props */
+
 Twinkle.close.codes = {
-	'请求无效': {
+	请求无效: {
 		ir: {
 			label: '请求无效',
 			action: 'keep'
@@ -104,7 +104,7 @@ Twinkle.close.codes = {
 			action: 'keep'
 		}
 	},
-	'保留': {
+	保留: {
 		k: {
 			label: '保留',
 			action: 'keep',
@@ -129,7 +129,7 @@ Twinkle.close.codes = {
 			adminonly: true
 		}
 	},
-	'删除': {
+	删除: {
 		d: {
 			label: '删除',
 			action: 'del',
@@ -142,7 +142,7 @@ Twinkle.close.codes = {
 			adminonly: true
 		}
 	},
-	'快速删除': {
+	快速删除: {
 		sd: {
 			label: '快速删除',
 			action: 'del'
@@ -173,12 +173,12 @@ Twinkle.close.codes = {
 			adminonly: true
 		}
 	}, */
-	'其他处理方法': {
+	其他处理方法: {
 		c: {
 			label: '转交侵权',
 			action: 'noop'
 		},
-		'm2pfd': {
+		m2pfd: {
 			label: '转送存废讨论',
 			action: 'noop'
 		},
@@ -242,42 +242,48 @@ Twinkle.close.callback = function twinklecloseCallback(title, section, noop) {
 	});
 	form.append({
 		type: 'checkbox',
-		list: [ {
-			label: '只关闭讨论，不进行其他操作',
-			value: 'noop',
-			name: 'noop',
-			event: Twinkle.close.callback.change_operation,
-			checked: noop
-		} ]
+		list: [
+			{
+				label: '只关闭讨论，不进行其他操作',
+				value: 'noop',
+				name: 'noop',
+				event: Twinkle.close.callback.change_operation,
+				checked: noop
+			}
+		]
 	});
 	if (new mw.Title(title).namespace % 2 === 0 && new mw.Title(title).namespace !== 2) {
 		// hide option for user pages, to avoid accidentally deleting user talk page
 		form.append({
 			type: 'checkbox',
-			list: [ {
-				label: '删除关联的讨论页',
-				value: 'talkpage',
-				name: 'talkpage',
-				tooltip: '删除时附带删除此页面的讨论页。',
-				checked: true,
-				event: function (event) {
-					event.stopPropagation();
+			list: [
+				{
+					label: '删除关联的讨论页',
+					value: 'talkpage',
+					name: 'talkpage',
+					tooltip: '删除时附带删除此页面的讨论页。',
+					checked: true,
+					event: function (event) {
+						event.stopPropagation();
+					}
 				}
-			} ]
+			]
 		});
 	}
 	form.append({
 		type: 'checkbox',
-		list: [ {
-			label: '删除重定向页',
-			value: 'redirects',
-			name: 'redirects',
-			tooltip: '删除到此页的重定向。',
-			checked: true,
-			event: function (event) {
-				event.stopPropagation();
+		list: [
+			{
+				label: '删除重定向页',
+				value: 'redirects',
+				name: 'redirects',
+				tooltip: '删除到此页的重定向。',
+				checked: true,
+				event: function (event) {
+					event.stopPropagation();
+				}
 			}
-		} ]
+		]
 	});
 	form.append({
 		type: 'submit'
@@ -325,7 +331,9 @@ Twinkle.close.callback = function twinklecloseCallback(title, section, noop) {
 Twinkle.close.callback.change_operation = function twinklecloseCallbackChangeOperation(e) {
 	const noop = e.target.checked;
 	const code = e.target.form.sub_group.value;
-	const messageData = $(e.target.form.sub_group).find('option[value="' + code + '"]').data('messageData');
+	const messageData = $(e.target.form.sub_group)
+		.find('option[value="' + code + '"]')
+		.data('messageData');
 	const talkpage = e.target.form.talkpage;
 	const redirects = e.target.form.redirects;
 	if (noop || messageData.action === 'keep') {
@@ -346,7 +354,9 @@ Twinkle.close.callback.change_operation = function twinklecloseCallbackChangeOpe
 };
 Twinkle.close.callback.change_code = function twinklecloseCallbackChangeCode(e) {
 	const resultData = $(e.target.form).data('resultData');
-	const messageData = $(e.target).find('option[value="' + e.target.value + '"]').data('messageData');
+	const messageData = $(e.target)
+		.find('option[value="' + e.target.value + '"]')
+		.data('messageData');
 	const noop = e.target.form.noop;
 	const talkpage = e.target.form.talkpage;
 	const redirects = e.target.form.redirects;
@@ -387,7 +397,9 @@ Twinkle.close.callback.change_code = function twinklecloseCallbackChangeCode(e) 
 Twinkle.close.callback.evaluate = function twinklecloseCallbackEvaluate(e) {
 	const code = e.target.sub_group.value;
 	const resultData = $(e.target).data('resultData');
-	const messageData = $(e.target.sub_group).find('option[value="' + code + '"]').data('messageData');
+	const messageData = $(e.target.sub_group)
+		.find('option[value="' + code + '"]')
+		.data('messageData');
 	const noop = e.target.noop.checked;
 	const talkpage = e.target.talkpage && e.target.talkpage.checked;
 	const redirects = e.target.redirects.checked;
@@ -480,9 +492,12 @@ Twinkle.close.callbacks = {
 	},
 	deleteRedirectsMain: function (apiobj) {
 		const xml = apiobj.responseXML;
-		const pages = $(xml).find('rd').map(function () {
-			return $(this).attr('title');
-		}).get();
+		const pages = $(xml)
+			.find('rd')
+			.map(function () {
+				return $(this).attr('title');
+			})
+			.get();
 		if (!pages.length) {
 			return;
 		}
@@ -530,7 +545,10 @@ Twinkle.close.callbacks = {
 		let newtext = text.replace(/<noinclude>\s*\{\{([rsaiftcmv]fd)(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*<\/noinclude>\s*/gi, '');
 		newtext = newtext.replace(/\{\{([rsaiftcmv]fd)(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/gi, '');
 		if (params.code !== 'tk') {
-			newtext = newtext.replace(/\{\{(notability|fame|mair|知名度|重要性|显著性|顯著性|知名度不足|人物重要性|重要性不足|notable|关注度|关注度不足|關注度|關注度不足|重要|重要度)(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\n*/gi, '');
+			newtext = newtext.replace(
+				/\{\{(notability|fame|mair|知名度|重要性|显著性|顯著性|知名度不足|人物重要性|重要性不足|notable|关注度|关注度不足|關注度|關注度不足|重要|重要度)(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\n*/gi,
+				''
+			);
 			newtext = newtext.replace(/\{\{(substub|小小作品|cod|小小條目|小小条目)(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\n*/gi, '');
 		}
 		if (params.code === 'mergeapproved') {

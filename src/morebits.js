@@ -135,7 +135,8 @@ Morebits.pageNameRegex = (pageName) => {
 	if (pageName === '') {
 		return '';
 	}
-	const firstChar = pageName[0], remainder = Morebits.string.escapeRegExp(pageName.slice(1));
+	const firstChar = pageName[0],
+		remainder = Morebits.string.escapeRegExp(pageName.slice(1));
 	if (mw.Title.phpCharToUpper(firstChar) !== firstChar.toLowerCase()) {
 		return '[' + mw.Title.phpCharToUpper(firstChar) + firstChar.toLowerCase() + ']' + remainder;
 	}
@@ -216,7 +217,12 @@ Morebits.namespaceRegex = (namespaces) => {
 			// Namespaces are completely agnostic as to case,
 			// and a regex string is more useful/compatible than a RegExp object,
 			// so we accept any casing for any letter.
-			aliases.push(name.split('').map((char) => Morebits.pageNameRegex(char)).join(''));
+			aliases.push(
+				name
+					.split('')
+					.map((char) => Morebits.pageNameRegex(char))
+					.join('')
+			);
 		}
 	});
 	switch (aliases.length) {
@@ -1409,7 +1415,8 @@ Morebits.string = {
 		unbinder.content = unbinder.content.replace(/\|/g, '{{subst:!}}');
 		reason = unbinder.rebind();
 		if (addSig) {
-			const sig = '~~' + '~~', sigIndex = reason.lastIndexOf(sig);
+			const sig = '~~' + '~~',
+				sigIndex = reason.lastIndexOf(sig);
 			if (sigIndex === -1 || sigIndex !== reason.length - sig.length) {
 				reason += ' ' + sig;
 			}
@@ -1425,11 +1432,14 @@ Morebits.string = {
 	 * @returns {string}
 	 */
 	formatReasonForLog: function (str) {
-		return str
-		// handle line breaks, which otherwise break numbering
-			.replace(/\n+/g, '{{pb}}')
-		// put an extra # in front before bulleted or numbered list items
-			.replace(/^(#+)/mg, '#$1').replace(/^(\*+)/mg, '#$1');
+		return (
+			str
+			// handle line breaks, which otherwise break numbering
+				.replace(/\n+/g, '{{pb}}')
+			// put an extra # in front before bulleted or numbered list items
+				.replace(/^(#+)/gm, '#$1')
+				.replace(/^(\*+)/gm, '#$1')
+		);
 	},
 	/**
 	 * Like `String.prototype.replace()`, but escapes any dollar signs in
@@ -1611,7 +1621,7 @@ Morebits.select2 = {
 		wordBeginning: function (params, data) {
 			const originalMatcher = $.fn.select2.defaults.defaults.matcher;
 			const result = originalMatcher(params, data);
-			if (!params.term || result && new RegExp('\\b' + mw.util.escapeRegExp(params.term), 'i').test(result.text)) {
+			if (!params.term || (result && new RegExp('\\b' + mw.util.escapeRegExp(params.term), 'i').test(result.text))) {
 				return result;
 			}
 			return null;
@@ -1627,7 +1637,13 @@ Morebits.select2 = {
 		if (idx < 0) {
 			return data.text;
 		}
-		return $('<span>').append(data.text.slice(0, idx), $('<span>').css('text-decoration', 'underline').text(data.text.slice(idx, idx + searchTerm.length)), data.text.slice(idx + searchTerm.length));
+		return $('<span>').append(
+			data.text.slice(0, idx),
+			$('<span>')
+				.css('text-decoration', 'underline')
+				.text(data.text.slice(idx, idx + searchTerm.length)),
+			data.text.slice(idx + searchTerm.length)
+		);
 	},
 	/** Intercept query as it is happening, for use in highlightSearchMatches. */
 	queryInterceptor: function (params) {
@@ -1976,9 +1992,15 @@ Morebits.date.prototype = {
 			len = len || 2; // Up to length of 00 + 1
 			return ('00' + num).toString().slice(0 - len);
 		};
-		const h24 = udate.getHours(), m = udate.getMinutes(), s = udate.getSeconds(), ms = udate.getMilliseconds();
-		const D = udate.getDate(), M = udate.getMonth() + 1, Y = udate.getFullYear();
-		const h12 = h24 % 12 || 12, amOrPm = h24 >= 12 ? '下午' : '上午';
+		const h24 = udate.getHours(),
+			m = udate.getMinutes(),
+			s = udate.getSeconds(),
+			ms = udate.getMilliseconds();
+		const D = udate.getDate(),
+			M = udate.getMonth() + 1,
+			Y = udate.getFullYear();
+		const h12 = h24 % 12 || 12,
+			amOrPm = h24 >= 12 ? '下午' : '上午';
 		const replacementMap = {
 			HH: pad(h24),
 			H: h24,
@@ -2007,12 +2029,14 @@ Morebits.date.prototype = {
 		unbinder.unbind('\\[', '\\]');
 		unbinder.content = unbinder.content.replace(
 			/* Regex notes:
-		 * d(d{2,3})? matches exactly 1, 3 or 4 occurrences of 'd' ('dd' is treated as a double match of 'd')
-		 * Y{1,2}(Y{2})? matches exactly 1, 2 or 4 occurrences of 'Y'
-		 */
-			/H{1,2}|h{1,2}|m{1,2}|s{1,2}|SSS|d(d{2,3})?|D{1,2}|M{1,4}|Y{1,2}(Y{2})?|A/g, function (match) {
+				 * d(d{2,3})? matches exactly 1, 3 or 4 occurrences of 'd' ('dd' is treated as a double match of 'd')
+				 * Y{1,2}(Y{2})? matches exactly 1, 2 or 4 occurrences of 'Y'
+				 */
+			/H{1,2}|h{1,2}|m{1,2}|s{1,2}|SSS|d(d{2,3})?|D{1,2}|M{1,4}|Y{1,2}(Y{2})?|A/g,
+			function (match) {
 				return replacementMap[match];
-			});
+			}
+		);
 		return unbinder.rebind().replace(/\[(.*?)\]/g, '$1');
 	},
 	/**
@@ -2293,57 +2317,65 @@ Morebits.wiki.api.prototype = {
 			} else if (val !== undefined) {
 				return encodeURIComponent(i) + '=' + encodeURIComponent(val);
 			}
-		}).join('&').replace(/^(.*?)(\btoken=[^&]*)&(.*)/, '$1$3&$2');
+		})
+			.join('&')
+			.replace(/^(.*?)(\btoken=[^&]*)&(.*)/, '$1$3&$2');
 			// token should always be the last item in the query string (bug TW-B-0013)
-		const ajaxparams = $.extend({}, {
-			context: this,
-			type: this.query.action === 'query' ? 'GET' : 'POST',
-			url: mw.util.wikiScript('api'),
-			data: queryString,
-			dataType: this.query.format,
-			headers: {
-				'Api-User-Agent': morebitsWikiApiUserAgent
-			}
-		}, callerAjaxParameters);
-		return $.ajax(ajaxparams).then(function onAPIsuccess(response, statusText) {
-			this.statusText = statusText;
-			this.response = this.responseXML = response;
-			// Limit to first error
-			if (this.query.format === 'json') {
-				this.errorCode = response.errors && response.errors[0].code;
-				if (this.query.errorformat === 'html') {
-					this.errorText = response.errors && response.errors[0].html;
-				} else if (this.query.errorformat === 'wikitext' || this.query.errorformat === 'plaintext') {
-					this.errorText = response.errors && response.errors[0].text;
+		const ajaxparams = $.extend(
+			{},
+			{
+				context: this,
+				type: this.query.action === 'query' ? 'GET' : 'POST',
+				url: mw.util.wikiScript('api'),
+				data: queryString,
+				dataType: this.query.format,
+				headers: {
+					'Api-User-Agent': morebitsWikiApiUserAgent
 				}
-			} else {
-				this.errorCode = $(response).find('errors error').eq(0).attr('code');
-				// Sufficient for html, wikitext, or plaintext errorformats
-				this.errorText = $(response).find('errors error').eq(0).text();
-			}
-			if (typeof this.errorCode === 'string') {
-				// the API didn't like what we told it, e.g., bad edit token or an error creating a page
-				return this.returnError(callerAjaxParameters);
-			}
+			},
+			callerAjaxParameters
+		);
+		return $.ajax(ajaxparams).then(
+			function onAPIsuccess(response, statusText) {
+				this.statusText = statusText;
+				this.response = this.responseXML = response;
+				// Limit to first error
+				if (this.query.format === 'json') {
+					this.errorCode = response.errors && response.errors[0].code;
+					if (this.query.errorformat === 'html') {
+						this.errorText = response.errors && response.errors[0].html;
+					} else if (this.query.errorformat === 'wikitext' || this.query.errorformat === 'plaintext') {
+						this.errorText = response.errors && response.errors[0].text;
+					}
+				} else {
+					this.errorCode = $(response).find('errors error').eq(0).attr('code');
+					// Sufficient for html, wikitext, or plaintext errorformats
+					this.errorText = $(response).find('errors error').eq(0).text();
+				}
+				if (typeof this.errorCode === 'string') {
+					// the API didn't like what we told it, e.g., bad edit token or an error creating a page
+					return this.returnError(callerAjaxParameters);
+				}
 
-			// invoke success callback if one was supplied
-			if (this.onSuccess) {
-				// set the callback context to this.parent for new code and supply the API object
-				// as the first argument to the callback (for legacy code)
-				this.onSuccess.call(this.parent, this);
-			} else {
-				this.statelem.info('完成');
+				// invoke success callback if one was supplied
+				if (this.onSuccess) {
+					// set the callback context to this.parent for new code and supply the API object
+					// as the first argument to the callback (for legacy code)
+					this.onSuccess.call(this.parent, this);
+				} else {
+					this.statelem.info('完成');
+				}
+				Morebits.wiki.actionCompleted();
+				return $.Deferred().resolveWith(this.parent, [ this ]);
+			},
+			// only network and server errors reach here - complaints from the API itself are caught in success()
+			function onAPIfailure(jqXHR, statusText, errorThrown) {
+				this.statusText = statusText;
+				this.errorThrown = errorThrown; // frequently undefined
+				this.errorText = statusText + '在调用API时发生了错误“' + jqXHR.statusText + '”';
+				return this.returnError();
 			}
-			Morebits.wiki.actionCompleted();
-			return $.Deferred().resolveWith(this.parent, [ this ]);
-		},
-		// only network and server errors reach here - complaints from the API itself are caught in success()
-		function onAPIfailure(jqXHR, statusText, errorThrown) {
-			this.statusText = statusText;
-			this.errorThrown = errorThrown; // frequently undefined
-			this.errorText = statusText + '在调用API时发生了错误“' + jqXHR.statusText + '”';
-			return this.returnError();
-		});
+		);
 	},
 	returnError: function (callerAjaxParameters) {
 		if (this.errorCode === 'badtoken' && !this.badtokenRetry) {
@@ -2351,10 +2383,12 @@ Morebits.wiki.api.prototype = {
 			this.badtokenRetry = true;
 			// Get a new CSRF token and retry. If the original action needs a different
 			// type of action than CSRF, we do one pointless retry before bailing out
-			return Morebits.wiki.api.getToken().then(function (token) {
-				this.query.token = token;
-				return this.post(callerAjaxParameters);
-			}.bind(this));
+			return Morebits.wiki.api.getToken().then(
+				function (token) {
+					this.query.token = token;
+					return this.post(callerAjaxParameters);
+				}.bind(this)
+			);
 		}
 		this.statelem.error(this.errorText + '（' + this.errorCode + '）');
 
@@ -2604,7 +2638,7 @@ Morebits.wiki.page = function (pageName, status) {
 		protectApi: null,
 		protectProcessApi: null
 	};
-	const emptyFunction = function () { };
+	const emptyFunction = function () {};
 
 	/**
 	 * Loads the text for the page.
@@ -2696,7 +2730,19 @@ Morebits.wiki.page = function (pageName, status) {
 		}
 
 		// shouldn't happen if canUseMwUserToken === true
-		if (ctx.fullyProtected && !ctx.suppressProtectWarning && !confirm(ctx.fullyProtected === 'infinity' ? '您即将编辑全保护页面“' + ctx.pageName + '”（永久）。\n\n单击“确定”以确认操作，或单击“取消”以取消操作。' : 'You are about to make an edit to the fully protected page "' + ctx.pageName + '"（保护期至：' + new Morebits.date(ctx.fullyProtected).calendar('utc') + ' (UTC)）。\n\n单击“确定”以确认操作，或单击“取消”以取消操作。')) {
+		if (
+			ctx.fullyProtected &&
+				!ctx.suppressProtectWarning &&
+				!confirm(
+					ctx.fullyProtected === 'infinity' ?
+						'您即将编辑全保护页面“' + ctx.pageName + '”（永久）。\n\n单击“确定”以确认操作，或单击“取消”以取消操作。' :
+						'You are about to make an edit to the fully protected page "' +
+								ctx.pageName +
+								'"（保护期至：' +
+								new Morebits.date(ctx.fullyProtected).calendar('utc') +
+								' (UTC)）。\n\n单击“确定”以确认操作，或单击“取消”以取消操作。'
+				)
+		) {
 			ctx.statusElement.error('已取消对全保护页面的编辑。');
 			ctx.onSaveFailure(this);
 			return;
@@ -3629,9 +3675,11 @@ Morebits.wiki.page = function (pageName, status) {
 		// extract protection info, to alert admins when they are about to edit a protected page
 		// Includes cascading protection
 		if (Morebits.userIsSysop) {
-			const editProt = page.protection.filter(function (pr) {
-				return pr.type === 'edit' && pr.level === 'sysop';
-			}).pop();
+			const editProt = page.protection
+				.filter(function (pr) {
+					return pr.type === 'edit' && pr.level === 'sysop';
+				})
+				.pop();
 			if (editProt) {
 				ctx.fullyProtected = editProt.expiry;
 			} else {
@@ -3803,16 +3851,21 @@ Morebits.wiki.page = function (pageName, status) {
 				titles: ctx.pageName // redirects are already resolved
 			};
 
-			const purgeApi = new Morebits.wiki.api('检测到编辑冲突，正在更新服务器缓存', purgeQuery, function () {
-				--Morebits.wiki.numberOfActionsLeft; // allow for normal completion if retry succeeds
+			const purgeApi = new Morebits.wiki.api(
+				'检测到编辑冲突，正在更新服务器缓存',
+				purgeQuery,
+				function () {
+					--Morebits.wiki.numberOfActionsLeft; // allow for normal completion if retry succeeds
 
-				ctx.statusElement.info('检测到编辑冲突，重试修改');
-				if (fnCanUseMwUserToken('edit')) {
-					ctx.saveApi.post(); // necessarily append, prepend, or newSection, so this should work as desired
-				} else {
-					ctx.loadApi.post(); // reload the page and reapply the edit
-				}
-			}, ctx.statusElement);
+					ctx.statusElement.info('检测到编辑冲突，重试修改');
+					if (fnCanUseMwUserToken('edit')) {
+						ctx.saveApi.post(); // necessarily append, prepend, or newSection, so this should work as desired
+					} else {
+						ctx.loadApi.post(); // reload the page and reapply the edit
+					}
+				},
+				ctx.statusElement
+			);
 			purgeApi.post();
 
 			// check for network or server error
@@ -3829,7 +3882,8 @@ Morebits.wiki.page = function (pageName, status) {
 			// hard error, give up
 		} else {
 			const response = ctx.saveApi.getResponse();
-			const errorData = response.error ||
+			const errorData =
+					response.error ||
 					// bc error format
 					response.errors[0].data; // html/wikitext/plaintext error format
 
@@ -3842,7 +3896,11 @@ Morebits.wiki.page = function (pageName, status) {
 					ctx.statusElement.error('编辑被防滥用过滤器规则“' + errorData.abusefilter.description + '”阻止；如果您认为您的该次编辑是有意义的，请至“Qiuwen:防滥用过滤器”提报。');
 					break;
 				case 'abusefilter-warning':
-					ctx.statusElement.error([ '编辑被防滥用过滤器规则“', errorData.abusefilter.description, '”警告；如果您仍希望做出该编辑，请尝试重新提交——根据过滤器的设置，您可能仍可以作出此编辑；如果您认为您的该次编辑是有意义的，请至“Qiuwen:防滥用过滤器”提报。' ]);
+					ctx.statusElement.error([
+						'编辑被防滥用过滤器规则“',
+						errorData.abusefilter.description,
+						'”警告；如果您仍希望做出该编辑，请尝试重新提交——根据过滤器的设置，您可能仍可以作出此编辑；如果您认为您的该次编辑是有意义的，请至“Qiuwen:防滥用过滤器”提报。'
+					]);
 					// We should provide the user with a way to automatically retry the action if they so choose -
 					// I can't see how to do this without creating a UI dependency on Morebits.wiki.page though -- TTO
 					break;
@@ -3985,15 +4043,31 @@ Morebits.wiki.page = function (pageName, status) {
 		// extract protection info
 		let editprot;
 		if (action === 'undelete') {
-			editprot = response.pages[0].protection.filter(function (pr) {
-				return pr.type === 'create' && pr.level === 'sysop';
-			}).pop();
+			editprot = response.pages[0].protection
+				.filter(function (pr) {
+					return pr.type === 'create' && pr.level === 'sysop';
+				})
+				.pop();
 		} else if (action === 'delete' || action === 'move') {
-			editprot = response.pages[0].protection.filter(function (pr) {
-				return pr.type === 'edit' && pr.level === 'sysop';
-			}).pop();
+			editprot = response.pages[0].protection
+				.filter(function (pr) {
+					return pr.type === 'edit' && pr.level === 'sysop';
+				})
+				.pop();
 		}
-		if (editprot && !ctx.suppressProtectWarning && !confirm('您即将对全保护页面“' + ctx.pageName + (editprot.expiry === 'infinity' ? '”（永久）' : '”（到期：' + new Morebits.date(editprot.expiry).calendar('utc') + ' (UTC)）') + '”进行“' + action + '”操作' + '。\n\n单击确定以继续操作，或单击取消以取消操作。')) {
+		if (
+			editprot &&
+				!ctx.suppressProtectWarning &&
+				!confirm(
+					'您即将对全保护页面“' +
+						ctx.pageName +
+						(editprot.expiry === 'infinity' ? '”（永久）' : '”（到期：' + new Morebits.date(editprot.expiry).calendar('utc') + ' (UTC)）') +
+						'”进行“' +
+						action +
+						'”操作' +
+						'。\n\n单击确定以继续操作，或单击取消以取消操作。'
+				)
+		) {
 			ctx.statusElement.error('已取消对全保护页面的操作。');
 			onFailure(this);
 			return false;
@@ -4270,7 +4344,10 @@ Morebits.wiki.page = function (pageName, status) {
 		if (ctx.protectCascade) {
 			// On move protection, this is technically stricter than the MW API,
 			// but seems reasonable to avoid dumb values and misleading log entries (T265626)
-			if ((!ctx.protectEdit || ctx.protectEdit.level !== 'sysop' || !ctx.protectMove || ctx.protectMove.level !== 'sysop') && !confirm('您已对“' + ctx.pageName + '”启用了连锁保护' + '，但没有设置仅管理员的保护级别。\n\n' + '单击确认以自动调整并继续连锁全保护，单击取消以跳过此操作')) {
+			if (
+				(!ctx.protectEdit || ctx.protectEdit.level !== 'sysop' || !ctx.protectMove || ctx.protectMove.level !== 'sysop') &&
+					!confirm('您已对“' + ctx.pageName + '”启用了连锁保护' + '，但没有设置仅管理员的保护级别。\n\n' + '单击确认以自动调整并继续连锁全保护，单击取消以跳过此操作')
+			) {
 				ctx.statusElement.error('连锁保护已取消。');
 				ctx.onProtectFailure(this);
 				return;
@@ -4280,7 +4357,8 @@ Morebits.wiki.page = function (pageName, status) {
 		}
 
 		// Build protection levels and expirys (expiries?) for query
-		const protections = [], expirys = [];
+		const protections = [],
+			expirys = [];
 		if (ctx.protectEdit) {
 			protections.push('edit=' + ctx.protectEdit.level);
 			expirys.push(ctx.protectEdit.expiry);
@@ -4467,7 +4545,7 @@ Morebits.wikitext.parseTemplate = function (text, start) {
 	}
 	for (let i = start; i < text.length; ++i) {
 		const test3 = text.substr(i, 3);
-		if (test3 === '{{{' || test3 === '}}}' && level[level.length - 1] === 3) {
+		if (test3 === '{{{' || (test3 === '}}}' && level[level.length - 1] === 3)) {
 			current += test3;
 			i += 2;
 			if (test3 === '{{{') {
@@ -4490,7 +4568,7 @@ Morebits.wikitext.parseTemplate = function (text, start) {
 			continue;
 		}
 		// Either leaving a link or template/parser function
-		if (test2 === '}}' && level[level.length - 1] === 2 || test2 === ']]' && level[level.length - 1] === 'wl') {
+		if ((test2 === '}}' && level[level.length - 1] === 2) || (test2 === ']]' && level[level.length - 1] === 'wl')) {
 			current += test2;
 			++i;
 			level.pop();
@@ -4678,28 +4756,34 @@ Morebits.wikitext.page.prototype = {
 
 		// Regex is extra complicated to allow for templates with
 		// parameters and to handle whitespace properly
-		this.text = this.text.replace(new RegExp(
-			// leading whitespace
-			'^\\s*' +
-				// capture template(s)
-				'(?:((?:\\s*' +
-				// Pre-template regex, such as leading html comments
-				preRegex + '|' +
-				// begin template format
-				'\\{\\{\\s*(?:' +
-				// Template regex
-				regex +
-				// end main template name, optionally with a number
-				// Probably remove the (?:) though
-				')\\d*\\s*' +
-				// template parameters
-				'(\\|(?:\\{\\{[^{}]*\\}\\}|[^{}])*)?' +
-				// end template format
-				'\\}\\})+' +
-				// end capture
-				'(?:\\s*\\n)?)' +
-				// trailing whitespace
-				'\\s*)?', flags), '$1' + tag);
+		this.text = this.text.replace(
+			new RegExp(
+				// leading whitespace
+				'^\\s*' +
+						// capture template(s)
+						'(?:((?:\\s*' +
+						// Pre-template regex, such as leading html comments
+						preRegex +
+						'|' +
+						// begin template format
+						'\\{\\{\\s*(?:' +
+						// Template regex
+						regex +
+						// end main template name, optionally with a number
+						// Probably remove the (?:) though
+						')\\d*\\s*' +
+						// template parameters
+						'(\\|(?:\\{\\{[^{}]*\\}\\}|[^{}])*)?' +
+						// end template format
+						'\\}\\})+' +
+						// end capture
+						'(?:\\s*\\n)?)' +
+						// trailing whitespace
+						'\\s*)?',
+				flags
+			),
+			'$1' + tag
+		);
 		return this;
 	},
 	/**
@@ -4752,21 +4836,23 @@ Morebits.userspaceLogger = function (logPageName) {
 			return def.reject();
 		}
 		const page = new Morebits.wiki.page('User:' + mw.config.get('wgUserName') + '/' + logPageName, '将项目加入到用户空间日志'); // make this '... to ' + logPageName ?
-		page.load(function (pageobj) {
-			// add blurb if log page doesn't exist or is blank
-			let text = pageobj.getPageText() || this.initialText;
+		page.load(
+			function (pageobj) {
+				// add blurb if log page doesn't exist or is blank
+				let text = pageobj.getPageText() || this.initialText;
 
-			// create monthly header if it doesn't exist already
-			const date = new Morebits.date(pageobj.getLoadTime());
-			if (!date.monthHeaderRegex().exec(text)) {
-				text += '\n\n' + date.monthHeader(this.headerLevel);
-			}
-			pageobj.setPageText(text + '\n' + logText);
-			pageobj.setEditSummary(summaryText);
-			pageobj.setChangeTags(this.changeTags);
-			pageobj.setCreateOption('recreate');
-			pageobj.save(def.resolve, def.reject);
-		}.bind(this));
+				// create monthly header if it doesn't exist already
+				const date = new Morebits.date(pageobj.getLoadTime());
+				if (!date.monthHeaderRegex().exec(text)) {
+					text += '\n\n' + date.monthHeader(this.headerLevel);
+				}
+				pageobj.setPageText(text + '\n' + logText);
+				pageobj.setEditSummary(summaryText);
+				pageobj.setChangeTags(this.changeTags);
+				pageobj.setCreateOption('recreate');
+				pageobj.save(def.resolve, def.reject);
+			}.bind(this)
+		);
 		return def;
 	};
 };
@@ -5012,7 +5098,9 @@ Morebits.checkboxShiftClickSupport = function (jQuerySelector, jQueryContext) {
 		const thisCb = this;
 		if (event.shiftKey && lastCheckbox !== null) {
 			const cbs = $(jQuerySelector, jQueryContext); // can't cache them, obviously, if we want to support resorting
-			let index = -1, lastIndex = -1, i;
+			let index = -1,
+				lastIndex = -1,
+				i;
 			for (i = 0; i < cbs.length; i++) {
 				if (cbs[i] === thisCb) {
 					index = i;
@@ -5196,7 +5284,7 @@ Morebits.batchOperation = function (currentAction) {
 			// update or remove status line
 			const statelem = arg.getStatusElement();
 			if (ctx.options.preserveIndividualStatusLines) {
-				if (arg.getPageName || arg.pageName || arg.query && arg.query.title) {
+				if (arg.getPageName || arg.pageName || (arg.query && arg.query.title)) {
 					// we know the page title - display a relevant message
 					const pageName = arg.getPageName ? arg.getPageName() : arg.pageName || arg.query.title;
 					statelem.info('完成（[[' + pageName + ']]）');
@@ -5238,7 +5326,7 @@ Morebits.batchOperation = function (currentAction) {
 		// update overall status line
 		const total = ctx.pageList.length;
 		if (ctx.countFinished < total) {
-			const progress = Math.round(100 * ctx.countFinished / total);
+			const progress = Math.round((100 * ctx.countFinished) / total);
 			ctx.statusElement.status(progress + '%');
 
 			// start a new chunk if we're close enough to the end of the previous chunk, and
@@ -5299,7 +5387,7 @@ Morebits.taskManager = function (context) {
 	 */
 	this.add = function (func, deps, onFailure) {
 		this.taskDependencyMap.set(func, deps);
-		this.failureCallbackMap.set(func, onFailure || function () { });
+		this.failureCallbackMap.set(func, onFailure || function () {});
 		const deferred = $.Deferred();
 		this.deferreds.set(func, deferred);
 		this.allDeferreds.push(deferred);
@@ -5316,25 +5404,31 @@ Morebits.taskManager = function (context) {
 			const dependencyPromisesArray = deps.map(function (dep) {
 				return self.deferreds.get(dep);
 			});
-			$.when.apply(self.context, dependencyPromisesArray).then(function () {
-				const result = task.apply(self.context, arguments);
-				if (result === undefined) {
-					// maybe the function threw, or it didn't return anything
-					mw.log.error('Morebits.taskManager: task returned undefined');
-					self.deferreds.get(task).reject.apply(self.context, arguments);
-					self.failureCallbackMap.get(task).apply(self.context, []);
-				}
-				result.then(function () {
-					self.deferreds.get(task).resolve.apply(self.context, arguments);
-				}, function () {
-					// task failed
-					self.deferreds.get(task).reject.apply(self.context, arguments);
+			$.when.apply(self.context, dependencyPromisesArray).then(
+				function () {
+					const result = task.apply(self.context, arguments);
+					if (result === undefined) {
+						// maybe the function threw, or it didn't return anything
+						mw.log.error('Morebits.taskManager: task returned undefined');
+						self.deferreds.get(task).reject.apply(self.context, arguments);
+						self.failureCallbackMap.get(task).apply(self.context, []);
+					}
+					result.then(
+						function () {
+							self.deferreds.get(task).resolve.apply(self.context, arguments);
+						},
+						function () {
+							// task failed
+							self.deferreds.get(task).reject.apply(self.context, arguments);
+							self.failureCallbackMap.get(task).apply(self.context, arguments);
+						}
+					);
+				},
+				function () {
+					// one or more of the dependencies failed
 					self.failureCallbackMap.get(task).apply(self.context, arguments);
-				});
-			}, function () {
-				// one or more of the dependencies failed
-				self.failureCallbackMap.get(task).apply(self.context, arguments);
-			});
+				}
+			);
 		});
 		return $.when.apply(null, this.allDeferreds); // resolved when everything is done!
 	};
@@ -5358,7 +5452,7 @@ Morebits.simpleWindow = function SimpleWindow(width, height) {
 	$(this.content).dialog({
 		autoOpen: false,
 		buttons: {
-			'Placeholder button': function () { }
+			'Placeholder button': function () {}
 		},
 		dialogClass: 'morebits-dialog',
 		width: Math.min(parseInt(window.innerWidth, 10), parseInt(width || 800, 10)),
@@ -5503,7 +5597,9 @@ Morebits.simpleWindow.prototype = {
 		// chrome has in height in addition to the height of an equivalent "classic"
 		// Morebits.simpleWindow
 		if (parseInt(getComputedStyle($(this.content).dialog('widget')[0], null).height, 10) > window.innerHeight) {
-			$(this.content).dialog('option', 'height', window.innerHeight - 2).dialog('option', 'position', 'top');
+			$(this.content)
+				.dialog('option', 'height', window.innerHeight - 2)
+				.dialog('option', 'position', 'top');
 		} else {
 			$(this.content).dialog('option', 'height', 'auto');
 		}
@@ -5535,17 +5631,23 @@ Morebits.simpleWindow.prototype = {
 
 		// look for submit buttons in the content, hide them, and add a proxy button to the button pane
 		const thisproxy = this;
-		$(this.content).find('input[type="submit"], button[type="submit"]').each(function (key, value) {
-			value.style.display = 'none';
-			const button = document.createElement('button');
-			button.textContent = value.hasAttribute('value') ? value.getAttribute('value') : value.textContent ? value.textContent : '提交';
-			button.className = value.className || 'submitButtonProxy';
-			// here is an instance of cheap coding, probably a memory-usage hit in using a closure here
-			button.addEventListener('click', function () {
-				value.click();
-			}, false);
-			thisproxy.buttons.push(button);
-		});
+		$(this.content)
+			.find('input[type="submit"], button[type="submit"]')
+			.each(function (key, value) {
+				value.style.display = 'none';
+				const button = document.createElement('button');
+				button.textContent = value.hasAttribute('value') ? value.getAttribute('value') : value.textContent ? value.textContent : '提交';
+				button.className = value.className || 'submitButtonProxy';
+				// here is an instance of cheap coding, probably a memory-usage hit in using a closure here
+				button.addEventListener(
+					'click',
+					function () {
+						value.click();
+					},
+					false
+				);
+				thisproxy.buttons.push(button);
+			});
 		// remove all buttons from the button pane and re-add them
 		if (this.buttons.length > 0) {
 			$(this.content).dialog('widget').find('.morebits-dialog-buttons').empty().append(this.buttons)[0].removeAttribute('data-empty');

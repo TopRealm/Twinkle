@@ -50,12 +50,14 @@ Twinkle.protect.callback = function twinkleprotectCallback() {
 			type: 'radio',
 			name: 'actiontype',
 			event: Twinkle.protect.callback.changeAction,
-			list: [ {
-				label: '保护页面',
-				value: 'protect',
-				tooltip: '实施页面保护',
-				checked: true
-			} ]
+			list: [
+				{
+					label: '保护页面',
+					value: 'protect',
+					tooltip: '实施页面保护',
+					checked: true
+				}
+			]
 		});
 	}
 	actionfield.append({
@@ -125,7 +127,6 @@ Twinkle.protect.currentProtectionLevels = {};
 Twinkle.protect.previousProtectionLevels = {};
 
 Twinkle.protect.fetchProtectionLevel = function twinkleprotectFetchProtectionLevel() {
-
 	const api = new mw.Api();
 	const protectDeferred = api.get({
 		format: 'json',
@@ -165,9 +166,12 @@ Twinkle.protect.fetchProtectionLevel = function twinkleprotectFetchProtectionLev
 		});
 
 		// Only use the log except unprotect
-		Twinkle.protect.previousProtectionLog = protectData.query.logevents.length >= 1 && protectData.query.logevents[0].action !== 'unprotect' ?
-			protectData.query.logevents[0] :
-			protectData.query.logevents.length >= 2 ? protectData.query.logevents[1] : null;
+		Twinkle.protect.previousProtectionLog =
+				protectData.query.logevents.length >= 1 && protectData.query.logevents[0].action !== 'unprotect' ?
+					protectData.query.logevents[0] :
+					protectData.query.logevents.length >= 2 ?
+						protectData.query.logevents[1] :
+						null;
 
 		if (Twinkle.protect.previousProtectionLog) {
 			$.each(Twinkle.protect.previousProtectionLog.params.details, function (index, protection) {
@@ -210,13 +214,13 @@ Twinkle.protect.callback.showLogAndCurrentProtectInfo = function twinkleprotectC
 					'此页面曾在',
 					$('<b>' + new Morebits.date(Twinkle.protect.previousProtectionLog.timestamp).calendar('utc') + '</b>')[0],
 					'被' + Twinkle.protect.previousProtectionLog.user + '保护：'
-				].concat(Twinkle.protect.formatProtectionDescription(Twinkle.protect.previousProtectionLevels)),
-			$linkMarkup[0]
+				].concat(Twinkle.protect.formatProtectionDescription(Twinkle.protect.previousProtectionLevels)), $linkMarkup[0]
 		);
 	}
 
 	Morebits.status.init($('div[name="currentprot"] span')[0]);
-	let protectionNode = [], statusLevel = 'info';
+	let protectionNode = [],
+		statusLevel = 'info';
 
 	protectionNode = Twinkle.protect.formatProtectionDescription(Twinkle.protect.currentProtectionLevels);
 	if (currentlyProtected) {
@@ -243,7 +247,7 @@ Twinkle.protect.callback.changeAction = function twinkleprotectCallbackChangeAct
 			});
 
 			field2 = new Morebits.quickForm.element({ type: 'field', label: '保护选项', name: 'field2' });
-			field2.append({ type: 'div', name: 'currentprot', label: ' ' });  // holds the current protection level, as filled out by the async callback
+			field2.append({ type: 'div', name: 'currentprot', label: ' ' }); // holds the current protection level, as filled out by the async callback
 			field2.append({ type: 'div', name: 'hasprotectlog', label: ' ' });
 			// for existing pages
 			if (mw.config.get('wgArticleId')) {
@@ -316,7 +320,8 @@ Twinkle.protect.callback.changeAction = function twinkleprotectCallbackChangeAct
 					// default expiry selection (2 days) is conditionally set in Twinkle.protect.callback.changePreset
 					list: Twinkle.protect.protectionLengths
 				});
-			} else {  // for non-existing pages
+			} else {
+				// for non-existing pages
 				field2.append({
 					type: 'select',
 					name: 'createlevel',
@@ -355,13 +360,14 @@ Twinkle.protect.callback.changeAction = function twinkleprotectCallbackChangeAct
 				name: 'protectReason',
 				label: '理由（保护日志）：'
 			});
-			if (!mw.config.get('wgArticleId') || mw.config.get('wgPageContentModel') === 'Scribunto') {  // tagging isn't relevant for non-existing or module pages
+			if (!mw.config.get('wgArticleId') || mw.config.get('wgPageContentModel') === 'Scribunto') {
+				// tagging isn't relevant for non-existing or module pages
 				break;
 			}
 			/* falls through */
 		case 'tag':
 			field1 = new Morebits.quickForm.element({ type: 'field', label: '标记选项', name: 'field1' });
-			field1.append({ type: 'div', name: 'currentprot', label: ' ' });  // holds the current protection level, as filled out by the async callback
+			field1.append({ type: 'div', name: 'currentprot', label: ' ' }); // holds the current protection level, as filled out by the async callback
 			field1.append({ type: 'div', name: 'hasprotectlog', label: ' ' });
 			field1.append({
 				type: 'select',
@@ -406,7 +412,7 @@ Twinkle.protect.callback.changeAction = function twinkleprotectCallbackChangeAct
 			});
 
 			field1 = new Morebits.quickForm.element({ type: 'field', label: '选项', name: 'field1' });
-			field1.append({ type: 'div', name: 'currentprot', label: ' ' });  // holds the current protection level, as filled out by the async callback
+			field1.append({ type: 'div', name: 'currentprot', label: ' ' }); // holds the current protection level, as filled out by the async callback
 			field1.append({ type: 'div', name: 'hasprotectlog', label: ' ' });
 			field1.append({
 				type: 'select',
@@ -468,7 +474,7 @@ Twinkle.protect.callback.changeAction = function twinkleprotectCallbackChangeAct
 Twinkle.protect.formevents = {
 	editmodify: function twinkleprotectFormEditmodifyEvent(e) {
 		e.target.form.editlevel.disabled = !e.target.checked;
-		e.target.form.editexpiry.disabled = !e.target.checked || (e.target.form.editlevel.value === 'all');
+		e.target.form.editexpiry.disabled = !e.target.checked || e.target.form.editlevel.value === 'all';
 		e.target.form.editlevel.style.color = e.target.form.editexpiry.style.color = e.target.checked ? '' : 'transparent';
 	},
 	editlevel: function twinkleprotectFormEditlevelEvent(e) {
@@ -484,7 +490,7 @@ Twinkle.protect.formevents = {
 			e.target.form.moveexpiry.value = 'infinity';
 		}
 		e.target.form.movelevel.disabled = !e.target.checked;
-		e.target.form.moveexpiry.disabled = !e.target.checked || (e.target.form.movelevel.value === 'all');
+		e.target.form.moveexpiry.disabled = !e.target.checked || e.target.form.movelevel.value === 'all';
 		e.target.form.movelevel.style.color = e.target.form.moveexpiry.style.color = e.target.checked ? '' : 'transparent';
 	},
 	movelevel: function twinkleprotectFormMovelevelEvent(e) {
@@ -494,7 +500,7 @@ Twinkle.protect.formevents = {
 		e.target.form.createexpiry.disabled = e.target.value === 'all';
 	},
 	tagtype: function twinkleprotectFormTagtypeEvent(e) {
-		e.target.form.small.disabled = e.target.form.noinclude.disabled = e.target.form.showexpiry.disabled = (e.target.value === 'none') || (e.target.value === 'noop');
+		e.target.form.small.disabled = e.target.form.noinclude.disabled = e.target.form.showexpiry.disabled = e.target.value === 'none' || e.target.value === 'noop';
 	}
 };
 
@@ -512,26 +518,33 @@ Twinkle.protect.doCustomExpiry = function twinkleprotectDoCustomExpiry(target) {
 };
 
 // NOTE: This list is used by batchprotect as well
-Twinkle.protect.protectionLevels = [ {
-	label: '全部',
-	value: 'all'
-}, {
-	label: '仅允许自动确认用户',
-	value: 'autoconfirmed'
-}, {
-	label: '仅模板编辑员和管理员',
-	value: 'templateeditor'
-}, {
-	label: '仅允许管理员',
-	value: 'sysop',
-	selected: true
-}, {
-	label: '仅允许资深用户',
-	value: 'revisionprotected'
-}, {
-	label: '仅允许裁决委员',
-	value: 'officialprotected'
-} ];
+Twinkle.protect.protectionLevels = [
+	{
+		label: '全部',
+		value: 'all'
+	},
+	{
+		label: '仅允许自动确认用户',
+		value: 'autoconfirmed'
+	},
+	{
+		label: '仅模板编辑员和管理员',
+		value: 'templateeditor'
+	},
+	{
+		label: '仅允许管理员',
+		value: 'sysop',
+		selected: true
+	},
+	{
+		label: '仅允许资深用户',
+		value: 'revisionprotected'
+	},
+	{
+		label: '仅允许裁决委员',
+		value: 'officialprotected'
+	}
+];
 
 // default expiry selection is conditionally set in Twinkle.protect.callback.changePreset
 // NOTE: This list is used by batchprotect as well
@@ -559,9 +572,7 @@ Twinkle.protect.protectionTypesAdmin = [
 	},
 	{
 		label: '模板保护',
-		list: [
-			{ label: '高风险模板（模板）', value: 'pp-template' }
-		]
+		list: [ { label: '高风险模板（模板）', value: 'pp-template' } ]
 	},
 	{
 		label: '半保护',
@@ -600,12 +611,9 @@ Twinkle.protect.protectionTypesCreateOnly = [
 	}
 ];
 
-Twinkle.protect.protectionTypes = Twinkle.protect.protectionTypesAdmin.concat(
-	Twinkle.protect.protectionTypesCreateOnly);
+Twinkle.protect.protectionTypes = Twinkle.protect.protectionTypesAdmin.concat(Twinkle.protect.protectionTypesCreateOnly);
 
-Twinkle.protect.protectionTypesCreate = [
-	{ label: '解除保护', value: 'unprotect' }
-].concat(Twinkle.protect.protectionTypesCreateOnly);
+Twinkle.protect.protectionTypesCreate = [ { label: '解除保护', value: 'unprotect' } ].concat(Twinkle.protect.protectionTypesCreateOnly);
 
 // NOTICE: keep this synched with [[MediaWiki:Protect-dropdown]]
 // expiry will override any defaults
@@ -723,58 +731,78 @@ Twinkle.protect.protectionPresetsInfo = {
 	}
 };
 
-Twinkle.protect.protectionTags = [ {
-	label: '无（移除现有模板）',
-	value: 'none'
-}, {
-	label: '无（不移除现有模板）',
-	value: 'noop'
-}, {
-	label: '编辑保护模板',
-	list: [ {
-		label: '{{pp-dispute}}: 争议、编辑战',
-		value: 'pp-dispute'
-	}, {
-		label: '{{pp-vandalism}}: 破坏',
-		value: 'pp-vandalism'
-	}, {
-		label: '{{pp-template}}: 高风险模板',
-		value: 'pp-template'
-	}, {
-		label: '{{pp-module}}: 高风险模块',
-		value: 'pp-module'
-	}, {
-		label: '{{pp-usertalk}}: 封禁用户讨论页',
-		value: 'pp-usertalk'
-	}, {
-		label: '{{pp-semi-sock}}: 傀儡破坏',
-		value: 'pp-semi-sock'
-	}, {
-		label: '{{pp-semi-blp}}: 违反生者传记',
-		value: 'pp-semi-blp}'
-	}, {
-		label: '{{pp-semi-indef}}: 常规长期半保护',
-		value: 'pp-semi-indef'
-	}, {
-		label: '{{pp-protected}}: 常规保护',
-		value: 'pp-protected'
-	} ]
-}, {
-	label: '移动保护模板',
-	list: [ {
-		label: '{{pp-move-dispute}}: 争议、编辑战',
-		value: 'pp-move-dispute'
-	}, {
-		label: '{{pp-move-vandalism}}: 页面移动破坏',
-		value: 'pp-move-vandalism'
-	}, {
-		label: '{{pp-move-indef}}: 长期保护',
-		value: 'pp-move-indef'
-	}, {
-		label: '{{pp-move}}: 常规',
-		value: 'pp-move'
-	} ]
-} ];
+Twinkle.protect.protectionTags = [
+	{
+		label: '无（移除现有模板）',
+		value: 'none'
+	},
+	{
+		label: '无（不移除现有模板）',
+		value: 'noop'
+	},
+	{
+		label: '编辑保护模板',
+		list: [
+			{
+				label: '{{pp-dispute}}: 争议、编辑战',
+				value: 'pp-dispute'
+			},
+			{
+				label: '{{pp-vandalism}}: 破坏',
+				value: 'pp-vandalism'
+			},
+			{
+				label: '{{pp-template}}: 高风险模板',
+				value: 'pp-template'
+			},
+			{
+				label: '{{pp-module}}: 高风险模块',
+				value: 'pp-module'
+			},
+			{
+				label: '{{pp-usertalk}}: 封禁用户讨论页',
+				value: 'pp-usertalk'
+			},
+			{
+				label: '{{pp-semi-sock}}: 傀儡破坏',
+				value: 'pp-semi-sock'
+			},
+			{
+				label: '{{pp-semi-blp}}: 违反生者传记',
+				value: 'pp-semi-blp}'
+			},
+			{
+				label: '{{pp-semi-indef}}: 常规长期半保护',
+				value: 'pp-semi-indef'
+			},
+			{
+				label: '{{pp-protected}}: 常规保护',
+				value: 'pp-protected'
+			}
+		]
+	},
+	{
+		label: '移动保护模板',
+		list: [
+			{
+				label: '{{pp-move-dispute}}: 争议、编辑战',
+				value: 'pp-move-dispute'
+			},
+			{
+				label: '{{pp-move-vandalism}}: 页面移动破坏',
+				value: 'pp-move-vandalism'
+			},
+			{
+				label: '{{pp-move-indef}}: 长期保护',
+				value: 'pp-move-indef'
+			},
+			{
+				label: '{{pp-move}}: 常规',
+				value: 'pp-move'
+			}
+		]
+	}
+];
 
 Twinkle.protect.callback.changePreset = function twinkleprotectCallbackChangePreset(e) {
 	const form = e.target.form;
@@ -789,7 +817,8 @@ Twinkle.protect.callback.changePreset = function twinkleprotectCallbackChangePre
 		break;
 	}
 
-	if (actiontype === 'protect') {  // actually protecting the page
+	if (actiontype === 'protect') {
+		// actually protecting the page
 		const item = Twinkle.protect.protectionPresetsInfo[form.category.value];
 
 		if (mw.config.get('wgArticleId')) {
@@ -845,8 +874,8 @@ Twinkle.protect.callback.changePreset = function twinkleprotectCallbackChangePre
 				form.noinclude.checked = false;
 			}
 		}
-
-	} else {  // RPP request
+	} else {
+		// RPP request
 		if (form.category.value === 'unprotect') {
 			form.expiry.value = '';
 			form.expiry.disabled = true;
@@ -867,10 +896,7 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 			tag: input.tagtype,
 			reason: (input.tagtype === 'pp-protected' || input.tagtype === 'pp-semi-protected' || input.tagtype === 'pp-move') && input.protectReason ? input.protectReason : null,
 			showexpiry: input.actiontype === 'protect' ? input.showexpiry : null,
-			expiry: input.actiontype === 'protect' ?
-				input.editmodify ? input.editexpiry :
-					input.movemodify ? input.moveexpiry : null :
-				null,
+			expiry: input.actiontype === 'protect' ? input.editmodify ? input.editexpiry : input.movemodify ? input.moveexpiry : null : null,
 			small: input.small,
 			noinclude: input.noinclude
 		};
@@ -981,7 +1007,6 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 			}
 
 			break;
-
 		}
 		case 'tag':
 			// apply a protection template
@@ -1135,7 +1160,8 @@ Twinkle.protect.callbacks = {
 	getTaggedPage: function (params, text) {
 		let tag, summary;
 
-		const oldtag_re = /(?:<noinclude>)?[ \t]*\{\{\s*(pp-[^{}]*?|protected|(?:t|v|s|p-|usertalk-v|usertalk-s|sb|move)protected(?:2)?|protected template|privacy protection)\s*?\}\}\s*(?:<\/noinclude>)?\s*/gi;
+		const oldtag_re =
+				/(?:<noinclude>)?[ \t]*\{\{\s*(pp-[^{}]*?|protected|(?:t|v|s|p-|usertalk-v|usertalk-s|sb|move)protected(?:2)?|protected template|privacy protection)\s*?\}\}\s*(?:<\/noinclude>)?\s*/gi;
 		const re_result = oldtag_re.exec(text);
 		if (re_result) {
 			if (params.tag === 'none' || confirm('在页面上找到{{' + re_result[1] + '}}\n单击确定以移除，或单击取消以取消操作。')) {
@@ -1157,9 +1183,14 @@ Twinkle.protect.callbacks = {
 				tag += '|small=yes';
 			}
 
-			if (/^\s*#(?:redirect|重定向|重新導向)/i.test(text)) { // redirect page
+			if (/^\s*#(?:redirect|重定向|重新導向)/i.test(text)) {
+				// redirect page
 				// Only tag if no {{rcat shell}} is found
-				if (!text.match(/{{(?:Redirect[ _]category shell|Rcat[ _]shell|This[ _]is a redirect|多种类型重定向|多種類型重定向|多種類型重新導向|多种类型重新导向|R0|其他重定向|RCS|Redirect[ _]shell)/i)) {
+				if (
+					!text.match(
+						/{{(?:Redirect[ _]category shell|Rcat[ _]shell|This[ _]is a redirect|多种类型重定向|多種類型重定向|多種類型重新導向|多种类型重新导向|R0|其他重定向|RCS|Redirect[ _]shell)/i
+					)
+				) {
 					text = text.replace(/#(?:redirect|重定向|重新導向) ?(\[\[.*?\]\])(.*)/i, '#REDIRECT $1$2\n\n{{' + tag + '}}');
 				} else {
 					Morebits.status.info('已存在Redirect category shell', '没什么可做的');
@@ -1246,9 +1277,7 @@ Twinkle.protect.callbacks = {
 		words += params.typename;
 
 		newtag += '* <small>当前保护状态：{{protection status|' + mw.config.get('wgPageName') + '}}</small>\n';
-		newtag += '请求' + Morebits.string.toUpperCaseFirstChar(words) + (params.reason !== '' ? '：' +
-
-			Morebits.string.formatReasonText(params.reason) : '。') + '--~~' + '~~';
+		newtag += '请求' + Morebits.string.toUpperCaseFirstChar(words) + (params.reason !== '' ? '：' + Morebits.string.formatReasonText(params.reason) : '。') + '--~~' + '~~';
 
 		let reg;
 
@@ -1282,7 +1311,7 @@ Twinkle.protect.callbacks = {
 					titles: mw.config.get('wgPageName'),
 					token: mw.user.tokens.get('watchToken')
 				};
-				// Only add the expiry if page is unwatched or already temporarily watched
+					// Only add the expiry if page is unwatched or already temporarily watched
 				if (Twinkle.protect.watched !== true && watchPref !== 'default' && watchPref !== 'yes') {
 					watch_query.expiry = watchPref;
 				}
@@ -1303,7 +1332,8 @@ Twinkle.protect.callbacks = {
 			return;
 		}
 
-		let sectionText, expiryText = '';
+		let sectionText,
+			expiryText = '';
 		if (params.type === 'unprotect') {
 			sectionText = sections[1];
 		} else {
@@ -1319,13 +1349,9 @@ Twinkle.protect.callbacks = {
 			if (rppRe.exec(requestList[i])) {
 				requestList[i] = requestList[i].trimRight();
 				if (params.type === 'unprotect') {
-
 					requestList[i] += '\n: {{RFPP|isun}}。--~~' + '~~\n';
 				} else {
-					requestList[i] += '\n: {{RFPP|' + params.type + '|' +
-						(Morebits.string.isInfinity(params.expiry) ? 'infinity' : expiryText) +
-
-						'}}。--~~' + '~~\n';
+					requestList[i] += '\n: {{RFPP|' + params.type + '|' + (Morebits.string.isInfinity(params.expiry) ? 'infinity' : expiryText) + '}}。--~~' + '~~\n';
 				}
 				found = true;
 				break;
