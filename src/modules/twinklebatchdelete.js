@@ -677,7 +677,7 @@ Twinkle.batchdelete.callbacks = {
 			return;
 		}
 
-		const redirectDeleter = new Morebits.batchOperation('正在删除到 ' + apiobj.params.page + ' 的重定向');
+		const redirectDeleter = new Morebits.batchOperation('正在删除到“' + apiobj.params.page + '”的重定向');
 		redirectDeleter.setOption('chunkSize', Twinkle.getPref('batchChunks'));
 		redirectDeleter.setPageList(pages);
 		redirectDeleter.run((pageName) => {
@@ -696,8 +696,8 @@ Twinkle.batchdelete.callbacks = {
 			return;
 		}
 
-		const page = new Morebits.wiki.page(apiobj.params.talkPage, '正在删除页面 ' + apiobj.params.page + ' 的讨论页');
-		page.setEditSummary('[[WP:CSD#G15|G15]]: ' + '已删页面“' + apiobj.params.page + '”的[[Wikipedia:讨论页|讨论页]]');
+		const page = new Morebits.wiki.page(apiobj.params.talkPage, '正在删除页面“' + apiobj.params.page + '”的[[Help:讨论页|讨论页]]');
+		page.setEditSummary('[[QW:G9|G9]]：孤立页面（已删页面“' + apiobj.params.page + '”的[[Help:讨论页|讨论页]]）');
 		page.setChangeTags(Twinkle.changeTags);
 		page.deletePage();
 	},
@@ -713,7 +713,7 @@ Twinkle.batchdelete.callbacks = {
 			return;
 		}
 
-		const unlinker = new Morebits.batchOperation('正在取消到 ' + apiobj.params.page + ' 的链入');
+		const unlinker = new Morebits.batchOperation('正在取消到“' + apiobj.params.page + '”的链入');
 		unlinker.setOption('chunkSize', Twinkle.getPref('batchChunks'));
 		unlinker.setPageList(pages);
 		unlinker.run((pageName) => {
@@ -768,7 +768,7 @@ Twinkle.batchdelete.callbacks = {
 			return;
 		}
 
-		const unlinker = new Morebits.batchOperation('正在取消到 ' + apiobj.params.page + ' 的链入');
+		const unlinker = new Morebits.batchOperation('正在取消到“' + apiobj.params.page + '”的链入');
 		unlinker.setOption('chunkSize', Twinkle.getPref('batchChunks'));
 		unlinker.setPageList(pages);
 		unlinker.run((pageName) => {
