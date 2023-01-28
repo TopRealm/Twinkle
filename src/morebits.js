@@ -71,7 +71,7 @@ Morebits.l10n = {
 	 * @param {string} str
 	 * @returns {number[] | null}
 	 */
-	signatureTimestampFormat: function (str) {
+	signatureTimestampFormat: (str) => {
 		const rgxUTC = /(\d{4})年(\d{1,2})月(\d{1,2})日 \(.\) (\d{2}):(\d{2}) \(UTC\)/; // YYYY年Month月DD日 (w) HH:mm (UTC)
 		const rgxCST = /(\d{4})年(\d{1,2})月(\d{1,2})日 \(.\) (\d{2}):(\d{2}) \(CST\)/; // YYYY年Month月DD日 (w) HH:mm (CST)
 		const match = rgxUTC.exec(str) || rgxCST.exec(str);
@@ -94,7 +94,7 @@ Morebits.l10n = {
  * @param {string} group - e.g. `sysop`, `extendedconfirmed`, etc.
  * @returns {boolean}
  */
-Morebits.userIsInGroup = function (group) {
+Morebits.userIsInGroup = (group) => {
 	return mw.config.get('wgUserGroups').indexOf(group) !== -1;
 };
 /**
@@ -111,7 +111,7 @@ Morebits.userIsSysop = Morebits.userIsInGroup('sysop') || Morebits.userIsInGroup
  *
  * @returns {boolean}
  */
-Morebits.isPageRedirect = function () {
+Morebits.isPageRedirect = () => {
 	return !!(mw.config.get('wgIsRedirect') || document.getElementById('softredirect') || $('.box-RfD').length || $('.box-Redirect_category_shell').length);
 };
 
@@ -131,7 +131,7 @@ Morebits.pageNameNorm = mw.config.get('wgPageName').replace(/_/g, ' ');
  * @param {string} pageName - Page name without namespace.
  * @returns {string} - For a page name `Foo bar`, returns the string `[Ff]oo[_ ]bar`.
  */
-Morebits.pageNameRegex = function (pageName) {
+Morebits.pageNameRegex = (pageName) => {
 	if (pageName === '') {
 		return '';
 	}
@@ -151,7 +151,7 @@ Morebits.pageNameRegex = function (pageName) {
  * @param {string|Node|(string|Node)[]} input
  * @returns {DocumentFragment}
  */
-Morebits.createHtml = function (input) {
+Morebits.createHtml = (input) => {
 	const fragment = document.createDocumentFragment();
 	if (!input) {
 		return fragment;
@@ -163,7 +163,7 @@ Morebits.createHtml = function (input) {
 		if (input[i] instanceof Node) {
 			fragment.appendChild(input[i]);
 		} else {
-			$.parseHTML(Morebits.createHtml.renderWikilinks(input[i])).forEach(function (node) {
+			$.parseHTML(Morebits.createHtml.renderWikilinks(input[i])).forEach((node) => {
 				fragment.appendChild(node);
 			});
 		}
@@ -177,11 +177,11 @@ Morebits.createHtml = function (input) {
  * @param text
  * @returns {*}
  */
-Morebits.createHtml.renderWikilinks = function (text) {
+Morebits.createHtml.renderWikilinks = (text) => {
 	const ub = new Morebits.unbinder(text);
 	// Don't convert wikilinks within code tags as they're used for displaying wiki-code
 	ub.unbind('<code>', '</code>');
-	ub.content = ub.content.replace(/\[\[:?(?:([^|\]]+?)\|)?([^\]|]+?)\]\]/g, function (_, target, text) {
+	ub.content = ub.content.replace(/\[\[:?(?:([^|\]]+?)\|)?([^\]|]+?)\]\]/g, (_, target, text) => {
 		if (!target) {
 			target = text;
 		}
@@ -205,20 +205,18 @@ Morebits.createHtml.renderWikilinks = function (text) {
  * Morebits.namespaceRegex([6])
  * @returns {string} - Regex-suitable string of all namespace aliases.
  */
-Morebits.namespaceRegex = function (namespaces) {
+Morebits.namespaceRegex = (namespaces) => {
 	if (!Array.isArray(namespaces)) {
 		namespaces = [ namespaces ];
 	}
 	const aliases = [];
 	let regex;
-	$.each(mw.config.get('wgNamespaceIds'), function (name, number) {
+	$.each(mw.config.get('wgNamespaceIds'), (name, number) => {
 		if (namespaces.indexOf(number) !== -1) {
 			// Namespaces are completely agnostic as to case,
 			// and a regex string is more useful/compatible than a RegExp object,
 			// so we accept any casing for any letter.
-			aliases.push(name.split('').map(function (char) {
-				return Morebits.pageNameRegex(char);
-			}).join(''));
+			aliases.push(name.split('').map((char) => Morebits.pageNameRegex(char)).join(''));
 		}
 	});
 	switch (aliases.length) {
