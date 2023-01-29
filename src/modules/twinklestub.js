@@ -288,11 +288,20 @@ Twinkle.stub.callbacks = {
 			tags = [];
 		const groupableTags = [];
 		let i;
-		// eslint-disable-next-line prefer-const
-		let totalTags;
-
 		// Remove tags that become superfluous with this action
 		let pageText = pageobj.getPageText();
+		// Check for preexisting tags and separate tags into groupable and non-groupable arrays
+		for (i = 0; i < params.tags.length; i++) {
+			tagRe = new RegExp('(\\{\\{' + params.tags[i] + '(\\||\\}\\}))', 'im');
+			if (!tagRe.exec(pageText)) {
+				tags = tags.concat(params.tags[i]);
+			} else {
+				Morebits.status.info('信息', '在页面上找到{{' + params.tags[i] + '}}……跳过');
+			}
+		}
+		tags = tags.concat(groupableTags);
+		tags.sort();
+		const totalTags = tags.length;
 		const addTag = (tagIndex, tagName) => {
 			pageText += '\n{{' + tagName + '}}';
 			if (tagIndex > 0) {
@@ -306,19 +315,6 @@ Twinkle.stub.callbacks = {
 			summaryText += tagName.indexOf(':') !== -1 ? tagName : 'Template:' + tagName + '|' + tagName;
 			summaryText += ']]}}';
 		};
-
-		// Check for preexisting tags and separate tags into groupable and non-groupable arrays
-		for (i = 0; i < params.tags.length; i++) {
-			tagRe = new RegExp('(\\{\\{' + params.tags[i] + '(\\||\\}\\}))', 'im');
-			if (!tagRe.exec(pageText)) {
-				tags = tags.concat(params.tags[i]);
-			} else {
-				Morebits.status.info('信息', '在页面上找到{{' + params.tags[i] + '}}……跳过');
-			}
-		}
-		tags = tags.concat(groupableTags);
-		tags.sort();
-		totalTags = tags.length;
 		$.each(tags, addTag);
 		summaryText += '标记到' + Twinkle.stub.mode;
 		pageobj.setPageText(pageText);
