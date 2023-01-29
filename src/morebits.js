@@ -2295,7 +2295,7 @@ Morebits.wiki.api.prototype = {
 	 */
 	post: function (callerAjaxParameters) {
 		++Morebits.wiki.numberOfActionsLeft;
-		const queryString = $.map(this.query, function (val, i) {
+		const queryString = $.map(this.query, (val, i) => {
 			if (Array.isArray(val)) {
 				return encodeURIComponent(i) + '=' + val.map(encodeURIComponent).join('|');
 			} else if (val !== undefined) {
@@ -2465,7 +2465,7 @@ Morebits.wiki.api.getToken = () => {
 		type: 'csrf',
 		format: 'json'
 	});
-	return tokenApi.post().then(function (apiobj) {
+	return tokenApi.post().then((apiobj) => {
 		return apiobj.response.query.tokens.csrftoken;
 	});
 };
