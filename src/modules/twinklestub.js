@@ -1,3 +1,4 @@
+/* eslint-disable quote-props */
 'use strict';
 
 /**
@@ -267,16 +268,15 @@ Twinkle.stub.article.tags = {
 // Add new categories with discretion - the list is long enough as is!
 
 Twinkle.stub.article.tagCategories = {
-	通用模板: [ 'stub', 'expand list' ],
-	国家和地理: [ 'asia-stub', 'europe-stub', 'france-geo-stub', 'geo-stub', 'JP-stub', 'switzerland-stub', 'UK-stub', 'US-bio-stub', 'US-geo-stub', 'US-stub' ],
-	杂项: [ 'food-stub', 'hist-stub', 'mil-stub', 'politic-stub', 'religion-stub', 'transp-stub' ],
-	人物: [ 'actor-stub', 'bio-stub', 'US-bio-stub' ],
-	科学: [ 'biology-stub', 'chem-stub', 'math-stub', 'med-stub', 'physics-stub', 'science-stub', 'weather-stub' ],
-	体育: [ 'sport-stub' ],
-	技术: [ 'tech-stub' ],
-	艺术: [ 'actor-stub', 'lit-stub', 'movie-stub', 'music-stub', 'TV-stub' ]
+	'通用模板': [ 'stub', 'expand list' ],
+	'国家和地理': [ 'asia-stub', 'europe-stub', 'france-geo-stub', 'geo-stub', 'JP-stub', 'switzerland-stub', 'UK-stub', 'US-bio-stub', 'US-geo-stub', 'US-stub' ],
+	'杂项': [ 'food-stub', 'hist-stub', 'mil-stub', 'politic-stub', 'religion-stub', 'transp-stub' ],
+	'人物': [ 'actor-stub', 'bio-stub', 'US-bio-stub' ],
+	'科学': [ 'biology-stub', 'chem-stub', 'math-stub', 'med-stub', 'physics-stub', 'science-stub', 'weather-stub' ],
+	'体育': [ 'sport-stub' ],
+	'技术': [ 'tech-stub' ],
+	'艺术': [ 'actor-stub', 'lit-stub', 'movie-stub', 'music-stub', 'TV-stub' ]
 };
-/* eslint-enable quote-props */
 
 // Tags for REDIRECTS start here
 

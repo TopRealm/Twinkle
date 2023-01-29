@@ -1,3 +1,4 @@
+/* eslint-disable es-x/no-object-values */
 'use strict';
 
 /**
@@ -93,7 +94,21 @@ Twinkle.tag.callback = () => {
 			Window.setTitle('条目维护标记');
 
 			// Object.values is unavailable in IE 11
-			// eslint-disable-next-line es-x/no-object-values
+			if (!Object.values) {
+				Object.values = function (obj) {
+					if (obj !== Object(obj)) {
+						throw new TypeError('Object.values called on a non-object');
+					}
+					const val = [];
+					let key;
+					for (key in obj) {
+						if (Object.prototype.hasOwnProperty.call(obj, key)) {
+							val.push(obj[key]);
+						}
+					}
+					return val;
+				};
+			}
 			const obj_values = Object.values || ((obj) => Object.keys(obj).map((key) => obj[key]));
 
 			// Build sorting and lookup object flatObject, which is always

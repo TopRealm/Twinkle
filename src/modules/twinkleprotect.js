@@ -140,8 +140,7 @@ Twinkle.protect.fetchProtectionLevel = () => {
 		titles: mw.config.get('wgPageName')
 	});
 
-	// eslint-disable-next-line no-useless-call
-	$.when.apply($, [ protectDeferred ]).done((protectData) => {
+	$.when.apply(jQuery, [ protectDeferred ]).done((protectData) => {
 		// $.when.apply is supposed to take an unknown number of promises
 		// via an array, which it does, but the type of data returned varies.
 		// If there are two or more deferreds, it returns an array (of objects),

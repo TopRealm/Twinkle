@@ -544,7 +544,7 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
 							type: 'div',
 							id: id + '_' + i + '_subgroup'
 						});
-							// eslint-disable-next-line no-loop-func
+						// eslint-disable-next-line no-loop-func
 						$.each(tmpgroup, (_idx, el) => {
 							const newEl = $.extend({}, el);
 							if (!newEl.type) {
@@ -1900,8 +1900,8 @@ Morebits.date.prototype = {
 			// No built-in week functions, so rather than build out ISO's getWeek/setWeek, just multiply
 			// Probably can't be used for Julian->Gregorian changeovers, etc.
 			if (unitNorm === 'Week') {
-				// eslint-disable-next-line no-unused-expressions, no-sequences
-				unitNorm = 'Date', num *= 7;
+				unitNorm = 'Date';
+				num *= 7;
 			}
 			this['set' + unitNorm](this['get' + unitNorm]() + num);
 			return this;

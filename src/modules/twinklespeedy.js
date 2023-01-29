@@ -1467,7 +1467,7 @@ Twinkle.speedy.getParameters = (form, values) => {
 
 // Function for processing talk page notification template parameters
 // eslint-disable-next-line no-unused-vars
-Twinkle.speedy.getUserTalkParameters = (normalized, _parameters) => {
+Twinkle.speedy.getUserTalkParameters = (normalized, parameters) => {
 	const utparams = [];
 	switch (normalized) {
 		default:
