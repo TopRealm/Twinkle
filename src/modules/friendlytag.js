@@ -23,15 +23,15 @@
 Twinkle.tag = () => {
 	// redirect tagging
 	if (Morebits.isPageRedirect()) {
-		Twinkle.tag.mode = 'redirect';
+		Twinkle.tag.mode = '重定向';
 		Twinkle.addPortletLink(Twinkle.tag.callback, '标记', 'friendly-tag', '标记重定向');
 		// file tagging
 	} else if (mw.config.get('wgNamespaceNumber') === 6 && !document.getElementById('mw-sharedupload') && document.getElementById('mw-imagepage-section-filehistory')) {
-		Twinkle.tag.mode = 'file';
+		Twinkle.tag.mode = '文件';
 		Twinkle.addPortletLink(Twinkle.tag.callback, '标记', 'friendly-tag', '为文件添加或移除标记');
 		// article/draft tagging
 	} else if (([ 0, 118 ].indexOf(mw.config.get('wgNamespaceNumber')) !== -1 && mw.config.get('wgCurRevisionId')) || (Morebits.pageNameNorm === Twinkle.getPref('sandboxPage'))) {
-		Twinkle.tag.mode = 'article';
+		Twinkle.tag.mode = '条目';
 		// Can't remove tags when not viewing current version
 		Twinkle.tag.canRemove =
 				mw.config.get('wgCurRevisionId') === mw.config.get('wgRevisionId') &&
@@ -43,7 +43,7 @@ Twinkle.tag = () => {
 };
 Twinkle.tag.checkedTags = [];
 Twinkle.tag.callback = () => {
-	const Window = new Morebits.simpleWindow(630, Twinkle.tag.mode === 'article' ? 500 : 400);
+	const Window = new Morebits.simpleWindow(630, Twinkle.tag.mode === '条目' ? 500 : 400);
 	Window.setScriptName('Twinkle');
 	// anyone got a good policy/guideline/info page/instructional page link??
 	Window.addFooterLink('参数设置', 'H:TW/PREF#tag');
@@ -90,7 +90,7 @@ Twinkle.tag.callback = () => {
 	});
 
 	switch (Twinkle.tag.mode) {
-		case 'article': {
+		case '条目': {
 			Window.setTitle('条目维护标记');
 			// Build sorting and lookup object flatObject, which is always
 			// needed but also used to generate the alphabetical list
@@ -160,7 +160,7 @@ Twinkle.tag.callback = () => {
 
 			break;
 		}
-		case 'file': {
+		case '文件': {
 			Window.setTitle('文件维护标记');
 
 			Twinkle.tag.fileList.forEach((group) => {
@@ -185,7 +185,7 @@ Twinkle.tag.callback = () => {
 			}
 			break;
 		}
-		case 'redirect': {
+		case '重定向': {
 			Window.setTitle('重定向标记');
 
 			const i = 1;
@@ -243,7 +243,7 @@ Twinkle.tag.callback = () => {
 		}
 	});
 
-	if (Twinkle.tag.mode === 'article') {
+	if (Twinkle.tag.mode === '条目') {
 
 		Twinkle.tag.alreadyPresentTags = [];
 
@@ -1652,7 +1652,7 @@ Twinkle.tag.callback.evaluate = (e) => {
 	// [array two]] devoid of context. Likewise, all the checkParameter
 	// calls could be in one if, but could be similarly confusing.
 	switch (Twinkle.tag.mode) {
-		case 'article':
+		case '条目':
 			params.tagsToRemove = form.getUnchecked('existingTags'); // not in `input`
 			params.tagsToRemain = params.existingTags || []; // container not created if none present
 
@@ -1682,7 +1682,7 @@ Twinkle.tag.callback.evaluate = (e) => {
 			}
 			break;
 
-		case 'file':
+		case '文件':
 			// Silly to provide the same string to each of these
 			if (checkParameter('Obsolete', 'ObsoleteFile', '替换的文件名称') ||
 				checkParameter('Vector version available', 'Vector_version_availableFile', '替换的文件名称')) {
@@ -1693,7 +1693,7 @@ Twinkle.tag.callback.evaluate = (e) => {
 			}
 			break;
 
-		case 'redirect':
+		case '重定向':
 			break;
 
 		default:
@@ -1703,7 +1703,7 @@ Twinkle.tag.callback.evaluate = (e) => {
 
 	// File/redirect: return if no tags selected
 	// Article: return if no tag is selected and no already present tag is deselected
-	if (params.tags.length === 0 && (Twinkle.tag.mode !== 'article' || params.tagsToRemove.length === 0)) {
+	if (params.tags.length === 0 && (Twinkle.tag.mode !== '条目' || params.tagsToRemove.length === 0)) {
 		alert('必须选择至少一个标记！');
 		return;
 	}
@@ -1713,7 +1713,7 @@ Twinkle.tag.callback.evaluate = (e) => {
 
 	Morebits.wiki.actionCompleted.redirect = Morebits.pageNameNorm;
 	Morebits.wiki.actionCompleted.notice = '标记完成，将在几秒内刷新页面';
-	if (Twinkle.tag.mode === 'redirect') {
+	if (Twinkle.tag.mode === '重定向') {
 		Morebits.wiki.actionCompleted.followRedirect = false;
 	}
 
