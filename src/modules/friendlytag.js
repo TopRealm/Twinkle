@@ -1,4 +1,3 @@
-/* eslint-disable es-x/no-object-values */
 'use strict';
 
 /**
@@ -30,8 +29,8 @@ Twinkle.tag = () => {
 	} else if (mw.config.get('wgNamespaceNumber') === 6 && !document.getElementById('mw-sharedupload') && document.getElementById('mw-imagepage-section-filehistory')) {
 		Twinkle.tag.mode = 'file';
 		Twinkle.addPortletLink(Twinkle.tag.callback, '标记', 'friendly-tag', '为文件添加或移除标记');
-		// article/draft article tagging
-	} else if ([ 0, 118 ].indexOf(mw.config.get('wgNamespaceNumber')) !== -1 && mw.config.get('wgCurRevisionId')) {
+		// article/draft tagging
+	} else if (([ 0, 118 ].indexOf(mw.config.get('wgNamespaceNumber')) !== -1 && mw.config.get('wgCurRevisionId')) || (Morebits.pageNameNorm === Twinkle.getPref('sandboxPage'))) {
 		Twinkle.tag.mode = 'article';
 		// Can't remove tags when not viewing current version
 		Twinkle.tag.canRemove =
@@ -55,11 +54,11 @@ Twinkle.tag.callback = () => {
 		type: 'input',
 		label: '筛选标记列表：',
 		name: 'quickfilter',
-		size: '30px',
+		size: '30',
 		event: function twinkletagquickfilter() {
 			// flush the DOM of all existing underline spans
 			$allCheckboxDivs.find('.search-hit').each((i, e) => {
-				const label_element = e.parentNode;
+				const label_element = e.parentElement;
 				// This would convert <label>Hello <span class=search-hit>wo</span>rld</label>
 				// to <label>Hello world</label>
 				label_element.innerHTML = label_element.textContent;
@@ -80,7 +79,7 @@ Twinkle.tag.callback = () => {
 						range.setEnd(textnode, searchHit.index + searchString.length);
 						const underline_span = $('<span>').addClass('search-hit').css('text-decoration', 'underline')[0];
 						range.surroundContents(underline_span);
-						this.parentNode.style.display = 'block'; // show
+						this.parentElement.style.display = 'block'; // show
 					}
 				});
 			} else {
@@ -89,42 +88,26 @@ Twinkle.tag.callback = () => {
 			}
 		}
 	});
+
 	switch (Twinkle.tag.mode) {
 		case 'article': {
 			Window.setTitle('条目维护标记');
-
-			// Object.values is unavailable in IE 11
-			if (!Object.values) {
-				Object.values = function (obj) {
-					if (obj !== Object(obj)) {
-						throw new TypeError('Object.values called on a non-object');
-					}
-					const val = [];
-					let key;
-					for (key in obj) {
-						if (Object.prototype.hasOwnProperty.call(obj, key)) {
-							val.push(obj[key]);
-						}
-					}
-					return val;
-				};
-			}
-			const obj_values = Object.values || ((obj) => Object.keys(obj).map((key) => obj[key]));
-
 			// Build sorting and lookup object flatObject, which is always
 			// needed but also used to generate the alphabetical list
+			// Would be infinitely better with Object.values, but, alas, IE 11
 			Twinkle.tag.article.flatObject = {};
-			obj_values(Twinkle.tag.article.tagList).forEach((group) => {
-				obj_values(group).forEach((subgroup) => {
-					if (Array.isArray(subgroup)) {
-						subgroup.forEach((item) => {
-							Twinkle.tag.article.flatObject[item.tag] = item;
+			Twinkle.tag.article.tagList.forEach((group) => {
+				group.value.forEach((subgroup) => {
+					if (subgroup.value) {
+						subgroup.value.forEach((item) => {
+							Twinkle.tag.article.flatObject[item.tag] = { description: item.description, excludeMI: !!item.excludeMI };
 						});
 					} else {
-						Twinkle.tag.article.flatObject[subgroup.tag] = subgroup;
+						Twinkle.tag.article.flatObject[subgroup.tag] = { description: subgroup.description, excludeMI: !!subgroup.excludeMI };
 					}
 				});
 			});
+
 			form.append({
 				type: 'select',
 				name: 'sortorder',
@@ -132,20 +115,11 @@ Twinkle.tag.callback = () => {
 				tooltip: '您可以在Twinkle参数设置（H:TW/PREF）中更改此项。',
 				event: Twinkle.tag.updateSortOrder,
 				list: [
-					{
-						type: 'option',
-						value: 'cat',
-						label: '按类别',
-						selected: Twinkle.getPref('tagArticleSortOrder') === 'cat'
-					},
-					{
-						type: 'option',
-						value: 'alpha',
-						label: '按字母顺序',
-						selected: Twinkle.getPref('tagArticleSortOrder') === 'alpha'
-					}
+					{ type: 'option', value: 'cat', label: '按类型', selected: Twinkle.getPref('tagArticleSortOrder') === 'cat' },
+					{ type: 'option', value: 'alpha', label: '按字母顺序', selected: Twinkle.getPref('tagArticleSortOrder') === 'alpha' }
 				]
 			});
+
 			if (!Twinkle.tag.canRemove) {
 				const divElement = document.createElement('div');
 				divElement.innerHTML = '要移除现有维护标记，请从当前条目版本中打开“标记”菜单';
@@ -155,12 +129,14 @@ Twinkle.tag.callback = () => {
 					label: divElement
 				});
 			}
+
 			form.append({
 				type: 'div',
 				id: 'tagWorkArea',
 				className: 'morebits-scrollbox',
 				style: 'max-height: 28em'
 			});
+
 			form.append({
 				type: 'checkbox',
 				list: [
@@ -173,86 +149,69 @@ Twinkle.tag.callback = () => {
 					}
 				]
 			});
+
 			form.append({
 				type: 'input',
 				label: '理由：',
 				name: 'reason',
 				tooltip: '附加于编辑摘要的可选理由，例如指出条目内容的哪些部分有问题或移除模板的理由，但如果理由很长则应该发表在讨论页。',
-				size: '60px'
+				size: '80'
 			});
+
 			break;
 		}
-		case 'file':
+		case 'file': {
 			Window.setTitle('文件维护标记');
-			$.each(Twinkle.tag.fileList, (groupName, group) => {
-				form.append({
-					type: 'header',
-					label: groupName
-				});
-				form.append({
-					type: 'checkbox',
-					name: 'tags',
-					list: group
-				});
+
+			Twinkle.tag.fileList.forEach((group) => {
+				if (group.buildFilename) {
+					group.value.forEach((el) => {
+						el.subgroup = {
+							type: 'input',
+							label: '替换的文件：',
+							tooltip: '输入替换此文件的文件名称（必填）',
+							name: el.value.replace(/ /g, '_') + 'File'
+						};
+					});
+				}
+
+				form.append({ type: 'header', label: group.key });
+				form.append({ type: 'checkbox', name: 'tags', list: group.value });
 			});
+
 			if (Twinkle.getPref('customFileTagList').length) {
-				form.append({
-					type: 'header',
-					label: '自定义模板'
-				});
-				form.append({
-					type: 'checkbox',
-					name: 'tags',
-					list: Twinkle.getPref('customFileTagList')
-				});
+				form.append({ type: 'header', label: '自定义模板' });
+				form.append({ type: 'checkbox', name: 'tags', list: Twinkle.getPref('customFileTagList') });
 			}
 			break;
+		}
 		case 'redirect': {
 			Window.setTitle('重定向标记');
-			let i = 1;
-			$.each(Twinkle.tag.redirectList, (groupName, group) => {
-				form.append({
-					type: 'header',
-					id: 'tagHeader' + i,
-					label: groupName
-				});
-				const subdiv = form.append({
-					type: 'div',
-					id: 'tagSubdiv' + i++
-				});
-				$.each(group, (subgroupName, subgroup) => {
-					subdiv.append({
-						type: 'div',
-						label: [ Morebits.htmlNode('b', subgroupName) ]
-					});
-					subdiv.append({
-						type: 'checkbox',
-						name: 'tags',
-						list: subgroup.map((item) => ({
-							value: item.tag,
-							label: '{{' + item.tag + '}}: ' + item.description,
-							subgroup: item.subgroup
-						}))
-					});
-				});
-			});
-			if (Twinkle.getPref('customRedirectTagList').length) {
-				form.append({
-					type: 'header',
-					label: '自定义模板'
-				});
+
+			const i = 1;
+			Twinkle.tag.redirectList.forEach((group) => {
+				form.append({ type: 'header', id: 'tagHeader' + i, label: group.key });
 				form.append({
 					type: 'checkbox',
 					name: 'tags',
-					list: Twinkle.getPref('customRedirectTagList')
+					list: group.value.map((item) => {
+						return { value: item.tag, label: '{{' + item.tag + '}}：' + item.description, subgroup: item.subgroup };
+					})
 				});
+			});
+
+			if (Twinkle.getPref('customRedirectTagList').length) {
+				form.append({ type: 'header', label: '自定义模板' });
+				form.append({ type: 'checkbox', name: 'tags', list: Twinkle.getPref('customRedirectTagList') });
 			}
 			break;
+
 		}
 		default:
-			alert('Twinkle.tag：未知模式' + Twinkle.tag.mode);
+			alert('Twinkle.tag：未知模式 ' + Twinkle.tag.mode);
 			break;
 	}
+
 	if (document.getElementsByClassName('patrollink').length) {
 		form.append({
 			type: 'checkbox',
@@ -266,62 +225,59 @@ Twinkle.tag.callback = () => {
 			]
 		});
 	}
-	form.append({
-		type: 'submit',
-		className: 'tw-tag-submit'
-	});
+	form.append({ type: 'submit', className: 'tw-tag-submit' });
+
 	const result = form.render();
 	Window.setContent(result);
 	Window.display();
 
 	// for quick filter:
 	$allCheckboxDivs = $(result).find('[name$=tags]').parent();
-	$allHeaders = $(result).find('h5, .quickformDescription');
+	$allHeaders = $(result).find('h5');
 	result.quickfilter.focus(); // place cursor in the quick filter field as soon as window is opened
 	result.quickfilter.autocomplete = 'off'; // disable browser suggestions
 	result.quickfilter.addEventListener('keypress', (e) => {
-		if (e.keyCode === 13) {
-			// prevent enter key from accidentally submitting the form
+		if (e.keyCode === 13) { // prevent enter key from accidentally submitting the form
 			e.preventDefault();
 			return false;
 		}
 	});
+
 	if (Twinkle.tag.mode === 'article') {
+
 		Twinkle.tag.alreadyPresentTags = [];
+
 		if (Twinkle.tag.canRemove) {
 			// Look for existing maintenance tags in the lead section and put them in array
 			// All tags are HTML table elements that are direct children of .mw-parser-output,
 			// except when they are within {{multiple issues}}
-			$('.mw-parser-output')
-				.children()
-				.each((i, e) => {
-					// break out on encountering the first heading, which means we are no
-					// longer in the lead section
-					if (e.tagName === 'H2') {
-						return false;
+			$('.mw-parser-output').children().each((i, e) => {
+
+				// break out on encountering the first heading, which means we are no
+				// longer in the lead section
+				if (e.tagName === 'H2') {
+					return false;
+				}
+
+				// The ability to remove tags depends on the template's {{ambox}} |name=
+				// parameter bearing the template's correct name (preferably) or a name that at
+				// least redirects to the actual name
+				// All tags have their first class name as "box-" + template name
+				if (e.className.indexOf('box-') === 0) {
+					if (e.classList[0] === 'box-问题条目') {
+						$(e).find('.ambox').each((idx, e) => {
+							if (e.classList[0].indexOf('box-') === 0) {
+								const tag = e.classList[0].slice('box-'.length).replace(/_/g, ' ');
+								Twinkle.tag.alreadyPresentTags.push(tag);
+							}
+						});
+						return true; // continue
 					}
 
-					// The ability to remove tags depends on the template's {{ambox}} |name=
-					// parameter bearing the template's correct name (preferably) or a name that at
-					// least redirects to the actual name
-					// All tags have their first class name as "box-" + template name
-					if (e.className.indexOf('box-') === 0) {
-						if (e.classList[0] === 'box-Multiple_issues') {
-							$(e)
-								.find('.ambox')
-								.each((idx, e) => {
-									if (e.classList[0].indexOf('box-') === 0) {
-										const tag = e.classList[0].slice('box-'.length).replace(/_/g, ' ');
-										Twinkle.tag.alreadyPresentTags.push(tag);
-									}
-								});
-							return true; // continue
-						}
-
-						const tag = e.classList[0].slice('box-'.length).replace(/_/g, ' ');
-						Twinkle.tag.alreadyPresentTags.push(tag);
-					}
-				});
+					const tag = e.classList[0].slice('box-'.length).replace(/_/g, ' ');
+					Twinkle.tag.alreadyPresentTags.push(tag);
+				}
+			});
 
 			// {{Uncategorized}} and {{Improve categories}} are usually placed at the end
 			if ($('.box-Uncategorized').length) {
@@ -330,6 +286,7 @@ Twinkle.tag.callback = () => {
 			if ($('.box-Improve_categories').length) {
 				Twinkle.tag.alreadyPresentTags.push('Improve categories');
 			}
+
 		}
 
 		// Add status text node after Submit button
@@ -347,6 +304,7 @@ Twinkle.tag.callback = () => {
 		const evt = document.createEvent('Event');
 		evt.initEvent('change', true, true);
 		result.sortorder.dispatchEvent(evt);
+
 	} else {
 		// Redirects and files: Add a link to each template's description page
 		Morebits.quickForm.getElements(result, 'tags').forEach(generateLinks);
@@ -356,47 +314,228 @@ Twinkle.tag.callback = () => {
 // $allCheckboxDivs and $allHeaders are defined globally, rather than in the
 // quickfilter event function, to avoid having to recompute them on every keydown
 let $allCheckboxDivs, $allHeaders;
+
 Twinkle.tag.updateSortOrder = (e) => {
 	const form = e.target.form;
 	const sortorder = e.target.value;
 	Twinkle.tag.checkedTags = form.getChecked('tags');
-	const container = new Morebits.quickForm.element({
-		type: 'fragment'
-	});
+
+	const container = new Morebits.quickForm.element({ type: 'fragment' });
 
 	// function to generate a checkbox, with appropriate subgroup if needed
-	const makeCheckbox = (item) => {
-		const tag = item.tag,
-			description = item.description;
-		const checkbox = {
-			value: tag,
-			label: '{{' + tag + '}}: ' + description
-		};
+	const makeCheckbox = (tag, description) => {
+		const checkbox = { value: tag, label: '{{' + tag + '}}: ' + description };
 		if (Twinkle.tag.checkedTags.indexOf(tag) !== -1) {
 			checkbox.checked = true;
 		}
-		checkbox.subgroup = item.subgroup;
+		switch (tag) {
+			case 'Expand language':
+				checkbox.subgroup = [
+					{
+						name: 'expandLanguage',
+						type: 'input',
+						label: '外语版本语言代码（必填）：'
+					},
+					{
+						type: 'checkbox',
+						list: [
+							{
+								name: 'highQualityArticle',
+								label: '高品质条目'
+							}
+						]
+					},
+					{
+						name: 'expandLanguage2',
+						type: 'input',
+						label: '外语版本语言代码：'
+					},
+					{
+						type: 'checkbox',
+						list: [
+							{
+								name: 'highQualityArticle2',
+								label: '高品质条目'
+							}
+						]
+					},
+					{
+						name: 'expandLanguage3',
+						type: 'input',
+						label: '外语版本语言代码：'
+					},
+					{
+						type: 'checkbox',
+						list: [
+							{
+								name: 'highQualityArticle3',
+								label: '高品质条目'
+							}
+						]
+					}
+				];
+				break;
+			case 'Expert needed':
+				checkbox.subgroup = [
+					{
+						name: 'expert',
+						type: 'input',
+						label: '哪个领域的专家（必填）：',
+						tooltip: '必填，可参考 Category:需要专业人士关注的页面 使用现存的分类。'
+					},
+					{
+						name: 'expert2',
+						type: 'input',
+						label: '哪个领域的专家：',
+						tooltip: '可选，可参考 Category:需要专业人士关注的页面 使用现存的分类。'
+					},
+					{
+						name: 'expert3',
+						type: 'input',
+						label: '哪个领域的专家：',
+						tooltip: '可选，可参考 Category:需要专业人士关注的页面 使用现存的分类。'
+					}
+				];
+				break;
+			case 'Merge':
+			case 'Merge from':
+			case 'Merge to': {
+				let otherTagName = 'Merge';
+				switch (tag) {
+					case 'Merge from':
+						otherTagName = 'Merge to';
+						break;
+					case 'Merge to':
+						otherTagName = 'Merge from';
+						break;
+					// no default
+				}
+				checkbox.subgroup = [
+					{
+						name: 'mergeTarget',
+						type: 'input',
+						label: '其他条目：',
+						tooltip: '如指定多个条目，请用管道符分隔：条目甲|条目乙'
+					},
+					{
+						type: 'checkbox',
+						list: [
+							{
+								name: 'mergeTagOther',
+								label: '用{{' + otherTagName + '}}标记其他条目',
+								checked: true,
+								tooltip: '仅在只输入了一个条目名时可用'
+							}
+						]
+					}
+				];
+				if (mw.config.get('wgNamespaceNumber') === 0) {
+					checkbox.subgroup.push({
+						name: 'mergeReason',
+						type: 'textarea',
+						label: '合并理由（会被贴上' +
+							(tag === 'Merge to' ? '其他' : '这') + '条目的讨论页）：',
+						tooltip: '可选，但强烈推荐。如不需要请留空。仅在只输入了一个条目名时可用。'
+					});
+				}
+				break;
+			}
+			case 'Missing information':
+				checkbox.subgroup = {
+					name: 'missingInformation',
+					type: 'input',
+					label: '缺少的内容（必填）：',
+					tooltip: '必填，显示为“缺少有关……的信息。”'
+				};
+				break;
+			case 'Notability':
+				checkbox.subgroup = {
+					name: 'notability',
+					type: 'select',
+					list: [
+						{ label: '{{Notability}}：' + '通用的关注度指引', value: 'none' },
+						{ label: '{{Notability|Astro}}：' + '天体', value: 'Astro' },
+						{ label: '{{Notability|Biographies}}：' + '人物传记', value: 'Biographies' },
+						{ label: '{{Notability|Book}}：' + '书籍', value: 'Book' },
+						{ label: '{{Notability|Companies}}：' + '组织与公司', value: 'Companies' },
+						{ label: '{{Notability|Cyclone}}：' + '气旋', value: 'Cyclone' },
+						{ label: '{{Notability|Fiction}}：' + '虚构事物', value: 'Fiction' },
+						{ label: '{{Notability|Geographic}}：' + '地理特征', value: 'Geographic' },
+						{ label: '{{Notability|Geometry}}：' + '几何图形', value: 'Geometry' },
+						{ label: '{{Notability|Invention}}：' + '发明、研究', value: 'Invention' },
+						{ label: '{{Notability|Music}}：' + '音乐', value: 'Music' },
+						{ label: '{{Notability|Numbers}}：' + '数字', value: 'Numbers' },
+						{ label: '{{Notability|Property}}：' + '性质表', value: 'Property' },
+						{ label: '{{Notability|Traffic}}：' + '交通', value: 'Traffic' },
+						{ label: '{{Notability|Web}}：' + '网站、网络内容' + '（非正式指引）', value: 'Web' }
+					]
+				};
+				break;
+			case 'Requested move':
+				checkbox.subgroup = [
+					{
+						name: 'moveTarget',
+						type: 'input',
+						label: '新名称：'
+					},
+					{
+						name: 'moveReason',
+						type: 'textarea',
+						label: '移动理由（会被粘贴该条目的讨论页）：',
+						tooltip: '可选，但强烈推荐。如不需要请留空。'
+					}
+				];
+				break;
+			case 'Split':
+				checkbox.subgroup = [
+					{
+						name: 'target1',
+						type: 'input',
+						label: '页面名1：',
+						tooltip: '可选。'
+					},
+					{
+						name: 'target2',
+						type: 'input',
+						label: '页面名2：',
+						tooltip: '可选。'
+					},
+					{
+						name: 'target3',
+						type: 'input',
+						label: '页面名3：',
+						tooltip: '可选。'
+					}
+				];
+				break;
+			case 'Cleanup':
+				checkbox.subgroup = [
+					{
+						name: 'cleanupReason',
+						type: 'input',
+						label: '需要清理的理由',
+						tooltip: '可选，但强烈推荐。如不需要请留空。'
+					}
+				];
+				break;
+			default:
+				break;
+		}
 		return checkbox;
 	};
+
 	const makeCheckboxesForAlreadyPresentTags = () => {
-		container.append({
-			type: 'header',
-			id: 'tagHeader0',
-			label: '已放置的维护标记'
-		});
-		const subdiv = container.append({
-			type: 'div',
-			id: 'tagSubdiv0'
-		});
+		container.append({ type: 'header', id: 'tagHeader0', label: '已放置的维护标记' });
+		const subdiv = container.append({ type: 'div', id: 'tagSubdiv0' });
 		const checkboxes = [];
 		const unCheckedTags = e.target.form.getUnchecked('existingTags');
 		Twinkle.tag.alreadyPresentTags.forEach((tag) => {
 			const checkbox = {
 				value: tag,
 				label: '{{' + tag + '}}' + (Twinkle.tag.article.flatObject[tag] ? ': ' + Twinkle.tag.article.flatObject[tag].description : ''),
-				checked: unCheckedTags.indexOf(tag) === -1,
-				style: 'font-style: italic'
+				checked: unCheckedTags.indexOf(tag) === -1
 			};
+
 			checkboxes.push(checkbox);
 		});
 		subdiv.append({
@@ -405,14 +544,14 @@ Twinkle.tag.updateSortOrder = (e) => {
 			list: checkboxes
 		});
 	};
-	if (sortorder === 'cat') {
-		// categorical sort order
+
+	if (sortorder === 'cat') { // categorical sort order
 		// function to iterate through the tags and create a checkbox for each one
 		const doCategoryCheckboxes = (subdiv, subgroup) => {
 			const checkboxes = [];
 			$.each(subgroup, (k, item) => {
 				if (Twinkle.tag.alreadyPresentTags.indexOf(item.tag) === -1) {
-					checkboxes.push(makeCheckbox(item));
+					checkboxes.push(makeCheckbox(item.tag, item.description));
 				}
 			});
 			subdiv.append({
@@ -421,42 +560,28 @@ Twinkle.tag.updateSortOrder = (e) => {
 				list: checkboxes
 			});
 		};
+
 		if (Twinkle.tag.alreadyPresentTags.length > 0) {
 			makeCheckboxesForAlreadyPresentTags();
 		}
 		let i = 1;
 		// go through each category and sub-category and append lists of checkboxes
-		$.each(Twinkle.tag.article.tagList, (groupName, group) => {
-			container.append({
-				type: 'header',
-				id: 'tagHeader' + i,
-				label: groupName
-			});
-			const subdiv = container.append({
-				type: 'div',
-				id: 'tagSubdiv' + i++
-			});
-			if (Array.isArray(group)) {
-				doCategoryCheckboxes(subdiv, group);
+		Twinkle.tag.article.tagList.forEach((group) => {
+			container.append({ type: 'header', id: 'tagHeader' + i, label: group.key });
+			const subdiv = container.append({ type: 'div', id: 'tagSubdiv' + i++ });
+			if (group.value[0].tag) {
+				doCategoryCheckboxes(subdiv, group.value);
 			} else {
-				$.each(group, (subgroupName, subgroup) => {
-					subdiv.append({
-						type: 'div',
-						label: [ Morebits.htmlNode('b', subgroupName) ]
-					});
-					doCategoryCheckboxes(subdiv, subgroup);
+				group.value.forEach((subgroup) => {
+					subdiv.append({ type: 'div', label: [ Morebits.htmlNode('b', subgroup.key) ] });
+					doCategoryCheckboxes(subdiv, subgroup.value);
 				});
 			}
 		});
-	} else {
-		// alphabetical sort order
+	} else { // alphabetical sort order
 		if (Twinkle.tag.alreadyPresentTags.length > 0) {
 			makeCheckboxesForAlreadyPresentTags();
-			container.append({
-				type: 'header',
-				id: 'tagHeader1',
-				label: '可用的维护标记'
-			});
+			container.append({ type: 'header', id: 'tagHeader1', label: '可用的维护标记' });
 		}
 
 		// Avoid repeatedly resorting
@@ -464,7 +589,7 @@ Twinkle.tag.updateSortOrder = (e) => {
 		const checkboxes = [];
 		Twinkle.tag.article.alphabeticalList.forEach((tag) => {
 			if (Twinkle.tag.alreadyPresentTags.indexOf(tag) === -1) {
-				checkboxes.push(makeCheckbox(Twinkle.tag.article.flatObject[tag]));
+				checkboxes.push(makeCheckbox(tag, Twinkle.tag.article.flatObject[tag].description));
 			}
 		});
 		container.append({
@@ -476,19 +601,16 @@ Twinkle.tag.updateSortOrder = (e) => {
 
 	// append any custom tags
 	if (Twinkle.getPref('customTagList').length) {
+		container.append({ type: 'header', label: '自定义模板' });
 		container.append({
-			type: 'header',
-			label: '自定义模板'
-		});
-		container.append({
-			type: 'checkbox',
-			name: 'tags',
+			type: 'checkbox', name: 'tags',
 			list: Twinkle.getPref('customTagList').map((el) => {
 				el.checked = Twinkle.tag.checkedTags.indexOf(el.value) !== -1;
 				return el;
 			})
 		});
 	}
+
 	const $workarea = $(form).find('#tagWorkArea');
 	const rendered = container.render();
 	$workarea.empty().append(rendered);
@@ -500,15 +622,10 @@ Twinkle.tag.updateSortOrder = (e) => {
 	form.quickfilter.focus();
 
 	// style adjustments
-	$workarea.find('h5').css({
-		'font-size': '110%'
-	});
-	$workarea.find('h5:not(:first-child)').css({
-		'margin-top': '1em'
-	});
-	$workarea.find('div').filter(':has(span.quickformDescription)').css({
-		'margin-top': '0.4em'
-	});
+	$workarea.find('h5').css({ 'font-size': '110%' });
+	$workarea.find('h5:not(:first-child)').css({ 'margin-top': '1em' });
+	$workarea.find('div').filter(':has(span.quickformDescription)').css({ 'margin-top': '0.4em' });
+
 	Morebits.quickForm.getElements(form, 'existingTags').forEach(generateLinks);
 	Morebits.quickForm.getElements(form, 'tags').forEach(generateLinks);
 
@@ -520,9 +637,12 @@ Twinkle.tag.updateSortOrder = (e) => {
 		} else if (this.name === 'existingTags') {
 			Twinkle.tag.status.numRemoved += this.checked ? -1 : 1;
 		}
+
 		const firstPart = '加入' + Twinkle.tag.status.numAdded + '个标记';
 		const secondPart = '移除' + Twinkle.tag.status.numRemoved + '个标记';
-		statusNode.textContent = (Twinkle.tag.status.numAdded ? '  ' + firstPart : '') + (Twinkle.tag.status.numRemoved ? (Twinkle.tag.status.numAdded ? '; ' : '  ') + secondPart : '');
+		statusNode.textContent =
+			(Twinkle.tag.status.numAdded ? '  ' + firstPart : '') +
+			(Twinkle.tag.status.numRemoved ? (Twinkle.tag.status.numAdded ? '；' : '  ') + secondPart : '');
 	});
 };
 
@@ -535,7 +655,10 @@ const generateLinks = (checkbox) => {
 	const link = Morebits.htmlNode('a', '>');
 	link.setAttribute('class', 'tag-template-link');
 	const tagname = checkbox.values;
-	link.setAttribute('href', mw.util.getUrl((tagname.indexOf(':') === -1 ? 'Template:' : '') + (tagname.indexOf('|') === -1 ? tagname : tagname.slice(0, tagname.indexOf('|')))));
+	link.setAttribute('href', mw.util.getUrl(
+		(tagname.indexOf(':') === -1 ? 'Template:' : '') +
+		(tagname.indexOf('|') === -1 ? tagname : tagname.slice(0, tagname.indexOf('|')))
+	));
 	link.setAttribute('target', '_blank');
 	$(checkbox).parent().append([ '\u00A0', link ]);
 };
@@ -543,1495 +666,337 @@ const generateLinks = (checkbox) => {
 // Tags for ARTICLES start here
 Twinkle.tag.article = {};
 
-// Shared across {{Rough translation}} and {{Not English}}
-const translationSubgroups = [
-	{
-		name: 'translationLanguage',
-		parameter: '1',
-		type: 'input',
-		label: 'Language of article (if known):',
-		tooltip: 'Consider looking at [[QW:LRC]] for help. If listing the article at PNT, please try to avoid leaving this box blank, unless you are completely unsure.'
-	}
-].concat(
-	mw.config.get('wgNamespaceNumber') === 0 ?
-		[
-			{
-				type: 'checkbox',
-				list: [
-					{
-						name: 'translationPostAtPNT',
-						label: 'List this article at Qiuwen:Pages needing translation into English (PNT)',
-						checked: true
-					}
-				]
-			},
-			{
-				name: 'translationComments',
-				type: 'textarea',
-				label: 'Additional comments to post at PNT',
-				tooltip: 'Optional, and only relevant if "List this article ..." above is checked.'
-			}
-		] : []
-);
-
-// Subgroups for {{merge}}, {{merge-to}} and {{merge-from}}
-const getMergeSubgroups = (tag) => {
-	let otherTagName = '合并';
-	// eslint-disable-next-line default-case
-	switch (tag) {
-		case 'Merge from':
-			otherTagName = '合并自';
-			break;
-		case 'Merge to':
-			otherTagName = '合并至';
-			break;
-	}
-	// no default
-	return [
-		{
-			name: 'mergeTarget',
-			type: 'input',
-			label: '其他条目：:',
-			tooltip: '如果指定多个条目，请使用“|”符号将其分开，例如：条目1|条目2',
-			required: true
-		},
-		{
-			type: 'checkbox',
-			list: [
-				{
-					name: 'mergeTagOther',
-					label: '将其他条目以{{' + otherTagName + '}}模板进行标记',
-					checked: true,
-					tooltip: 'Only available if a single article name is entered.'
-				}
-			]
-		}
-	].concat(
-		mw.config.get('wgNamespaceNumber') === 0 ?
-			{
-				name: 'mergeReason',
-				type: 'textarea',
-				label: 'Rationale for merge (will be posted on ' + (tag === 'Merge to' ? "the other article's" : "this article's") + ' talk page):',
-				tooltip: 'Optional, but strongly recommended. Leave blank if not wanted. Only available if a single article name is entered.'
-			} : []
-	);
-};
-
 // Tags arranged by category; will be used to generate the alphabetical list,
 // but tags should be in alphabetical order within the categories
 // excludeMI: true indicate a tag that *does not* work inside {{multiple issues}}
 // Add new categories with discretion - the list is long enough as is!
-Twinkle.tag.article.tagList = {
-	'Cleanup and maintenance tags': {
-		'General cleanup': [
-			{
-				tag: 'Cleanup',
-				description: 'requires cleanup',
-				subgroup: {
-					name: 'cleanup',
-					parameter: 'reason',
-					type: 'input',
-					label: 'Specific reason why cleanup is needed:',
-					tooltip: 'Required.',
-					size: 35,
-					required: true
-				}
-			},
-			// has a subgroup with text input
-			{
-				tag: 'Cleanup rewrite',
-				description: "needs to be rewritten entirely to comply with Wikipedia's quality standards"
-			},
-			{
-				tag: 'Copy edit',
-				description: 'requires copy editing for grammar, style, cohesion, tone, or spelling',
-				subgroup: {
-					name: 'copyEdit',
-					parameter: 'for',
-					type: 'input',
-					label: '"This article may require copy editing for..."',
-					tooltip: 'e.g. "consistent spelling". Optional.',
-					size: 35
-				}
-			} // has a subgroup with text input
-		],
-
-		'Potentially unwanted content': [
-			{
-				tag: 'Close paraphrasing',
-				description: 'contains close paraphrasing of a non-free copyrighted source',
-				subgroup: {
-					name: 'closeParaphrasing',
-					parameter: 'source',
-					type: 'input',
-					label: 'Source:',
-					tooltip: 'Source that has been closely paraphrased'
-				}
-			},
-			{
-				tag: 'Copypaste',
-				description: 'appears to have been copied and pasted from another location',
-				excludeMI: true,
-				subgroup: {
-					name: 'copypaste',
-					parameter: 'url',
-					type: 'input',
-					label: 'Source URL:',
-					tooltip: 'If known.',
-					size: 50
-				}
-			},
-			// has a subgroup with text input
-			{
-				tag: 'External links',
-				description: 'external links may not follow content policies or guidelines'
-			},
-			{
-				tag: 'Non-free',
-				description: 'may contain excessive or improper use of copyrighted materials'
-			}
-		],
-		'Structure, formatting, and lead section': [
-			{
-				tag: 'Cleanup reorganize',
-				description: "needs reorganization to comply with Wikipedia's layout guidelines"
-			},
-			{
-				tag: 'Lead missing',
-				description: 'no lead section'
-			},
-			{
-				tag: 'Lead rewrite',
-				description: 'lead section needs to be rewritten to comply with guidelines'
-			},
-			{
-				tag: 'Lead too long',
-				description: 'lead section is too long for the length of the article'
-			},
-			{
-				tag: 'Lead too short',
-				description: 'lead section is too short and should be expanded to summarize key points'
-			},
-			{
-				tag: 'Sections',
-				description: 'needs to be divided into sections by topic'
-			},
-			{
-				tag: 'Too many sections',
-				description: 'too many section headers dividing up content, should be condensed'
-			},
-			{
-				tag: 'Very long',
-				description: 'too long to read and navigate comfortably'
-			}
-		],
-		'Fiction-related cleanup': [
-			{
-				tag: 'All plot',
-				description: 'almost entirely a plot summary'
-			},
-			{
-				tag: 'Fiction',
-				description: 'fails to distinguish between fact and fiction'
-			},
-			{
-				tag: 'In-universe',
-				description: 'subject is fictional and needs rewriting to provide a non-fictional perspective'
-			},
-			{
-				tag: 'Long plot',
-				description: 'plot summary is too long or excessively detailed'
-			},
-			{
-				tag: 'No plot',
-				description: 'needs a plot summary'
-			}
+Twinkle.tag.article.tagList = [ {
+	key: '清理和维护模板',
+	value: [ {
+		key: '常规清理',
+		value: [
+			{ tag: 'Cleanup', description: '可能需要进行清理，以符合维基百科的质量标准' },
+			{ tag: 'Cleanup rewrite', description: '不符合维基百科的质量标准，需要完全重写' },
+			{ tag: 'Cleanup-jargon', description: '包含过多行话或专业术语，可能需要简化或提出进一步解释' },
+			{ tag: 'Copy edit', description: '需要编修，以确保文法、用词、语气、格式、标点等使用恰当' }
 		]
 	},
-	'General content issues': {
-		'Importance and notability': [
-			{
-				tag: 'Notability',
-				description: 'subject may not meet the general notability guideline',
-				subgroup: {
-					name: 'notability',
-					parameter: '1',
-					type: 'select',
-					list: [
-						{
-							label: "{{notability}}: article's subject may not meet the general notability guideline",
-							value: ''
-						},
-						{
-							label: '{{notability|Academics}}: notability guideline for academics',
-							value: 'Academics'
-						},
-						{
-							label: '{{notability|Astro}}: notability guideline for astronomical objects',
-							value: 'Astro'
-						},
-						{
-							label: '{{notability|Biographies}}: notability guideline for biographies',
-							value: 'Biographies'
-						},
-						{
-							label: '{{notability|Books}}: notability guideline for books',
-							value: 'Books'
-						},
-						{
-							label: '{{notability|Companies}}: notability guidelines for companies and organizations',
-							value: 'Companies'
-						},
-						{
-							label: '{{notability|Events}}: notability guideline for events',
-							value: 'Events'
-						},
-						{
-							label: '{{notability|Films}}: notability guideline for films',
-							value: 'Films'
-						},
-						{
-							label: '{{notability|Geographic}}: notability guideline for geographic features',
-							value: 'Geographic'
-						},
-						{
-							label: '{{notability|Lists}}: notability guideline for stand-alone lists',
-							value: 'Lists'
-						},
-						{
-							label: '{{notability|Music}}: notability guideline for music',
-							value: 'Music'
-						},
-						{
-							label: '{{notability|Neologisms}}: notability guideline for neologisms',
-							value: 'Neologisms'
-						},
-						{
-							label: '{{notability|Numbers}}: notability guideline for numbers',
-							value: 'Numbers'
-						},
-						{
-							label: '{{notability|Products}}: notability guideline for products and services',
-							value: 'Products'
-						},
-						{
-							label: '{{notability|Sports}}: notability guideline for sports and athletics',
-							value: 'Sports'
-						},
-						{
-							label: '{{notability|Television}}: notability guideline for television shows',
-							value: 'Television'
-						},
-						{
-							label: '{{notability|Web}}: notability guideline for web content',
-							value: 'Web'
-						}
-					]
-				}
-			}
-		],
-		'Style of writing': [
-			{
-				tag: 'Advert',
-				description: 'written like an advertisement'
-			},
-			{
-				tag: 'Cleanup tense',
-				description: 'does not follow guidelines on use of different tenses.'
-			},
-			{
-				tag: 'Essay-like',
-				description: 'written like a personal reflection, personal essay, or argumentative essay'
-			},
-			{
-				tag: 'Fanpov',
-				description: "written from a fan's point of view"
-			},
-			{
-				tag: 'Inappropriate person',
-				description: 'uses first-person or second-person inappropiately'
-			},
-			{
-				tag: 'Like resume',
-				description: 'written like a resume'
-			},
-			{
-				tag: 'Manual',
-				description: 'written like a manual or guidebook'
-			},
-			{
-				tag: 'Cleanup-PR',
-				description: 'reads like a press release or news article',
-				subgroup: {
-					type: 'hidden',
-					name: 'cleanupPR1',
-					parameter: '1',
-					value: 'article'
-				}
-			},
-			{
-				tag: 'Over-quotation',
-				description: 'too many or too-lengthy quotations for an encyclopedic entry'
-			},
-			{
-				tag: 'Prose',
-				description: 'written in a list format but may read better as prose'
-			},
-			{
-				tag: 'Technical',
-				description: 'too technical for most readers to understand'
-			},
-			{
-				tag: 'Tone',
-				description: 'tone or style may not reflect the encyclopedic tone used on Wikipedia'
-			}
-		],
-		'Sense (or lack thereof)': [
-			{
-				tag: 'Confusing',
-				description: 'confusing or unclear'
-			},
-			{
-				tag: 'Incomprehensible',
-				description: 'very hard to understand or incomprehensible'
-			},
-			{
-				tag: 'Unfocused',
-				description: 'lacks focus or is about more than one topic'
-			}
-		],
-		'Information and detail': [
-			{
-				tag: 'Context',
-				description: 'insufficient context for those unfamiliar with the subject'
-			},
-			{
-				tag: 'Excessive examples',
-				description: 'may contain indiscriminate, excessive, or irrelevant examples'
-			},
-			{
-				tag: 'Expert needed',
-				description: 'needs attention from an expert on the subject',
-				subgroup: [
-					{
-						name: 'expertNeeded',
-						parameter: '1',
-						type: 'input',
-						label: 'Name of relevant WikiProject:',
-						tooltip: 'Optionally, enter the name of a WikiProject which might be able to help recruit an expert. Don\'t include the "WikiProject" prefix.'
-					},
-					{
-						name: 'expertNeededReason',
-						parameter: 'reason',
-						type: 'input',
-						label: 'Reason:',
-						tooltip: 'Short explanation describing the issue. Either Reason or Talk link is required.'
-					},
-					{
-						name: 'expertNeededTalk',
-						parameter: 'talk',
-						type: 'input',
-						label: 'Talk discussion:',
-						tooltip:
-								"Name of the section of this article's talk page where the issue is being discussed. Do not give a link, just the name of the section. Either Reason or Talk link is required."
-					}
-				]
-			},
-			{
-				tag: 'Overly detailed',
-				description: 'excessive amount of intricate detail'
-			},
-			{
-				tag: 'Undue weight',
-				description: 'lends undue weight to certain ideas, incidents, or controversies'
-			}
-		],
-		'Timeliness': [
-			{
-				tag: 'Current',
-				description: 'documents a current event',
-				excludeMI: true
-			},
-			// Works but not intended for use in MI
-			{
-				tag: 'Update',
-				description: 'needs additional up-to-date information added'
-			}
-		],
-		'Neutrality, bias, and factual accuracy': [
-			{
-				tag: 'Autobiography',
-				description: 'autobiography and may not be written neutrally'
-			},
-			{
-				tag: 'COI',
-				description: 'creator or major contributor may have a conflict of interest',
-				subgroup:
-						mw.config.get('wgNamespaceNumber') === 0 ?
-							{
-								name: 'coiReason',
-								type: 'textarea',
-								label: "Explanation for COI tag (will be posted on this article's talk page):",
-								tooltip: 'Optional, but strongly recommended. Leave blank if not wanted.'
-							} : []
-			},
-			{
-				tag: 'Disputed',
-				description: 'questionable factual accuracy'
-			},
-			{
-				tag: 'Hoax',
-				description: 'may partially or completely be a hoax'
-			},
-			{
-				tag: 'Globalize',
-				description: 'may not represent a worldwide view of the subject',
-				subgroup: [
-					{
-						type: 'hidden',
-						name: 'globalize1',
-						parameter: '1',
-						value: 'article'
-					},
-					{
-						name: 'globalizeRegion',
-						parameter: '2',
-						type: 'input',
-						label: 'Over-represented country or region'
-					}
-				]
-			},
-			{
-				tag: 'Over-coverage',
-				description: 'extensive bias or disproportional coverage towards one or more specific regions'
-			},
-			{
-				tag: 'Paid contributions',
-				description: 'contains paid contributions, and may therefore require cleanup'
-			},
-			{
-				tag: 'Peacock',
-				description: 'contains wording that promotes the subject in a subjective manner without adding information'
-			},
-			{
-				tag: 'POV',
-				description: 'does not maintain a neutral point of view'
-			},
-			{
-				tag: 'Recentism',
-				description: 'slanted towards recent events'
-			},
-			{
-				tag: 'Too few opinions',
-				description: 'may not include all significant viewpoints'
-			},
-			{
-				tag: 'Undisclosed paid',
-				description: 'may have been created or edited in return for undisclosed payments'
-			},
-			{
-				tag: 'Weasel',
-				description: 'neutrality or verifiability is compromised by the use of weasel words'
-			}
-		],
-		'Verifiability and sources': [
-			{
-				tag: 'BLP sources',
-				description: 'BLP that needs additional sources for verification'
-			},
-			{
-				tag: 'BLP unsourced',
-				description: 'BLP that has no sources at all (use BLP PROD instead for new articles)'
-			},
-			{
-				tag: 'More citations needed',
-				description: 'needs additional references or sources for verification'
-			},
-			{
-				tag: 'One source',
-				description: 'relies largely or entirely on a single source'
-			},
-			{
-				tag: 'Original research',
-				description: 'contains original research'
-			},
-			{
-				tag: 'Primary sources',
-				description: 'relies too much on references to primary sources, and needs secondary sources'
-			},
-			{
-				tag: 'Self-published',
-				description: 'contains excessive or inappropriate references to self-published sources'
-			},
-			{
-				tag: 'Sources exist',
-				description: 'notable topic, sources are available that could be added to article'
-			},
-			{
-				tag: 'Third-party',
-				description: 'relies too heavily on sources too closely associated with the subject'
-			},
-			{
-				tag: 'Unreferenced',
-				description: 'does not cite any sources at all'
-			},
-			{
-				tag: 'Unreliable sources',
-				description: 'some references may not be reliable'
-			}
+	{
+		key: '可能多余的内容',
+		value: [
+			{ tag: 'Copypaste', description: '内容可能是从某个来源处拷贝后粘贴' },
+			{ tag: 'External links', description: '使用外部链接的方式可能不符合维基百科的方针或指引' },
+			{ tag: 'Non-free', description: '可能过多或不当地使用了受著作权保护的文字、图像或多媒体文件' }
 		]
 	},
-	'Specific content issues': {
-		'Language': [
-			{
-				tag: 'Not English',
-				description: 'written in a language other than English and needs translation',
-				excludeMI: true,
-				subgroup: translationSubgroups
-					.slice(0, 1)
-					.concat([
-						{
-							type: 'checkbox',
-							list: [
-								{
-									name: 'translationNotify',
-									label: 'Notify article creator',
-									checked: true,
-									tooltip: "Places {{uw-notenglish}} on the creator's talk page."
-								}
-							]
-						}
-					])
-					.concat(translationSubgroups.slice(1))
-			},
-			{
-				tag: 'Rough translation',
-				description: 'poor translation from another language',
-				excludeMI: true,
-				subgroup: translationSubgroups
-			},
-			{
-				tag: 'Expand language',
-				description: 'should be expanded with text translated from a foreign-language article',
-				excludeMI: true,
-				subgroup: [
-					{
-						type: 'hidden',
-						name: 'expandLangTopic',
-						parameter: 'topic',
-						value: '',
-						required: true // force empty topic param in output
-					},
-					{
-						name: 'expandLanguageLangCode',
-						parameter: 'langcode',
-						type: 'input',
-						label: 'Language code:',
-						tooltip: 'Language code of the language from which article is to be expanded from',
-						required: true
-					},
-					{
-						name: 'expandLanguageArticle',
-						parameter: 'otherarticle',
-						type: 'input',
-						label: 'Name of article:',
-						tooltip: 'Name of article to be expanded from, without the interwiki prefix'
-					}
-				]
-			}
-		],
-		'Links': [
-			{
-				tag: 'Dead end',
-				description: 'article has no links to other articles'
-			},
-			{
-				tag: 'Orphan',
-				description: 'linked to from no other articles'
-			},
-			{
-				tag: 'Overlinked',
-				description: 'too many duplicate and/or irrelevant links to other articles'
-			},
-			{
-				tag: 'Underlinked',
-				description: 'needs more wikilinks to other articles'
-			}
-		],
-		'Referencing technique': [
-			{
-				tag: 'Citation style',
-				description: 'unclear or inconsistent citation style'
-			},
-			{
-				tag: 'Cleanup bare URLs',
-				description: 'uses bare URLs for references, which are prone to link rot'
-			},
-			{
-				tag: 'More footnotes',
-				description: 'has some references, but insufficient inline citations'
-			},
-			{
-				tag: 'No footnotes',
-				description: 'has references, but lacks inline citations'
-			}
-		],
-		'Categories': [
-			{
-				tag: 'Improve categories',
-				description: 'needs additional or more specific categories',
-				excludeMI: true
-			},
-			{
-				tag: 'Uncategorized',
-				description: 'not added to any categories',
-				excludeMI: true
-			}
+	{
+		key: '结构和导言',
+		value: [
+			{ tag: 'Lead too long', description: '导言部分也许过于冗长' },
+			{ tag: 'Lead too short', description: '导言部分也许不足以概括其内容' },
+			{ tag: 'Very long', description: '可能过于冗长' }
 		]
 	},
-	'Merging': [
-		{
-			tag: 'History merge',
-			description: 'another page should be history merged into this one',
-			excludeMI: true,
-			subgroup: [
-				{
-					name: 'histmergeOriginalPage',
-					parameter: 'originalpage',
-					type: 'input',
-					label: 'Other article:',
-					tooltip: 'Name of the page that should be merged into this one (required).',
-					required: true
-				},
-				{
-					name: 'histmergeReason',
-					parameter: 'reason',
-					type: 'input',
-					label: 'Reason:',
-					tooltip: 'Short explanation describing the reason a history merge is needed. Should probably begin with "because" and end with a period.'
-				},
-				{
-					name: 'histmergeSysopDetails',
-					parameter: 'details',
-					type: 'input',
-					label: 'Extra details:',
-					tooltip: 'For complex cases, provide extra instructions for the reviewing administrator.'
-				}
-			]
-		},
-		{
-			tag: 'Merge',
-			description: 'should be merged with another given article',
-			excludeMI: true,
-			subgroup: getMergeSubgroups('Merge')
-		},
-		{
-			tag: 'Merge from',
-			description: 'another given article should be merged into this one',
-			excludeMI: true,
-			subgroup: getMergeSubgroups('Merge from')
-		},
-		{
-			tag: 'Merge to',
-			description: 'should be merged into another given article',
-			excludeMI: true,
-			subgroup: getMergeSubgroups('Merge to')
-		}
-	],
-	'Informational': [
-		{
-			tag: 'GOCEinuse',
-			description: 'currently undergoing a major copy edit by the Guild of Copy Editors',
-			excludeMI: true
-		},
-		{
-			tag: 'In use',
-			description: 'undergoing a major edit for a short while',
-			excludeMI: true
-		},
-		{
-			tag: 'Under construction',
-			description: 'in the process of an expansion or major restructuring',
-			excludeMI: true
-		}
+	{
+		key: '虚构作品相关清理',
+		value: [
+			{ tag: 'In-universe', description: '使用小说故事内的观点描述一个虚构事物' },
+			{ tag: 'Long plot', description: '可能包含过于详细的剧情摘要' }
+		]
+	} ]
+},
+{
+	key: '常规条目问题',
+	value: [ {
+		key: '重要性和知名度',
+		value: [
+			{ tag: 'Notability', description: '可能不符合通用关注度指引', excludeMI: true },  // has a subgroup with subcategories
+			{ tag: 'Notability Unreferenced', description: '可能具备关注度，但需要来源加以彰显' }
+		]
+	},
+	{
+		key: '写作风格',
+		value: [
+			{ tag: 'Advert', description: '类似广告或宣传性内容' },
+			{ tag: 'Fanpov', description: '类似爱好者网页' },
+			{ tag: 'How-to', description: '包含指南或教学内容' },
+			{ tag: 'Inappropriate person', description: '使用不适当的第一人称和第二人称' },
+			{ tag: 'Newsrelease', description: '阅读起来像是新闻稿及包含过度的宣传性语调' },
+			{ tag: 'Prose', description: '使用了日期或时间列表式记述，需要改写为连贯的叙述性文字' },
+			{ tag: 'Review', description: '阅读起来类似评论，需要清理' },
+			{ tag: 'Tone', description: '语调或风格可能不适合百科全书的写作方式' }
+		]
+	},
+	{
+		key: '内容',
+		value: [
+			{ tag: 'Expand language', description: '可以根据其他语言版本扩展' },  // these three have a subgroup with several options
+			{ tag: 'Missing information', description: '缺少必要的信息' },  // these three have a subgroup with several options
+			{ tag: 'Substub', description: '过于短小', excludeMI: true },
+			{ tag: 'Unencyclopedic', description: '可能不适合写入百科全书' }
+		]
+	},
+	{
+		key: '信息和细节',
+		value: [
+			{ tag: 'Expert needed', description: '需要精通或熟悉本主题的专业人士（专家）参与及协助编辑' },
+			{ tag: 'Overly detailed', description: '包含太多过度细节内容' },
+			{ tag: 'Trivia', description: '应避免有陈列杂项、琐碎资料的部分' }
+		]
+	},
+	{
+		key: '时间性',
+		value: [
+			{ tag: 'Current', description: '记述新闻动态', excludeMI: true }, // Works but not intended for use in MI
+			{ tag: 'Update', description: '当前条目或章节需要更新' }
+		]
+	},
+	{
+		key: '中立、偏见和事实准确性',
+		value: [
+			{ tag: 'Autobiography', description: '类似一篇自传，或内容主要由条目描述的当事人或组织撰写、编辑' },
+			{ tag: 'COI', description: '主要贡献者与本条目所宣扬的内容可能存在利益冲突' },
+			{ tag: 'Disputed', description: '内容疑欠准确，有待查证' },
+			{ tag: 'Globalize', description: '仅具有一部分地区的信息或观点' },
+			{ tag: 'Hoax', description: '真实性被质疑' },
+			{ tag: 'POV', description: '中立性有争议。内容、语调可能带有明显的个人观点或地方色彩' },
+			{ tag: 'Self-contradictory', description: '内容自相矛盾' },
+			{ tag: 'Weasel', description: '语义模棱两可而损及其中立性或准确性' }
+		]
+	},
+	{
+		key: '可供查证和来源',
+		value: [
+			{ tag: 'BLPdispute', description: '可能违反了维基百科关于生者传记的方针' },
+			{ tag: 'BLPsources', description: '生者传记需要补充更多可供查证的来源' },
+			{ tag: 'BLP unsourced', description: '生者传记没有列出任何参考或来源' },
+			{ tag: 'Citecheck', description: '可能包含不适用或被曲解的引用资料，部分内容的准确性无法被证实' },
+			{ tag: 'More footnotes needed', description: '因为文内引用不足，部分字句的来源仍然不明' },
+			{ tag: 'No footnotes', description: '因为没有内文引用而来源仍然不明' },
+			{ tag: 'Onesource', description: '极大或完全地依赖于某个单一的来源' },
+			{ tag: 'Original research', description: '可能包含原创研究或未查证内容' },
+			{ tag: 'Primarysources', description: '依赖第一手来源' },
+			{ tag: 'Refimprove', description: '需要补充更多来源' },
+			{ tag: 'Unreferenced', description: '没有列出任何参考或来源' }
+		]
+	} ]
+},
+{
+	key: '具体内容问题',
+	value: [ {
+		key: '语言',
+		value: [
+			{ tag: 'NotMandarin', description: '包含过多不是现代标准汉语的内容', excludeMI: true },
+			{ tag: 'Rough translation', description: '翻译品质不佳' }
+		]
+	},
+	{
+		key: '链接',
+		value: [
+			{ tag: 'Dead end', description: '需要加上内部链接以构筑百科全书的链接网络' },
+			{ tag: 'Orphan', description: '没有或只有很少链入页面' },
+			{ tag: 'Overlinked', description: '含有过多、重复、或不必要的内部链接' },
+			{ tag: 'Underlinked', description: '需要更多内部链接以构筑百科全书的链接网络' }
+		]
+	},
+	{
+		key: '参考技术',
+		value: [
+			{ tag: 'Citation style', description: '引用需要进行清理' }
+		]
+	},
+	{
+		key: '分类',
+		value: [
+			{ tag: 'Improve categories', description: '需要更多页面分类', excludeMI: true },
+			{ tag: 'Uncategorized', description: '缺少页面分类', excludeMI: true }
+		]
+	} ]
+},
+{
+	key: '合并、拆分、移动',
+	value: [
+		{ tag: 'Merge from', description: '建议将页面并入本页面', excludeMI: true },
+		{ tag: 'Merge to', description: '建议将此页面并入页面', excludeMI: true },
+		{ tag: 'Merge', description: '建议此页面与页面合并', excludeMI: true },
+		{ tag: 'Requested move', description: '建议将此页面移动到新名称', excludeMI: true },
+		{ tag: 'Split', description: '建议将此页面分割为多个页面', excludeMI: true }
 	]
-};
+} ];
 
 // Tags for REDIRECTS start here
 // Not by policy, but the list roughly approximates items with >500
 // transclusions from Template:R template index
-Twinkle.tag.redirectList = {
-	'Grammar, punctuation, and spelling': {
-		'Abbreviation': [
-			{
-				tag: 'R from acronym',
-				description: 'redirect from an acronym (e.g. POTUS) to its expanded form'
-			},
-			{
-				tag: 'R from initialism',
-				description: 'redirect from an initialism (e.g. AGF) to its expanded form'
-			},
-			{
-				tag: 'R from MathSciNet abbreviation',
-				description: 'redirect from MathSciNet publication title abbreviation to the unabbreviated title'
-			},
-			{
-				tag: 'R from NLM abbreviation',
-				description: 'redirect from a NLM publication title abbreviation to the unabbreviated title'
-			}
-		],
-		'Capitalisation': [
-			{
-				tag: 'R from CamelCase',
-				description: 'redirect from a CamelCase title'
-			},
-			{
-				tag: 'R from other capitalisation',
-				description: 'redirect from a title with another method of capitalisation'
-			},
-			{
-				tag: 'R from miscapitalisation',
-				description: 'redirect from a capitalisation error'
-			}
-		],
-		'Grammar & punctuation': [
-			{
-				tag: 'R from modification',
-				description: "redirect from a modification of the target's title, such as with words rearranged"
-			},
-			{
-				tag: 'R from plural',
-				description: 'redirect from a plural word to the singular equivalent'
-			},
-			{
-				tag: 'R to plural',
-				description: 'redirect from a singular noun to its plural form'
-			}
-		],
-		'Parts of speech': [
-			{
-				tag: 'R from verb',
-				description: 'redirect from an English-language verb or verb phrase'
-			},
-			{
-				tag: 'R from adjective',
-				description: 'redirect from an adjective (word or phrase that describes a noun)'
-			}
-		],
-		'Spelling': [
-			{
-				tag: 'R from alternative spelling',
-				description: 'redirect from a title with a different spelling'
-			},
-			{
-				tag: 'R from ASCII-only',
-				description: 'redirect from a title in only basic ASCII to the formal title, with differences that are not diacritical marks or ligatures'
-			},
-			{
-				tag: 'R from diacritic',
-				description: 'redirect from a page name that has diacritical marks (accents, umlauts, etc.)'
-			},
-			{
-				tag: 'R to diacritic',
-				description: 'redirect to the article title with diacritical marks (accents, umlauts, etc.)'
-			},
-			{
-				tag: 'R from misspelling',
-				description: 'redirect from a misspelling or typographical error'
-			}
-		]
-	},
-	'Alternative names': {
-		General: [
-			{
-				tag: 'R from alternative language',
-				description: 'redirect from or to a title in another language',
-				subgroup: [
-					{
-						name: 'altLangFrom',
-						type: 'input',
-						label: 'From language (two-letter code):',
-						tooltip: 'Enter the two-letter code of the language the redirect name is in; such as en for English, de for German'
-					},
-					{
-						name: 'altLangTo',
-						type: 'input',
-						label: 'To language (two-letter code):',
-						tooltip: 'Enter the two-letter code of the language the target name is in; such as en for English, de for German'
-					},
-					{
-						name: 'altLangInfo',
-						type: 'div',
-						label: $.parseHTML(
-							'<p>For a list of language codes, see <a href="/wiki/QW:Template_messages/Redirect_language_codes">Qiuwen:Template messages/Redirect language codes</a></p>'
-						)
-					}
-				]
-			},
-			{
-				tag: 'R from alternative name',
-				description: 'redirect from a title that is another name, a pseudonym, a nickname, or a synonym'
-			},
-			{
-				tag: 'R from ambiguous sort name',
-				description: 'redirect from an ambiguous sort name to a page or list that disambiguates it'
-			},
-			{
-				tag: 'R from former name',
-				description: 'redirect from a former or historic name or a working title'
-			},
-			{
-				tag: 'R from incomplete name',
-				description: 'R from incomplete name'
-			},
-			{
-				tag: 'R from incorrect name',
-				description: 'redirect from an erroneus name that is unsuitable as a title'
-			},
-			{
-				tag: 'R from less specific name',
-				description: 'redirect from a less specific title to a more specific, less general one'
-			},
-			{
-				tag: 'R from long name',
-				description: 'redirect from a more complete title'
-			},
-			{
-				tag: 'R from more specific name',
-				description: 'redirect from a more specific title to a less specific, more general one'
-			},
-			{
-				tag: 'R from non-neutral name',
-				description: 'redirect from a title that contains a non-neutral, pejorative, controversial, or offensive word, phrase, or name'
-			},
-			{
-				tag: 'R from short name',
-				description: "redirect from a title that is a shortened form of a person's full name, a book title, or other more complete title"
-			},
-			{
-				tag: 'R from sort name',
-				description: "redirect from the target's sort name, such as beginning with their surname rather than given name"
-			},
-			{
-				tag: 'R from synonym',
-				description: 'redirect from a semantic synonym of the target page title'
-			}
-		],
-		People: [
-			{
-				tag: 'R from birth name',
-				description: "redirect from a person's birth name to a more common name"
-			},
-			{
-				tag: 'R from given name',
-				description: "redirect from a person's given name"
-			},
-			{
-				tag: 'R from name with title',
-				description: "redirect from a person's name preceded or followed by a title to the name with no title or with the title in parentheses"
-			},
-			{
-				tag: 'R from person',
-				description: 'redirect from a person or persons to a related article'
-			},
-			{
-				tag: 'R from personal name',
-				description: "redirect from an individual's personal name to an article titled with their professional or other better known moniker"
-			},
-			{
-				tag: 'R from pseudonym',
-				description: 'redirect from a pseudonym'
-			},
-			{
-				tag: 'R from surname',
-				description: 'redirect from a title that is a surname'
-			}
-		],
-		Technical: [
-			{
-				tag: 'R from drug trade name',
-				description: 'redirect from (or to) the trade name of a drug to (or from) the international nonproprietary name (INN)'
-			},
-			{
-				tag: 'R from filename',
-				description: 'redirect from a title that is a filename of the target'
-			},
-			{
-				tag: 'R from molecular formula',
-				description: 'redirect from a molecular/chemical formula to its technical or trivial name'
-			},
-			{
-				tag: 'R from gene symbol',
-				description: 'redirect from a Human Genome Organisation (HUGO) symbol for a gene to an article about the gene'
-			}
-		],
-		Organisms: [
-			{
-				tag: 'R to scientific name',
-				description: 'redirect from the common name to the scientific name'
-			},
-			{
-				tag: 'R from scientific name',
-				description: 'redirect from the scientific name to the common name'
-			},
-			{
-				tag: 'R from alternative scientific name',
-				description: 'redirect from an alternative scientific name to the accepted scientific name'
-			},
-			{
-				tag: 'R from scientific abbreviation',
-				description: 'redirect from a scientific abbreviation'
-			},
-			{
-				tag: 'R to monotypic taxon',
-				description: 'redirect from the only lower-ranking member of a monotypic taxon to its monotypic taxon'
-			},
-			{
-				tag: 'R from monotypic taxon',
-				description: 'redirect from a monotypic taxon to its only lower-ranking member'
-			},
-			{
-				tag: 'R taxon with possibilities',
-				description: 'redirect from a title related to a living organism that potentially could be expanded into an article'
-			}
-		],
-		Geography: [
-			{
-				tag: 'R from name and country',
-				description: 'redirect from the specific name to the briefer name'
-			},
-			{
-				tag: 'R from more specific geographic name',
-				description: 'redirect from a geographic location that includes extraneous identifiers such as the county or region of a city'
-			}
-		]
-	},
-	'Navigation aids': {
-		'Navigation': [
-			{
-				tag: 'R to anchor',
-				description: 'redirect from a topic that does not have its own page to an anchored part of a page on the subject'
-			},
-			{
-				tag: 'R avoided double redirect',
-				description: 'redirect from an alternative title for another redirect',
-				subgroup: {
-					name: 'doubleRedirectTarget',
+Twinkle.tag.redirectList = [ {
+	key: '常用模板',
+	value: [
+		{ tag: '合并重定向', description: '保持页面题名至相应主条目，令页面内容在合并后仍能保存其编辑历史' },
+		{ tag: '简繁重定向', description: '引导简体至繁体，或繁体至简体' },
+		{ tag: '关注度重定向', description: '缺乏关注度的子主题向有关注度的母主题的重定向' },
+		{ tag: '模板重定向', description: '指向模板的重定向页面' },
+		{ tag: '别名重定向', description: '标题的其他名称、笔名、绰号、同义字等' },
+		{ tag: '译名重定向', description: '人物、作品等各项事物的其他翻译名称' },
+		{ tag: '缩写重定向', description: '标题缩写' },
+		{ tag: '拼写重定向', description: '标题的其他不同拼写' },
+		{ tag: '错字重定向', description: '纠正标题的常见错误拼写或误植' },
+		{ tag: '旧名重定向', description: '将事物早前的名称引导至更改后的主题' },
+		{ tag: '全名重定向', description: '标题的完整或更完整名称' },
+		{ tag: '短名重定向', description: '完整标题名称或人物全名的部分、不完整的名称或简称' },
+		{ tag: '姓氏重定向', description: '人物姓氏' },
+		{ tag: '名字重定向', description: '人物人名' },
+		{ tag: '本名重定向', description: '人物本名' },
+		{
+			tag: '非中文重定向',
+			description: '非中文标题',
+			subgroup: [
+				{
+					name: 'altLangFrom',
 					type: 'input',
-					label: 'Redirect target name',
-					tooltip: "Enter the page this redirect would target if the page wasn't also a redirect"
+					label: '本重新導向的語言（可選）',
+					tooltip: '輸入重新導向名稱所使用語言的ISO 639代碼，例如en代表英語，代碼可參見 Template:ISO_639_name'
 				}
-			},
-			{
-				tag: 'R from file metadata link',
-				description: 'redirect of a wikilink created from EXIF, XMP, or other information (i.e. the "metadata" section on some image description pages)'
-			},
-			{
-				tag: 'R to list entry',
-				description: 'redirect to a list which contains brief descriptions of subjects not notable enough to have separate articles'
-			},
-			{
-				tag: 'R mentioned in hatnote',
-				description: 'redirect from a title that is mentioned in a hatnote at the redirect target'
-			},
-			{
-				tag: 'R to section',
-				description: 'similar to {{R to list entry}}, but when list is organized in sections, such as list of characters in a fictional universe'
-			},
-			{
-				tag: 'R from shortcut',
-				description: 'redirect from a Wikipedia shortcut'
-			},
-			{
-				tag: 'R to subpage',
-				description: 'redirect to a subpage'
-			}
-		],
-		'Disambiguation': [
-			{
-				tag: 'R from ambiguous term',
-				description:
-						'redirect from an ambiguous page name to a page that disambiguates it. This template should never appear on a page that has "(disambiguation)" in its title, use R to disambiguation page instead'
-			},
-			{
-				tag: 'R to disambiguation page',
-				description: 'redirect to a disambiguation page'
-			},
-			{
-				tag: 'R from incomplete disambiguation',
-				description: 'redirect from a page name that is too ambiguous to be the title of an article and should redirect to an appropriate disambiguation page'
-			},
-			{
-				tag: 'R from incorrect disambiguation',
-				description: 'redirect from a page name with incorrect disambiguation due to an error or previous editorial misconception'
-			},
-			{
-				tag: 'R from other disambiguation',
-				description: 'redirect from a page name with an alternative disambiguation qualifier'
-			},
-			{
-				tag: 'R from unnecessary disambiguation',
-				description: 'redirect from a page name that has an unneeded disambiguation qualifier'
-			}
-		],
-		'Merge, duplicate & move': [
-			{
-				tag: 'R from duplicated article',
-				description: 'redirect to a similar article in order to preserve its edit history'
-			},
-			{
-				tag: 'R with history',
-				description: 'redirect from a page containing substantive page history, kept to preserve content and attributions'
-			},
-			{
-				tag: 'R from move',
-				description: 'redirect from a page that has been moved/renamed'
-			},
-			{
-				tag: 'R from merge',
-				description: 'redirect from a merged page in order to preserve its edit history'
-			}
-		],
-		'Namespace': [
-			{
-				tag: 'R from remote talk page',
-				description: 'redirect from a talk page in any talk namespace to a corresponding page that is more heavily watched'
-			},
-			{
-				tag: 'R to category namespace',
-				description: 'redirect from a page outside the category namespace to a category page'
-			},
-			{
-				tag: 'R to help namespace',
-				description: 'redirect from any page inside or outside of help namespace to a page in that namespace'
-			},
-			{
-				tag: 'R to main namespace',
-				description: 'redirect from a page outside the main-article namespace to an article in mainspace'
-			},
-			{
-				tag: 'R to portal namespace',
-				description: 'redirect from any page inside or outside of portal space to a page in that namespace'
-			},
-			{
-				tag: 'R to project namespace',
-				description: 'redirect from any page inside or outside of project (Qiuwen: or QW:) space to any page in the project namespace'
-			},
-			{
-				tag: 'R to user namespace',
-				description: 'redirect from a page outside the user namespace to a user page (not to a user talk page)'
-			}
-		]
-	},
-	'Media': {
-		General: [
-			{
-				tag: 'R from book',
-				description: 'redirect from a book title to a more general, relevant article'
-			},
-			{
-				tag: 'R from album',
-				description: 'redirect from an album to a related topic such as the recording artist or a list of albums'
-			},
-			{
-				tag: 'R from song',
-				description: 'redirect from a song title to a more general, relevant article'
-			},
-			{
-				tag: 'R from television episode',
-				description: 'redirect from a television episode title to a related work or lists of episodes'
-			}
-		],
-		Fiction: [
-			{
-				tag: 'R from fictional character',
-				description: 'redirect from a fictional character to a related fictional work or list of characters'
-			},
-			{
-				tag: 'R from fictional element',
-				description: 'redirect from a fictional element (such as an object or concept) to a related fictional work or list of similar elements'
-			},
-			{
-				tag: 'R from fictional location',
-				description: 'redirect from a fictional location or setting to a related fictional work or list of places'
-			}
-		]
-	},
-	'Miscellaneous': {
-		'Related information': [
-			{
-				tag: 'R to article without mention',
-				description: 'redirect to an article without any mention of the redirected word or phrase'
-			},
-			{
-				tag: 'R to decade',
-				description: 'redirect from a year to the decade article'
-			},
-			{
-				tag: 'R from domain name',
-				description: 'redirect from a domain name to an article about a website'
-			},
-			{
-				tag: 'R from phrase',
-				description: 'redirect from a phrase to a more general relevant article covering the topic'
-			},
-			{
-				tag: 'R from list topic',
-				description: 'redirect from the topic of a list to the equivalent list'
-			},
-			{
-				tag: 'R from member',
-				description: 'redirect from a member of a group to a related topic such as the group or organization'
-			},
-			{
-				tag: 'R to related topic',
-				description: 'redirect to an article about a similar topic'
-			},
-			{
-				tag: 'R from related word',
-				description: 'redirect from a related word'
-			},
-			{
-				tag: 'R from school',
-				description: 'redirect from a school article that had very little information'
-			},
-			{
-				tag: 'R from subtopic',
-				description: 'redirect from a title that is a subtopic of the target article'
-			},
-			{
-				tag: 'R to subtopic',
-				description: "redirect to a subtopic of the redirect's title"
-			},
-			{
-				tag: 'R from Unicode character',
-				description: 'redirect from a single Unicode character to an article or Wikipedia project page that infers meaning for the symbol'
-			},
-			{
-				tag: 'R from Unicode code',
-				description: 'redirect from a Unicode code point to an article about the character it represents'
-			}
-		],
-		'With possibilities': [
-			{
-				tag: 'R with possibilities',
-				description: 'redirect from a specific title to a more general, less detailed article (something which can and should be expanded)'
-			}
-		],
-		'ISO codes': [
-			{
-				tag: 'R from ISO 4 abbreviation',
-				description: 'redirect from an ISO 4 publication title abbreviation to the unabbreviated title'
-			},
-			{
-				tag: 'R from ISO 639 code',
-				description: 'redirect from a title that is an ISO 639 language code to an article about the language'
-			}
-		],
-		'Printworthiness': [
-			{
-				tag: 'R printworthy',
-				description: 'redirect from a title that would be helpful in a printed or CD/DVD version of Wikipedia'
-			},
-			{
-				tag: 'R unprintworthy',
-				description: 'redirect from a title that would NOT be helpful in a printed or CD/DVD version of Wikipedia'
-			}
-		]
-	}
-};
+			]
+		},
+		{ tag: '日文重定向', description: '日语名称' }
+	]
+},
+{
+	key: '偶用模板',
+	value: [
+		{ tag: '角色重定向', description: '电视剧、电影、书籍等作品的角色' },
+		{ tag: '章节重定向', description: '导向至较高密度组织的页面' },
+		{ tag: '列表重定向', description: '导向至低密度的列表' },
+		{ tag: '可能性重定向', description: '导向至当前提供内容更为详尽的目标页面' },
+		{ tag: '关联字重定向', description: '标题名称关联字' },
+		{
+			tag: '条目请求重定向',
+			description: '需要独立条目的页面',
+			subgroup: [
+				{
+					name: 'reqArticleLang',
+					type: 'input',
+					label: '外語語言代碼：',
+					tooltip: '使用ISO 639代碼，可參見 Template:ISO_639_name'
+				},
+				{
+					name: 'reqArticleTitle',
+					type: 'input',
+					label: '外語頁面名稱：',
+					size: 60
+				}
+			]
+		},
+		{ tag: '快捷方式重定向', description: '维基百科快捷方式' }
+	]
+},
+{
+	key: '鲜用模板',
+	value: [
+		{ tag: '词组重定向', description: '将词组/词组/成语指向切题的条目及恰当章节' },
+		{ tag: '消歧义页重定向', description: '指向消歧义页' },
+		{ tag: '域名重定向', description: '域名' },
+		{ tag: '年代重定向', description: '于年份条目导向至年代条目' },
+		{ tag: '用户框模板重定向', description: '用户框模板' },
+		{ tag: '重定向模板用重定向', description: '导向至重定向模板' },
+		{ tag: 'EXIF重定向', description: 'JPEG图像文件包含EXIF信息' }
+	]
+} ];
 
 // maintenance tags for FILES start here
-Twinkle.tag.fileList = {
-	'License and sourcing problem tags': [
+
+Twinkle.tag.fileList = [ {
+	key: '著作权和来源问题标签',
+	value: [
 		{
-			label: '{{Better source requested}}: source info consists of bare image URL/generic base URL only',
-			value: 'Better source requested'
-		},
-		{
-			label: '{{Non-free reduce}}: non-low-resolution fair use image (or too-long audio clip, etc)',
-			value: 'Non-free reduce'
-		},
-		{
-			label: '{{Orphaned non-free revisions}}: fair use media with old revisions that need to be deleted',
-			value: 'Orphaned non-free revisions'
+			label: '{{Non-free reduce}}：' + '非低分辨率的合理使用图像（或过长的音频剪辑等）', value: 'Non-free reduce'
 		}
-	],
-	'Wikimedia Commons-related tags': [
+	]
+},
+{
+	key: '维基共享资源相关标签',
+	value: [
 		{
-			label: '{{Copy to Commons}}: free media that should be copied to Commons',
-			value: 'Copy to Commons'
+			label: '{{Copy to Wikimedia Commons}}：' + '自由著作权文件应该被移动至维基共享资源', value: 'Copy to Wikimedia Commons'
 		},
 		{
-			label: '{{Do not move to Commons}}: file not suitable for moving to Commons',
+			label: '{{Do not move to Commons}}：' + '不要移动至维基共享资源',
 			value: 'Do not move to Commons',
+			subgroup: {
+				type: 'input',
+				name: 'DoNotMoveToCommons_reason',
+				label: '原因：',
+				tooltip: '输入不应该将该图像移动到维基共享资源的原因（必填）。'
+			}
+		},
+		{
+			label: '{{Keep local}}：' + '请求在本地保留维基共享资源的文件副本',
+			value: 'Keep local',
 			subgroup: [
 				{
 					type: 'input',
-					name: 'DoNotMoveToCommons_reason',
-					label: 'Reason:',
-					tooltip: 'Enter the reason why this image should not be moved to Commons (required). If the file is PD in the US but not in country of origin, enter "US only"',
-					required: true
+					name: 'keeplocalName',
+					label: '共享资源的不同图像名称：',
+					tooltip: '输入在共享资源的图像名称（如果不同于本地名称），不包括 File: 前缀'
 				},
 				{
-					type: 'number',
-					name: 'DoNotMoveToCommons_expiry',
-					label: 'Expiration year:',
-					min: new Morebits.date().getFullYear(),
-					tooltip: 'If this file can be moved to Commons beginning in a certain year, you can enter it here (optional).'
+					type: 'input',
+					name: 'keeplocalReason',
+					label: '原因：',
+					tooltip: '输入请求在本地保留文件副本的原因（可选）：'
 				}
 			]
 		},
 		{
-			label: '{{Keep local}}: request to keep local copy of a Commons file',
-			value: 'Keep local',
-			subgroup: {
-				type: 'input',
-				name: 'keeplocalName',
-				label: 'Commons image name if different:',
-				tooltip: 'Name of the image on Commons (if different from local name), excluding the File: prefix:'
-			}
-		},
-		{
-			label: '{{Now Commons}}: file has been copied to Commons',
+			label: '{{Now Commons}}：' + '文件已被复制到维基共享资源（CSD F7）',
 			value: 'Now Commons',
 			subgroup: {
 				type: 'input',
 				name: 'nowcommonsName',
-				label: 'Commons image name if different:',
-				tooltip: 'Name of the image on Commons (if different from local name), excluding the File: prefix:'
+				label: '共享资源的不同图像名称：',
+				tooltip: '输入在共享资源的图像名称（如果不同于本地名称），不包括 File: 前缀'
 			}
 		}
-	],
-	'Cleanup tags': [
+	]
+},
+{
+	key: '清理标签',
+	value: [
+		{ label: '{{Watermark}}：' + '图像包含了水印', value: 'Watermark' },
 		{
-			label: '{{Artifacts}}: PNG contains residual compression artifacts',
-			value: 'Artifacts'
-		},
-		{
-			label: '{{Bad font}}: SVG uses fonts not available on the thumbnail server',
-			value: 'Bad font'
-		},
-		{
-			label: '{{Bad format}}: PDF/DOC/... file should be converted to a more useful format',
-			value: 'Bad format'
-		},
-		{
-			label: '{{Bad GIF}}: GIF that should be PNG, JPEG, or SVG',
-			value: 'Bad GIF'
-		},
-		{
-			label: '{{Bad JPEG}}: JPEG that should be PNG or SVG',
-			value: 'Bad JPEG'
-		},
-		{
-			label: '{{Bad SVG}}: SVG containing raster graphics',
-			value: 'Bad SVG'
-		},
-		{
-			label: '{{Bad trace}}: auto-traced SVG requiring cleanup',
-			value: 'Bad trace'
-		},
-		{
-			label: '{{Cleanup image}}: general cleanup',
-			value: 'Cleanup image',
-			subgroup: {
-				type: 'input',
-				name: 'cleanupimageReason',
-				label: 'Reason:',
-				tooltip: 'Enter the reason for cleanup (required)',
-				required: true
-			}
-		},
-		{
-			label: '{{ClearType}}: image (not screenshot) with ClearType anti-aliasing',
-			value: 'ClearType'
-		},
-		{
-			label: '{{Imagewatermark}}: image contains visible or invisible watermarking',
-			value: 'Imagewatermark'
-		},
-		{
-			label: '{{NoCoins}}: image using coins to indicate scale',
-			value: 'NoCoins'
-		},
-		{
-			label: '{{Overcompressed JPEG}}: JPEG with high levels of artifacts',
-			value: 'Overcompressed JPEG'
-		},
-		{
-			label: '{{Opaque}}: opaque background should be transparent',
-			value: 'Opaque'
-		},
-		{
-			label: '{{Remove border}}: unneeded border, white space, etc.',
-			value: 'Remove border'
-		},
-		{
-			label: '{{Rename media}}: file should be renamed according to the criteria at [[QW:FMV]]',
+			label: '{{Rename media}}：' + '文件应该根据文件名称指引被重命名',
 			value: 'Rename media',
 			subgroup: [
 				{
 					type: 'input',
 					name: 'renamemediaNewname',
-					label: 'New name:',
-					tooltip: 'Enter the new name for the image (optional)'
+					label: '新名称：',
+					tooltip: '输入图像的新名称（可选）'
 				},
 				{
 					type: 'input',
 					name: 'renamemediaReason',
-					label: 'Reason:',
-					tooltip: 'Enter the reason for the rename (optional)'
+					label: '原因：',
+					tooltip: '输入重命名的原因（可选）'
 				}
 			]
 		},
-		{
-			label: '{{Should be PNG}}: GIF or JPEG should be lossless',
-			value: 'Should be PNG'
-		},
-		{
-			label: '{{Should be SVG}}: PNG, GIF or JPEG should be vector graphics',
-			value: 'Should be SVG',
-			subgroup: {
-				name: 'svgCategory',
-				type: 'select',
-				list: [
-					{
-						label: '{{Should be SVG|other}}',
-						value: 'other'
-					},
-					{
-						label: '{{Should be SVG|alphabet}}: character images, font examples, etc.',
-						value: 'alphabet'
-					},
-					{
-						label: '{{Should be SVG|chemical}}: chemical diagrams, etc.',
-						value: 'chemical'
-					},
-					{
-						label: '{{Should be SVG|circuit}}: electronic circuit diagrams, etc.',
-						value: 'circuit'
-					},
-					{
-						label: '{{Should be SVG|coat of arms}}: coats of arms',
-						value: 'coat of arms'
-					},
-					{
-						label: '{{Should be SVG|diagram}}: diagrams that do not fit any other subcategory',
-						value: 'diagram'
-					},
-					{
-						label: '{{Should be SVG|emblem}}: emblems, free/libre logos, insignias, etc.',
-						value: 'emblem'
-					},
-					{
-						label: '{{Should be SVG|fair use}}: fair-use images, fair-use logos',
-						value: 'fair use'
-					},
-					{
-						label: '{{Should be SVG|flag}}: flags',
-						value: 'flag'
-					},
-					{
-						label: '{{Should be SVG|graph}}: visual plots of data',
-						value: 'graph'
-					},
-					{
-						label: '{{Should be SVG|logo}}: logos',
-						value: 'logo'
-					},
-					{
-						label: '{{Should be SVG|map}}: maps',
-						value: 'map'
-					},
-					{
-						label: '{{Should be SVG|music}}: musical scales, notes, etc.',
-						value: 'music'
-					},
-					{
-						label: '{{Should be SVG|physical}}: "realistic" images of physical objects, people, etc.',
-						value: 'physical'
-					},
-					{
-						label: '{{Should be SVG|symbol}}: miscellaneous symbols, icons, etc.',
-						value: 'symbol'
-					}
-				]
-			}
-		},
-		{
-			label: '{{Should be text}}: image should be represented as text, tables, or math markup',
-			value: 'Should be text'
-		}
-	],
-	'Image quality tags': [
-		{
-			label: '{{Image hoax}}: Image may be manipulated or constitute a hoax',
-			value: 'Image hoax'
-		},
-		{
-			label: '{{Image-blownout}}',
-			value: 'Image-blownout'
-		},
-		{
-			label: '{{Image-out-of-focus}}',
-			value: 'Image-out-of-focus'
-		},
-		{
-			label: '{{Image-Poor-Quality}}',
-			value: 'Image-Poor-Quality',
-			subgroup: {
-				type: 'input',
-				name: 'ImagePoorQualityReason',
-				label: 'Reason:',
-				tooltip: 'Enter the reason why this image is so bad (required)',
-				required: true
-			}
-		},
-		{
-			label: '{{Image-underexposure}}',
-			value: 'Image-underexposure'
-		},
-		{
-			label: '{{Low quality chem}}: disputed chemical structures',
-			value: 'Low quality chem',
-			subgroup: {
-				type: 'input',
-				name: 'lowQualityChemReason',
-				label: 'Reason:',
-				tooltip: 'Enter the reason why the diagram is disputed (required)',
-				required: true
-			}
-		}
-	],
-	'Replacement tags': [
-		{
-			label: '{{Obsolete}}: improved version available',
-			value: 'Obsolete'
-		},
-		{
-			label: '{{PNG version available}}',
-			value: 'PNG version available'
-		},
-		{
-			label: '{{Vector version available}}',
-			value: 'Vector version available'
-		}
+		{ label: '{{Should be SVG}}：' + 'PNG、GIF、JPEG文件应该重制成矢量图形', value: 'Should be SVG' }
 	]
-};
-Twinkle.tag.fileList['Replacement tags'].forEach((el) => {
-	el.subgroup = {
-		type: 'input',
-		label: 'Replacement file:',
-		tooltip: 'Enter the name of the file which replaces this one (required)',
-		name: el.value.replace(/ /g, '_') + 'File',
-		required: true
-	};
-});
+},
+{
+	key: '文件取代标签',
+	value: [
+		{ label: '{{Obsolete}}：' + '有新版本可用的过时文件', value: 'Obsolete' },
+		{ label: '{{Vector version available}}：' + '有矢量图形可用的非矢量图形文件', value: 'Vector version available' }
+	],
+	buildFilename: true
+} ];
+
 Twinkle.tag.callbacks = {
 	article: (pageobj) => {
+
 		// Remove tags that become superfluous with this action
-		let pageText = pageobj.getPageText().replace(/\{\{\s*([Uu]serspace draft)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/g, '');
+		let pageText = pageobj.getPageText().replace(/\{\{\s*([Nn]ew unreviewed article|[Uu]nreviewed|[Uu]serspace draft)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/g, '');
 		const params = pageobj.getCallbackParameters();
 
 		/**
@@ -2041,18 +1006,18 @@ Twinkle.tag.callbacks = {
 		const postRemoval = () => {
 			if (params.tagsToRemove.length) {
 				// Remove empty {{multiple issues}} if found
-				pageText = pageText.replace(/\{\{(multiple ?issues|article ?issues|mi)\s*\|\s*\}\}\n?/im, '');
+				pageText = pageText.replace(/\{\{(multiple ?issues|article ?issues|mi|ai|issues|多個問題|多个问题|問題條目|问题条目|數個問題|数个问题)\s*\|\s*\}\}\n?/im, '');
 				// Remove single-element {{multiple issues}} if found
-				pageText = pageText.replace(/\{\{(?:multiple ?issues|article ?issues|mi)\s*\|\s*(\{\{[^}]+\}\})\s*\}\}/im, '$1');
+				pageText = pageText.replace(/\{\{(?:multiple ?issues|article ?issues|mi|ai|issues|多個問題|多个问题|問題條目|问题条目|數個問題|数个问题)\s*\|\s*(\{\{(?:\{\{[^{}]*\}\}|[^{}])+\}\})\s*\}\}/im, '$1');
 			}
 
 			// Build edit summary
 			const makeSentence = (array) => {
 				if (array.length < 3) {
-					return array.join(' and ');
+					return array.join('和');
 				}
 				const last = array.pop();
-				return array.join(', ') + ', and ' + last;
+				return array.join('、') + '和' + last;
 			};
 			const makeTemplateLink = (tag) => {
 				let text = '{{[[';
@@ -2063,60 +1028,46 @@ Twinkle.tag.callbacks = {
 				text += tag.indexOf(':') !== -1 ? tag : 'Template:' + tag + '|' + tag;
 				return text + ']]}}';
 			};
+
 			let summaryText;
 			const addedTags = params.tags.map(makeTemplateLink);
 			const removedTags = params.tagsToRemove.map(makeTemplateLink);
 			if (addedTags.length) {
-				summaryText = 'Added ' + makeSentence(addedTags);
-				summaryText += removedTags.length ? '; and removed ' + makeSentence(removedTags) : '';
+				summaryText = '加入' + makeSentence(addedTags);
+				summaryText += removedTags.length ? '並移除' + makeSentence(removedTags) : '';
 			} else {
-				summaryText = 'Removed ' + makeSentence(removedTags);
+				summaryText = '移除' + makeSentence(removedTags);
 			}
-			summaryText += ' tag' + (addedTags.length + removedTags.length > 1 ? 's' : '');
+			summaryText += '标记';
 			if (params.reason) {
-				summaryText += ': ' + params.reason;
+				summaryText += '：' + params.reason;
 			}
 
 			// avoid truncated summaries
 			if (summaryText.length > 499) {
 				summaryText = summaryText.replace(/\[\[[^|]+\|([^\]]+)\]\]/g, '$1');
 			}
+
 			pageobj.setPageText(pageText);
 			pageobj.setEditSummary(summaryText);
-			if (
-				(mw.config.get('wgNamespaceNumber') === 0 && Twinkle.getPref('watchTaggedVenues').indexOf('articles') !== -1) ||
-					(mw.config.get('wgNamespaceNumber') === 118 && Twinkle.getPref('watchTaggedVenues').indexOf('drafts') !== -1)
-			) {
-				pageobj.setWatchlist(Twinkle.getPref('watchTaggedPages'));
-			}
+			pageobj.setChangeTags(Twinkle.changeTags);
+			pageobj.setWatchlist(Twinkle.getPref('watchTaggedPages'));
 			pageobj.setMinorEdit(Twinkle.getPref('markTaggedPagesAsMinor'));
 			pageobj.setCreateOption('nocreate');
 			pageobj.save(() => {
-				// COI: Start the discussion on the talk page (mainspace only)
-				if (params.coiReason) {
-					const coiTalkPage = new Morebits.wiki.page('Talk:' + Morebits.pageNameNorm, 'Starting discussion on talk page');
-
-					coiTalkPage.setNewSectionText(params.coiReason + ' ~~' + '~~');
-					coiTalkPage.setNewSectionTitle('COI tag (' + new Morebits.date(pageobj.getLoadTime()).format('MMMM Y', 'utc') + ')');
-					coiTalkPage.setChangeTags(Twinkle.changeTags);
-					coiTalkPage.setCreateOption('recreate');
-					coiTalkPage.newSection();
-				}
-
-				// Special functions for merge tags
-				// Post a rationale on the talk page (mainspace only)
+				// special functions for merge tags
 				if (params.mergeReason) {
-					const mergeTalkPage = new Morebits.wiki.page('Talk:' + params.discussArticle, 'Posting rationale on talk page');
-
-					mergeTalkPage.setNewSectionText(params.mergeReason.trim() + ' ~~' + '~~');
-					mergeTalkPage.setNewSectionTitle(params.talkDiscussionTitleLinked);
-					mergeTalkPage.setChangeTags(Twinkle.changeTags);
-					mergeTalkPage.setWatchlist(Twinkle.getPref('watchMergeDiscussions'));
-					mergeTalkPage.setCreateOption('recreate');
-					mergeTalkPage.newSection();
+					// post the rationale on the talk page (only operates in main namespace)
+					const talkpage = new Morebits.wiki.page('Talk:' + params.discussArticle, '将理由贴进讨论页');
+					talkpage.setNewSectionText(params.mergeReason.trim() + ' ~~~~');
+					talkpage.setNewSectionTitle('请求与[[' + params.nonDiscussArticle + ']]合并');
+					talkpage.setChangeTags(Twinkle.changeTags);
+					talkpage.setWatchlist(Twinkle.getPref('watchMergeDiscussions'));
+					talkpage.setCreateOption('recreate');
+					talkpage.newSection();
 				}
-				// Tag the target page (if requested)
 				if (params.mergeTagOther) {
+					// tag the target page if requested
 					let otherTagName = 'Merge';
 					if (params.mergeTag === 'Merge from') {
 						otherTagName = 'Merge to';
@@ -2132,64 +1083,29 @@ Twinkle.tag.callbacks = {
 						talkDiscussionTitle: params.talkDiscussionTitle,
 						talkDiscussionTitleLinked: params.talkDiscussionTitleLinked
 					};
-					const otherpage = new Morebits.wiki.page(params.mergeTarget, 'Tagging other page (' + params.mergeTarget + ')');
-					otherpage.setChangeTags(Twinkle.changeTags);
+					const otherpage = new Morebits.wiki.page(params.mergeTarget, '标记其他页面（' +
+						params.mergeTarget + '）');
 					otherpage.setCallbackParameters(newParams);
 					otherpage.load(Twinkle.tag.callbacks.article);
 				}
+				// special functions for requested move tags
+				if (params.moveReason) {
+					// post the rationale on the talk page (only operates in main namespace)
+					let moveTalkpageText = '\n\n{{subst:RM|1=' + params.moveReason.trim();
+					if (params.moveTarget) {
+						moveTalkpageText += '|2=' + params.moveTarget;
+					}
+					moveTalkpageText += '}}';
 
-				// Special functions for {{not English}} and {{rough translation}}
-				// Post at QW:PNT (mainspace only)
-				if (params.translationPostAtPNT) {
-					const pntPage = new Morebits.wiki.page('Qiuwen:Pages needing translation into English', 'Listing article at Qiuwen:Pages needing translation into English');
-					pntPage.setFollowRedirect(true);
-					pntPage.load((pageobj) => {
-						const old_text = pageobj.getPageText();
-						const lang = params.translationLanguage;
-						const reason = params.translationComments;
-
-						const templateText = '{{subst:needtrans|pg=' + Morebits.pageNameNorm + '|Language=' + (lang || 'uncertain') + '|Comments=' + reason.trim() + '}} ~~' + '~~';
-						let text, summary;
-						if (params.tags.indexOf('Rough translation') !== -1) {
-							text = old_text + '\n\n' + templateText;
-							summary = 'Translation cleanup requested on ';
-						} else {
-							text = old_text.replace(/\n+(==\s?Translated pages that could still use some cleanup\s?==)/, '\n\n' + templateText + '\n\n$1');
-							summary = 'Translation' + (lang ? ' from ' + lang : '') + ' requested on ';
-						}
-						if (text === old_text) {
-							pageobj.getStatusElement().error('failed to find target spot for the discussion');
-							return;
-						}
-						pageobj.setPageText(text);
-						pageobj.setEditSummary(summary + ' [[:' + Morebits.pageNameNorm + ']]');
-						pageobj.setChangeTags(Twinkle.changeTags);
-						pageobj.setCreateOption('recreate');
-						pageobj.save();
-					});
-				}
-				// Notify the user ({{Not English}} only)
-				if (params.translationNotify) {
-					new Morebits.wiki.page(Morebits.pageNameNorm).lookupCreation((innerPageobj) => {
-						const initialContrib = innerPageobj.getCreator();
-
-						// Disallow warning yourself
-						if (initialContrib === mw.config.get('wgUserName')) {
-							innerPageobj.getStatusElement().warn('You (' + initialContrib + ') created this page; skipping user notification');
-							return;
-						}
-						const userTalkPage = new Morebits.wiki.page('User talk:' + initialContrib, 'Notifying initial contributor (' + initialContrib + ')');
-						userTalkPage.setNewSectionTitle('Your article [[' + Morebits.pageNameNorm + ']]');
-
-						userTalkPage.setNewSectionText('{{subst:uw-notenglish|1=' + Morebits.pageNameNorm + (params.translationPostAtPNT ? '' : '|nopnt=yes') + '}} ~~' + '~~');
-						userTalkPage.setEditSummary('Notice: Please use English when contributing to the English Wikipedia.');
-						userTalkPage.setChangeTags(Twinkle.changeTags);
-						userTalkPage.setCreateOption('recreate');
-						userTalkPage.setFollowRedirect(true, false);
-						userTalkPage.newSection();
-					});
+					const moveTalkpage = new Morebits.wiki.page('Talk:' + params.discussArticle, '将理由贴进讨论页');
+					moveTalkpage.setAppendText(moveTalkpageText);
+					moveTalkpage.setEditSummary('请求移动' + (params.moveTarget ? '至[[' + params.moveTarget + ']]' : ''));
+					moveTalkpage.setChangeTags(Twinkle.changeTags);
+					moveTalkpage.setCreateOption('recreate');
+					moveTalkpage.append();
 				}
 			});
+
 			if (params.patrol) {
 				pageobj.patrol();
 			}
@@ -2200,11 +1116,14 @@ Twinkle.tag.callbacks = {
 		 * Calls postRemoval() when done
 		 */
 		const removeTags = () => {
+
 			if (params.tagsToRemove.length === 0) {
 				postRemoval();
 				return;
 			}
-			Morebits.status.info('Info', 'Removing deselected tags that were already present');
+
+			Morebits.status.info('信息', '移除取消选择的已存在标记');
+
 			const getRedirectsFor = [];
 
 			// Remove the tags from the page text, if found in its proper name,
@@ -2212,121 +1131,161 @@ Twinkle.tag.callbacks = {
 			// later removal
 			params.tagsToRemove.forEach((tag) => {
 				const tag_re = new RegExp('\\{\\{' + Morebits.pageNameRegex(tag) + '\\s*(\\|[^}]+)?\\}\\}\\n?');
+
 				if (tag_re.test(pageText)) {
 					pageText = pageText.replace(tag_re, '');
 				} else {
 					getRedirectsFor.push('Template:' + tag);
 				}
 			});
+
 			if (!getRedirectsFor.length) {
 				postRemoval();
 				return;
 			}
 
 			// Remove tags which appear in page text as redirects
-			const api = new Morebits.wiki.api(
-				'Getting template redirects',
-				{
-					action: 'query',
-					prop: 'linkshere',
-					titles: getRedirectsFor.join('|'),
-					redirects: 1,
-					// follow redirect if the class name turns out to be a redirect page
-					lhnamespace: '10',
-					// template namespace only
-					lhshow: 'redirect',
-					lhlimit: 'max',
-					// 500 is max for normal users, 5000 for bots and sysops
-					format: 'json'
-				},
-				(apiobj) => {
-					const pages = apiobj.getResponse().query.pages.filter((p) => !p.missing && !!p.linkshere);
-					pages.forEach((page) => {
-						let removed = false;
-						page.linkshere.forEach((el) => {
-							const tag = el.title.slice(9);
-							const tag_re = new RegExp('\\{\\{' + Morebits.pageNameRegex(tag) + '\\s*(\\|[^}]*)?\\}\\}\\n?');
-							if (tag_re.test(pageText)) {
-								pageText = pageText.replace(tag_re, '');
-								removed = true;
-								return false; // break out of $.each
-							}
-						});
-
-						if (!removed) {
-							Morebits.status.warn('Info', 'Failed to find {{' + page.title.slice(9) + '}} on the page... excluding');
+			const api = new Morebits.wiki.api('获取模板重定向', {
+				action: 'query',
+				prop: 'linkshere',
+				titles: getRedirectsFor.join('|'),
+				redirects: 1,
+				lhnamespace: '10',
+				lhshow: 'redirect',
+				lhlimit: 'max' // 500 is max for normal users, 5000 for bots and sysops
+			}, (apiobj) => {
+				$(apiobj.responseXML).find('page').each((idx, page) => {
+					let removed = false;
+					$(page).find('lh').each((idx, el) => {
+						const tag = $(el).attr('title').slice(9);
+						const tag_re = new RegExp('\\{\\{' + Morebits.pageNameRegex(tag) + '\\s*(\\|(?:\\{\\{[^{}]*\\}\\}|[^{}])*)?\\}\\}\\n?');
+						if (tag_re.test(pageText)) {
+							pageText = pageText.replace(tag_re, '');
+							removed = true;
+							return false; // break out of $.each
 						}
 					});
-					postRemoval();
-				}
-			);
+					if (!removed) {
+						Morebits.status.warn('信息', '无法在页面上找到{{' + $(page).attr('title').slice(9) + '}}…跳过');
+					}
+
+				});
+
+				postRemoval();
+
+			});
 			api.post();
+
 		};
+
 		if (!params.tags.length) {
 			removeTags();
 			return;
 		}
-		let tagRe,
-			tagText = '',
-			tags = [];
-		const groupableTags = [],
-			groupableExistingTags = [];
-			// Executes first: addition of selected tags
-			/**
-			 * Updates `tagText` with the syntax of `tagName` template with its parameters
-			 *
-			 * @param {number} tagIndex
-			 * @param {string} tagName
-			 */
+
+		let tagRe, tagText = '', tags = [];
+		const groupableTags = [], groupableExistingTags = [];
+		// Executes first: addition of selected tags
+		/**
+		 * Updates `tagText` with the syntax of `tagName` template with its parameters
+		 *
+		 * @param {number} tagIndex
+		 * @param {string} tagName
+		 */
 		const addTag = (tagIndex, tagName) => {
 			let currentTag = '';
 			if (tagName === 'Uncategorized' || tagName === 'Improve categories') {
-				pageText += '\n\n{{' + tagName + '|date={{subst:CURRENTMONTHNAME}} {{subst:CURRENTYEAR}}}}';
+				pageText += '\n\n{{' + tagName + '|time={{subst:#time:c}}}}';
 			} else {
 				currentTag += '{{' + tagName;
 				// fill in other parameters, based on the tag
-				const subgroupObj = Twinkle.tag.article.flatObject[tagName] && Twinkle.tag.article.flatObject[tagName].subgroup;
-				if (subgroupObj) {
-					const subgroups = Array.isArray(subgroupObj) ? subgroupObj : [ subgroupObj ];
-					subgroups.forEach((gr) => {
-						if (gr.parameter && (params[gr.name] || gr.required)) {
-							currentTag += '|' + gr.parameter + '=' + (params[gr.name] || '');
-						}
-					});
-				}
 				switch (tagName) {
-					case 'Not English':
-					case 'Rough translation':
-						if (params.translationPostAtPNT) {
-							currentTag += '|listed=yes';
+					case 'Expand language':
+						currentTag += '|1=' + params.expandLanguage;
+						if (params.highQualityArticle) {
+							currentTag += '|status=yes';
+						}
+						if (params.expandLanguage2) {
+							currentTag += '|2=' + params.expandLanguage2;
+							if (params.highQualityArticle2) {
+								currentTag += '|status2=yes';
+							}
+						}
+						if (params.expandLanguage3) {
+							currentTag += '|3=' + params.expandLanguage3;
+							if (params.highQualityArticle3) {
+								currentTag += '|status3=yes';
+							}
+						}
+						break;
+					case 'Expert needed':
+						currentTag += '|subject=' + params.expert;
+						if (params.expert2) {
+							currentTag += '|subject2=' + params.expert2;
+						}
+						if (params.expert3) {
+							currentTag += '|subject3=' + params.expert3;
 						}
 						break;
 					case 'Merge':
 					case 'Merge to':
 					case 'Merge from':
-						params.mergeTag = tagName;
-						// normalize the merge target for now and later
-						params.mergeTarget = Morebits.string.toUpperCaseFirstChar(params.mergeTarget.replace(/_/g, ' '));
-						currentTag += '|' + params.mergeTarget;
+						if (params.mergeTarget) {
+							// normalize the merge target for now and later
+							params.mergeTarget = Morebits.string.toUpperCaseFirstChar(params.mergeTarget.replace(/_/g, ' '));
 
-						// link to the correct section on the talk page, for article space only
-						if (mw.config.get('wgNamespaceNumber') === 0 && (params.mergeReason || params.discussArticle)) {
-							if (!params.discussArticle) {
-								// discussArticle is the article whose talk page will contain the discussion
-								params.discussArticle = tagName === 'Merge to' ? params.mergeTarget : mw.config.get('wgTitle');
-								// nonDiscussArticle is the article which won't have the discussion
-								params.nonDiscussArticle = tagName === 'Merge to' ? mw.config.get('wgTitle') : params.mergeTarget;
-								const direction = '[[' + params.nonDiscussArticle + ']]' + (params.mergeTag === 'Merge' ? ' with ' : ' into ') + '[[' + params.discussArticle + ']]';
-								params.talkDiscussionTitleLinked = 'Proposed merge of ' + direction;
-								params.talkDiscussionTitle = params.talkDiscussionTitleLinked.replace(/\[\[(.*?)\]\]/g, '$1');
+							currentTag += '|' + params.mergeTarget;
+
+							// link to the correct section on the talk page, for article space only
+							if (mw.config.get('wgNamespaceNumber') === 0 && (params.mergeReason || params.discussArticle)) {
+								if (!params.discussArticle) {
+									// discussArticle is the article whose talk page will contain the discussion
+									params.discussArticle = tagName === 'Merge to' ? params.mergeTarget : mw.config.get('wgTitle');
+									// nonDiscussArticle is the article which won't have the discussion
+									params.nonDiscussArticle = tagName === 'Merge to' ? mw.config.get('wgTitle') : params.mergeTarget;
+									params.talkDiscussionTitle = '请求与' + params.nonDiscussArticle + '合并';
+								}
+								currentTag += '|discuss=Talk:' + params.discussArticle + '#' + params.talkDiscussionTitle;
 							}
-							currentTag += '|discuss=Talk:' + params.discussArticle + '#' + params.talkDiscussionTitle;
+						}
+						break;
+					case 'Missing information':
+						currentTag += '|1=' + params.missingInformation;
+						break;
+					case 'Notability':
+						if (params.notability !== 'none') {
+							currentTag += '|3=' + params.notability;
+						}
+						break;
+					case 'Requested move':
+						if (params.moveTarget) {
+							// normalize the move target for now and later
+							params.moveTarget = Morebits.string.toUpperCaseFirstChar(params.moveTarget.replace(/_/g, ' '));
+							params.discussArticle = mw.config.get('wgTitle');
+							currentTag += '|' + params.moveTarget;
+						}
+						break;
+					case 'Split':
+						if (params.target1) {
+							currentTag += '|1=' + params.target1;
+						}
+						if (params.target2) {
+							currentTag += '|2=' + params.target2;
+						}
+						if (params.target3) {
+							currentTag += '|3=' + params.target3;
+						}
+						break;
+					case 'Cleanup':
+						if (params.cleanupReason) {
+							currentTag += '|reason=' + params.cleanupReason;
 						}
 						break;
 					default:
 						break;
 				}
-				currentTag += '|date={{subst:CURRENTMONTHNAME}} {{subst:CURRENTYEAR}}}}\n';
+
+				currentTag += '|time={{subst:#time:c}}}}\n';
 				tagText += currentTag;
 			}
 		};
@@ -2342,18 +1301,15 @@ Twinkle.tag.callbacks = {
 			// Insert tag after short description or any hatnotes,
 			// as well as deletion/protection-related templates
 			const wikipage = new Morebits.wikitext.page(pageText);
-			const templatesAfter =
-					Twinkle.hatnoteRegex +
-					// Protection templates
-					'pp|pp-.*?|' +
-					// CSD
-					'db|delete|db-.*?|speedy deletion-.*?|' +
-					// not a hatnote, but sometimes under a CSD or AfD
-					'salt|proposed deletion endorsed';
-				// AfD is special, as the tag includes html comments before and after the actual template
-				// trailing whitespace/newline needed since this subst's a newline
-			const afdRegex = '(?:<!--.*AfD.*\\n\\{\\{(?:Article for deletion\\/dated|AfDM).*\\}\\}\\n<!--.*(?:\\n<!--.*)?AfD.*(?:\\s*\\n))?';
-			pageText = wikipage.insertAfterTemplates(tagText, templatesAfter, null, afdRegex).getText();
+			const templatesAfter = Twinkle.hatnoteRegex +
+				// Protection templates
+				'pp|pp-.*?|' +
+				// CSD
+				'(?:Delete|Db-reason|D|Deletebecause|Db|速删|速刪|Speedy|SD|快删|快刪|CSD)|' +
+				// AfD
+				'[rsaiftcmv]fd';
+			pageText = wikipage.insertAfterTemplates(tagText, templatesAfter).getText();
+
 			removeTags();
 		};
 
@@ -2362,6 +1318,12 @@ Twinkle.tag.callbacks = {
 			tagRe = new RegExp('\\{\\{' + tag + '(\\||\\}\\})', 'im');
 			// regex check for preexistence of tag can be skipped if in canRemove mode
 			if (Twinkle.tag.canRemove || !tagRe.exec(pageText)) {
+				if (tag === 'Notability' && (mw.config.get('wgNamespaceNumber') === 0 || confirm('该页面不是条目，您仍要提报到关注度提报吗？'))) {
+					const qiuwen_page = new Morebits.wiki.page('qiuwen:关注度/提报', '加入关注度记录项');
+					qiuwen_page.setFollowRedirect(true);
+					qiuwen_page.setCallbackParameters(params);
+					qiuwen_page.load(Twinkle.tag.callbacks.notabilityList);
+				}
 				// condition Twinkle.tag.article.tags[tag] to ensure that its not a custom tag
 				// Custom tags are assumed non-groupable, since we don't know whether MI template supports them
 				if (Twinkle.tag.article.flatObject[tag] && !Twinkle.tag.article.flatObject[tag].excludeMI) {
@@ -2370,10 +1332,10 @@ Twinkle.tag.callbacks = {
 					tags.push(tag);
 				}
 			} else {
-				if (tag === 'Merge from' || tag === 'History merge') {
+				if (tag === 'Merge from') {
 					tags.push(tag);
 				} else {
-					Morebits.status.warn('Info', 'Found {{' + tag + '}} on the article already...excluding');
+					Morebits.status.warn('信息', '在页面上找到{{' + tag + '}}…跳过');
 					// don't do anything else with merge tags
 					if ([ 'Merge', 'Merge to' ].indexOf(tag) !== -1) {
 						params.mergeTarget = params.mergeReason = params.mergeTagOther = null;
@@ -2389,17 +1351,24 @@ Twinkle.tag.callbacks = {
 				groupableExistingTags.push(tag);
 			}
 		});
-		const miTest = /\{\{(multiple ?issues|article ?issues|mi)(?!\s*\|\s*section\s*=)[^}]+\{/im.exec(pageText);
+
+		const miTest = /\{\{(multiple ?issues|article ?issues|mi|ai|issues|多個問題|多个问题|問題條目|问题条目|數個問題|数个问题)\s*\|[^}]+\{/im.exec(pageText);
+
 		if (miTest && groupableTags.length > 0) {
-			Morebits.status.info('Info', '加入supported tags inside existing {{multiple issues}} tag');
+			Morebits.status.info('信息', '加入支持的标记入已存在的{{multiple issues}}');
+
 			tagText = '';
 			$.each(groupableTags, addTag);
+
 			const miRegex = new RegExp('(\\{\\{\\s*' + miTest[1] + '\\s*(?:\\|(?:\\{\\{[^{}]*\\}\\}|[^{}])*)?)\\}\\}\\s*', 'im');
 			pageText = pageText.replace(miRegex, '$1' + tagText + '}}\n');
 			tagText = '';
+
 			addUngroupedTags();
-		} else if (params.group && !miTest && groupableExistingTags.length + groupableTags.length >= 2) {
-			Morebits.status.info('Info', 'Grouping supported tags inside {{multiple issues}}');
+
+		} else if (params.group && !miTest && (groupableExistingTags.length + groupableTags.length) >= 2) {
+			Morebits.status.info('信息', '加入支持的标记入{{multiple issues}}');
+
 			tagText += '{{Multiple issues|\n';
 
 			/**
@@ -2408,8 +1377,10 @@ Twinkle.tag.callbacks = {
 			const addNewTagsToMI = () => {
 				$.each(groupableTags, addTag);
 				tagText += '}}\n';
+
 				addUngroupedTags();
 			};
+
 			const getRedirectsFor = [];
 
 			// Reposition the tags on the page into {{multiple issues}}, if found with its
@@ -2423,93 +1394,101 @@ Twinkle.tag.callbacks = {
 					getRedirectsFor.push('Template:' + tag);
 				}
 			});
+
 			if (!getRedirectsFor.length) {
 				addNewTagsToMI();
 				return;
 			}
-			const api = new Morebits.wiki.api(
-				'Getting template redirects',
-				{
-					action: 'query',
-					prop: 'linkshere',
-					titles: getRedirectsFor.join('|'),
-					redirects: 1,
-					lhnamespace: '10',
-					// template namespace only
-					lhshow: 'redirect',
-					lhlimit: 'max',
-					// 500 is max for normal users, 5000 for bots and sysops
-					format: 'json'
-				},
-				(apiobj) => {
-					const pages = apiobj.getResponse().query.pages.filter((p) => !p.missing && !!p.linkshere);
-					pages.forEach((page) => {
-						let found = false;
-						page.linkshere.forEach((el) => {
-							const tag = el.title.slice(9);
-							const tag_re = new RegExp('(\\{\\{' + Morebits.pageNameRegex(tag) + '\\s*(\\|[^}]*)?\\}\\}\\n?)');
-							if (tag_re.test(pageText)) {
-								tagText += tag_re.exec(pageText)[1];
-								pageText = pageText.replace(tag_re, '');
-								found = true;
-								return false; // break out of $.each
-							}
-						});
 
-						if (!found) {
-							Morebits.status.warn('Info', 'Failed to find the existing {{' + page.title.slice(9) + '}} on the page... skip repositioning');
+			const api = new Morebits.wiki.api('获取模板重定向', {
+				action: 'query',
+				prop: 'linkshere',
+				titles: getRedirectsFor.join('|'),
+				redirects: 1,
+				lhnamespace: '10',
+				lhshow: 'redirect',
+				lhlimit: 'max' // 500 is max for normal users, 5000 for bots and sysops
+			}, (apiobj) => {
+				$(apiobj.responseXML).find('page').each((idx, page) => {
+					let found = false;
+					$(page).find('lh').each((idx, el) => {
+						const tag = $(el).attr('title').slice(9);
+						const tag_re = new RegExp('(\\{\\{' + Morebits.pageNameRegex(tag) + '\\s*(\\|[^}]*)?\\}\\}\\n?)');
+						if (tag_re.test(pageText)) {
+							tagText += tag_re.exec(pageText)[1];
+							pageText = pageText.replace(tag_re, '');
+							found = true;
+							return false; // break out of $.each
 						}
 					});
-					addNewTagsToMI();
-				}
-			);
+					if (!found) {
+						Morebits.status.warn('信息', '无法在页面上找到{{' + $(page).attr('title').slice(9) + '}}…跳过');
+					}
+				});
+				addNewTagsToMI();
+			});
 			api.post();
+
 		} else {
 			tags = tags.concat(groupableTags);
 			addUngroupedTags();
 		}
 	},
+
+	notabilityList: (pageobj) => {
+		// var text = pageobj.getPageText();
+		// var params = pageobj.getCallbackParameters();
+		pageobj.setAppendText('\n{{subst:Fameitem|title=' + Morebits.pageNameNorm + '}}');
+		pageobj.setEditSummary('加入' + '[[' + Morebits.pageNameNorm + ']]');
+		pageobj.setChangeTags(Twinkle.changeTags);
+		pageobj.setCreateOption('recreate');
+		pageobj.append();
+	},
+
 	redirect: (pageobj) => {
 		const params = pageobj.getCallbackParameters();
-		let pageText = pageobj.getPageText(),
-			tagRe,
-			tagText = '',
-			summaryText = 'Added';
+		let pageText = pageobj.getPageText(), tagRe, tagText = '', summaryText = '加入';
 		const tags = [];
 		let i;
+
 		for (i = 0; i < params.tags.length; i++) {
 			tagRe = new RegExp('(\\{\\{' + params.tags[i] + '(\\||\\}\\}))', 'im');
 			if (!tagRe.exec(pageText)) {
 				tags.push(params.tags[i]);
 			} else {
-				Morebits.status.warn('Info', 'Found {{' + params.tags[i] + '}} on the redirect already...excluding');
+				Morebits.status.warn('信息', '在重定向上找到{{' + params.tags[i] + '}}…跳过');
 			}
 		}
+
 		const addTag = (tagIndex, tagName) => {
 			tagText += '\n{{' + tagName;
-			if (tagName === 'R from alternative language') {
+			if (tagName === '非中文重定向') {
 				if (params.altLangFrom) {
-					tagText += '|from=' + params.altLangFrom;
+					tagText += '|1=' + params.altLangFrom;
 				}
-				if (params.altLangTo) {
-					tagText += '|to=' + params.altLangTo;
+			} else if (tagName === '条目请求重定向' || tagName === '條目請求重定向') {
+				if (params.reqArticleLang && params.reqArticleTitle) {
+					tagText += '|1=' + params.reqArticleLang;
+					tagText += '|2=' + params.reqArticleTitle;
 				}
-			} else if (tagName === 'R avoided double redirect' && params.doubleRedirectTarget) {
-				tagText += '|1=' + params.doubleRedirectTarget;
 			}
 			tagText += '}}';
+
 			if (tagIndex > 0) {
-				if (tagIndex === tags.length - 1) {
-					summaryText += ' and';
-				} else if (tagIndex < tags.length - 1) {
-					summaryText += ',';
+				if (tagIndex === (tags.length - 1)) {
+					summaryText += '和';
+				} else if (tagIndex < (tags.length - 1)) {
+					summaryText += '、';
 				}
 			}
-			summaryText += ' {{[[:' + (tagName.indexOf(':') !== -1 ? tagName : 'Template:' + tagName + '|' + tagName) + ']]}}';
+
+			summaryText += '{{[[:' + (tagName.indexOf(':') !== -1 ? tagName : 'Template:' + tagName + '|' + tagName) + ']]}}';
 		};
+
 		if (!tags.length) {
-			Morebits.status.warn('Info', 'No tags remaining to apply');
+			Morebits.status.warn('信息', '没有标签可供标记');
 		}
+
 		tags.sort();
 		$.each(tags, addTag);
 
@@ -2520,7 +1499,7 @@ Twinkle.tag.callbacks = {
 			pageText = pageText.replace(oldTags[0], oldTags[1] + tagText + oldTags[2] + oldTags[3]);
 		} else {
 			// Fold any pre-existing Rcats into taglist and under Rcatshell
-			const pageTags = pageText.match(/\s*{{R(?:edirect)? .*?}}/gim);
+			const pageTags = pageText.match(/\s*{{.+?重定向.*?}}/img);
 			let oldPageTags = '';
 			if (pageTags) {
 				pageTags.forEach((pageTag) => {
@@ -2532,24 +1511,28 @@ Twinkle.tag.callbacks = {
 			}
 			pageText += '\n{{Redirect category shell|' + tagText + oldPageTags + '\n}}';
 		}
-		summaryText += (tags.length > 0 ? ' tag' + (tags.length > 1 ? 's' : ' ') : 'rcat shell') + ' to redirect';
+
+		summaryText += (tags.length > 0 ? '标记' : '{{Redirect category shell}}') + '到重定向';
 
 		// avoid truncated summaries
 		if (summaryText.length > 499) {
 			summaryText = summaryText.replace(/\[\[[^|]+\|([^\]]+)\]\]/g, '$1');
 		}
+
 		pageobj.setPageText(pageText);
 		pageobj.setEditSummary(summaryText);
-		if (Twinkle.getPref('watchTaggedVenues').indexOf('redirects') !== -1) {
-			pageobj.setWatchlist(Twinkle.getPref('watchTaggedPages'));
-		}
+		pageobj.setChangeTags(Twinkle.changeTags);
+		pageobj.setWatchlist(Twinkle.getPref('watchTaggedPages'));
 		pageobj.setMinorEdit(Twinkle.getPref('markTaggedPagesAsMinor'));
 		pageobj.setCreateOption('nocreate');
 		pageobj.save();
+
 		if (params.patrol) {
 			pageobj.patrol();
 		}
+
 	},
+
 	file: (pageobj) => {
 		let text = pageobj.getPageText();
 		const params = pageobj.getCallbackParameters();
@@ -2557,14 +1540,19 @@ Twinkle.tag.callbacks = {
 
 		// Add maintenance tags
 		if (params.tags.length) {
-			let tagtext = '',
-				currentTag;
+
+			let tagtext = '', currentTag;
 			$.each(params.tags, (k, tag) => {
 				// when other commons-related tags are placed, remove "move to Commons" tag
 				if ([ 'Keep local', 'Now Commons', 'Do not move to Commons' ].indexOf(tag) !== -1) {
 					text = text.replace(/\{\{(mtc|(copy |move )?to ?commons|move to wikimedia commons|copy to wikimedia commons)[^}]*\}\}/gi, '');
 				}
+				if (tag === 'Vector version available') {
+					text = text.replace(/\{\{((convert to |convertto|should be |shouldbe|to)?svg|badpng|vectorize)[^}]*\}\}/gi, '');
+				}
+
 				currentTag = tag;
+
 				switch (tag) {
 					case 'Now Commons':
 						currentTag = 'subst:' + currentTag; // subst
@@ -2576,6 +1564,9 @@ Twinkle.tag.callbacks = {
 						if (params.keeplocalName !== '') {
 							currentTag += '|1=' + params.keeplocalName;
 						}
+						if (params.keeplocalReason !== '') {
+							currentTag += '|reason=' + params.keeplocalReason;
+						}
 						break;
 					case 'Rename media':
 						if (params.renamemediaNewname !== '') {
@@ -2585,77 +1576,49 @@ Twinkle.tag.callbacks = {
 							currentTag += '|2=' + params.renamemediaReason;
 						}
 						break;
-					case 'Cleanup image':
-						currentTag += '|1=' + params.cleanupimageReason;
-						break;
-					case 'Image-Poor-Quality':
-						currentTag += '|1=' + params.ImagePoorQualityReason;
-						break;
-					case 'Image hoax':
-						currentTag += '|date={{subst:CURRENTMONTHNAME}} {{subst:CURRENTYEAR}}';
-						break;
-					case 'Low quality chem':
-						currentTag += '|1=' + params.lowQualityChemReason;
-						break;
 					case 'Vector version available':
-						text = text.replace(/\{\{((convert to |convertto|should be |shouldbe|to)?svg|badpng|vectorize)[^}]*\}\}/gi, '');
-						/* falls through */
-					case 'PNG version available':
-						/* falls through */
+					/* falls through */
 					case 'Obsolete':
 						currentTag += '|1=' + params[tag.replace(/ /g, '_') + 'File'];
 						break;
 					case 'Do not move to Commons':
 						currentTag += '|reason=' + params.DoNotMoveToCommons_reason;
-						if (params.DoNotMoveToCommons_expiry) {
-							currentTag += '|expiry=' + params.DoNotMoveToCommons_expiry;
-						}
 						break;
-					case 'Orphaned non-free revisions':
-						currentTag = 'subst:' + currentTag; // subst
-
-						// remove {{non-free reduce}} and redirects
-						text = text.replace(
-							/\{\{\s*(Template\s*:\s*)?(Non-free reduce|FairUseReduce|Fairusereduce|Fair Use Reduce|Fair use reduce|Reduce size|Reduce|Fair-use reduce|Image-toobig|Comic-ovrsize-img|Non-free-reduce|Nfr|Smaller image|Nonfree reduce)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/gi,
-							''
-						);
-						currentTag += '|date={{subst:date}}';
-						break;
-					case 'Copy to Commons':
+					case 'Copy to Wikimedia Commons':
 						currentTag += '|human=' + mw.config.get('wgUserName');
 						break;
-					case 'Should be SVG':
-						currentTag += '|' + params.svgCategory;
-						break;
 					default:
-						break;
-						// don't care
+						break; // don't care
 				}
 
 				currentTag = '{{' + currentTag + '}}\n';
+
 				tagtext += currentTag;
-				summary += '{{' + tag + '}}, ';
+				summary += '{{' + tag + '}}、';
 			});
+
 			if (!tagtext) {
-				pageobj.getStatusElement().warn('User canceled operation; nothing to do');
+				pageobj.getStatusElement().warn('用户取消操作，没什么要做的');
 				return;
 			}
+
 			text = tagtext + text;
 		}
+
 		pageobj.setPageText(text);
-		pageobj.setEditSummary(summary.slice(0, Math.max(0, summary.length - 2)));
+		pageobj.setEditSummary(summary.substring(0, summary.length - 1));
 		pageobj.setChangeTags(Twinkle.changeTags);
-		if (Twinkle.getPref('watchTaggedVenues').indexOf('files') !== -1) {
-			pageobj.setWatchlist(Twinkle.getPref('watchTaggedPages'));
-		}
+		pageobj.setWatchlist(Twinkle.getPref('watchTaggedPages'));
 		pageobj.setMinorEdit(Twinkle.getPref('markTaggedPagesAsMinor'));
 		pageobj.setCreateOption('nocreate');
 		pageobj.save();
+
 		if (params.patrol) {
 			pageobj.patrol();
 		}
 	}
 };
+
 Twinkle.tag.callback.evaluate = (e) => {
 	const form = e.target;
 	const params = Morebits.quickForm.getInputData(form);
@@ -2668,150 +1631,97 @@ Twinkle.tag.callback.evaluate = (e) => {
 			return sum;
 		}, 0);
 		if (count > 1) {
-			let message = 'Please select only one of: {{' + conflicts.join('}}, {{') + '}}.';
-			message += extra ? ' ' + extra : '';
+			let message = '请在以下标签中择一使用' + '：{{' + conflicts.join('}}、{{') + '}}。';
+			message += extra || '';
 			alert(message);
+			return true;
+		}
+	};
+	// Given a tag, ensure an associate parameter is present
+	// Maybe just sock this away in each function???
+	const checkParameter = (tag, parameter, description) => {
+		description = description || '理由';
+		if (params.tags.indexOf(tag) !== -1 && params[parameter].trim() === '') {
+			alert('您必须指定' + '{{' + tag + '}}的' + description + '。');
 			return true;
 		}
 	};
 
 	// We could theoretically put them all checkIncompatible calls in a
 	// forEach loop, but it's probably clearer not to have [[array one],
-	// [array two]] devoid of context.
+	// [array two]] devoid of context. Likewise, all the checkParameter
+	// calls could be in one if, but could be similarly confusing.
 	switch (Twinkle.tag.mode) {
 		case 'article':
 			params.tagsToRemove = form.getUnchecked('existingTags'); // not in `input`
 			params.tagsToRemain = params.existingTags || []; // container not created if none present
 
-			if (params.tags.indexOf('Merge') !== -1 || params.tags.indexOf('Merge from') !== -1 || params.tags.indexOf('Merge to') !== -1) {
-				if (
-					checkIncompatible(
-						[ 'Merge', 'Merge from', 'Merge to' ],
-						'If several merges are required, use {{Merge}} and separate the article names with pipes (although in this case Twinkle cannot tag the other articles automatically).'
-					)
-				) {
+			if ((params.tags.indexOf('Merge') !== -1) || (params.tags.indexOf('Merge from') !== -1) ||
+				(params.tags.indexOf('Merge to') !== -1)) {
+				if (checkIncompatible([ 'Merge', 'Merge from', 'Merge to' ], '如果需要多次合并，请使用{{Merge}}并用管道符分隔条目名（但在这种情形中Twinkle不能自动标记其他条目）。')) {
+					return;
+				}
+				if (!params.mergeTarget) {
+					alert('请指定使用于merge模板中的另一个页面标题。');
 					return;
 				}
 				if ((params.mergeTagOther || params.mergeReason) && params.mergeTarget.indexOf('|') !== -1) {
-					alert(
-						'Tagging multiple articles in a merge, and starting a discussion for multiple articles, is not supported at the moment. Please turn off "tag other article", and/or clear out the "reason" box, and try again.'
-					);
+					alert('当前还不支持在一次合并中标记多个条目，与开启关于多个条目的讨论。请不要勾选“标记其他条目”并清空“理由”框后再提交。');
 					return;
 				}
 			}
-			if (checkIncompatible([ 'Not English', 'Rough translation' ])) {
+
+			if (checkParameter('Expand language', 'expandLanguage', '语言代码')) {
+				return;
+			}
+			if (checkParameter('Missing information', 'missingInformation', '缺少的内容')) {
+				return;
+			}
+			if (checkParameter('Expert needed', 'expert', '专家领域')) {
 				return;
 			}
 			break;
-		case 'file': {
-			if (checkIncompatible([ 'Bad GIF', 'Bad JPEG', 'Bad SVG', 'Bad format' ])) {
-				return;
-			}
-			if (checkIncompatible([ 'Should be PNG', 'Should be SVG', 'Should be text' ])) {
-				return;
-			}
-			if (checkIncompatible([ 'Bad SVG', 'Vector version available' ])) {
-				return;
-			}
-			if (checkIncompatible([ 'Bad JPEG', 'Overcompressed JPEG' ])) {
-				return;
-			}
-			if (checkIncompatible([ 'PNG version available', 'Vector version available' ])) {
-				return;
-			}
 
-			// Get extension from either mime-type or title, if not present (e.g., SVGs)
-			let extension = ((extension = $('.mime-type').text()) && extension.split(/\//)[1]) || mw.Title.newFromText(Morebits.pageNameNorm).getExtension();
-			if (extension) {
-				const extensionUpper = extension.toUpperCase();
-				// What self-respecting file format has *two* extensions?!
-				if (extensionUpper === 'JPG') {
-					extension = 'JPEG';
-				}
-
-				// Check that selected templates make sense given the file's extension.
-				// Bad GIF|JPEG|SVG
-				let badIndex; // Keep track of where the offending template is so we can reference it below
-				if (
-					(extensionUpper !== 'GIF' && (badIndex = params.tags.indexOf('Bad GIF')) !== -1) ||
-						(extensionUpper !== 'JPEG' && (badIndex = params.tags.indexOf('Bad JPEG')) !== -1) ||
-						(extensionUpper !== 'SVG' && (badIndex = params.tags.indexOf('Bad SVG')) !== -1)
-				) {
-					let suggestion = 'This appears to be a ' + extension + ' file, ';
-					if ([ 'GIF', 'JPEG', 'SVG' ].indexOf(extensionUpper) !== -1) {
-						suggestion += 'please use {{Bad ' + extensionUpper + '}} instead.';
-					} else {
-						suggestion += 'so {{' + params.tags[badIndex] + '}} is inappropriate.';
-					}
-					alert(suggestion);
-					return;
-				}
-				// Should be PNG|SVG
-				if (params.tags.toString().indexOf('Should be ') !== -1 && params.tags.indexOf('Should be ' + extensionUpper) !== -1) {
-					alert('This is already a ' + extension + ' file, so {{Should be ' + extensionUpper + '}} is inappropriate.');
-					return;
-				}
-
-				// Overcompressed JPEG
-				if (params.tags.indexOf('Overcompressed JPEG') !== -1 && extensionUpper !== 'JPEG') {
-					alert('This appears to be a ' + extension + " file, so {{Overcompressed JPEG}} probably doesn't apply.");
-					return;
-				}
-				// Bad trace and Bad font
-				if (extensionUpper !== 'SVG') {
-					if (params.tags.indexOf('Bad trace') !== -1) {
-						alert('This appears to be a ' + extension + " file, so {{Bad trace}} probably doesn't apply.");
-						return;
-					} else if (params.tags.indexOf('Bad font') !== -1) {
-						alert('This appears to be a ' + extension + " file, so {{Bad font}} probably doesn't apply.");
-						return;
-					}
-				}
+		case 'file':
+			// Silly to provide the same string to each of these
+			if (checkParameter('Obsolete', 'ObsoleteFile', '替换的文件名称') ||
+				checkParameter('Vector version available', 'Vector_version_availableFile', '替换的文件名称')) {
+				return;
 			}
-			if (
-				params.tags.indexOf('Do not move to Commons') !== -1 &&
-					params.DoNotMoveToCommons_expiry &&
-					(!/^2\d{3}$/.test(params.DoNotMoveToCommons_expiry) || parseInt(params.DoNotMoveToCommons_expiry, 10) <= new Date().getFullYear())
-			) {
-				alert('Must be a valid future year.');
+			if (checkParameter('Do not move to Commons', 'DoNotMoveToCommons_reason')) {
 				return;
 			}
 			break;
-		}
+
 		case 'redirect':
-			if (checkIncompatible([ 'R printworthy', 'R unprintworthy' ])) {
-				return;
-			}
-			if (checkIncompatible([ 'R from subtopic', 'R to subtopic' ])) {
-				return;
-			}
-			if (checkIncompatible([ 'R to category namespace', 'R to help namespace', 'R to main namespace', 'R to portal namespace', 'R to project namespace', 'R to user namespace' ])) {
-				return;
-			}
 			break;
+
 		default:
-			alert('Twinkle.tag: unknown mode ' + Twinkle.tag.mode);
+			alert('Twinkle.tag：未知模式 ' + Twinkle.tag.mode);
 			break;
 	}
 
 	// File/redirect: return if no tags selected
 	// Article: return if no tag is selected and no already present tag is deselected
 	if (params.tags.length === 0 && (Twinkle.tag.mode !== 'article' || params.tagsToRemove.length === 0)) {
-		alert('You must select at least one tag!');
+		alert('必须选择至少一个标记！');
 		return;
 	}
+
 	Morebits.simpleWindow.setButtonsEnabled(false);
 	Morebits.status.init(form);
+
 	Morebits.wiki.actionCompleted.redirect = Morebits.pageNameNorm;
-	Morebits.wiki.actionCompleted.notice = 'Tagging complete, reloading article in a few seconds';
+	Morebits.wiki.actionCompleted.notice = '标记完成，将在几秒内刷新页面';
 	if (Twinkle.tag.mode === 'redirect') {
 		Morebits.wiki.actionCompleted.followRedirect = false;
 	}
-	const qiuwen_page = new Morebits.wiki.page(Morebits.pageNameNorm, 'Tagging ' + Twinkle.tag.mode);
+
+	const qiuwen_page = new Morebits.wiki.page(Morebits.pageNameNorm, '正在标记' + Twinkle.tag.mode);
 	qiuwen_page.setCallbackParameters(params);
-	qiuwen_page.setChangeTags(Twinkle.changeTags);
 	qiuwen_page.load(Twinkle.tag.callbacks[Twinkle.tag.mode]);
 };
+
 Twinkle.addInitCallback(Twinkle.tag, 'tag');
 })(jQuery);
 /* </nowiki> */
