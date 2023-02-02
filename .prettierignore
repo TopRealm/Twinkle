@@ -1,4 +1,6 @@
 src/lib/
+src/modules/twinkleclose.js
+src/modules/twinklestub.js
 scripts/
 dist/
 *.md
