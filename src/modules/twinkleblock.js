@@ -833,7 +833,8 @@ Twinkle.block.callback.change_action = (e) => {
 					'被' + Twinkle.block.recentBlockLog.user + '封禁',
 					$('<b>' + Morebits.string.formatTime(Twinkle.block.recentBlockLog.params.duration) + '</b>')[0],
 					Twinkle.block.manualUnblock ? '（手动解封）' : '（自动过期）'
-				], $blockloglink[0]
+				],
+			$blockloglink[0]
 		);
 	}
 	if (blockBox && Twinkle.block.currentBlockInfo) {

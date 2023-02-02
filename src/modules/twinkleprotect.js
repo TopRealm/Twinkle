@@ -213,7 +213,8 @@ Twinkle.protect.callback.showLogAndCurrentProtectInfo = () => {
 					'此页面曾在',
 					$('<b>' + new Morebits.date(Twinkle.protect.previousProtectionLog.timestamp).calendar('utc') + '</b>')[0],
 					'被' + Twinkle.protect.previousProtectionLog.user + '保护：'
-				].concat(Twinkle.protect.formatProtectionDescription(Twinkle.protect.previousProtectionLevels)), $linkMarkup[0]
+				].concat(Twinkle.protect.formatProtectionDescription(Twinkle.protect.previousProtectionLevels)),
+			$linkMarkup[0]
 		);
 	}
 

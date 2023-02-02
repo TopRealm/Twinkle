@@ -544,7 +544,7 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
 							type: 'div',
 							id: id + '_' + i + '_subgroup'
 						});
-						// eslint-disable-next-line no-loop-func
+							// eslint-disable-next-line no-loop-func
 						$.each(tmpgroup, (_idx, el) => {
 							const newEl = $.extend({}, el);
 							if (!newEl.type) {

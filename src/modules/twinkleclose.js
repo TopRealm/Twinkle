@@ -1,4 +1,3 @@
-/* eslint-disable quote-props */
 'use strict';
 
 /**
@@ -87,7 +86,7 @@ Twinkle.close.addLinks = () => {
 // Keep this synchronized with {{delh}}
 
 Twinkle.close.codes = {
-	'请求无效': {
+	请求无效: {
 		ir: {
 			label: '请求无效',
 			action: 'keep'
@@ -105,7 +104,7 @@ Twinkle.close.codes = {
 			action: 'keep'
 		}
 	},
-	'保留': {
+	保留: {
 		k: {
 			label: '保留',
 			action: 'keep',
@@ -130,7 +129,7 @@ Twinkle.close.codes = {
 			adminonly: true
 		}
 	},
-	'删除': {
+	删除: {
 		d: {
 			label: '删除',
 			action: 'del',
@@ -143,7 +142,7 @@ Twinkle.close.codes = {
 			adminonly: true
 		}
 	},
-	'快速删除': {
+	快速删除: {
 		sd: {
 			label: '快速删除',
 			action: 'del'
@@ -174,7 +173,7 @@ Twinkle.close.codes = {
 			adminonly: true
 		}
 	}, */
-	'其他处理方法': {
+	其他处理方法: {
 		c: {
 			label: '转交侵权',
 			action: 'noop'
