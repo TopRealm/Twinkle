@@ -423,8 +423,7 @@ Twinkle.fluff.callbacks = {
 			apiobj.statelem.error('抓取到的修订版本与请求的修订版本不符，取消。');
 			return;
 		}
-		// eslint-disable-next-line no-tabs
-		const optional_summary = prompt('请输入回退理由：								', apiobj.params.summary); // padded out to widen prompt in Firefox
+		const optional_summary = prompt('请输入回退理由：', apiobj.params.summary); // padded out to widen prompt in Firefox
 		if (optional_summary === null) {
 			apiobj.statelem.error('由用户取消。');
 			return;
@@ -602,8 +601,7 @@ Twinkle.fluff.callbacks = {
 		let summary, extra_summary;
 		switch (params.type) {
 			case 'agf':
-				// eslint-disable-next-line no-tabs
-				extra_summary = prompt('可选的编辑摘要：							  ', params.summary); // padded out to widen prompt in Firefox
+				extra_summary = prompt('可选的编辑摘要：', params.summary); // padded out to widen prompt in Firefox
 				if (extra_summary === null) {
 					statelem.error('Aborted by user.');
 					return;
@@ -621,8 +619,7 @@ Twinkle.fluff.callbacks = {
 				/* falls through */
 			default:
 				if (Twinkle.getPref('offerReasonOnNormalRevert')) {
-					// eslint-disable-next-line no-tabs
-					extra_summary = prompt('可选的编辑摘要：							  ', params.summary); // padded out to widen prompt in Firefox
+					extra_summary = prompt('可选的编辑摘要：', params.summary); // padded out to widen prompt in Firefox
 					if (extra_summary === null) {
 						statelem.error('用户取消操作。');
 						return;
