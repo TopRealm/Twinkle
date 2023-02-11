@@ -951,8 +951,7 @@ Twinkle.config.sections = [
 				adminOnly: true
 			},
 			// twinklewarn.js: When using the autolevel select option, how many days makes a prior warning stale
-			// Huggle is three days ([[Special:Diff/918980316]] and [[Special:Diff/919417999]]) while ClueBotNG is two:
-			// https://github.com/DamianZaremba/cluebotng/blob/4958e25d6874cba01c75f11debd2e511fd5a2ce5/bot/action_functions.php#L62
+			// Huggle is three days while ClueBotNG is two:
 			{
 				name: 'autolevelStaleDays',
 				type: 'integer'
