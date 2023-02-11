@@ -1,4 +1,3 @@
-/* eslint-disable quote-props */
 'use strict';
 
 /**
@@ -13,6 +12,7 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - twinkleclose.js */
+/* eslint-disable quote-props */
 /* <nowiki> */
 (($) => {
 /**
