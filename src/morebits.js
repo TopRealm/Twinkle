@@ -10,8 +10,6 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - morebits.js */
-/* eslint-disable no-new */
-/* eslint-disable no-throw-literal */
 /* <nowiki> */
 /**
  * A library full of lots of goodness for user scripts on MediaWiki wikis.
@@ -1537,7 +1535,7 @@ Morebits.array = {
 	 */
 	uniq: (arr) => {
 		if (!Array.isArray(arr)) {
-			throw 'A non-array object passed to Morebits.array.uniq';
+			throw new Error('A non-array object passed to Morebits.array.uniq');
 		}
 		return arr.filter((item, idx) => arr.indexOf(item) === idx);
 	},
@@ -1551,7 +1549,7 @@ Morebits.array = {
 	 */
 	dups: (arr) => {
 		if (!Array.isArray(arr)) {
-			throw 'A non-array object passed to Morebits.array.dups';
+			throw new Error('A non-array object passed to Morebits.array.dups');
 		}
 		return arr.filter((item, idx) => arr.indexOf(item) !== idx);
 	},
@@ -1565,7 +1563,7 @@ Morebits.array = {
 	 */
 	chunk: (arr, size) => {
 		if (!Array.isArray(arr)) {
-			throw 'A non-array object passed to Morebits.array.chunk';
+			throw new Error('A non-array object passed to Morebits.array.chunk');
 		}
 		if (typeof size !== 'number' || size <= 0) {
 			// pretty impossible to do anything :)
@@ -3698,7 +3696,8 @@ Morebits.wiki.page = function (pageName, status) {
 				}
 
 				// only notify user for redirects, not normalization
-				new Morebits.status('信息', '从 ' + ctx.pageName + ' 重定向到 ' + resolvedName);
+				const info = new Morebits.status('信息', '从 ' + ctx.pageName + ' 重定向到 ' + resolvedName);
+				info();
 			}
 			ctx.pageName = resolvedName; // update to redirect target or normalized name
 		} else {
@@ -4846,7 +4845,7 @@ Morebits.status.onError = (handler) => {
 	if (typeof handler === 'function') {
 		Morebits.status.errorEvent = handler;
 	} else {
-		throw 'Morebits.status.onError: handler is not a function';
+		throw new Error('Morebits.status.onError: handler is not a function');
 	}
 };
 Morebits.status.prototype = {
@@ -5224,7 +5223,8 @@ Morebits.batchOperation = function (currentAction) {
 				statelem.unlink();
 			}
 		} else if (typeof arg === 'string' && ctx.options.preserveIndividualStatusLines) {
-			new Morebits.status(arg, '完成（[[' + arg + ']]）');
+			const info = new Morebits.status(arg, '完成（[[' + arg + ']]）');
+			info();
 		}
 		ctx.countFinishedSuccess++;
 		fnDoneOne();

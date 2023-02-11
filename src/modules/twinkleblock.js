@@ -1765,8 +1765,8 @@ Twinkle.block.callback.protectuserpage = (pageobj) => {
 };
 Twinkle.block.callback.issue_template = (formData) => {
 	if (Morebits.ip.isRange(relevantUserName)) {
-		// eslint-disable-next-line no-new
-		new Morebits.status('信息', '由于封禁目标为IP段，加入封禁模板已略过', 'warn');
+		const info = new Morebits.status('信息', '由于封禁目标为IP段，加入封禁模板已略过', 'warn');
+		info();
 		return;
 	}
 	const userTalkPage = 'User_talk:' + relevantUserName;
