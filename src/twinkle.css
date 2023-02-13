@@ -23,10 +23,10 @@
 	padding: 0.75em 1.25em;
 	margin: 0;
 	color: #54595d;
+	font-family: sans-serif;
 	font-size: 0.8em;
 	font-weight: normal;
 	letter-spacing: 0.05em;
-	font-family: sans-serif;
 }
 
 /* twinkleclose.js */
@@ -41,18 +41,18 @@ a.twinkle-close-button-disabled {
 
 /* The additional box on user skin.js and twinklepreferences.js pages */
 #twinkle-config-headerbox {
-	border: 1px #f60 solid;
-	background: #fed;
 	padding: 0.6em;
+	border: 1px #f60 solid;
 	margin: 0.5em auto;
+	background: #fed;
 	text-align: center;
 }
 
 /* twinkleoptions.js */
 #twinkle-config-headerbox.config-twopt-box {
-	font-weight: bold;
 	width: 80%;
 	border-width: 2px;
+	font-weight: bold;
 }
 
 /* skin-specific js */
