@@ -16,12 +16,12 @@
 /* <nowiki> */
 (($) => {
 /**
- * twinkleconfig.js: Preferences module
- * Mode of invocation:  Adds configuration form to Help:Twinkle/参数设置,
- *                      and adds an ad box to the top of user subpages belonging to the
- *                      currently logged-in user which end in '.js'
- * Active on:           What I just said. Yeah.
- */
+	 * twinkleconfig.js: Preferences module
+	 * Mode of invocation:  Adds configuration form to Help:Twinkle/参数设置,
+	 *                      and adds an ad box to the top of user subpages belonging to the
+	 *                      currently logged-in user which end in '.js'
+	 * Active on:           What I just said. Yeah.
+	 */
 
 Twinkle.config = {};
 Twinkle.config.watchlistEnums = {
@@ -56,7 +56,7 @@ Twinkle.config.commonSets = {
 		r1: "R1",
 		r2: "R2"
 	},
-	csdCriteriaDisplayOrder: [ "db", "g1", "g2", "g3", "g4", "g5", "g6", "g7", "g8", "g9", "a1", "a2", "a3", "o1", "o2", "o3", "f1", "f2", "r1", "r2" ],
+	csdCriteriaDisplayOrder: ["db", "g1", "g2", "g3", "g4", "g5", "g6", "g7", "g8", "g9", "a1", "a2", "a3", "o1", "o2", "o3", "f1", "f2", "r1", "r2"],
 	csdCriteriaNotification: {
 		db: "自定义理由（{{db}}）",
 		g1: "G1",
@@ -79,7 +79,7 @@ Twinkle.config.commonSets = {
 		r1: "R1",
 		r2: "R2"
 	},
-	csdCriteriaNotificationDisplayOrder: [ "db", "g1", "g2", "g3", "g4", "g5", "g6", "g7", "g8", "g9", "a1", "a2", "a3", "o1", "o2", "o3", "f1", "f2", "r1", "r2" ],
+	csdCriteriaNotificationDisplayOrder: ["db", "g1", "g2", "g3", "g4", "g5", "g6", "g7", "g8", "g9", "a1", "a2", "a3", "o1", "o2", "o3", "f1", "f2", "r1", "r2"],
 	csdAndDICriteria: {
 		db: "自定义理由（{{db}}）",
 		g1: "G1",
@@ -102,7 +102,7 @@ Twinkle.config.commonSets = {
 		r1: "R1",
 		r2: "R2"
 	},
-	csdAndDICriteriaDisplayOrder: [ "db", "g1", "g2", "g3", "g4", "g5", "g6", "g7", "g8", "g9", "a1", "a2", "a3", "o1", "o2", "o3", "f1", "f2", "r1", "r2" ],
+	csdAndDICriteriaDisplayOrder: ["db", "g1", "g2", "g3", "g4", "g5", "g6", "g7", "g8", "g9", "a1", "a2", "a3", "o1", "o2", "o3", "f1", "f2", "r1", "r2"],
 	namespacesNoSpecial: {
 		0: "（条目）",
 		1: "Talk",
@@ -128,32 +128,32 @@ Twinkle.config.commonSets = {
 };
 
 /**
- * Section entry format:
- *
- * {
- *   title: <human-readable section title>,
- *   module: <name of the associated module, used to link to sections>,
- *   adminOnly: <true for admin-only sections>,
- *   hidden: <true for advanced preferences that rarely need to be changed - they can still be modified by manually editing twinkleoptions.js>,
- *   preferences: [
- *     {
- *       name: <TwinkleConfig property name>,
- *       label: <human-readable short description - used as a form label>,
- *       helptip: <(optional) human-readable text (using valid HTML) that complements the description, like limits, warnings, etc.>
- *       adminOnly: <true for admin-only preferences>,
- *       type: <string|boolean|integer|enum|set|customList> (customList stores an array of JSON objects { value, label }),
- *       enumValues: <for type = "enum": a JSON object where the keys are the internal names and the values are human-readable strings>,
- *       setValues: <for type = "set": a JSON object where the keys are the internal names and the values are human-readable strings>,
- *       setDisplayOrder: <(optional) for type = "set": an array containing the keys of setValues (as strings) in the order that they are displayed>,
- *       customListValueTitle: <for type = "customList": the heading for the left "value" column in the custom list editor>,
- *       customListLabelTitle: <for type = "customList": the heading for the right "label" column in the custom list editor>
- *     },
- *     . . .
- *   ]
- * },
- * . . .
- *
- */
+	 * Section entry format:
+	 *
+	 * {
+	 *   title: <human-readable section title>,
+	 *   module: <name of the associated module, used to link to sections>,
+	 *   adminOnly: <true for admin-only sections>,
+	 *   hidden: <true for advanced preferences that rarely need to be changed - they can still be modified by manually editing twinkleoptions.js>,
+	 *   preferences: [
+	 *     {
+	 *       name: <TwinkleConfig property name>,
+	 *       label: <human-readable short description - used as a form label>,
+	 *       helptip: <(optional) human-readable text (using valid HTML) that complements the description, like limits, warnings, etc.>
+	 *       adminOnly: <true for admin-only preferences>,
+	 *       type: <string|boolean|integer|enum|set|customList> (customList stores an array of JSON objects { value, label }),
+	 *       enumValues: <for type = "enum": a JSON object where the keys are the internal names and the values are human-readable strings>,
+	 *       setValues: <for type = "set": a JSON object where the keys are the internal names and the values are human-readable strings>,
+	 *       setDisplayOrder: <(optional) for type = "set": an array containing the keys of setValues (as strings) in the order that they are displayed>,
+	 *       customListValueTitle: <for type = "customList": the heading for the left "value" column in the custom list editor>,
+	 *       customListLabelTitle: <for type = "customList": the heading for the right "label" column in the custom list editor>
+	 *     },
+	 *     . . .
+	 *   ]
+	 * },
+	 * . . .
+	 *
+	 */
 
 Twinkle.config.sections = [
 	{
@@ -982,9 +982,7 @@ Twinkle.config.init = () => {
 				"在这里修改您的参数设置之前，" +
 				"</b>" +
 				"确认您已移除了" +
-				`<a href="${
-					mw.util.getUrl("Special:MyPage/skin.js")
-				}" title="Special:MyPage/skin.js">` +
+				`<a href="${mw.util.getUrl("Special:MyPage/skin.js")}" title="Special:MyPage/skin.js">` +
 				"用户JavaScript文件" +
 				"</a>" +
 				"中任何旧的" +
@@ -993,7 +991,7 @@ Twinkle.config.init = () => {
 		contentdiv.appendChild(contentnotice);
 
 		// look and see if the user does in fact have any old settings in their skin JS file
-		const skinjs = new Morebits.wiki.page(`User:${ mw.config.get("wgUserName") }/${ mw.config.get("skin") }.js`);
+		const skinjs = new Morebits.wiki.page(`User:${mw.config.get("wgUserName")}/${mw.config.get("skin")}.js`);
 		skinjs.setCallbackParameters(contentnotice);
 		skinjs.load(Twinkle.config.legacyPrefsNotice);
 
@@ -1052,7 +1050,7 @@ Twinkle.config.init = () => {
 			const tocli = document.createElement("li");
 			tocli.className = "toclevel-1";
 			const toca = document.createElement("a");
-			toca.setAttribute("href", `#${ section.module}`);
+			toca.setAttribute("href", `#${section.module}`);
 			toca.appendChild(document.createTextNode(section.title));
 			tocli.appendChild(toca);
 			tocul.appendChild(tocli);
@@ -1107,7 +1105,7 @@ Twinkle.config.init = () => {
 						cell.style.paddingRight = "0.5em";
 						label = document.createElement("label");
 						label.setAttribute("for", pref.name);
-						label.appendChild(document.createTextNode(`${pref.label }：`));
+						label.appendChild(document.createTextNode(`${pref.label}：`));
 						cell.appendChild(label);
 						row.appendChild(cell);
 
@@ -1137,7 +1135,7 @@ Twinkle.config.init = () => {
 						cell.style.paddingRight = "0.5em";
 						label = document.createElement("label");
 						label.setAttribute("for", pref.name);
-						label.appendChild(document.createTextNode(`${pref.label }：`));
+						label.appendChild(document.createTextNode(`${pref.label}：`));
 						cell.appendChild(label);
 						row.appendChild(cell);
 
@@ -1179,7 +1177,7 @@ Twinkle.config.init = () => {
 						// add label first of all
 						cell.setAttribute("colspan", "2");
 						label = document.createElement("label"); // not really necessary to use a label element here, but we do it for consistency of styling
-						label.appendChild(document.createTextNode(`${pref.label }：`));
+						label.appendChild(document.createTextNode(`${pref.label}：`));
 						cell.appendChild(label);
 						const checkdiv = document.createElement("div");
 						checkdiv.style.paddingLeft = "1em";
@@ -1189,8 +1187,8 @@ Twinkle.config.init = () => {
 							checklabel.style.display = "inline-block";
 							const check = document.createElement("input");
 							check.setAttribute("type", "checkbox");
-							check.setAttribute("id", `${pref.name }_${ itemkey}`);
-							check.setAttribute("name", `${pref.name }_${ itemkey}`);
+							check.setAttribute("id", `${pref.name}_${itemkey}`);
+							check.setAttribute("name", `${pref.name}_${itemkey}`);
 							if (gotPref && gotPref.indexOf(itemkey) !== -1) {
 								check.setAttribute("checked", "checked");
 							}
@@ -1222,7 +1220,7 @@ Twinkle.config.init = () => {
 						cell.style.paddingRight = "0.5em";
 						label = document.createElement("label");
 						label.setAttribute("for", pref.name);
-						label.appendChild(document.createTextNode(`${pref.label }：`));
+						label.appendChild(document.createTextNode(`${pref.label}：`));
 						cell.appendChild(label);
 						row.appendChild(cell);
 
@@ -1244,7 +1242,7 @@ Twinkle.config.init = () => {
 						break;
 					}
 					default:
-						alert(`twinkleconfig: 未知类型的属性 ${ pref.name}`);
+						alert(`twinkleconfig: 未知类型的属性 ${pref.name}`);
 						break;
 				}
 				row.appendChild(cell);
@@ -1256,14 +1254,14 @@ Twinkle.config.init = () => {
 				if (pref.helptip) {
 					// convert mentions of templates in the helptip to clickable links
 					cell.innerHTML = pref.helptip
-						.replace(/{{(.+?)}}/g, `{{<a href="${ mw.util.getUrl("Template:") }$1" target="_blank">$1</a>}}`)
-						.replace(/\[\[(.+?)]]/g, `<a href="${ mw.util.getUrl("") }$1" target="_blank">$1</a>`);
+						.replace(/{{(.+?)}}/g, `{{<a href="${mw.util.getUrl("Template:")}$1" target="_blank">$1</a>}}`)
+						.replace(/\[\[(.+?)]]/g, `<a href="${mw.util.getUrl("")}$1" target="_blank">$1</a>`);
 				}
 				// add reset link (custom lists don't need this, as their config value isn't displayed on the form)
 				if (pref.type !== "customList") {
 					const resetlink = document.createElement("a");
 					resetlink.setAttribute("href", "#tw-reset");
-					resetlink.setAttribute("id", `twinkle-config-reset-${ pref.name}`);
+					resetlink.setAttribute("id", `twinkle-config-reset-${pref.name}`);
 					resetlink.addEventListener("click", Twinkle.config.resetPrefLink, false);
 					resetlink.style.cssFloat = "right";
 					resetlink.style.margin = "0 0.6em";
@@ -1330,7 +1328,7 @@ Twinkle.config.init = () => {
 			box.appendChild(link);
 			box.appendChild(document.createTextNode("，或直接编辑本页。"));
 			$(box).insertAfter($("#contentSub"));
-		} else if ([ "vector", "vector-2022", "gongbi", "citizen", "common" ].indexOf(scriptPageName) !== -1) {
+		} else if (["vector", "vector-2022", "gongbi", "citizen", "common"].indexOf(scriptPageName) !== -1) {
 			// place "Looking for Twinkle options?" notice
 			box.setAttribute("class", "config-userskin-box");
 			box.appendChild(document.createTextNode("如果您想配置您的Twinkle，请使用"));
@@ -1350,16 +1348,12 @@ Twinkle.config.legacyPrefsNotice = (pageobj) => {
 	const contentnotice = pageobj.getCallbackParameters();
 	if (text.indexOf("TwinkleConfig") !== -1 || text.indexOf("FriendlyConfig") !== -1) {
 		contentnotice.innerHTML =
-				"<table class=\"plainlinks ombox ombox-content\"><tr><td class=\"mbox-image\">" +
-				"<img alt=\"\" src=\"https://tu.zhongwen.wiki/images/thumb/8/8f/Alert_Mark_%28Orange%29.svg/40px-Alert_Mark_%28Orange%29.svg.png\" /></td>" +
-				"<td class=\"mbox-text\"><p><big><b>在这里修改您的参数设置之前，</b>您必须移除在用户JavaScript文件中任何旧的Friendly设置。</big></p>" +
-				`<p>要这样做，您可以<a href="${
-					mw.config.get("wgScript")
-				}?title=User:${
-					encodeURIComponent(mw.config.get("wgUserName"))
-				}/${
-					mw.config.get("skin")
-				}.js&action=edit" target="_blank"><b>编辑您的个人JavaScript</b></a>。删除提到<code>FriendlyConfig</code>的代码。</p>` +
+				'<table class="plainlinks ombox ombox-content"><tr><td class="mbox-image">' +
+				'<img alt="" src="https://tu.zhongwen.wiki/images/thumb/8/8f/Alert_Mark_%28Orange%29.svg/40px-Alert_Mark_%28Orange%29.svg.png" /></td>' +
+				'<td class="mbox-text"><p><big><b>在这里修改您的参数设置之前，</b>您必须移除在用户JavaScript文件中任何旧的Friendly设置。</big></p>' +
+				`<p>要这样做，您可以<a href="${mw.config.get("wgScript")}?title=User:${encodeURIComponent(mw.config.get("wgUserName"))}/${mw.config.get(
+					"skin"
+				)}.js&action=edit" target="_blank"><b>编辑您的个人JavaScript</b></a>。删除提到<code>FriendlyConfig</code>的代码。</p>` +
 				"</td></tr></table>";
 	} else {
 		$(contentnotice).remove();
@@ -1601,8 +1595,8 @@ Twinkle.config.resetPref = (pref) => {
 			break;
 		case "set":
 			$.each(pref.setValues, (itemkey) => {
-				if (document.getElementById(`${pref.name }_${ itemkey}`)) {
-					document.getElementById(`${pref.name }_${ itemkey}`).checked = Twinkle.defaultConfig[pref.name].indexOf(itemkey) !== -1;
+				if (document.getElementById(`${pref.name}_${itemkey}`)) {
+					document.getElementById(`${pref.name}_${itemkey}`).checked = Twinkle.defaultConfig[pref.name].indexOf(itemkey) !== -1;
 				}
 			});
 			break;
@@ -1610,7 +1604,7 @@ Twinkle.config.resetPref = (pref) => {
 			$(document.getElementById(pref.name)).data("value", Twinkle.defaultConfig[pref.name]);
 			break;
 		default:
-			alert(`twinkleconfig: unknown data type for preference ${ pref.name}`);
+			alert(`twinkleconfig: unknown data type for preference ${pref.name}`);
 			break;
 	}
 };
@@ -1633,8 +1627,8 @@ Twinkle.config.resetAllPrefs = () => {
 
 Twinkle.config.save = (e) => {
 	Morebits.status.init(document.getElementById("twinkle-config-content"));
-	const userjs = `${mw.config.get("wgFormattedNamespaces")[mw.config.get("wgNamespaceIds").user] }:${ mw.config.get("wgUserName") }/twinkleoptions.js`;
-	const qiuwen_page = new Morebits.wiki.page(userjs, `保存参数设置到 ${ userjs}`);
+	const userjs = `${mw.config.get("wgFormattedNamespaces")[mw.config.get("wgNamespaceIds").user]}:${mw.config.get("wgUserName")}/twinkleoptions.js`;
+	const qiuwen_page = new Morebits.wiki.page(userjs, `保存参数设置到 ${userjs}`);
 	qiuwen_page.setCallbackParameters(e.target);
 	qiuwen_page.load(Twinkle.config.writePrefs);
 	return false;
@@ -1672,7 +1666,7 @@ Twinkle.config.writePrefs = (pageobj) => {
 							// read from the input box
 							userValue = parseInt(form[pref.name].value, 10);
 							if (isNaN(userValue)) {
-								Morebits.status.warn("保存", `您为 ${ pref.name } 指定的值（${ pref.value }）不合法，会继续保存操作，但此值将会跳过。`);
+								Morebits.status.warn("保存", `您为 ${pref.name} 指定的值（${pref.value}）不合法，会继续保存操作，但此值将会跳过。`);
 								userValue = null;
 							}
 							break;
@@ -1682,14 +1676,14 @@ Twinkle.config.writePrefs = (pageobj) => {
 							if (pref.setDisplayOrder) {
 								// read only those keys specified in the display order
 								$.each(pref.setDisplayOrder, (_itemkey, item) => {
-									if (form[`${pref.name }_${ item}`].checked) {
+									if (form[`${pref.name}_${item}`].checked) {
 										userValue.push(item);
 									}
 								});
 							} else {
 								// read all the keys in the list of values
 								$.each(pref.setValues, (itemkey) => {
-									if (form[`${pref.name }_${ itemkey}`].checked) {
+									if (form[`${pref.name}_${itemkey}`].checked) {
 										userValue.push(itemkey);
 									}
 								});
@@ -1700,7 +1694,7 @@ Twinkle.config.writePrefs = (pageobj) => {
 							userValue = $(form[pref.name]).data("value");
 							break;
 						default:
-							alert(`twinkleconfig: 未知数据类型，属性 ${ pref.name}`);
+							alert(`twinkleconfig: 未知数据类型，属性 ${pref.name}`);
 							break;
 					}
 				} else if (Twinkle.prefs) {
@@ -1719,9 +1713,7 @@ Twinkle.config.writePrefs = (pageobj) => {
 			"// twinkleoptions.js：用户Twinkle参数设置文件\n" +
 			"//\n" +
 			"// 注：修改您的参数设置最简单的办法是使用\n" +
-			`// Twinkle参数设置面板，在[[${
-				Morebits.pageNameNorm
-			}]]。\n` +
+			`// Twinkle参数设置面板，在[[${Morebits.pageNameNorm}]]。\n` +
 			"//\n" +
 			"// 这个文件是自动生成的，您所做的任何修改（除了\n" +
 			"// 以一种合法的JavaScript的方式来修改这些属性值）会\n" +
@@ -1732,7 +1724,7 @@ Twinkle.config.writePrefs = (pageobj) => {
 	text += JSON.stringify(newConfig, null, 2);
 	text += ";\n" + "\n" + "// twinkleoptions.js到此为止\n" + "// </nowiki>";
 	pageobj.setPageText(text);
-	pageobj.setEditSummary(`保存Twinkle参数设置：来自[[:${ Morebits.pageNameNorm }]]的自动编辑`);
+	pageobj.setEditSummary(`保存Twinkle参数设置：来自[[:${Morebits.pageNameNorm}]]的自动编辑`);
 	pageobj.setChangeTags(Twinkle.changeTags);
 	pageobj.setCreateOption("recreate");
 	pageobj.save(Twinkle.config.saveSuccess);
@@ -1748,9 +1740,7 @@ Twinkle.config.saveSuccess = (pageobj) => {
 			"您的Twinkle参数设置已被保存。" +
 			"</b></p><p>" +
 			"要看到这些更改，您可能需要" +
-			`<a href="${
-				mw.util.getUrl("QW:BYPASS")
-			}" title="QW:BYPASS"><b>` +
+			`<a href="${mw.util.getUrl("QW:BYPASS")}" title="QW:BYPASS"><b>` +
 			"绕过浏览器缓存" +
 			"</b></a>。</p>";
 	Morebits.status.root.appendChild(noticebox);

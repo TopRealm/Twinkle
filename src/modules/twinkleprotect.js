@@ -15,10 +15,10 @@
 /* <nowiki> */
 (($) => {
 /**
- * twinkleprotect.js: Protect/RPP module
- * Mode of invocation:  Tab ("PP"/"RPP")
- * Active on:           Non-special, non-MediaWiki pages
- */
+	 * twinkleprotect.js: Protect/RPP module
+	 * Mode of invocation:  Tab ("PP"/"RPP")
+	 * Active on:           Non-special, non-MediaWiki pages
+	 */
 
 // Note: a lot of code in this module is re-used/called by batchprotect.
 
@@ -68,7 +68,7 @@ Twinkle.protect.callback = () => {
 			{
 				label: "请求保护页面",
 				value: "request",
-				tooltip: `如果您想在管理员通告版请求保护此页${ Morebits.userIsSysop ? "而不是自行完成。" : "。"}`,
+				tooltip: `如果您想在管理员通告版请求保护此页${Morebits.userIsSysop ? "而不是自行完成。" : "。"}`,
 				checked: !Morebits.userIsSysop
 			},
 			{
@@ -140,7 +140,7 @@ Twinkle.protect.fetchProtectionLevel = () => {
 		titles: mw.config.get("wgPageName")
 	});
 
-	$.when.apply(jQuery, [ protectDeferred ]).done((protectData) => {
+	$.when.apply(jQuery, [protectDeferred]).done((protectData) => {
 		// $.when.apply is supposed to take an unknown number of promises
 		// via an array, which it does, but the type of data returned varies.
 		// If there are two or more deferreds, it returns an array (of objects),
@@ -166,11 +166,11 @@ Twinkle.protect.fetchProtectionLevel = () => {
 
 		// Only use the log except unprotect
 		Twinkle.protect.previousProtectionLog =
-				protectData.query.logevents.length >= 1 && protectData.query.logevents[0].action !== "unprotect" ?
-					protectData.query.logevents[0] :
-					protectData.query.logevents.length >= 2 ?
-						protectData.query.logevents[1] :
-						null;
+				protectData.query.logevents.length >= 1 && protectData.query.logevents[0].action !== "unprotect"
+					? protectData.query.logevents[0]
+					: protectData.query.logevents.length >= 2
+						? protectData.query.logevents[1]
+						: null;
 
 		if (Twinkle.protect.previousProtectionLog) {
 			$.each(Twinkle.protect.previousProtectionLog.params.details, (_index, protection) => {
@@ -200,19 +200,19 @@ Twinkle.protect.callback.showLogAndCurrentProtectInfo = () => {
 
 		if (Twinkle.protect.hasProtectLog) {
 			$linkMarkup.append(
-				$(`<a target="_blank" href="${ mw.util.getUrl("Special:Log", { action: "view", page: mw.config.get("wgPageName"), type: "protect" }) }">保护日志</a>`),
+				$(`<a target="_blank" href="${mw.util.getUrl("Special:Log", { action: "view", page: mw.config.get("wgPageName"), type: "protect" })}">保护日志</a>`),
 				Twinkle.protect.hasStableLog ? $("<span> &bull; </span>") : null
 			);
 		}
 
 		Morebits.status.init($('div[name="hasprotectlog"] span')[0]);
 		Morebits.status.warn(
-			currentlyProtected ?
-				"先前保护" :
-				[
+			currentlyProtected
+				? "先前保护"
+				: [
 					"此页面曾在",
-					$(`<b>${ new Morebits.date(Twinkle.protect.previousProtectionLog.timestamp).calendar("utc") }</b>`)[0],
-					`被${ Twinkle.protect.previousProtectionLog.user }保护：`
+					$(`<b>${new Morebits.date(Twinkle.protect.previousProtectionLog.timestamp).calendar("utc")}</b>`)[0],
+					`被${Twinkle.protect.previousProtectionLog.user}保护：`
 				].concat(Twinkle.protect.formatProtectionDescription(Twinkle.protect.previousProtectionLevels)),
 			$linkMarkup[0]
 		);
@@ -575,7 +575,7 @@ Twinkle.protect.protectionTypesAdmin = [
 	},
 	{
 		label: "模板保护",
-		list: [ { label: "高风险模板（模板）", value: "pp-template" } ]
+		list: [{ label: "高风险模板（模板）", value: "pp-template" }]
 	},
 	{
 		label: "半保护",
@@ -617,7 +617,7 @@ Twinkle.protect.protectionTypesCreateOnly = [
 
 Twinkle.protect.protectionTypes = Twinkle.protect.protectionTypesAdmin.concat(Twinkle.protect.protectionTypesCreateOnly);
 
-Twinkle.protect.protectionTypesCreate = [ { label: "解除保护", value: "unprotect" } ].concat(Twinkle.protect.protectionTypesCreateOnly);
+Twinkle.protect.protectionTypesCreate = [{ label: "解除保护", value: "unprotect" }].concat(Twinkle.protect.protectionTypesCreateOnly);
 
 // NOTICE: keep this synched with [[MediaWiki:Protect-dropdown]]
 // expiry will override any defaults
@@ -928,7 +928,7 @@ Twinkle.protect.callback.evaluate = (e) => {
 					closeparams.type = "semi";
 					closeparams.expiry = input.editexpiry;
 				}
-			} else if (input.movemodify && [ "officialprotected", "revisionprotected", "sysop", "templateeditor" ].indexOf(input.movelevel) !== -1) {
+			} else if (input.movemodify && ["officialprotected", "revisionprotected", "sysop", "templateeditor"].indexOf(input.movelevel) !== -1) {
 				closeparams.type = "move";
 				closeparams.expiry = input.moveexpiry;
 			}
@@ -1062,9 +1062,9 @@ Twinkle.protect.callback.evaluate = (e) => {
 						if (!pl.admin || Twinkle.protect.trustedBots.indexOf(pl.admin) !== -1) {
 							return null;
 						}
-						return `User:${ pl.admin}`;
+						return `User:${pl.admin}`;
 					});
-					if (admins.length && !confirm(`是否已与管理员 (${ Morebits.array.uniq(admins).join(", ") })沟通？`)) {
+					if (admins.length && !confirm(`是否已与管理员 (${Morebits.array.uniq(admins).join(", ")})沟通？`)) {
 						return false;
 					}
 					// otherwise falls through
@@ -1166,7 +1166,7 @@ Twinkle.protect.callbacks = {
 				/(?:<noinclude>)?[ \t]*\{\{\s*(pp-[^{}]*?|protected|(?:t|v|s|p-|usertalk-v|usertalk-s|sb|move)protected(?:2)?|protected template|privacy protection)\s*?\}\}\s*(?:<\/noinclude>)?\s*/gi;
 		const re_result = oldtag_re.exec(text);
 		if (re_result) {
-			if (params.tag === "none" || confirm(`在页面上找到{{${ re_result[1] }}}\n单击确定以移除，或单击取消以取消操作。`)) {
+			if (params.tag === "none" || confirm(`在页面上找到{{${re_result[1]}}}\n单击确定以移除，或单击取消以取消操作。`)) {
 				text = text.replace(oldtag_re, "");
 			}
 		}
@@ -1176,10 +1176,10 @@ Twinkle.protect.callbacks = {
 		} else {
 			tag = params.tag;
 			if (params.reason) {
-				tag += `|reason=${ params.reason}`;
+				tag += `|reason=${params.reason}`;
 			}
 			if (params.showexpiry && params.expiry && !Morebits.string.isInfinity(params.expiry)) {
-				tag += `|expiry={{subst:#time:c|${ params.expiry }}}`;
+				tag += `|expiry={{subst:#time:c|${params.expiry}}}`;
 			}
 			if (params.small) {
 				tag += "|small=yes";
@@ -1193,28 +1193,28 @@ Twinkle.protect.callbacks = {
 						/{{(?:Redirect[ _]category shell|Rcat[ _]shell|This[ _]is a redirect|多种类型重定向|多種類型重定向|多種類型重新導向|多种类型重新导向|R0|其他重定向|RCS|Redirect[ _]shell)/i
 					)
 				) {
-					text = text.replace(/#(?:redirect|重定向|重新導向) ?(\[\[.*?\]\])(.*)/i, `#REDIRECT $1$2\n\n{{${ tag }}}`);
+					text = text.replace(/#(?:redirect|重定向|重新導向) ?(\[\[.*?\]\])(.*)/i, `#REDIRECT $1$2\n\n{{${tag}}}`);
 				} else {
 					Morebits.status.info("已存在Redirect category shell", "没什么可做的");
 					return;
 				}
 			} else {
 				if (params.noinclude) {
-					tag = `<noinclude>{{${ tag }}}</noinclude>`;
+					tag = `<noinclude>{{${tag}}}</noinclude>`;
 
 					// 只有表格需要单独加回车，其他情况加回车会破坏模板。
 					if (text.indexOf("{|") === 0) {
 						tag += "\n";
 					}
 				} else {
-					tag = `{{${ tag }}}\n`;
+					tag = `{{${tag}}}\n`;
 				}
 
 				// Insert tag after short description or any hatnotes
 				const wikipage = new Morebits.wikitext.page(text);
 				text = wikipage.insertAfterTemplates(tag, Twinkle.hatnoteRegex).getText();
 			}
-			summary = `加入{{${ params.tag }}}`;
+			summary = `加入{{${params.tag}}}`;
 		}
 
 		return {
@@ -1245,7 +1245,7 @@ Twinkle.protect.callbacks = {
 		let text = rppPage.getPageText();
 		const statusElement = rppPage.getStatusElement();
 
-		const rppRe = new RegExp(`===\\s*(\\[\\[)?\\s*:?\\s*${ Morebits.string.escapeRegExp(Morebits.pageNameNorm) }\\s*(\\]\\])?\\s*===`, "m");
+		const rppRe = new RegExp(`===\\s*(\\[\\[)?\\s*:?\\s*${Morebits.string.escapeRegExp(Morebits.pageNameNorm)}\\s*(\\]\\])?\\s*===`, "m");
 		const tag = rppRe.exec(text);
 
 		const rppLink = document.createElement("a");
@@ -1253,13 +1253,13 @@ Twinkle.protect.callbacks = {
 		rppLink.appendChild(document.createTextNode(rppPage.getPageName()));
 
 		if (tag) {
-			statusElement.error([ rppLink, "已有对此页面的保护提名，取消操作。" ]);
+			statusElement.error([rppLink, "已有对此页面的保护提名，取消操作。"]);
 			return;
 		}
 
-		let newtag = `=== [[:${ mw.config.get("wgPageName") }]] ===\n`;
-		if (new RegExp(`^${ mw.util.escapeRegExp(newtag).replace(/\s+/g, "\\s*")}`, "m").test(text)) {
-			statusElement.error([ rppLink, "已有对此页面的保护提名，取消操作。" ]);
+		let newtag = `=== [[:${mw.config.get("wgPageName")}]] ===\n`;
+		if (new RegExp(`^${mw.util.escapeRegExp(newtag).replace(/\s+/g, "\\s*")}`, "m").test(text)) {
+			statusElement.error([rppLink, "已有对此页面的保护提名，取消操作。"]);
 			return;
 		}
 
@@ -1278,8 +1278,8 @@ Twinkle.protect.callbacks = {
 
 		words += params.typename;
 
-		newtag += `* <small>当前保护状态：{{protection status|${ mw.config.get("wgPageName") }}}</small>\n`;
-		newtag += `请求${ Morebits.string.toUpperCaseFirstChar(words) }${params.reason !== "" ? `：${ Morebits.string.formatReasonText(params.reason)}` : "。" }--~~` + "~~";
+		newtag += `* <small>当前保护状态：{{protection status|${mw.config.get("wgPageName")}}}</small>\n`;
+		newtag += `请求${Morebits.string.toUpperCaseFirstChar(words)}${params.reason !== "" ? `：${Morebits.string.formatReasonText(params.reason)}` : "。"}--~~` + "~~";
 
 		let reg;
 
@@ -1290,13 +1290,13 @@ Twinkle.protect.callbacks = {
 		}
 
 		const originalTextLength = text.length;
-		text = text.replace(reg, `$1\n${ newtag }\n`);
+		text = text.replace(reg, `$1\n${newtag}\n`);
 		if (text.length === originalTextLength) {
-			statusElement.error([ "无法在QW:RFPP上找到相关定位点标记。" ]);
+			statusElement.error(["无法在QW:RFPP上找到相关定位点标记。"]);
 			return;
 		}
 		statusElement.status("加入新提名…");
-		rppPage.setEditSummary(`/* ${ Morebits.pageNameNorm } */ 请求对[[${ Morebits.pageNameNorm }]]${ params.typename}`);
+		rppPage.setEditSummary(`/* ${Morebits.pageNameNorm} */ 请求对[[${Morebits.pageNameNorm}]]${params.typename}`);
 		rppPage.setChangeTags(Twinkle.changeTags);
 		rppPage.setPageText(text);
 		rppPage.setCreateOption("recreate");
@@ -1330,7 +1330,7 @@ Twinkle.protect.callbacks = {
 		const sections = text.split(/(?=\n==\s*请求解除保护\s*==)/);
 
 		if (sections.length !== 2) {
-			statusElement.error([ "无法在QW:RFPP上找到相关定位点标记。" ]);
+			statusElement.error(["无法在QW:RFPP上找到相关定位点标记。"]);
 			return;
 		}
 
@@ -1346,14 +1346,14 @@ Twinkle.protect.callbacks = {
 		const requestList = sectionText.split(/(?=\n===.+===\s*\n)/);
 
 		let found = false;
-		const rppRe = new RegExp(`===\\s*(\\[\\[)?\\s*:?\\s*${ Morebits.pageNameRegex(Morebits.pageNameNorm) }\\s*(\\]\\])?\\s*===`, "m");
+		const rppRe = new RegExp(`===\\s*(\\[\\[)?\\s*:?\\s*${Morebits.pageNameRegex(Morebits.pageNameNorm)}\\s*(\\]\\])?\\s*===`, "m");
 		for (let i = 1; i < requestList.length; i++) {
 			if (rppRe.exec(requestList[i])) {
 				requestList[i] = requestList[i].trimRight();
 				if (params.type === "unprotect") {
 					requestList[i] += "\n: {{RFPP|isun}}。--~~" + "~~\n";
 				} else {
-					requestList[i] += `\n: {{RFPP|${ params.type }|${ Morebits.string.isInfinity(params.expiry) ? "infinity" : expiryText }}}。--~~` + "~~\n";
+					requestList[i] += `\n: {{RFPP|${params.type}|${Morebits.string.isInfinity(params.expiry) ? "infinity" : expiryText}}}。--~~` + "~~\n";
 				}
 				found = true;
 				break;
@@ -1414,7 +1414,7 @@ Twinkle.protect.callbacks = {
 			summary += expiryText;
 		}
 
-		rppPage.setEditSummary(`/* ${ Morebits.pageNameNorm } */ ${ summary}`);
+		rppPage.setEditSummary(`/* ${Morebits.pageNameNorm} */ ${summary}`);
 		rppPage.setChangeTags(Twinkle.changeTags);
 		rppPage.setPageText(text);
 		rppPage.save();
@@ -1462,11 +1462,11 @@ Twinkle.protect.formatProtectionDescription = (protectionLevels) => {
 					level = settings.level;
 					break;
 			}
-			protectionNode.push($(`<b>${ label }：${ level }</b>`)[0]);
+			protectionNode.push($(`<b>${label}：${level}</b>`)[0]);
 			if (Morebits.string.isInfinity(settings.expiry)) {
 				protectionNode.push("（无限期）");
 			} else {
-				protectionNode.push(`（过期：${ new Morebits.date(settings.expiry).calendar("utc") }）`);
+				protectionNode.push(`（过期：${new Morebits.date(settings.expiry).calendar("utc")}）`);
 			}
 			if (settings.cascade) {
 				protectionNode.push("（连锁）");

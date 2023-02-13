@@ -15,10 +15,10 @@
 /* <nowiki> */
 (($) => {
 /**
- * twinklebatchundelete.js: Batch undelete module
- * Mode of invocation:     Tab ("Und-batch")
- * Active on:              Existing user and project pages
- */
+	 * twinklebatchundelete.js: Batch undelete module
+	 * Mode of invocation:     Tab ("Und-batch")
+	 * Active on:              Existing user and project pages
+	 */
 
 Twinkle.batchundelete = () => {
 	if (
@@ -87,9 +87,9 @@ Twinkle.batchundelete.callback = () => {
 				list.push({
 					label:
 							title +
-							(isProtected ?
-								"（" + `全保护，${ $editprot.attr("expiry") === "infinity" ? "无限期" : `${new Morebits.date($editprot.attr("expiry")).calendar("utc") } (UTC)` + "过期" }）` :
-								""),
+							(isProtected
+								? "（" + `全保护，${$editprot.attr("expiry") === "infinity" ? "无限期" : `${new Morebits.date($editprot.attr("expiry")).calendar("utc")} (UTC)` + "过期"}）`
+								: ""),
 					value: title,
 					checked: true,
 					style: isProtected ? "color:red" : ""
@@ -133,7 +133,7 @@ Twinkle.batchundelete.callback.evaluate = (event) => {
 	const numProtected = $(Morebits.quickForm.getElements(event.target, "pages")).filter((_index, element) => {
 		return element.checked && element.nextElementSibling.style.color === "red";
 	}).length;
-	if (numProtected > 0 && !confirm(`您正要反删除 ${ numProtected } 个全保护页面，您确定吗？`)) {
+	if (numProtected > 0 && !confirm(`您正要反删除 ${numProtected} 个全保护页面，您确定吗？`)) {
 		return;
 	}
 
@@ -164,9 +164,9 @@ Twinkle.batchundelete.callback.evaluate = (event) => {
 			pageUndeleter: pageUndeleter
 		};
 
-		const qiuwen_page = new Morebits.wiki.page(pageName, `反删除页面${ pageName}`);
+		const qiuwen_page = new Morebits.wiki.page(pageName, `反删除页面${pageName}`);
 		qiuwen_page.setCallbackParameters(params);
-		qiuwen_page.setEditSummary(`${reason } (批量)`);
+		qiuwen_page.setEditSummary(`${reason} (批量)`);
 		qiuwen_page.setChangeTags(Twinkle.changeTags);
 		qiuwen_page.suppressProtectWarning();
 		qiuwen_page.setMaxRetries(3); // temporary increase from 2 to make batchundelete more likely to succeed [[phab:T222402]] #613
@@ -212,8 +212,8 @@ Twinkle.batchundelete.callbacks = {
 			return;
 		}
 
-		const page = new Morebits.wiki.page(apiobj.params.talkPage, `正在反删除${ apiobj.params.page }的讨论页`);
-		page.setEditSummary(`反删除“${ apiobj.params.page }”的[[Wikipedia:讨论页|讨论页]]`);
+		const page = new Morebits.wiki.page(apiobj.params.talkPage, `正在反删除${apiobj.params.page}的讨论页`);
+		page.setEditSummary(`反删除“${apiobj.params.page}”的[[Wikipedia:讨论页|讨论页]]`);
 		page.setChangeTags(Twinkle.changeTags);
 		page.undeletePage();
 	}

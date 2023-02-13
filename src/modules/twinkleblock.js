@@ -15,10 +15,10 @@
 /* <nowiki> */
 (($) => {
 /**
- * twinkleblock.js: Block module
- * Mode of invocation:     Tab ("Block")
- * Active on:              Any page with relevant user name (userspace, contribs, etc.)
- */
+	 * twinkleblock.js: Block module
+	 * Mode of invocation:     Tab ("Block")
+	 * Active on:              Any page with relevant user name (userspace, contribs, etc.)
+	 */
 const api = new mw.Api();
 let relevantUserName = mw.config.get("wgRelevantUserName");
 const menuFormattedNamespaces = $.extend({}, mw.config.get("wgFormattedNamespaces"));
@@ -43,7 +43,7 @@ Twinkle.block.callback = () => {
 	Twinkle.block.field_template_options = {};
 	const Window = new Morebits.simpleWindow(650, 530);
 	// need to be verbose about who we're blocking
-	Window.setTitle(`封禁或向${ relevantUserName }发出封禁模板`);
+	Window.setTitle(`封禁或向${relevantUserName}发出封禁模板`);
 	Window.setScriptName("Twinkle");
 	Window.addFooterLink("封禁方针", "QW:BLOCK");
 	Window.addFooterLink("封禁设置", "H:TW/PREF#封禁");
@@ -161,7 +161,7 @@ Twinkle.block.fetchUserInfo = (fn) => {
 		lelimit: 2,
 		ususers: userName,
 		usprop: "groupmemberships",
-		letitle: `User:${ userName}`
+		letitle: `User:${userName}`
 	};
 	if (Morebits.ip.isRange(userName)) {
 		query.bkip = userName;
@@ -174,7 +174,7 @@ Twinkle.block.fetchUserInfo = (fn) => {
 				userinfo = data.query.users[0];
 			Twinkle.block.isRegistered = !!userinfo.userid;
 			if (Twinkle.block.isRegistered) {
-				relevantUserName = `User:${ userName}`;
+				relevantUserName = `User:${userName}`;
 				Twinkle.block.userIsBot =
 						!!userinfo.groupmemberships &&
 						userinfo.groupmemberships
@@ -614,7 +614,7 @@ Twinkle.block.callback.change_action = (e) => {
 		field_template_options.append({
 			type: "div",
 			id: "blockpreview",
-			label: [ $previewlink[0] ]
+			label: [$previewlink[0]]
 		});
 		field_template_options.append({
 			type: "div",
@@ -815,23 +815,21 @@ Twinkle.block.callback.change_action = (e) => {
 	}
 	if (blockBox && Twinkle.block.hasBlockLog) {
 		const $blockloglink = $(
-			`<a target="_blank" href="${
-				mw.util.getUrl("Special:Log", {
-					action: "view",
-					page: relevantUserName,
-					type: "block"
-				})
-			}">封禁日志</a>)`
+			`<a target="_blank" href="${mw.util.getUrl("Special:Log", {
+				action: "view",
+				page: relevantUserName,
+				type: "block"
+			})}">封禁日志</a>)`
 		);
 		Morebits.status.init($('div[name="hasblocklog"] span').last()[0]);
 		Morebits.status.warn(
-			Twinkle.block.currentBlockInfo ?
-				"封禁详情" :
-				[
+			Twinkle.block.currentBlockInfo
+				? "封禁详情"
+				: [
 					"此用户曾在",
-					$(`<b>${ new Morebits.date(Twinkle.block.recentBlockLog.timestamp).calendar("utc") }</b>`)[0],
-					`被${ Twinkle.block.recentBlockLog.user }封禁`,
-					$(`<b>${ Morebits.string.formatTime(Twinkle.block.recentBlockLog.params.duration) }</b>`)[0],
+					$(`<b>${new Morebits.date(Twinkle.block.recentBlockLog.timestamp).calendar("utc")}</b>`)[0],
+					`被${Twinkle.block.recentBlockLog.user}封禁`,
+					$(`<b>${Morebits.string.formatTime(Twinkle.block.recentBlockLog.params.duration)}</b>`)[0],
 					Twinkle.block.manualUnblock ? "（手动解封）" : "（自动过期）"
 				],
 			$blockloglink[0]
@@ -845,7 +843,7 @@ Twinkle.block.callback.change_action = (e) => {
 		if (Twinkle.block.currentBlockInfo.expiry === "infinity") {
 			statusStr += "（无限期）";
 		} else if (new Morebits.date(Twinkle.block.currentBlockInfo.expiry).isValid()) {
-			statusStr += `（终止于${ new Morebits.date(Twinkle.block.currentBlockInfo.expiry).calendar("utc") }）`;
+			statusStr += `（终止于${new Morebits.date(Twinkle.block.currentBlockInfo.expiry).calendar("utc")}）`;
 		}
 		let infoStr = "提交请求以变更封禁";
 		if (Twinkle.block.currentBlockInfo.partial === undefined && partialBox) {
@@ -1055,7 +1053,7 @@ Twinkle.block.transformBlockPresets = () => {
 			$.each(blockGroup.list, (_, blockPreset) => {
 				const value = blockPreset.value,
 					reason = blockPreset.label,
-					newPreset = `${value }:${ reason}`;
+					newPreset = `${value}:${reason}`;
 				Twinkle.block.blockPresetsInfo[newPreset] = jQuery.extend(true, {}, Twinkle.block.blockPresetsInfo[value]);
 				Twinkle.block.blockPresetsInfo[newPreset].template = value;
 				if (blockGroup.meta) {
@@ -1288,7 +1286,7 @@ Twinkle.block.callback.filtered_block_groups = (group, show_template) =>
 			if (!(blockSettings.templateName && show_template) && registrationRestrict) {
 				const templateName = blockSettings.templateName || blockSettings.template || blockPreset.value;
 				return {
-					label: (show_template ? `{{${ templateName }}}: ` : "") + (blockPreset.label || `{{${ templateName }}}`),
+					label: (show_template ? `{{${templateName}}}: ` : "") + (blockPreset.label || `{{${templateName}}}`),
 					value: blockPreset.value,
 					data: [
 						{
@@ -1328,12 +1326,10 @@ Twinkle.block.callback.change_expiry = (e) => {
 };
 Twinkle.block.seeAlsos = [];
 Twinkle.block.callback.toggle_see_alsos = function twinkleblockCallbackToggleSeeAlso() {
-	const reason = this.form.reason.value.replace(new RegExp(`(<!-- )(参见|參見)${ Twinkle.block.seeAlsos.join("、") }( -->)`), "");
-	Twinkle.block.seeAlsos = Twinkle.block.seeAlsos.filter(
-		(el) => {
-			return el !== this.value;
-		}
-	);
+	const reason = this.form.reason.value.replace(new RegExp(`(<!-- )(参见|參見)${Twinkle.block.seeAlsos.join("、")}( -->)`), "");
+	Twinkle.block.seeAlsos = Twinkle.block.seeAlsos.filter((el) => {
+		return el !== this.value;
+	});
 	if (this.checked) {
 		Twinkle.block.seeAlsos.push(this.value);
 	}
@@ -1341,7 +1337,7 @@ Twinkle.block.callback.toggle_see_alsos = function twinkleblockCallbackToggleSee
 	if (!Twinkle.block.seeAlsos.length) {
 		this.form.reason.value = reason;
 	} else {
-		this.form.reason.value = `${reason }<!-- 参见${ seeAlsoMessage } -->`;
+		this.form.reason.value = `${reason}<!-- 参见${seeAlsoMessage} -->`;
 	}
 };
 Twinkle.block.callback.update_form = (e, data) => {
@@ -1387,7 +1383,7 @@ Twinkle.block.callback.update_form = (e, data) => {
 			$(el).prop("checked", check);
 		});
 	if (data.prependReason && data.reason) {
-		form.reason.value = `${data.reason }; ${ form.reason.value}`;
+		form.reason.value = `${data.reason}; ${form.reason.value}`;
 	} else {
 		form.reason.value = data.reason || "";
 	}
@@ -1509,7 +1505,7 @@ Twinkle.block.callback.evaluate = (e) => {
 			return sum;
 		}, 0);
 		if (count > 1) {
-			let message = `请在以下标签中择一使用：{{${ conflicts.join("}}、{{") }}}。`;
+			let message = `请在以下标签中择一使用：{{${conflicts.join("}}、{{")}}}。`;
 			message += extra || "";
 			alert(message);
 			return true;
@@ -1519,16 +1515,16 @@ Twinkle.block.callback.evaluate = (e) => {
 		if (params.tag.length === 0) {
 			return alert("请至少选择一个用户页标记！");
 		}
-		if (checkIncompatible([ "Blocked user", "Blocked sockpuppet" ], "{{Blocked sockpuppet}}已涵盖{{Blocked user}}的功能。")) {
+		if (checkIncompatible(["Blocked user", "Blocked sockpuppet"], "{{Blocked sockpuppet}}已涵盖{{Blocked user}}的功能。")) {
 			return;
 		}
-		if (checkIncompatible([ "Blocked user", "Sockpuppeteer" ], "{{Sockpuppeteer}}已涵盖{{Blocked user}}的功能。")) {
+		if (checkIncompatible(["Blocked user", "Sockpuppeteer"], "{{Sockpuppeteer}}已涵盖{{Blocked user}}的功能。")) {
 			return;
 		}
-		if (checkIncompatible([ "Blocked user", "Locked global account" ], "请使用{{Locked global account}}的“亦被本地封禁”选项。")) {
+		if (checkIncompatible(["Blocked user", "Locked global account"], "请使用{{Locked global account}}的“亦被本地封禁”选项。")) {
 			return;
 		}
-		if (checkIncompatible([ "Blocked sockpuppet", "Sockpuppeteer" ], "请从主账户和分身账户中选择一个。")) {
+		if (checkIncompatible(["Blocked sockpuppet", "Sockpuppeteer"], "请从主账户和分身账户中选择一个。")) {
 			return;
 		}
 		if (params.tag.indexOf("Blocked sockpuppet") > -1 && params.sppUsername.trim() === "") {
@@ -1602,7 +1598,7 @@ Twinkle.block.callback.evaluate = (e) => {
 			list: "blocks|logevents",
 			letype: "block",
 			lelimit: 1,
-			letitle: `User:${ blockoptions.user}`
+			letitle: `User:${blockoptions.user}`
 		};
 		if (Morebits.ip.isRange(blockoptions.user)) {
 			query.bkip = blockoptions.user;
@@ -1614,7 +1610,7 @@ Twinkle.block.callback.evaluate = (e) => {
 			const logevents = data.query.logevents[0];
 			const logid = data.query.logevents.length ? logevents.logid : false;
 			if (logid !== Twinkle.block.blockLogId || !!block !== !!Twinkle.block.currentBlockInfo) {
-				let message = `${mw.config.get("wgRelevantUserName") }的封禁状态已被修改。`;
+				let message = `${mw.config.get("wgRelevantUserName")}的封禁状态已被修改。`;
 				if (block) {
 					message += "新状态：";
 				} else {
@@ -1626,13 +1622,13 @@ Twinkle.block.callback.evaluate = (e) => {
 						logExpiry = "无限期";
 					} else {
 						const expiryDate = new Morebits.date(logevents.params.expiry);
-						logExpiry += `到${ expiryDate.calendar()}`;
+						logExpiry += `到${expiryDate.calendar()}`;
 					}
 				} else {
 					// no duration, action=unblock, just show timestamp
-					logExpiry = `于${ new Morebits.date(logevents.timestamp).calendar()}`;
+					logExpiry = `于${new Morebits.date(logevents.timestamp).calendar()}`;
 				}
-				message += `由${ logevents.user }以“${ logevents.comment }”${ blockActionText[logevents.action] }${logExpiry }，你想要以你的设置变更封禁吗？`;
+				message += `由${logevents.user}以“${logevents.comment}”${blockActionText[logevents.action]}${logExpiry}，你想要以你的设置变更封禁吗？`;
 				if (!confirm(message)) {
 					Morebits.status.error("执行封禁", "用户取消操作");
 					return;
@@ -1665,7 +1661,7 @@ Twinkle.block.callback.evaluate = (e) => {
 	if (toTag || toProtect) {
 		Morebits.simpleWindow.setButtonsEnabled(false);
 		Morebits.status.init(e.target);
-		const userPage = `User:${ relevantUserName}`;
+		const userPage = `User:${relevantUserName}`;
 		const qiuwen_page = new Morebits.wiki.page(userPage, "标记或保护用户页");
 		qiuwen_page.setCallbackParameters(params);
 		qiuwen_page.load(Twinkle.block.callback.taguserpage);
@@ -1697,14 +1693,14 @@ Twinkle.block.callback.taguserpage = (pageobj) => {
 	if (params.actiontype.indexOf("tag") > -1) {
 		const tags = [];
 		params.tag.forEach((tag) => {
-			let tagtext = `{{${ tag}`;
+			let tagtext = `{{${tag}`;
 			switch (tag) {
 				case "Blocked user":
 					break;
 				case "Blocked sockpuppet":
-					tagtext += `|1=${ params.sppUsername.trim()}`;
+					tagtext += `|1=${params.sppUsername.trim()}`;
 					if (params.sppEvidence.trim()) {
-						tagtext += `|evidence=${ params.sppEvidence.trim()}`;
+						tagtext += `|evidence=${params.sppEvidence.trim()}`;
 					}
 					break;
 				case "Sockpuppeteer":
@@ -1713,7 +1709,7 @@ Twinkle.block.callback.taguserpage = (pageobj) => {
 						tagtext += "|check=yes";
 					}
 					if (params.spmEvidence.trim()) {
-						tagtext += `|evidence=${ params.spmEvidence.trim()}`;
+						tagtext += `|evidence=${params.spmEvidence.trim()}`;
 					}
 					break;
 				case "Locked global account":
@@ -1729,7 +1725,7 @@ Twinkle.block.callback.taguserpage = (pageobj) => {
 		});
 		let text = tags.join("\n");
 		if (params.category) {
-			text += `\n[[Category:${ params.category.trim() }的用户分身]]`;
+			text += `\n[[Category:${params.category.trim()}的用户分身]]`;
 		}
 		pageobj.setPageText(text);
 		pageobj.setEditSummary("标记被永久封禁的用户页");
@@ -1769,7 +1765,7 @@ Twinkle.block.callback.issue_template = (formData) => {
 		info();
 		return;
 	}
-	const userTalkPage = `User_talk:${ relevantUserName}`;
+	const userTalkPage = `User_talk:${relevantUserName}`;
 	const params = $.extend(formData, {
 		messageData: Twinkle.block.blockPresetsInfo[formData.template],
 		reason: Twinkle.block.field_template_options.block_reason,
@@ -1792,21 +1788,21 @@ Twinkle.block.callback.closeRequest = (vipPage) => {
 	const statusElement = vipPage.getStatusElement();
 	const userName = relevantUserName;
 	const expiryText = Morebits.string.formatTime(params.expiry);
-	const comment = `{{Blocked|${ Morebits.string.isInfinity(params.expiry) ? "indef" : expiryText }}}。`;
+	const comment = `{{Blocked|${Morebits.string.isInfinity(params.expiry) ? "indef" : expiryText}}}。`;
 	const requestList = text.split(/(?=\n===.+===\s*\n)/);
 	let found = false;
 	let hidename = false;
-	const vipRe = new RegExp(`===\\s*{{\\s*[Vv]andal\\s*\\|\\s*(1\\s*=\\s*)?${ Morebits.pageNameRegex(userName) }\\s*(\\|\\s*hidename\\s*=[^|]+)?}}\\s*===`, "m");
+	const vipRe = new RegExp(`===\\s*{{\\s*[Vv]andal\\s*\\|\\s*(1\\s*=\\s*)?${Morebits.pageNameRegex(userName)}\\s*(\\|\\s*hidename\\s*=[^|]+)?}}\\s*===`, "m");
 	for (let i = 1; i < requestList.length; i++) {
 		if (vipRe.exec(requestList[i])) {
 			hidename = /\|\s*hidename\s*=[^|]+/.test(requestList[i]);
 			requestList[i] = requestList[i].trimRight();
 
-			let newText = requestList[i].replace(/^(\*\s*处理：)[ \t]*(<!-- 非管理員僅可標記已執行的封禁，針對提報的意見請放在下一行 -->)?[ \t]*$/m, `$1${ comment }--~~` + "~~");
+			let newText = requestList[i].replace(/^(\*\s*处理：)[ \t]*(<!-- 非管理員僅可標記已執行的封禁，針對提報的意見請放在下一行 -->)?[ \t]*$/m, `$1${comment}--~~` + "~~");
 			if (requestList[i] === newText) {
-				newText = `${requestList[i] }\n* 处理：${ comment }--~~` + "~~";
+				newText = `${requestList[i]}\n* 处理：${comment}--~~` + "~~";
 			}
-			requestList[i] = `${newText }\n`;
+			requestList[i] = `${newText}\n`;
 			found = true;
 			break;
 		}
@@ -1820,11 +1816,11 @@ Twinkle.block.callback.closeRequest = (vipPage) => {
 	if (hidename) {
 		summary = "标记为已处理";
 	} else {
-		summary = `/* ${ userName } */ `;
+		summary = `/* ${userName} */ `;
 		if (Morebits.string.isInfinity(params.expiry)) {
 			summary += "不限期封禁";
 		} else {
-			summary += `封禁${ expiryText}`;
+			summary += `封禁${expiryText}`;
 		}
 	}
 	vipPage.setEditSummary(summary);
@@ -1836,22 +1832,22 @@ Twinkle.block.callback.getBlockNoticeWikitext = (params, nosign) => {
 	let text = "{{";
 	const settings = Twinkle.block.blockPresetsInfo[params.template];
 	if (!settings.nonstandard) {
-		text += `subst:${ params.template}`;
+		text += `subst:${params.template}`;
 		if (params.article && settings.pageParam) {
-			text += `|page=${ params.article}`;
+			text += `|page=${params.article}`;
 		}
 		if (!/te?mp|^\s*$|min/.exec(params.expiry)) {
 			if (params.indefinite) {
 				text += "|indef=yes";
 			} else if (!params.blank_duration) {
-				text += `|time=${ Morebits.string.formatTime(params.expiry)}`;
+				text += `|time=${Morebits.string.formatTime(params.expiry)}`;
 			}
 		}
 		if (!Twinkle.block.isRegistered && !params.hardblock) {
 			text += "|anon=yes";
 		}
 		if (params.reason) {
-			text += `|reason=${ params.reason}`;
+			text += `|reason=${params.reason}`;
 		}
 		if (params.disabletalk) {
 			text += "|notalk=yes";
@@ -1867,20 +1863,20 @@ Twinkle.block.callback.getBlockNoticeWikitext = (params, nosign) => {
 						return array.join("和");
 					}
 					const last = array.pop();
-					return `${array.join("、") }和${ last}`;
+					return `${array.join("、")}和${last}`;
 				};
 				text += "|area=某些";
 				if (params.pagerestrictions.length) {
-					text += `頁面（${ makeSentence(params.pagerestrictions.map((p) => `[[:${ p }]]`))}`;
+					text += `頁面（${makeSentence(params.pagerestrictions.map((p) => `[[:${p}]]`))}`;
 					text += params.namespacerestrictions.length ? "）和某些" : "）";
 				}
 				if (params.namespacerestrictions.length) {
 					// 1 => Talk, 2 => User, etc.
 					const namespaceNames = params.namespacerestrictions.map((id) => menuFormattedNamespaces[id]);
-					text += `[[Qiuwen:命名空间|命名空间]]（${ makeSentence(namespaceNames) }）`;
+					text += `[[Qiuwen:命名空间|命名空间]]（${makeSentence(namespaceNames)}）`;
 				}
 			} else if (params.area) {
-				text += `|area=${ params.area}`;
+				text += `|area=${params.area}`;
 			} else {
 				if (params.noemail) {
 					text += "|email=yes";
@@ -1897,7 +1893,7 @@ Twinkle.block.callback.getBlockNoticeWikitext = (params, nosign) => {
 	if ((settings.sig === "~~" + "~~" || settings.sig === undefined) && !nosign) {
 		text += "}}--~~" + "~~";
 	} else if (settings.sig && !nosign) {
-		text += `|sig=${ settings.sig}`;
+		text += `|sig=${settings.sig}`;
 		text += "}}";
 	} else {
 		text += "}}";
@@ -1912,7 +1908,7 @@ Twinkle.block.callback.main = (pageobj) => {
 	params.indefinite = Morebits.string.isInfinity(params.expiry);
 	if (Twinkle.getPref("blankTalkpageOnIndefBlock") && params.template !== "uw-lblock" && params.indefinite) {
 		Morebits.status.info("信息", "根据参数设置清空讨论页并为日期创建新二级标题");
-		text = `${date.monthHeader() }\n`;
+		text = `${date.monthHeader()}\n`;
 	} else {
 		text = pageobj.getPageText();
 		const dateHeaderRegex = date.monthHeaderRegex();
@@ -1929,7 +1925,7 @@ Twinkle.block.callback.main = (pageobj) => {
 		}
 		if (!dateHeaderRegexResult || dateHeaderRegexResult.index !== lastHeaderIndex) {
 			Morebits.status.info("信息", "未找到当月的二级标题，将创建新的");
-			text += `${date.monthHeader() }\n`;
+			text += `${date.monthHeader()}\n`;
 		}
 	}
 	params.expiry = typeof params.template_expiry !== "undefined" ? params.template_expiry : params.expiry;
@@ -1939,7 +1935,7 @@ Twinkle.block.callback.main = (pageobj) => {
 	let summary = "封禁通知：";
 	summary += messageData.summary || messageData.reason || params.reason;
 	if (messageData.suppressArticleInSummary !== true && params.article) {
-		summary += `，于[[${ params.article }]]`;
+		summary += `，于[[${params.article}]]`;
 	}
 	pageobj.setPageText(text);
 	pageobj.setEditSummary(summary);

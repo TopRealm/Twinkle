@@ -41,9 +41,9 @@ const Twinkle = {};
 window.Twinkle = Twinkle; // allow global access
 
 /**
- * Twinkle-specific data shared by multiple modules
- * Likely customized per installation
- */
+	 * Twinkle-specific data shared by multiple modules
+	 * Likely customized per installation
+	 */
 // Custom change tag(s) to be applied to all Twinkle actions, create at Special:Tags
 Twinkle.changeTags = "Twinkle";
 // Available for actions that don't (yet) support tags
@@ -54,12 +54,12 @@ Twinkle.hatnoteRegex =
 		"(?:Short[ _]description)|(?:Rellink|Hatnote|HAT)|(?:Main|细节|細節|Main[ _]articles|主条目|主條目|Hurricane[ _]main|条目|條目|主|頁面|页面|主頁面|主页面|主頁|主页|主題目|主题目|Main[ _]article|AP)|(?:Wrongtitle|Correct[ _]title)|(?:主条目消歧义|主條目消歧義|消歧义链接|消歧義鏈接|消歧義連結|消连|消連|消歧义连结|DisambLink|Noteref|Dablink)|(?:Distinguish|不是|Not|提示|混淆|分別|分别|區別|区别|本条目的主题不是|本條目的主題不是|本条目主题不是|本條目主題不是|条目主题不是|條目主題不是|主题不是|主題不是|Confused|区分|區分|Confusion|Confuse|RedirectNOT|Misspelling)|(?:Distinguish2|SelfDistinguish|Not2|不是2)|(?:For)|(?:Details|Further|See|另见|另見|More|相關條目|相关条目|Detail|见|見|更多资料|更多資料|Further[ _]information|更多资讯|更多資訊|More[ _]information|更多信息)|(?:Selfref)|(?:About|Otheruses4|关于|關於)|(?:Other[ _]uses|Otheruse|条目消歧义|條目消歧義|他用|Otheruses)|(?:Other[ _]uses list|Otheruselist|主條目消歧義列表|主条目消歧义列表|Otheruseslist|Aboutlist|About[ _]list|Otheruses[ _]list)|(?:Redirect|重定向至此|Redirects[ _]here|Redirect[ _]to)|(?:Redirect2|主條目消歧義2|主条目消歧义2|Redir|重定向至此2)|(?:Redirect3)|(?:Redirect4)|(?:Redirect-distinguish)|(?:Redirect-synonym)|(?:Redirect-multi)|(?:Seealso|参看|參看|See[ _]also|参见|參見|Also)|(?:See[ _]also2|Seealso2|不轉換參見|不转换参见)|(?:Other[ _]places)|(?:Contrast|對比|对比)";
 Twinkle.initCallbacks = [];
 /**
- * Adds a callback to execute when Twinkle has loaded.
- *
- * @param {Function} func
- * @param {string} [name] - name of module used to check if is disabled.
- * If name is not given, module is loaded unconditionally.
- */
+	 * Adds a callback to execute when Twinkle has loaded.
+	 *
+	 * @param {Function} func
+	 * @param {string} [name] - name of module used to check if is disabled.
+	 * If name is not given, module is loaded unconditionally.
+	 */
 Twinkle.addInitCallback = (func, name) => {
 	Twinkle.initCallbacks.push({
 		func: func,
@@ -68,18 +68,18 @@ Twinkle.addInitCallback = (func, name) => {
 };
 Twinkle.defaultConfig = {};
 /**
- * This holds the default set of preferences used by Twinkle.
- * It is important that all new preferences added here, especially admin-only ones, are also added to
- * |Twinkle.config.sections| in twinkleconfig.js, so they are configurable via the Twinkle preferences panel.
- * For help on the actual preferences, see the comments in twinkleconfig.js.
- *
- * Formerly Twinkle.defaultConfig.twinkle and Twinkle.defaultConfig.friendly
- */
+	 * This holds the default set of preferences used by Twinkle.
+	 * It is important that all new preferences added here, especially admin-only ones, are also added to
+	 * |Twinkle.config.sections| in twinkleconfig.js, so they are configurable via the Twinkle preferences panel.
+	 * For help on the actual preferences, see the comments in twinkleconfig.js.
+	 *
+	 * Formerly Twinkle.defaultConfig.twinkle and Twinkle.defaultConfig.friendly
+	 */
 Twinkle.defaultConfig = {
 	// General
 	userTalkPageMode: "tab",
 	dialogLargeFont: false,
-	disabledModules: Morebits.userIsSysop ? [] : [ "block" ],
+	disabledModules: Morebits.userIsSysop ? [] : ["block"],
 	// default to disable block for non-sysop, if enable manually, they can only use it to tag userpage
 	disabledSysopModules: [],
 	// ARV
@@ -93,13 +93,13 @@ Twinkle.defaultConfig = {
 	openTalkPage: [],
 	openTalkPageOnAutoRevert: false,
 	rollbackInPlace: false,
-	markRevertedPagesAsMinor: [ "vand" ],
-	watchRevertedPages: [ "agf", "norm", "vand", "torev" ],
+	markRevertedPagesAsMinor: ["vand"],
+	watchRevertedPages: ["agf", "norm", "vand", "torev"],
 	watchRevertedExpiry: "yes",
 	offerReasonOnNormalRevert: true,
 	confirmOnFluff: false,
 	confirmOnMobileFluff: true,
-	showRollbackLinks: [ "diff", "others" ],
+	showRollbackLinks: ["diff", "others"],
 	customRevertSummary: [],
 	// DI (twinkleimage)
 	notifyUserOnDeli: true,
@@ -111,13 +111,13 @@ Twinkle.defaultConfig = {
 	watchProtectedPages: "default",
 	// CSD
 	speedySelectionStyle: "buttonClick",
-	watchSpeedyPages: [ "g1", "g3", "g4", "g7", "g8" ],
+	watchSpeedyPages: ["g1", "g3", "g4", "g7", "g8"],
 	watchSpeedyExpiry: "yes",
 	markSpeedyPagesAsPatrolled: false,
 	watchSpeedyUser: "1 month",
 	// these next two should probably be identical by default
-	notifyUserOnSpeedyDeletionNomination: [ "db", "g1", "g2", "g3", "g4", "g5", "g6", "g7", "g8", "g9", "a1", "a2", "a3", "r1", "r2", "f1", "f2", "o1", "o2", "o3" ],
-	warnUserOnSpeedyDelete: [ "db", "g1", "g2", "g3", "g4", "g5", "g6", "g7", "g8", "g9", "a1", "a2", "a3", "r1", "r2", "f1", "f2", "o1", "o2", "o3" ],
+	notifyUserOnSpeedyDeletionNomination: ["db", "g1", "g2", "g3", "g4", "g5", "g6", "g7", "g8", "g9", "a1", "a2", "a3", "r1", "r2", "f1", "f2", "o1", "o2", "o3"],
+	warnUserOnSpeedyDelete: ["db", "g1", "g2", "g3", "g4", "g5", "g6", "g7", "g8", "g9", "a1", "a2", "a3", "r1", "r2", "f1", "f2", "o1", "o2", "o3"],
 	promptForSpeedyDeletionSummary: [],
 	openUserTalkPageOnSpeedyDelete: [],
 	deleteTalkPageOnDelete: true,
@@ -127,10 +127,10 @@ Twinkle.defaultConfig = {
 	speedyWindowWidth: 800,
 	logSpeedyNominations: true,
 	speedyLogPageName: "CSD日志",
-	noLogOnSpeedyNomination: [ "o1" ],
+	noLogOnSpeedyNomination: ["o1"],
 	enlargeG11Input: false,
 	// Unlink
-	unlinkNamespaces: [ "0", "10", "118" ],
+	unlinkNamespaces: ["0", "10", "118"],
 	// Warn
 	defaultWarningGroup: "1",
 	combinedSingletMenus: false,
@@ -240,28 +240,28 @@ Twinkle.getPref = (name) => {
 };
 
 /**
- * **************** Twinkle.addPortlet() ****************
- *
- * Adds a portlet menu to one of the navigation areas on the page.
- * This is necessarily quite a hack since skins, navigation areas, and
- * portlet menu types all work slightly different.
- *
- * Available navigation areas depend on the skin used.
- * Vector:
- *  For each option, the outer nav class contains "vector-menu", the inner div class is "vector-menu-content", and the ul is "vector-menu-content-list"
- *  "mw-panel", outer nav class contains "vector-menu-portal". Existing portlets/elements: "p-logo", "p-navigation", "p-interaction", "p-tb", "p-coll-print_export"
- *  "left-navigation", outer nav class contains "vector-menu-tabs" or "vector-menu-dropdown". Existing portlets: "p-namespaces", "p-variants" (menu)
- *  "right-navigation", outer nav class contains "vector-menu-tabs" or "vector-menu-dropdown". Existing portlets: "p-views", "p-cactions" (menu), "p-search"
- *  Special layout of p-personal portlet (part of "head") through specialized styles.
- *
- * @param String navigation -- id of the target navigation area (skin dependant, on vector either of "left-navigation", "right-navigation", or "mw-panel")
- * @param String id -- id of the portlet menu to create, preferably start with "p-".
- * @param String text -- name of the portlet menu to create. Visibility depends on the class used.
- * @param String type -- type of portlet. Currently only used for the vector non-sidebar portlets, pass "menu" to make this portlet a drop down menu.
- * @param Node nextnodeid -- the id of the node before which the new item should be added, should be another item in the same list, or undefined to place it at the end.
- *
- * @return Node -- the DOM node of the new item (a DIV element) or null
- */
+	 * **************** Twinkle.addPortlet() ****************
+	 *
+	 * Adds a portlet menu to one of the navigation areas on the page.
+	 * This is necessarily quite a hack since skins, navigation areas, and
+	 * portlet menu types all work slightly different.
+	 *
+	 * Available navigation areas depend on the skin used.
+	 * Vector:
+	 *  For each option, the outer nav class contains "vector-menu", the inner div class is "vector-menu-content", and the ul is "vector-menu-content-list"
+	 *  "mw-panel", outer nav class contains "vector-menu-portal". Existing portlets/elements: "p-logo", "p-navigation", "p-interaction", "p-tb", "p-coll-print_export"
+	 *  "left-navigation", outer nav class contains "vector-menu-tabs" or "vector-menu-dropdown". Existing portlets: "p-namespaces", "p-variants" (menu)
+	 *  "right-navigation", outer nav class contains "vector-menu-tabs" or "vector-menu-dropdown". Existing portlets: "p-views", "p-cactions" (menu), "p-search"
+	 *  Special layout of p-personal portlet (part of "head") through specialized styles.
+	 *
+	 * @param String navigation -- id of the target navigation area (skin dependant, on vector either of "left-navigation", "right-navigation", or "mw-panel")
+	 * @param String id -- id of the portlet menu to create, preferably start with "p-".
+	 * @param String text -- name of the portlet menu to create. Visibility depends on the class used.
+	 * @param String type -- type of portlet. Currently only used for the vector non-sidebar portlets, pass "menu" to make this portlet a drop down menu.
+	 * @param Node nextnodeid -- the id of the node before which the new item should be added, should be another item in the same list, or undefined to place it at the end.
+	 *
+	 * @return Node -- the DOM node of the new item (a DIV element) or null
+	 */
 Twinkle.addPortlet = (navigation, id, text, type, nextnodeid) => {
 	// sanity checks, and get required DOM nodes
 	const root = document.getElementById(navigation) || document.querySelector(navigation);
@@ -294,7 +294,7 @@ Twinkle.addPortlet = (navigation, id, text, type, nextnodeid) => {
 			if (navigation !== "portal" && navigation !== "left-navigation" && navigation !== "right-navigation") {
 				navigation = "mw-panel";
 			}
-			outerNavClass = `mw-portlet vector-menu vector-menu-${ navigation === "mw-panel" ? "portal" : type === "menu" ? "dropdown vector-menu-dropdown-noicon" : "tabs"}`;
+			outerNavClass = `mw-portlet vector-menu vector-menu-${navigation === "mw-panel" ? "portal" : type === "menu" ? "dropdown vector-menu-dropdown-noicon" : "tabs"}`;
 			innerDivClass = "vector-menu-content";
 			break;
 		case "gongbi":
@@ -320,16 +320,16 @@ Twinkle.addPortlet = (navigation, id, text, type, nextnodeid) => {
 		outerNav = document.createElement("nav");
 		heading = document.createElement("h3");
 	}
-	outerNav.setAttribute("aria-labelledby", `${id }-label`);
+	outerNav.setAttribute("aria-labelledby", `${id}-label`);
 	// Vector getting vector-menu-empty FIXME TODO
-	outerNav.className = `${outerNavClass } emptyPortlet`;
+	outerNav.className = `${outerNavClass} emptyPortlet`;
 	outerNav.id = id;
 	if (nextnode && nextnode.parentNode === root) {
 		root.insertBefore(outerNav, nextnode);
 	} else {
 		root.appendChild(outerNav);
 	}
-	heading.id = `${id }-label`;
+	heading.id = `${id}-label`;
 	const ul = document.createElement("ul");
 	if (skin === "vector" || skin === "vector-2022") {
 		ul.className = "vector-menu-content-list";
@@ -341,7 +341,7 @@ Twinkle.addPortlet = (navigation, id, text, type, nextnodeid) => {
 			const chkbox = document.createElement("input");
 			chkbox.className = "vector-menu-checkbox";
 			chkbox.setAttribute("type", "checkbox");
-			chkbox.setAttribute("aria-labelledby", `${id }-label`);
+			chkbox.setAttribute("aria-labelledby", `${id}-label`);
 			outerNav.appendChild(chkbox);
 
 			// Vector gets its title in a span; all others except
@@ -373,11 +373,11 @@ Twinkle.addPortlet = (navigation, id, text, type, nextnodeid) => {
 };
 
 /**
- * **************** Twinkle.addPortletLink() ****************
- * Builds a portlet menu if it doesn't exist yet, and add the portlet link.
- *
- * @param task: Either a URL for the portlet link or a function to execute.
- */
+	 * **************** Twinkle.addPortletLink() ****************
+	 * Builds a portlet menu if it doesn't exist yet, and add the portlet link.
+	 *
+	 * @param task: Either a URL for the portlet link or a function to execute.
+	 */
 Twinkle.addPortletLink = (task, text, id, tooltip) => {
 	if (Twinkle.getPref("portletArea") !== null) {
 		Twinkle.addPortlet(Twinkle.getPref("portletArea"), Twinkle.getPref("portletId"), Twinkle.getPref("portletName"), Twinkle.getPref("portletType"), Twinkle.getPref("portletNext"));
@@ -399,14 +399,14 @@ Twinkle.addPortletLink = (task, text, id, tooltip) => {
 };
 
 /**
- * **************** General initialization code ****************
- */
-const scriptpathbefore = `${mw.util.wikiScript("index") }?title=`,
+	 * **************** General initialization code ****************
+	 */
+const scriptpathbefore = `${mw.util.wikiScript("index")}?title=`,
 	scriptpathafter = "&action=raw&ctype=text/javascript&happy=yes";
 
 // Retrieve the user's Twinkle preferences
 $.ajax({
-	url: `${scriptpathbefore }User:${ encodeURIComponent(mw.config.get("wgUserName")) }/twinkleoptions.js${ scriptpathafter}`,
+	url: `${scriptpathbefore}User:${encodeURIComponent(mw.config.get("wgUserName"))}/twinkleoptions.js${scriptpathafter}`,
 	dataType: "text"
 })
 	.fail(() => {
@@ -453,9 +453,9 @@ $.ajax({
 Twinkle.load = () => {
 	// Don't activate on special pages other than those listed here, so
 	// that others load faster, especially the watchlist.
-	let activeSpecialPageList = [ "Block", "Contributions", "AbuseLog", "Recentchanges", "Recentchangeslinked" ]; // wgRelevantUserName defined for non-sysops on Special:Block
+	let activeSpecialPageList = ["Block", "Contributions", "AbuseLog", "Recentchanges", "Recentchangeslinked"]; // wgRelevantUserName defined for non-sysops on Special:Block
 	if (Morebits.userIsSysop) {
-		activeSpecialPageList = activeSpecialPageList.concat([ "DeletedContributions", "Prefixindex", "BrokenRedirects" ]);
+		activeSpecialPageList = activeSpecialPageList.concat(["DeletedContributions", "Prefixindex", "BrokenRedirects"]);
 	}
 	if (mw.config.get("wgNamespaceNumber") === -1 && activeSpecialPageList.indexOf(mw.config.get("wgCanonicalSpecialPageName")) === -1) {
 		return;
@@ -502,7 +502,7 @@ Twinkle.makeFindSourcesDiv = (divID) => {
 	}
 	if (!Twinkle.findSources) {
 		const parser = new Morebits.wiki.preview($(divID)[0]);
-		parser.beginRender(`({{Find sources|${ Morebits.pageNameNorm }}})`, "QW:AFD").then(() => {
+		parser.beginRender(`({{Find sources|${Morebits.pageNameNorm}}})`, "QW:AFD").then(() => {
 			// Save for second-time around
 			Twinkle.findSources = parser.previewbox.innerHTML;
 			$(divID).removeClass("morebits-previewbox");
@@ -535,7 +535,7 @@ Twinkle.generateBatchPageLinks = (checkbox) => {
 	link.setAttribute("class", "tw-batchpage-link");
 	link.setAttribute("href", mw.util.getUrl($checkbox.val()));
 	link.setAttribute("target", "_blank");
-	$checkbox.next().prepend([ link, " " ]);
+	$checkbox.next().prepend([link, " "]);
 };
 })(window, document, jQuery); // End wrap with anonymous function
 /* </nowiki> */

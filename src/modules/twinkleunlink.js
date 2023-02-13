@@ -15,10 +15,10 @@
 /* <nowiki> */
 (($) => {
 /**
- * twinkleunlink.js: Unlink module
- * Mode of invocation:  Tab ("Unlink")
- * Active on:           Non-special pages, except Qiuwen:Sandbox
- */
+	 * twinkleunlink.js: Unlink module
+	 * Mode of invocation:  Tab ("Unlink")
+	 * Active on:           Non-special pages, except Qiuwen:Sandbox
+	 */
 
 Twinkle.unlink = () => {
 	if (mw.config.get("wgNamespaceNumber") < 0 || mw.config.get("wgPageName") === Twinkle.getPref("sandboxPage") || !Morebits.userIsSysop) {
@@ -31,7 +31,7 @@ Twinkle.unlink = () => {
 Twinkle.unlink.callback = (presetReason) => {
 	const fileSpace = mw.config.get("wgNamespaceNumber") === 6;
 	const Window = new Morebits.simpleWindow(600, 440);
-	Window.setTitle(`取消页面链入${ fileSpace ? "及文件使用" : ""}`);
+	Window.setTitle(`取消页面链入${fileSpace ? "及文件使用" : ""}`);
 	Window.setScriptName("Twinkle");
 	Window.addFooterLink("参数设置", "H:TW/PREF#消链");
 	Window.addFooterLink("帮助文档", "H:TW/DOC#销链");
@@ -40,12 +40,12 @@ Twinkle.unlink.callback = (presetReason) => {
 
 	// prepend some documentation: files are commented out, while any
 	// display text is preserved for links (otherwise the link itself is used)
-	const linkTextBefore = Morebits.htmlNode("code", `[[${ fileSpace ? ":" : "" }${Morebits.pageNameNorm }|链接文字]]`);
+	const linkTextBefore = Morebits.htmlNode("code", `[[${fileSpace ? ":" : ""}${Morebits.pageNameNorm}|链接文字]]`);
 	const linkTextAfter = Morebits.htmlNode("code", "链接文字");
-	const linkPlainBefore = Morebits.htmlNode("code", `[[${ Morebits.pageNameNorm }]]`);
+	const linkPlainBefore = Morebits.htmlNode("code", `[[${Morebits.pageNameNorm}]]`);
 	let linkPlainAfter;
 	if (fileSpace) {
-		linkPlainAfter = Morebits.htmlNode("code", `<!-- [[${ Morebits.pageNameNorm }]] -->`);
+		linkPlainAfter = Morebits.htmlNode("code", `<!-- [[${Morebits.pageNameNorm}]] -->`);
 	} else {
 		linkPlainAfter = Morebits.htmlNode("code", Morebits.pageNameNorm);
 	}
@@ -53,7 +53,7 @@ Twinkle.unlink.callback = (presetReason) => {
 		type: "div",
 		style: "margin-bottom: 0.5em; font-style: normal;",
 		label: [
-			`这个工具可以取消所有指向该页的链接（“链入”）${ fileSpace ? "，或通过加入<!-- -->注释标记隐藏所有对此文件的使用" : "" }。例如：`,
+			`这个工具可以取消所有指向该页的链接（“链入”）${fileSpace ? "，或通过加入<!-- -->注释标记隐藏所有对此文件的使用" : ""}。例如：`,
 			linkTextBefore,
 			"将会变成",
 			linkTextAfter,
@@ -119,7 +119,7 @@ Twinkle.unlink.callback.evaluate = (event) => {
 	}
 	Morebits.simpleWindow.setButtonsEnabled(false);
 	Morebits.status.init(form);
-	const unlinker = new Morebits.batchOperation(`取消${ input.backlinks.length ? `链入${ input.imageusage.length ? "与文件使用" : ""}` : "文件使用"}`);
+	const unlinker = new Morebits.batchOperation(`取消${input.backlinks.length ? `链入${input.imageusage.length ? "与文件使用" : ""}` : "文件使用"}`);
 	unlinker.setOption("preserveIndividualStatusLines", true);
 	unlinker.setPageList(pages);
 	const params = {
@@ -127,7 +127,7 @@ Twinkle.unlink.callback.evaluate = (event) => {
 		unlinker: unlinker
 	};
 	unlinker.run((pageName) => {
-		const qiuwen_page = new Morebits.wiki.page(pageName, `在页面“${ pageName }”中取消链入`);
+		const qiuwen_page = new Morebits.wiki.page(pageName, `在页面“${pageName}”中取消链入`);
 		qiuwen_page.setBotEdit(true); // unlink considered a floody operation
 		qiuwen_page.setCallbackParameters(
 			$.extend(
@@ -174,13 +174,13 @@ Twinkle.unlink.callbacks = {
 					});
 					apiobj.params.form.append({
 						type: "div",
-						label: `已选择的命名空间：${ namespaces.join("、")}`,
+						label: `已选择的命名空间：${namespaces.join("、")}`,
 						tooltip: "您可在Twinkle参数设置中更改相关事项，请参见[[H:TW/PREF]]"
 					});
 					if (response["query-continue"] && response["query-continue"].imageusage) {
 						apiobj.params.form.append({
 							type: "div",
-							label: `显示前${ mw.language.convertNumber(list.length) }个文件使用。`
+							label: `显示前${mw.language.convertNumber(list.length)}个文件使用。`
 						});
 					}
 					apiobj.params.form.append({
@@ -227,13 +227,13 @@ Twinkle.unlink.callbacks = {
 				});
 				apiobj.params.form.append({
 					type: "div",
-					label: `已选择的命名空间：${ namespaces.join("、")}`,
+					label: `已选择的命名空间：${namespaces.join("、")}`,
 					tooltip: "您可在Twinkle参数设置中更改相关事项，请参见[[H:TW/PREF]]"
 				});
 				if (response["query-continue"] && response["query-continue"].backlinks) {
 					apiobj.params.form.append({
 						type: "div",
-						label: `显示前${ mw.language.convertNumber(list.length) }个链入。`
+						label: `显示前${mw.language.convertNumber(list.length)}个链入。`
 					});
 				}
 				apiobj.params.form.append({
@@ -301,18 +301,18 @@ Twinkle.unlink.callbacks = {
 			if (text === oldtext) {
 				warningString = warningString ? "取消链入或文件使用" : "取消链入";
 			} else {
-				summaryText = `${summaryText ? `${summaryText } / ` : "" }取消链结到`;
+				summaryText = `${summaryText ? `${summaryText} / ` : ""}取消链结到`;
 				oldtext = text;
 			}
 		}
 		if (warningString) {
 			// nothing to do!
-			pageobj.getStatusElement().error(`未能在页面上找到${ warningString }。`);
+			pageobj.getStatusElement().error(`未能在页面上找到${warningString}。`);
 			params.unlinker.workerFailure(pageobj);
 			return;
 		}
 		pageobj.setPageText(text);
-		pageobj.setEditSummary(`${summaryText }“${ Morebits.pageNameNorm }”：${ params.reason}`);
+		pageobj.setEditSummary(`${summaryText}“${Morebits.pageNameNorm}”：${params.reason}`);
 		pageobj.setChangeTags(Twinkle.changeTags);
 		pageobj.setCreateOption("nocreate");
 		pageobj.save(params.unlinker.workerSuccess, params.unlinker.workerFailure);

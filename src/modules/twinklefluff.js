@@ -15,14 +15,14 @@
 /* <nowiki> */
 (($) => {
 /**
- * twinklefluff.js: Revert/rollback module
- * Mode of invocation:  Links on contributions, recent changes, history, and diff pages
- * Active on:           Diff pages, history pages, Special:RecentChanges(Linked), and Special:Contributions
- */
+	 * twinklefluff.js: Revert/rollback module
+	 * Mode of invocation:  Links on contributions, recent changes, history, and diff pages
+	 * Active on:           Diff pages, history pages, Special:RecentChanges(Linked), and Special:Contributions
+	 */
 
 /**
- * Twinklefluff revert and antivandalism utility
- */
+	 * Twinklefluff revert and antivandalism utility
+	 */
 
 Twinkle.fluff = () => {
 	// Only proceed if the user can actually edit the page in question
@@ -87,20 +87,20 @@ Twinkle.fluff.linkBuilder = {
 		return link;
 	},
 	/**
-	 * @param {string} [vandal=null] - Username of the editor being reverted
-	 * Provide a falsey value if the username is hidden, defaults to null
-	 * @param {boolean} inline - True to create two links in a span, false
-	 * to create three links in a div (optional)
-	 * @param {number|string} [rev=wgCurRevisionId] - Revision ID being reverted (optional)
-	 * @param {string} [page=wgPageName] - Page being reverted (optional)
-	 */
+		 * @param {string} [vandal=null] - Username of the editor being reverted
+		 * Provide a falsey value if the username is hidden, defaults to null
+		 * @param {boolean} inline - True to create two links in a span, false
+		 * to create three links in a div (optional)
+		 * @param {number|string} [rev=wgCurRevisionId] - Revision ID being reverted (optional)
+		 * @param {string} [page=wgPageName] - Page being reverted (optional)
+		 */
 	rollbackLinks: (vandal, inline, rev, page) => {
 		vandal ||= null;
 		const elem = inline ? "span" : "div";
 		const revNode = document.createElement(elem);
 		rev = parseInt(rev, 10);
 		if (rev) {
-			revNode.setAttribute("id", `tw-revert${ rev}`);
+			revNode.setAttribute("id", `tw-revert${rev}`);
 		} else {
 			revNode.setAttribute("id", "tw-revert");
 		}
@@ -153,7 +153,7 @@ Twinkle.fluff.linkBuilder = {
 		revisionRef = typeof revisionRef === "number" ? revisionRef : mw.config.get(revisionRef);
 		const elem = inline ? "span" : "div";
 		const revertToRevisionNode = document.createElement(elem);
-		revertToRevisionNode.setAttribute("id", `tw-revert-to-${ revisionRef}`);
+		revertToRevisionNode.setAttribute("id", `tw-revert-to-${revisionRef}`);
 		revertToRevisionNode.style.fontWeight = "bold";
 		const revertToRevisionLink = Twinkle.fluff.linkBuilder.buildLink("SaddleBrown", "恢复此版本");
 		$(revertToRevisionLink).on("click", () => {
@@ -247,17 +247,17 @@ Twinkle.fluff.addLinks = {
 	diff: () => {
 		// Autofill user talk links on diffs with vanarticle for easy warning, but don't autowarn
 		const warnFromTalk = (xtitle) => {
-			const talkLink = $(`#mw-diff-${ xtitle }2 .mw-usertoollinks a`).first();
+			const talkLink = $(`#mw-diff-${xtitle}2 .mw-usertoollinks a`).first();
 			if (talkLink.length) {
-				let extraParams = `vanarticle=${ mw.util.rawurlencode(Morebits.pageNameNorm) }&noautowarn=true`;
+				let extraParams = `vanarticle=${mw.util.rawurlencode(Morebits.pageNameNorm)}&noautowarn=true`;
 				// diffIDs for vanarticlerevid
 				extraParams += "&vanarticlerevid=";
 				extraParams += xtitle === "otitle" ? mw.config.get("wgDiffOldId") : mw.config.get("wgDiffNewId");
 				const href = talkLink.attr("href");
 				if (href.indexOf("?") === -1) {
-					talkLink.attr("href", `${href }?${ extraParams}`);
+					talkLink.attr("href", `${href}?${extraParams}`);
 				} else {
-					talkLink.attr("href", `${href }&${ extraParams}`);
+					talkLink.attr("href", `${href}&${extraParams}`);
 				}
 			}
 		};
@@ -352,8 +352,8 @@ Twinkle.fluff.revert = (type, vandal, rev, page) => {
 		const notifyStatus = document.createElement("span");
 		mw.notify(notifyStatus, {
 			autoHide: false,
-			title: `回退${ page}`,
-			tag: `twinklefluff_${ rev}` // Shouldn't be necessary given disableLink
+			title: `回退${page}`,
+			tag: `twinklefluff_${rev}` // Shouldn't be necessary given disableLink
 		});
 
 		Morebits.status.init(notifyStatus);
@@ -371,12 +371,12 @@ Twinkle.fluff.revert = (type, vandal, rev, page) => {
 	};
 	const query = {
 		action: "query",
-		prop: [ "info", "revisions", "flagged" ],
+		prop: ["info", "revisions", "flagged"],
 		titles: pagename,
 		inprop: "watched",
 		intestactions: "edit",
 		rvlimit: Twinkle.getPref("revertMaxRevisions"),
-		rvprop: [ "ids", "timestamp", "user" ],
+		rvprop: ["ids", "timestamp", "user"],
 		curtimestamp: "",
 		meta: "tokens",
 		type: "csrf",
@@ -390,12 +390,12 @@ Twinkle.fluff.revertToRevision = (oldrev) => {
 	Morebits.status.init(document.getElementById("mw-content-text"));
 	const query = {
 		action: "query",
-		prop: [ "info", "revisions" ],
+		prop: ["info", "revisions"],
 		titles: mw.config.get("wgPageName"),
 		inprop: "watched",
 		rvlimit: 1,
 		rvstartid: oldrev,
-		rvprop: [ "ids", "user" ],
+		rvprop: ["ids", "user"],
 		curtimestamp: "",
 		meta: "tokens",
 		type: "csrf",
@@ -428,7 +428,7 @@ Twinkle.fluff.callbacks = {
 			apiobj.statelem.error("由用户取消。");
 			return;
 		}
-		const summary = Twinkle.fluff.formatSummary(`回退到由$USER做出的修订版本${ revertToRevID}`, revertToUserHidden ? null : revertToUser, optional_summary);
+		const summary = Twinkle.fluff.formatSummary(`回退到由$USER做出的修订版本${revertToRevID}`, revertToUserHidden ? null : revertToUser, optional_summary);
 		const query = {
 			action: "edit",
 			title: mw.config.get("wgPageName"),
@@ -496,17 +496,17 @@ Twinkle.fluff.callbacks = {
 		let userNorm = params.user || Twinkle.fluff.hiddenName;
 		let index = 1;
 		if (params.revid !== lastrevid) {
-			Morebits.status.warn("Warning", [ "最新修订版本 ", Morebits.htmlNode("strong", lastrevid), " 与我们的修订版本 ", Morebits.htmlNode("strong", params.revid), "不同" ]);
+			Morebits.status.warn("Warning", ["最新修订版本 ", Morebits.htmlNode("strong", lastrevid), " 与我们的修订版本 ", Morebits.htmlNode("strong", params.revid), "不同"]);
 			if (lastuser === params.user) {
 				switch (params.type) {
 					case "vand":
-						Morebits.status.info("信息", [ "最新修订版本由 ", Morebits.htmlNode("strong", userNorm), " 做出，因我们假定破坏，继续回退操作。" ]);
+						Morebits.status.info("信息", ["最新修订版本由 ", Morebits.htmlNode("strong", userNorm), " 做出，因我们假定破坏，继续回退操作。"]);
 						break;
 					case "agf":
-						Morebits.status.warn("警告", [ "最新修订版本由 ", Morebits.htmlNode("strong", userNorm), " 做出，因我们假定善意，取消回退操作，因为问题可能已被修复。" ]);
+						Morebits.status.warn("警告", ["最新修订版本由 ", Morebits.htmlNode("strong", userNorm), " 做出，因我们假定善意，取消回退操作，因为问题可能已被修复。"]);
 						return;
 					default:
-						Morebits.status.warn("提示", [ "最新修订版本由 ", Morebits.htmlNode("strong", userNorm), " 做出，但我们还是不回退了。" ]);
+						Morebits.status.warn("提示", ["最新修订版本由 ", Morebits.htmlNode("strong", userNorm), " 做出，但我们还是不回退了。"]);
 						return;
 				}
 			} else if (
@@ -517,10 +517,10 @@ Twinkle.fluff.callbacks = {
 					revs.length > 1 &&
 					revs[1].getAttribute("revid") === params.revid
 			) {
-				Morebits.status.info("信息", [ "最新修订版本由 ", Morebits.htmlNode("strong", lastuser), "，一个可信的机器人做出，但之前的版本被认为是破坏，继续回退操作。" ]);
+				Morebits.status.info("信息", ["最新修订版本由 ", Morebits.htmlNode("strong", lastuser), "，一个可信的机器人做出，但之前的版本被认为是破坏，继续回退操作。"]);
 				index = 2;
 			} else {
-				Morebits.status.error("错误", [ "最新修订版本由 ", Morebits.htmlNode("strong", lastuser), " 做出，所以这个修订版本可能已经被回退了，取消回退操作。" ]);
+				Morebits.status.error("错误", ["最新修订版本由 ", Morebits.htmlNode("strong", lastuser), " 做出，所以这个修订版本可能已经被回退了，取消回退操作。"]);
 				return;
 			}
 		} else {
@@ -532,26 +532,26 @@ Twinkle.fluff.callbacks = {
 		if (Twinkle.fluff.trustedBots.indexOf(params.user) !== -1) {
 			switch (params.type) {
 				case "vand":
-					Morebits.status.info("信息", [ "将对 ", Morebits.htmlNode("strong", userNorm), " 执行破坏回退，这是一个可信的机器人，我们假定您要回退前一个修订版本。" ]);
+					Morebits.status.info("信息", ["将对 ", Morebits.htmlNode("strong", userNorm), " 执行破坏回退，这是一个可信的机器人，我们假定您要回退前一个修订版本。"]);
 					index = 2;
 					params.user = revs[1].user;
 					params.userHidden = !!revs[1].userhidden;
 					break;
 				case "agf":
-					Morebits.status.warn("提示", [ "将对 ", Morebits.htmlNode("strong", userNorm), " 执行善意回退，但这是一个可信的机器人，取消回退操作。" ]);
+					Morebits.status.warn("提示", ["将对 ", Morebits.htmlNode("strong", userNorm), " 执行善意回退，但这是一个可信的机器人，取消回退操作。"]);
 					return;
 				case "norm":
 					/* falls through */
 				default: {
-					const cont = confirm(`选择了常规回退，但最新修改是由一个可信的机器人（${ userNorm }）做出的。确定以回退前一个修订版本，取消以回退机器人的修改`);
+					const cont = confirm(`选择了常规回退，但最新修改是由一个可信的机器人（${userNorm}）做出的。确定以回退前一个修订版本，取消以回退机器人的修改`);
 					if (cont) {
-						Morebits.status.info("信息", [ "将对 ", Morebits.htmlNode("strong", userNorm), " 执行常规回退，这是一个可信的机器人，基于确认，我们将回退前一个修订版本。" ]);
+						Morebits.status.info("信息", ["将对 ", Morebits.htmlNode("strong", userNorm), " 执行常规回退，这是一个可信的机器人，基于确认，我们将回退前一个修订版本。"]);
 						index = 2;
 						params.user = revs[1].user;
 						params.userHidden = !!revs[1].userhidden;
 						userNorm = params.user || Twinkle.fluff.hiddenName;
 					} else {
-						Morebits.status.warn("提示", [ "将对 ", Morebits.htmlNode("strong", userNorm), " 执行常规回退，这是一个可信的机器人，基于确认，我们仍将回退这个修订版本。" ]);
+						Morebits.status.warn("提示", ["将对 ", Morebits.htmlNode("strong", userNorm), " 执行常规回退，这是一个可信的机器人，基于确认，我们仍将回退这个修订版本。"]);
 					}
 					break;
 				}
@@ -570,7 +570,7 @@ Twinkle.fluff.callbacks = {
 			statelem.error([
 				"未找到之前的修订版本，可能 ",
 				Morebits.htmlNode("strong", userNorm),
-				` 是唯一贡献者，或这个用户连续做出了超过 ${ mw.language.convertNumber(Twinkle.getPref("revertMaxRevisions")) } 次编辑。`
+				` 是唯一贡献者，或这个用户连续做出了超过 ${mw.language.convertNumber(Twinkle.getPref("revertMaxRevisions"))} 次编辑。`
 			]);
 			return;
 		}
@@ -581,7 +581,7 @@ Twinkle.fluff.callbacks = {
 		const good_revision = revs[found];
 		let userHasAlreadyConfirmedAction = false;
 		if (params.type !== "vand" && count > 1) {
-			if (!confirm(`${userNorm } 连续做出了 ${ mw.language.convertNumber(count) } 次编辑，是否要全部回退？`)) {
+			if (!confirm(`${userNorm} 连续做出了 ${mw.language.convertNumber(count)} 次编辑，是否要全部回退？`)) {
 				Morebits.status.info("提示", "用户取消操作");
 				return;
 			}
@@ -611,7 +611,7 @@ Twinkle.fluff.callbacks = {
 				break;
 			case "vand":
 				summary = Twinkle.fluff.formatSummary(
-					`回退$USER做出的${ params.count }次编辑，到由${ params.gooduserHidden ? Twinkle.fluff.hiddenName : params.gooduser }做出的最后修订版本 `,
+					`回退$USER做出的${params.count}次编辑，到由${params.gooduserHidden ? Twinkle.fluff.hiddenName : params.gooduser}做出的最后修订版本 `,
 					params.userHidden ? null : params.user
 				);
 				break;
@@ -626,7 +626,7 @@ Twinkle.fluff.callbacks = {
 					}
 					userHasAlreadyConfirmedAction = true;
 				}
-				summary = Twinkle.fluff.formatSummary(`回退$USER做出的${ params.count }次编辑`, params.userHidden ? null : params.user, extra_summary);
+				summary = Twinkle.fluff.formatSummary(`回退$USER做出的${params.count}次编辑`, params.userHidden ? null : params.user, extra_summary);
 				break;
 		}
 		if (
@@ -702,9 +702,9 @@ Twinkle.fluff.callbacks = {
 			const params = apiobj.params;
 			if (params.notifyUser && !params.userHidden) {
 				// notifyUser only from main, not from toRevision
-				Morebits.status.info("信息", [ "开启用户 ", Morebits.htmlNode("strong", params.user), " 的讨论页" ]);
+				Morebits.status.info("信息", ["开启用户 ", Morebits.htmlNode("strong", params.user), " 的讨论页"]);
 				const windowQuery = {
-					title: `User talk:${ params.user}`,
+					title: `User talk:${params.user}`,
 					action: "edit",
 					preview: "yes",
 					vanarticle: params.pagename.replace(/_/g, " "),
@@ -743,7 +743,7 @@ Twinkle.fluff.formatSummary = (builtInString, userName, customString) => {
 
 	// append user's custom reason
 	if (customString) {
-		result += `: ${ Morebits.string.toUpperCaseFirstChar(customString)}`;
+		result += `: ${Morebits.string.toUpperCaseFirstChar(customString)}`;
 	}
 
 	// find number of UTF-8 bytes the resulting string takes up, and possibly add
@@ -752,10 +752,10 @@ Twinkle.fluff.formatSummary = (builtInString, userName, customString) => {
 	if (/\$USER/.test(builtInString)) {
 		if (userName) {
 			const resultLen = unescape(encodeURIComponent(result.replace("$USER", ""))).length;
-			const contribsLink = `[[Special:Contribs/${ userName }|${ userName }]]`;
+			const contribsLink = `[[Special:Contribs/${userName}|${userName}]]`;
 			const contribsLen = unescape(encodeURIComponent(contribsLink)).length;
 			if (resultLen + contribsLen <= 499) {
-				const talkLink = `（[[User talk:${ userName }|讨论]]）`;
+				const talkLink = `（[[User talk:${userName}|讨论]]）`;
 				if (resultLen + contribsLen + unescape(encodeURIComponent(talkLink)).length <= 499) {
 					result = Morebits.string.safeReplace(result, "$USER", contribsLink + talkLink);
 				} else {

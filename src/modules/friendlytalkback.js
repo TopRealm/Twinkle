@@ -15,11 +15,11 @@
 /* <nowiki> */
 (($) => {
 /**
- * friendlytalkback.js: Talkback module
- * Mode of invocation:     Tab ("TB")
- * Active on:              Any page with relevant user name (userspace, contribs, etc.) except IP ranges
- * Config directives in:   FriendlyConfig
- */
+	 * friendlytalkback.js: Talkback module
+	 * Mode of invocation:     Tab ("TB")
+	 * Active on:              Any page with relevant user name (userspace, contribs, etc.) except IP ranges
+	 * Config directives in:   FriendlyConfig
+	 */
 Twinkle.talkback = () => {
 	if (!mw.config.exists("wgRelevantUserName")) {
 		return;
@@ -84,7 +84,7 @@ Twinkle.talkback.callback = () => {
 	form.append({
 		type: "div",
 		id: "talkbackpreview",
-		label: [ previewlink ]
+		label: [previewlink]
 	});
 	form.append({
 		type: "div",
@@ -108,7 +108,7 @@ Twinkle.talkback.callback = () => {
 	const query = {
 		action: "query",
 		prop: "extlinks",
-		titles: `User talk:${ mw.config.get("wgRelevantUserName")}`,
+		titles: `User talk:${mw.config.get("wgRelevantUserName")}`,
 		elquery: "userjs.invalid/noTalkback",
 		ellimit: "1",
 		format: "json"
@@ -120,10 +120,10 @@ Twinkle.talkback.optout = "";
 Twinkle.talkback.callback.optoutStatus = (apiobj) => {
 	const el = apiobj.getResponse().query.pages[0].extlinks;
 	if (el && el.length) {
-		Twinkle.talkback.optout = `${mw.config.get("wgRelevantUserName") }不希望收到回复通告`;
+		Twinkle.talkback.optout = `${mw.config.get("wgRelevantUserName")}不希望收到回复通告`;
 		const url = el[0].url;
 		const reason = mw.util.getParamValue("reason", url);
-		Twinkle.talkback.optout += reason ? `: ${ reason}` : ".";
+		Twinkle.talkback.optout += reason ? `: ${reason}` : ".";
 	}
 	$("#twinkle-talkback-optout-message").text(Twinkle.talkback.optout);
 };
@@ -164,7 +164,7 @@ Twinkle.talkback.changeTarget = (e) => {
 				name: "page",
 				label: "讨论页面名称",
 				tooltip: "正在进行讨论的页面名称。例如：“User talk:QiuWen”或“Qiuwen talk:首页”。仅限于所有讨论页面、项目和模板命名空间。",
-				value: prev_page || `User talk:${ mw.config.get("wgUserName")}`
+				value: prev_page || `User talk:${mw.config.get("wgUserName")}`
 			});
 			work_area.append({
 				type: "input",
@@ -304,15 +304,15 @@ Twinkle.talkback.evaluate = (e) => {
 			break;
 		case "see":
 			input.page = Twinkle.talkback.callbacks.normalizeTalkbackPage(input.page);
-			talkpage.setEditSummary(`请看看[[:${ input.page }${input.section ? `#${ input.section}` : "" }]]上的讨论`);
+			talkpage.setEditSummary(`请看看[[:${input.page}${input.section ? `#${input.section}` : ""}]]上的讨论`);
 			break;
 		default:
 			// talkback
 			input.page = Twinkle.talkback.callbacks.normalizeTalkbackPage(input.page);
-			talkpage.setEditSummary(`回复通告：[[:${ input.page }${input.section ? `#${ input.section}` : "" }]])`);
+			talkpage.setEditSummary(`回复通告：[[:${input.page}${input.section ? `#${input.section}` : ""}]])`);
 			break;
 	}
-	talkpage.setAppendText(`\n\n${ Twinkle.talkback.callbacks.getNoticeWikitext(input)}`);
+	talkpage.setAppendText(`\n\n${Twinkle.talkback.callbacks.getNoticeWikitext(input)}`);
 	talkpage.setChangeTags(Twinkle.changeTags);
 	talkpage.setCreateOption("recreate");
 	talkpage.setMinorEdit(Twinkle.getPref("markTalkbackAsMinor"));
@@ -342,7 +342,7 @@ Twinkle.talkback.callbacks = {
 			input.page = Twinkle.talkback.callbacks.normalizeTalkbackPage(input.page);
 		}
 		const noticetext = Twinkle.talkback.callbacks.getNoticeWikitext(input);
-		form.previewer.beginRender(noticetext, `User talk:${ mw.config.get("wgRelevantUserName")}`); // Force wikitext/correct username
+		form.previewer.beginRender(noticetext, `User talk:${mw.config.get("wgRelevantUserName")}`); // Force wikitext/correct username
 	},
 
 	getNoticeWikitext: (input) => {
@@ -352,23 +352,23 @@ Twinkle.talkback.callbacks = {
 				text = Morebits.string.safeReplace(Twinkle.talkback.noticeboards[input.noticeboard].text, "$SECTION", input.section);
 				break;
 			case "mail":
-				text = `==${ Twinkle.getPref("mailHeading") }==\n{{YGM|subject=${ input.section }|ts=~~` + "~" + "~~}}";
+				text = `==${Twinkle.getPref("mailHeading")}==\n{{YGM|subject=${input.section}|ts=~~` + "~" + "~~}}";
 				if (input.message) {
-					text += `\n${ input.message }  ~~` + "~~";
+					text += `\n${input.message}  ~~` + "~~";
 				} else if (Twinkle.getPref("insertTalkbackSignature")) {
 					text += "\n~~" + "~~";
 				}
 				break;
 			case "see": {
 				const heading = Twinkle.getPref("talkbackHeading");
-				text = `{{subst:Please see|location=${ input.page }${input.section ? `#${ input.section}` : "" }|more=${ input.message }|heading=${ heading }}}`;
+				text = `{{subst:Please see|location=${input.page}${input.section ? `#${input.section}` : ""}|more=${input.message}|heading=${heading}}}`;
 				break;
 			}
 			default:
 				// talkback
-				text = `==${ Twinkle.getPref("talkbackHeading") }==\n{{talkback|${ input.page }${input.section ? `|${ input.section}` : "" }|ts=~~` + "~" + "~~}}";
+				text = `==${Twinkle.getPref("talkbackHeading")}==\n{{talkback|${input.page}${input.section ? `|${input.section}` : ""}|ts=~~` + "~" + "~~}}";
 				if (input.message) {
-					text += `\n${ input.message } ~~` + "~~";
+					text += `\n${input.message} ~~` + "~~";
 				} else if (Twinkle.getPref("insertTalkbackSignature")) {
 					text += "\n~~" + "~~";
 				}

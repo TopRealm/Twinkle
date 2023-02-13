@@ -15,10 +15,10 @@
 /* <nowiki> */
 (($) => {
 /**
- * twinklediff.js: Diff module
- * Mode of invocation:  Tab on non-diff pages ("Last"); tabs on diff pages ("Since", "Since mine", "Current")
- * Active on:           Existing non-special pages
- */
+	 * twinklediff.js: Diff module
+	 * Mode of invocation:  Tab on non-diff pages ("Last"); tabs on diff pages ("Since", "Since mine", "Current")
+	 * Active on:           Existing non-special pages
+	 */
 
 Twinkle.diff = () => {
 	if (mw.config.get("wgNamespaceNumber") < 0 || !mw.config.get("wgArticleId")) {
@@ -81,7 +81,7 @@ Twinkle.diff.evaluate = (me) => {
 		action: "query",
 		titles: mw.config.get("wgPageName"),
 		rvlimit: 1,
-		rvprop: [ "ids", "user" ],
+		rvprop: ["ids", "user"],
 		rvstartid: mw.config.get("wgCurRevisionId") - 1,
 		// i.e. not the current one
 		rvuser: user,
@@ -99,7 +99,7 @@ Twinkle.diff.callbacks = {
 		const rev = self.response.query.pages[0].revisions;
 		const revid = rev && rev[0].revid;
 		if (!revid) {
-			self.statelem.error(`未找到合适的早期版本，或 ${ self.params.user } 是唯一贡献者。取消。`);
+			self.statelem.error(`未找到合适的早期版本，或 ${self.params.user} 是唯一贡献者。取消。`);
 			return;
 		}
 		window.location = mw.util.getUrl(mw.config.get("wgPageName"), {

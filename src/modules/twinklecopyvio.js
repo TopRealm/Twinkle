@@ -15,11 +15,11 @@
 /* <nowiki> */
 (() => {
 /**
- * twinklecopyvio.js: Copyvio module
- * Mode of invocation:    Tab ("Copyvio")
- * Active on:             Existing, non-special pages, except for file pages with no local (non-Commons) file which are not redirects
- * Config directives in:  TwinkleConfig
- */
+	 * twinklecopyvio.js: Copyvio module
+	 * Mode of invocation:    Tab ("Copyvio")
+	 * Active on:             Existing, non-special pages, except for file pages with no local (non-Commons) file which are not redirects
+	 * Config directives in:  TwinkleConfig
+	 */
 
 Twinkle.copyvio = () => {
 	// Disable on:
@@ -97,10 +97,10 @@ Twinkle.copyvio.callbacks = {
 
 		// Notification to first contributor
 		if (params.usertalk) {
-			const usertalkpage = new Morebits.wiki.page(`User talk:${ initialContrib}`, `通知页面创建者（${ initialContrib })`);
-			const notifytext = `\n{{subst:CopyvioNotice|${ mw.config.get("wgPageName") }}}`;
+			const usertalkpage = new Morebits.wiki.page(`User talk:${initialContrib}`, `通知页面创建者（${initialContrib})`);
+			const notifytext = `\n{{subst:CopyvioNotice|${mw.config.get("wgPageName")}}}`;
 			usertalkpage.setAppendText(notifytext);
-			usertalkpage.setEditSummary(`通知：页面[[${ mw.config.get("wgPageName") }]]疑似侵犯著作权`);
+			usertalkpage.setEditSummary(`通知：页面[[${mw.config.get("wgPageName")}]]疑似侵犯著作权`);
 			usertalkpage.setChangeTags(Twinkle.changeTags);
 			usertalkpage.setCreateOption("recreate");
 			usertalkpage.setWatchlist(Twinkle.getPref("copyvioWatchUser"));
@@ -111,16 +111,11 @@ Twinkle.copyvio.callbacks = {
 	taggingArticle: (pageobj) => {
 		const params = pageobj.getCallbackParameters();
 		const revisionId = mw.config.get("wgRevisionId") || mw.config.get("wgDiffNewId") || mw.config.get("wgCurRevisionId");
-		let tag =
-				`{{subst:Copyvio/auto|url=${ 
-					params.source
-						.replace(/http/g, "&#104;ttp")
-						.replace(/\n+/g, "\n")
-						.replace(/^\s*([^*])/gm, "* $1")
-						.replace(/^\* $/m, "") 
-				}|OldRevision=${ 
-					revisionId 
-				}}}`;
+		let tag = `{{subst:Copyvio/auto|url=${params.source
+			.replace(/http/g, "&#104;ttp")
+			.replace(/\n+/g, "\n")
+			.replace(/^\s*([^*])/gm, "* $1")
+			.replace(/^\* $/m, "")}|OldRevision=${revisionId}}}`;
 		const text = pageobj.getPageText();
 		const oldcsd = text.match(/\{\{\s*(db(-\w*)?|d|delete)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}/i);
 		if (
@@ -129,7 +124,7 @@ Twinkle.copyvio.callbacks = {
 					"在页面上找到快速删除模板，要保留吗？\n\n当页面同时侵犯著作权又符合快速删除标准时，应使用快速删除程序。\n单击“确认”以保留快速删除模板，若您认为快速删除理由不合，单击“取消”以移除快速删除模板。"
 				)
 		) {
-			tag = `${oldcsd[0] }\n${ tag}`;
+			tag = `${oldcsd[0]}\n${tag}`;
 		}
 		pageobj.setPageText(tag);
 		pageobj.setEditSummary("本页面疑似侵犯著作权");
@@ -145,13 +140,13 @@ Twinkle.copyvio.callbacks = {
 		const text = pageobj.getPageText();
 		let output = "";
 		const date = new Date();
-		const dateHeaderRegex = new RegExp(`^===+\\s*${ date.getUTCMonth() + 1 }月${ date.getUTCDate() }日\\s*===+`, "mg");
+		const dateHeaderRegex = new RegExp(`^===+\\s*${date.getUTCMonth() + 1}月${date.getUTCDate()}日\\s*===+`, "mg");
 		if (!dateHeaderRegex.exec(text)) {
-			output = `\n\n===${ date.getUTCMonth() + 1 }月${ date.getUTCDate() }日===`;
+			output = `\n\n===${date.getUTCMonth() + 1}月${date.getUTCDate()}日===`;
 		}
-		output += `\n{{subst:CopyvioVFDRecord|${ mw.config.get("wgPageName") }}}`;
+		output += `\n{{subst:CopyvioVFDRecord|${mw.config.get("wgPageName")}}}`;
 		pageobj.setAppendText(output);
-		pageobj.setEditSummary(`加入[[${ mw.config.get("wgPageName") }]]`);
+		pageobj.setEditSummary(`加入[[${mw.config.get("wgPageName")}]]`);
 		pageobj.setChangeTags(Twinkle.changeTags);
 		pageobj.setCreateOption("recreate");
 		pageobj.append();

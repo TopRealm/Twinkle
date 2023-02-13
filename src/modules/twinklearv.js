@@ -15,10 +15,10 @@
 /* <nowiki> */
 (($) => {
 /**
- * twinklearv.js: ARV module
- * Mode of invocation:  Tab ("ARV")
- * Active on:           Any page with relevant user name (userspace, contribs, etc.)
- */
+	 * twinklearv.js: ARV module
+	 * Mode of invocation:  Tab ("ARV")
+	 * Active on:           Any page with relevant user name (userspace, contribs, etc.)
+	 */
 
 Twinkle.arv = () => {
 	const username = mw.config.get("wgRelevantUserName");
@@ -108,7 +108,7 @@ Twinkle.arv.callback = (uid) => {
 		if (blocklist.length) {
 			// If an IP is blocked *and* rangeblocked, only use whichever is more recent
 			const block = blocklist[0];
-			let message = `此账户已经被${ block.partial ? "部分" : ""}`;
+			let message = `此账户已经被${block.partial ? "部分" : ""}`;
 			// Start and end differ, range blocked
 			message += block.rangestart !== block.rangeend ? "段封禁。" : "封禁。";
 			if (block.partial) {
@@ -366,14 +366,14 @@ Twinkle.arv.callback.evaluate = (e) => {
 				.join("; ");
 			if (form.page.value !== "") {
 				// Allow links to redirects, files, and categories
-				reason = `在 {{No redirect|:${ form.page.value }}}`;
+				reason = `在 {{No redirect|:${form.page.value}}}`;
 				if (form.badid.value !== "") {
-					reason += ` ({{diff|${ form.page.value }|${ form.badid.value }|${ form.goodid.value }|diff}})`;
+					reason += ` ({{diff|${form.page.value}|${form.badid.value}|${form.goodid.value}|diff}})`;
 				}
 				reason += ":";
 			}
 			if (types) {
-				reason += ` ${ types}`;
+				reason += ` ${types}`;
 			}
 			if (comment !== "") {
 				reason += (reason === "" ? "" : ". ") + comment;
@@ -398,16 +398,16 @@ Twinkle.arv.callback.evaluate = (e) => {
 				const $aivLink = '<a target="_blank" href="/wiki/QW:AIV">QW:AIV</a>';
 
 				// check if user has already been reported
-				if (new RegExp(`\\{\\{\\s*(?:(?:[Ii][Pp])?[Vv]andal|[Uu]serlinks)\\s*\\|\\s*(?:1=)?\\s*${ Morebits.string.escapeRegExp(uid) }\\s*\\}\\}`).test(text)) {
+				if (new RegExp(`\\{\\{\\s*(?:(?:[Ii][Pp])?[Vv]andal|[Uu]serlinks)\\s*\\|\\s*(?:1=)?\\s*${Morebits.string.escapeRegExp(uid)}\\s*\\}\\}`).test(text)) {
 					aivPage.getStatusElement().error("提报已存在，不会加入新提报");
-					Morebits.status.printUserText(reason, `您输入的评论已在下方提供，您可以将其加入到${ $aivLink }:`);
+					Morebits.status.printUserText(reason, `您输入的评论已在下方提供，您可以将其加入到${$aivLink}:`);
 					return;
 				}
 				aivPage.setPageSection(0);
 				aivPage.getStatusElement().status("加入新提报");
-				aivPage.setEditSummary(`报告[[Special:Contributions/${ uid }|${ uid }]]`);
+				aivPage.setEditSummary(`报告[[Special:Contributions/${uid}|${uid}]]`);
 				aivPage.setChangeTags(Twinkle.changeTags);
-				aivPage.setAppendText(`\n*{{vandal|${ /=/.test(uid) ? "1=" : "" }${uid }}} &ndash; ${ reason}`);
+				aivPage.setAppendText(`\n*{{vandal|${/=/.test(uid) ? "1=" : ""}${uid}}} &ndash; ${reason}`);
 				aivPage.append();
 			});
 			break;
@@ -424,19 +424,19 @@ Twinkle.arv.callback.evaluate = (e) => {
 			if (types.length <= 2) {
 				types = types.join(" and ");
 			} else {
-				types = [ types.slice(0, -1).join(", "), types.slice(-1) ].join(" and ");
+				types = [types.slice(0, -1).join(", "), types.slice(-1)].join(" and ");
 			}
 			let article = "a";
 			if (/[aeiouwyh]/.test(types[0] || "")) {
 				// non 100% correct, but whatever, including 'h' for Cockney
 				article = "an";
 			}
-			reason = `*{{user-uaa|1=${ uid }}} &ndash; `;
+			reason = `*{{user-uaa|1=${uid}}} &ndash; `;
 			if (types.length || hasShared) {
-				reason += `Violation of the username policy as ${ article } ${ types } username${ hasShared ? " that implies shared use. " : ". "}`;
+				reason += `Violation of the username policy as ${article} ${types} username${hasShared ? " that implies shared use. " : ". "}`;
 			}
 			if (comment !== "") {
-				reason += `${Morebits.string.toUpperCaseFirstChar(comment) }. `;
+				reason += `${Morebits.string.toUpperCaseFirstChar(comment)}. `;
 			}
 
 			reason += "~~" + "~~";
@@ -452,21 +452,21 @@ Twinkle.arv.callback.evaluate = (e) => {
 				const text = uaaPage.getPageText();
 
 				// check if user has already been reported
-				if (new RegExp(`\\{\\{\\s*user-uaa\\s*\\|\\s*(1\\s*=\\s*)?${ Morebits.string.escapeRegExp(uid) }\\s*(\\||\\})`).test(text)) {
+				if (new RegExp(`\\{\\{\\s*user-uaa\\s*\\|\\s*(1\\s*=\\s*)?${Morebits.string.escapeRegExp(uid)}\\s*(\\||\\})`).test(text)) {
 					uaaPage.getStatusElement().error("User is already listed.");
 					const $uaaLink = '<a target="_blank" href="/wiki/QW:UAA">QW:UAA</a>';
 					Morebits.status.printUserText(
 						reason,
-						`The comments you typed are provided below, in case you wish to manually post them under the existing report for this user at ${ $uaaLink }:`
+						`The comments you typed are provided below, in case you wish to manually post them under the existing report for this user at ${$uaaLink}:`
 					);
 					return;
 				}
 				uaaPage.getStatusElement().status("Adding new report...");
-				uaaPage.setEditSummary(`Reporting [[Special:Contributions/${ uid }|${ uid }]].`);
+				uaaPage.setEditSummary(`Reporting [[Special:Contributions/${uid}|${uid}]].`);
 				uaaPage.setChangeTags(Twinkle.changeTags);
 
 				// Blank newline per [[Special:Permalink/996949310#Spacing]]; see also [[QW:LISTGAP]] and [[QW:INDENTGAP]]
-				uaaPage.setPageText(`${text }\n${ reason }\n*`);
+				uaaPage.setPageText(`${text}\n${reason}\n*`);
 				uaaPage.save();
 			});
 			break;
@@ -489,7 +489,7 @@ Twinkle.arv.callback.evaluate = (e) => {
 				return;
 			}
 			sockParameters.uid = puppetReport ? form.sockmaster.value.trim() : uid;
-			sockParameters.sockpuppets = puppetReport ? [ uid ] : Morebits.array.uniq($.map($("input:text[name=sockpuppet]", form), (o) => $(o).val() || null));
+			sockParameters.sockpuppets = puppetReport ? [uid] : Morebits.array.uniq($.map($("input:text[name=sockpuppet]", form), (o) => $(o).val() || null));
 			Morebits.simpleWindow.setButtonsEnabled(false);
 			Morebits.status.init(form);
 			Twinkle.arv.processSock(sockParameters);
@@ -621,17 +621,17 @@ Twinkle.arv.processSock = (params) => {
 	Morebits.wiki.addCheckpoint(); // prevent notification events from causing an erronous "action completed"
 
 	// prepare the SPI report
-	let text = `\n{{subst:SPI report|${ params.sockpuppets.map((sock, index) => `${index + 1 }=${ sock}`).join("|") }\n|evidence=${ params.evidence } \n`;
+	let text = `\n{{subst:SPI report|${params.sockpuppets.map((sock, index) => `${index + 1}=${sock}`).join("|")}\n|evidence=${params.evidence} \n`;
 	if (params.checkuser) {
 		text += "|checkuser=yes";
 	}
 	text += "}}";
-	const reportpage = `Qiuwen:傀儡调查/${ params.uid}`;
+	const reportpage = `Qiuwen:傀儡调查/${params.uid}`;
 	Morebits.wiki.actionCompleted.redirect = reportpage;
 	Morebits.wiki.actionCompleted.notice = "提报完成";
 	const spiPage = new Morebits.wiki.page(reportpage, "拉取讨论页面");
 	spiPage.setFollowRedirect(true);
-	spiPage.setEditSummary(`加入对[[Special:Contributions/${ params.uid }|${ params.uid }]]的新提报`);
+	spiPage.setEditSummary(`加入对[[Special:Contributions/${params.uid}|${params.uid}]]的新提报`);
 	spiPage.setChangeTags(Twinkle.changeTags);
 	spiPage.setAppendText(text);
 	spiPage.setWatchlist(Twinkle.getPref("spiWatchReport"));
@@ -669,7 +669,7 @@ Twinkle.arv.processAN3 = (params) => {
 				if (!rev.comment && typeof rev.commenthidden === "string") {
 					return "(comment hidden)";
 				}
-				return `"${ rev.comment }"`;
+				return `"${rev.comment}"`;
 			};
 			let orig;
 			if (data.length) {
@@ -686,7 +686,7 @@ Twinkle.arv.processAN3 = (params) => {
 			}
 			let origtext = "";
 			if (orig) {
-				origtext = `{{diff2|${ orig.revid }|${ orig.timestamp }}} ${ hasHiddenComment(orig)}`;
+				origtext = `{{diff2|${orig.revid}|${orig.timestamp}}} ${hasHiddenComment(orig)}`;
 			}
 			const grouped_diffs = {};
 			let parentid, lastid;
@@ -704,18 +704,16 @@ Twinkle.arv.processAN3 = (params) => {
 				if (sub.length >= 2) {
 					const last = sub[0];
 					const first = sub.slice(-1)[0];
-					const label =
-							`Consecutive edits made from ${ 
-								new Morebits.date(first.timestamp).format("HH:mm, D MMMM YYYY", "utc") 
-							} (UTC) to ${ 
-								new Morebits.date(last.timestamp).format("HH:mm, D MMMM YYYY", "utc") 
-							} (UTC)`;
-					ret = `# {{diff|oldid=${ first.parentid }|diff=${ last.revid }|label=${ label }}}\n`;
+					const label = `Consecutive edits made from ${new Morebits.date(first.timestamp).format("HH:mm, D MMMM YYYY", "utc")} (UTC) to ${new Morebits.date(last.timestamp).format(
+						"HH:mm, D MMMM YYYY",
+						"utc"
+					)} (UTC)`;
+					ret = `# {{diff|oldid=${first.parentid}|diff=${last.revid}|label=${label}}}\n`;
 				}
 				ret += sub
 					.reverse()
 					.map((v) => {
-						return `${sub.length >= 2 ? "#" : "" }# {{diff2|${ v.revid }|${ new Morebits.date(v.timestamp).format("HH:mm, D MMMM YYYY", "utc") } (UTC)}} ${ hasHiddenComment(v)}`;
+						return `${sub.length >= 2 ? "#" : ""}# {{diff2|${v.revid}|${new Morebits.date(v.timestamp).format("HH:mm, D MMMM YYYY", "utc")} (UTC)}} ${hasHiddenComment(v)}`;
 					})
 					.join("\n");
 				return ret;
@@ -725,39 +723,35 @@ Twinkle.arv.processAN3 = (params) => {
 			const warningtext = params.warnings
 				.reverse()
 				.map((v) => {
-					return `#  {{diff2|${ v.revid }|${ new Morebits.date(v.timestamp).format("HH:mm, D MMMM YYYY", "utc") } (UTC)}} ${ hasHiddenComment(v)}`;
+					return `#  {{diff2|${v.revid}|${new Morebits.date(v.timestamp).format("HH:mm, D MMMM YYYY", "utc")} (UTC)}} ${hasHiddenComment(v)}`;
 				})
 				.join("\n");
 			let resolvetext = params.resolves
 				.reverse()
 				.map((v) => {
-					return `#  {{diff2|${ v.revid }|${ new Morebits.date(v.timestamp).format("HH:mm, D MMMM YYYY", "utc") } (UTC)}} ${ hasHiddenComment(v)}`;
+					return `#  {{diff2|${v.revid}|${new Morebits.date(v.timestamp).format("HH:mm, D MMMM YYYY", "utc")} (UTC)}} ${hasHiddenComment(v)}`;
 				})
 				.join("\n");
 			if (params.free_resolves) {
 				const page = params.free_resolves;
 				if (page.compare) {
-					resolvetext += `\n#  {{diff|oldid=${ page.compare.fromrevid }|diff=${ page.compare.torevid }|label=Consecutive edits on ${ page.compare.totitle }}}`;
+					resolvetext += `\n#  {{diff|oldid=${page.compare.fromrevid}|diff=${page.compare.torevid}|label=Consecutive edits on ${page.compare.totitle}}}`;
 				} else if (page.revisions) {
 					const revCount = page.revisions.length;
 					let rev;
 					if (revCount < 3) {
 						// diff=prev or next
 						rev = revCount === 1 ? page.revisions[0] : page.revisions[1];
-						resolvetext +=
-								`\n#  {{diff2|${ rev.revid }|${ new Morebits.date(rev.timestamp).format("HH:mm, D MMMM YYYY", "utc") } (UTC) on ${ page.title }}} ${ hasHiddenComment(rev)}`;
+						resolvetext += `\n#  {{diff2|${rev.revid}|${new Morebits.date(rev.timestamp).format("HH:mm, D MMMM YYYY", "utc")} (UTC) on ${page.title}}} ${hasHiddenComment(rev)}`;
 					} else {
 						// diff and oldid are nonconsecutive
 						rev = page.revisions[0];
 						const revLatest = page.revisions[revCount - 1];
-						const label =
-								`Consecutive edits made from ${ 
-									new Morebits.date(rev.timestamp).format("HH:mm, D MMMM YYYY", "utc") 
-								} (UTC) to ${ 
-									new Morebits.date(revLatest.timestamp).format("HH:mm, D MMMM YYYY", "utc") 
-								} (UTC) on ${ 
-									page.title}`;
-						resolvetext += `\n# {{diff|oldid=${ rev.revid }|diff=${ revLatest.revid }|label=${ label }}}\n`;
+						const label = `Consecutive edits made from ${new Morebits.date(rev.timestamp).format("HH:mm, D MMMM YYYY", "utc")} (UTC) to ${new Morebits.date(revLatest.timestamp).format(
+							"HH:mm, D MMMM YYYY",
+							"utc"
+						)} (UTC) on ${page.title}`;
+						resolvetext += `\n# {{diff|oldid=${rev.revid}|diff=${revLatest.revid}|label=${label}}}\n`;
 					}
 				}
 			}
@@ -765,35 +759,20 @@ Twinkle.arv.processAN3 = (params) => {
 			if (comment) {
 				comment += " ~~" + "~~";
 			}
-			const text =
-					`\n\n{{subst:AN3 report|diffs=${ 
-						difftext 
-					}|warnings=${ 
-						warningtext 
-					}|resolves=${ 
-						resolvetext 
-					}|pagename=${ 
-						params.page 
-					}|orig=${ 
-						origtext 
-					}|comment=${ 
-						comment 
-					}|uid=${ 
-						params.uid 
-					}}}`;
+			const text = `\n\n{{subst:AN3 report|diffs=${difftext}|warnings=${warningtext}|resolves=${resolvetext}|pagename=${params.page}|orig=${origtext}|comment=${comment}|uid=${params.uid}}}`;
 			const reportpage = "Qiuwen:Administrators' noticeboard/Edit warring";
 			Morebits.wiki.actionCompleted.redirect = reportpage;
 			Morebits.wiki.actionCompleted.notice = "Reporting complete";
 			const an3Page = new Morebits.wiki.page(reportpage, "Retrieving discussion page");
 			an3Page.setFollowRedirect(true);
-			an3Page.setEditSummary(`Adding new report for [[Special:Contributions/${ params.uid }|${ params.uid }]].`);
+			an3Page.setEditSummary(`Adding new report for [[Special:Contributions/${params.uid}|${params.uid}]].`);
 			an3Page.setChangeTags(Twinkle.changeTags);
 			an3Page.setAppendText(text);
 			an3Page.append();
 
 			// notify user
-			const notifyText = `\n\n{{subst:an3-notice|1=${ mw.util.wikiUrlencode(params.uid) }|auto=1}} ~~` + "~~";
-			const talkPage = new Morebits.wiki.page(`User talk:${ params.uid}`, "Notifying edit warrior");
+			const notifyText = `\n\n{{subst:an3-notice|1=${mw.util.wikiUrlencode(params.uid)}|auto=1}} ~~` + "~~";
+			const talkPage = new Morebits.wiki.page(`User talk:${params.uid}`, "Notifying edit warrior");
 			talkPage.setFollowRedirect(true);
 			talkPage.setEditSummary("Notifying about edit warring noticeboard discussion.");
 			talkPage.setChangeTags(Twinkle.changeTags);

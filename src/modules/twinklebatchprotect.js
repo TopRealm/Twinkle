@@ -15,11 +15,11 @@
 /* <nowiki> */
 (($) => {
 /**
- * twinklebatchprotect.js: Batch protect module (sysops only)
- * Mode of invocation:     Tab ("P-batch")
- * Active on:              Existing project pages and user pages; existing and
- *                         non-existing categories; Special:PrefixIndex
- */
+	 * twinklebatchprotect.js: Batch protect module (sysops only)
+	 * Mode of invocation:     Tab ("P-batch")
+	 * Active on:              Existing project pages and user pages; existing and
+	 *                         non-existing categories; Special:PrefixIndex
+	 */
 
 Twinkle.batchprotect = () => {
 	if (
@@ -203,10 +203,10 @@ Twinkle.batchprotect.callback = () => {
 						metadata.push("重定向");
 					}
 					if (page.ns === 6) {
-						metadata.push(`上传者：${ page.imageinfo[0].user}`);
-						metadata.push(`最后编辑者：${ page.revisions[0].user}`);
+						metadata.push(`上传者：${page.imageinfo[0].user}`);
+						metadata.push(`最后编辑者：${page.revisions[0].user}`);
 					} else {
-						metadata.push(`${mw.language.convertNumber(page.revisions[0].size) }字节`);
+						metadata.push(`${mw.language.convertNumber(page.revisions[0].size)}字节`);
 					}
 					editProt = page.protection
 						.filter((pr) => {
@@ -215,11 +215,11 @@ Twinkle.batchprotect.callback = () => {
 						.pop();
 				}
 				if (editProt) {
-					metadata.push(`${missing ? "白纸" : "" }全保护${ editProt.expiry === "infinity" ? "（永久）" : `（${ new Morebits.date(editProt.expiry).calendar("utc") } (UTC)过期）`}`);
+					metadata.push(`${missing ? "白纸" : ""}全保护${editProt.expiry === "infinity" ? "（永久）" : `（${new Morebits.date(editProt.expiry).calendar("utc")} (UTC)过期）`}`);
 				}
 				const title = page.title;
 				list.push({
-					label: title + (metadata.length ? ` (${ metadata.join("; ") })` : ""),
+					label: title + (metadata.length ? ` (${metadata.join("; ")})` : ""),
 					value: title,
 					checked: true,
 					style: editProt ? "color:red" : ""
@@ -273,7 +273,7 @@ Twinkle.batchprotect.callback.evaluate = (event) => {
 	const numProtected = $(Morebits.quickForm.getElements(form, "个页面")).filter((index, element) => {
 		return element.checked && element.nextElementSibling.style.color === "red";
 	}).length;
-	if (numProtected > 0 && !confirm(`您即将对${ mw.language.convertNumber(numProtected) }个全保护页面进行操作。您确定吗？`)) {
+	if (numProtected > 0 && !confirm(`您即将对${mw.language.convertNumber(numProtected)}个全保护页面进行操作。您确定吗？`)) {
 		return;
 	}
 	const input = Morebits.quickForm.getInputData(form);
@@ -297,7 +297,7 @@ Twinkle.batchprotect.callback.evaluate = (event) => {
 			titles: pageName,
 			format: "json"
 		};
-		const qiuwen_api = new Morebits.wiki.api(`正在检查页面“${ pageName }”是否存在`, query, Twinkle.batchprotect.callbacks.main, null, batchOperation.workerFailure);
+		const qiuwen_api = new Morebits.wiki.api(`正在检查页面“${pageName}”是否存在`, query, Twinkle.batchprotect.callbacks.main, null, batchOperation.workerFailure);
 		qiuwen_api.params = $.extend(
 			{
 				page: pageName,
@@ -315,7 +315,7 @@ Twinkle.batchprotect.callbacks = {
 			apiobj.params.page = response.query.normalized[0].to;
 		}
 		const exists = !response.query.pages[0].missing;
-		const page = new Morebits.wiki.page(apiobj.params.page, `正在保护${ apiobj.params.page}`);
+		const page = new Morebits.wiki.page(apiobj.params.page, `正在保护${apiobj.params.page}`);
 		let takenAction = false;
 		if (exists && apiobj.params.editmodify) {
 			page.setEditProtection(apiobj.params.editlevel, apiobj.params.editexpiry);
@@ -330,7 +330,7 @@ Twinkle.batchprotect.callbacks = {
 			takenAction = true;
 		}
 		if (!takenAction) {
-			Morebits.status.warn(`正在保护“${ apiobj.params.page}`, `”页面${ exists ? "存在" : "不存在" }；无事可做，跳过`);
+			Morebits.status.warn(`正在保护“${apiobj.params.page}`, `”页面${exists ? "存在" : "不存在"}；无事可做，跳过`);
 			apiobj.params.batchOperation.workerFailure(apiobj);
 			return;
 		}

@@ -15,10 +15,10 @@
 /* <nowiki> */
 (($) => {
 /**
- * twinkleimage.js: Image CSD module
- * Mode of invocation:  Tab ("DI")
- * Active on:           Local nonredirect file pages (not on Commons)
- */
+	 * twinkleimage.js: Image CSD module
+	 * Mode of invocation:  Tab ("DI")
+	 * Active on:           Local nonredirect file pages (not on Commons)
+	 */
 
 Twinkle.image = () => {
 	if (mw.config.get("wgNamespaceNumber") === 6 && !document.getElementById("mw-sharedupload") && document.getElementById("mw-imagepage-section-filehistory")) {
@@ -157,7 +157,7 @@ Twinkle.image.callback.choice = (event) => {
 Twinkle.image.callback.evaluate = (event) => {
 	const input = Morebits.quickForm.getInputData(event.target);
 	if (input.replacement) {
-		input.replacement = (new RegExp(`^${ Morebits.namespaceRegex(6) }:`, "i").test(input.replacement) ? "" : "File:") + input.replacement;
+		input.replacement = (new RegExp(`^${Morebits.namespaceRegex(6)}:`, "i").test(input.replacement) ? "" : "File:") + input.replacement;
 	}
 	let csdcrit;
 	switch (input.type) {
@@ -173,7 +173,7 @@ Twinkle.image.callback.evaluate = (event) => {
 			throw new Error("Twinkle.image.callback.evaluate: 未知理由");
 	}
 	const lognomination = Twinkle.getPref("logSpeedyNominations") && Twinkle.getPref("noLogOnSpeedyNomination").indexOf(csdcrit.toLowerCase()) === -1;
-	const templatename = input.derivative ? `dw ${ input.type}` : input.type;
+	const templatename = input.derivative ? `dw ${input.type}` : input.type;
 	const params = $.extend(
 		{
 			templatename: templatename,
@@ -203,8 +203,8 @@ Twinkle.image.callback.evaluate = (event) => {
 		// No auto-notification, display what was going to be added.
 		const noteData = document.createElement("pre");
 
-		noteData.appendChild(document.createTextNode(`{{subst:di-${ templatename }-notice|1=${ mw.config.get("wgTitle") }}} ~~` + "~~"));
-		Morebits.status.info("提醒", [ "这些内容也应当通知到原始上传者:", document.createElement("br"), noteData ]);
+		noteData.appendChild(document.createTextNode(`{{subst:di-${templatename}-notice|1=${mw.config.get("wgTitle")}}} ~~` + "~~"));
+		Morebits.status.info("提醒", ["这些内容也应当通知到原始上传者:", document.createElement("br"), noteData]);
 	}
 };
 Twinkle.image.callbacks = {
@@ -214,14 +214,14 @@ Twinkle.image.callbacks = {
 
 		// remove "move to Commons" tag - deletion-tagged files cannot be moved to Commons
 		// text = text.replace(/\{\{(mtc|(copy |move )?to ?commons|move to wikimedia commons|copy to wikimedia commons)[^}]*\}\}/gi, '');
-		let tag = `{{di-${ params.templatename }|date={{subst:#time:c}}`;
+		let tag = `{{di-${params.templatename}|date={{subst:#time:c}}`;
 		switch (params.type) {
 			case "no source no license":
 			case "no source":
 				tag += params.non_free ? "|non-free=yes" : "";
 				break;
 			case "no permission":
-				tag += params.source ? `|source=${ params.source}` : "";
+				tag += params.source ? `|source=${params.source}` : "";
 				break;
 			default:
 				break;
@@ -230,7 +230,7 @@ Twinkle.image.callbacks = {
 
 		tag += "|help=off}}\n";
 		pageobj.setPageText(tag + text);
-		pageobj.setEditSummary(`文件正被检查是否需要删除, 原因是[[QW:CSD#${ params.normalized }|CSD ${ params.normalized }]] (${ params.type }).`);
+		pageobj.setEditSummary(`文件正被检查是否需要删除, 原因是[[QW:CSD#${params.normalized}|CSD ${params.normalized}]] (${params.type}).`);
 		pageobj.setChangeTags(Twinkle.changeTags);
 		pageobj.setWatchlist(Twinkle.getPref("deliWatchPage"));
 		pageobj.setCreateOption("nocreate");
@@ -242,17 +242,17 @@ Twinkle.image.callbacks = {
 
 		// disallow warning yourself
 		if (initialContrib === mw.config.get("wgUserName")) {
-			pageobj.getStatusElement().warn(`你 (${ initialContrib }) 创建了这个页面；跳过通知步骤`);
+			pageobj.getStatusElement().warn(`你 (${initialContrib}) 创建了这个页面；跳过通知步骤`);
 		} else {
-			const usertalkpage = new Morebits.wiki.page(`User talk:${ initialContrib}`, `通知原始上传者 (${ initialContrib })`);
-			let notifytext = `\n{{subst:di-${ params.templatename }-notice|1=${ mw.config.get("wgTitle")}`;
+			const usertalkpage = new Morebits.wiki.page(`User talk:${initialContrib}`, `通知原始上传者 (${initialContrib})`);
+			let notifytext = `\n{{subst:di-${params.templatename}-notice|1=${mw.config.get("wgTitle")}`;
 			if (params.type === "no permission") {
-				notifytext += params.source ? `|source=${ params.source}` : "";
+				notifytext += params.source ? `|source=${params.source}` : "";
 			}
 
 			notifytext += "}} ~~" + "~~";
 			usertalkpage.setAppendText(notifytext);
-			usertalkpage.setEditSummary(`[[:${ Morebits.pageNameNorm }]]的文件删除提醒。`);
+			usertalkpage.setEditSummary(`[[:${Morebits.pageNameNorm}]]的文件删除提醒。`);
 			usertalkpage.setChangeTags(Twinkle.changeTags);
 			usertalkpage.setCreateOption("recreate");
 			usertalkpage.setWatchlist(Twinkle.getPref("deliWatchUser"));
@@ -267,48 +267,37 @@ Twinkle.image.callbacks = {
 	},
 	addToLog: (params, initialContrib) => {
 		const usl = new Morebits.userspaceLogger(Twinkle.getPref("speedyLogPageName"));
-		usl.initialText =
-				`这是该用户使用[[H:TW|Twinkle]]的速删模块做出的[[QW:CSD|快速删除]]提名列表。\n\n如果您不再想保留此日志，请在[[${ 
-					Twinkle.getPref("configPage") 
-				}|参数设置]]中关掉，并使用[[QW:O1|CSD O1]]提交快速删除。${ 
-					Morebits.userIsSysop ? "\n\n此日志并不记录用Twinkle直接执行的删除。" : ""}`;
+		usl.initialText = `这是该用户使用[[H:TW|Twinkle]]的速删模块做出的[[QW:CSD|快速删除]]提名列表。\n\n如果您不再想保留此日志，请在[[${Twinkle.getPref(
+			"configPage"
+		)}|参数设置]]中关掉，并使用[[QW:O1|CSD O1]]提交快速删除。${Morebits.userIsSysop ? "\n\n此日志并不记录用Twinkle直接执行的删除。" : ""}`;
 		const formatParamLog = (normalize, csdparam, input) => {
 			if (normalize === "F5" && csdparam === "replacement") {
-				input = `[[:${ input }]]`;
+				input = `[[:${input}]]`;
 			}
-			return ` {${ normalize } ${ csdparam }: ${ input }}`;
+			return ` {${normalize} ${csdparam}: ${input}}`;
 		};
 		let extraInfo = "";
 
 		// If a logged file is deleted but exists on commons, the wikilink will be blue, so provide a link to the log
-		const fileLogLink = ` ([{{fullurl:Special:Log|page=${ mw.util.wikiUrlencode(mw.config.get("wgPageName")) }}} log])`;
-		let appendText =
-				`# [[:${ 
-					Morebits.pageNameNorm 
-				}]]${ 
-					fileLogLink 
-				}: DI [[QW:CSD#${ 
-					params.normalized.toUpperCase() 
-				}|CSD ${ 
-					params.normalized.toUpperCase() 
-				}]] ({{tl|di-${ 
-					params.templatename 
-				}}})`;
-		[ "reason", "replacement", "source" ].forEach((item) => {
+		const fileLogLink = ` ([{{fullurl:Special:Log|page=${mw.util.wikiUrlencode(mw.config.get("wgPageName"))}}} log])`;
+		let appendText = `# [[:${Morebits.pageNameNorm}]]${fileLogLink}: DI [[QW:CSD#${params.normalized.toUpperCase()}|CSD ${params.normalized.toUpperCase()}]] ({{tl|di-${
+			params.templatename
+		}}})`;
+		["reason", "replacement", "source"].forEach((item) => {
 			if (params[item]) {
 				extraInfo += formatParamLog(params.normalized.toUpperCase(), item, params[item]);
 				return false;
 			}
 		});
 		if (extraInfo) {
-			appendText += `; 其他信息:${ extraInfo}`;
+			appendText += `; 其他信息:${extraInfo}`;
 		}
 		if (initialContrib) {
-			appendText += `; 已通知 {{user|1=${ initialContrib }}}`;
+			appendText += `; 已通知 {{user|1=${initialContrib}}}`;
 		}
 
 		appendText += " ~~" + "~" + "~~\n";
-		const editsummary = `在日志记录[[:${ Morebits.pageNameNorm }]]的快速删除提名`;
+		const editsummary = `在日志记录[[:${Morebits.pageNameNorm}]]的快速删除提名`;
 		usl.changeTags = Twinkle.changeTags;
 		usl.log(appendText, editsummary);
 	}
