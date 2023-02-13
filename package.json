@@ -31,8 +31,6 @@
 		"mwn": "^0.11.2",
 		"prettier": "^2.8.3",
 		"prompts": "^2.4.2",
-		"stylelint": "^15.1.0",
-		"stylelint-config-idiomatic-order": "^9.0.0",
-		"stylelint-config-standard": "^30.0.1"
+		"stylelint": "^15.1.0"
 	}
 }
