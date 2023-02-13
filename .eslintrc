@@ -15,6 +15,7 @@
 	"ignorePatterns": ["src/lib/", "scripts/", "dist/", "*.json"],
 	"rules": {
 		"camelcase": "off",
+		"logical-assignment-operators": "error",
 		"max-len": "off",
 		"new-cap": "off",
 		"no-alert": "off",
@@ -60,7 +61,7 @@
 		"no-multi-spaces": "error",
 		"no-param-reassign": "off",
 		"no-underscore-dangle": "off",
-		"strict": "off",
+		"strict": ["error", "global"],
 		"quotes": [
 			1,
 			"double",
@@ -97,7 +98,7 @@
 		"prefer-exponentiation-operator": "error",
 		"require-await": "error",
 		"arrow-parens": "error",
-		"no-use-before-define": "off"
+		"no-use-before-define": "error"
 	},
 	"reportUnusedDisableDirectives": true,
 	"globals": {
