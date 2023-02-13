@@ -1,6 +1,6 @@
 {
-	"extends": [ "stylelint-config-standard", "stylelint-config-idiomatic-order" ],
-	"plugins": [ "stylelint-no-unsupported-browser-features" ],
+	"extends": ["stylelint-config-standard", "stylelint-config-idiomatic-order"],
+	"plugins": ["stylelint-no-unsupported-browser-features"],
 	"rules": {
 		"selector-id-pattern": null,
 		"selector-class-pattern": null,
@@ -18,20 +18,12 @@
 		"selector-type-no-unknown": true,
 		"no-duplicate-selectors": null,
 		"plugin/no-unsupported-browser-features": [
-			true, {
-				"browsers": [
-					"> 0.5%",
-					"Last 2 versions",
-					"Firefox ESR",
-					"not dead",
-					"not ie <= 11",
-					"not op_mini all"
-				],
-				"ignore": [
-					"rem"
-				],
+			true,
+			{
+				"browsers": ["> 0.5%", "Last 2 versions", "Firefox ESR", "not dead", "not ie <= 11", "not op_mini all"],
+				"ignore": ["rem"],
 				"ignorePartialSupport": true
-		  	}
+			}
 		]
 	}
 }

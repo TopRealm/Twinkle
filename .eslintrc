@@ -15,7 +15,6 @@
 	"ignorePatterns": ["src/lib/", "scripts/", "dist/", "*.json"],
 	"rules": {
 		"camelcase": "off",
-		"logical-assignment-operators": "error",
 		"max-len": "off",
 		"new-cap": "off",
 		"no-alert": "off",
