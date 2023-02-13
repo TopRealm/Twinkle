@@ -60,7 +60,7 @@
 		"no-multi-spaces": "error",
 		"no-param-reassign": "off",
 		"no-underscore-dangle": "off",
-		"strict": ["error", "global"],
+		"strict": "off",
 		"quotes": [
 			1,
 			"double",
