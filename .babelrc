@@ -3,10 +3,19 @@
 		[
 			"@babel/preset-env",
 			{
+				"corejs": "3",
+				"useBuiltIns": "entry",
 				"modules": false
 			}
 		],
-		"@babel/preset-react"
+		"@babel/preset-react",
+		[
+			"minify",
+			{
+				"builtIns": false,
+				"mangle": false
+			}
+		]
 	],
 	"plugins": [],
 	"ignore": ["src/lib/", "scripts/", "dist/", "*.json"]
