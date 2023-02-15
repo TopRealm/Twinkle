@@ -221,7 +221,7 @@ Twinkle.image.callback.evaluate = (event) => {
 		// No auto-notification, display what was going to be added.
 		const noteData = document.createElement('pre');
 
-		noteData.append(
+		noteData.appendChild(
 			document.createTextNode(
 				`{{subst:di-${templatename}-notice|1=${mw.config.get('wgTitle')}}} ~~` + '~~'
 			)

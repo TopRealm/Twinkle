@@ -1174,7 +1174,7 @@ Twinkle.warn.callback.change_category = (e) => {
 				label: '可用模板'
 			});
 			wrapperOptgroup = wrapperOptgroup.render();
-			container.append(wrapperOptgroup);
+			container.appendChild(wrapperOptgroup);
 			container = wrapperOptgroup;
 		}
 		$.each(contents, (itemKey, itemProperties) => {
@@ -1196,7 +1196,7 @@ Twinkle.warn.callback.change_category = (e) => {
 			if (!selected && old_subvalue && old_subvalue_re.test(template)) {
 				elem.data.selected = selected = true;
 			}
-			const elemRendered = container.append(elem.render());
+			const elemRendered = container.appendChild(elem.render());
 			$(elemRendered).data('messageData', itemProperties);
 		});
 	};
@@ -1250,7 +1250,7 @@ Twinkle.warn.callback.change_category = (e) => {
 					label: groupLabel
 				});
 				optgroup = optgroup.render();
-				sub_group.append(optgroup);
+				sub_group.appendChild(optgroup);
 				// create the options
 				createEntries(groupContents, optgroup, false);
 			});
@@ -1278,7 +1278,7 @@ Twinkle.warn.callback.change_category = (e) => {
 						label: groupLabel
 					});
 					optgroup = optgroup.render();
-					sub_group.append(optgroup);
+					sub_group.appendChild(optgroup);
 					// create the options
 					createEntries(groupContents, optgroup, false, lvl);
 				});

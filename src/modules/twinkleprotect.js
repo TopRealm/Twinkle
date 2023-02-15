@@ -591,7 +591,7 @@ Twinkle.protect.doCustomExpiry = (target) => {
 		const option = document.createElement('option');
 		option.setAttribute('value', custom);
 		option.textContent = custom;
-		target.append(option);
+		target.appendChild(option);
 		target.value = custom;
 	} else {
 		target.selectedIndex = 0;
@@ -1405,7 +1405,7 @@ Twinkle.protect.callbacks = {
 
 		const rppLink = document.createElement('a');
 		rppLink.setAttribute('href', mw.util.getUrl(rppPage.getPageName()));
-		rppLink.append(document.createTextNode(rppPage.getPageName()));
+		rppLink.appendChild(document.createTextNode(rppPage.getPageName()));
 
 		if (tag) {
 			statusElement.error([rppLink, '已有对此页面的保护提名，取消操作。']);

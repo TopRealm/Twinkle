@@ -517,7 +517,7 @@ Twinkle.speedy.callback.modeChanged = (form) => {
 			if (Twinkle.getPref('speedySelectionStyle') !== 'radioClick') {
 				// force listeners to re-init
 				customOption.click();
-				customOption.parentNode.append(customOption.subgroup);
+				customOption.parentNode.appendChild(customOption.subgroup);
 			}
 			customOption.subgroup.querySelector('input').value = decodeURIComponent(
 				$('#delete-reason').text()

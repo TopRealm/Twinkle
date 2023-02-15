@@ -80,14 +80,14 @@ Twinkle.fluff.linkBuilder = {
 	spanTag: (color, content) => {
 		const span = document.createElement('span');
 		span.style.color = color;
-		span.append(document.createTextNode(content));
+		span.appendChild(document.createTextNode(content));
 		return span;
 	},
 	buildLink: (color, text) => {
 		const link = document.createElement('a');
-		link.append(Twinkle.fluff.linkBuilder.spanTag('Black', '['));
-		link.append(Twinkle.fluff.linkBuilder.spanTag(color, text));
-		link.append(Twinkle.fluff.linkBuilder.spanTag('Black', ']'));
+		link.appendChild(Twinkle.fluff.linkBuilder.spanTag('Black', '['));
+		link.appendChild(Twinkle.fluff.linkBuilder.spanTag(color, text));
+		link.appendChild(Twinkle.fluff.linkBuilder.spanTag('Black', ']'));
 		link.href = '#';
 		return link;
 	},
@@ -113,7 +113,7 @@ Twinkle.fluff.linkBuilder = {
 		const sepNode1 = document.createElement('span');
 		const sepText = document.createTextNode(separator);
 		sepNode1.setAttribute('class', 'tw-rollback-link-separator');
-		sepNode1.append(sepText);
+		sepNode1.appendChild(sepText);
 		const sepNode2 = sepNode1.cloneNode(true);
 		const normNode = document.createElement('span');
 		const vandNode = document.createElement('span');
@@ -131,10 +131,10 @@ Twinkle.fluff.linkBuilder = {
 		});
 		normNode.setAttribute('class', 'tw-rollback-link-normal');
 		vandNode.setAttribute('class', 'tw-rollback-link-vandalism');
-		normNode.append(sepNode1);
-		vandNode.append(sepNode2);
-		normNode.append(normLink);
-		vandNode.append(vandLink);
+		normNode.appendChild(sepNode1);
+		vandNode.appendChild(sepNode2);
+		normNode.appendChild(normLink);
+		vandNode.appendChild(vandLink);
 		if (!inline) {
 			const agfNode = document.createElement('span');
 			const agfLink = Twinkle.fluff.linkBuilder.buildLink(
@@ -148,11 +148,11 @@ Twinkle.fluff.linkBuilder = {
 
 			agfNode.setAttribute('class', 'tw-rollback-link-agf');
 			agfLink.style.fontWeight = 'bold';
-			agfNode.append(agfLink);
-			revNode.append(agfNode);
+			agfNode.appendChild(agfLink);
+			revNode.appendChild(agfNode);
 		}
-		revNode.append(normNode);
-		revNode.append(vandNode);
+		revNode.appendChild(normNode);
+		revNode.appendChild(vandNode);
 		return revNode;
 	},
 	// Build [restore this revision] links
@@ -172,9 +172,9 @@ Twinkle.fluff.linkBuilder = {
 			Twinkle.fluff.revertToRevision(revisionRef);
 		});
 		if (inline) {
-			revertToRevisionNode.append(document.createTextNode(' '));
+			revertToRevisionNode.appendChild(document.createTextNode(' '));
 		}
-		revertToRevisionNode.append(revertToRevisionLink);
+		revertToRevisionNode.appendChild(revertToRevisionLink);
 		return revertToRevisionNode;
 	}
 };
@@ -202,7 +202,7 @@ Twinkle.fluff.addLinks = {
 
 					// It's unlikely, but we can't easily check for revdel'd usernames
 					// since only a strong element is provided, with no easy selector
-					current.append(
+					current.appendChild(
 						Twinkle.fluff.linkBuilder.rollbackLinks(
 							username,
 							true,
@@ -230,7 +230,7 @@ Twinkle.fluff.addLinks = {
 				const href = $(current).find('.mw-changeslist-diff').attr('href');
 				const rev = mw.util.getParamValue('diff', href);
 				const page = current.dataset.targetPage;
-				current.append(
+				current.appendChild(
 					Twinkle.fluff.linkBuilder.rollbackLinks(vandal, true, rev, page)
 				);
 			});
@@ -252,7 +252,7 @@ Twinkle.fluff.addLinks = {
 				// for faster than every
 				for (const element of histList) {
 					if ($(element).find('.mw-userlink').text() !== vandal) {
-						first.append(
+						first.appendChild(
 							Twinkle.fluff.linkBuilder.rollbackLinks(vandal, true)
 						);
 						break;
@@ -268,7 +268,7 @@ Twinkle.fluff.addLinks = {
 				const href = rev.querySelector('.mw-changeslist-date').href;
 				const oldid = Number.parseInt(mw.util.getParamValue('oldid', href), 10);
 				if (!Number.isNaN(oldid)) {
-					rev.append(
+					rev.appendChild(
 						Twinkle.fluff.linkBuilder.restoreThisRevisionLink(oldid, true)
 					);
 				}
@@ -312,7 +312,7 @@ Twinkle.fluff.addLinks = {
 					Twinkle.fluff.linkBuilder.restoreThisRevisionLink('wgDiffOldId');
 			oldTitle.insertBefore(revertToRevision, oldTitle.firstChild);
 			if (Twinkle.getPref('customRevertSummary').length > 0) {
-				revertToRevision.append(document.createTextNode(' || '));
+				revertToRevision.appendChild(document.createTextNode(' || '));
 				const revertsummary = new Morebits.quickForm.element({
 					type: 'select',
 					name: 'revertsummary'
@@ -329,7 +329,7 @@ Twinkle.fluff.addLinks = {
 						value: e.value
 					});
 				});
-				revertToRevision.append(revertsummary.render().childNodes[0]);
+				revertToRevision.appendChild(revertsummary.render().childNodes[0]);
 			}
 		}
 

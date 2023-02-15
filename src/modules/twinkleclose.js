@@ -34,7 +34,7 @@ Twinkle.close.addLinks = () => {
 	const spanTag = (color, content) => {
 		const span = document.createElement('span');
 		span.style.color = color;
-		span.append(document.createTextNode(content));
+		span.appendChild(document.createTextNode(content));
 		return span;
 	};
 	$('h1:has(.mw-headline),h2:has(.mw-headline),h3:has(.mw-headline),h4:has(.mw-headline),h5:has(.mw-headline),h6:has(.mw-headline)', '#bodyContent').each((index, current) => {
@@ -45,10 +45,10 @@ Twinkle.close.addLinks = () => {
 
 	const delNode = document.createElement('strong');
 	const delLink = document.createElement('a');
-	delLink.append(spanTag('Black', '['));
-	delLink.append(spanTag('Red', '关闭讨论'));
-	delLink.append(spanTag('Black', ']'));
-	delNode.append(delLink);
+	delLink.appendChild(spanTag('Black', '['));
+	delLink.appendChild(spanTag('Red', '关闭讨论'));
+	delLink.appendChild(spanTag('Black', ']'));
+	delNode.appendChild(delLink);
 	titles.each((_key, current) => {
 		const headlinehref = $(current).find('.mw-headline a').attr('href');
 		if (headlinehref === undefined) {
@@ -71,14 +71,14 @@ Twinkle.close.addLinks = () => {
 		const pagenotexist = $(current).find('.mw-headline a').hasClass('new');
 		const section = current.dataset.section;
 		const node = current.querySelectorAll('.mw-headline')[0];
-		node.append(document.createTextNode(' '));
+		node.appendChild(document.createTextNode(' '));
 		const tmpNode = delNode.cloneNode(true);
 		tmpNode.firstChild.href = `#${ section}`;
 		$(tmpNode.firstChild).on('click', () => {
 			Twinkle.close.callback(title, section, pagenotexist);
 			return false;
 		});
-		node.append(tmpNode);
+		node.appendChild(tmpNode);
 	});
 };
 
@@ -308,7 +308,7 @@ Twinkle.close.callback = (title, section, noop) => {
 				selected: itemProperties.selected,
 				disabled: Twinkle.getPref('XfdClose') !== 'all' && itemProperties.adminonly
 			});
-			const elemRendered = container.append(elem.render());
+			const elemRendered = container.appendChild(elem.render());
 			$(elemRendered).data('messageData', itemProperties);
 		});
 	};
@@ -318,7 +318,7 @@ Twinkle.close.callback = (title, section, noop) => {
 			label: groupLabel
 		});
 		optgroup = optgroup.render();
-		sub_group.append(optgroup);
+		sub_group.appendChild(optgroup);
 		// create the options
 		createEntries(groupContents, optgroup);
 	});

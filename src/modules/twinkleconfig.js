@@ -1061,7 +1061,7 @@ Twinkle.config.init = () => {
 				'中任何旧的' +
 				'<code>FriendlyConfig</code>' +
 				'设置。';
-		contentdiv.append(contentnotice);
+		contentdiv.appendChild(contentnotice);
 
 		// look and see if the user does in fact have any old settings in their skin JS file
 		const skinjs = new Morebits.wiki.page(
@@ -1079,19 +1079,19 @@ Twinkle.config.init = () => {
 		toctitle.id = 'toctitle';
 		const toch2 = document.createElement('h2');
 		toch2.textContent = '目录 ';
-		toctitle.append(toch2);
+		toctitle.appendChild(toch2);
 		// add TOC show/hide link
 		const toctoggle = document.createElement('span');
 		toctoggle.className = 'toctoggle';
-		toctoggle.append(document.createTextNode('['));
+		toctoggle.appendChild(document.createTextNode('['));
 		const toctogglelink = document.createElement('a');
 		toctogglelink.className = 'internal';
 		toctogglelink.setAttribute('href', '#tw-tocshowhide');
 		toctogglelink.textContent = '隐藏';
-		toctoggle.append(toctogglelink);
-		toctoggle.append(document.createTextNode(']'));
-		toctitle.append(toctoggle);
-		toctable.append(toctitle);
+		toctoggle.appendChild(toctogglelink);
+		toctoggle.appendChild(document.createTextNode(']'));
+		toctitle.appendChild(toctoggle);
+		toctable.appendChild(toctitle);
 		// create item container: this is what we add stuff to
 		const tocul = document.createElement('ul');
 		toctogglelink.addEventListener(
@@ -1103,15 +1103,15 @@ Twinkle.config.init = () => {
 			},
 			false
 		);
-		toctable.append(tocul);
-		contentdiv.append(toctable);
+		toctable.appendChild(tocul);
+		contentdiv.appendChild(toctable);
 		const contentform = document.createElement('form');
 		contentform.setAttribute('action', 'javascript:void(0)'); // was #tw-save - changed to void(0) to work around Chrome issue
 		contentform.addEventListener('submit', Twinkle.config.save, true);
-		contentdiv.append(contentform);
+		contentdiv.appendChild(contentform);
 		const container = document.createElement('table');
 		container.style.width = '100%';
-		contentform.append(container);
+		contentform.appendChild(container);
 		$(Twinkle.config.sections).each((_sectionkey, section) => {
 			if (section.hidden || section.adminOnly && !Morebits.userIsSysop) {
 				return true; // i.e. "continue" in this context
@@ -1122,9 +1122,9 @@ Twinkle.config.init = () => {
 			tocli.className = 'toclevel-1';
 			const toca = document.createElement('a');
 			toca.setAttribute('href', `#${section.module}`);
-			toca.append(document.createTextNode(section.title));
-			tocli.append(toca);
-			tocul.append(tocli);
+			toca.appendChild(document.createTextNode(section.title));
+			tocli.appendChild(toca);
+			tocul.appendChild(tocli);
 			let row = document.createElement('tr');
 			let cell = document.createElement('td');
 			cell.setAttribute('colspan', '3');
@@ -1132,10 +1132,10 @@ Twinkle.config.init = () => {
 			heading.style.borderBottom = '1px solid gray';
 			heading.style.marginTop = '0.2em';
 			heading.id = section.module;
-			heading.append(document.createTextNode(section.title));
-			cell.append(heading);
-			row.append(cell);
-			container.append(row);
+			heading.appendChild(document.createTextNode(section.title));
+			cell.appendChild(heading);
+			row.appendChild(cell);
+			container.appendChild(row);
 			let rowcount = 1; // for row banding
 
 			// add each of the preferences to the form
@@ -1165,9 +1165,9 @@ Twinkle.config.init = () => {
 						if (gotPref === true) {
 							input.setAttribute('checked', 'checked');
 						}
-						label.append(input);
-						label.append(document.createTextNode(pref.label));
-						cell.append(label);
+						label.appendChild(input);
+						label.appendChild(document.createTextNode(pref.label));
+						cell.appendChild(label);
 						break;
 					}
 					case 'string': // create an input box
@@ -1177,9 +1177,9 @@ Twinkle.config.init = () => {
 						cell.style.paddingRight = '0.5em';
 						label = document.createElement('label');
 						label.setAttribute('for', pref.name);
-						label.append(document.createTextNode(`${pref.label}：`));
-						cell.append(label);
-						row.append(cell);
+						label.appendChild(document.createTextNode(`${pref.label}：`));
+						cell.appendChild(label);
+						row.appendChild(cell);
 
 						// add input box to second column
 						cell = document.createElement('td');
@@ -1197,7 +1197,7 @@ Twinkle.config.init = () => {
 						if (gotPref) {
 							input.setAttribute('value', gotPref);
 						}
-						cell.append(input);
+						cell.appendChild(input);
 						break;
 					}
 					case 'enum': {
@@ -1208,9 +1208,9 @@ Twinkle.config.init = () => {
 						cell.style.paddingRight = '0.5em';
 						label = document.createElement('label');
 						label.setAttribute('for', pref.name);
-						label.append(document.createTextNode(`${pref.label}：`));
-						cell.append(label);
-						row.append(cell);
+						label.appendChild(document.createTextNode(`${pref.label}：`));
+						cell.appendChild(label);
+						row.appendChild(cell);
 
 						// add input box to second column
 						cell = document.createElement('td');
@@ -1233,18 +1233,18 @@ Twinkle.config.init = () => {
 								option.setAttribute('selected', 'selected');
 								optionExists = true;
 							}
-							option.append(document.createTextNode(enumdisplay));
-							input.append(option);
+							option.appendChild(document.createTextNode(enumdisplay));
+							input.appendChild(option);
 						});
 						// Append user-defined value to options
 						if (!optionExists) {
 							const option = document.createElement('option');
 							option.setAttribute('value', gotPref);
 							option.setAttribute('selected', 'selected');
-							option.append(document.createTextNode(gotPref));
-							input.append(option);
+							option.appendChild(document.createTextNode(gotPref));
+							input.appendChild(option);
 						}
-						cell.append(input);
+						cell.appendChild(input);
 						break;
 					}
 					case 'set': {
@@ -1252,8 +1252,8 @@ Twinkle.config.init = () => {
 						// add label first of all
 						cell.setAttribute('colspan', '2');
 						label = document.createElement('label'); // not really necessary to use a label element here, but we do it for consistency of styling
-						label.append(document.createTextNode(`${pref.label}：`));
-						cell.append(label);
+						label.appendChild(document.createTextNode(`${pref.label}：`));
+						cell.appendChild(label);
 						const checkdiv = document.createElement('div');
 						checkdiv.style.paddingLeft = '1em';
 						const worker = (itemkey, itemvalue) => {
@@ -1271,9 +1271,9 @@ Twinkle.config.init = () => {
 							if (pref.name === 'unlinkNamespaces' && gotPref && gotPref.includes(Number.parseInt(itemkey, 10))) {
 								check.setAttribute('checked', 'checked');
 							}
-							checklabel.append(check);
-							checklabel.append(document.createTextNode(itemvalue));
-							checkdiv.append(checklabel);
+							checklabel.appendChild(check);
+							checklabel.appendChild(document.createTextNode(itemvalue));
+							checkdiv.appendChild(checklabel);
 						};
 						if (pref.setDisplayOrder) {
 							// add check boxes according to the given display order
@@ -1284,7 +1284,7 @@ Twinkle.config.init = () => {
 							// add check boxes according to the order it gets fed to us (probably strict alphabetical)
 							$.each(pref.setValues, worker);
 						}
-						cell.append(checkdiv);
+						cell.appendChild(checkdiv);
 						break;
 					}
 					case 'customList': {
@@ -1293,9 +1293,9 @@ Twinkle.config.init = () => {
 						cell.style.paddingRight = '0.5em';
 						label = document.createElement('label');
 						label.setAttribute('for', pref.name);
-						label.append(document.createTextNode(`${pref.label}：`));
-						cell.append(label);
-						row.append(cell);
+						label.appendChild(document.createTextNode(`${pref.label}：`));
+						cell.appendChild(label);
+						row.appendChild(cell);
 
 						// add button to second column
 						cell = document.createElement('td');
@@ -1314,8 +1314,8 @@ Twinkle.config.init = () => {
 							value: gotPref,
 							pref: pref
 						});
-						button.append(document.createTextNode('编辑项目'));
-						cell.append(button);
+						button.appendChild(document.createTextNode('编辑项目'));
+						cell.appendChild(button);
 						break;
 					}
 					default: {
@@ -1323,7 +1323,7 @@ Twinkle.config.init = () => {
 						break;
 					}
 				}
-				row.append(cell);
+				row.appendChild(cell);
 
 				// add help tip
 				cell = document.createElement('td');
@@ -1351,11 +1351,11 @@ Twinkle.config.init = () => {
 					resetlink.addEventListener('click', Twinkle.config.resetPrefLink, false);
 					resetlink.style.cssFloat = 'right';
 					resetlink.style.margin = '0 0.6em';
-					resetlink.append(document.createTextNode('复位'));
-					cell.append(resetlink);
+					resetlink.appendChild(document.createTextNode('复位'));
+					cell.appendChild(resetlink);
 				}
-				row.append(cell);
-				container.append(row);
+				row.appendChild(cell);
+				container.appendChild(row);
 				return true;
 			});
 			return true;
@@ -1367,8 +1367,8 @@ Twinkle.config.init = () => {
 		const button = document.createElement('button');
 		button.setAttribute('id', 'twinkle-config-submit');
 		button.setAttribute('type', 'submit');
-		button.append(document.createTextNode('保存更改'));
-		footerbox.append(button);
+		button.appendChild(document.createTextNode('保存更改'));
+		footerbox.appendChild(button);
 		const footerspan = document.createElement('span');
 		footerspan.className = 'plainlinks';
 		footerspan.style.marginLeft = '2.4em';
@@ -1377,10 +1377,10 @@ Twinkle.config.init = () => {
 		footera.setAttribute('href', '#tw-reset-all');
 		footera.setAttribute('id', 'twinkle-config-resetall');
 		footera.addEventListener('click', Twinkle.config.resetAllPrefs, false);
-		footera.append(document.createTextNode('恢复默认'));
-		footerspan.append(footera);
-		footerbox.append(footerspan);
-		contentform.append(footerbox);
+		footera.appendChild(document.createTextNode('恢复默认'));
+		footerspan.appendChild(footera);
+		footerbox.appendChild(footerspan);
+		contentform.appendChild(footerbox);
 
 		// since all the section headers exist now, we can try going to the requested anchor
 		if (window.location.hash) {
@@ -1408,30 +1408,30 @@ Twinkle.config.init = () => {
 			box.setAttribute('class', 'config-twopt-box');
 			if (mw.config.get('wgArticleId') > 0) {
 				// page exists
-				box.append(
+				box.appendChild(
 					document.createTextNode('这页包含您的Twinkle参数设置，您可使用')
 				);
 			} else {
 				// page does not exist
-				box.append(document.createTextNode('您可配置您的Twinkle，通过使用'));
+				box.appendChild(document.createTextNode('您可配置您的Twinkle，通过使用'));
 			}
 			link = document.createElement('a');
 			link.setAttribute('href', mw.util.getUrl(Twinkle.getPref('configPage')));
-			link.append(document.createTextNode('Twinkle参数设置面板'));
-			box.append(link);
-			box.append(document.createTextNode('，或直接编辑本页。'));
+			link.appendChild(document.createTextNode('Twinkle参数设置面板'));
+			box.appendChild(link);
+			box.appendChild(document.createTextNode('，或直接编辑本页。'));
 			$(box).insertAfter($('#contentSub'));
 		} else if (
 			['vector', 'vector-2022', 'gongbi', 'citizen', 'common'].includes(scriptPageName)
 		) {
 			// place "Looking for Twinkle options?" notice
 			box.setAttribute('class', 'config-userskin-box');
-			box.append(document.createTextNode('如果您想配置您的Twinkle，请使用'));
+			box.appendChild(document.createTextNode('如果您想配置您的Twinkle，请使用'));
 			link = document.createElement('a');
 			link.setAttribute('href', mw.util.getUrl(Twinkle.getPref('configPage')));
-			link.append(document.createTextNode('Twinkle参数设置面板'));
-			box.append(link);
-			box.append(document.createTextNode('。'));
+			link.appendChild(document.createTextNode('Twinkle参数设置面板'));
+			box.appendChild(link);
+			box.appendChild(document.createTextNode('。'));
 			$(box).insertAfter($('#contentSub'));
 		}
 	}
@@ -1474,8 +1474,8 @@ Twinkle.config.listDialog.addRow = (dlgtable, value, label) => {
 		false
 	);
 	removeButton.textContent = '移除';
-	contenttd.append(removeButton);
-	contenttr.append(contenttd);
+	contenttd.appendChild(removeButton);
+	contenttr.appendChild(contenttd);
 
 	// value input box
 	contenttd = document.createElement('td');
@@ -1486,8 +1486,8 @@ Twinkle.config.listDialog.addRow = (dlgtable, value, label) => {
 	if (value) {
 		input.setAttribute('value', value);
 	}
-	contenttd.append(input);
-	contenttr.append(contenttd);
+	contenttd.appendChild(input);
+	contenttr.appendChild(contenttd);
 
 	// label input box
 	contenttd = document.createElement('td');
@@ -1498,9 +1498,9 @@ Twinkle.config.listDialog.addRow = (dlgtable, value, label) => {
 	if (label) {
 		input.setAttribute('value', label);
 	}
-	contenttd.append(input);
-	contenttr.append(contenttd);
-	dlgtable.append(contenttr);
+	contenttd.appendChild(input);
+	contenttr.appendChild(contenttd);
+	dlgtable.appendChild(contenttr);
 };
 Twinkle.config.listDialog.display = (e) => {
 	const $prefbutton = $(e.target);
@@ -1521,18 +1521,18 @@ Twinkle.config.listDialog.display = (e) => {
 	// top-left cell
 	let dlgth = document.createElement('th');
 	dlgth.style.width = '5%';
-	dlgtr.append(dlgth);
+	dlgtr.appendChild(dlgth);
 	// value column header
 	dlgth = document.createElement('th');
 	dlgth.style.width = '35%';
 	dlgth.textContent = curpref.customListValueTitle ?? '数值';
-	dlgtr.append(dlgth);
+	dlgtr.appendChild(dlgth);
 	// label column header
 	dlgth = document.createElement('th');
 	dlgth.style.width = '60%';
 	dlgth.textContent = curpref.customListLabelTitle ?? '标签';
-	dlgtr.append(dlgth);
-	dlgtbody.append(dlgtr);
+	dlgtr.appendChild(dlgth);
+	dlgtbody.appendChild(dlgtr);
 
 	// content rows
 	let gotRow = false;
@@ -1561,12 +1561,12 @@ Twinkle.config.listDialog.display = (e) => {
 		false
 	);
 	addButton.textContent = '添加';
-	dlgtd.append(addButton);
-	dlgtr.append(dlgtd);
-	dlgtfoot.append(dlgtr);
-	dlgtable.append(dlgtbody);
-	dlgtable.append(dlgtfoot);
-	dialogcontent.append(dlgtable);
+	dlgtd.appendChild(addButton);
+	dlgtr.appendChild(dlgtd);
+	dlgtfoot.appendChild(dlgtr);
+	dlgtable.appendChild(dlgtbody);
+	dlgtable.appendChild(dlgtfoot);
+	dialogcontent.appendChild(dlgtable);
 
 	// buttonpane buttons: [Save changes] [Reset] [Cancel]
 	let button = document.createElement('button');
@@ -1580,7 +1580,7 @@ Twinkle.config.listDialog.display = (e) => {
 		false
 	);
 	button.textContent = '保存修改';
-	dialogcontent.append(button);
+	dialogcontent.appendChild(button);
 	button = document.createElement('button');
 	button.setAttribute('type', 'submit'); // so Morebits.simpleWindow puts the button in the button pane
 	button.addEventListener(
@@ -1591,7 +1591,7 @@ Twinkle.config.listDialog.display = (e) => {
 		false
 	);
 	button.textContent = '复位';
-	dialogcontent.append(button);
+	dialogcontent.appendChild(button);
 	button = document.createElement('button');
 	button.setAttribute('type', 'submit'); // so Morebits.simpleWindow puts the button in the button pane
 	button.addEventListener(
@@ -1602,7 +1602,7 @@ Twinkle.config.listDialog.display = (e) => {
 		false
 	);
 	button.textContent = '取消';
-	dialogcontent.append(button);
+	dialogcontent.appendChild(button);
 	dialog.setContent(dialogcontent);
 	dialog.display();
 };
@@ -1860,10 +1860,10 @@ Twinkle.config.saveSuccess = (pageobj) => {
 			`<a href="${mw.util.getUrl('QW:BYPASS')}" title="QW:BYPASS"><b>` +
 			'绕过浏览器缓存' +
 			'</b></a>。</p>';
-	Morebits.status.root.append(noticebox);
+	Morebits.status.root.appendChild(noticebox);
 	const noticeclear = document.createElement('br');
 	noticeclear.style.clear = 'both';
-	Morebits.status.root.append(noticeclear);
+	Morebits.status.root.appendChild(noticeclear);
 };
 Twinkle.addInitCallback(Twinkle.config.init);
 })(jQuery);
