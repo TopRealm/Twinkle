@@ -11,5 +11,11 @@
 		"@babel/preset-react"
 	],
 	"plugins": [],
-	"ignore": ["src/lib/", "scripts/", "dist/", "*.json"]
+	"targets": "> 0.1%, last 5 versions, Firefox ESR, not dead",
+	"ignore": [
+		"src/lib/",
+		"scripts/",
+		"dist/",
+		"*.json"
+	]
 }

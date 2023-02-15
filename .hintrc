@@ -1,0 +1,11 @@
+{
+	"extends": [
+		"development"
+	],
+	"browserslist": [
+		"> 0.1%",
+		"last 5 versions",
+		"Firefox ESR",
+		"not dead"
+	]
+}
