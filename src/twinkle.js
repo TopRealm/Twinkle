@@ -391,7 +391,7 @@ Twinkle.addPortlet = (navigation, id, text, type, nextnodeid) => {
 	if (nextnode && nextnode.parentNode === root) {
 		nextnode.before(outerNav);
 	} else {
-		root.append(outerNav);
+		root.appendChild(outerNav);
 	}
 	heading.id = `${id}-label`;
 	const ul = document.createElement('ul');
@@ -406,32 +406,32 @@ Twinkle.addPortlet = (navigation, id, text, type, nextnodeid) => {
 			chkbox.className = 'vector-menu-checkbox';
 			chkbox.setAttribute('type', 'checkbox');
 			chkbox.setAttribute('aria-labelledby', `${id}-label`);
-			outerNav.append(chkbox);
+			outerNav.appendChild(chkbox);
 
 			// Vector gets its title in a span; all others except
 			// gongbi have no title, and it has no span
 			const span = document.createElement('span');
-			span.append(document.createTextNode(text));
-			heading.append(span);
+			span.appendChild(document.createTextNode(text));
+			heading.appendChild(span);
 			const a = document.createElement('a');
 			a.href = '#';
 			$(a).on('click', (e) => {
 				e.preventDefault();
 			});
-			heading.append(a);
+			heading.appendChild(a);
 		}
 	} else {
 		// Basically just gongbi
-		heading.append(document.createTextNode(text));
+		heading.appendChild(document.createTextNode(text));
 	}
-	outerNav.append(heading);
+	outerNav.appendChild(heading);
 	if (innerDivClass) {
 		const innerDiv = document.createElement('div');
 		innerDiv.className = innerDivClass;
-		innerDiv.append(ul);
-		outerNav.append(innerDiv);
+		innerDiv.appendChild(ul);
+		outerNav.appendChild(innerDiv);
 	} else {
-		outerNav.append(ul);
+		outerNav.appendChild(ul);
 	}
 	return outerNav;
 };

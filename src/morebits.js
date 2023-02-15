@@ -52,23 +52,23 @@ const Morebits = {};
 window.Morebits = Morebits; // allow global access
 
 /**
-	 * Wiki-specific configurations for Morebits
-	 */
+		 * Wiki-specific configurations for Morebits
+		 */
 Morebits.l10n = {
 	/**
-		 * Local aliases for "redirect" magic word.
-		 * Check using api.php?action=query&format=json&meta=siteinfo&formatversion=2&siprop=magicwords
-		 */
+			 * Local aliases for "redirect" magic word.
+			 * Check using api.php?action=query&format=json&meta=siteinfo&formatversion=2&siprop=magicwords
+			 */
 	redirectTagAliases: ['#REDIRECT', '#重定向'],
 	/**
-		 * Takes a string as argument and checks if it is a timestamp or not
-		 * If not, it returns null. If yes, it returns an array of integers
-		 * in the format [year, month, date, hour, minute, second]
-		 * which can be passed to Date.UTC()
-		 *
-		 * @param {string} str
-		 * @returns {number[] | null}
-		 */
+			 * Takes a string as argument and checks if it is a timestamp or not
+			 * If not, it returns null. If yes, it returns an array of integers
+			 * in the format [year, month, date, hour, minute, second]
+			 * which can be passed to Date.UTC()
+			 *
+			 * @param {string} str
+			 * @returns {number[] | null}
+			 */
 	signatureTimestampFormat: (str) => {
 		const rgxUTC = /(\d{4})年(\d{1,2})月(\d{1,2})日 \(.\) (\d{2}):(\d{2}) \(UTC\)/; // YYYY年Month月DD日 (w) HH:mm (UTC)
 		const rgxCST = /(\d{4})年(\d{1,2})月(\d{1,2})日 \(.\) (\d{2}):(\d{2}) \(CST\)/; // YYYY年Month月DD日 (w) HH:mm (CST)
@@ -89,53 +89,53 @@ Morebits.l10n = {
 };
 
 /**
-	 * Simple helper function to see what groups a user might belong.
-	 *
-	 * @param {string} group - e.g. `sysop`, `extendedconfirmed`, etc.
-	 * @returns {boolean}
-	 */
+		 * Simple helper function to see what groups a user might belong.
+		 *
+		 * @param {string} group - e.g. `sysop`, `extendedconfirmed`, etc.
+		 * @returns {boolean}
+		 */
 Morebits.userIsInGroup = (group) => {
 	return mw.config.get('wgUserGroups').includes(group);
 };
 /**
-	 * Hardcodes whether the user is a sysop, used a lot.
-	 *
-	 * @type {boolean}
-	 */
+		 * Hardcodes whether the user is a sysop, used a lot.
+		 *
+		 * @type {boolean}
+		 */
 Morebits.userIsSysop = Morebits.userIsInGroup('sysop') || Morebits.userIsInGroup('steward');
 
 /**
-	 * Determines whether the current page is a redirect or soft redirect. Fails
-	 * to detect soft redirects on edit, history, etc. pages.  Will attempt to
-	 * detect Module:RfD, with the same failure points.
-	 *
-	 * @returns {boolean}
-	 */
+		 * Determines whether the current page is a redirect or soft redirect. Fails
+		 * to detect soft redirects on edit, history, etc. pages.  Will attempt to
+		 * detect Module:RfD, with the same failure points.
+		 *
+		 * @returns {boolean}
+		 */
 Morebits.isPageRedirect = () => {
 	return !!(
 		mw.config.get('wgIsRedirect') ||
-			document.querySelector('#softredirect') ||
-			$('.box-RfD').length ||
-			$('.box-Redirect_category_shell').length
+				document.querySelector('#softredirect') ||
+				$('.box-RfD').length ||
+				$('.box-Redirect_category_shell').length
 	);
 };
 
 /**
-	 * Stores a normalized (underscores converted to spaces) version of the
-	 * `wgPageName` variable.
-	 *
-	 * @type {string}
-	 */
+		 * Stores a normalized (underscores converted to spaces) version of the
+		 * `wgPageName` variable.
+		 *
+		 * @type {string}
+		 */
 Morebits.pageNameNorm = mw.config.get('wgPageName').replace(/_/g, ' ');
 
 /**
-	 * Create a string for use in regex matching a page name.  Accounts for
-	 * leading character's capitalization, underscores as spaces, and special
-	 * characters being escaped.  See also {@link Morebits.namespaceRegex}.
-	 *
-	 * @param {string} pageName - Page name without namespace.
-	 * @returns {string} - For a page name `Foo bar`, returns the string `[Ff]oo[_ ]bar`.
-	 */
+		 * Create a string for use in regex matching a page name.  Accounts for
+		 * leading character's capitalization, underscores as spaces, and special
+		 * characters being escaped.  See also {@link Morebits.namespaceRegex}.
+		 *
+		 * @param {string} pageName - Page name without namespace.
+		 * @returns {string} - For a page name `Foo bar`, returns the string `[Ff]oo[_ ]bar`.
+		 */
 Morebits.pageNameRegex = (pageName) => {
 	if (pageName === '') {
 		return '';
@@ -149,14 +149,14 @@ Morebits.pageNameRegex = (pageName) => {
 };
 
 /**
-	 * Converts string or array of DOM nodes into an HTML fragment.
-	 * Wikilink syntax (`[[...]]`) is transformed into HTML anchor.
-	 * Used in Morebits.quickForm and Morebits.status
-	 *
-	 * @internal
-	 * @param {string|Node|(string|Node)[]} input
-	 * @returns {DocumentFragment}
-	 */
+		 * Converts string or array of DOM nodes into an HTML fragment.
+		 * Wikilink syntax (`[[...]]`) is transformed into HTML anchor.
+		 * Used in Morebits.quickForm and Morebits.status
+		 *
+		 * @internal
+		 * @param {string|Node|(string|Node)[]} input
+		 * @returns {DocumentFragment}
+		 */
 Morebits.createHtml = (input) => {
 	const fragment = document.createDocumentFragment();
 	if (!input) {
@@ -167,10 +167,10 @@ Morebits.createHtml = (input) => {
 	}
 	for (const element of input) {
 		if (element instanceof Node) {
-			fragment.append(element);
+			fragment.appendChild(element);
 		} else {
 			$.parseHTML(Morebits.createHtml.renderWikilinks(element)).forEach((node) => {
-				fragment.append(node);
+				fragment.appendChild(node);
 			});
 		}
 	}
@@ -178,11 +178,11 @@ Morebits.createHtml = (input) => {
 };
 
 /**
-	 * Converts wikilinks to HTML anchor tags.
-	 *
-	 * @param text
-	 * @returns {*}
-	 */
+		 * Converts wikilinks to HTML anchor tags.
+		 *
+		 * @param text
+		 * @returns {*}
+		 */
 Morebits.createHtml.renderWikilinks = (text) => {
 	const ub = new Morebits.unbinder(text);
 	// Don't convert wikilinks within code tags as they're used for displaying wiki-code
@@ -203,20 +203,20 @@ Morebits.createHtml.renderWikilinks = (text) => {
 };
 
 /**
-	 * Create a string for use in regex matching all namespace aliases, regardless
-	 * of the capitalization and underscores/spaces.  Doesn't include the optional
-	 * leading `:`, but if there's more than one item, wraps the list in a
-	 * non-capturing group.  This means you can do `Morebits.namespaceRegex([4]) +
-	 * ':' + Morebits.pageNameRegex('Twinkle')` to match a full page.  Uses
-	 * {@link Morebits.pageNameRegex}.
-	 *
-	 * @param {number[]} namespaces - Array of namespace numbers.  Unused/invalid
-	 * namespace numbers are silently discarded.
-	 * @example
-	 * // returns '(?:[Ff][Ii][Ll][Ee]|[Ii][Mm][Aa][Gg][Ee])'
-	 * Morebits.namespaceRegex([6])
-	 * @returns {string} - Regex-suitable string of all namespace aliases.
-	 */
+		 * Create a string for use in regex matching all namespace aliases, regardless
+		 * of the capitalization and underscores/spaces.  Doesn't include the optional
+		 * leading `:`, but if there's more than one item, wraps the list in a
+		 * non-capturing group.  This means you can do `Morebits.namespaceRegex([4]) +
+		 * ':' + Morebits.pageNameRegex('Twinkle')` to match a full page.  Uses
+		 * {@link Morebits.pageNameRegex}.
+		 *
+		 * @param {number[]} namespaces - Array of namespace numbers.  Unused/invalid
+		 * namespace numbers are silently discarded.
+		 * @example
+		 * // returns '(?:[Ff][Ii][Ll][Ee]|[Ii][Mm][Aa][Gg][Ee])'
+		 * Morebits.namespaceRegex([6])
+		 * @returns {string} - Regex-suitable string of all namespace aliases.
+		 */
 Morebits.namespaceRegex = (namespaces) => {
 	if (!Array.isArray(namespaces)) {
 		namespaces = [namespaces];
@@ -255,14 +255,14 @@ Morebits.namespaceRegex = (namespaces) => {
 
 /* **************** Morebits.quickForm **************** */
 /**
-	 * Creation of simple and standard forms without much specific coding.
-	 *
-	 * @namespace Morebits.quickForm
-	 * @memberof Morebits
-	 * @class
-	 * @param {event} event - Function to execute when form is submitted.
-	 * @param {string} [eventType=submit] - Type of the event.
-	 */
+		 * Creation of simple and standard forms without much specific coding.
+		 *
+		 * @namespace Morebits.quickForm
+		 * @memberof Morebits
+		 * @class
+		 * @param {event} event - Function to execute when form is submitted.
+		 * @param {string} [eventType=submit] - Type of the event.
+		 */
 Morebits.quickForm = function QuickForm(event, eventType) {
 	this.root = new Morebits.quickForm.element({
 		type: 'form',
@@ -272,11 +272,11 @@ Morebits.quickForm = function QuickForm(event, eventType) {
 };
 
 /**
-	 * Renders the HTML output of the quickForm.
-	 *
-	 * @memberof Morebits.quickForm
-	 * @returns {HTMLElement}
-	 */
+		 * Renders the HTML output of the quickForm.
+		 *
+		 * @memberof Morebits.quickForm
+		 * @returns {HTMLElement}
+		 */
 Morebits.quickForm.prototype.render = function QuickFormRender() {
 	const ret = this.root.render();
 	ret.names = {};
@@ -284,93 +284,93 @@ Morebits.quickForm.prototype.render = function QuickFormRender() {
 };
 
 /**
-	 * Append element to the form.
-	 *
-	 * @memberof Morebits.quickForm
-	 * @param {(object|Morebits.quickForm.element)} data - A quickform element, or the object with which
-	 * a quickform element is constructed.
-	 * @returns {Morebits.quickForm.element} - Same as what is passed to the function.
-	 */
+		 * Append element to the form.
+		 *
+		 * @memberof Morebits.quickForm
+		 * @param {(object|Morebits.quickForm.element)} data - A quickform element, or the object with which
+		 * a quickform element is constructed.
+		 * @returns {Morebits.quickForm.element} - Same as what is passed to the function.
+		 */
 Morebits.quickForm.prototype.append = function QuickFormAppend(data) {
 	return this.root.append(data);
 };
 
 /**
-	 * Create a new element for the the form.
-	 *
-	 * Index to Morebits.quickForm.element types:
-	 * - Global attributes: id, className, style, tooltip, extra, $data, adminonly
-	 * - `select`: A combo box (aka drop-down).
-	 *     - Attributes: name, label, multiple, size, list, event, disabled
-	 *  - `option`: An element for a combo box.
-	 *      - Attributes: value, label, selected, disabled
-	 *  - `optgroup`: A group of "option"s.
-	 *      - Attributes: label, list
-	 *  - `field`: A fieldset (aka group box).
-	 *      - Attributes: name, label, disabled
-	 *  - `checkbox`: A checkbox. Must use "list" parameter.
-	 *      - Attributes: name, list, event
-	 *      - Attributes (within list): name, label, value, checked, disabled, event, subgroup
-	 *  - `radio`: A radio button. Must use "list" parameter.
-	 *      - Attributes: name, list, event
-	 *      - Attributes (within list): name, label, value, checked, disabled, event, subgroup
-	 *  - `input`: A text input box.
-	 *      - Attributes: name, label, value, size, placeholder, maxlength, disabled, required, readonly, event
-	 *  - `number`: A number input box.
-	 *      - Attributes: Everything the text `input` has, as well as: min, max, step, list
-	 *  - `dyninput`: A set of text boxes with "Remove" buttons and an "Add" button.
-	 *      - Attributes: name, label, min, max, sublabel, value, size, maxlength, event
-	 *  - `hidden`: An invisible form field.
-	 *      - Attributes: name, value
-	 *  - `header`: A level 5 header.
-	 *      - Attributes: label
-	 *  - `div`: A generic placeholder element or label.
-	 *      - Attributes: name, label
-	 *  - `submit`: A submit button. Morebits.simpleWindow moves these to the footer of the dialog.
-	 *      - Attributes: name, label, disabled
-	 *  - `button`: A generic button.
-	 *      - Attributes: name, label, disabled, event
-	 *  - `textarea`: A big, multi-line text box.
-	 *      - Attributes: name, label, value, cols, rows, disabled, required, readonly
-	 *  - `fragment`: A DocumentFragment object.
-	 *      - No attributes, and no global attributes except adminonly.
-	 * There is some difference on how types handle the `label` attribute:
-	 * - `div`, `select`, `field`, `checkbox`/`radio`, `input`, `textarea`, `header`, and `dyninput` can accept an array of items,
-	 * and the label item(s) can be `Element`s.
-	 * - `option`, `optgroup`, `_dyninput_element`, `submit`, and `button` accept only a single string.
-	 *
-	 * @memberof Morebits.quickForm
-	 * @class
-	 * @param {Object} data - Object representing the quickform element. Should
-	 * specify one of the available types from the index above, as well as any
-	 * relevant and available attributes.
-	 * @example new Morebits.quickForm.element({
-	 *     name: 'target',
-	 *     type: 'input',
-	 *     label: 'Your target:',
-	 *     tooltip: 'Enter your target. Required.',
-	 *     required: true
-	 * });
-	 */
+		 * Create a new element for the the form.
+		 *
+		 * Index to Morebits.quickForm.element types:
+		 * - Global attributes: id, className, style, tooltip, extra, $data, adminonly
+		 * - `select`: A combo box (aka drop-down).
+		 *     - Attributes: name, label, multiple, size, list, event, disabled
+		 *  - `option`: An element for a combo box.
+		 *      - Attributes: value, label, selected, disabled
+		 *  - `optgroup`: A group of "option"s.
+		 *      - Attributes: label, list
+		 *  - `field`: A fieldset (aka group box).
+		 *      - Attributes: name, label, disabled
+		 *  - `checkbox`: A checkbox. Must use "list" parameter.
+		 *      - Attributes: name, list, event
+		 *      - Attributes (within list): name, label, value, checked, disabled, event, subgroup
+		 *  - `radio`: A radio button. Must use "list" parameter.
+		 *      - Attributes: name, list, event
+		 *      - Attributes (within list): name, label, value, checked, disabled, event, subgroup
+		 *  - `input`: A text input box.
+		 *      - Attributes: name, label, value, size, placeholder, maxlength, disabled, required, readonly, event
+		 *  - `number`: A number input box.
+		 *      - Attributes: Everything the text `input` has, as well as: min, max, step, list
+		 *  - `dyninput`: A set of text boxes with "Remove" buttons and an "Add" button.
+		 *      - Attributes: name, label, min, max, sublabel, value, size, maxlength, event
+		 *  - `hidden`: An invisible form field.
+		 *      - Attributes: name, value
+		 *  - `header`: A level 5 header.
+		 *      - Attributes: label
+		 *  - `div`: A generic placeholder element or label.
+		 *      - Attributes: name, label
+		 *  - `submit`: A submit button. Morebits.simpleWindow moves these to the footer of the dialog.
+		 *      - Attributes: name, label, disabled
+		 *  - `button`: A generic button.
+		 *      - Attributes: name, label, disabled, event
+		 *  - `textarea`: A big, multi-line text box.
+		 *      - Attributes: name, label, value, cols, rows, disabled, required, readonly
+		 *  - `fragment`: A DocumentFragment object.
+		 *      - No attributes, and no global attributes except adminonly.
+		 * There is some difference on how types handle the `label` attribute:
+		 * - `div`, `select`, `field`, `checkbox`/`radio`, `input`, `textarea`, `header`, and `dyninput` can accept an array of items,
+		 * and the label item(s) can be `Element`s.
+		 * - `option`, `optgroup`, `_dyninput_element`, `submit`, and `button` accept only a single string.
+		 *
+		 * @memberof Morebits.quickForm
+		 * @class
+		 * @param {Object} data - Object representing the quickform element. Should
+		 * specify one of the available types from the index above, as well as any
+		 * relevant and available attributes.
+		 * @example new Morebits.quickForm.element({
+		 *     name: 'target',
+		 *     type: 'input',
+		 *     label: 'Your target:',
+		 *     tooltip: 'Enter your target. Required.',
+		 *     required: true
+		 * });
+		 */
 Morebits.quickForm.element = function QuickFormElement(data) {
 	this.data = data;
 	this.childs = [];
 };
 
 /**
-	 * @memberof Morebits.quickForm.element
-	 * @type {number}
-	 */
+		 * @memberof Morebits.quickForm.element
+		 * @type {number}
+		 */
 Morebits.quickForm.element.id = 0;
 
 /**
-	 * Appends an element to current element.
-	 *
-	 * @memberof Morebits.quickForm.element
-	 * @param {Morebits.quickForm.element} data - A quickForm element or the object required to
-	 * create the quickForm element.
-	 * @returns {Morebits.quickForm.element} The same element passed in.
-	 */
+		 * Appends an element to current element.
+		 *
+		 * @memberof Morebits.quickForm.element
+		 * @param {Morebits.quickForm.element} data - A quickForm element or the object required to
+		 * create the quickForm element.
+		 * @returns {Morebits.quickForm.element} The same element passed in.
+		 */
 Morebits.quickForm.element.prototype.append = function QuickFormElementAppend(data) {
 	const child = data instanceof Morebits.quickForm.element ? data : new Morebits.quickForm.element(data);
 	this.childs.push(child);
@@ -378,19 +378,19 @@ Morebits.quickForm.element.prototype.append = function QuickFormElementAppend(da
 };
 
 /**
-	 * Renders the HTML output for the quickForm element.  This should be called
-	 * without parameters: `form.render()`.
-	 *
-	 * @memberof Morebits.quickForm.element
-	 * @returns {HTMLElement}
-	 */
+		 * Renders the HTML output for the quickForm element.  This should be called
+		 * without parameters: `form.render()`.
+		 *
+		 * @memberof Morebits.quickForm.element
+		 * @returns {HTMLElement}
+		 */
 Morebits.quickForm.element.prototype.render = function QuickFormElementRender(
 	internal_subgroup_id
 ) {
 	const currentNode = this.compute(this.data, internal_subgroup_id);
 	for (let i = 0; i < this.childs.length; ++i) {
 		// do not pass internal_subgroup_id to recursive calls
-		currentNode[1].append(this.childs[i].render());
+		currentNode[1].appendChild(this.childs[i].render());
 	}
 	return currentNode[0];
 };
@@ -425,11 +425,11 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
 			node = document.createElement('div');
 			node.setAttribute('id', `div_${id}`);
 			if (data.label) {
-				label = node.append(document.createElement('label'));
+				label = node.appendChild(document.createElement('label'));
 				label.setAttribute('for', id);
-				label.append(Morebits.createHtml(data.label));
+				label.appendChild(Morebits.createHtml(data.label));
 			}
-			const select = node.append(document.createElement('select'));
+			const select = node.appendChild(document.createElement('select'));
 			if (data.event) {
 				select.addEventListener('change', data.event, false);
 			}
@@ -448,7 +448,7 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
 					current = data.list[i];
 					current.type = current.list ? 'optgroup' : 'option';
 					subnode = this.compute(current);
-					select.append(subnode[0]);
+					select.appendChild(subnode[0]);
 				}
 			}
 			childContainer = select;
@@ -465,7 +465,7 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
 				node.setAttribute('disabled', 'disabled');
 			}
 			node.setAttribute('label', data.label);
-			node.append(document.createTextNode(data.label));
+			node.appendChild(document.createTextNode(data.label));
 			break;
 		}
 		case 'optgroup': {
@@ -477,15 +477,15 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
 					current.type = 'option'; // must be options here
 
 					subnode = this.compute(current);
-					node.append(subnode[0]);
+					node.appendChild(subnode[0]);
 				}
 			}
 			break;
 		}
 		case 'field': {
 			node = document.createElement('fieldset');
-			label = node.append(document.createElement('legend'));
-			label.append(Morebits.createHtml(data.label));
+			label = node.appendChild(document.createElement('legend'));
+			label.appendChild(Morebits.createHtml(data.label));
 			if (data.name) {
 				node.setAttribute('name', data.name);
 			}
@@ -504,19 +504,19 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
 					let cur_div;
 					if (current.type === 'header') {
 						// inline hack
-						cur_div = node.append(document.createElement('h6'));
-						cur_div.append(document.createTextNode(current.label));
+						cur_div = node.appendChild(document.createElement('h6'));
+						cur_div.appendChild(document.createTextNode(current.label));
 						if (current.tooltip) {
 							Morebits.quickForm.element.generateTooltip(cur_div, current);
 						}
 						continue;
 					}
-					cur_div = node.append(document.createElement('div'));
+					cur_div = node.appendChild(document.createElement('div'));
 					// Add hidden attr
 					if (current.hidden) {
 						cur_div.setAttribute('hidden', '');
 					}
-					subnode = cur_div.append(document.createElement('input'));
+					subnode = cur_div.appendChild(document.createElement('input'));
 					subnode.values = current.value;
 					subnode.setAttribute('value', current.value);
 					subnode.setAttribute('type', data.type);
@@ -535,8 +535,8 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
 					if (current.disabled) {
 						subnode.setAttribute('disabled', 'disabled');
 					}
-					label = cur_div.append(document.createElement('label'));
-					label.append(Morebits.createHtml(current.label));
+					label = cur_div.appendChild(document.createElement('label'));
+					label.appendChild(Morebits.createHtml(current.label));
 					label.setAttribute('for', cur_id);
 					if (current.tooltip) {
 						Morebits.quickForm.element.generateTooltip(label, current);
@@ -555,7 +555,7 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
 							type: 'div',
 							id: `${id}_${i}_subgroup`
 						});
-							// eslint-disable-next-line no-loop-func
+						// eslint-disable-next-line no-loop-func
 						$.each(tmpgroup, (_idx, el) => {
 							const newEl = $.extend({}, el);
 							if (!newEl.type) {
@@ -570,7 +570,7 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
 						subnode.shown = false;
 						event = (e) => {
 							if (e.target.checked) {
-								e.target.parentNode.append(e.target.subgroup);
+								e.target.parentNode.appendChild(e.target.subgroup);
 								if (e.target.type === 'radio') {
 									const name = e.target.name;
 									if (e.target.form.names[name] !== undefined) {
@@ -584,7 +584,7 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
 						};
 						subnode.addEventListener('change', event, true);
 						if (current.checked) {
-							subnode.parentNode.append(subgroup);
+							subnode.parentNode.appendChild(subgroup);
 						}
 					} else if (data.type === 'radio') {
 						event = (e) => {
@@ -623,11 +623,11 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
 				node.setAttribute('hidden', '');
 			}
 			if (data.label) {
-				label = node.append(document.createElement('label'));
-				label.append(Morebits.createHtml(data.label));
+				label = node.appendChild(document.createElement('label'));
+				label.appendChild(Morebits.createHtml(data.label));
 				label.setAttribute('for', data.id || id);
 			}
-			subnode = node.append(document.createElement('input'));
+			subnode = node.appendChild(document.createElement('input'));
 			// Add value and placeholder attrs
 			if (data.value) {
 				subnode.setAttribute('value', data.value);
@@ -666,23 +666,23 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
 			const min = data.min || 1;
 			const max = data.max || Number.POSITIVE_INFINITY;
 			node = document.createElement('div');
-			label = node.append(document.createElement('h5'));
-			label.append(Morebits.createHtml(data.label));
-			const listNode = node.append(document.createElement('div'));
+			label = node.appendChild(document.createElement('h5'));
+			label.appendChild(Morebits.createHtml(data.label));
+			const listNode = node.appendChild(document.createElement('div'));
 			const more = this.compute({
 				type: 'button',
 				label: '更多',
 				disabled: min >= max,
 				event: (e) => {
 					const new_node = new Morebits.quickForm.element(e.target.sublist);
-					e.target.area.append(new_node.render());
+					e.target.area.appendChild(new_node.render());
 					if (++e.target.counter >= e.target.max) {
 						e.target.setAttribute('disabled', 'disabled');
 					}
 					e.stopPropagation();
 				}
 			});
-			node.append(more[0]);
+			node.appendChild(more[0]);
 			const moreButton = more[1];
 			const sublist = {
 				type: '_dyninput_element',
@@ -696,7 +696,7 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
 			};
 			for (i = 0; i < min; ++i) {
 				const elem = new Morebits.quickForm.element(sublist);
-				listNode.append(elem.render());
+				listNode.appendChild(elem.render());
 			}
 			sublist.remove = true;
 			sublist.morebutton = moreButton;
@@ -711,11 +711,11 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
 			// Private, similar to normal input
 			node = document.createElement('div');
 			if (data.label) {
-				label = node.append(document.createElement('label'));
-				label.append(document.createTextNode(data.label));
+				label = node.appendChild(document.createElement('label'));
+				label.appendChild(document.createTextNode(data.label));
 				label.setAttribute('for', id);
 			}
-			subnode = node.append(document.createElement('input'));
+			subnode = node.appendChild(document.createElement('input'));
 			if (data.value) {
 				subnode.setAttribute('value', data.value);
 			}
@@ -743,7 +743,7 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
 						e.stopPropagation();
 					}
 				});
-				node.append(remove[0]);
+				node.appendChild(remove[0]);
 				const removeButton = remove[1];
 				removeButton.inputnode = node;
 				removeButton.listnode = data.listnode;
@@ -761,7 +761,7 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
 		}
 		case 'header': {
 			node = document.createElement('h5');
-			node.append(Morebits.createHtml(data.label));
+			node.appendChild(Morebits.createHtml(data.label));
 			break;
 		}
 		case 'div': {
@@ -772,14 +772,14 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
 			if (data.label) {
 				const result = document.createElement('span');
 				result.className = 'quickformDescription';
-				result.append(Morebits.createHtml(data.label));
-				node.append(result);
+				result.appendChild(Morebits.createHtml(data.label));
+				node.appendChild(result);
 			}
 			break;
 		}
 		case 'submit': {
 			node = document.createElement('span');
-			childContainer = node.append(document.createElement('input'));
+			childContainer = node.appendChild(document.createElement('input'));
 			childContainer.setAttribute('type', 'submit');
 			if (data.label) {
 				childContainer.setAttribute('value', data.label);
@@ -792,7 +792,7 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
 		}
 		case 'button': {
 			node = document.createElement('span');
-			childContainer = node.append(document.createElement('input'));
+			childContainer = node.appendChild(document.createElement('input'));
 			childContainer.setAttribute('type', 'button');
 			if (data.label) {
 				childContainer.setAttribute('value', data.label);
@@ -814,13 +814,13 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
 				node.setAttribute('hidden', '');
 			}
 			if (data.label) {
-				label = node.append(document.createElement('h5'));
+				label = node.appendChild(document.createElement('h5'));
 				const labelElement = document.createElement('label');
-				labelElement.append(Morebits.createHtml(data.label));
+				labelElement.appendChild(Morebits.createHtml(data.label));
 				labelElement.setAttribute('for', data.id || id);
-				label.append(labelElement);
+				label.appendChild(labelElement);
 			}
-			subnode = node.append(document.createElement('textarea'));
+			subnode = node.appendChild(document.createElement('textarea'));
 			subnode.setAttribute('name', data.name);
 			if (data.cols) {
 				subnode.setAttribute('cols', data.cols);
@@ -876,18 +876,18 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(
 };
 
 /**
-	 * Create a jQuery UI-based tooltip.
-	 *
-	 * @memberof Morebits.quickForm.element
-	 * @requires jquery.ui
-	 * @param {HTMLElement} node - The HTML element beside which a tooltip is to be generated.
-	 * @param {Object} data - Tooltip-related configuration data.
-	 */
+		 * Create a jQuery UI-based tooltip.
+		 *
+		 * @memberof Morebits.quickForm.element
+		 * @requires jquery.ui
+		 * @param {HTMLElement} node - The HTML element beside which a tooltip is to be generated.
+		 * @param {Object} data - Tooltip-related configuration data.
+		 */
 Morebits.quickForm.element.generateTooltip = (node, data) => {
-	const tooltipButton = node.append(document.createElement('span'));
+	const tooltipButton = node.appendChild(document.createElement('span'));
 	tooltipButton.className = 'morebits-tooltipButton';
 	tooltipButton.title = data.tooltip; // Provides the content for jQuery UI
-	tooltipButton.append(document.createTextNode('?'));
+	tooltipButton.appendChild(document.createTextNode('?'));
 	$(tooltipButton).tooltip({
 		position: {
 			my: 'left top',
@@ -902,23 +902,23 @@ Morebits.quickForm.element.generateTooltip = (node, data) => {
 // Some utility methods for manipulating quickForms after their creation:
 // (None of these work for "dyninput" type fields at present)
 /**
-	 * Returns an object containing all filled form data entered by the user, with the object
-	 * keys being the form element names. Disabled fields will be ignored, but not hidden fields.
-	 *
-	 * @memberof Morebits.quickForm
-	 * @param {HTMLFormElement} form
-	 * @returns {Object} With field names as keys, input data as values.
-	 */
+		 * Returns an object containing all filled form data entered by the user, with the object
+		 * keys being the form element names. Disabled fields will be ignored, but not hidden fields.
+		 *
+		 * @memberof Morebits.quickForm
+		 * @param {HTMLFormElement} form
+		 * @returns {Object} With field names as keys, input data as values.
+		 */
 Morebits.quickForm.getInputData = (form) => {
 	const result = {};
 	for (let i = 0; i < form.elements.length; i++) {
 		const field = form.elements[i];
 		if (
 			field.disabled ||
-				!field.name ||
-				!field.type ||
-				field.type === 'submit' ||
-				field.type === 'button'
+					!field.name ||
+					!field.type ||
+					field.type === 'submit' ||
+					field.type === 'button'
 		) {
 			continue;
 		}
@@ -966,13 +966,13 @@ Morebits.quickForm.getInputData = (form) => {
 };
 
 /**
-	 * Returns all form elements with a given field name or ID.
-	 *
-	 * @memberof Morebits.quickForm
-	 * @param {HTMLFormElement} form
-	 * @param {string} fieldName - The name or id of the fields.
-	 * @returns {HTMLElement[]} - Array of matching form elements.
-	 */
+		 * Returns all form elements with a given field name or ID.
+		 *
+		 * @memberof Morebits.quickForm
+		 * @param {HTMLFormElement} form
+		 * @param {string} fieldName - The name or id of the fields.
+		 * @returns {HTMLElement[]} - Array of matching form elements.
+		 */
 Morebits.quickForm.getElements = (form, fieldName) => {
 	const $form = $(form);
 	fieldName = $.escapeSelector(fieldName); // sanitize input
@@ -985,14 +985,14 @@ Morebits.quickForm.getElements = (form, fieldName) => {
 };
 
 /**
-	 * Searches the array of elements for a checkbox or radio button with a certain
-	 * `value` attribute, and returns the first such element. Returns null if not found.
-	 *
-	 * @memberof Morebits.quickForm
-	 * @param {HTMLInputElement[]} elementArray - Array of checkbox or radio elements.
-	 * @param {string} value - Value to search for.
-	 * @returns {HTMLInputElement}
-	 */
+		 * Searches the array of elements for a checkbox or radio button with a certain
+		 * `value` attribute, and returns the first such element. Returns null if not found.
+		 *
+		 * @memberof Morebits.quickForm
+		 * @param {HTMLInputElement[]} elementArray - Array of checkbox or radio elements.
+		 * @param {string} value - Value to search for.
+		 * @returns {HTMLInputElement}
+		 */
 Morebits.quickForm.getCheckboxOrRadio = (elementArray, value) => {
 	const found = $.grep(elementArray, (el) => el.value === value);
 	if (found.length > 0) {
@@ -1002,19 +1002,19 @@ Morebits.quickForm.getCheckboxOrRadio = (elementArray, value) => {
 };
 
 /**
-	 * Returns the &lt;div> containing the form element, or the form element itself
-	 * May not work as expected on checkboxes or radios.
-	 *
-	 * @memberof Morebits.quickForm
-	 * @param {HTMLElement} element
-	 * @returns {HTMLElement}
-	 */
+		 * Returns the &lt;div> containing the form element, or the form element itself
+		 * May not work as expected on checkboxes or radios.
+		 *
+		 * @memberof Morebits.quickForm
+		 * @param {HTMLElement} element
+		 * @returns {HTMLElement}
+		 */
 Morebits.quickForm.getElementContainer = (element) => {
 	// for divs, headings and fieldsets, the container is the element itself
 	if (
 		element instanceof HTMLFieldSetElement ||
-			element instanceof HTMLDivElement ||
-			element instanceof HTMLHeadingElement
+				element instanceof HTMLDivElement ||
+				element instanceof HTMLHeadingElement
 	) {
 		return element;
 	}
@@ -1024,20 +1024,20 @@ Morebits.quickForm.getElementContainer = (element) => {
 };
 
 /**
-	 * Gets the HTML element that contains the label of the given form element
-	 * (mainly for internal use).
-	 *
-	 * @memberof Morebits.quickForm
-	 * @param {(HTMLElement|Morebits.quickForm.element)} element
-	 * @returns {HTMLElement}
-	 */
+		 * Gets the HTML element that contains the label of the given form element
+		 * (mainly for internal use).
+		 *
+		 * @memberof Morebits.quickForm
+		 * @param {(HTMLElement|Morebits.quickForm.element)} element
+		 * @returns {HTMLElement}
+		 */
 Morebits.quickForm.getElementLabelObject = (element) => {
 	// for buttons, divs and headers, the label is on the element itself
 	if (
 		element.type === 'button' ||
-			element.type === 'submit' ||
-			element instanceof HTMLDivElement ||
-			element instanceof HTMLHeadingElement
+				element.type === 'submit' ||
+				element instanceof HTMLDivElement ||
+				element instanceof HTMLHeadingElement
 	) {
 		return element;
 		// for fieldsets, the label is the child <legend> element
@@ -1052,12 +1052,12 @@ Morebits.quickForm.getElementLabelObject = (element) => {
 };
 
 /**
-	 * Gets the label text of the element.
-	 *
-	 * @memberof Morebits.quickForm
-	 * @param {(HTMLElement|Morebits.quickForm.element)} element
-	 * @returns {string}
-	 */
+		 * Gets the label text of the element.
+		 *
+		 * @memberof Morebits.quickForm
+		 * @param {(HTMLElement|Morebits.quickForm.element)} element
+		 * @returns {string}
+		 */
 Morebits.quickForm.getElementLabel = (element) => {
 	const labelElement = Morebits.quickForm.getElementLabelObject(element);
 	if (!labelElement) {
@@ -1067,13 +1067,13 @@ Morebits.quickForm.getElementLabel = (element) => {
 };
 
 /**
-	 * Sets the label of the element to the given text.
-	 *
-	 * @memberof Morebits.quickForm
-	 * @param {(HTMLElement|Morebits.quickForm.element)} element
-	 * @param {string} labelText
-	 * @returns {boolean} True if succeeded, false if the label element is unavailable.
-	 */
+		 * Sets the label of the element to the given text.
+		 *
+		 * @memberof Morebits.quickForm
+		 * @param {(HTMLElement|Morebits.quickForm.element)} element
+		 * @param {string} labelText
+		 * @returns {boolean} True if succeeded, false if the label element is unavailable.
+		 */
 Morebits.quickForm.setElementLabel = (element, labelText) => {
 	const labelElement = Morebits.quickForm.getElementLabelObject(element);
 	if (!labelElement) {
@@ -1084,13 +1084,13 @@ Morebits.quickForm.setElementLabel = (element, labelText) => {
 };
 
 /**
-	 * Stores the element's current label, and temporarily sets the label to the given text.
-	 *
-	 * @memberof Morebits.quickForm
-	 * @param {(HTMLElement|Morebits.quickForm.element)} element
-	 * @param {string} temporaryLabelText
-	 * @returns {boolean} `true` if succeeded, `false` if the label element is unavailable.
-	 */
+		 * Stores the element's current label, and temporarily sets the label to the given text.
+		 *
+		 * @memberof Morebits.quickForm
+		 * @param {(HTMLElement|Morebits.quickForm.element)} element
+		 * @param {string} temporaryLabelText
+		 * @returns {boolean} `true` if succeeded, `false` if the label element is unavailable.
+		 */
 Morebits.quickForm.overrideElementLabel = (element, temporaryLabelText) => {
 	if (!Object.hasOwn(element.dataset, 'oldlabel')) {
 		element.dataset.oldlabel = Morebits.quickForm.getElementLabel(element);
@@ -1099,12 +1099,12 @@ Morebits.quickForm.overrideElementLabel = (element, temporaryLabelText) => {
 };
 
 /**
-	 * Restores the label stored by overrideElementLabel.
-	 *
-	 * @memberof Morebits.quickForm
-	 * @param {(HTMLElement|Morebits.quickForm.element)} element
-	 * @returns {boolean} True if succeeded, false if the label element is unavailable.
-	 */
+		 * Restores the label stored by overrideElementLabel.
+		 *
+		 * @memberof Morebits.quickForm
+		 * @param {(HTMLElement|Morebits.quickForm.element)} element
+		 * @returns {boolean} True if succeeded, false if the label element is unavailable.
+		 */
 Morebits.quickForm.resetElementLabel = (element) => {
 	if (Object.hasOwn(element.dataset, 'oldlabel')) {
 		return Morebits.quickForm.setElementLabel(
@@ -1116,23 +1116,23 @@ Morebits.quickForm.resetElementLabel = (element) => {
 };
 
 /**
-	 * Shows or hides a form element plus its label and tooltip.
-	 *
-	 * @memberof Morebits.quickForm
-	 * @param {(HTMLElement|jQuery|string)} element - HTML/jQuery element, or jQuery selector string.
-	 * @param {boolean} [visibility] - Skip this to toggle visibility.
-	 */
+		 * Shows or hides a form element plus its label and tooltip.
+		 *
+		 * @memberof Morebits.quickForm
+		 * @param {(HTMLElement|jQuery|string)} element - HTML/jQuery element, or jQuery selector string.
+		 * @param {boolean} [visibility] - Skip this to toggle visibility.
+		 */
 Morebits.quickForm.setElementVisibility = (element, visibility) => {
 	$(element).toggle(visibility);
 };
 
 /**
-	 * Shows or hides the question mark icon (which displays the tooltip) next to a form element.
-	 *
-	 * @memberof Morebits.quickForm
-	 * @param {(HTMLElement|jQuery)} element
-	 * @param {boolean} [visibility] - Skip this to toggle visibility.
-	 */
+		 * Shows or hides the question mark icon (which displays the tooltip) next to a form element.
+		 *
+		 * @memberof Morebits.quickForm
+		 * @param {(HTMLElement|jQuery)} element
+		 * @param {boolean} [visibility] - Skip this to toggle visibility.
+		 */
 Morebits.quickForm.setElementTooltipVisibility = (element, visibility) => {
 	$(Morebits.quickForm.getElementContainer(element))
 		.find('.morebits-tooltipButton')
@@ -1140,20 +1140,20 @@ Morebits.quickForm.setElementTooltipVisibility = (element, visibility) => {
 };
 
 /**
-	 * @external HTMLFormElement
-	 */
+		 * @external HTMLFormElement
+		 */
 /**
-	 * Get checked items in the form.
-	 *
-	 * @function external:HTMLFormElement.getChecked
-	 * @param {string} name - Find checked property of elements (i.e. a checkbox
-	 * or a radiobutton) with the given name, or select options that have selected
-	 * set to true (don't try to mix selects with radio/checkboxes).
-	 * @param {string} [type] - Optionally specify either radio or checkbox (for
-	 * the event that both checkboxes and radiobuttons have the same name).
-	 * @returns {string[]} - Contains the values of elements with the given name
-	 * checked property set to true.
-	 */
+		 * Get checked items in the form.
+		 *
+		 * @function external:HTMLFormElement.getChecked
+		 * @param {string} name - Find checked property of elements (i.e. a checkbox
+		 * or a radiobutton) with the given name, or select options that have selected
+		 * set to true (don't try to mix selects with radio/checkboxes).
+		 * @param {string} [type] - Optionally specify either radio or checkbox (for
+		 * the event that both checkboxes and radiobuttons have the same name).
+		 * @returns {string[]} - Contains the values of elements with the given name
+		 * checked property set to true.
+		 */
 HTMLFormElement.prototype.getChecked = function (name, type) {
 	const elements = this.elements[name];
 	if (!elements) {
@@ -1196,17 +1196,17 @@ HTMLFormElement.prototype.getChecked = function (name, type) {
 };
 
 /**
-	 * Does the same as {@link HTMLFormElement.getChecked|getChecked}, but with unchecked elements.
-	 *
-	 * @function external:HTMLFormElement.getUnchecked
-	 * @param {string} name - Find checked property of elements (i.e. a checkbox
-	 * or a radiobutton) with the given name, or select options that have selected
-	 * set to true (don't try to mix selects with radio/checkboxes).
-	 * @param {string} [type] - Optionally specify either radio or checkbox (for
-	 * the event that both checkboxes and radiobuttons have the same name).
-	 * @returns {string[]} - Contains the values of elements with the given name
-	 * checked property set to true.
-	 */
+		 * Does the same as {@link HTMLFormElement.getChecked|getChecked}, but with unchecked elements.
+		 *
+		 * @function external:HTMLFormElement.getUnchecked
+		 * @param {string} name - Find checked property of elements (i.e. a checkbox
+		 * or a radiobutton) with the given name, or select options that have selected
+		 * set to true (don't try to mix selects with radio/checkboxes).
+		 * @param {string} [type] - Optionally specify either radio or checkbox (for
+		 * the event that both checkboxes and radiobuttons have the same name).
+		 * @returns {string[]} - Contains the values of elements with the given name
+		 * checked property set to true.
+		 */
 HTMLFormElement.prototype.getUnchecked = function (name, type) {
 	const elements = this.elements[name];
 	if (!elements) {
@@ -1249,21 +1249,21 @@ HTMLFormElement.prototype.getUnchecked = function (name, type) {
 };
 
 /**
-	 * Utilities to help process IP addresses.
-	 *
-	 * @namespace Morebits.ip
-	 * @memberof Morebits
-	 */
+		 * Utilities to help process IP addresses.
+		 *
+		 * @namespace Morebits.ip
+		 * @memberof Morebits
+		 */
 Morebits.ip = {
 	/**
-		 * Converts an IPv6 address to the canonical form stored and used by MediaWiki.
-		 * JavaScript translation of the {@link https://gerrit.wikimedia.org/r/plugins/gitiles/mediawiki/core/+/8eb6ac3e84ea3312d391ca96c12c49e3ad0753bb/includes/utils/IP.php#131|`IP::sanitizeIP()`}
-		 * function from the IPUtils library.  Addresses are verbose, uppercase,
-		 * normalized, and expanded to 8 words.
-		 *
-		 * @param {string} address - The IPv6 address, with or without CIDR.
-		 * @returns {string}
-		 */
+			 * Converts an IPv6 address to the canonical form stored and used by MediaWiki.
+			 * JavaScript translation of the {@link https://gerrit.wikimedia.org/r/plugins/gitiles/mediawiki/core/+/8eb6ac3e84ea3312d391ca96c12c49e3ad0753bb/includes/utils/IP.php#131|`IP::sanitizeIP()`}
+			 * function from the IPUtils library.  Addresses are verbose, uppercase,
+			 * normalized, and expanded to 8 words.
+			 *
+			 * @param {string} address - The IPv6 address, with or without CIDR.
+			 * @returns {string}
+			 */
 	sanitizeIPv6: (address) => {
 		address = address.trim();
 		if (address === '') {
@@ -1313,21 +1313,21 @@ Morebits.ip = {
 		return address.replace(/(^|:)0+([\dA-Fa-f]{1,4})/g, '$1$2');
 	},
 	/**
-		 * Determine if the given IP address is a range.  Just conjoins
-		 * `mw.util.isIPAddress` with and without the `allowBlock` option.
-		 *
-		 * @param {string} ip
-		 * @returns {boolean} - True if given a valid IP address range, false otherwise.
-		 */
+			 * Determine if the given IP address is a range.  Just conjoins
+			 * `mw.util.isIPAddress` with and without the `allowBlock` option.
+			 *
+			 * @param {string} ip
+			 * @returns {boolean} - True if given a valid IP address range, false otherwise.
+			 */
 	isRange: (ip) => mw.util.isIPAddress(ip, true) && !mw.util.isIPAddress(ip),
 	/**
-		 * Check that an IP range is within the CIDR limits.  Most likely to be useful
-		 * in conjunction with `wgRelevantUserName`.  CIDR limits are hardcoded as /16
-		 * for IPv4 and /32 for IPv6.
-		 *
-		 * @returns {boolean} - True for valid ranges within the CIDR limits,
-		 * otherwise false (ranges outside the limit, single IPs, non-IPs).
-		 */
+			 * Check that an IP range is within the CIDR limits.  Most likely to be useful
+			 * in conjunction with `wgRelevantUserName`.  CIDR limits are hardcoded as /16
+			 * for IPv4 and /32 for IPv6.
+			 *
+			 * @returns {boolean} - True for valid ranges within the CIDR limits,
+			 * otherwise false (ranges outside the limit, single IPs, non-IPs).
+			 */
 	validCIDR: (ip) => {
 		if (Morebits.ip.isRange(ip)) {
 			const subnet = Number.parseInt(ip.match(/\/(\d{1,3})$/)[1], 10);
@@ -1347,12 +1347,12 @@ Morebits.ip = {
 		return false;
 	},
 	/**
-		 * Get the /64 subnet for an IPv6 address.
-		 *
-		 * @param {string} ipv6 - The IPv6 address, with or without a subnet.
-		 * @returns {boolean|string} - False if not IPv6 or bigger than a 64,
-		 * otherwise the (sanitized) /64 address.
-		 */
+			 * Get the /64 subnet for an IPv6 address.
+			 *
+			 * @param {string} ipv6 - The IPv6 address, with or without a subnet.
+			 * @returns {boolean|string} - False if not IPv6 or bigger than a 64,
+			 * otherwise the (sanitized) /64 address.
+			 */
 	get64: (ipv6) => {
 		if (!ipv6 || !mw.util.isIPv6Address(ipv6, true)) {
 			return false;
@@ -1363,49 +1363,49 @@ Morebits.ip = {
 		}
 		ipv6 = Morebits.ip.sanitizeIPv6(ipv6);
 		const ip_re =
-				/^((?:[\dA-F]{1,4}:){4})(?:[\dA-F]{1,4}:){3}[\dA-F]{1,4}(?:\/\d{1,3})?$/;
+					/^((?:[\dA-F]{1,4}:){4})(?:[\dA-F]{1,4}:){3}[\dA-F]{1,4}(?:\/\d{1,3})?$/;
 		return ipv6.replace(ip_re, '$1' + '0:0:0:0/64');
 	}
 };
 
 /**
-	 * Helper functions to manipulate strings.
-	 *
-	 * @namespace Morebits.string
-	 * @memberof Morebits
-	 */
+		 * Helper functions to manipulate strings.
+		 *
+		 * @namespace Morebits.string
+		 * @memberof Morebits
+		 */
 Morebits.string = {
 	/**
-		 * @param {string} str
-		 * @returns {string}
-		 */
+			 * @param {string} str
+			 * @returns {string}
+			 */
 	toUpperCaseFirstChar: (str) => {
 		str = str.toString();
 		// return str.substr(0, 1).toUpperCase() + str.substr(1);
 		return str.slice(0, 1).toUpperCase() + str.slice(1);
 	},
 	/**
-		 * @param {string} str
-		 * @returns {string}
-		 */
+			 * @param {string} str
+			 * @returns {string}
+			 */
 	toLowerCaseFirstChar: (str) => {
 		str = str.toString();
 		// return str.substr(0, 1).toLowerCase() + str.substr(1);
 		return str.slice(0, 1).toLowerCase() + str.slice(1);
 	},
 	/**
-		 * Gives an array of substrings of `str` - starting with `start` and
-		 * ending with `end` - which is not in `skiplist`.  Intended for use
-		 * on wikitext with templates or links.
-		 *
-		 * @param {string} str
-		 * @param {string} start
-		 * @param {string} end
-		 * @param {(string[]|string)} [skiplist]
-		 * @returns {string[]}
-		 * @throws If the `start` and `end` strings aren't of the same length.
-		 * @throws If `skiplist` isn't an array or string
-		 */
+			 * Gives an array of substrings of `str` - starting with `start` and
+			 * ending with `end` - which is not in `skiplist`.  Intended for use
+			 * on wikitext with templates or links.
+			 *
+			 * @param {string} str
+			 * @param {string} start
+			 * @param {string} end
+			 * @param {(string[]|string)} [skiplist]
+			 * @returns {string[]}
+			 * @throws If the `start` and `end` strings aren't of the same length.
+			 * @throws If `skiplist` isn't an array or string
+			 */
 	splitWeightedByKeys: (str, start, end, skiplist) => {
 		if (start.length !== end.length) {
 			throw new Error('start marker and end marker must be of the same length');
@@ -1450,15 +1450,15 @@ Morebits.string = {
 		return result;
 	},
 	/**
-		 * Formats freeform "reason" (from a textarea) for deletion/other
-		 * templates that are going to be substituted, (e.g. PROD, XFD, RPP).
-		 * Handles `|` outside a nowiki tag.
-		 * Optionally, also adds a signature if not present already.
-		 *
-		 * @param {string} str
-		 * @param {boolean} [addSig]
-		 * @returns {string}
-		 */
+			 * Formats freeform "reason" (from a textarea) for deletion/other
+			 * templates that are going to be substituted, (e.g. PROD, XFD, RPP).
+			 * Handles `|` outside a nowiki tag.
+			 * Optionally, also adds a signature if not present already.
+			 *
+			 * @param {string} str
+			 * @param {boolean} [addSig]
+			 * @returns {string}
+			 */
 	formatReasonText: (str, addSig) => {
 		let reason = (str || '').toString().trim();
 		const unbinder = new Morebits.unbinder(reason);
@@ -1475,58 +1475,58 @@ Morebits.string = {
 		return reason.trim();
 	},
 	/**
-		 * Formats a "reason" (from a textarea) for inclusion in a userspace
-		 * log.  Replaces newlines with {{Pb}}, and adds an extra `#` before
-		 * list items for proper formatting.
-		 *
-		 * @param {string} str
-		 * @returns {string}
-		 */
+			 * Formats a "reason" (from a textarea) for inclusion in a userspace
+			 * log.  Replaces newlines with {{Pb}}, and adds an extra `#` before
+			 * list items for proper formatting.
+			 *
+			 * @param {string} str
+			 * @returns {string}
+			 */
 	formatReasonForLog: (str) =>
 		str
-		// handle line breaks, which otherwise break numbering
+			// handle line breaks, which otherwise break numbering
 			.replace(/\n+/g, '{{pb}}')
-		// put an extra # in front before bulleted or numbered list items
+			// put an extra # in front before bulleted or numbered list items
 			.replace(/^(#+)/gm, '#$1')
 			.replace(/^(\*+)/gm, '#$1'),
 	/**
-		 * Like `String.prototype.replace()`, but escapes any dollar signs in
-		 * the replacement string.  Useful when the the replacement string is
-		 * arbitrary, such as a username or freeform user input, and could
-		 * contain dollar signs.
-		 *
-		 * @param {string} string - Text in which to replace.
-		 * @param {(string|RegExp)} pattern
-		 * @param {string} replacement
-		 * @returns {string}
-		 */
+			 * Like `String.prototype.replace()`, but escapes any dollar signs in
+			 * the replacement string.  Useful when the the replacement string is
+			 * arbitrary, such as a username or freeform user input, and could
+			 * contain dollar signs.
+			 *
+			 * @param {string} string - Text in which to replace.
+			 * @param {(string|RegExp)} pattern
+			 * @param {string} replacement
+			 * @returns {string}
+			 */
 	safeReplace: (string, pattern, replacement) =>
 		string.replace(pattern, replacement.replace(/\$/g, '$$$$')),
 	/**
-		 * Determine if the user-provided expiration will be considered an
-		 * infinite-length by MW.
-		 *
-		 * @see {@link phabricator.wikimedia.org/T68646}
-		 *
-		 * @param {string} expiry
-		 * @returns {boolean}
-		 */
+			 * Determine if the user-provided expiration will be considered an
+			 * infinite-length by MW.
+			 *
+			 * @see {@link phabricator.wikimedia.org/T68646}
+			 *
+			 * @param {string} expiry
+			 * @returns {boolean}
+			 */
 	isInfinity: (expiry) =>
 		['indefinite', 'infinity', 'infinite', 'never'].includes(expiry),
 	/**
-		 * Escapes a string to be used in a RegExp, replacing spaces and
-		 * underscores with `[_ ]` as they are often equivalent.
-		 *
-		 * @param {string} text - String to be escaped.
-		 * @returns {string} - The escaped text.
-		 */
+			 * Escapes a string to be used in a RegExp, replacing spaces and
+			 * underscores with `[_ ]` as they are often equivalent.
+			 *
+			 * @param {string} text - String to be escaped.
+			 * @returns {string} - The escaped text.
+			 */
 	escapeRegExp: (text) => mw.util.escapeRegExp(text).replace(/ |_/g, '[_ ]'),
 	/**
-		 * formatTime
-		 *
-		 * @param {*} time The string to foramt
-		 * @returns {string}
-		 */
+			 * formatTime
+			 *
+			 * @param {*} time The string to foramt
+			 * @returns {string}
+			 */
 	formatTime: (time) => {
 		let m;
 		if ((m = time.match(/^\s*(\d+)\s*sec(ond)?s?\s*$/)) !== null) {
@@ -1556,12 +1556,12 @@ Morebits.string = {
 		return time;
 	},
 	/**
-		 * Append punctuation to a string when it's missing
-		 *
-		 * @param {string} str
-		 * @param {string} punctuation
-		 * @returns {string}
-		 */
+			 * Append punctuation to a string when it's missing
+			 *
+			 * @param {string} str
+			 * @param {string} punctuation
+			 * @returns {string}
+			 */
 	appendPunctuation: (str, punctuation) => {
 		if (punctuation === undefined) {
 			punctuation = '。';
@@ -1574,19 +1574,19 @@ Morebits.string = {
 };
 
 /**
-	 * Helper functions to manipulate arrays.
-	 *
-	 * @namespace Morebits.array
-	 * @memberof Morebits
-	 */
+		 * Helper functions to manipulate arrays.
+		 *
+		 * @namespace Morebits.array
+		 * @memberof Morebits
+		 */
 Morebits.array = {
 	/**
-		 * Remove duplicated items from an array.
-		 *
-		 * @param {Array} arr
-		 * @returns {Array} A copy of the array with duplicates removed.
-		 * @throws When provided a non-array.
-		 */
+			 * Remove duplicated items from an array.
+			 *
+			 * @param {Array} arr
+			 * @returns {Array} A copy of the array with duplicates removed.
+			 * @throws When provided a non-array.
+			 */
 	uniq: (arr) => {
 		if (!Array.isArray(arr)) {
 			throw new TypeError('A non-array object passed to Morebits.array.uniq');
@@ -1594,13 +1594,13 @@ Morebits.array = {
 		return arr.filter((item, idx) => arr.indexOf(item) === idx);
 	},
 	/**
-		 * Remove non-duplicated items from an array.
-		 *
-		 * @param {Array} arr
-		 * @returns {Array} A copy of the array with the first instance of each value
-		 * removed; subsequent instances of those values (duplicates) remain.
-		 * @throws When provided a non-array.
-		 */
+			 * Remove non-duplicated items from an array.
+			 *
+			 * @param {Array} arr
+			 * @returns {Array} A copy of the array with the first instance of each value
+			 * removed; subsequent instances of those values (duplicates) remain.
+			 * @throws When provided a non-array.
+			 */
 	dups: (arr) => {
 		if (!Array.isArray(arr)) {
 			throw new TypeError('A non-array object passed to Morebits.array.dups');
@@ -1608,13 +1608,13 @@ Morebits.array = {
 		return arr.filter((item, idx) => arr.indexOf(item) !== idx);
 	},
 	/**
-		 * Break up an array into smaller arrays.
-		 *
-		 * @param {Array} arr
-		 * @param {number} size - Size of each chunk (except the last, which could be different).
-		 * @returns {Array[]} An array containing the smaller, chunked arrays.
-		 * @throws When provided a non-array.
-		 */
+			 * Break up an array into smaller arrays.
+			 *
+			 * @param {Array} arr
+			 * @param {number} size - Size of each chunk (except the last, which could be different).
+			 * @returns {Array[]} An array containing the smaller, chunked arrays.
+			 * @throws When provided a non-array.
+			 */
 	chunk: (arr, size) => {
 		if (!Array.isArray(arr)) {
 			throw new TypeError('A non-array object passed to Morebits.array.chunk');
@@ -1634,28 +1634,28 @@ Morebits.array = {
 };
 
 /**
-	 * Utilities to enhance select2 menus. See twinklewarn, twinklexfd,
-	 * twinkleblock for sample usages.
-	 *
-	 * @see {@link https://select2.org/}
-	 *
-	 * @namespace Morebits.select2
-	 * @memberof Morebits
-	 * @requires jquery.select2
-	 */
+		 * Utilities to enhance select2 menus. See twinklewarn, twinklexfd,
+		 * twinkleblock for sample usages.
+		 *
+		 * @see {@link https://select2.org/}
+		 *
+		 * @namespace Morebits.select2
+		 * @memberof Morebits
+		 * @requires jquery.select2
+		 */
 Morebits.select2 = {
 	matchers: {
 		/**
-			 * Custom matcher in which if the optgroup name matches, all options in that
-			 * group are shown, like in jquery.chosen.
-			 */
+				 * Custom matcher in which if the optgroup name matches, all options in that
+				 * group are shown, like in jquery.chosen.
+				 */
 		optgroupFull: (params, data) => {
 			const originalMatcher = $.fn.select2.defaults.defaults.matcher;
 			const result = originalMatcher(params, data);
 			if (
 				result &&
-					params.term &&
-					data.text.toUpperCase().includes(params.term.toUpperCase())
+						params.term &&
+						data.text.toUpperCase().includes(params.term.toUpperCase())
 			) {
 				result.children = data.children;
 			}
@@ -1667,10 +1667,10 @@ Morebits.select2 = {
 			const result = originalMatcher(params, data);
 			if (
 				!params.term ||
-					result &&
-						new RegExp(`\\b${mw.util.escapeRegExp(params.term)}`, 'i').test(
-							result.text
-						)
+						result &&
+							new RegExp(`\\b${mw.util.escapeRegExp(params.term)}`, 'i').test(
+								result.text
+							)
 			) {
 				return result;
 			}
@@ -1700,11 +1700,11 @@ Morebits.select2 = {
 		Morebits.select2SearchQuery = params && params.term;
 	},
 	/**
-		 * Open dropdown and begin search when the `.select2-selection` has
-		 * focus and a key is pressed.
-		 *
-		 * @see {@link https://github.com/select2/select2/issues/3279#issuecomment-442524147}
-		 */
+			 * Open dropdown and begin search when the `.select2-selection` has
+			 * focus and a key is pressed.
+			 *
+			 * @see {@link https://github.com/select2/select2/issues/3279#issuecomment-442524147}
+			 */
 	autoStart: (ev) => {
 		if (ev.which < 48) {
 			return;
@@ -1716,24 +1716,24 @@ Morebits.select2 = {
 		target = target.prev();
 		target.select2('open');
 		const search =
-				target.data('select2').dropdown.$search || target.data('select2').selection.$search;
-			// Use DOM .focus() to work around a jQuery 3.6.0 regression (https://github.com/select2/select2/issues/5993)
+					target.data('select2').dropdown.$search || target.data('select2').selection.$search;
+		// Use DOM .focus() to work around a jQuery 3.6.0 regression (https://github.com/select2/select2/issues/5993)
 		search[0].focus();
 	}
 };
 
 /**
-	 * Temporarily hide a part of a string while processing the rest of it.
-	 * Used by {@link Morebits.wikitext.page#commentOutImage|Morebits.wikitext.page.commentOutImage}.
-	 *
-	 * @memberof Morebits
-	 * @class
-	 * @param {string} string - The initial text to process.
-	 * @example var u = new Morebits.unbinder('Hello world <!-- world --> world');
-	 * u.unbind('<!--', '-->'); // text inside comment remains intact
-	 * u.content = u.content.replace(/world/g, 'earth');
-	 * u.rebind(); // gives 'Hello earth <!-- world --> earth'
-	 */
+		 * Temporarily hide a part of a string while processing the rest of it.
+		 * Used by {@link Morebits.wikitext.page#commentOutImage|Morebits.wikitext.page.commentOutImage}.
+		 *
+		 * @memberof Morebits
+		 * @class
+		 * @param {string} string - The initial text to process.
+		 * @example var u = new Morebits.unbinder('Hello world <!-- world --> world');
+		 * u.unbind('<!--', '-->'); // text inside comment remains intact
+		 * u.content = u.content.replace(/world/g, 'earth');
+		 * u.rebind(); // gives 'Hello earth <!-- world --> earth'
+		 */
 Morebits.unbinder = function Unbinder(string) {
 	if (typeof string !== 'string') {
 		throw new TypeError('not a string');
@@ -1747,14 +1747,14 @@ Morebits.unbinder = function Unbinder(string) {
 };
 Morebits.unbinder.prototype = {
 	/**
-		 * Hide the region encapsulated by the `prefix` and `postfix` from
-		 * string processing.  `prefix` and `postfix` will be used in a
-		 * RegExp, so items that need escaping should be use `\\`.
-		 *
-		 * @param {string} prefix
-		 * @param {string} postfix
-		 * @throws If either `prefix` or `postfix` is missing.
-		 */
+			 * Hide the region encapsulated by the `prefix` and `postfix` from
+			 * string processing.  `prefix` and `postfix` will be used in a
+			 * RegExp, so items that need escaping should be use `\\`.
+			 *
+			 * @param {string} prefix
+			 * @param {string} postfix
+			 * @throws If either `prefix` or `postfix` is missing.
+			 */
 	unbind: function UnbinderUnbind(prefix, postfix) {
 		if (!prefix || !postfix) {
 			throw new Error('Both prefix and postfix must be provided');
@@ -1763,10 +1763,10 @@ Morebits.unbinder.prototype = {
 		this.content = this.content.replace(re, Morebits.unbinder.getCallback(this));
 	},
 	/**
-		 * Restore the hidden portion of the `content` string.
-		 *
-		 * @returns {string} The processed output.
-		 */
+			 * Restore the hidden portion of the `content` string.
+			 *
+			 * @returns {string} The processed output.
+			 */
 	rebind: function UnbinderRebind() {
 		let content = this.content;
 		content.self = this;
@@ -1797,13 +1797,13 @@ Morebits.unbinder.getCallback = (self) => (match) => {
 
 /* **************** Morebits.date **************** */
 /**
-	 * Create a date object with enhanced processing capabilities, a la
-	 * {@link https://momentjs.com/|moment.js}. MediaWiki timestamp format is also
-	 * acceptable, in addition to everything that JS Date() accepts.
-	 *
-	 * @memberof Morebits
-	 * @class
-	 */
+		 * Create a date object with enhanced processing capabilities, a la
+		 * {@link https://momentjs.com/|moment.js}. MediaWiki timestamp format is also
+		 * acceptable, in addition to everything that JS Date() accepts.
+		 *
+		 * @memberof Morebits
+		 * @class
+		 */
 Morebits.date = function () {
 	const args = Array.prototype.slice.call(arguments);
 
@@ -1849,17 +1849,17 @@ Morebits.date = function () {
 };
 
 /**
-	 * Localized strings for date processing.
-	 *
-	 * @memberof Morebits.date
-	 * @type {object.<string, string>}
-	 * @property {string[]} months
-	 * @property {string[]} monthsShort
-	 * @property {string[]} days
-	 * @property {string[]} daysShort
-	 * @property {object.<string, string>} relativeTimes
-	 * @private
-	 */
+		 * Localized strings for date processing.
+		 *
+		 * @memberof Morebits.date
+		 * @type {object.<string, string>}
+		 * @property {string[]} months
+		 * @property {string[]} monthsShort
+		 * @property {string[]} days
+		 * @property {string[]} daysShort
+		 * @property {object.<string, string>} relativeTimes
+		 * @private
+		 */
 Morebits.date.localeData = {
 	// message names here correspond to MediaWiki message names
 	months: [
@@ -1903,19 +1903,19 @@ Morebits.date.localeData = {
 };
 
 /**
-	 * Map units with getter/setter function names, for `add` and `subtract`
-	 * methods.
-	 *
-	 * @memberof Morebits.date
-	 * @type {object.<string, string>}
-	 * @property {string} seconds
-	 * @property {string} minutes
-	 * @property {string} hours
-	 * @property {string} days
-	 * @property {string} weeks
-	 * @property {string} months
-	 * @property {string} years
-	 */
+		 * Map units with getter/setter function names, for `add` and `subtract`
+		 * methods.
+		 *
+		 * @memberof Morebits.date
+		 * @type {object.<string, string>}
+		 * @property {string} seconds
+		 * @property {string} minutes
+		 * @property {string} hours
+		 * @property {string} days
+		 * @property {string} weeks
+		 * @property {string} months
+		 * @property {string} years
+		 */
 Morebits.date.unitMap = {
 	seconds: 'Seconds',
 	minutes: 'Minutes',
@@ -1932,16 +1932,16 @@ Morebits.date.prototype = {
 		return !Number.isNaN(this.getTime());
 	},
 	/**
-		 * @param {(Date|Morebits.date)} date
-		 * @returns {boolean}
-		 */
+			 * @param {(Date|Morebits.date)} date
+			 * @returns {boolean}
+			 */
 	isBefore: function (date) {
 		return this.getTime() < date.getTime();
 	},
 	/**
-		 * @param {(Date|Morebits.date)} date
-		 * @returns {boolean}
-		 */
+			 * @param {(Date|Morebits.date)} date
+			 * @returns {boolean}
+			 */
 	isAfter: function (date) {
 		return this.getTime() > date.getTime();
 	},
@@ -1978,14 +1978,14 @@ Morebits.date.prototype = {
 		return Morebits.date.localeData.daysShort[this.getDay()];
 	},
 	/**
-		 * Add a given number of minutes, hours, days, weeks, months, or years to the date.
-		 * This is done in-place. The modified date object is also returned, allowing chaining.
-		 *
-		 * @param {number} number - Should be an integer.
-		 * @param {string} unit
-		 * @throws If invalid or unsupported unit is given.
-		 * @returns {Morebits.date}
-		 */
+			 * Add a given number of minutes, hours, days, weeks, months, or years to the date.
+			 * This is done in-place. The modified date object is also returned, allowing chaining.
+			 *
+			 * @param {number} number - Should be an integer.
+			 * @param {string} unit
+			 * @throws If invalid or unsupported unit is given.
+			 * @returns {Morebits.date}
+			 */
 	add: function (number, unit) {
 		let num = Number.parseInt(number, 10); // normalize
 		if (Number.isNaN(num)) {
@@ -2009,53 +2009,53 @@ Morebits.date.prototype = {
 		);
 	},
 	/**
-		 * Subtracts a given number of minutes, hours, days, weeks, months, or years to the date.
-		 * This is done in-place. The modified date object is also returned, allowing chaining.
-		 *
-		 * @param {number} number - Should be an integer.
-		 * @param {string} unit
-		 * @throws If invalid or unsupported unit is given.
-		 * @returns {Morebits.date}
-		 */
+			 * Subtracts a given number of minutes, hours, days, weeks, months, or years to the date.
+			 * This is done in-place. The modified date object is also returned, allowing chaining.
+			 *
+			 * @param {number} number - Should be an integer.
+			 * @param {string} unit
+			 * @throws If invalid or unsupported unit is given.
+			 * @returns {Morebits.date}
+			 */
 	subtract: function (number, unit) {
 		return this.add(-number, unit);
 	},
 	/**
-		 * Format the date into a string per the given format string.
-		 * Replacement syntax is a subset of that in moment.js:
-		 *
-		 * | Syntax | Output |
-		 * |--------|--------|
-		 * | H | Hours (24-hour) |
-		 * | HH | Hours (24-hour, padded to 2 digits) |
-		 * | h | Hours (12-hour) |
-		 * | hh | Hours (12-hour, padded to 2 digits) |
-		 * | A | AM or PM |
-		 * | m | Minutes |
-		 * | mm | Minutes (padded to 2 digits) |
-		 * | s | Seconds |
-		 * | ss | Seconds (padded to 2 digits) |
-		 * | SSS | Milliseconds fragment, 3 digits |
-		 * | d | Day number of the week (Sun=0) |
-		 * | ddd | Abbreviated day name |
-		 * | dddd | Full day name |
-		 * | D | Date |
-		 * | DD | Date (padded to 2 digits) |
-		 * | M | Month number (1-indexed) |
-		 * | MM | Month number (1-indexed, padded to 2 digits) |
-		 * | MMM | Abbreviated month name |
-		 * | MMMM | Full month name |
-		 * | Y | Year |
-		 * | YY | Final two digits of year (20 for 2020, 42 for 1942) |
-		 * | YYYY | Year (same as `Y`) |
-		 *
-		 * @param {string} formatstr - Format the date into a string, using
-		 * the replacement syntax.  Use `[` and `]` to escape items.  If not
-		 * provided, will return the ISO-8601-formatted string.
-		 * @param {(string|number)} [zone=system] - `system` (for browser-default time zone),
-		 * `utc`, or specify a time zone as number of minutes relative to UTC.
-		 * @returns {string}
-		 */
+			 * Format the date into a string per the given format string.
+			 * Replacement syntax is a subset of that in moment.js:
+			 *
+			 * | Syntax | Output |
+			 * |--------|--------|
+			 * | H | Hours (24-hour) |
+			 * | HH | Hours (24-hour, padded to 2 digits) |
+			 * | h | Hours (12-hour) |
+			 * | hh | Hours (12-hour, padded to 2 digits) |
+			 * | A | AM or PM |
+			 * | m | Minutes |
+			 * | mm | Minutes (padded to 2 digits) |
+			 * | s | Seconds |
+			 * | ss | Seconds (padded to 2 digits) |
+			 * | SSS | Milliseconds fragment, 3 digits |
+			 * | d | Day number of the week (Sun=0) |
+			 * | ddd | Abbreviated day name |
+			 * | dddd | Full day name |
+			 * | D | Date |
+			 * | DD | Date (padded to 2 digits) |
+			 * | M | Month number (1-indexed) |
+			 * | MM | Month number (1-indexed, padded to 2 digits) |
+			 * | MMM | Abbreviated month name |
+			 * | MMMM | Full month name |
+			 * | Y | Year |
+			 * | YY | Final two digits of year (20 for 2020, 42 for 1942) |
+			 * | YYYY | Year (same as `Y`) |
+			 *
+			 * @param {string} formatstr - Format the date into a string, using
+			 * the replacement syntax.  Use `[` and `]` to escape items.  If not
+			 * provided, will return the ISO-8601-formatted string.
+			 * @param {(string|number)} [zone=system] - `system` (for browser-default time zone),
+			 * `utc`, or specify a time zone as number of minutes relative to UTC.
+			 * @returns {string}
+			 */
 	format: function (formatstr, zone) {
 		if (!this.isValid()) {
 			return 'Invalid date'; // Put the truth out, preferable to "NaNNaNNan NaN:NaN" or whatever
@@ -2118,27 +2118,27 @@ Morebits.date.prototype = {
 		unbinder.unbind('\\[', '\\]');
 		unbinder.content = unbinder.content.replace(
 			/* Regex notes:
-				 * d(d{2,3})? matches exactly 1, 3 or 4 occurrences of 'd' ('dd' is treated as a double match of 'd')
-				 * Y{1,2}(Y{2})? matches exactly 1, 2 or 4 occurrences of 'Y'
-				 */
+					 * d(d{2,3})? matches exactly 1, 3 or 4 occurrences of 'd' ('dd' is treated as a double match of 'd')
+					 * Y{1,2}(Y{2})? matches exactly 1, 2 or 4 occurrences of 'Y'
+					 */
 			/H{1,2}|h{1,2}|m{1,2}|s{1,2}|SSS|d(d{2,3})?|D{1,2}|M{1,4}|Y{1,2}(Y{2})?|A/g,
 			(match) => replacementMap[match]
 		);
 		return unbinder.rebind().replace(/\[(.*?)]/g, '$1');
 	},
 	/**
-		 * Gives a readable relative time string such as "Yesterday at 6:43 PM" or "Last Thursday at 11:45 AM".
-		 * Similar to `calendar` in moment.js, but with time zone support.
-		 *
-		 * @param {(string|number)} [zone=system] - 'system' (for browser-default time zone),
-		 * 'utc' (for UTC), or specify a time zone as number of minutes past UTC.
-		 * @returns {string}
-		 */
+			 * Gives a readable relative time string such as "Yesterday at 6:43 PM" or "Last Thursday at 11:45 AM".
+			 * Similar to `calendar` in moment.js, but with time zone support.
+			 *
+			 * @param {(string|number)} [zone=system] - 'system' (for browser-default time zone),
+			 * 'utc' (for UTC), or specify a time zone as number of minutes past UTC.
+			 * @returns {string}
+			 */
 	calendar: function (zone) {
 		// Zero out the hours, minutes, seconds and milliseconds - keeping only the date;
 		// find the difference. Note that setHours() returns the same thing as getTime().
 		const dateDiff =
-				(new Date().setHours(0, 0, 0, 0) - new Date(this).setHours(0, 0, 0, 0)) / 8.64e7;
+					(new Date().setHours(0, 0, 0, 0) - new Date(this).setHours(0, 0, 0, 0)) / 8.64e7;
 		switch (true) {
 			case dateDiff === 0: {
 				return this.format(Morebits.date.localeData.relativeTimes.thisDay, zone);
@@ -2161,11 +2161,11 @@ Morebits.date.prototype = {
 		}
 	},
 	/**
-		 * Get a regular expression that matches wikitext section titles, such
-		 * as `==December 2019==` or `=== Jan 2018 ===`.
-		 *
-		 * @returns {RegExp}
-		 */
+			 * Get a regular expression that matches wikitext section titles, such
+			 * as `==December 2019==` or `=== Jan 2018 ===`.
+			 *
+			 * @returns {RegExp}
+			 */
 	monthHeaderRegex: function () {
 		return new RegExp(
 			`^(==+)\\s*${this.getUTCFullYear()}年(?:${this.getUTCMonthName()}|${this.getUTCMonthNameAbbrev()})\\s*\\1`,
@@ -2173,12 +2173,12 @@ Morebits.date.prototype = {
 		);
 	},
 	/**
-		 * Creates a wikitext section header with the month and year.
-		 *
-		 * @param {number} [level=2] - Header level.  Pass 0 for just the text
-		 * with no wikitext markers (==).
-		 * @returns {string}
-		 */
+			 * Creates a wikitext section header with the month and year.
+			 *
+			 * @param {number} [level=2] - Header level.  Pass 0 for just the text
+			 * with no wikitext markers (==).
+			 * @returns {string}
+			 */
 	monthHeader: function (level) {
 		// Default to 2, but allow for 0 or stringy numbers
 		level = Number.parseInt(level, 10);
@@ -2205,19 +2205,19 @@ Object.getOwnPropertyNames(Date.prototype).forEach((func) => {
 
 /* **************** Morebits.wiki **************** */
 /**
-	 * Various objects for wiki editing and API access, including
-	 * {@link Morebits.wiki.api} and {@link Morebits.wiki.page}.
-	 *
-	 * @namespace Morebits.wiki
-	 * @memberof Morebits
-	 */
+		 * Various objects for wiki editing and API access, including
+		 * {@link Morebits.wiki.api} and {@link Morebits.wiki.page}.
+		 *
+		 * @namespace Morebits.wiki
+		 * @memberof Morebits
+		 */
 Morebits.wiki = {};
 
 /**
-	 * @deprecated in favor of Morebits.isPageRedirect as of November 2020
-	 * @memberof Morebits.wiki
-	 * @returns {boolean}
-	 */
+		 * @deprecated in favor of Morebits.isPageRedirect as of November 2020
+		 * @memberof Morebits.wiki
+		 * @returns {boolean}
+		 */
 Morebits.wiki.isPageRedirect = () => {
 	console.warn(
 		'NOTE: Morebits.wiki.isPageRedirect has been deprecated, use Morebits.isPageRedirect instead.'
@@ -2227,44 +2227,44 @@ Morebits.wiki.isPageRedirect = () => {
 
 /* **************** Morebits.wiki.actionCompleted **************** */
 /**
-	 * @memberof Morebits.wiki
-	 * @type {number}
-	 */
+		 * @memberof Morebits.wiki
+		 * @type {number}
+		 */
 Morebits.wiki.numberOfActionsLeft = 0;
 /**
-	 * @memberof Morebits.wiki
-	 * @type {number}
-	 */
+		 * @memberof Morebits.wiki
+		 * @type {number}
+		 */
 Morebits.wiki.nbrOfCheckpointsLeft = 0;
 
 /**
-	 * Display message and/or redirect to page upon completion of tasks.
-	 *
-	 * Every call to Morebits.wiki.api.post() results in the dispatch of an
-	 * asynchronous callback. Each callback can in turn make an additional call to
-	 * Morebits.wiki.api.post() to continue a processing sequence. At the
-	 * conclusion of the final callback of a processing sequence, it is not
-	 * possible to simply return to the original caller because there is no call
-	 * stack leading back to the original context. Instead,
-	 * Morebits.wiki.actionCompleted.event() is called to display the result to
-	 * the user and to perform an optional page redirect.
-	 *
-	 * The determination of when to call Morebits.wiki.actionCompleted.event() is
-	 * managed through the globals Morebits.wiki.numberOfActionsLeft and
-	 * Morebits.wiki.nbrOfCheckpointsLeft. Morebits.wiki.numberOfActionsLeft is
-	 * incremented at the start of every Morebits.wiki.api call and decremented
-	 * after the completion of a callback function. If a callback function does
-	 * not create a new Morebits.wiki.api object before exiting, it is the final
-	 * step in the processing chain and Morebits.wiki.actionCompleted.event() will
-	 * then be called.
-	 *
-	 * Optionally, callers may use Morebits.wiki.addCheckpoint() to indicate that
-	 * processing is not complete upon the conclusion of the final callback
-	 * function.  This is used for batch operations. The end of a batch is
-	 * signaled by calling Morebits.wiki.removeCheckpoint().
-	 *
-	 * @memberof Morebits.wiki
-	 */
+		 * Display message and/or redirect to page upon completion of tasks.
+		 *
+		 * Every call to Morebits.wiki.api.post() results in the dispatch of an
+		 * asynchronous callback. Each callback can in turn make an additional call to
+		 * Morebits.wiki.api.post() to continue a processing sequence. At the
+		 * conclusion of the final callback of a processing sequence, it is not
+		 * possible to simply return to the original caller because there is no call
+		 * stack leading back to the original context. Instead,
+		 * Morebits.wiki.actionCompleted.event() is called to display the result to
+		 * the user and to perform an optional page redirect.
+		 *
+		 * The determination of when to call Morebits.wiki.actionCompleted.event() is
+		 * managed through the globals Morebits.wiki.numberOfActionsLeft and
+		 * Morebits.wiki.nbrOfCheckpointsLeft. Morebits.wiki.numberOfActionsLeft is
+		 * incremented at the start of every Morebits.wiki.api call and decremented
+		 * after the completion of a callback function. If a callback function does
+		 * not create a new Morebits.wiki.api object before exiting, it is the final
+		 * step in the processing chain and Morebits.wiki.actionCompleted.event() will
+		 * then be called.
+		 *
+		 * Optionally, callers may use Morebits.wiki.addCheckpoint() to indicate that
+		 * processing is not complete upon the conclusion of the final callback
+		 * function.  This is used for batch operations. The end of a batch is
+		 * signaled by calling Morebits.wiki.removeCheckpoint().
+		 *
+		 * @memberof Morebits.wiki
+		 */
 Morebits.wiki.actionCompleted = (self) => {
 	if (--Morebits.wiki.numberOfActionsLeft <= 0 && Morebits.wiki.nbrOfCheckpointsLeft <= 0) {
 		Morebits.wiki.actionCompleted.event(self);
@@ -2295,9 +2295,9 @@ Morebits.wiki.actionCompleted.event = () => {
 
 /** @memberof Morebits.wiki */
 Morebits.wiki.actionCompleted.timeOut =
-		typeof window.wpActionCompletedTimeOut === 'undefined'
-			? 5000
-			: window.wpActionCompletedTimeOut;
+			typeof window.wpActionCompletedTimeOut === 'undefined'
+				? 5000
+				: window.wpActionCompletedTimeOut;
 /** @memberof Morebits.wiki */
 Morebits.wiki.actionCompleted.redirect = null;
 /** @memberof Morebits.wiki */
@@ -2317,26 +2317,26 @@ Morebits.wiki.removeCheckpoint = () => {
 
 /* **************** Morebits.wiki.api **************** */
 /**
-	 * An easy way to talk to the MediaWiki API.  Accepts either json or xml
-	 * (default) formats; if json is selected, will default to `formatversion=2`
-	 * unless otherwise specified.  Similarly, enforces newer `errorformat`s,
-	 * defaulting to `html` if unspecified.  `uselang` enforced to the wiki's
-	 * content language.
-	 *
-	 * In new code, the use of the last 3 parameters should be avoided, instead
-	 * use {@link Morebits.wiki.api#setStatusElement|setStatusElement()} to bind
-	 * the status element (if needed) and use `.then()` or `.catch()` on the
-	 * promise returned by `post()`, rather than specify the `onSuccess` or
-	 * `onFailure` callbacks.
-	 *
-	 * @memberof Morebits.wiki
-	 * @class
-	 * @param {string} currentAction - The current action (required).
-	 * @param {Object} query - The query (required).
-	 * @param {Function} [onSuccess] - The function to call when request is successful.
-	 * @param {Morebits.status} [statusElement] - A Morebits.status object to use for status messages.
-	 * @param {Function} [onError] - The function to call if an error occurs.
-	 */
+		 * An easy way to talk to the MediaWiki API.  Accepts either json or xml
+		 * (default) formats; if json is selected, will default to `formatversion=2`
+		 * unless otherwise specified.  Similarly, enforces newer `errorformat`s,
+		 * defaulting to `html` if unspecified.  `uselang` enforced to the wiki's
+		 * content language.
+		 *
+		 * In new code, the use of the last 3 parameters should be avoided, instead
+		 * use {@link Morebits.wiki.api#setStatusElement|setStatusElement()} to bind
+		 * the status element (if needed) and use `.then()` or `.catch()` on the
+		 * promise returned by `post()`, rather than specify the `onSuccess` or
+		 * `onFailure` callbacks.
+		 *
+		 * @memberof Morebits.wiki
+		 * @class
+		 * @param {string} currentAction - The current action (required).
+		 * @param {Object} query - The query (required).
+		 * @param {Function} [onSuccess] - The function to call when request is successful.
+		 * @param {Morebits.status} [statusElement] - A Morebits.status object to use for status messages.
+		 * @param {Function} [onError] - The function to call if an error occurs.
+		 */
 Morebits.wiki.api = function (currentAction, query, onSuccess, statusElement, onError) {
 	this.currentAction = currentAction;
 	this.query = query;
@@ -2394,10 +2394,10 @@ Morebits.wiki.api.prototype = {
 	badtokenRetry: false,
 	// set to true if this on a retry attempted after a badtoken error
 	/**
-		 * Keep track of parent object for callbacks.
-		 *
-		 * @param {*} parent
-		 */
+			 * Keep track of parent object for callbacks.
+			 *
+			 * @param {*} parent
+			 */
 	setParent: function (parent) {
 		this.parent = parent;
 	},
@@ -2407,12 +2407,12 @@ Morebits.wiki.api.prototype = {
 		this.statelem.status(this.currentAction);
 	},
 	/**
-		 * Carry out the request.
-		 *
-		 * @param {Object} callerAjaxParameters - Do not specify a parameter unless you really
-		 * really want to give jQuery some extra parameters.
-		 * @returns {@Promise} - A jQuery promise object that is resolved or rejected with the api object.
-		 */
+			 * Carry out the request.
+			 *
+			 * @param {Object} callerAjaxParameters - Do not specify a parameter unless you really
+			 * really want to give jQuery some extra parameters.
+			 * @returns {@Promise} - A jQuery promise object that is resolved or rejected with the api object.
+			 */
 	post: function (callerAjaxParameters) {
 		++Morebits.wiki.numberOfActionsLeft;
 		const queryString = $.map(this.query, (val, i) => {
@@ -2424,7 +2424,7 @@ Morebits.wiki.api.prototype = {
 		})
 			.join('&')
 			.replace(/^(.*?)(\btoken=[^&]*)&(.*)/, '$1$3&$2');
-			// token should always be the last item in the query string (bug TW-B-0013)
+		// token should always be the last item in the query string (bug TW-B-0013)
 		const ajaxparams = $.extend(
 			{},
 			{
@@ -2450,7 +2450,7 @@ Morebits.wiki.api.prototype = {
 						this.errorText = response.errors && response.errors[0].html;
 					} else if (
 						this.query.errorformat === 'wikitext' ||
-							this.query.errorformat === 'plaintext'
+								this.query.errorformat === 'plaintext'
 					) {
 						this.errorText = response.errors && response.errors[0].text;
 					}
@@ -2547,38 +2547,38 @@ Morebits.wiki.getCachedJson = (title) => {
 };
 let morebitsWikiApiUserAgent = 'Qiuwen/1.1 morebits.js';
 /**
-	 * Set the custom user agent header, which is used for server-side logging.
-	 * Note that doing so will set the useragent for every `Morebits.wiki.api`
-	 * process performed thereafter.
-	 *
-	 * @see {@link https://lists.wikimedia.org/pipermail/mediawiki-api-announce/2014-November/000075.html}
-	 * for original announcement.
-	 *
-	 * @memberof Morebits.wiki.api
-	 * @param {string} [ua=morebits.js] - User agent.  The default
-	 * value of `morebits.js` will be appended to any provided
-	 * value.
-	 */
+		 * Set the custom user agent header, which is used for server-side logging.
+		 * Note that doing so will set the useragent for every `Morebits.wiki.api`
+		 * process performed thereafter.
+		 *
+		 * @see {@link https://lists.wikimedia.org/pipermail/mediawiki-api-announce/2014-November/000075.html}
+		 * for original announcement.
+		 *
+		 * @memberof Morebits.wiki.api
+		 * @param {string} [ua=morebits.js] - User agent.  The default
+		 * value of `morebits.js` will be appended to any provided
+		 * value.
+		 */
 Morebits.wiki.api.setApiUserAgent = (ua) => {
 	morebitsWikiApiUserAgent = `Qiuwen/1.1 morebits.js${ua ? `; ${ua}` : ''}`;
 };
 
 /**
-	 * Change/revision tag applied to Morebits actions when no other tags are specified.
-	 * Unused by default per EnWiki consensus.
-	 *
-	 * @constant
-	 * @memberof Morebits.wiki.api
-	 * @type {string}
-	 */
+		 * Change/revision tag applied to Morebits actions when no other tags are specified.
+		 * Unused by default per EnWiki consensus.
+		 *
+		 * @constant
+		 * @memberof Morebits.wiki.api
+		 * @type {string}
+		 */
 const morebitsWikiChangeTag = '';
 
 /**
-	 * Get a new CSRF token on encountering token errors.
-	 *
-	 * @memberof Morebits.wiki.api
-	 * @returns {string} MediaWiki CSRF token.
-	 */
+		 * Get a new CSRF token on encountering token errors.
+		 *
+		 * @memberof Morebits.wiki.api
+		 * @returns {string} MediaWiki CSRF token.
+		 */
 Morebits.wiki.api.getToken = () => {
 	const tokenApi = new Morebits.wiki.api('获取令牌', {
 		action: 'query',
@@ -2593,65 +2593,65 @@ Morebits.wiki.api.getToken = () => {
 
 /* **************** Morebits.wiki.page **************** */
 /**
-	 * Use the MediaWiki API to load a page and optionally edit it, move it, etc.
-	 *
-	 * Callers are not permitted to directly access the properties of this class!
-	 * All property access is through the appropriate get___() or set___() method.
-	 *
-	 * Callers should set {@link Morebits.wiki.actionCompleted.notice} and {@link Morebits.wiki.actionCompleted.redirect}
-	 * before the first call to {@link Morebits.wiki.page.load()}.
-	 *
-	 * Each of the callback functions takes one parameter, which is a
-	 * reference to the Morebits.wiki.page object that registered the callback.
-	 * Callback functions may invoke any Morebits.wiki.page prototype method using this reference.
-	 *
-	 *
-	 * Call sequence for common operations (optional final user callbacks not shown):
-	 *
-	 * - Edit current contents of a page (no edit conflict):
-	 * `.load(userTextEditCallback) -> ctx.loadApi.post() ->
-	 * ctx.loadApi.post.success() -> ctx.fnLoadSuccess() -> userTextEditCallback() ->
-	 * .save() -> ctx.saveApi.post() -> ctx.loadApi.post.success() -> ctx.fnSaveSuccess()`
-	 *
-	 * - Edit current contents of a page (with edit conflict):
-	 * `.load(userTextEditCallback) -> ctx.loadApi.post() ->
-	 * ctx.loadApi.post.success() -> ctx.fnLoadSuccess() -> userTextEditCallback() ->
-	 * .save() -> ctx.saveApi.post() -> ctx.loadApi.post.success() ->
-	 * ctx.fnSaveError() -> ctx.loadApi.post() -> ctx.loadApi.post.success() ->
-	 * ctx.fnLoadSuccess() -> userTextEditCallback() -> .save() ->
-	 * ctx.saveApi.post() -> ctx.loadApi.post.success() -> ctx.fnSaveSuccess()`
-	 *
-	 * - Append to a page (similar for prepend and newSection):
-	 * `.append() -> ctx.loadApi.post() -> ctx.loadApi.post.success() ->
-	 * ctx.fnLoadSuccess() -> ctx.fnAutoSave() -> .save() -> ctx.saveApi.post() ->
-	 * ctx.loadApi.post.success() -> ctx.fnSaveSuccess()`
-	 *
-	 * Notes:
-	 * 1. All functions following Morebits.wiki.api.post() are invoked asynchronously from the jQuery AJAX library.
-	 * 2. The sequence for append/prepend/newSection could be slightly shortened,
-	 * but it would require significant duplication of code for little benefit.
-	 *
-	 *
-	 * @memberof Morebits.wiki
-	 * @class
-	 * @param {string} pageName - The name of the page, prefixed by the namespace (if any).
-	 * For the current page, use `mw.config.get('wgPageName')`.
-	 * @param {string|Morebits.status} [status] - A string describing the action about to be undertaken,
-	 * or a Morebits.status object
-	 */
+		 * Use the MediaWiki API to load a page and optionally edit it, move it, etc.
+		 *
+		 * Callers are not permitted to directly access the properties of this class!
+		 * All property access is through the appropriate get___() or set___() method.
+		 *
+		 * Callers should set {@link Morebits.wiki.actionCompleted.notice} and {@link Morebits.wiki.actionCompleted.redirect}
+		 * before the first call to {@link Morebits.wiki.page.load()}.
+		 *
+		 * Each of the callback functions takes one parameter, which is a
+		 * reference to the Morebits.wiki.page object that registered the callback.
+		 * Callback functions may invoke any Morebits.wiki.page prototype method using this reference.
+		 *
+		 *
+		 * Call sequence for common operations (optional final user callbacks not shown):
+		 *
+		 * - Edit current contents of a page (no edit conflict):
+		 * `.load(userTextEditCallback) -> ctx.loadApi.post() ->
+		 * ctx.loadApi.post.success() -> ctx.fnLoadSuccess() -> userTextEditCallback() ->
+		 * .save() -> ctx.saveApi.post() -> ctx.loadApi.post.success() -> ctx.fnSaveSuccess()`
+		 *
+		 * - Edit current contents of a page (with edit conflict):
+		 * `.load(userTextEditCallback) -> ctx.loadApi.post() ->
+		 * ctx.loadApi.post.success() -> ctx.fnLoadSuccess() -> userTextEditCallback() ->
+		 * .save() -> ctx.saveApi.post() -> ctx.loadApi.post.success() ->
+		 * ctx.fnSaveError() -> ctx.loadApi.post() -> ctx.loadApi.post.success() ->
+		 * ctx.fnLoadSuccess() -> userTextEditCallback() -> .save() ->
+		 * ctx.saveApi.post() -> ctx.loadApi.post.success() -> ctx.fnSaveSuccess()`
+		 *
+		 * - Append to a page (similar for prepend and newSection):
+		 * `.append() -> ctx.loadApi.post() -> ctx.loadApi.post.success() ->
+		 * ctx.fnLoadSuccess() -> ctx.fnAutoSave() -> .save() -> ctx.saveApi.post() ->
+		 * ctx.loadApi.post.success() -> ctx.fnSaveSuccess()`
+		 *
+		 * Notes:
+		 * 1. All functions following Morebits.wiki.api.post() are invoked asynchronously from the jQuery AJAX library.
+		 * 2. The sequence for append/prepend/newSection could be slightly shortened,
+		 * but it would require significant duplication of code for little benefit.
+		 *
+		 *
+		 * @memberof Morebits.wiki
+		 * @class
+		 * @param {string} pageName - The name of the page, prefixed by the namespace (if any).
+		 * For the current page, use `mw.config.get('wgPageName')`.
+		 * @param {string|Morebits.status} [status] - A string describing the action about to be undertaken,
+		 * or a Morebits.status object
+		 */
 Morebits.wiki.page = function (pageName, status) {
 	if (!status) {
 		status = `打开页面“${pageName}”`;
 	}
 
 	/**
-		 * Private context variables.
-		 *
-		 * This context is not visible to the outside, thus all the data here
-		 * must be accessed via getter and setter functions.
-		 *
-		 * @private
-		 */
+			 * Private context variables.
+			 *
+			 * This context is not visible to the outside, thus all the data here
+			 * must be accessed via getter and setter functions.
+			 *
+			 * @private
+			 */
 	const ctx = {
 		// backing fields for public properties
 		pageName: pageName,
@@ -2746,11 +2746,11 @@ Morebits.wiki.page = function (pageName, status) {
 	const emptyFunction = () => {};
 
 	/**
-		 * Loads the text for the page.
-		 *
-		 * @param {Function} onSuccess - Callback function which is called when the load has succeeded.
-		 * @param {Function} [onFailure] - Callback function which is called when the load fails.
-		 */
+			 * Loads the text for the page.
+			 *
+			 * @param {Function} onSuccess - Callback function which is called when the load has succeeded.
+			 * @param {Function} [onFailure] - Callback function which is called when the load fails.
+			 */
 	this.load = function (onSuccess, onFailure) {
 		ctx.onLoadSuccess = onSuccess;
 		ctx.onLoadFailure = onFailure || emptyFunction;
@@ -2804,18 +2804,18 @@ Morebits.wiki.page = function (pageName, status) {
 	};
 
 	/**
-		 * Saves the text for the page to MediaWiki.
-		 * Must be preceded by successfully calling `load()`.
-		 *
-		 * Warning: Calling `save()` can result in additional calls to the
-		 * previous `load()` callbacks to recover from edit conflicts! In this
-		 * case, callers must make the same edit to the new pageText and
-		 * re-invoke `save()`.  This behavior can be disabled with
-		 * `setMaxConflictRetries(0)`.
-		 *
-		 * @param {Function} [onSuccess] - Callback function which is called when the save has succeeded.
-		 * @param {Function} [onFailure] - Callback function which is called when the save fails.
-		 */
+			 * Saves the text for the page to MediaWiki.
+			 * Must be preceded by successfully calling `load()`.
+			 *
+			 * Warning: Calling `save()` can result in additional calls to the
+			 * previous `load()` callbacks to recover from edit conflicts! In this
+			 * case, callers must make the same edit to the new pageText and
+			 * re-invoke `save()`.  This behavior can be disabled with
+			 * `setMaxConflictRetries(0)`.
+			 *
+			 * @param {Function} [onSuccess] - Callback function which is called when the save has succeeded.
+			 * @param {Function} [onFailure] - Callback function which is called when the save fails.
+			 */
 	this.save = function (onSuccess, onFailure) {
 		ctx.onSaveSuccess = onSuccess;
 		ctx.onSaveFailure = onFailure || emptyFunction;
@@ -2843,16 +2843,16 @@ Morebits.wiki.page = function (pageName, status) {
 		// shouldn't happen if canUseMwUserToken === true
 		if (
 			ctx.fullyProtected &&
-				!ctx.suppressProtectWarning &&
-				!confirm(
-					ctx.fullyProtected === 'infinity'
-						? `您即将编辑全保护页面“${ctx.pageName}”（永久）。\n\n单击“确定”以确认操作，或单击“取消”以取消操作。`
-						: `You are about to make an edit to the fully protected page "${
-							ctx.pageName
-						}"（保护期至：${new Morebits.date(ctx.fullyProtected).calendar(
-							'utc'
-						)} (UTC)）。\n\n单击“确定”以确认操作，或单击“取消”以取消操作。`
-				)
+					!ctx.suppressProtectWarning &&
+					!confirm(
+						ctx.fullyProtected === 'infinity'
+							? `您即将编辑全保护页面“${ctx.pageName}”（永久）。\n\n单击“确定”以确认操作，或单击“取消”以取消操作。`
+							: `You are about to make an edit to the fully protected page "${
+								ctx.pageName
+							}"（保护期至：${new Morebits.date(ctx.fullyProtected).calendar(
+								'utc'
+							)} (UTC)）。\n\n单击“确定”以确认操作，或单击“取消”以取消操作。`
+					)
 		) {
 			ctx.statusElement.error('已取消对全保护页面的编辑。');
 			ctx.onSaveFailure(this);
@@ -2958,13 +2958,13 @@ Morebits.wiki.page = function (pageName, status) {
 	};
 
 	/**
-		 * Adds the text provided via `setAppendText()` to the end of the
-		 * page.  Does not require calling `load()` first, unless a watchlist
-		 * expiry is used.
-		 *
-		 * @param {Function} [onSuccess] - Callback function which is called when the method has succeeded.
-		 * @param {Function} [onFailure] - Callback function which is called when the method fails.
-		 */
+			 * Adds the text provided via `setAppendText()` to the end of the
+			 * page.  Does not require calling `load()` first, unless a watchlist
+			 * expiry is used.
+			 *
+			 * @param {Function} [onSuccess] - Callback function which is called when the method has succeeded.
+			 * @param {Function} [onFailure] - Callback function which is called when the method fails.
+			 */
 	this.append = function (onSuccess, onFailure) {
 		ctx.editMode = 'append';
 		if (fnCanUseMwUserToken('edit')) {
@@ -2977,13 +2977,13 @@ Morebits.wiki.page = function (pageName, status) {
 	};
 
 	/**
-		 * Adds the text provided via `setPrependText()` to the start of the
-		 * page.  Does not require calling `load()` first, unless a watchlist
-		 * expiry is used.
-		 *
-		 * @param {Function}  [onSuccess] - Callback function which is called when the method has succeeded.
-		 * @param {Function}  [onFailure] - Callback function which is called when the method fails.
-		 */
+			 * Adds the text provided via `setPrependText()` to the start of the
+			 * page.  Does not require calling `load()` first, unless a watchlist
+			 * expiry is used.
+			 *
+			 * @param {Function}  [onSuccess] - Callback function which is called when the method has succeeded.
+			 * @param {Function}  [onFailure] - Callback function which is called when the method fails.
+			 */
 	this.prepend = function (onSuccess, onFailure) {
 		ctx.editMode = 'prepend';
 		if (fnCanUseMwUserToken('edit')) {
@@ -2996,16 +2996,16 @@ Morebits.wiki.page = function (pageName, status) {
 	};
 
 	/**
-		 * Creates a new section with the text provided by `setNewSectionText()`
-		 * and section title from `setNewSectionTitle()`.
-		 * If `editSummary` is provided, that will be used instead of the
-		 * autogenerated "->Title (new section" edit summary.
-		 * Does not require calling `load()` first, unless a watchlist expiry
-		 * is used.
-		 *
-		 * @param {Function}  [onSuccess] - Callback function which is called when the method has succeeded.
-		 * @param {Function}  [onFailure] - Callback function which is called when the method fails.
-		 */
+			 * Creates a new section with the text provided by `setNewSectionText()`
+			 * and section title from `setNewSectionTitle()`.
+			 * If `editSummary` is provided, that will be used instead of the
+			 * autogenerated "->Title (new section" edit summary.
+			 * Does not require calling `load()` first, unless a watchlist expiry
+			 * is used.
+			 *
+			 * @param {Function}  [onSuccess] - Callback function which is called when the method has succeeded.
+			 * @param {Function}  [onFailure] - Callback function which is called when the method fails.
+			 */
 	this.newSection = function (onSuccess, onFailure) {
 		ctx.editMode = 'new';
 		if (fnCanUseMwUserToken('edit')) {
@@ -3048,9 +3048,9 @@ Morebits.wiki.page = function (pageName, status) {
 	};
 
 	/**
-		 * @param {string} newSectionTitle - Title for the new section created when `newSection()` is called
-		 * If missing, `ctx.editSummary` will be used. Issues may occur if a substituted template is used.
-		 */
+			 * @param {string} newSectionTitle - Title for the new section created when `newSection()` is called
+			 * If missing, `ctx.editSummary` will be used. Issues may occur if a substituted template is used.
+			 */
 	this.setNewSectionTitle = (newSectionTitle) => {
 		ctx.editMode = 'new';
 		ctx.newSectionTitle = newSectionTitle;
@@ -3058,35 +3058,35 @@ Morebits.wiki.page = function (pageName, status) {
 
 	// Edit-related setter methods:
 	/**
-		 * Set the edit summary that will be used when `save()` is called.
-		 * Unnecessary if editMode is 'new' and newSectionTitle is provided.
-		 *
-		 * @param {string} summary
-		 */
+			 * Set the edit summary that will be used when `save()` is called.
+			 * Unnecessary if editMode is 'new' and newSectionTitle is provided.
+			 *
+			 * @param {string} summary
+			 */
 	this.setEditSummary = (summary) => {
 		ctx.editSummary = summary;
 	};
 
 	/**
-		 * Set any custom tag(s) to be applied to the API action.
-		 * A number of actions don't support it, most notably watch, review.
-		 *
-		 * @param {string|string[]} tags - String or array of tag(s).
-		 */
+			 * Set any custom tag(s) to be applied to the API action.
+			 * A number of actions don't support it, most notably watch, review.
+			 *
+			 * @param {string|string[]} tags - String or array of tag(s).
+			 */
 	this.setChangeTags = (tags) => {
 		ctx.changeTags = tags;
 	};
 
 	/**
-		 * @param {string} [createOption=null] - Can take the following four values:
-		 * - recreate: create the page if it does not exist, or edit it if it exists.
-		 * - createonly: create the page if it does not exist, but return an
-		 * error if it already exists.
-		 * - nocreate: don't create the page, only edit it if it already exists.
-		 * - `null`: create the page if it does not exist, unless it was deleted
-		 * in the moment between loading the page and saving the edit (default).
-		 *
-		 */
+			 * @param {string} [createOption=null] - Can take the following four values:
+			 * - recreate: create the page if it does not exist, or edit it if it exists.
+			 * - createonly: create the page if it does not exist, but return an
+			 * error if it already exists.
+			 * - nocreate: don't create the page, only edit it if it already exists.
+			 * - `null`: create the page if it does not exist, unless it was deleted
+			 * in the moment between loading the page and saving the edit (default).
+			 *
+			 */
 	this.setCreateOption = (createOption) => {
 		ctx.createOption = createOption;
 	};
@@ -3102,56 +3102,56 @@ Morebits.wiki.page = function (pageName, status) {
 	};
 
 	/**
-		 * @param {number} pageSection - Integer specifying the section number to load or save.
-		 * If specified as `null`, the entire page will be retrieved.
-		 */
+			 * @param {number} pageSection - Integer specifying the section number to load or save.
+			 * If specified as `null`, the entire page will be retrieved.
+			 */
 	this.setPageSection = (pageSection) => {
 		ctx.pageSection = pageSection;
 	};
 
 	/**
-		 * @param {number} maxConflictRetries - Number of retries for save errors involving an edit conflict or
-		 * loss of token. Default: 2.
-		 */
+			 * @param {number} maxConflictRetries - Number of retries for save errors involving an edit conflict or
+			 * loss of token. Default: 2.
+			 */
 	this.setMaxConflictRetries = (maxConflictRetries) => {
 		ctx.maxConflictRetries = maxConflictRetries;
 	};
 
 	/**
-		 * @param {number} maxRetries - Number of retries for save errors not involving an edit conflict or
-		 * loss of token. Default: 2.
-		 */
+			 * @param {number} maxRetries - Number of retries for save errors not involving an edit conflict or
+			 * loss of token. Default: 2.
+			 */
 	this.setMaxRetries = (maxRetries) => {
 		ctx.maxRetries = maxRetries;
 	};
 
 	/**
-		 * Set whether and how to watch the page, including setting an expiry.
-		 *
-		 * @param {boolean|string|Morebits.date|Date} [watchlistOption=false] -
-		 * Basically a mix of MW API and Twinkley options available pre-expiry:
-		 * - `true`|`'yes'`|`'watch'`: page will be added to the user's
-		 * watchlist when the action is called. Defaults to an indefinite
-		 * watch unless `watchlistExpiry` is provided.
-		 * - `false`|`'no'`|`'nochange'`: watchlist status of the page (including expiry) will not be changed.
-		 * - `'default'`|`'preferences'`: watchlist status of the page will be
-		 * set based on the user's preference settings when the action is
-		 * called. Defaults to an indefinite watch unless `watchlistExpiry` is
-		 * provided.
-		 * - `'unwatch'`: explicitly unwatch the page.
-		 * - Any other `string` or `number`, or a `Morebits.date` or `Date`
-		 * object: watch page until the specified time, deferring to
-		 * `watchlistExpiry` if provided.
-		 * @param {string|number|Morebits.date|Date} [watchlistExpiry=infinity] -
-		 * A date-like string or number, or a date object.  If a string or number,
-		 * can be relative (2 weeks) or other similarly date-like (i.e. NOT "potato"):
-		 * ISO 8601: 2038-01-09T03:14:07Z
-		 * MediaWiki: 20380109031407
-		 * UNIX: 2147483647
-		 * SQL: 2038-01-09 03:14:07
-		 * Can also be `infinity` or infinity-like (`infinite`, `indefinite`, and `never`).
-		 * See {@link phabricator.wikimedia.org/source/mediawiki-libs-Timestamp/browse/master/src/ConvertibleTimestamp.php;4e53b859a9580c55958078f46dd4f3a44d0fcaa0$57-109?as=source&blame=off}
-		 */
+			 * Set whether and how to watch the page, including setting an expiry.
+			 *
+			 * @param {boolean|string|Morebits.date|Date} [watchlistOption=false] -
+			 * Basically a mix of MW API and Twinkley options available pre-expiry:
+			 * - `true`|`'yes'`|`'watch'`: page will be added to the user's
+			 * watchlist when the action is called. Defaults to an indefinite
+			 * watch unless `watchlistExpiry` is provided.
+			 * - `false`|`'no'`|`'nochange'`: watchlist status of the page (including expiry) will not be changed.
+			 * - `'default'`|`'preferences'`: watchlist status of the page will be
+			 * set based on the user's preference settings when the action is
+			 * called. Defaults to an indefinite watch unless `watchlistExpiry` is
+			 * provided.
+			 * - `'unwatch'`: explicitly unwatch the page.
+			 * - Any other `string` or `number`, or a `Morebits.date` or `Date`
+			 * object: watch page until the specified time, deferring to
+			 * `watchlistExpiry` if provided.
+			 * @param {string|number|Morebits.date|Date} [watchlistExpiry=infinity] -
+			 * A date-like string or number, or a date object.  If a string or number,
+			 * can be relative (2 weeks) or other similarly date-like (i.e. NOT "potato"):
+			 * ISO 8601: 2038-01-09T03:14:07Z
+			 * MediaWiki: 20380109031407
+			 * UNIX: 2147483647
+			 * SQL: 2038-01-09 03:14:07
+			 * Can also be `infinity` or infinity-like (`infinite`, `indefinite`, and `never`).
+			 * See {@link phabricator.wikimedia.org/source/mediawiki-libs-Timestamp/browse/master/src/ConvertibleTimestamp.php;4e53b859a9580c55958078f46dd4f3a44d0fcaa0$57-109?as=source&blame=off}
+			 */
 	this.setWatchlist = (watchlistOption, watchlistExpiry) => {
 		if (watchlistOption instanceof Morebits.date || watchlistOption instanceof Date) {
 			watchlistOption = watchlistOption.toISOString();
@@ -3160,7 +3160,7 @@ Morebits.wiki.page = function (pageName, status) {
 			watchlistExpiry = 'infinity';
 		} else if (
 			watchlistExpiry instanceof Morebits.date ||
-				watchlistExpiry instanceof Date
+					watchlistExpiry instanceof Date
 		) {
 			watchlistExpiry = watchlistExpiry.toISOString();
 		}
@@ -3205,26 +3205,26 @@ Morebits.wiki.page = function (pageName, status) {
 	};
 
 	/**
-		 * Set a watchlist expiry. setWatchlist can mostly handle this by
-		 * itself, so this is here largely for completeness and compatibility
-		 * with the full suite of options.
-		 *
-		 * @param {string|number|Morebits.date|Date} [watchlistExpiry=infinity] -
-		 * A date-like string or number, or a date object.  If a string or number,
-		 * can be relative (2 weeks) or other similarly date-like (i.e. NOT "potato"):
-		 * ISO 8601: 2038-01-09T03:14:07Z
-		 * MediaWiki: 20380109031407
-		 * UNIX: 2147483647
-		 * SQL: 2038-01-09 03:14:07
-		 * Can also be `infinity` or infinity-like (`infinite`, `indefinite`, and `never`).
-		 * See {@link phabricator.wikimedia.org/source/mediawiki-libs-Timestamp/browse/master/src/ConvertibleTimestamp.php;4e53b859a9580c55958078f46dd4f3a44d0fcaa0$57-109?as=source&blame=off}
-		 */
+			 * Set a watchlist expiry. setWatchlist can mostly handle this by
+			 * itself, so this is here largely for completeness and compatibility
+			 * with the full suite of options.
+			 *
+			 * @param {string|number|Morebits.date|Date} [watchlistExpiry=infinity] -
+			 * A date-like string or number, or a date object.  If a string or number,
+			 * can be relative (2 weeks) or other similarly date-like (i.e. NOT "potato"):
+			 * ISO 8601: 2038-01-09T03:14:07Z
+			 * MediaWiki: 20380109031407
+			 * UNIX: 2147483647
+			 * SQL: 2038-01-09 03:14:07
+			 * Can also be `infinity` or infinity-like (`infinite`, `indefinite`, and `never`).
+			 * See {@link phabricator.wikimedia.org/source/mediawiki-libs-Timestamp/browse/master/src/ConvertibleTimestamp.php;4e53b859a9580c55958078f46dd4f3a44d0fcaa0$57-109?as=source&blame=off}
+			 */
 	this.setWatchlistExpiry = (watchlistExpiry) => {
 		if (typeof watchlistExpiry === 'undefined') {
 			watchlistExpiry = 'infinity';
 		} else if (
 			watchlistExpiry instanceof Morebits.date ||
-				watchlistExpiry instanceof Date
+					watchlistExpiry instanceof Date
 		) {
 			watchlistExpiry = watchlistExpiry.toISOString();
 		}
@@ -3232,22 +3232,22 @@ Morebits.wiki.page = function (pageName, status) {
 	};
 
 	/**
-		 * @deprecated As of December 2020, use setWatchlist.
-		 * @param {boolean} [watchlistOption=false] -
-		 * - `True`: page watchlist status will be set based on the user's
-		 * preference settings when `save()` is called.
-		 * - `False`: watchlist status of the page will not be changed.
-		 *
-		 * Watchlist notes:
-		 * 1. The MediaWiki API value of 'unwatch', which explicitly removes
-		 * the page from the user's watchlist, is not used.
-		 * 2. If both `setWatchlist()` and `setWatchlistFromPreferences()` are
-		 * called, the last call takes priority.
-		 * 3. Twinkle modules should use the appropriate preference to set the watchlist options.
-		 * 4. Most Twinkle modules use `setWatchlist()`. `setWatchlistFromPreferences()`
-		 * is only needed for the few Twinkle watchlist preferences that
-		 * accept a string value of `default`.
-		 */
+			 * @deprecated As of December 2020, use setWatchlist.
+			 * @param {boolean} [watchlistOption=false] -
+			 * - `True`: page watchlist status will be set based on the user's
+			 * preference settings when `save()` is called.
+			 * - `False`: watchlist status of the page will not be changed.
+			 *
+			 * Watchlist notes:
+			 * 1. The MediaWiki API value of 'unwatch', which explicitly removes
+			 * the page from the user's watchlist, is not used.
+			 * 2. If both `setWatchlist()` and `setWatchlistFromPreferences()` are
+			 * called, the last call takes priority.
+			 * 3. Twinkle modules should use the appropriate preference to set the watchlist options.
+			 * 4. Most Twinkle modules use `setWatchlist()`. `setWatchlistFromPreferences()`
+			 * is only needed for the few Twinkle watchlist preferences that
+			 * accept a string value of `default`.
+			 */
 	this.setWatchlistFromPreferences = (watchlistOption) => {
 		console.warn(
 			'NOTE: Morebits.wiki.page.setWatchlistFromPreferences was deprecated December 2020, please use setWatchlist'
@@ -3256,15 +3256,15 @@ Morebits.wiki.page = function (pageName, status) {
 	};
 
 	/**
-		 * @param {boolean} [followRedirect=false] -
-		 * - `true`: a maximum of one redirect will be followed. In the event
-		 * of a redirect, a message is displayed to the user and the redirect
-		 * target can be retrieved with getPageName().
-		 * - `false`: (default) the requested pageName will be used without regard to any redirect.
-		 * @param {boolean} [followCrossNsRedirect=true] - Not applicable if `followRedirect` is not set true.
-		 * - `true`: (default) follow redirect even if it is a cross-namespace redirect
-		 * - `false`: don't follow redirect if it is cross-namespace, edit the redirect itself.
-		 */
+			 * @param {boolean} [followRedirect=false] -
+			 * - `true`: a maximum of one redirect will be followed. In the event
+			 * of a redirect, a message is displayed to the user and the redirect
+			 * target can be retrieved with getPageName().
+			 * - `false`: (default) the requested pageName will be used without regard to any redirect.
+			 * @param {boolean} [followCrossNsRedirect=true] - Not applicable if `followRedirect` is not set true.
+			 * - `true`: (default) follow redirect even if it is a cross-namespace redirect
+			 * - `false`: don't follow redirect if it is cross-namespace, edit the redirect itself.
+			 */
 	this.setFollowRedirect = (followRedirect, followCrossNsRedirect) => {
 		if (ctx.pageLoaded) {
 			ctx.statusElement.error(
@@ -3274,25 +3274,25 @@ Morebits.wiki.page = function (pageName, status) {
 		}
 		ctx.followRedirect = followRedirect;
 		ctx.followCrossNsRedirect =
-				typeof followCrossNsRedirect !== 'undefined'
-					? followCrossNsRedirect
-					: ctx.followCrossNsRedirect;
+					typeof followCrossNsRedirect !== 'undefined'
+						? followCrossNsRedirect
+						: ctx.followCrossNsRedirect;
 	};
 
 	// lookup-creation setter function
 	/**
-		 * @param {boolean} flag - If set true, the author and timestamp of
-		 * the first non-redirect version of the page is retrieved.
-		 *
-		 * Warning:
-		 * 1. If there are no revisions among the first 50 that are
-		 * non-redirects, or if there are less 50 revisions and all are
-		 * redirects, the original creation is retrieved.
-		 * 2. Revisions that the user is not privileged to access
-		 * (revdeled/suppressed) will be treated as non-redirects.
-		 * 3. Must not be used when the page has a non-wikitext contentmodel
-		 * such as Modulespace Lua or user JavaScript/CSS.
-		 */
+			 * @param {boolean} flag - If set true, the author and timestamp of
+			 * the first non-redirect version of the page is retrieved.
+			 *
+			 * Warning:
+			 * 1. If there are no revisions among the first 50 that are
+			 * non-redirects, or if there are less 50 revisions and all are
+			 * redirects, the original creation is retrieved.
+			 * 2. Revisions that the user is not privileged to access
+			 * (revdeled/suppressed) will be treated as non-redirects.
+			 * 3. Must not be used when the page has a non-wikitext contentmodel
+			 * such as Modulespace Lua or user JavaScript/CSS.
+			 */
 	this.setLookupNonRedirectCreator = (flag) => {
 		ctx.lookupNonRedirectCreator = flag;
 	};
@@ -3320,11 +3320,11 @@ Morebits.wiki.page = function (pageName, status) {
 
 	// Protect-related setter functions
 	/**
-		 * @param {string} level - The right required for the specific action
-		 * e.g. autoconfirmed, sysop, templateeditor, extendedconfirmed
-		 * (enWiki-only).
-		 * @param {string} [expiry=infinity]
-		 */
+			 * @param {string} level - The right required for the specific action
+			 * e.g. autoconfirmed, sysop, templateeditor, extendedconfirmed
+			 * (enWiki-only).
+			 * @param {string} [expiry=infinity]
+			 */
 	this.setEditProtection = (level, expiry) => {
 		ctx.protectEdit = {
 			level: level,
@@ -3366,94 +3366,94 @@ Morebits.wiki.page = function (pageName, status) {
 
 	// Miscellaneous getters/setters:
 	/**
-		 * Define an object for use in a callback function.
-		 *
-		 * `callbackParameters` is for use by the caller only. The parameters
-		 * allow a caller to pass the proper context into its callback
-		 * function.  Callers must ensure that any changes to the
-		 * callbackParameters object within a `load()` callback still permit a
-		 * proper re-entry into the `load()` callback if an edit conflict is
-		 * detected upon calling `save()`.
-		 *
-		 * @param {Object} callbackParameters
-		 */
+			 * Define an object for use in a callback function.
+			 *
+			 * `callbackParameters` is for use by the caller only. The parameters
+			 * allow a caller to pass the proper context into its callback
+			 * function.  Callers must ensure that any changes to the
+			 * callbackParameters object within a `load()` callback still permit a
+			 * proper re-entry into the `load()` callback if an edit conflict is
+			 * detected upon calling `save()`.
+			 *
+			 * @param {Object} callbackParameters
+			 */
 	this.setCallbackParameters = (callbackParameters) => {
 		ctx.callbackParameters = callbackParameters;
 	};
 
 	/**
-		 * @returns {Object} - The object previously set by `setCallbackParameters()`.
-		 */
+			 * @returns {Object} - The object previously set by `setCallbackParameters()`.
+			 */
 	this.getCallbackParameters = () => ctx.callbackParameters;
 
 	/**
-		 * @param {Morebits.status} statusElement
-		 */
+			 * @param {Morebits.status} statusElement
+			 */
 	this.setStatusElement = (statusElement) => {
 		ctx.statusElement = statusElement;
 	};
 
 	/**
-		 * @returns {Morebits.status} Status element created by the constructor.
-		 */
+			 * @returns {Morebits.status} Status element created by the constructor.
+			 */
 	this.getStatusElement = () => ctx.statusElement;
 
 	/**
-		 * @returns {boolean} True if the page existed on the wiki when it was last loaded.
-		 */
+			 * @returns {boolean} True if the page existed on the wiki when it was last loaded.
+			 */
 	this.exists = () => ctx.pageExists;
 
 	/**
-		 * @returns {string} Page ID of the page loaded. 0 if the page doesn't
-		 * exist.
-		 */
+			 * @returns {string} Page ID of the page loaded. 0 if the page doesn't
+			 * exist.
+			 */
 	this.getPageID = () => ctx.pageID;
 
 	/**
-		 * @returns {string} - Content model of the page.  Possible values
-		 * include (but may not be limited to): `wikitext`, `javascript`,
-		 * `css`, `json`, `Scribunto`, `sanitized-css`, `MassMessageListContent`.
-		 * Also gettable via `mw.config.get('wgPageContentModel')`.
-		 */
+			 * @returns {string} - Content model of the page.  Possible values
+			 * include (but may not be limited to): `wikitext`, `javascript`,
+			 * `css`, `json`, `Scribunto`, `sanitized-css`, `MassMessageListContent`.
+			 * Also gettable via `mw.config.get('wgPageContentModel')`.
+			 */
 	this.getContentModel = () => ctx.contentModel;
 
 	/**
-		 * @returns {boolean|string} - Watched status of the page. Boolean
-		 * unless it's being watched temporarily, in which case returns the
-		 * expiry string.
-		 */
+			 * @returns {boolean|string} - Watched status of the page. Boolean
+			 * unless it's being watched temporarily, in which case returns the
+			 * expiry string.
+			 */
 	this.getWatched = () => ctx.watched;
 
 	/**
-		 * @returns {string} ISO 8601 timestamp at which the page was last loaded.
-		 */
+			 * @returns {string} ISO 8601 timestamp at which the page was last loaded.
+			 */
 	this.getLoadTime = () => ctx.loadTime;
 
 	/**
-		 * @returns {string} The user who created the page following `lookupCreation()`.
-		 */
+			 * @returns {string} The user who created the page following `lookupCreation()`.
+			 */
 	this.getCreator = () => ctx.creator;
 
 	/**
-		 * @returns {string} The ISOString timestamp of page creation following `lookupCreation()`.
-		 */
+			 * @returns {string} The ISOString timestamp of page creation following `lookupCreation()`.
+			 */
 	this.getCreationTimestamp = () => ctx.timestamp;
 
 	/** @returns {boolean} whether or not you can edit the page */
 	this.canEdit = () => !!ctx.testActions && ctx.testActions.includes('edit');
 
 	/**
-		 * Retrieves the username of the user who created the page as well as
-		 * the timestamp of creation.  The username can be retrieved using the
-		 * `getCreator()` function; the timestamp can be retrieved using the
-		 * `getCreationTimestamp()` function.
-		 * Prior to June 2019 known as `lookupCreator()`.
-		 *
-		 * @param {Function} onSuccess - Callback function to be called when
-		 * the username and timestamp are found within the callback.
-		 * @param {Function} [onFailure] - Callback function to be called when
-		 * the lookup fails
-		 */
+			 * Retrieves the username of the user who created the page as well as
+			 * the timestamp of creation.  The username can be retrieved using the
+			 * `getCreator()` function; the timestamp can be retrieved using the
+			 * `getCreationTimestamp()` function.
+			 * Prior to June 2019 known as `lookupCreator()`.
+			 *
+			 * @param {Function} onSuccess - Callback function to be called when
+			 * the username and timestamp are found within the callback.
+			 * @param {Function} [onFailure] - Callback function to be called when
+			 * the lookup fails
+			 */
 	this.lookupCreation = function (onSuccess, onFailure) {
 		ctx.onLookupCreationSuccess = onSuccess;
 		ctx.onLookupCreationFailure = onFailure || emptyFunction;
@@ -3497,11 +3497,11 @@ Morebits.wiki.page = function (pageName, status) {
 	};
 
 	/**
-		 * Reverts a page to `revertOldID` set by `setOldID`.
-		 *
-		 * @param {Function} [onSuccess] - Callback function to run on success.
-		 * @param {Function} [onFailure] - Callback function to run on failure.
-		 */
+			 * Reverts a page to `revertOldID` set by `setOldID`.
+			 *
+			 * @param {Function} [onSuccess] - Callback function to run on success.
+			 * @param {Function} [onFailure] - Callback function to run on failure.
+			 */
 	this.revert = function (onSuccess, onFailure) {
 		ctx.onSaveSuccess = onSuccess;
 		ctx.onSaveFailure = onFailure || emptyFunction;
@@ -3515,11 +3515,11 @@ Morebits.wiki.page = function (pageName, status) {
 	};
 
 	/**
-		 * Moves a page to another title.
-		 *
-		 * @param {Function} [onSuccess] - Callback function to run on success.
-		 * @param {Function} [onFailure] - Callback function to run on failure.
-		 */
+			 * Moves a page to another title.
+			 *
+			 * @param {Function} [onSuccess] - Callback function to run on success.
+			 * @param {Function} [onFailure] - Callback function to run on failure.
+			 */
 	this.move = function (onSuccess, onFailure) {
 		ctx.onMoveSuccess = onSuccess;
 		ctx.onMoveFailure = onFailure || emptyFunction;
@@ -3549,14 +3549,14 @@ Morebits.wiki.page = function (pageName, status) {
 	};
 
 	/**
-		 * Marks the page as patrolled, using `rcid` (if available) or `revid`.
-		 *
-		 * Patrolling as such doesn't need to rely on loading the page in
-		 * question; simply passing a revid to the API is sufficient, so in
-		 * those cases just using {@link Morebits.wiki.api} is probably preferable.
-		 *
-		 * No error handling since we don't actually care about the errors.
-		 */
+			 * Marks the page as patrolled, using `rcid` (if available) or `revid`.
+			 *
+			 * Patrolling as such doesn't need to rely on loading the page in
+			 * question; simply passing a revid to the API is sufficient, so in
+			 * those cases just using {@link Morebits.wiki.api} is probably preferable.
+			 *
+			 * No error handling since we don't actually care about the errors.
+			 */
 	this.patrol = function () {
 		if (!Morebits.userIsSysop && !Morebits.userIsInGroup('patroller')) {
 			return;
@@ -3590,11 +3590,11 @@ Morebits.wiki.page = function (pageName, status) {
 
 	// |delete| is a reserved word in some flavours of JS
 	/**
-		 * Deletes a page (for admins only).
-		 *
-		 * @param {Function} [onSuccess] - Callback function to run on success.
-		 * @param {Function} [onFailure] - Callback function to run on failure.
-		 */
+			 * Deletes a page (for admins only).
+			 *
+			 * @param {Function} [onSuccess] - Callback function to run on success.
+			 * @param {Function} [onFailure] - Callback function to run on failure.
+			 */
 	this.deletePage = function (onSuccess, onFailure) {
 		ctx.onDeleteSuccess = onSuccess;
 		ctx.onDeleteFailure = onFailure || emptyFunction;
@@ -3619,11 +3619,11 @@ Morebits.wiki.page = function (pageName, status) {
 	};
 
 	/**
-		 * Undeletes a page (for admins only).
-		 *
-		 * @param {Function} [onSuccess] - Callback function to run on success.
-		 * @param {Function} [onFailure] - Callback function to run on failure.
-		 */
+			 * Undeletes a page (for admins only).
+			 *
+			 * @param {Function} [onSuccess] - Callback function to run on success.
+			 * @param {Function} [onFailure] - Callback function to run on failure.
+			 */
 	this.undeletePage = function (onSuccess, onFailure) {
 		ctx.onUndeleteSuccess = onSuccess;
 		ctx.onUndeleteFailure = onFailure || emptyFunction;
@@ -3648,11 +3648,11 @@ Morebits.wiki.page = function (pageName, status) {
 	};
 
 	/**
-		 * Protects a page (for admins only).
-		 *
-		 * @param {Function} [onSuccess] - Callback function to run on success.
-		 * @param {Function} [onFailure] - Callback function to run on failure.
-		 */
+			 * Protects a page (for admins only).
+			 *
+			 * @param {Function} [onSuccess] - Callback function to run on success.
+			 * @param {Function} [onFailure] - Callback function to run on failure.
+			 */
 	this.protect = function (onSuccess, onFailure) {
 		ctx.onProtectSuccess = onSuccess;
 		ctx.onProtectFailure = onFailure || emptyFunction;
@@ -3685,18 +3685,18 @@ Morebits.wiki.page = function (pageName, status) {
 
 	/* Private member functions: These are not exposed outside */
 	/**
-		 * Determines whether we can save an API call by using the csrf token
-		 * sent with the page HTML, or whether we need to ask the server for
-		 * more info (e.g. protection or watchlist expiry).
-		 *
-		 * Currently used for `append`, `prepend`, `newSection`, `move`,
-		 * `deletePage`, and `undeletePage`. Not used for
-		 * `protect` since it always needs to request protection status.
-		 *
-		 * @param {string} [action=edit] - The action being undertaken, e.g.
-		 * "edit" or "delete". In practice, only "edit" or "notedit" matters.
-		 * @returns {boolean}
-		 */
+			 * Determines whether we can save an API call by using the csrf token
+			 * sent with the page HTML, or whether we need to ask the server for
+			 * more info (e.g. protection or watchlist expiry).
+			 *
+			 * Currently used for `append`, `prepend`, `newSection`, `move`,
+			 * `deletePage`, and `undeletePage`. Not used for
+			 * `protect` since it always needs to request protection status.
+			 *
+			 * @param {string} [action=edit] - The action being undertaken, e.g.
+			 * "edit" or "delete". In practice, only "edit" or "notedit" matters.
+			 * @returns {boolean}
+			 */
 	const fnCanUseMwUserToken = (action) => {
 		action = typeof action !== 'undefined' ? action : 'edit'; // IE doesn't support default parameters
 
@@ -3723,7 +3723,7 @@ Morebits.wiki.page = function (pageName, status) {
 		if (Morebits.userIsSysop && !ctx.suppressProtectWarning) {
 			if (
 				new mw.Title(Morebits.pageNameNorm).getPrefixedText() !==
-					new mw.Title(ctx.pageName).getPrefixedText()
+						new mw.Title(ctx.pageName).getPrefixedText()
 			) {
 				return false;
 			}
@@ -3739,19 +3739,19 @@ Morebits.wiki.page = function (pageName, status) {
 	};
 
 	/**
-		 * When functions can't use
-		 * {@link Morebits.wiki.page~fnCanUseMwUserToken|fnCanUseMwUserToken}
-		 * or require checking protection or watched status, maintain the query
-		 * in one place. Used for {@link Morebits.wiki.page#deletePage|delete},
-		 * {@link Morebits.wiki.page#undeletePage|undelete},
-		 * {@link* Morebits.wiki.page#protect|protect},
-		 * and {@link Morebits.wiki.page#move|move}
-		 * (basically, just not {@link Morebits.wiki.page#load|load}).
-		 *
-		 * @param {string} action - The action being undertaken, e.g. "edit" or
-		 * "delete".
-		 * @returns {Object} Appropriate query.
-		 */
+			 * When functions can't use
+			 * {@link Morebits.wiki.page~fnCanUseMwUserToken|fnCanUseMwUserToken}
+			 * or require checking protection or watched status, maintain the query
+			 * in one place. Used for {@link Morebits.wiki.page#deletePage|delete},
+			 * {@link Morebits.wiki.page#undeletePage|undelete},
+			 * {@link* Morebits.wiki.page#protect|protect},
+			 * and {@link Morebits.wiki.page#move|move}
+			 * (basically, just not {@link Morebits.wiki.page#load|load}).
+			 *
+			 * @param {string} action - The action being undertaken, e.g. "edit" or
+			 * "delete".
+			 * @returns {Object} Appropriate query.
+			 */
 	const fnNeedTokenInfoQuery = (action) => {
 		const query = {
 			action: 'query',
@@ -3762,7 +3762,7 @@ Morebits.wiki.page = function (pageName, status) {
 			inprop: 'watched',
 			format: 'json'
 		};
-			// Protection not checked for flagged-revs or non-sysop moves
+		// Protection not checked for flagged-revs or non-sysop moves
 		if (action !== 'move' || Morebits.userIsSysop) {
 			query.inprop += '|protection';
 		}
@@ -3849,8 +3849,8 @@ Morebits.wiki.page = function (pageName, status) {
 			}
 			// set revert edit summary
 			ctx.editSummary =
-					`[[QW:UNDO|撤销]]由 ${ctx.revertUser} 所做出的` +
-					`修订 ${ctx.revertOldID}：${ctx.editSummary}`;
+						`[[QW:UNDO|撤销]]由 ${ctx.revertUser} 所做出的` +
+						`修订 ${ctx.revertOldID}：${ctx.editSummary}`;
 		}
 		ctx.pageLoaded = true;
 
@@ -3908,16 +3908,16 @@ Morebits.wiki.page = function (pageName, status) {
 	};
 
 	/**
-		 * Determine whether we should provide a watchlist expiry.  Will not
-		 * do so if the page is currently permanently watched, or the current
-		 * expiry is *after* the new, provided expiry.  Only handles strings
-		 * recognized by {@link Morebits.date} or relative timeframes with
-		 * unit it can process.  Relies on the fact that fnCanUseMwUserToken
-		 * requires page loading if a watchlistexpiry is provided, so we are
-		 * ensured of knowing the watch status by the use of this.
-		 *
-		 * @returns {boolean}
-		 */
+			 * Determine whether we should provide a watchlist expiry.  Will not
+			 * do so if the page is currently permanently watched, or the current
+			 * expiry is *after* the new, provided expiry.  Only handles strings
+			 * recognized by {@link Morebits.date} or relative timeframes with
+			 * unit it can process.  Relies on the fact that fnCanUseMwUserToken
+			 * requires page loading if a watchlistexpiry is provided, so we are
+			 * ensured of knowing the watch status by the use of this.
+			 *
+			 * @returns {boolean}
+			 */
 	const fnApplyWatchlistExpiry = () => {
 		if (ctx.watchlistExpiry) {
 			if (!ctx.watched || Morebits.string.isInfinity(ctx.watchlistExpiry)) {
@@ -3960,7 +3960,7 @@ Morebits.wiki.page = function (pageName, status) {
 			// default on success action - display link for edited page
 			const link = document.createElement('a');
 			link.setAttribute('href', mw.util.getUrl(ctx.pageName));
-			link.append(document.createTextNode(ctx.pageName));
+			link.appendChild(document.createTextNode(ctx.pageName));
 			ctx.statusElement.info(['完成（', link, '）']);
 			if (ctx.onSaveSuccess) {
 				ctx.onSaveSuccess(this); // invoke callback
@@ -4014,7 +4014,7 @@ Morebits.wiki.page = function (pageName, status) {
 			// check for network or server error
 		} else if (
 			(errorCode === null || errorCode === undefined) &&
-				ctx.retries++ < ctx.maxRetries
+					ctx.retries++ < ctx.maxRetries
 		) {
 			// the error might be transient, so try again
 			ctx.statusElement.info('保存失败，在2秒后重试…');
@@ -4029,9 +4029,9 @@ Morebits.wiki.page = function (pageName, status) {
 		} else {
 			const response = ctx.saveApi.getResponse();
 			const errorData =
-					response.error ||
-					// bc error format
-					response.errors[0].data; // html/wikitext/plaintext error format
+						response.error ||
+						// bc error format
+						response.errors[0].data; // html/wikitext/plaintext error format
 
 			switch (errorCode) {
 				case 'protectedpage': {
@@ -4153,13 +4153,13 @@ Morebits.wiki.page = function (pageName, status) {
 	};
 
 	/**
-		 * Common checks for action methods. Used for move, undelete, delete,
-		 * protect.
-		 *
-		 * @param {string} action - The action being checked.
-		 * @param {string} onFailure - Failure callback.
-		 * @returns {boolean}
-		 */
+			 * Common checks for action methods. Used for move, undelete, delete,
+			 * protect.
+			 *
+			 * @param {string} action - The action being checked.
+			 * @param {string} onFailure - Failure callback.
+			 * @returns {boolean}
+			 */
 	const fnPreflightChecks = function (action, onFailure) {
 		// if a non-admin tries to do this, don't bother
 		if (!Morebits.userIsSysop && action !== 'move') {
@@ -4178,21 +4178,21 @@ Morebits.wiki.page = function (pageName, status) {
 	};
 
 	/**
-		 * Common checks for fnProcess functions (`fnProcessDelete`, `fnProcessMove`, etc.
-		 * Used for move, undelete, delete, protect.
-		 *
-		 * @param {string} action - The action being checked.
-		 * @param {string} onFailure - Failure callback.
-		 * @param {string} response - The response document from the API call.
-		 * @returns {boolean}
-		 */
+			 * Common checks for fnProcess functions (`fnProcessDelete`, `fnProcessMove`, etc.
+			 * Used for move, undelete, delete, protect.
+			 *
+			 * @param {string} action - The action being checked.
+			 * @param {string} onFailure - Failure callback.
+			 * @param {string} response - The response document from the API call.
+			 * @returns {boolean}
+			 */
 	const fnProcessChecks = function (action, onFailure, response) {
 		const missing = response.pages[0].missing;
 
 		// No undelete as an existing page could have deleted revisions
 		const actionMissing = missing && ['delete', 'move'].includes(action);
 		const protectMissing =
-				action === 'protect' && missing && (ctx.protectEdit || ctx.protectMove);
+					action === 'protect' && missing && (ctx.protectEdit || ctx.protectMove);
 		const saltMissing = action === 'protect' && !missing && ctx.protectCreate;
 		if (actionMissing || protectMissing || saltMissing) {
 			ctx.statusElement.error(
@@ -4216,16 +4216,16 @@ Morebits.wiki.page = function (pageName, status) {
 		}
 		if (
 			editprot &&
-				!ctx.suppressProtectWarning &&
-				!confirm(
-					`您即将对全保护页面“${ctx.pageName}${
-						editprot.expiry === 'infinity'
-							? '”（永久）'
-							: `”（到期：${new Morebits.date(editprot.expiry).calendar(
-								'utc'
-							)} (UTC)）`
-					}”进行“${action}”操作` + '。\n\n单击确定以继续操作，或单击取消以取消操作。'
-				)
+					!ctx.suppressProtectWarning &&
+					!confirm(
+						`您即将对全保护页面“${ctx.pageName}${
+							editprot.expiry === 'infinity'
+								? '”（永久）'
+								: `”（到期：${new Morebits.date(editprot.expiry).calendar(
+									'utc'
+								)} (UTC)）`
+						}”进行“${action}”操作` + '。\n\n单击确定以继续操作，或单击取消以取消操作。'
+					)
 		) {
 			ctx.statusElement.error('已取消对全保护页面的操作。');
 			onFailure(this);
@@ -4519,14 +4519,14 @@ Morebits.wiki.page = function (pageName, status) {
 			// but seems reasonable to avoid dumb values and misleading log entries (T265626)
 			if (
 				(!ctx.protectEdit ||
-						ctx.protectEdit.level !== 'sysop' ||
-						!ctx.protectMove ||
-						ctx.protectMove.level !== 'sysop') &&
-					!confirm(
-						`您已对“${ctx.pageName}”启用了连锁保护` +
-							'，但没有设置仅管理员的保护级别。\n\n' +
-							'单击确认以自动调整并继续连锁全保护，单击取消以跳过此操作'
-					)
+							ctx.protectEdit.level !== 'sysop' ||
+							!ctx.protectMove ||
+							ctx.protectMove.level !== 'sysop') &&
+						!confirm(
+							`您已对“${ctx.pageName}”启用了连锁保护` +
+								'，但没有设置仅管理员的保护级别。\n\n' +
+								'单击确认以自动调整并继续连锁全保护，单击取消以跳过此操作'
+						)
 			) {
 				ctx.statusElement.error('连锁保护已取消。');
 				ctx.onProtectFailure(this);
@@ -4561,7 +4561,7 @@ Morebits.wiki.page = function (pageName, status) {
 			watchlist: ctx.watchlistOption,
 			format: 'json'
 		};
-			// Only shows up in logs, not page history [[phab:T259983]]
+		// Only shows up in logs, not page history [[phab:T259983]]
 		if (ctx.changeTags) {
 			query.tags = ctx.changeTags;
 		}
@@ -4590,36 +4590,36 @@ Morebits.wiki.page = function (pageName, status) {
 
 /* **************** Morebits.wiki.preview **************** */
 /**
-	 * Use the API to parse a fragment of wikitext and render it as HTML.
-	 *
-	 * The suggested implementation pattern (in {@link Morebits.simpleWindow} and
-	 * {@link Morebits.quickForm} situations) is to construct a
-	 * `Morebits.wiki.preview` object after rendering a `Morebits.quickForm`, and
-	 * bind the object to an arbitrary property of the form (e.g. |previewer|).
-	 * For an example, see twinklewarn.js.
-	 *
-	 * @memberof Morebits.wiki
-	 * @class
-	 * @param {HTMLElement} previewbox - The element that will contain the rendered HTML,
-	 * usually a <div> element.
-	 */
+		 * Use the API to parse a fragment of wikitext and render it as HTML.
+		 *
+		 * The suggested implementation pattern (in {@link Morebits.simpleWindow} and
+		 * {@link Morebits.quickForm} situations) is to construct a
+		 * `Morebits.wiki.preview` object after rendering a `Morebits.quickForm`, and
+		 * bind the object to an arbitrary property of the form (e.g. |previewer|).
+		 * For an example, see twinklewarn.js.
+		 *
+		 * @memberof Morebits.wiki
+		 * @class
+		 * @param {HTMLElement} previewbox - The element that will contain the rendered HTML,
+		 * usually a <div> element.
+		 */
 Morebits.wiki.preview = function (previewbox) {
 	this.previewbox = previewbox;
 	$(previewbox).addClass('morebits-previewbox').hide();
 
 	/**
-		 * Displays the preview box, and begins an asynchronous attempt
-		 * to render the specified wikitext.
-		 *
-		 * @param {string} wikitext - Wikitext to render; most things should work, including `subst:` and `~~~~`.
-		 * @param {string} [pageTitle] - Optional parameter for the page this should be rendered as being on, if omitted it is taken as the current page.
-		 * @param {string} [sectionTitle] - If provided, render the text as a new section using this as the title.
-		 * @returns {jQuery.promise}
-		 */
+			 * Displays the preview box, and begins an asynchronous attempt
+			 * to render the specified wikitext.
+			 *
+			 * @param {string} wikitext - Wikitext to render; most things should work, including `subst:` and `~~~~`.
+			 * @param {string} [pageTitle] - Optional parameter for the page this should be rendered as being on, if omitted it is taken as the current page.
+			 * @param {string} [sectionTitle] - If provided, render the text as a new section using this as the title.
+			 * @returns {jQuery.promise}
+			 */
 	this.beginRender = (wikitext, pageTitle, sectionTitle) => {
 		$(previewbox).show();
 		const statusspan = document.createElement('span');
-		previewbox.append(statusspan);
+		previewbox.appendChild(statusspan);
 		Morebits.status.init(statusspan);
 
 		// 如果页面不是wikitext（例如用户js/css等），那么找一个wikitext页面来预览。
@@ -4677,21 +4677,21 @@ Morebits.wiki.preview = function (previewbox) {
 
 /* **************** Morebits.wikitext **************** */
 /**
-	 * Wikitext manipulation.
-	 *
-	 * @namespace Morebits.wikitext
-	 * @memberof Morebits
-	 */
+		 * Wikitext manipulation.
+		 *
+		 * @namespace Morebits.wikitext
+		 * @memberof Morebits
+		 */
 Morebits.wikitext = {};
 
 /**
-	 * Get the value of every parameter found in the wikitext of a given template.
-	 *
-	 * @memberof Morebits.wikitext
-	 * @param {string} text - Wikitext containing a template.
-	 * @param {number} [start=0] - Index noting where in the text the template begins.
-	 * @returns {Object} `{name: templateName, parameters: {key: value}}`.
-	 */
+		 * Get the value of every parameter found in the wikitext of a given template.
+		 *
+		 * @memberof Morebits.wikitext
+		 * @param {string} text - Wikitext containing a template.
+		 * @param {number} [start=0] - Index noting where in the text the template begins.
+		 * @returns {Object} `{name: templateName, parameters: {key: value}}`.
+		 */
 Morebits.wikitext.parseTemplate = (text, start) => {
 	start ||= 0;
 	const level = []; // Track of how deep we are ({{, {{{, or [[)
@@ -4706,11 +4706,11 @@ Morebits.wikitext.parseTemplate = (text, start) => {
 	let key, value;
 
 	/**
-		 * Function to handle finding parameter values.
-		 *
-		 * @param {boolean} [final=false] - Whether this is the final
-		 * parameter and we need to remove the trailing `}}`.
-		 */
+			 * Function to handle finding parameter values.
+			 *
+			 * @param {boolean} [final=false] - Whether this is the final
+			 * parameter and we need to remove the trailing `}}`.
+			 */
 	const findParam = (final) => {
 		// Nothing found yet, this must be the template name
 		if (count === -1) {
@@ -4766,7 +4766,7 @@ Morebits.wikitext.parseTemplate = (text, start) => {
 		// Either leaving a link or template/parser function
 		if (
 			test2 === '}}' && level[level.length - 1] === 2 ||
-				test2 === ']]' && level[level.length - 1] === 'wl'
+					test2 === ']]' && level[level.length - 1] === 'wl'
 		) {
 			current += test2;
 			++i;
@@ -4796,23 +4796,23 @@ Morebits.wikitext.parseTemplate = (text, start) => {
 };
 
 /**
-	 * Adjust and manipulate the wikitext of a page.
-	 *
-	 * @class
-	 * @memberof Morebits.wikitext
-	 * @param {string} text - Wikitext to be manipulated.
-	 */
+		 * Adjust and manipulate the wikitext of a page.
+		 *
+		 * @class
+		 * @memberof Morebits.wikitext
+		 * @param {string} text - Wikitext to be manipulated.
+		 */
 Morebits.wikitext.page = function mediawikiPage(text) {
 	this.text = text;
 };
 Morebits.wikitext.page.prototype = {
 	text: '',
 	/**
-		 * Removes links to `link_target` from the page text.
-		 *
-		 * @param {string} link_target
-		 * @returns {Morebits.wikitext.page}
-		 */
+			 * Removes links to `link_target` from the page text.
+			 *
+			 * @param {string} link_target
+			 * @returns {Morebits.wikitext.page}
+			 */
 	removeLink: function (link_target) {
 		const mwTitle = mw.Title.newFromText(link_target);
 		const namespaceID = mwTitle.getNamespaceId();
@@ -4836,13 +4836,13 @@ Morebits.wikitext.page.prototype = {
 		return this;
 	},
 	/**
-		 * Comments out images from page text; if used in a gallery, deletes the whole line.
-		 * If used as a template argument (not necessarily with `File:` prefix), the template parameter is commented out.
-		 *
-		 * @param {string} image - Image name without `File:` prefix.
-		 * @param {string} [reason] - Reason to be included in comment, alongside the commented-out image.
-		 * @returns {Morebits.wikitext.page}
-		 */
+			 * Comments out images from page text; if used in a gallery, deletes the whole line.
+			 * If used as a template argument (not necessarily with `File:` prefix), the template parameter is commented out.
+			 *
+			 * @param {string} image - Image name without `File:` prefix.
+			 * @param {string} [reason] - Reason to be included in comment, alongside the commented-out image.
+			 * @returns {Morebits.wikitext.page}
+			 */
 	commentOutImage: function (image, reason) {
 		const unbinder = new Morebits.unbinder(this.text);
 		unbinder.unbind('<!--', '-->');
@@ -4890,12 +4890,12 @@ Morebits.wikitext.page.prototype = {
 		return this;
 	},
 	/**
-		 * Converts uses of [[File:`image`]] to [[File:`image`|`data`]].
-		 *
-		 * @param {string} image - Image name without File: prefix.
-		 * @param {string} data - The display options.
-		 * @returns {Morebits.wikitext.page}
-		 */
+			 * Converts uses of [[File:`image`]] to [[File:`image`|`data`]].
+			 *
+			 * @param {string} image - Image name without File: prefix.
+			 * @param {string} data - The display options.
+			 * @returns {Morebits.wikitext.page}
+			 */
 	addToImageComment: function (image, data) {
 		const image_re_string = Morebits.pageNameRegex(image);
 		const links_re = new RegExp(
@@ -4915,12 +4915,12 @@ Morebits.wikitext.page.prototype = {
 		return this;
 	},
 	/**
-		 * Remove all transclusions of a template from page text.
-		 *
-		 * @param {string} template - Page name whose transclusions are to be removed,
-		 * include namespace prefix only if not in template namespace.
-		 * @returns {Morebits.wikitext.page}
-		 */
+			 * Remove all transclusions of a template from page text.
+			 *
+			 * @param {string} template - Page name whose transclusions are to be removed,
+			 * include namespace prefix only if not in template namespace.
+			 * @returns {Morebits.wikitext.page}
+			 */
 	removeTemplate: function (template) {
 		const template_re_string = Morebits.pageNameRegex(template);
 		const links_re = new RegExp(
@@ -4940,19 +4940,19 @@ Morebits.wikitext.page.prototype = {
 		return this;
 	},
 	/**
-		 * Smartly insert a tag atop page text but after specified templates,
-		 * such as hatnotes, short description, or deletion and protection templates.
-		 * Notably, does *not* insert a newline after the tag.
-		 *
-		 * @param {string} tag - The tag to be inserted.
-		 * @param {string|string[]} regex - Templates after which to insert tag,
-		 * given as either as a (regex-valid) string or an array to be joined by pipes.
-		 * @param {string} [flags=i] - Regex flags to apply.  `''` to provide no flags;
-		 * other falsey values will default to `i`.
-		 * @param {string|string[]} [preRegex] - Optional regex string or array to match
-		 * before any template matches (i.e. before `{{`), such as html comments.
-		 * @returns {Morebits.wikitext.page}
-		 */
+			 * Smartly insert a tag atop page text but after specified templates,
+			 * such as hatnotes, short description, or deletion and protection templates.
+			 * Notably, does *not* insert a newline after the tag.
+			 *
+			 * @param {string} tag - The tag to be inserted.
+			 * @param {string|string[]} regex - Templates after which to insert tag,
+			 * given as either as a (regex-valid) string or an array to be joined by pipes.
+			 * @param {string} [flags=i] - Regex flags to apply.  `''` to provide no flags;
+			 * other falsey values will default to `i`.
+			 * @param {string|string[]} [preRegex] - Optional regex string or array to match
+			 * before any template matches (i.e. before `{{`), such as html comments.
+			 * @returns {Morebits.wikitext.page}
+			 */
 	insertAfterTemplates: function (tag, regex, flags, preRegex) {
 		if (typeof tag === 'undefined') {
 			throw new TypeError('No tag provided');
@@ -4980,26 +4980,26 @@ Morebits.wikitext.page.prototype = {
 			new RegExp(
 				// leading whitespace
 				'^\\s*' +
-						// capture template(s)
-						`(?:((?:\\s*${
-							// Pre-template regex, such as leading html comments
-							preRegex
-						}|` +
-						// begin template format
-						`\\{\\{\\s*(?:${
-							// Template regex
-							regex
-							// end main template name, optionally with a number
-							// Probably remove the (?:) though
-						})\\d*\\s*` +
-						// template parameters
-						'(\\|(?:\\{\\{[^{}]*\\}\\}|[^{}])*)?' +
-						// end template format
-						'\\}\\})+' +
-						// end capture
-						'(?:\\s*\\n)?)' +
-						// trailing whitespace
-						'\\s*)?',
+							// capture template(s)
+							`(?:((?:\\s*${
+								// Pre-template regex, such as leading html comments
+								preRegex
+							}|` +
+							// begin template format
+							`\\{\\{\\s*(?:${
+								// Template regex
+								regex
+								// end main template name, optionally with a number
+								// Probably remove the (?:) though
+							})\\d*\\s*` +
+							// template parameters
+							'(\\|(?:\\{\\{[^{}]*\\}\\}|[^{}])*)?' +
+							// end template format
+							'\\}\\})+' +
+							// end capture
+							'(?:\\s*\\n)?)' +
+							// trailing whitespace
+							'\\s*)?',
 				flags
 			),
 			`$1${tag}`
@@ -5007,10 +5007,10 @@ Morebits.wikitext.page.prototype = {
 		return this;
 	},
 	/**
-		 * Get the manipulated wikitext.
-		 *
-		 * @returns {string}
-		 */
+			 * Get the manipulated wikitext.
+			 *
+			 * @returns {string}
+			 */
 	getText: function () {
 		return this.text;
 	}
@@ -5018,38 +5018,38 @@ Morebits.wikitext.page.prototype = {
 
 /* *********** Morebits.userspaceLogger ************ */
 /**
-	 * Handles logging actions to a userspace log.
-	 * Used in CSD, PROD, and XFD.
-	 *
-	 * @memberof Morebits
-	 * @class
-	 * @param {string} logPageName - Title of the subpage of the current user's log.
-	 */
+		 * Handles logging actions to a userspace log.
+		 * Used in CSD, PROD, and XFD.
+		 *
+		 * @memberof Morebits
+		 * @class
+		 * @param {string} logPageName - Title of the subpage of the current user's log.
+		 */
 Morebits.userspaceLogger = function (logPageName) {
 	if (!logPageName) {
 		throw new Error('no log page name specified');
 	}
 	/**
-		 * The text to prefix the log with upon creation, defaults to empty.
-		 *
-		 * @type {string}
-		 */
+			 * The text to prefix the log with upon creation, defaults to empty.
+			 *
+			 * @type {string}
+			 */
 	this.initialText = '';
 	/**
-		 * The header level to use for months, defaults to 3 (`===`).
-		 *
-		 * @type {number}
-		 */
+			 * The header level to use for months, defaults to 3 (`===`).
+			 *
+			 * @type {number}
+			 */
 	this.headerLevel = 3;
 	this.changeTags = '';
 
 	/**
-		 * Log the entry.
-		 *
-		 * @param {string} logText - Doesn't include leading `#` or `*`.
-		 * @param {string} summaryText - Edit summary.
-		 * @returns {@jQuery.Promise}
-		 */
+			 * Log the entry.
+			 *
+			 * @param {string} logText - Doesn't include leading `#` or `*`.
+			 * @param {string} summaryText - Edit summary.
+			 * @returns {@jQuery.Promise}
+			 */
 	this.log = function (logText, summaryText) {
 		const def = $.Deferred();
 		if (!logText) {
@@ -5080,18 +5080,18 @@ Morebits.userspaceLogger = function (logPageName) {
 
 /* **************** Morebits.status **************** */
 /**
-	 * Create and show status messages of varying urgency.
-	 * {@link Morebits.status.init|Morebits.status.init()} must be called before
-	 * any status object is created, otherwise those statuses won't be visible.
-	 *
-	 * @memberof Morebits
-	 * @class
-	 * @param {string} text - Text before the the colon `:`.
-	 * @param {string} stat - Text after the colon `:`.
-	 * @param {string} [type=status] - Determine the font color of the status
-	 * line, allowable values are: `status` (blue), `info` (green), `warn` (red),
-	 * or `error` (bold red).
-	 */
+		 * Create and show status messages of varying urgency.
+		 * {@link Morebits.status.init|Morebits.status.init()} must be called before
+		 * any status object is created, otherwise those statuses won't be visible.
+		 *
+		 * @memberof Morebits
+		 * @class
+		 * @param {string} text - Text before the the colon `:`.
+		 * @param {string} stat - Text after the colon `:`.
+		 * @param {string} [type=status] - Determine the font color of the status
+		 * line, allowable values are: `status` (blue), `info` (green), `warn` (red),
+		 * or `error` (bold red).
+		 */
 Morebits.status = function Status(text, stat, type) {
 	this.textRaw = text;
 	this.text = Morebits.createHtml(text);
@@ -5103,12 +5103,12 @@ Morebits.status = function Status(text, stat, type) {
 };
 
 /**
-	 * Specify an area for status message elements to be added to.
-	 *
-	 * @memberof Morebits.status
-	 * @param {HTMLElement} root - Usually a div element.
-	 * @throws If `root` is not an `HTMLElement`.
-	 */
+		 * Specify an area for status message elements to be added to.
+		 *
+		 * @memberof Morebits.status
+		 * @param {HTMLElement} root - Usually a div element.
+		 * @throws If `root` is not an `HTMLElement`.
+		 */
 Morebits.status.init = (root) => {
 	if (!(root instanceof Element)) {
 		throw new TypeError('object not an instance of Element');
@@ -5122,10 +5122,10 @@ Morebits.status.init = (root) => {
 Morebits.status.root = null;
 
 /**
-	 * @memberof Morebits.status
-	 * @param {Function} handler - Function to execute on error.
-	 * @throws When `handler` is not a function.
-	 */
+		 * @memberof Morebits.status
+		 * @param {Function} handler - Function to execute on error.
+		 * @throws When `handler` is not a function.
+		 */
 Morebits.status.onError = (handler) => {
 	if (typeof handler === 'function') {
 		Morebits.status.errorEvent = handler;
@@ -5145,7 +5145,7 @@ Morebits.status.prototype = {
 	/** Add the status element node to the DOM. */
 	link: function () {
 		if (!this.linked && Morebits.status.root) {
-			Morebits.status.root.append(this.node);
+			Morebits.status.root.appendChild(this.node);
 			this.linked = true;
 		}
 	},
@@ -5157,12 +5157,12 @@ Morebits.status.prototype = {
 		}
 	},
 	/**
-		 * Update the status.
-		 *
-		 * @param {string} status - Part of status message after colon.
-		 * @param {string} type - 'status' (blue), 'info' (green), 'warn'
-		 * (red), or 'error' (bold red).
-		 */
+			 * Update the status.
+			 *
+			 * @param {string} status - Part of status message after colon.
+			 * @param {string} type - 'status' (blue), 'info' (green), 'warn'
+			 * (red), or 'error' (bold red).
+			 */
 	update: function (status, type) {
 		this.statRaw = status;
 		this.stat = Morebits.createHtml(status);
@@ -5187,12 +5187,12 @@ Morebits.status.prototype = {
 	/** Produce the html for first part of the status message. */
 	generate: function () {
 		this.node = document.createElement('div');
-		this.node.append(document.createElement('span')).append(this.text);
+		this.node.appendChild(document.createElement('span')).appendChild(this.text);
 		this.node
-			.append(document.createElement('span'))
-			.append(document.createTextNode(': '));
-		this.target = this.node.append(document.createElement('span'));
-		this.target.append(document.createTextNode('')); // dummy node
+			.appendChild(document.createElement('span'))
+			.appendChild(document.createTextNode(': '));
+		this.target = this.node.appendChild(document.createElement('span'));
+		this.target.appendChild(document.createTextNode('')); // dummy node
 	},
 
 	/** Complete the html, for the second part of the status message. */
@@ -5201,7 +5201,7 @@ Morebits.status.prototype = {
 		while (this.target.hasChildNodes()) {
 			this.target.firstChild.remove();
 		}
-		this.target.append(this.stat);
+		this.target.appendChild(this.stat);
 		this.link();
 	},
 	status: function (status) {
@@ -5218,58 +5218,58 @@ Morebits.status.prototype = {
 	}
 };
 /**
-	 * @memberof Morebits.status
-	 * @param {string} text - Before colon
-	 * @param {string} status - After colon
-	 * @returns {Morebits.status} - `status`-type (blue)
-	 */
+		 * @memberof Morebits.status
+		 * @param {string} text - Before colon
+		 * @param {string} status - After colon
+		 * @returns {Morebits.status} - `status`-type (blue)
+		 */
 Morebits.status.status = (text, status) => new Morebits.status(text, status);
 /**
-	 * @memberof Morebits.status
-	 * @param {string} text - Before colon
-	 * @param {string} status - After colon
-	 * @returns {Morebits.status} - `info`-type (green)
-	 */
+		 * @memberof Morebits.status
+		 * @param {string} text - Before colon
+		 * @param {string} status - After colon
+		 * @returns {Morebits.status} - `info`-type (green)
+		 */
 Morebits.status.info = (text, status) => new Morebits.status(text, status, 'info');
 /**
-	 * @memberof Morebits.status
-	 * @param {string} text - Before colon
-	 * @param {string} status - After colon
-	 * @returns {Morebits.status} - `warn`-type (red)
-	 */
+		 * @memberof Morebits.status
+		 * @param {string} text - Before colon
+		 * @param {string} status - After colon
+		 * @returns {Morebits.status} - `warn`-type (red)
+		 */
 Morebits.status.warn = (text, status) => new Morebits.status(text, status, 'warn');
 /**
-	 * @memberof Morebits.status
-	 * @param {string} text - Before colon
-	 * @param {string} status - After colon
-	 * @returns {Morebits.status} - `error`-type (bold red)
-	 */
+		 * @memberof Morebits.status
+		 * @param {string} text - Before colon
+		 * @param {string} status - After colon
+		 * @returns {Morebits.status} - `error`-type (bold red)
+		 */
 Morebits.status.error = (text, status) => new Morebits.status(text, status, 'error');
 
 /**
-	 * For the action complete message at the end, create a status line without
-	 * a colon separator.
-	 *
-	 * @memberof Morebits.status
-	 * @param {string} text
-	 */
+		 * For the action complete message at the end, create a status line without
+		 * a colon separator.
+		 *
+		 * @memberof Morebits.status
+		 * @param {string} text
+		 */
 Morebits.status.actionCompleted = (text) => {
 	const node = document.createElement('div');
-	node.append(document.createElement('b')).append(document.createTextNode(text));
+	node.appendChild(document.createElement('b')).appendChild(document.createTextNode(text));
 	node.className = 'morebits_status_info morebits_action_complete';
 	if (Morebits.status.root) {
-		Morebits.status.root.append(node);
+		Morebits.status.root.appendChild(node);
 	}
 };
 
 /**
-	 * Display the user's rationale, comments, etc. Back to them after a failure,
-	 * so that they may re-use it.
-	 *
-	 * @memberof Morebits.status
-	 * @param {string} comments
-	 * @param {string} message
-	 */
+		 * Display the user's rationale, comments, etc. Back to them after a failure,
+		 * so that they may re-use it.
+		 *
+		 * @memberof Morebits.status
+		 * @param {string} comments
+		 * @param {string} message
+		 */
 Morebits.status.printUserText = (comments, message) => {
 	const p = document.createElement('p');
 	p.innerHTML = message;
@@ -5278,35 +5278,35 @@ Morebits.status.printUserText = (comments, message) => {
 	div.style.marginTop = '0';
 	div.style.whiteSpace = 'pre-wrap';
 	div.textContent = comments;
-	p.append(div);
-	Morebits.status.root.append(p);
+	p.appendChild(div);
+	Morebits.status.root.appendChild(p);
 };
 
 /**
-	 * Simple helper function to create a simple node.
-	 *
-	 * @param {string} type - Type of HTML element.
-	 * @param {string} content - Text content.
-	 * @param {string} [color] - Font color.
-	 * @returns {HTMLElement}
-	 */
+		 * Simple helper function to create a simple node.
+		 *
+		 * @param {string} type - Type of HTML element.
+		 * @param {string} content - Text content.
+		 * @param {string} [color] - Font color.
+		 * @returns {HTMLElement}
+		 */
 Morebits.htmlNode = (type, content, color) => {
 	const node = document.createElement(type);
 	if (color) {
 		node.style.color = color;
 	}
-	node.append(document.createTextNode(content));
+	node.appendChild(document.createTextNode(content));
 	return node;
 };
 
 /**
-	 * Add shift-click support for checkboxes. The wikibits version
-	 * (`window.addCheckboxClickHandlers`) has some restrictions, and doesn't work
-	 * with checkboxes inside a sortable table, so let's build our own.
-	 *
-	 * @param jQuerySelector
-	 * @param jQueryContext
-	 */
+		 * Add shift-click support for checkboxes. The wikibits version
+		 * (`window.addCheckboxClickHandlers`) has some restrictions, and doesn't work
+		 * with checkboxes inside a sortable table, so let's build our own.
+		 *
+		 * @param jQuerySelector
+		 * @param jQueryContext
+		 */
 Morebits.checkboxShiftClickSupport = (jQuerySelector, jQueryContext) => {
 	let lastCheckbox = null;
 	const clickHandler = function (event) {
@@ -5356,42 +5356,42 @@ Morebits.checkboxShiftClickSupport = (jQuerySelector, jQueryContext) => {
 
 /* **************** Morebits.batchOperation **************** */
 /**
-	 * Iterates over a group of pages (or arbitrary objects) and executes a worker function
-	 * for each.
-	 *
-	 * `setPageList(pageList)`: Sets the list of pages to work on. It should be an
-	 * array of page names strings.
-	 *
-	 * `setOption(optionName, optionValue)`: Sets a known option:
-	 * - `chunkSize` (integer): The size of chunks to break the array into (default
-	 * 50). Setting this to a small value (<5) can cause problems.
-	 * - `preserveIndividualStatusLines` (boolean): Keep each page's status element
-	 * visible when worker is complete? See note below.
-	 *
-	 * `run(worker, postFinish)`: Runs the callback `worker` for each page in the
-	 * list.  The callback must call `workerSuccess` when succeeding, or
-	 * `workerFailure` when failing.  If using {@link Morebits.wiki.api} or
-	 * {@link Morebits.wiki.page}, this is easily done by passing these two
-	 * functions as parameters to the methods on those objects: for instance,
-	 * `page.save(batchOp.workerSuccess, batchOp.workerFailure)`.  Make sure the
-	 * methods are called directly if special success/failure cases arise.  If you
-	 * omit to call these methods, the batch operation will stall after the first
-	 * chunk!  Also ensure that either workerSuccess or workerFailure is called no
-	 * more than once.  The second callback `postFinish` is executed when the
-	 * entire batch has been processed.
-	 *
-	 * If using `preserveIndividualStatusLines`, you should try to ensure that the
-	 * `workerSuccess` callback has access to the page title.  This is no problem for
-	 * {@link Morebits.wiki.page} objects.  But when using the API, please set the
-	 * |pageName| property on the {@link Morebits.wiki.api} object.
-	 *
-	 * There are sample batchOperation implementations using Morebits.wiki.page in
-	 * twinklebatchdelete.js, twinklebatchundelete.js, and twinklebatchprotect.js.
-	 *
-	 * @memberof Morebits
-	 * @class
-	 * @param {string} [currentAction]
-	 */
+		 * Iterates over a group of pages (or arbitrary objects) and executes a worker function
+		 * for each.
+		 *
+		 * `setPageList(pageList)`: Sets the list of pages to work on. It should be an
+		 * array of page names strings.
+		 *
+		 * `setOption(optionName, optionValue)`: Sets a known option:
+		 * - `chunkSize` (integer): The size of chunks to break the array into (default
+		 * 50). Setting this to a small value (<5) can cause problems.
+		 * - `preserveIndividualStatusLines` (boolean): Keep each page's status element
+		 * visible when worker is complete? See note below.
+		 *
+		 * `run(worker, postFinish)`: Runs the callback `worker` for each page in the
+		 * list.  The callback must call `workerSuccess` when succeeding, or
+		 * `workerFailure` when failing.  If using {@link Morebits.wiki.api} or
+		 * {@link Morebits.wiki.page}, this is easily done by passing these two
+		 * functions as parameters to the methods on those objects: for instance,
+		 * `page.save(batchOp.workerSuccess, batchOp.workerFailure)`.  Make sure the
+		 * methods are called directly if special success/failure cases arise.  If you
+		 * omit to call these methods, the batch operation will stall after the first
+		 * chunk!  Also ensure that either workerSuccess or workerFailure is called no
+		 * more than once.  The second callback `postFinish` is executed when the
+		 * entire batch has been processed.
+		 *
+		 * If using `preserveIndividualStatusLines`, you should try to ensure that the
+		 * `workerSuccess` callback has access to the page title.  This is no problem for
+		 * {@link Morebits.wiki.page} objects.  But when using the API, please set the
+		 * |pageName| property on the {@link Morebits.wiki.api} object.
+		 *
+		 * There are sample batchOperation implementations using Morebits.wiki.page in
+		 * twinklebatchdelete.js, twinklebatchundelete.js, and twinklebatchprotect.js.
+		 *
+		 * @memberof Morebits
+		 * @class
+		 * @param {string} [currentAction]
+		 */
 Morebits.batchOperation = function (currentAction) {
 	const ctx = {
 		// backing fields for public properties
@@ -5418,39 +5418,39 @@ Morebits.batchOperation = function (currentAction) {
 	this.getStatusElement = () => ctx.statusElement;
 
 	/**
-		 * Sets the list of pages to work on.
-		 *
-		 * @param {Array} pageList - Array of objects over which you wish to execute the worker function
-		 * This is usually the list of page names (strings).
-		 */
+			 * Sets the list of pages to work on.
+			 *
+			 * @param {Array} pageList - Array of objects over which you wish to execute the worker function
+			 * This is usually the list of page names (strings).
+			 */
 	this.setPageList = (pageList) => {
 		ctx.pageList = pageList;
 	};
 
 	/**
-		 * Sets a known option.
-		 *
-		 * @param {string} optionName - Name of the option:
-		 * - chunkSize (integer): The size of chunks to break the array into
-		 * (default 50). Setting this to a small value (<5) can cause problems.
-		 * - preserveIndividualStatusLines (boolean): Keep each page's status
-		 * element visible when worker is complete?
-		 * @param {number|boolean} optionValue - Value to which the option is
-		 * to be set. Should be an integer for chunkSize and a boolean for
-		 * preserveIndividualStatusLines.
-		 */
+			 * Sets a known option.
+			 *
+			 * @param {string} optionName - Name of the option:
+			 * - chunkSize (integer): The size of chunks to break the array into
+			 * (default 50). Setting this to a small value (<5) can cause problems.
+			 * - preserveIndividualStatusLines (boolean): Keep each page's status
+			 * element visible when worker is complete?
+			 * @param {number|boolean} optionValue - Value to which the option is
+			 * to be set. Should be an integer for chunkSize and a boolean for
+			 * preserveIndividualStatusLines.
+			 */
 	this.setOption = (optionName, optionValue) => {
 		ctx.options[optionName] = optionValue;
 	};
 
 	/**
-		 * Runs the first callback for each page in the list.
-		 * The callback must call workerSuccess when succeeding, or workerFailure when failing.
-		 * Runs the optional second callback when the whole batch has been processed.
-		 *
-		 * @param {Function} worker
-		 * @param {Function} [postFinish]
-		 */
+			 * Runs the first callback for each page in the list.
+			 * The callback must call workerSuccess when succeeding, or workerFailure when failing.
+			 * Runs the optional second callback when the whole batch has been processed.
+			 *
+			 * @param {Function} worker
+			 * @param {Function} [postFinish]
+			 */
 	this.run = (worker, postFinish) => {
 		if (ctx.running) {
 			ctx.statusElement.error('批量操作已在运行');
@@ -5484,14 +5484,14 @@ Morebits.batchOperation = function (currentAction) {
 	};
 
 	/**
-		 * To be called by worker before it terminates successfully.
-		 *
-		 * @param {(Morebits.wiki.page|Morebits.wiki.api|string)} arg -
-		 * This should be the `Morebits.wiki.page` or `Morebits.wiki.api` object used by worker
-		 * (for the adjustment of status lines emitted by them).
-		 * If no Morebits.wiki.* object is used (e.g. you're using `mw.Api()` or something else), and
-		 * `preserveIndividualStatusLines` option is on, give the page name (string) as argument.
-		 */
+			 * To be called by worker before it terminates successfully.
+			 *
+			 * @param {(Morebits.wiki.page|Morebits.wiki.api|string)} arg -
+			 * This should be the `Morebits.wiki.page` or `Morebits.wiki.api` object used by worker
+			 * (for the adjustment of status lines emitted by them).
+			 * If no Morebits.wiki.* object is used (e.g. you're using `mw.Api()` or something else), and
+			 * `preserveIndividualStatusLines` option is on, give the page name (string) as argument.
+			 */
 	this.workerSuccess = (arg) => {
 		if (arg instanceof Morebits.wiki.api || arg instanceof Morebits.wiki.page) {
 			// update or remove status line
@@ -5549,8 +5549,8 @@ Morebits.batchOperation = function (currentAction) {
 			// we haven't already started the next one
 			if (
 				ctx.countFinished >=
-						ctx.countStarted - Math.max(ctx.options.chunkSize / 10, 2) &&
-					Math.floor(ctx.countFinished / ctx.options.chunkSize) > ctx.currentChunkIndex
+							ctx.countStarted - Math.max(ctx.options.chunkSize / 10, 2) &&
+						Math.floor(ctx.countFinished / ctx.options.chunkSize) > ctx.currentChunkIndex
 			) {
 				fnStartNewChunk();
 			}
@@ -5577,16 +5577,16 @@ Morebits.batchOperation = function (currentAction) {
 };
 
 /**
-	 * Given a set of asynchronous functions to run along with their dependencies,
-	 * run them in an efficient sequence so that multiple functions
-	 * that don't depend on each other are triggered simultaneously. Where
-	 * dependencies exist, it ensures that the dependency functions finish running
-	 * before the dependent function runs. The values resolved by the dependencies
-	 * are made available to the dependant as arguments.
-	 *
-	 * @memberof Morebits
-	 * @class
-	 */
+		 * Given a set of asynchronous functions to run along with their dependencies,
+		 * run them in an efficient sequence so that multiple functions
+		 * that don't depend on each other are triggered simultaneously. Where
+		 * dependencies exist, it ensures that the dependency functions finish running
+		 * before the dependent function runs. The values resolved by the dependencies
+		 * are made available to the dependant as arguments.
+		 *
+		 * @memberof Morebits
+		 * @class
+		 */
 Morebits.taskManager = function (context) {
 	this.taskDependencyMap = new Map();
 	this.failureCallbackMap = new Map();
@@ -5595,16 +5595,16 @@ Morebits.taskManager = function (context) {
 	this.context = context || window;
 
 	/**
-		 * Register a task along with its dependencies (tasks which should have finished
-		 * execution before we can begin this one). Each task is a function that must return
-		 * a promise. The function will get the values resolved by the dependency functions
-		 * as arguments.
-		 *
-		 * @param {Function} func - A task.
-		 * @param {Function[]} deps - Its dependencies.
-		 * @param {Function} [onFailure] - a failure callback that's run if the task or any one
-		 * of its dependencies fail.
-		 */
+			 * Register a task along with its dependencies (tasks which should have finished
+			 * execution before we can begin this one). Each task is a function that must return
+			 * a promise. The function will get the values resolved by the dependency functions
+			 * as arguments.
+			 *
+			 * @param {Function} func - A task.
+			 * @param {Function[]} deps - Its dependencies.
+			 * @param {Function} [onFailure] - a failure callback that's run if the task or any one
+			 * of its dependencies fail.
+			 */
 	this.add = function (func, deps, onFailure) {
 		this.taskDependencyMap.set(func, deps);
 		this.failureCallbackMap.set(func, onFailure || (() => {}));
@@ -5614,10 +5614,10 @@ Morebits.taskManager = function (context) {
 	};
 
 	/**
-		 * Run all the tasks. Multiple tasks may be run at once.
-		 *
-		 * @returns {jQuery.Promise} - Resolved if all tasks succeed, rejected otherwise.
-		 */
+			 * Run all the tasks. Multiple tasks may be run at once.
+			 *
+			 * @returns {jQuery.Promise} - Resolved if all tasks succeed, rejected otherwise.
+			 */
 	this.execute = function () {
 		const self = this; // proxy for `this` for use inside functions where `this` is something else
 		this.taskDependencyMap.forEach((deps, task) => {
@@ -5655,14 +5655,14 @@ Morebits.taskManager = function (context) {
 };
 
 /**
-	 * A simple draggable window, now a wrapper for jQuery UI's dialog feature.
-	 *
-	 * @memberof Morebits
-	 * @class
-	 * @requires jquery.ui.dialog
-	 * @param {number} width
-	 * @param {number} height - The maximum allowable height for the content area.
-	 */
+		 * A simple draggable window, now a wrapper for jQuery UI's dialog feature.
+		 *
+		 * @memberof Morebits
+		 * @class
+		 * @requires jquery.ui.dialog
+		 * @param {number} width
+		 * @param {number} height - The maximum allowable height for the content area.
+		 */
 Morebits.simpleWindow = function SimpleWindow(width, height) {
 	const content = document.createElement('div');
 	this.content = content;
@@ -5728,21 +5728,21 @@ Morebits.simpleWindow.prototype = {
 	hasFooterLinks: false,
 	scriptName: null,
 	/**
-		 * Focuses the dialog. This might work, or on the contrary, it might not.
-		 *
-		 * @returns {Morebits.simpleWindow}
-		 */
+			 * Focuses the dialog. This might work, or on the contrary, it might not.
+			 *
+			 * @returns {Morebits.simpleWindow}
+			 */
 	focus: function () {
 		$(this.content).dialog('moveToTop');
 		return this;
 	},
 	/**
-		 * Closes the dialog. If this is set as an event handler, it will stop the event
-		 * from doing anything more.
-		 *
-		 * @param {event} [event]
-		 * @returns {Morebits.simpleWindow}
-		 */
+			 * Closes the dialog. If this is set as an event handler, it will stop the event
+			 * from doing anything more.
+			 *
+			 * @param {event} [event]
+			 * @returns {Morebits.simpleWindow}
+			 */
 	close: function (event) {
 		if (event) {
 			event.preventDefault();
@@ -5751,11 +5751,11 @@ Morebits.simpleWindow.prototype = {
 		return this;
 	},
 	/**
-		 * Shows the dialog. Calling display() on a dialog that has previously been closed
-		 * might work, but it is not guaranteed.
-		 *
-		 * @returns {Morebits.simpleWindow}
-		 */
+			 * Shows the dialog. Calling display() on a dialog that has previously been closed
+			 * might work, but it is not guaranteed.
+			 *
+			 * @returns {Morebits.simpleWindow}
+			 */
 	display: function () {
 		if (this.scriptName) {
 			const $widget = $(this.content).dialog('widget');
@@ -5775,43 +5775,43 @@ Morebits.simpleWindow.prototype = {
 		return this;
 	},
 	/**
-		 * Sets the dialog title.
-		 *
-		 * @param {string} title
-		 * @returns {Morebits.simpleWindow}
-		 */
+			 * Sets the dialog title.
+			 *
+			 * @param {string} title
+			 * @returns {Morebits.simpleWindow}
+			 */
 	setTitle: function (title) {
 		$(this.content).dialog('option', 'title', title);
 		return this;
 	},
 	/**
-		 * Sets the script name, appearing as a prefix to the title to help users determine which
-		 * user script is producing which dialog. For instance, Twinkle modules set this to "Twinkle".
-		 *
-		 * @param {string} name
-		 * @returns {Morebits.simpleWindow}
-		 */
+			 * Sets the script name, appearing as a prefix to the title to help users determine which
+			 * user script is producing which dialog. For instance, Twinkle modules set this to "Twinkle".
+			 *
+			 * @param {string} name
+			 * @returns {Morebits.simpleWindow}
+			 */
 	setScriptName: function (name) {
 		this.scriptName = name;
 		return this;
 	},
 	/**
-		 * Sets the dialog width.
-		 *
-		 * @param {number} width
-		 * @returns {Morebits.simpleWindow}
-		 */
+			 * Sets the dialog width.
+			 *
+			 * @param {number} width
+			 * @returns {Morebits.simpleWindow}
+			 */
 	setWidth: function (width) {
 		$(this.content).dialog('option', 'width', width);
 		return this;
 	},
 	/**
-		 * Sets the dialog's maximum height. The dialog will auto-size to fit its contents,
-		 * but the content area will grow no larger than the height given here.
-		 *
-		 * @param {number} height
-		 * @returns {Morebits.simpleWindow}
-		 */
+			 * Sets the dialog's maximum height. The dialog will auto-size to fit its contents,
+			 * but the content area will grow no larger than the height given here.
+			 *
+			 * @param {number} height
+			 * @returns {Morebits.simpleWindow}
+			 */
 	setHeight: function (height) {
 		this.height = height;
 
@@ -5822,7 +5822,7 @@ Morebits.simpleWindow.prototype = {
 		// Morebits.simpleWindow
 		if (
 			Number.parseInt(getComputedStyle($(this.content).dialog('widget')[0], null).height, 10) >
-				window.innerHeight
+					window.innerHeight
 		) {
 			$(this.content)
 				.dialog('option', 'height', window.innerHeight - 2)
@@ -5839,27 +5839,27 @@ Morebits.simpleWindow.prototype = {
 		return this;
 	},
 	/**
-		 * Sets the content of the dialog to the given element node, usually from rendering
-		 * a {@link Morebits.quickForm}.
-		 * Re-enumerates the footer buttons, but leaves the footer links as they are.
-		 * Be sure to call this at least once before the dialog is displayed...
-		 *
-		 * @param {HTMLElement} content
-		 * @returns {Morebits.simpleWindow}
-		 */
+			 * Sets the content of the dialog to the given element node, usually from rendering
+			 * a {@link Morebits.quickForm}.
+			 * Re-enumerates the footer buttons, but leaves the footer links as they are.
+			 * Be sure to call this at least once before the dialog is displayed...
+			 *
+			 * @param {HTMLElement} content
+			 * @returns {Morebits.simpleWindow}
+			 */
 	setContent: function (content) {
 		this.purgeContent();
 		this.addContent(content);
 		return this;
 	},
 	/**
-		 * Adds the given element node to the dialog content.
-		 *
-		 * @param {HTMLElement} content
-		 * @returns {Morebits.simpleWindow}
-		 */
+			 * Adds the given element node to the dialog content.
+			 *
+			 * @param {HTMLElement} content
+			 * @returns {Morebits.simpleWindow}
+			 */
 	addContent: function (content) {
-		this.content.append(content);
+		this.content.appendChild(content);
 
 		// look for submit buttons in the content, hide them, and add a proxy button to the button pane
 		const thisproxy = this;
@@ -5898,10 +5898,10 @@ Morebits.simpleWindow.prototype = {
 		return this;
 	},
 	/**
-		 * Removes all contents from the dialog, barring any footer links.
-		 *
-		 * @returns {Morebits.simpleWindow}
-		 */
+			 * Removes all contents from the dialog, barring any footer links.
+			 *
+			 * @returns {Morebits.simpleWindow}
+			 */
 	purgeContent: function () {
 		this.buttons = [];
 		// delete all buttons in the buttonpane
@@ -5912,16 +5912,16 @@ Morebits.simpleWindow.prototype = {
 		return this;
 	},
 	/**
-		 * Adds a link in the bottom-right corner of the dialog.
-		 * This can be used to provide help or policy links.
-		 * For example, Twinkle's CSD module adds a link to the CSD policy page,
-		 * as well as a link to Twinkle's documentation.
-		 *
-		 * @param {string} text - Display text.
-		 * @param {string} wikiPage - Link target.
-		 * @param {boolean} [prep=false] - Set true to prepend rather than append.
-		 * @returns {Morebits.simpleWindow}
-		 */
+			 * Adds a link in the bottom-right corner of the dialog.
+			 * This can be used to provide help or policy links.
+			 * For example, Twinkle's CSD module adds a link to the CSD policy page,
+			 * as well as a link to Twinkle's documentation.
+			 *
+			 * @param {string} text - Display text.
+			 * @param {string} wikiPage - Link target.
+			 * @param {boolean} [prep=false] - Set true to prepend rather than append.
+			 * @returns {Morebits.simpleWindow}
+			 */
 	addFooterLink: function (text, wikiPage, prep) {
 		const $footerlinks = $(this.content)
 			.dialog('widget')
@@ -5949,14 +5949,14 @@ Morebits.simpleWindow.prototype = {
 		return this;
 	},
 	/**
-		 * Sets whether the window should be modal or not. Modal dialogs create
-		 * an overlay below the dialog but above other page elements. This
-		 * must be used (if necessary) before calling display().
-		 *
-		 * @param {boolean} [modal=false] - If set to true, other items on the
-		 * page will be disabled, i.e., cannot be interacted with.
-		 * @returns {Morebits.simpleWindow}
-		 */
+			 * Sets whether the window should be modal or not. Modal dialogs create
+			 * an overlay below the dialog but above other page elements. This
+			 * must be used (if necessary) before calling display().
+			 *
+			 * @param {boolean} [modal=false] - If set to true, other items on the
+			 * page will be disabled, i.e., cannot be interacted with.
+			 * @returns {Morebits.simpleWindow}
+			 */
 	setModality: function (modal) {
 		$(this.content).dialog('option', 'modal', modal);
 		return this;
@@ -5964,29 +5964,29 @@ Morebits.simpleWindow.prototype = {
 };
 
 /**
-	 * Enables or disables all footer buttons on all {@link Morebits.simpleWindow}s in the current page.
-	 * This should be called with `false` when the button(s) become irrelevant (e.g. just before
-	 * {@link Morebits.status.init} is called).
-	 * This is not an instance method so that consumers don't have to keep a reference to the
-	 * original `Morebits.simpleWindow` object sitting around somewhere. Anyway, most of the time
-	 * there will only be one `Morebits.simpleWindow` open, so this shouldn't matter.
-	 *
-	 * @memberof Morebits.simpleWindow
-	 * @param {boolean} enabled
-	 */
+		 * Enables or disables all footer buttons on all {@link Morebits.simpleWindow}s in the current page.
+		 * This should be called with `false` when the button(s) become irrelevant (e.g. just before
+		 * {@link Morebits.status.init} is called).
+		 * This is not an instance method so that consumers don't have to keep a reference to the
+		 * original `Morebits.simpleWindow` object sitting around somewhere. Anyway, most of the time
+		 * there will only be one `Morebits.simpleWindow` open, so this shouldn't matter.
+		 *
+		 * @memberof Morebits.simpleWindow
+		 * @param {boolean} enabled
+		 */
 Morebits.simpleWindow.setButtonsEnabled = (enabled) => {
 	$('.morebits-dialog-buttons button').prop('disabled', !enabled);
 };
 })(window, document, jQuery); // End wrap with anonymous function
 
 /**
- * If this script is being executed outside a ResourceLoader context, we add some
- * global assignments for legacy scripts, hopefully these can be removed down the line.
- *
- * IMPORTANT NOTE:
- * PLEASE DO NOT USE THESE ALIASES IN NEW CODE!
- * Thanks.
- */
+	 * If this script is being executed outside a ResourceLoader context, we add some
+	 * global assignments for legacy scripts, hopefully these can be removed down the line.
+	 *
+	 * IMPORTANT NOTE:
+	 * PLEASE DO NOT USE THESE ALIASES IN NEW CODE!
+	 * Thanks.
+	 */
 
 if (typeof arguments === 'undefined') {
 	// typeof is here for a reason...
