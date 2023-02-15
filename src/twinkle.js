@@ -311,11 +311,11 @@ Twinkle.getPref = (name) => {
 	 */
 Twinkle.addPortlet = (navigation, id, text, type, nextnodeid) => {
 	// sanity checks, and get required DOM nodes
-	const root = document.querySelector(`#${navigation}`) || document.querySelector(navigation);
+	const root = document.querySelector(navigation);
 	if (!root) {
 		return null;
 	}
-	const item = document.querySelector(`#${id}`);
+	const item = document.querySelector(id);
 	if (item) {
 		if (item.parentNode && item.parentNode === root) {
 			return item;
@@ -324,7 +324,7 @@ Twinkle.addPortlet = (navigation, id, text, type, nextnodeid) => {
 	}
 	let nextnode;
 	if (nextnodeid) {
-		nextnode = document.querySelector(`#${nextnodeid}`);
+		nextnode = document.querySelector(nextnodeid);
 	}
 
 	// verify/normalize input
