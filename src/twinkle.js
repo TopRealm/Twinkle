@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
  * _addText: '{{Twinkle Header}}'
@@ -239,33 +237,37 @@ Twinkle.defaultConfig = {
 // now some skin dependent config.
 switch (mw.config.get('skin')) {
 	case 'vector':
-	case 'vector-2022':
+	case 'vector-2022': {
 		Twinkle.defaultConfig.portletArea = 'right-navigation';
 		Twinkle.defaultConfig.portletId = 'p-twinkle';
 		Twinkle.defaultConfig.portletName = 'TW';
 		Twinkle.defaultConfig.portletType = 'menu';
 		Twinkle.defaultConfig.portletNext = 'p-search';
 		break;
-	case 'gongbi':
+	}
+	case 'gongbi': {
 		Twinkle.defaultConfig.portletArea = '#page-tools .sidebar-inner';
 		Twinkle.defaultConfig.portletId = 'p-twinkle';
 		Twinkle.defaultConfig.portletName = 'Twinkle';
 		Twinkle.defaultConfig.portletType = null;
 		Twinkle.defaultConfig.portletNext = 'p-userpagetools';
 		break;
-	case 'citizen':
+	}
+	case 'citizen': {
 		Twinkle.defaultConfig.portletArea = '#page-actions-more__card';
 		Twinkle.defaultConfig.portletId = 'p-twinkle';
 		Twinkle.defaultConfig.portletName = 'Twinkle';
 		Twinkle.defaultConfig.portletType = 'nav';
 		Twinkle.defaultConfig.portletNext = 'p-tb';
 		break;
-	default:
+	}
+	default: {
 		Twinkle.defaultConfig.portletArea = null;
 		Twinkle.defaultConfig.portletId = 'p-cactions';
 		Twinkle.defaultConfig.portletName = null;
 		Twinkle.defaultConfig.portletType = null;
 		Twinkle.defaultConfig.portletNext = null;
+	}
 }
 Twinkle.getPref = (name) => {
 	if (typeof Twinkle.prefs === 'object' && Twinkle.prefs[name] !== undefined) {
@@ -309,11 +311,11 @@ Twinkle.getPref = (name) => {
 	 */
 Twinkle.addPortlet = (navigation, id, text, type, nextnodeid) => {
 	// sanity checks, and get required DOM nodes
-	const root = document.getElementById(navigation) || document.querySelector(navigation);
+	const root = document.querySelector(`#${navigation}`) || document.querySelector(navigation);
 	if (!root) {
 		return null;
 	}
-	const item = document.getElementById(id);
+	const item = document.querySelector(`#${id}`);
 	if (item) {
 		if (item.parentNode && item.parentNode === root) {
 			return item;
@@ -322,7 +324,7 @@ Twinkle.addPortlet = (navigation, id, text, type, nextnodeid) => {
 	}
 	let nextnode;
 	if (nextnodeid) {
-		nextnode = document.getElementById(nextnodeid);
+		nextnode = document.querySelector(`#${nextnodeid}`);
 	}
 
 	// verify/normalize input
@@ -337,7 +339,7 @@ Twinkle.addPortlet = (navigation, id, text, type, nextnodeid) => {
 	let outerNavClass, innerDivClass;
 	switch (skin) {
 		case 'vector':
-		case 'vector-2022':
+		case 'vector-2022': {
 			// XXX: portal doesn't work
 			if (
 				navigation !== 'portal' &&
@@ -355,18 +357,22 @@ Twinkle.addPortlet = (navigation, id, text, type, nextnodeid) => {
 			}`;
 			innerDivClass = 'vector-menu-content';
 			break;
-		case 'gongbi':
+		}
+		case 'gongbi': {
 			outerNavClass = 'mw-portlet';
 			innerDivClass = 'mw-portlet-body';
 			break;
-		case 'citizen':
+		}
+		case 'citizen': {
 			outerNavClass = 'mw-portlet';
 			innerDivClass = 'mw-portlet-twinkle';
 			break;
-		default:
+		}
+		default: {
 			navigation = 'column-one';
 			outerNavClass = 'portlet';
 			break;
+		}
 	}
 
 	// Build the DOM elements.
@@ -383,9 +389,9 @@ Twinkle.addPortlet = (navigation, id, text, type, nextnodeid) => {
 	outerNav.className = `${outerNavClass} emptyPortlet`;
 	outerNav.id = id;
 	if (nextnode && nextnode.parentNode === root) {
-		root.insertBefore(outerNav, nextnode);
+		nextnode.before(outerNav);
 	} else {
-		root.appendChild(outerNav);
+		root.append(outerNav);
 	}
 	heading.id = `${id}-label`;
 	const ul = document.createElement('ul');
@@ -395,37 +401,37 @@ Twinkle.addPortlet = (navigation, id, text, type, nextnodeid) => {
 
 		// add invisible checkbox to keep menu open when clicked
 		// similar to the p-cactions ("More") menu
-		if (outerNavClass.indexOf('vector-menu-dropdown') !== -1) {
+		if (outerNavClass.includes('vector-menu-dropdown')) {
 			const chkbox = document.createElement('input');
 			chkbox.className = 'vector-menu-checkbox';
 			chkbox.setAttribute('type', 'checkbox');
 			chkbox.setAttribute('aria-labelledby', `${id}-label`);
-			outerNav.appendChild(chkbox);
+			outerNav.append(chkbox);
 
 			// Vector gets its title in a span; all others except
 			// gongbi have no title, and it has no span
 			const span = document.createElement('span');
-			span.appendChild(document.createTextNode(text));
-			heading.appendChild(span);
+			span.append(document.createTextNode(text));
+			heading.append(span);
 			const a = document.createElement('a');
 			a.href = '#';
 			$(a).on('click', (e) => {
 				e.preventDefault();
 			});
-			heading.appendChild(a);
+			heading.append(a);
 		}
 	} else {
 		// Basically just gongbi
-		heading.appendChild(document.createTextNode(text));
+		heading.append(document.createTextNode(text));
 	}
-	outerNav.appendChild(heading);
+	outerNav.append(heading);
 	if (innerDivClass) {
 		const innerDiv = document.createElement('div');
 		innerDiv.className = innerDivClass;
-		innerDiv.appendChild(ul);
-		outerNav.appendChild(innerDiv);
+		innerDiv.append(ul);
+		outerNav.append(innerDiv);
 	} else {
-		outerNav.appendChild(ul);
+		outerNav.append(ul);
 	}
 	return outerNav;
 };
@@ -498,28 +504,26 @@ $.ajax({
 			''
 		);
 		const optionsText_nocomment = optionsText_nowiki.replace(
-			/(?:^(?:\/\/[^\n]*\n)*\n*|(?:\/\/[^\n]*(?:\n|$))*$)/g,
+			/^(?:\/\/[^\n]*\n)*\n*|(?:\/\/[^\n]*(?:\n|$))*$/g,
 			''
 		);
 
 		// First version of options had some boilerplate code to make it eval-able -- strip that too. This part may become obsolete down the line.
 		const optionsText_nowindow = optionsText_nocomment.replace(
-			/(?:^window.Twinkle.prefs = |;\n*$)/g,
+			/^window.Twinkle.prefs = |;\n*$/g,
 			''
 		);
 		try {
 			const options = JSON.parse(optionsText_nowindow);
 			if (options) {
-				if (options.twinkle || options.friendly) {
+				Twinkle.prefs = options.twinkle || options.friendly ?
 					// Old preferences format
-					Twinkle.prefs = $.extend(options.twinkle, options.friendly);
-				} else {
-					Twinkle.prefs = options;
-				}
+					$.extend(options.twinkle, options.friendly) :
+					options;
 				// v2 established after unification of Twinkle/Friendly objects
 				Twinkle.prefs.optionsVersion ||= 1;
 			}
-		} catch (e) {
+		} catch {
 			mw.notify('未能解析您的Twinkle参数设置', {
 				type: 'error'
 			});
@@ -550,7 +554,7 @@ Twinkle.load = () => {
 	}
 	if (
 		mw.config.get('wgNamespaceNumber') === -1 &&
-			activeSpecialPageList.indexOf(mw.config.get('wgCanonicalSpecialPageName')) === -1
+			!activeSpecialPageList.includes(mw.config.get('wgCanonicalSpecialPageName'))
 	) {
 		return;
 	}
@@ -569,7 +573,7 @@ Twinkle.load = () => {
 	// Redefine addInitCallback so that any modules being loaded now on are directly
 	// initialised rather than added to initCallbacks array
 	Twinkle.addInitCallback = (func, name) => {
-		if (!name || Twinkle.disabledModules.indexOf(name) === -1) {
+		if (!name || !Twinkle.disabledModules.includes(name)) {
 			func();
 		}
 	};

@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
  * _addText: '{{Twinkle Header}}'
@@ -71,7 +69,7 @@ Twinkle.diff.evaluate = (me) => {
 	if (me) {
 		user = mw.config.get('wgUserName');
 	} else {
-		const node = document.getElementById('mw-diff-ntitle2');
+		const node = document.querySelector('#mw-diff-ntitle2');
 		if (!node) {
 			// nothing to do?
 			return;
@@ -89,7 +87,7 @@ Twinkle.diff.evaluate = (me) => {
 		rvuser: user,
 		format: 'json'
 	};
-	Morebits.status.init(document.getElementById('mw-content-text'));
+	Morebits.status.init(document.querySelector('#mw-content-text'));
 	const qiuwen_api = new Morebits.wiki.api(
 		'抓取最初贡献者信息',
 		query,

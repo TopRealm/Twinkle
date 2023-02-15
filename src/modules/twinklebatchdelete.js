@@ -203,8 +203,7 @@ Twinkle.batchdelete.callback = () => {
 					);
 				}
 				if (page.ns === 6) {
-					metadata.push(`上传者：${page.imageinfo[0].user}`);
-					metadata.push(`最后编辑：${page.revisions[0].user}`);
+					metadata.push(`上传者：${page.imageinfo[0].user}`, `最后编辑：${page.revisions[0].user}`);
 				} else {
 					metadata.push(`${mw.language.convertNumber(page.revisions[0].size)}字节`);
 				}
@@ -274,8 +273,8 @@ Twinkle.batchdelete.generateNewPageList = (form) => {
 	const elements = form.elements.pages;
 	if (elements instanceof NodeList) {
 		// if there are multiple pages
-		for (let i = 0; i < elements.length; ++i) {
-			Twinkle.batchdelete.pages[elements[i].value].checked = elements[i].checked;
+		for (const element of elements) {
+			Twinkle.batchdelete.pages[element.value].checked = element.checked;
 		}
 	} else if (elements instanceof HTMLInputElement) {
 		// if there is just one page
@@ -394,7 +393,7 @@ Twinkle.batchdelete.callback.toggleSubpages = (e) => {
 				const pageTitle = mw.Title.newFromText(pageName);
 
 				// No need to look for subpages in main/file/mediawiki space
-				if ([0, 6, 8].indexOf(pageTitle.namespace) > -1) {
+				if ([0, 6, 8].includes(pageTitle.namespace)) {
 					subpageLister.workerSuccess();
 					return;
 				}
@@ -437,8 +436,7 @@ Twinkle.batchdelete.callback.toggleSubpages = (e) => {
 								);
 							}
 							if (page.ns === 6) {
-								metadata.push(`上传者：${page.imageinfo[0].user}`);
-								metadata.push(`最后编辑：${page.revisions[0].user}`);
+								metadata.push(`上传者：${page.imageinfo[0].user}`, `最后编辑：${page.revisions[0].user}`);
 							} else {
 								metadata.push(
 									`${mw.language.convertNumber(page.revisions[0].size)}字节`
@@ -757,11 +755,7 @@ Twinkle.batchdelete.callbacks = {
 			return;
 		}
 		let text;
-		if (params.title in Twinkle.batchdelete.unlinkCache) {
-			text = Twinkle.batchdelete.unlinkCache[params.title];
-		} else {
-			text = pageobj.getPageText();
-		}
+		text = params.title in Twinkle.batchdelete.unlinkCache ? Twinkle.batchdelete.unlinkCache[params.title] : pageobj.getPageText();
 		const old_text = text;
 		const wikiPage = new Morebits.wikitext.page(text);
 		text = wikiPage.removeLink(params.page).getText();
@@ -806,11 +800,7 @@ Twinkle.batchdelete.callbacks = {
 		}
 		const image = params.page.replace(new RegExp(`^${Morebits.namespaceRegex(6)}:`), '');
 		let text;
-		if (params.title in Twinkle.batchdelete.unlinkCache) {
-			text = Twinkle.batchdelete.unlinkCache[params.title];
-		} else {
-			text = pageobj.getPageText();
-		}
+		text = params.title in Twinkle.batchdelete.unlinkCache ? Twinkle.batchdelete.unlinkCache[params.title] : pageobj.getPageText();
 		const old_text = text;
 		const wikiPage = new Morebits.wikitext.page(text);
 		text = wikiPage.commentOutImage(image, '因文件已删，故注释之').getText();

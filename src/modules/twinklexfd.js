@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
  * _addText: '{{Twinkle Header}}'
@@ -30,8 +28,8 @@ Twinkle.xfd = () => {
 		mw.config.get('wgNamespaceNumber') < 0 ||
 			!mw.config.get('wgArticleId') ||
 			mw.config.get('wgNamespaceNumber') === 6 &&
-				(document.getElementById('mw-sharedupload') ||
-					!document.getElementById('mw-imagepage-section-filehistory') &&
+				(document.querySelector('#mw-sharedupload') ||
+					!document.querySelector('#mw-imagepage-section-filehistory') &&
 						!Morebits.isPageRedirect())
 	) {
 		return;
@@ -113,21 +111,25 @@ Twinkle.xfd.callback.change_category = (e) => {
 	const form = e.target.form;
 	const old_area = Morebits.quickForm.getElements(e.target.form, 'work_area')[0];
 	let work_area = null;
-	const oldreasontextbox = form.getElementsByTagName('textarea')[0];
+	const oldreasontextbox = form.querySelectorAll('textarea')[0];
 	let oldreason = oldreasontextbox ? oldreasontextbox.value : '';
 	const appendReasonBox = (xfd_cat) => {
 		switch (xfd_cat) {
-			case 'fwdcsd':
+			case 'fwdcsd': {
 				oldreason = decodeURIComponent($('#delete-reason').text()).replace(/\+/g, ' ');
 				break;
-			case 'fame':
+			}
+			case 'fame': {
 				oldreason = Twinkle.getPref('afdFameDefaultReason');
 				break;
-			case 'substub':
+			}
+			case 'substub': {
 				oldreason = Twinkle.getPref('afdSubstubDefaultReason');
 				break;
-			default:
+			}
+			default: {
 				break;
+			}
 		}
 		work_area.append({
 			type: 'textarea',
@@ -238,7 +240,7 @@ Twinkle.xfd.callback.change_category = (e) => {
 			form.xfdcat.dispatchEvent(evt);
 			break;
 		}
-		case 'ffd':
+		case 'ffd': {
 			work_area = new Morebits.quickForm.element({
 				type: 'field',
 				label: '文件存废讨论',
@@ -248,7 +250,8 @@ Twinkle.xfd.callback.change_category = (e) => {
 			work_area = work_area.render();
 			old_area.parentNode.replaceChild(work_area, old_area);
 			break;
-		default:
+		}
+		default: {
 			work_area = new Morebits.quickForm.element({
 				type: 'field',
 				label: '未定义',
@@ -257,6 +260,7 @@ Twinkle.xfd.callback.change_category = (e) => {
 			work_area = work_area.render();
 			old_area.parentNode.replaceChild(work_area, old_area);
 			break;
+		}
 	}
 
 	// Return to checked state when switching
@@ -264,29 +268,43 @@ Twinkle.xfd.callback.change_category = (e) => {
 	form.notify.disabled = false;
 };
 Twinkle.xfd.callback.change_afd_category = (e) => {
-	if (e.target.value === 'merge') {
-		e.target.form.mergeinto.parentNode.removeAttribute('hidden');
-		e.target.form.fwdcsdreason.parentNode.setAttribute('hidden', '');
-		e.target.form.mergeinto.previousElementSibling.innerHTML = '合并到：';
-	} else if (e.target.value === 'fwdcsd') {
-		e.target.form.mergeinto.parentNode.removeAttribute('hidden');
-		e.target.form.fwdcsdreason.parentNode.removeAttribute('hidden');
-		e.target.form.mergeinto.previousElementSibling.innerHTML = '提交人：';
-		e.target.form.xfdreason.value = decodeURIComponent($('#delete-reason').text()).replace(
-			/\+/g,
-			' '
-		);
-	} else if (e.target.value === 'fame') {
-		e.target.form.mergeinto.parentNode.setAttribute('hidden', '');
-		e.target.form.fwdcsdreason.parentNode.setAttribute('hidden', '');
-		e.target.form.xfdreason.value = Twinkle.getPref('afdFameDefaultReason');
-	} else if (e.target.value === 'substub') {
-		e.target.form.mergeinto.parentNode.setAttribute('hidden', '');
-		e.target.form.fwdcsdreason.parentNode.setAttribute('hidden', '');
-		e.target.form.xfdreason.value = Twinkle.getPref('afdSubstubDefaultReason');
-	} else {
-		e.target.form.mergeinto.parentNode.setAttribute('hidden', '');
-		e.target.form.fwdcsdreason.parentNode.setAttribute('hidden', '');
+	switch (e.target.value) {
+		case 'merge': {
+			e.target.form.mergeinto.parentNode.removeAttribute('hidden');
+			e.target.form.fwdcsdreason.parentNode.setAttribute('hidden', '');
+			e.target.form.mergeinto.previousElementSibling.innerHTML = '合并到：';
+
+			break;
+		}
+		case 'fwdcsd': {
+			e.target.form.mergeinto.parentNode.removeAttribute('hidden');
+			e.target.form.fwdcsdreason.parentNode.removeAttribute('hidden');
+			e.target.form.mergeinto.previousElementSibling.innerHTML = '提交人：';
+			e.target.form.xfdreason.value = decodeURIComponent($('#delete-reason').text()).replace(
+				/\+/g,
+				' '
+			);
+
+			break;
+		}
+		case 'fame': {
+			e.target.form.mergeinto.parentNode.setAttribute('hidden', '');
+			e.target.form.fwdcsdreason.parentNode.setAttribute('hidden', '');
+			e.target.form.xfdreason.value = Twinkle.getPref('afdFameDefaultReason');
+
+			break;
+		}
+		case 'substub': {
+			e.target.form.mergeinto.parentNode.setAttribute('hidden', '');
+			e.target.form.fwdcsdreason.parentNode.setAttribute('hidden', '');
+			e.target.form.xfdreason.value = Twinkle.getPref('afdSubstubDefaultReason');
+
+			break;
+		}
+		default: {
+			e.target.form.mergeinto.parentNode.setAttribute('hidden', '');
+			e.target.form.fwdcsdreason.parentNode.setAttribute('hidden', '');
+		}
 	}
 	if (Twinkle.getPref('afdDefaultCategory') === 'same') {
 		localStorage.Twinkle_afdCategory = e.target.value;
@@ -364,14 +382,14 @@ Twinkle.xfd.callbacks = {
 
 			// Then, test if there are speedy deletion-related templates on the article.
 			const textNoSd = text.replace(
-				/\{\{\s*(db(-\w*)?|d|delete|(?:hang|hold)[- ]?on)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/gi,
+				/{{\s*(db(-\w*)?|d|delete|(?:hang|hold)[ -]?on)\s*(\|(?:{{[^{}]*}}|[^{}])*)?}}\s*/gi,
 				''
 			);
 			if (text !== textNoSd && confirm('在页面上找到快速删除模板，要移除吗？')) {
 				text = textNoSd;
 			}
 			const textNoNotMandarin = text.replace(
-				/\{\{\s*(NotMandarin|Notchinese|非中文|非現代漢語|非现代汉语|非現代標準漢語|非现代标准汉语)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/gi,
+				/{{\s*(notmandarin|notchinese|非中文|非現代漢語|非现代汉语|非現代標準漢語|非现代标准汉语)\s*(\|(?:{{[^{}]*}}|[^{}])*)?}}\s*/gi,
 				''
 			);
 			if (
@@ -404,12 +422,14 @@ Twinkle.xfd.callbacks = {
 			let to = '';
 			switch (params.xfdcat) {
 				case 'fwdcsd':
-				case 'merge':
+				case 'merge': {
 					to = params.mergeinto;
-					/* Fall through */
-				default:
+				}
+				/* Fall through */
+				default: {
 					type = params.xfdcat;
 					break;
+				}
 			}
 			let append = true;
 			switch (type) {
@@ -423,7 +443,7 @@ Twinkle.xfd.callbacks = {
 					if (type === 'fame') {
 						newText += `\n{{Findsources|${Morebits.pageNameNorm}}}`;
 					}
-					if (text.indexOf(commentText) !== -1) {
+					if (text.includes(commentText)) {
 						text = text.replace(commentText, `${newText}\n\n${commentText}`);
 						pageobj.setPageText(text);
 						append = false;
@@ -449,7 +469,7 @@ Twinkle.xfd.callbacks = {
 					}
 					break;
 				}
-				default:
+				default: {
 					pageobj.setAppendText(
 						`\n{{subst:DRItem|Type=${type}|DRarticles=${
 							Morebits.pageNameNorm
@@ -460,6 +480,7 @@ Twinkle.xfd.callbacks = {
 						}|To=${to}}}~~` + '~~'
 					);
 					break;
+				}
 			}
 			pageobj.setEditSummary(`加入[[${Morebits.pageNameNorm}]]`);
 			pageobj.setChangeTags(Twinkle.changeTags);
@@ -481,7 +502,7 @@ Twinkle.xfd.callbacks = {
 				return;
 			}
 			const text = pageobj.getPageText();
-			const xfd = /(?:\{\{([rsaiftcmv]fd|md1|proposed deletion)[^{}]*?\}\})/i.exec(text);
+			const xfd = /(?:{{([acfimr-tv]fd|md1|proposed deletion)[^{}]*?}})/i.exec(text);
 			if (
 				xfd &&
 					!confirm(`删除相关模板{{${xfd[1]}}}已被置于页面中，您是否仍想继续提报？`)
@@ -489,7 +510,7 @@ Twinkle.xfd.callbacks = {
 				statelem.error('页面已被提交至存废讨论。');
 				return;
 			}
-			const copyvio = /(?:\{\{\s*(copyvio)[^{}]*?\}\})/i.exec(text);
+			const copyvio = /(?:{{\s*(copyvio)[^{}]*?}})/i.exec(text);
 			if (copyvio) {
 				statelem.error('页面中已有著作权验证模板。');
 				return;
@@ -596,7 +617,7 @@ Twinkle.xfd.callbacks = {
 				return;
 			}
 			const text = pageobj.getPageText();
-			const xfd = /(?:\{\{([rsaiftcmv]fd|md1|proposed deletion)[^{}]*?\}\})/i.exec(text);
+			const xfd = /(?:{{([acfimr-tv]fd|md1|proposed deletion)[^{}]*?}})/i.exec(text);
 			if (
 				xfd &&
 					!confirm(`删除相关模板{{${xfd[1]}}}已被置于页面中，您是否仍想继续提报？`)
@@ -621,27 +642,34 @@ Twinkle.xfd.callbacks = {
 		)}|参数设置]]中关掉，并使用[[QW:CSD#O1|CSD O1]]提交快速删除。`;
 		let xfdCatName;
 		switch (params.xfdcat) {
-			case 'delete':
+			case 'delete': {
 				xfdCatName = '删除';
 				break;
-			case 'merge':
+			}
+			case 'merge': {
 				xfdCatName = '合并到';
 				break;
-			case 'fwdcsd':
+			}
+			case 'fwdcsd': {
 				xfdCatName = '转交自快速删除候选';
 				break;
-			case 'fame':
+			}
+			case 'fame': {
 				xfdCatName = '批量关注度提删';
 				break;
-			case 'substub':
+			}
+			case 'substub': {
 				xfdCatName = '批量小小作品提删';
 				break;
-			case 'batch':
+			}
+			case 'batch': {
 				xfdCatName = '批量其他提删';
 				break;
-			default:
+			}
+			default: {
 				xfdCatName = '文件存废讨论';
 				break;
+			}
 		}
 
 		// If a logged file is deleted but exists on commons, the wikilink will be blue, so provide a link to the log
@@ -708,7 +736,7 @@ Twinkle.xfd.callback.evaluate = (e) => {
 			logpage = `Qiuwen:存废讨论/记录/${date.format('YYYY/MM/DD', 'utc')}`;
 			lognomination =
 					Twinkle.getPref('logXfdNominations') &&
-					Twinkle.getPref('noLogOnXfdNomination').indexOf(xfdcat) === -1;
+					!Twinkle.getPref('noLogOnXfdNomination').includes(xfdcat);
 			params = {
 				usertalk: usertalk,
 				xfdcat: xfdcat,
@@ -738,12 +766,12 @@ Twinkle.xfd.callback.evaluate = (e) => {
 			Morebits.wiki.removeCheckpoint();
 			break;
 		}
-		case 'ffd':
+		case 'ffd': {
 			// FFD
 			logpage = `Qiuwen:存废讨论/记录/${date.format('YYYY/MM/DD', 'utc')}`;
 			lognomination =
 					Twinkle.getPref('logXfdNominations') &&
-					Twinkle.getPref('noLogOnXfdNomination').indexOf('ffd') === -1;
+					!Twinkle.getPref('noLogOnXfdNomination').includes('ffd');
 			params = {
 				usertalk: usertalk,
 				reason: reason,
@@ -765,9 +793,11 @@ Twinkle.xfd.callback.evaluate = (e) => {
 			qiuwen_page.load(Twinkle.xfd.callbacks.ffd.tryTagging);
 			Morebits.wiki.removeCheckpoint();
 			break;
-		default:
+		}
+		default: {
 			alert('twinklexfd：未定义的类别');
 			break;
+		}
 	}
 };
 Twinkle.addInitCallback(Twinkle.xfd, 'xfd');

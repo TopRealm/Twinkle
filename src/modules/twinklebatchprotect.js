@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
  * _addText: '{{Twinkle Header}}'
@@ -217,8 +215,7 @@ Twinkle.batchprotect.callback = () => {
 						metadata.push('重定向');
 					}
 					if (page.ns === 6) {
-						metadata.push(`上传者：${page.imageinfo[0].user}`);
-						metadata.push(`最后编辑者：${page.revisions[0].user}`);
+						metadata.push(`上传者：${page.imageinfo[0].user}`, `最后编辑者：${page.revisions[0].user}`);
 					} else {
 						metadata.push(
 							`${mw.language.convertNumber(page.revisions[0].size)}字节`

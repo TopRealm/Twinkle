@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
  * _addText: '{{Twinkle Header}}'
@@ -23,8 +21,8 @@
 Twinkle.image = () => {
 	if (
 		mw.config.get('wgNamespaceNumber') === 6 &&
-			!document.getElementById('mw-sharedupload') &&
-			document.getElementById('mw-imagepage-section-filehistory')
+			!document.querySelector('#mw-sharedupload') &&
+			document.querySelector('#mw-imagepage-section-filehistory')
 	) {
 		Twinkle.addPortletLink(Twinkle.image.callback, '图权', 'tw-di', '提交文件快速删除');
 	}
@@ -124,7 +122,7 @@ Twinkle.image.callback.choice = (event) => {
 	});
 	switch (value) {
 		case 'no source no license':
-		case 'no source':
+		case 'no source': {
 			work_area.append({
 				type: 'checkbox',
 				list: [
@@ -134,8 +132,9 @@ Twinkle.image.callback.choice = (event) => {
 					}
 				]
 			});
-			/* falls through */
-		case 'no license':
+		}
+		/* falls through */
+		case 'no license': {
 			work_area.append({
 				type: 'checkbox',
 				list: [
@@ -147,15 +146,18 @@ Twinkle.image.callback.choice = (event) => {
 				]
 			});
 			break;
-		case 'no permission':
+		}
+		case 'no permission': {
 			work_area.append({
 				type: 'input',
 				name: 'source',
 				label: '来源：'
 			});
 			break;
-		default:
+		}
+		default: {
 			break;
+		}
 	}
 	root.replaceChild(work_area.render(), $(root).find('div[name="work_area"]')[0]);
 };
@@ -171,18 +173,21 @@ Twinkle.image.callback.evaluate = (event) => {
 	switch (input.type) {
 		case 'no source no license':
 		case 'no source':
-		case 'no license':
+		case 'no license': {
 			csdcrit = 'F1';
 			break;
-		case 'no permission':
+		}
+		case 'no permission': {
 			csdcrit = 'F2';
 			break;
-		default:
+		}
+		default: {
 			throw new Error('Twinkle.image.callback.evaluate: 未知理由');
+		}
 	}
 	const lognomination =
 			Twinkle.getPref('logSpeedyNominations') &&
-			Twinkle.getPref('noLogOnSpeedyNomination').indexOf(csdcrit.toLowerCase()) === -1;
+			!Twinkle.getPref('noLogOnSpeedyNomination').includes(csdcrit.toLowerCase());
 	const templatename = input.derivative ? `dw ${input.type}` : input.type;
 	const params = $.extend(
 		{
@@ -216,7 +221,7 @@ Twinkle.image.callback.evaluate = (event) => {
 		// No auto-notification, display what was going to be added.
 		const noteData = document.createElement('pre');
 
-		noteData.appendChild(
+		noteData.append(
 			document.createTextNode(
 				`{{subst:di-${templatename}-notice|1=${mw.config.get('wgTitle')}}} ~~` + '~~'
 			)
@@ -238,14 +243,17 @@ Twinkle.image.callbacks = {
 		let tag = `{{di-${params.templatename}|date={{subst:#time:c}}`;
 		switch (params.type) {
 			case 'no source no license':
-			case 'no source':
+			case 'no source': {
 				tag += params.non_free ? '|non-free=yes' : '';
 				break;
-			case 'no permission':
+			}
+			case 'no permission': {
 				tag += params.source ? `|source=${params.source}` : '';
 				break;
-			default:
+			}
+			default: {
 				break;
+			}
 				// doesn't matter
 		}
 

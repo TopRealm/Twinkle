@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
  * _addText: '{{Twinkle Header}}'
@@ -312,17 +310,9 @@ Twinkle.speedy.initDialog = (callbackfunc) => {
 Twinkle.speedy.callback.getMode = (form) => {
 	let mode = Twinkle.speedy.mode.userSingleSubmit;
 	if (form.tag_only && !form.tag_only.checked) {
-		if (form.delmultiple.checked) {
-			mode = Twinkle.speedy.mode.sysopMultipleSubmit;
-		} else {
-			mode = Twinkle.speedy.mode.sysopSingleSubmit;
-		}
+		mode = form.delmultiple.checked ? Twinkle.speedy.mode.sysopMultipleSubmit : Twinkle.speedy.mode.sysopSingleSubmit;
 	} else {
-		if (form.multiple.checked) {
-			mode = Twinkle.speedy.mode.userMultipleSubmit;
-		} else {
-			mode = Twinkle.speedy.mode.userSingleSubmit;
-		}
+		mode = form.multiple.checked ? Twinkle.speedy.mode.userMultipleSubmit : Twinkle.speedy.mode.userSingleSubmit;
 	}
 	if (Twinkle.getPref('speedySelectionStyle') === 'radioClick') {
 		mode++;
@@ -382,7 +372,7 @@ Twinkle.speedy.callback.modeChanged = (form) => {
 		});
 	}
 	switch (namespace) {
-		case 0:
+		case 0: {
 			// article and pseudo namespace
 			work_area.append({
 				type: 'header',
@@ -394,7 +384,8 @@ Twinkle.speedy.callback.modeChanged = (form) => {
 				list: Twinkle.speedy.generateCsdList(Twinkle.speedy.articleList, mode)
 			});
 			break;
-		case 2:
+		}
+		case 2: {
 			// user
 			work_area.append({
 				type: 'header',
@@ -406,7 +397,8 @@ Twinkle.speedy.callback.modeChanged = (form) => {
 				list: Twinkle.speedy.generateCsdList(Twinkle.speedy.userList, mode)
 			});
 			break;
-		case 3:
+		}
+		case 3: {
 			// user talk
 			if (mw.util.isIPAddress(mw.config.get('wgRelevantUserName'))) {
 				work_area.append({
@@ -420,7 +412,8 @@ Twinkle.speedy.callback.modeChanged = (form) => {
 				});
 			}
 			break;
-		case 6:
+		}
+		case 6: {
 			// file
 			work_area.append({
 				type: 'header',
@@ -438,7 +431,8 @@ Twinkle.speedy.callback.modeChanged = (form) => {
 				});
 			}
 			break;
-		case 14:
+		}
+		case 14: {
 			// category
 			work_area.append({
 				type: 'header',
@@ -450,7 +444,8 @@ Twinkle.speedy.callback.modeChanged = (form) => {
 				list: Twinkle.speedy.generateCsdList(Twinkle.speedy.categoryList, mode)
 			});
 			break;
-		case 118:
+		}
+		case 118: {
 			// draft
 			work_area.append({
 				type: 'header',
@@ -462,7 +457,8 @@ Twinkle.speedy.callback.modeChanged = (form) => {
 				list: Twinkle.speedy.generateCsdList(Twinkle.speedy.draftList, mode)
 			});
 			break;
-		case namespace % 2 === 1 && namespace !== 3:
+		}
+		case namespace % 2 === 1 && namespace !== 3: {
 			// show db-talk on talk pages, but not user talk pages
 			work_area.append({
 				type: 'header',
@@ -474,8 +470,10 @@ Twinkle.speedy.callback.modeChanged = (form) => {
 				list: Twinkle.speedy.generateCsdList(Twinkle.speedy.talkList, mode)
 			});
 			break;
-		default:
+		}
+		default: {
 			break;
+		}
 	}
 
 	// custom rationale lives under general criteria when tagging
@@ -519,7 +517,7 @@ Twinkle.speedy.callback.modeChanged = (form) => {
 			if (Twinkle.getPref('speedySelectionStyle') !== 'radioClick') {
 				// force listeners to re-init
 				customOption.click();
-				customOption.parentNode.appendChild(customOption.subgroup);
+				customOption.parentNode.append(customOption.subgroup);
 			}
 			customOption.subgroup.querySelector('input').value = decodeURIComponent(
 				$('#delete-reason').text()
@@ -654,12 +652,12 @@ Twinkle.speedy.generateCsdList = (list, mode) => {
 		}
 		if (
 			criterion.showInNamespaces &&
-				criterion.showInNamespaces.indexOf(mw.config.get('wgNamespaceNumber')) < 0
+				!criterion.showInNamespaces.includes(mw.config.get('wgNamespaceNumber'))
 		) {
 			return null;
 		} else if (
 			criterion.hideInNamespaces &&
-				criterion.hideInNamespaces.indexOf(mw.config.get('wgNamespaceNumber')) > -1
+				criterion.hideInNamespaces.includes(mw.config.get('wgNamespaceNumber'))
 		) {
 			return null;
 		}
@@ -1071,7 +1069,7 @@ Twinkle.speedy.callbacks = {
 				params.deleteTalkPage &&
 					params.normalized !== 'f7' &&
 					params.normalized !== 'o1' &&
-					!document.getElementById('ca-talk').classList.contains('new')
+					!document.querySelector('#ca-talk').classList.contains('new')
 			) {
 				const talkpage = new Morebits.wiki.page(
 					`${
@@ -1206,8 +1204,7 @@ Twinkle.speedy.callbacks = {
 			};
 			if (
 				params.normalized === 'db' ||
-					Twinkle.getPref('promptForSpeedyDeletionSummary').indexOf(params.normalized) !==
-						-1
+					Twinkle.getPref('promptForSpeedyDeletionSummary').includes(params.normalized)
 			) {
 				// provide a link to the user talk page
 				const $link = $('<a>', {
@@ -1234,22 +1231,22 @@ Twinkle.speedy.callbacks = {
 					'打开中……'
 				);
 				switch (Twinkle.getPref('userTalkPageMode')) {
-					case 'tab':
+					case 'tab': {
 						window.open(
 							`${mw.util.wikiScript('index')}?${$.param(query)}`,
 							'_blank'
 						);
 						break;
-					case 'blank':
+					}
+					case 'blank': {
 						window.open(
 							`${mw.util.wikiScript('index')}?${$.param(query)}`,
 							'_blank',
 							'location=no,toolbar=no,status=no,directories=no,scrollbars=yes,width=1200,height=800'
 						);
 						break;
-					case 'window':
-						/* falls through */
-					default:
+					}
+					default: {
 						window.open(
 							`${mw.util.wikiScript('index')}?${$.param(query)}`,
 							window.name === 'twinklewarnwindow'
@@ -1258,6 +1255,7 @@ Twinkle.speedy.callbacks = {
 							'location=no,toolbar=no,status=no,directories=no,scrollbars=yes,width=1200,height=800'
 						);
 						break;
+					}
 				}
 				statusIndicator.info('完成');
 			}
@@ -1274,7 +1272,7 @@ Twinkle.speedy.callbacks = {
 			statusIndicator.status('0%');
 			let current = 0;
 			const onsuccess = (apiobjInner) => {
-				const now = `${parseInt(100 * ++current / total, 10)}%`;
+				const now = `${Number.parseInt(100 * ++current / total, 10)}%`;
 				statusIndicator.update(now);
 				apiobjInner.statelem.unlink();
 				if (current >= total) {
@@ -1307,7 +1305,7 @@ Twinkle.speedy.callbacks = {
 
 			// check for existing deletion tags
 			const textNoSd = text.replace(
-				/\{\{\s*(db(-\w*)?|d|delete|deletebecause|speedy|csd|速刪|速删|快删|快刪)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/gi,
+				/{{\s*(db(-\w*)?|d|delete|deletebecause|speedy|csd|速刪|速删|快删|快刪)\s*(\|(?:{{[^{}]*}}|[^{}])*)?}}\s*/gi,
 				''
 			);
 			if (
@@ -1318,7 +1316,7 @@ Twinkle.speedy.callbacks = {
 				return;
 			}
 			text = textNoSd;
-			const copyvio = /(?:\{\{\s*(copyvio|侵权|侵權)[^{}]*?\}\})/i.exec(text);
+			const copyvio = /(?:{{\s*(copyvio|侵权|侵權)[^{}]*?}})/i.exec(text);
 			if (
 				copyvio &&
 					!confirm('著作权验证模板已被置于页面中，您是否仍想加入一个快速删除模板？')
@@ -1326,7 +1324,7 @@ Twinkle.speedy.callbacks = {
 				statelem.error('页面中已有著作权验证模板。');
 				return;
 			}
-			const xfd = /(?:\{\{([rsaiftcmv]fd|md1|proposed deletion)[^{}]*?\}\})/i.exec(text);
+			const xfd = /(?:{{([acfimr-tv]fd|md1|proposed deletion)[^{}]*?}})/i.exec(text);
 			if (
 				xfd &&
 					!confirm(
@@ -1357,13 +1355,13 @@ Twinkle.speedy.callbacks = {
 
 			// Remove tags that become superfluous with this action
 			text = text.replace(
-				/\{\{\s*([Nn]ew unreviewed article|[Uu]nreviewed|[Uu]serspace draft)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/g,
+				/{{\s*([Nn]ew unreviewed article|[Uu]nreviewed|[Uu]serspace draft)\s*(\|(?:{{[^{}]*}}|[^{}])*)?}}\s*/g,
 				''
 			);
 			if (mw.config.get('wgNamespaceNumber') === 6) {
 				// remove "move to Commons" tag - deletion-tagged files cannot be moved to Commons
 				text = text.replace(
-					/\{\{(mtc|(copy |move )?to ?commons|move to wikimedia commons|copy to wikimedia commons)[^}]*\}\}/gi,
+					/{{(mtc|(copy |move )?to ?commons|move to wikimedia commons|copy to wikimedia commons)[^}]*}}/gi,
 					''
 				);
 			}
@@ -1456,12 +1454,10 @@ Twinkle.speedy.callbacks = {
 
 								notifytext += '}}--~~' + '~~';
 								let editsummary = '通知：';
-								if (params.normalizeds.indexOf('g12') === -1) {
+								editsummary += !params.normalizeds.includes('g12') ?
 									// no article name in summary for G10 deletions
-									editsummary += `页面[[${Morebits.pageNameNorm}]]`;
-								} else {
-									editsummary += '一攻击性页面';
-								}
+									`页面[[${Morebits.pageNameNorm}]]`:
+									'攻击性页面';
 								editsummary += '快速删除提名';
 								usertalkpage.setAppendText(notifytext);
 								usertalkpage.setEditSummary(editsummary);
@@ -1498,13 +1494,9 @@ Twinkle.speedy.callbacks = {
 			}`;
 			let appendText = `# [[:${Morebits.pageNameNorm}]]：`;
 			if (params.fromDI) {
-				if (params.normalized === 'f3 f4') {
-					appendText += '图版[[QW:F1|CSD F1]]（{{tl|no source no license/auto}}）';
-				} else {
-					appendText += `图版[[QW:CSD#${params.normalized.toUpperCase()}|CSD ${params.normalized.toUpperCase()}]]（{{tl|${
-						params.templatename
-					}}}）`;
-				}
+				appendText += params.normalized === 'f3 f4' ? '图版[[QW:F1|CSD F1]]（{{tl|no source no license/auto}}）' : `图版[[QW:CSD#${params.normalized.toUpperCase()}|CSD ${params.normalized.toUpperCase()}]]（{{tl|${
+					params.templatename
+				}}}）`;
 			} else {
 				if (params.normalizeds.length > 1) {
 					appendText += '多个理由（';
@@ -1537,7 +1529,7 @@ Twinkle.speedy.getParameters = (form, values) => {
 		const currentParams = [];
 		let redimage;
 		switch (value) {
-			case 'reason':
+			case 'reason': {
 				if (form['csd.reason_1']) {
 					const dbrationale = form['csd.reason_1'].value;
 					if (!dbrationale || !dbrationale.trim()) {
@@ -1548,7 +1540,8 @@ Twinkle.speedy.getParameters = (form, values) => {
 					currentParams['1'] = dbrationale;
 				}
 				break;
-			case 'a2':
+			}
+			case 'a2': {
 				if (form['csd.a2_pagename']) {
 					const a2_otherpage = form['csd.a2_pagename'].value;
 					if (!a2_otherpage || !a2_otherpage.trim()) {
@@ -1559,7 +1552,8 @@ Twinkle.speedy.getParameters = (form, values) => {
 					currentParams.pagename = a2_otherpage;
 				}
 				break;
-			case 'g4':
+			}
+			case 'g4': {
 				if (form['csd.g4_pagename']) {
 					const g4_otherpage = form['csd.g4_pagename'].value;
 					if (!g4_otherpage || !g4_otherpage.trim()) {
@@ -1570,7 +1564,8 @@ Twinkle.speedy.getParameters = (form, values) => {
 					currentParams.pagename = g4_otherpage;
 				}
 				break;
-			case 'f2':
+			}
+			case 'f2': {
 				if (form['csd.f2_filename']) {
 					redimage = form['csd.f2_filename'].value;
 					if (!redimage || !redimage.trim()) {
@@ -1584,7 +1579,8 @@ Twinkle.speedy.getParameters = (form, values) => {
 					);
 				}
 				break;
-			case 'r1':
+			}
+			case 'r1': {
 				if (form['csd.r1_type']) {
 					const r1_redirtype = form['csd.r1_type'].value;
 					if (!r1_redirtype) {
@@ -1595,7 +1591,8 @@ Twinkle.speedy.getParameters = (form, values) => {
 					currentParams['1'] = r1_redirtype;
 				}
 				break;
-			case 'r2':
+			}
+			case 'r2': {
 				if (form['csd.r2_type']) {
 					const r2_redirtype = form['csd.r2_type'].value;
 					if (!r2_redirtype) {
@@ -1606,8 +1603,10 @@ Twinkle.speedy.getParameters = (form, values) => {
 					currentParams['1'] = r2_redirtype;
 				}
 				break;
-			default:
+			}
+			default: {
 				break;
+			}
 		}
 		parameters.push(currentParams);
 	});
@@ -1619,8 +1618,9 @@ Twinkle.speedy.getParameters = (form, values) => {
 Twinkle.speedy.getUserTalkParameters = (normalized, parameters) => {
 	const utparams = [];
 	switch (normalized) {
-		default:
+		default: {
 			break;
+		}
 	}
 	return utparams;
 };
@@ -1630,7 +1630,7 @@ Twinkle.speedy.getUserTalkParameters = (normalized, parameters) => {
 	 * @returns {Array}
 	 */
 Twinkle.speedy.resolveCsdValues = (e) => {
-	const values = (e.target.form ? e.target.form : e.target).getChecked('csd');
+	const values = (e.target.form ?? e.target).getChecked('csd');
 	if (values.length === 0) {
 		alert('请选择一个理据。');
 		return null;
@@ -1638,7 +1638,7 @@ Twinkle.speedy.resolveCsdValues = (e) => {
 	return values;
 };
 Twinkle.speedy.callback.evaluateSysop = (e) => {
-	const form = e.target.form ? e.target.form : e.target;
+	const form = e.target.form ?? e.target;
 	if (
 		e.target.type === 'checkbox' ||
 			e.target.type === 'text' ||
@@ -1664,10 +1664,10 @@ Twinkle.speedy.callback.evaluateSysop = (e) => {
 	// analyse each criterion to determine whether to watch the page, prompt for summary, or notify the creator
 	let watchPage, promptForSummary;
 	normalizeds.forEach((norm) => {
-		if (Twinkle.getPref('watchSpeedyPages').indexOf(norm) !== -1) {
+		if (Twinkle.getPref('watchSpeedyPages').includes(norm)) {
 			watchPage = Twinkle.getPref('watchSpeedyExpiry');
 		}
-		if (Twinkle.getPref('promptForSpeedyDeletionSummary').indexOf(norm) !== -1) {
+		if (Twinkle.getPref('promptForSpeedyDeletionSummary').includes(norm)) {
 			promptForSummary = true;
 		}
 	});
@@ -1689,7 +1689,7 @@ Twinkle.speedy.callback.evaluateSysop = (e) => {
 	Twinkle.speedy.callbacks.sysop.main(params);
 };
 Twinkle.speedy.callback.evaluateUser = (e) => {
-	const form = e.target.form ? e.target.form : e.target;
+	const form = e.target.form ?? e.target;
 	if (
 		e.target.type === 'checkbox' ||
 			e.target.type === 'text' ||
@@ -1715,7 +1715,7 @@ Twinkle.speedy.callback.evaluateUser = (e) => {
 	// analyse each criterion to determine whether to watch the page/notify the creator
 	let watchPage = false;
 	$.each(normalizeds, (_index, norm) => {
-		if (Twinkle.getPref('watchSpeedyPages').indexOf(norm) !== -1) {
+		if (Twinkle.getPref('watchSpeedyPages').includes(norm)) {
 			watchPage = Twinkle.getPref('watchSpeedyExpiry');
 			return false; // break
 		}
@@ -1724,7 +1724,7 @@ Twinkle.speedy.callback.evaluateUser = (e) => {
 	let notifyuser = false;
 	if (form.notify.checked) {
 		$.each(normalizeds, (_index, norm) => {
-			if (Twinkle.getPref('notifyUserOnSpeedyDeletionNomination').indexOf(norm) !== -1) {
+			if (Twinkle.getPref('notifyUserOnSpeedyDeletionNomination').includes(norm)) {
 				notifyuser = true;
 				return false; // break
 			}
@@ -1734,7 +1734,7 @@ Twinkle.speedy.callback.evaluateUser = (e) => {
 	let csdlog = false;
 	if (Twinkle.getPref('logSpeedyNominations')) {
 		$.each(normalizeds, (_index, norm) => {
-			if (Twinkle.getPref('noLogOnSpeedyNomination').indexOf(norm) === -1) {
+			if (!Twinkle.getPref('noLogOnSpeedyNomination').includes(norm)) {
 				csdlog = true;
 				return false; // break
 			}

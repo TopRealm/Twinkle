@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
  * _addText: '{{Twinkle Header}}'
@@ -43,7 +41,7 @@ Twinkle.stub.callback = () => {
 	Window.addFooterLink('帮助文档', 'H:TW/DOC#小作品');
 	Window.addFooterLink('问题反馈', 'HT:TW');
 	const form = new Morebits.quickForm(Twinkle.stub.callback.evaluate);
-	if (document.getElementsByClassName('patrollink').length) {
+	if (document.querySelectorAll('.patrollink').length) {
 		form.append({
 			type: 'checkbox',
 			list: [
@@ -58,7 +56,7 @@ Twinkle.stub.callback = () => {
 	}
 	switch (Twinkle.stub.mode) {
 		case '條目':
-		case '条目':
+		case '条目': {
 			Window.setTitle('条目小作品标记');
 			form.append({
 				type: 'select',
@@ -86,9 +84,11 @@ Twinkle.stub.callback = () => {
 				id: 'tagWorkArea'
 			});
 			break;
-		default:
+		}
+		default: {
 			alert(`Twinkle.stub：未知模式 ${ Twinkle.stub.mode}`);
 			break;
+		}
 	}
 	form.append({
 		type: 'submit'
@@ -120,7 +120,7 @@ Twinkle.stub.updateSortOrder = (e) => {
 			value: tag,
 			label: `{{${ tag }}}: ${ description}`
 		};
-		if (Twinkle.stub.checkedTags.indexOf(tag) !== -1) {
+		if (Twinkle.stub.checkedTags.includes(tag)) {
 			checkbox.checked = true;
 		}
 		return checkbox;
@@ -293,7 +293,7 @@ Twinkle.stub.callbacks = {
 		// Check for preexisting tags and separate tags into groupable and non-groupable arrays
 		for (i = 0; i < params.tags.length; i++) {
 			tagRe = new RegExp(`(\\{\\{${ params.tags[i] }(\\||\\}\\}))`, 'im');
-			if (!tagRe.exec(pageText)) {
+			if (!tagRe.test(pageText)) {
 				tags = tags.concat(params.tags[i]);
 			} else {
 				Morebits.status.info('信息', `在页面上找到{{${ params.tags[i] }}}……跳过`);
@@ -312,7 +312,7 @@ Twinkle.stub.callbacks = {
 				}
 			}
 			summaryText += '{{[[';
-			summaryText += tagName.indexOf(':') !== -1 ? tagName : `Template:${ tagName }|${ tagName}`;
+			summaryText += tagName.includes(':') ? tagName : `Template:${ tagName }|${ tagName}`;
 			summaryText += ']]}}';
 		};
 		$.each(tags, addTag);
@@ -337,13 +337,15 @@ Twinkle.stub.callback.evaluate = (e) => {
 	}
 	switch (Twinkle.stub.mode) {
 		case '條目':
-		case '条目':
+		case '条目': {
 			params.tags = form.getChecked('articleTags');
 			params.group = false;
 			break;
-		default:
+		}
+		default: {
 			alert(`Twinkle.stub：未知模式 ${ Twinkle.stub.mode}`);
 			break;
+		}
 	}
 	if (!params.tags.length) {
 		alert('必须选择至少一个标记！');
@@ -362,16 +364,19 @@ Twinkle.stub.callback.evaluate = (e) => {
 		case '条目':
 		case '條目':
 			/* falls through */
-		case '重定向':
+		case '重定向': {
 			qiuwen_page.load(Twinkle.stub.callbacks.main);
 			return;
+		}
 		case '文件':
-		case '檔案':
+		case '檔案': {
 			qiuwen_page.load(Twinkle.stub.callbacks.file);
 			break;
-		default:
+		}
+		default: {
 			alert(`Twinkle.stub：未知模式 ${ Twinkle.stub.mode}`);
 			break;
+		}
 	}
 };
 Twinkle.addInitCallback(Twinkle.stub, 'stub');

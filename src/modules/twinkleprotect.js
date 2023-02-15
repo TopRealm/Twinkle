@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
  * _addText: '{{Twinkle Header}}'
@@ -266,7 +264,7 @@ Twinkle.protect.callback.changeAction = (e) => {
 	let field2;
 
 	switch (e.target.values) {
-		case 'protect':
+		case 'protect': {
 			field_preset = new Morebits.quickForm.element({
 				type: 'field',
 				label: '默认',
@@ -412,8 +410,9 @@ Twinkle.protect.callback.changeAction = (e) => {
 				// tagging isn't relevant for non-existing or module pages
 				break;
 			}
-			/* falls through */
-		case 'tag':
+		}
+		/* falls through */
+		case 'tag': {
 			field1 = new Morebits.quickForm.element({
 				type: 'field',
 				label: '标记选项',
@@ -452,8 +451,9 @@ Twinkle.protect.callback.changeAction = (e) => {
 				]
 			});
 			break;
+		}
 
-		case 'request':
+		case 'request': {
 			field_preset = new Morebits.quickForm.element({
 				type: 'field',
 				label: '保护类型',
@@ -492,9 +492,11 @@ Twinkle.protect.callback.changeAction = (e) => {
 				label: '理由：'
 			});
 			break;
-		default:
+		}
+		default: {
 			alert('这玩意儿被逆袭的天邪鬼吃掉了！');
 			break;
+		}
 	}
 
 	let oldfield;
@@ -589,7 +591,7 @@ Twinkle.protect.doCustomExpiry = (target) => {
 		const option = document.createElement('option');
 		option.setAttribute('value', custom);
 		option.textContent = custom;
-		target.appendChild(option);
+		target.append(option);
 		target.value = custom;
 	} else {
 		target.selectedIndex = 0;
@@ -893,11 +895,11 @@ Twinkle.protect.callback.changePreset = (e) => {
 
 	const actiontypes = form.actiontype;
 	let actiontype;
-	for (let i = 0; i < actiontypes.length; i++) {
-		if (!actiontypes[i].checked) {
+	for (const actiontype_ of actiontypes) {
+		if (!actiontype_.checked) {
 			continue;
 		}
-		actiontype = actiontypes[i].values;
+		actiontype = actiontype_.values;
 		break;
 	}
 
@@ -937,22 +939,14 @@ Twinkle.protect.callback.changePreset = (e) => {
 		}
 
 		const reasonField = actiontype === 'protect' ? form.protectReason : form.reason;
-		if (item.reason) {
-			reasonField.value = item.reason;
-		} else {
-			reasonField.value = '';
-		}
+		reasonField.value = item.reason ?? '';
 
 		// sort out tagging options, disabled if nonexistent or lua
 		if (
 			mw.config.get('wgArticleId') &&
 				mw.config.get('wgPageContentModel') !== 'Scribunto'
 		) {
-			if (form.category.value === 'unprotect') {
-				form.tagtype.value = 'none';
-			} else {
-				form.tagtype.value = item.template ? item.template : form.category.value;
-			}
+			form.tagtype.value = form.category.value === 'unprotect' ? 'none' : item.template ?? form.category.value;
 			Twinkle.protect.formevents.tagtype({ target: form.tagtype });
 
 			if (/template/.test(form.category.value)) {
@@ -1013,27 +1007,42 @@ Twinkle.protect.callback.evaluate = (e) => {
 			closeparams.type = 'unprotect';
 		} else if (mw.config.get('wgArticleId')) {
 			if (input.editmodify) {
-				if (input.editlevel === 'officialprotected') {
-					closeparams.type = 'officialprotected';
-					closeparams.expiry = input.editexpiry;
-				} else if (input.editlevel === 'revisionprotected') {
-					closeparams.type = 'revisionprotected';
-					closeparams.expiry = input.editexpiry;
-				} else if (input.editlevel === 'sysop') {
-					closeparams.type = 'full';
-					closeparams.expiry = input.editexpiry;
-				} else if (input.editlevel === 'templateeditor') {
-					closeparams.type = 'temp';
-					closeparams.expiry = input.editexpiry;
-				} else if (input.editlevel === 'autoconfirmed') {
-					closeparams.type = 'semi';
-					closeparams.expiry = input.editexpiry;
+				switch (input.editlevel) {
+					case 'officialprotected': {
+						closeparams.type = 'officialprotected';
+						closeparams.expiry = input.editexpiry;
+
+						break;
+					}
+					case 'revisionprotected': {
+						closeparams.type = 'revisionprotected';
+						closeparams.expiry = input.editexpiry;
+
+						break;
+					}
+					case 'sysop': {
+						closeparams.type = 'full';
+						closeparams.expiry = input.editexpiry;
+
+						break;
+					}
+					case 'templateeditor': {
+						closeparams.type = 'temp';
+						closeparams.expiry = input.editexpiry;
+
+						break;
+					}
+					case 'autoconfirmed': {
+						closeparams.type = 'semi';
+						closeparams.expiry = input.editexpiry;
+
+						break;
+					}
+				// No default
 				}
 			} else if (
 				input.movemodify &&
-					['officialprotected', 'revisionprotected', 'sysop', 'templateeditor'].indexOf(
-						input.movelevel
-					) !== -1
+					['officialprotected', 'revisionprotected', 'sysop', 'templateeditor'].includes(input.movelevel)
 			) {
 				closeparams.type = 'move';
 				closeparams.expiry = input.moveexpiry;
@@ -1119,7 +1128,7 @@ Twinkle.protect.callback.evaluate = (e) => {
 
 			break;
 		}
-		case 'tag':
+		case 'tag': {
 			// apply a protection template
 			Morebits.simpleWindow.setButtonsEnabled(false);
 			Morebits.status.init(form);
@@ -1130,6 +1139,7 @@ Twinkle.protect.callback.evaluate = (e) => {
 
 			Twinkle.protect.callbacks.taggingPageInitial(tagparams);
 			break;
+		}
 
 		case 'request': {
 			// file request at RFPP
@@ -1138,36 +1148,41 @@ Twinkle.protect.callback.evaluate = (e) => {
 				case 'pp-dispute':
 				case 'pp-vandalism':
 				case 'pp-usertalk':
-				case 'pp-protected':
+				case 'pp-protected': {
 					typename = '全保护';
 					break;
-				case 'pp-template':
+				}
+				case 'pp-template': {
 					typename = '模板保护';
 					break;
+				}
 				case 'pp-semi-vandalism':
 				case 'pp-semi-disruptive':
 				case 'pp-semi-unsourced':
 				case 'pp-semi-usertalk':
 				case 'pp-semi-sock':
 				case 'pp-semi-blp':
-				case 'pp-semi-protected':
+				case 'pp-semi-protected': {
 					typename = '半保护';
 					break;
+				}
 				case 'pp-move':
 				case 'pp-move-dispute':
 				case 'pp-move-indef':
-				case 'pp-move-vandalism':
+				case 'pp-move-vandalism': {
 					typename = '移动保护';
 					break;
+				}
 				case 'pp-create':
 				case 'pp-create-offensive':
 				case 'pp-create-blp':
-				case 'pp-create-salt':
+				case 'pp-create-salt': {
 					typename = '白纸保护';
 					break;
+				}
 				case 'unprotect': {
 					const admins = $.map(Twinkle.protect.currentProtectionLevels, (pl) => {
-						if (!pl.admin || Twinkle.protect.trustedBots.indexOf(pl.admin) !== -1) {
+						if (!pl.admin || Twinkle.protect.trustedBots.includes(pl.admin)) {
 							return null;
 						}
 						return `User:${pl.admin}`;
@@ -1182,43 +1197,54 @@ Twinkle.protect.callback.evaluate = (e) => {
 					}
 					// otherwise falls through
 				}
-				default:
+				default: {
 					alert('未知保护类型！');
 					break;
+				}
 			}
 			switch (input.category) {
-				case 'pp-dispute':
+				case 'pp-dispute': {
 					typereason = '争议或编辑战';
 					break;
+				}
 				case 'pp-vandalism':
-				case 'pp-semi-vandalism':
+				case 'pp-semi-vandalism': {
 					typereason = '持续[[QW:VAND|破坏]]';
 					break;
-				case 'pp-template':
+				}
+				case 'pp-template': {
 					typereason = '高风险模板';
 					break;
+				}
 				case 'pp-usertalk':
-				case 'pp-semi-usertalk':
+				case 'pp-semi-usertalk': {
 					typereason = '被封禁用户滥用其讨论页';
 					break;
-				case 'pp-semi-sock':
+				}
+				case 'pp-semi-sock': {
 					typereason = '持续滥用[[QW:SOCK|多重账号]]';
 					break;
-				case 'pp-semi-blp':
+				}
+				case 'pp-semi-blp': {
 					typereason = '违反[[QW:BLP|生者传记方针]]';
 					break;
-				case 'pp-move-dispute':
+				}
+				case 'pp-move-dispute': {
 					typereason = '页面标题争议、编辑战';
 					break;
-				case 'pp-move-vandalism':
+				}
+				case 'pp-move-vandalism': {
 					typereason = '移动破坏';
 					break;
-				case 'pp-move-indef':
+				}
+				case 'pp-move-indef': {
 					typereason = '高风险页面';
 					break;
-				default:
+				}
+				default: {
 					typereason = '';
 					break;
+				}
 			}
 
 			let reason = typereason;
@@ -1254,9 +1280,10 @@ Twinkle.protect.callback.evaluate = (e) => {
 			rppPage.load(Twinkle.protect.callbacks.fileRequest);
 			break;
 		}
-		default:
+		default: {
 			alert('twinkleprotect: 未知操作类型');
 			break;
+		}
 	}
 };
 
@@ -1276,17 +1303,15 @@ Twinkle.protect.callbacks = {
 		let tag, summary;
 
 		const oldtag_re =
-				/(?:<noinclude>)?[ \t]*\{\{\s*(pp-[^{}]*?|protected|(?:t|v|s|p-|usertalk-v|usertalk-s|sb|move)protected(?:2)?|protected template|privacy protection)\s*?\}\}\s*(?:<\/noinclude>)?\s*/gi;
+				/(?:<noinclude>)?[\t ]*{{\s*(pp-[^{}]*?|protected|(?:t|v|s|p-|usertalk-v|usertalk-s|sb|move)protected2?|protected template|privacy protection)\s*?}}\s*(?:<\/noinclude>)?\s*/gi;
 		const re_result = oldtag_re.exec(text);
-		if (re_result) {
-			if (
-				params.tag === 'none' ||
+		if (re_result && (
+			params.tag === 'none' ||
 					confirm(
 						`在页面上找到{{${re_result[1]}}}\n单击确定以移除，或单击取消以取消操作。`
 					)
-			) {
-				text = text.replace(oldtag_re, '');
-			}
+		)) {
+			text = text.replace(oldtag_re, '');
 		}
 
 		if (params.tag === 'none') {
@@ -1311,12 +1336,12 @@ Twinkle.protect.callbacks = {
 				// redirect page
 				// Only tag if no {{rcat shell}} is found
 				if (
-					!text.match(
-						/{{(?:Redirect[ _]category shell|Rcat[ _]shell|This[ _]is a redirect|多种类型重定向|多種類型重定向|多種類型重新導向|多种类型重新导向|R0|其他重定向|RCS|Redirect[ _]shell)/i
+					!/{{(?:redirect[ _]category shell|rcat[ _]shell|this[ _]is a redirect|多种类型重定向|多種類型重定向|多種類型重新導向|多种类型重新导向|r0|其他重定向|rcs|redirect[ _]shell)/i.test(
+						text
 					)
 				) {
 					text = text.replace(
-						/#(?:redirect|重定向|重新導向) ?(\[\[.*?\]\])(.*)/i,
+						/#(?:redirect|重定向|重新導向) ?(\[\[.*?]])(.*)/i,
 						`#REDIRECT $1$2\n\n{{${tag}}}`
 					);
 				} else {
@@ -1380,7 +1405,7 @@ Twinkle.protect.callbacks = {
 
 		const rppLink = document.createElement('a');
 		rppLink.setAttribute('href', mw.util.getUrl(rppPage.getPageName()));
-		rppLink.appendChild(document.createTextNode(rppPage.getPageName()));
+		rppLink.append(document.createTextNode(rppPage.getPageName()));
 
 		if (tag) {
 			statusElement.error([rppLink, '已有对此页面的保护提名，取消操作。']);
@@ -1399,15 +1424,18 @@ Twinkle.protect.callbacks = {
 
 		let words;
 		switch (params.expiry) {
-			case 'temporary':
+			case 'temporary': {
 				words = '临时';
 				break;
-			case 'infinity':
+			}
+			case 'infinity': {
 				words = '永久';
 				break;
-			default:
+			}
+			default: {
 				words = '';
 				break;
+			}
 		}
 
 		words += params.typename;
@@ -1422,13 +1450,7 @@ Twinkle.protect.callbacks = {
 						: '。'
 				}--~~` + '~~';
 
-		let reg;
-
-		if (params.category === 'unprotect') {
-			reg = /(==\s*请求解除保护\s*==)/;
-		} else {
-			reg = /({{\s*\/header\s*}})/;
-		}
+		const reg = params.category === 'unprotect' ? /(==\s*请求解除保护\s*==)/ : /({{\s*\/header\s*}})/;
 
 		const originalTextLength = text.length;
 		text = text.replace(reg, `$1\n${newtag}\n`);
@@ -1452,7 +1474,7 @@ Twinkle.protect.callbacks = {
 			const watch =
 					watchPref !== 'no' &&
 					(watchPref !== 'default' ||
-						!!parseInt(mw.user.options.get('watchdefault'), 10));
+						!!Number.parseInt(mw.user.options.get('watchdefault'), 10));
 			if (watch) {
 				const watch_query = {
 					action: 'watch',
@@ -1503,8 +1525,8 @@ Twinkle.protect.callbacks = {
 			'm'
 		);
 		for (let i = 1; i < requestList.length; i++) {
-			if (rppRe.exec(requestList[i])) {
-				requestList[i] = requestList[i].trimRight();
+			if (rppRe.test(requestList[i])) {
+				requestList[i] = requestList[i].trimEnd();
 				if (params.type === 'unprotect') {
 					requestList[i] += '\n: {{RFPP|isun}}。--~~' + '~~\n';
 				} else {
@@ -1523,47 +1545,48 @@ Twinkle.protect.callbacks = {
 			return;
 		}
 
-		if (params.type === 'unprotect') {
-			text = sections[0] + requestList.join('');
-		} else {
-			text = requestList.join('') + sections[1];
-		}
+		text = params.type === 'unprotect' ? sections[0] + requestList.join('') : requestList.join('') + sections[1];
 
 		let summary = '';
 
-		if (params.type === 'unprotect') {
-			sectionText = sections[1];
-		} else {
-			sectionText = sections[0];
-		}
+		sectionText = params.type === 'unprotect' ? sections[1] : sections[0];
 		switch (params.type) {
-			case 'semi':
+			case 'semi': {
 				summary = '半保护';
 				break;
-			case 'temp':
+			}
+			case 'temp': {
 				summary = '模板保护';
 				break;
-			case 'full':
+			}
+			case 'full': {
 				summary = '全保护';
 				break;
-			case 'revisionprotected':
+			}
+			case 'revisionprotected': {
 				summary = '版本保护';
 				break;
-			case 'officialprotected':
+			}
+			case 'officialprotected': {
 				summary = '裁委会保护';
 				break;
-			case 'move':
+			}
+			case 'move': {
 				summary = '移动保护';
 				break;
-			case 'salt':
+			}
+			case 'salt': {
 				summary = '白纸保护';
 				break;
-			case 'unprotect':
+			}
+			case 'unprotect': {
 				summary = '解除保护';
 				break;
-			default:
+			}
+			default: {
 				statusElement.warn('未知保护类型');
 				return;
+			}
 		}
 
 		if (Morebits.string.isInfinity(params.expiry)) {
@@ -1586,39 +1609,49 @@ Twinkle.protect.formatProtectionDescription = (protectionLevels) => {
 		$.each(protectionLevels, (type, settings) => {
 			let label;
 			switch (type) {
-				case 'edit':
+				case 'edit': {
 					label = '编辑';
 					break;
-				case 'move':
+				}
+				case 'move': {
 					label = '移动';
 					break;
-				case 'create':
+				}
+				case 'create': {
 					label = '创建';
 					break;
-				default:
+				}
+				default: {
 					label = type;
 					break;
+				}
 			}
 			let level;
 			switch (settings.level) {
-				case 'officialprotected':
+				case 'officialprotected': {
 					level = '仅允许裁决委员';
 					break;
-				case 'revisionprotected':
+				}
+				case 'revisionprotected': {
 					level = '仅允许资深用户';
 					break;
-				case 'sysop':
+				}
+				case 'sysop': {
 					level = '仅管理员';
 					break;
-				case 'templateeditor':
+				}
+				case 'templateeditor': {
 					level = '仅模板编辑员和管理员';
 					break;
-				case 'autoconfirmed':
+				}
+				case 'autoconfirmed': {
 					level = '仅允许自动确认用户';
 					break;
-				default:
+				}
+				default: {
 					level = settings.level;
 					break;
+				}
 			}
 			protectionNode.push($(`<b>${label}：${level}</b>`)[0]);
 			if (Morebits.string.isInfinity(settings.expiry)) {

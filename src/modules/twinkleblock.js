@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
  * _addText: '{{Twinkle Header}}'
@@ -194,7 +192,7 @@ Twinkle.block.fetchUserInfo = (fn) => {
 							.map((e) => {
 								return e.group;
 							})
-							.indexOf('bot') !== -1;
+							.includes('bot');
 			} else {
 				relevantUserName = userName;
 				Twinkle.block.userIsBot = false;
@@ -224,9 +222,9 @@ Twinkle.block.fetchUserInfo = (fn) => {
 				return fn();
 			}
 		},
-		(msg) => {
+		(error) => {
 			Morebits.status.init($('div[name="currentblock"] span').last()[0]);
-			Morebits.status.warn('抓取用户信息出错', msg);
+			Morebits.status.warn('抓取用户信息出错', error);
 		}
 	);
 };
@@ -463,8 +461,7 @@ Twinkle.block.callback.change_action = (e) => {
 			label: '监视该用户的用户页和讨论页',
 			name: 'watchuser',
 			value: '1'
-		});
-		blockoptions.push({
+		}, {
 			checked: true,
 			label: '标记当前的破坏中的请求',
 			name: 'closevip',
@@ -1405,11 +1402,7 @@ Twinkle.block.callback.toggle_see_alsos = function twinkleblockCallbackToggleSee
 		Twinkle.block.seeAlsos.push(this.value);
 	}
 	const seeAlsoMessage = Twinkle.block.seeAlsos.join('、');
-	if (!Twinkle.block.seeAlsos.length) {
-		this.form.reason.value = reason;
-	} else {
-		this.form.reason.value = `${reason}<!-- 参见${seeAlsoMessage} -->`;
-	}
+	this.form.reason.value = !Twinkle.block.seeAlsos.length ? reason : `${reason}<!-- 参见${seeAlsoMessage} -->`;
 };
 Twinkle.block.callback.update_form = (e, data) => {
 	const form = e.target.form;
@@ -1453,11 +1446,7 @@ Twinkle.block.callback.update_form = (e, data) => {
 			const check = data[el.name] === '' || !!data[el.name];
 			$(el).prop('checked', check);
 		});
-	if (data.prependReason && data.reason) {
-		form.reason.value = `${data.reason}; ${form.reason.value}`;
-	} else {
-		form.reason.value = data.reason || '';
-	}
+	form.reason.value = data.prependReason && data.reason ? `${data.reason}; ${form.reason.value}` : data.reason || '';
 };
 Twinkle.block.callback.change_template = (e) => {
 	const form = e.target.form,
@@ -1584,7 +1573,7 @@ Twinkle.block.callback.evaluate = (e) => {
 	// Given an array of incompatible tags, check if we have two or more selected
 	const checkIncompatible = (conflicts, extra) => {
 		const count = conflicts.reduce((sum, tag) => {
-			sum += params.tag.indexOf(tag) !== -1;
+			sum += params.tag.includes(tag);
 			return sum;
 		}, 0);
 		if (count > 1) {
@@ -1630,7 +1619,7 @@ Twinkle.block.callback.evaluate = (e) => {
 		) {
 			return;
 		}
-		if (params.tag.indexOf('Blocked sockpuppet') > -1 && params.sppUsername.trim() === '') {
+		if (params.tag.includes('Blocked sockpuppet') && params.sppUsername.trim() === '') {
 			return alert('请提供傀儡账户的主账户用户名！');
 		}
 	}
@@ -1638,7 +1627,7 @@ Twinkle.block.callback.evaluate = (e) => {
 		if (blockoptions.partial) {
 			if (
 				blockoptions.disabletalk &&
-					blockoptions.namespacerestrictions.indexOf('3') === -1
+					!blockoptions.namespacerestrictions.includes('3')
 			) {
 				return alert(
 					'部分封禁无法阻止编辑自己的讨论页，除非也封禁了User talk命名空间！'
@@ -1729,11 +1718,7 @@ Twinkle.block.callback.evaluate = (e) => {
 					!!block !== !!Twinkle.block.currentBlockInfo
 			) {
 				let message = `${mw.config.get('wgRelevantUserName')}的封禁状态已被修改。`;
-				if (block) {
-					message += '新状态：';
-				} else {
-					message += '最新日志：';
-				}
+				message += block ? '新状态：' : '最新日志：';
 				let logExpiry = '';
 				if (logevents.params.duration) {
 					if (logevents.params.duration === 'infinity') {
@@ -1810,20 +1795,22 @@ Twinkle.block.callback.evaluate = (e) => {
 Twinkle.block.callback.taguserpage = (pageobj) => {
 	const params = pageobj.getCallbackParameters();
 	const statelem = pageobj.getStatusElement();
-	if (params.actiontype.indexOf('tag') > -1) {
+	if (params.actiontype.includes('tag')) {
 		const tags = [];
 		params.tag.forEach((tag) => {
 			let tagtext = `{{${tag}`;
 			switch (tag) {
-				case 'Blocked user':
+				case 'Blocked user': {
 					break;
-				case 'Blocked sockpuppet':
+				}
+				case 'Blocked sockpuppet': {
 					tagtext += `|1=${params.sppUsername.trim()}`;
 					if (params.sppEvidence.trim()) {
 						tagtext += `|evidence=${params.sppEvidence.trim()}`;
 					}
 					break;
-				case 'Sockpuppeteer':
+				}
+				case 'Sockpuppeteer': {
 					tagtext += '|blocked';
 					if (params.spmChecked) {
 						tagtext += '|check=yes';
@@ -1832,13 +1819,16 @@ Twinkle.block.callback.taguserpage = (pageobj) => {
 						tagtext += `|evidence=${params.spmEvidence.trim()}`;
 					}
 					break;
-				case 'Locked global account':
+				}
+				case 'Locked global account': {
 					if (params.lockBlocked) {
 						tagtext += '|blocked=yes';
 					}
 					break;
-				default:
+				}
+				default: {
 					return alert('未知的用户页模板！');
+				}
 			}
 			tagtext += '}}';
 			tags.push(tagtext);
@@ -1862,7 +1852,7 @@ Twinkle.block.callback.taguserpage = (pageobj) => {
 Twinkle.block.callback.protectuserpage = (pageobj) => {
 	const params = pageobj.getCallbackParameters();
 	const statelem = pageobj.getStatusElement();
-	if (params.actiontype.indexOf('protect') > -1) {
+	if (params.actiontype.includes('protect')) {
 		if (pageobj.exists()) {
 			pageobj.setEditProtection('sysop', 'indefinite');
 			pageobj.setMoveProtection('sysop', 'indefinite');
@@ -1925,12 +1915,12 @@ Twinkle.block.callback.closeRequest = (vipPage) => {
 		'm'
 	);
 	for (let i = 1; i < requestList.length; i++) {
-		if (vipRe.exec(requestList[i])) {
+		if (vipRe.test(requestList[i])) {
 			hidename = /\|\s*hidename\s*=[^|]+/.test(requestList[i]);
-			requestList[i] = requestList[i].trimRight();
+			requestList[i] = requestList[i].trimEnd();
 
 			let newText = requestList[i].replace(
-				/^(\*\s*处理：)[ \t]*(<!-- 非管理員僅可標記已執行的封禁，針對提報的意見請放在下一行 -->)?[ \t]*$/m,
+				/^(\*\s*处理：)[\t ]*(<!-- 非管理員僅可標記已執行的封禁，針對提報的意見請放在下一行 -->)?[\t ]*$/m,
 				`$1${comment}--~~` + '~~'
 			);
 			if (requestList[i] === newText) {
@@ -1951,11 +1941,7 @@ Twinkle.block.callback.closeRequest = (vipPage) => {
 		summary = '标记为已处理';
 	} else {
 		summary = `/* ${userName} */ `;
-		if (Morebits.string.isInfinity(params.expiry)) {
-			summary += '不限期封禁';
-		} else {
-			summary += `封禁${expiryText}`;
-		}
+		summary += Morebits.string.isInfinity(params.expiry) ? '不限期封禁' : `封禁${expiryText}`;
 	}
 	vipPage.setEditSummary(summary);
 	vipPage.setChangeTags(Twinkle.changeTags);
@@ -1970,7 +1956,7 @@ Twinkle.block.callback.getBlockNoticeWikitext = (params, nosign) => {
 		if (params.article && settings.pageParam) {
 			text += `|page=${params.article}`;
 		}
-		if (!/te?mp|^\s*$|min/.exec(params.expiry)) {
+		if (!/te?mp|^\s*$|min/.test(params.expiry)) {
 			if (params.indefinite) {
 				text += '|indef=yes';
 			} else if (!params.blank_duration) {

@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
  * _addText: '{{Twinkle Header}}'
@@ -28,8 +26,8 @@ Twinkle.tag = () => {
 		// file tagging
 	} else if (
 		mw.config.get('wgNamespaceNumber') === 6 &&
-			!document.getElementById('mw-sharedupload') &&
-			document.getElementById('mw-imagepage-section-filehistory')
+			!document.querySelector('#mw-sharedupload') &&
+			document.querySelector('#mw-imagepage-section-filehistory')
 	) {
 		Twinkle.tag.mode = '文件';
 		Twinkle.addPortletLink(
@@ -40,7 +38,7 @@ Twinkle.tag = () => {
 		);
 		// article/draft tagging
 	} else if (
-		[0, 118].indexOf(mw.config.get('wgNamespaceNumber')) !== -1 &&
+		[0, 118].includes(mw.config.get('wgNamespaceNumber')) &&
 				mw.config.get('wgCurRevisionId') ||
 			Morebits.pageNameNorm === Twinkle.getPref('sandboxPage')
 	) {
@@ -256,12 +254,13 @@ Twinkle.tag.callback = () => {
 			}
 			break;
 		}
-		default:
+		default: {
 			alert(`Twinkle.tag：未知模式 ${Twinkle.tag.mode}`);
 			break;
+		}
 	}
 
-	if (document.getElementsByClassName('patrollink').length) {
+	if (document.querySelectorAll('.patrollink').length) {
 		form.append({
 			type: 'checkbox',
 			list: [
@@ -377,11 +376,11 @@ Twinkle.tag.updateSortOrder = (e) => {
 	// function to generate a checkbox, with appropriate subgroup if needed
 	const makeCheckbox = (tag, description) => {
 		const checkbox = { value: tag, label: `{{${tag}}}: ${description}` };
-		if (Twinkle.tag.checkedTags.indexOf(tag) !== -1) {
+		if (Twinkle.tag.checkedTags.includes(tag)) {
 			checkbox.checked = true;
 		}
 		switch (tag) {
-			case 'Expand language':
+			case 'Expand language': {
 				checkbox.subgroup = [
 					{
 						name: 'expandLanguage',
@@ -427,7 +426,8 @@ Twinkle.tag.updateSortOrder = (e) => {
 					}
 				];
 				break;
-			case 'Expert needed':
+			}
+			case 'Expert needed': {
 				checkbox.subgroup = [
 					{
 						name: 'expert',
@@ -449,17 +449,20 @@ Twinkle.tag.updateSortOrder = (e) => {
 					}
 				];
 				break;
+			}
 			case 'Merge':
 			case 'Merge from':
 			case 'Merge to': {
 				let otherTagName = 'Merge';
 				switch (tag) {
-					case 'Merge from':
+					case 'Merge from': {
 						otherTagName = 'Merge to';
 						break;
-					case 'Merge to':
+					}
+					case 'Merge to': {
 						otherTagName = 'Merge from';
 						break;
+					}
 						// no default
 				}
 				checkbox.subgroup = [
@@ -494,7 +497,7 @@ Twinkle.tag.updateSortOrder = (e) => {
 				}
 				break;
 			}
-			case 'Missing information':
+			case 'Missing information': {
 				checkbox.subgroup = {
 					name: 'missingInformation',
 					type: 'input',
@@ -502,7 +505,8 @@ Twinkle.tag.updateSortOrder = (e) => {
 					tooltip: '必填，显示为“缺少有关……的信息。”'
 				};
 				break;
-			case 'Notability':
+			}
+			case 'Notability': {
 				checkbox.subgroup = {
 					name: 'notability',
 					type: 'select',
@@ -540,7 +544,8 @@ Twinkle.tag.updateSortOrder = (e) => {
 					]
 				};
 				break;
-			case 'Requested move':
+			}
+			case 'Requested move': {
 				checkbox.subgroup = [
 					{
 						name: 'moveTarget',
@@ -555,7 +560,8 @@ Twinkle.tag.updateSortOrder = (e) => {
 					}
 				];
 				break;
-			case 'Split':
+			}
+			case 'Split': {
 				checkbox.subgroup = [
 					{
 						name: 'target1',
@@ -577,7 +583,8 @@ Twinkle.tag.updateSortOrder = (e) => {
 					}
 				];
 				break;
-			case 'Cleanup':
+			}
+			case 'Cleanup': {
 				checkbox.subgroup = [
 					{
 						name: 'cleanupReason',
@@ -587,8 +594,10 @@ Twinkle.tag.updateSortOrder = (e) => {
 					}
 				];
 				break;
-			default:
+			}
+			default: {
 				break;
+			}
 		}
 		return checkbox;
 	};
@@ -606,7 +615,7 @@ Twinkle.tag.updateSortOrder = (e) => {
 						? `: ${Twinkle.tag.article.flatObject[tag].description}`
 						: ''
 				}`,
-				checked: unCheckedTags.indexOf(tag) === -1
+				checked: !unCheckedTags.includes(tag)
 			};
 
 			checkboxes.push(checkbox);
@@ -624,7 +633,7 @@ Twinkle.tag.updateSortOrder = (e) => {
 		const doCategoryCheckboxes = (subdiv, subgroup) => {
 			const checkboxes = [];
 			$.each(subgroup, (k, item) => {
-				if (Twinkle.tag.alreadyPresentTags.indexOf(item.tag) === -1) {
+				if (!Twinkle.tag.alreadyPresentTags.includes(item.tag)) {
 					checkboxes.push(makeCheckbox(item.tag, item.description));
 				}
 			});
@@ -668,7 +677,7 @@ Twinkle.tag.updateSortOrder = (e) => {
 		).sort();
 		const checkboxes = [];
 		Twinkle.tag.article.alphabeticalList.forEach((tag) => {
-			if (Twinkle.tag.alreadyPresentTags.indexOf(tag) === -1) {
+			if (!Twinkle.tag.alreadyPresentTags.includes(tag)) {
 				checkboxes.push(
 					makeCheckbox(tag, Twinkle.tag.article.flatObject[tag].description)
 				);
@@ -688,7 +697,7 @@ Twinkle.tag.updateSortOrder = (e) => {
 			type: 'checkbox',
 			name: 'tags',
 			list: Twinkle.getPref('customTagList').map((el) => {
-				el.checked = Twinkle.tag.checkedTags.indexOf(el.value) !== -1;
+				el.checked = Twinkle.tag.checkedTags.includes(el.value);
 				return el;
 			})
 		});
@@ -716,7 +725,7 @@ Twinkle.tag.updateSortOrder = (e) => {
 	Morebits.quickForm.getElements(form, 'tags').forEach(generateLinks);
 
 	// tally tags added/removed, update statusNode text
-	const statusNode = document.getElementById('tw-tag-status');
+	const statusNode = document.querySelector('#tw-tag-status');
 	$('[name=tags], [name=existingTags]').on('click', function () {
 		if (this.name === 'tags') {
 			Twinkle.tag.status.numAdded += this.checked ? 1 : -1;
@@ -746,8 +755,8 @@ const generateLinks = (checkbox) => {
 	link.setAttribute(
 		'href',
 		mw.util.getUrl(
-			(tagname.indexOf(':') === -1 ? 'Template:' : '') +
-					(tagname.indexOf('|') === -1 ? tagname : tagname.slice(0, tagname.indexOf('|')))
+			(!tagname.includes(':') ? 'Template:' : '') +
+					(!tagname.includes('|') ? tagname : tagname.slice(0, tagname.indexOf('|')))
 		)
 	);
 	link.setAttribute('target', '_blank');
@@ -1190,7 +1199,7 @@ Twinkle.tag.callbacks = {
 		let pageText = pageobj
 			.getPageText()
 			.replace(
-				/\{\{\s*([Nn]ew unreviewed article|[Uu]nreviewed|[Uu]serspace draft)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/g,
+				/{{\s*([Nn]ew unreviewed article|[Uu]nreviewed|[Uu]serspace draft)\s*(\|(?:{{[^{}]*}}|[^{}])*)?}}\s*/g,
 				''
 			);
 		const params = pageobj.getCallbackParameters();
@@ -1203,12 +1212,12 @@ Twinkle.tag.callbacks = {
 			if (params.tagsToRemove.length) {
 				// Remove empty {{multiple issues}} if found
 				pageText = pageText.replace(
-					/\{\{(multiple ?issues|article ?issues|mi|ai|issues|多個問題|多个问题|問題條目|问题条目|數個問題|数个问题)\s*\|\s*\}\}\n?/im,
+					/{{(multiple ?issues|article ?issues|mi|ai|issues|多個問題|多个问题|問題條目|问题条目|數個問題|数个问题)\s*\|\s*}}\n?/im,
 					''
 				);
 				// Remove single-element {{multiple issues}} if found
 				pageText = pageText.replace(
-					/\{\{(?:multiple ?issues|article ?issues|mi|ai|issues|多個問題|多个问题|問題條目|问题条目|數個問題|数个问题)\s*\|\s*(\{\{(?:\{\{[^{}]*\}\}|[^{}])+\}\})\s*\}\}/im,
+					/{{(?:multiple ?issues|article ?issues|mi|ai|issues|多個問題|多个问题|問題條目|问题条目|數個問題|数个问题)\s*\|\s*({{(?:{{[^{}]*}}|[^{}])+}})\s*}}/im,
 					'$1'
 				);
 			}
@@ -1224,10 +1233,10 @@ Twinkle.tag.callbacks = {
 			const makeTemplateLink = (tag) => {
 				let text = '{{[[';
 				// if it is a custom tag with a parameter
-				if (tag.indexOf('|') !== -1) {
+				if (tag.includes('|')) {
 					tag = tag.slice(0, tag.indexOf('|'));
 				}
-				text += tag.indexOf(':') !== -1 ? tag : `Template:${tag}|${tag}`;
+				text += tag.includes(':') ? tag : `Template:${tag}|${tag}`;
 				return `${text}]]}}`;
 			};
 
@@ -1247,7 +1256,7 @@ Twinkle.tag.callbacks = {
 
 			// avoid truncated summaries
 			if (summaryText.length > 499) {
-				summaryText = summaryText.replace(/\[\[[^|]+\|([^\]]+)\]\]/g, '$1');
+				summaryText = summaryText.replace(/\[\[[^|]+\|([^\]]+)]]/g, '$1');
 			}
 
 			pageobj.setPageText(pageText);
@@ -1428,7 +1437,7 @@ Twinkle.tag.callbacks = {
 				currentTag += `{{${tagName}`;
 				// fill in other parameters, based on the tag
 				switch (tagName) {
-					case 'Expand language':
+					case 'Expand language': {
 						currentTag += `|1=${params.expandLanguage}`;
 						if (params.highQualityArticle) {
 							currentTag += '|status=yes';
@@ -1446,7 +1455,8 @@ Twinkle.tag.callbacks = {
 							}
 						}
 						break;
-					case 'Expert needed':
+					}
+					case 'Expert needed': {
 						currentTag += `|subject=${params.expert}`;
 						if (params.expert2) {
 							currentTag += `|subject2=${params.expert2}`;
@@ -1455,9 +1465,10 @@ Twinkle.tag.callbacks = {
 							currentTag += `|subject3=${params.expert3}`;
 						}
 						break;
+					}
 					case 'Merge':
 					case 'Merge to':
-					case 'Merge from':
+					case 'Merge from': {
 						if (params.mergeTarget) {
 							// normalize the merge target for now and later
 							params.mergeTarget = Morebits.string.toUpperCaseFirstChar(
@@ -1488,15 +1499,18 @@ Twinkle.tag.callbacks = {
 							}
 						}
 						break;
-					case 'Missing information':
+					}
+					case 'Missing information': {
 						currentTag += `|1=${params.missingInformation}`;
 						break;
-					case 'Notability':
+					}
+					case 'Notability': {
 						if (params.notability !== 'none') {
 							currentTag += `|3=${params.notability}`;
 						}
 						break;
-					case 'Requested move':
+					}
+					case 'Requested move': {
 						if (params.moveTarget) {
 							// normalize the move target for now and later
 							params.moveTarget = Morebits.string.toUpperCaseFirstChar(
@@ -1506,7 +1520,8 @@ Twinkle.tag.callbacks = {
 							currentTag += `|${params.moveTarget}`;
 						}
 						break;
-					case 'Split':
+					}
+					case 'Split': {
 						if (params.target1) {
 							currentTag += `|1=${params.target1}`;
 						}
@@ -1517,13 +1532,16 @@ Twinkle.tag.callbacks = {
 							currentTag += `|3=${params.target3}`;
 						}
 						break;
-					case 'Cleanup':
+					}
+					case 'Cleanup': {
 						if (params.cleanupReason) {
 							currentTag += `|reason=${params.cleanupReason}`;
 						}
 						break;
-					default:
+					}
+					default: {
 						break;
+					}
 				}
 
 				currentTag += '|time={{subst:#time:c}}}}\n';
@@ -1560,7 +1578,7 @@ Twinkle.tag.callbacks = {
 		params.tags.forEach((tag) => {
 			tagRe = new RegExp(`\\{\\{${tag}(\\||\\}\\})`, 'im');
 			// regex check for preexistence of tag can be skipped if in canRemove mode
-			if (Twinkle.tag.canRemove || !tagRe.exec(pageText)) {
+			if (Twinkle.tag.canRemove || !tagRe.test(pageText)) {
 				if (
 					tag === 'Notability' &&
 						(mw.config.get('wgNamespaceNumber') === 0 ||
@@ -1590,7 +1608,7 @@ Twinkle.tag.callbacks = {
 				} else {
 					Morebits.status.warn('信息', `在页面上找到{{${tag}}}…跳过`);
 					// don't do anything else with merge tags
-					if (['Merge', 'Merge to'].indexOf(tag) !== -1) {
+					if (['Merge', 'Merge to'].includes(tag)) {
 						params.mergeTarget = params.mergeReason = params.mergeTagOther = null;
 					}
 				}
@@ -1609,7 +1627,7 @@ Twinkle.tag.callbacks = {
 		});
 
 		const miTest =
-				/\{\{(multiple ?issues|article ?issues|mi|ai|issues|多個問題|多个问题|問題條目|问题条目|數個問題|数个问题)\s*\|[^}]+\{/im.exec(
+				/{{(multiple ?issues|article ?issues|mi|ai|issues|多個問題|多个问题|問題條目|问题条目|數個問題|数个问题)\s*\|[^}]+{/im.exec(
 					pageText
 				);
 
@@ -1737,7 +1755,7 @@ Twinkle.tag.callbacks = {
 
 		for (i = 0; i < params.tags.length; i++) {
 			tagRe = new RegExp(`(\\{\\{${params.tags[i]}(\\||\\}\\}))`, 'im');
-			if (!tagRe.exec(pageText)) {
+			if (!tagRe.test(pageText)) {
 				tags.push(params.tags[i]);
 			} else {
 				Morebits.status.warn('信息', `在重定向上找到{{${params.tags[i]}}}…跳过`);
@@ -1750,11 +1768,9 @@ Twinkle.tag.callbacks = {
 				if (params.altLangFrom) {
 					tagText += `|1=${params.altLangFrom}`;
 				}
-			} else if (tagName === '条目请求重定向' || tagName === '條目請求重定向') {
-				if (params.reqArticleLang && params.reqArticleTitle) {
-					tagText += `|1=${params.reqArticleLang}`;
-					tagText += `|2=${params.reqArticleTitle}`;
-				}
+			} else if ((tagName === '条目请求重定向' || tagName === '條目請求重定向') && params.reqArticleLang && params.reqArticleTitle) {
+				tagText += `|1=${params.reqArticleLang}`;
+				tagText += `|2=${params.reqArticleTitle}`;
 			}
 			tagText += '}}';
 
@@ -1767,7 +1783,7 @@ Twinkle.tag.callbacks = {
 			}
 
 			summaryText += `{{[[:${
-				tagName.indexOf(':') !== -1 ? tagName : `Template:${tagName}|${tagName}`
+				tagName.includes(':') ? tagName : `Template:${tagName}|${tagName}`
 			}]]}}`;
 		};
 
@@ -1779,10 +1795,10 @@ Twinkle.tag.callbacks = {
 		$.each(tags, addTag);
 
 		// Check for all Rcat shell redirects (from #433)
-		if (pageText.match(/{{(?:redr|this is a redirect|r(?:edirect)?(?:.?cat.*)?[ _]?sh)/i)) {
+		if (/{{(?:redr|this is a redirect|r(?:edirect)?(?:.?cat.*)?[ _]?sh)/i.test(pageText)) {
 			// Regex inspired by [[User:Kephir/gadgets/sagittarius.js]] ([[Special:PermaLink/831402893]])
 			const oldTags = pageText.match(
-				/(\s*{{[A-Za-z\s]+\|(?:\s*1=)?)((?:[^|{}]|{{[^}]+}})+)(}})\s*/i
+				/(\s*{{[\sa-z]+\|(?:\s*1=)?)((?:[^{|}]|{{[^}]+}})+)(}})\s*/i
 			);
 			pageText = pageText.replace(
 				oldTags[0],
@@ -1807,7 +1823,7 @@ Twinkle.tag.callbacks = {
 
 		// avoid truncated summaries
 		if (summaryText.length > 499) {
-			summaryText = summaryText.replace(/\[\[[^|]+\|([^\]]+)\]\]/g, '$1');
+			summaryText = summaryText.replace(/\[\[[^|]+\|([^\]]+)]]/g, '$1');
 		}
 
 		pageobj.setPageText(pageText);
@@ -1835,16 +1851,16 @@ Twinkle.tag.callbacks = {
 			$.each(params.tags, (k, tag) => {
 				// when other commons-related tags are placed, remove "move to Commons" tag
 				if (
-					['Keep local', 'Now Commons', 'Do not move to Commons'].indexOf(tag) !== -1
+					['Keep local', 'Now Commons', 'Do not move to Commons'].includes(tag)
 				) {
 					text = text.replace(
-						/\{\{(mtc|(copy |move )?to ?commons|move to wikimedia commons|copy to wikimedia commons)[^}]*\}\}/gi,
+						/{{(mtc|(copy |move )?to ?commons|move to wikimedia commons|copy to wikimedia commons)[^}]*}}/gi,
 						''
 					);
 				}
 				if (tag === 'Vector version available') {
 					text = text.replace(
-						/\{\{((convert to |convertto|should be |shouldbe|to)?svg|badpng|vectorize)[^}]*\}\}/gi,
+						/{{((convert to |convertto|should be |shouldbe|to)?svg|badpng|vectorize)[^}]*}}/gi,
 						''
 					);
 				}
@@ -1852,13 +1868,14 @@ Twinkle.tag.callbacks = {
 				currentTag = tag;
 
 				switch (tag) {
-					case 'Now Commons':
+					case 'Now Commons': {
 						currentTag = `subst:${currentTag}`; // subst
 						if (params.nowcommonsName !== '') {
 							currentTag += `|1=${params.nowcommonsName}`;
 						}
 						break;
-					case 'Keep local':
+					}
+					case 'Keep local': {
 						if (params.keeplocalName !== '') {
 							currentTag += `|1=${params.keeplocalName}`;
 						}
@@ -1866,7 +1883,8 @@ Twinkle.tag.callbacks = {
 							currentTag += `|reason=${params.keeplocalReason}`;
 						}
 						break;
-					case 'Rename media':
+					}
+					case 'Rename media': {
 						if (params.renamemediaNewname !== '') {
 							currentTag += `|1=${params.renamemediaNewname}`;
 						}
@@ -1874,19 +1892,24 @@ Twinkle.tag.callbacks = {
 							currentTag += `|2=${params.renamemediaReason}`;
 						}
 						break;
+					}
 					case 'Vector version available':
 						/* falls through */
-					case 'Obsolete':
+					case 'Obsolete': {
 						currentTag += `|1=${params[`${tag.replace(/ /g, '_')}File`]}`;
 						break;
-					case 'Do not move to Commons':
+					}
+					case 'Do not move to Commons': {
 						currentTag += `|reason=${params.DoNotMoveToCommons_reason}`;
 						break;
-					case 'Copy to Wikimedia Commons':
+					}
+					case 'Copy to Wikimedia Commons': {
 						currentTag += `|human=${mw.config.get('wgUserName')}`;
 						break;
-					default:
-						break; // don't care
+					}
+					default: {
+						break;
+					} // don't care
 				}
 
 				currentTag = `{{${currentTag}}}\n`;
@@ -1925,7 +1948,7 @@ Twinkle.tag.callback.evaluate = (e) => {
 	// Given an array of incompatible tags, check if we have two or more selected
 	const checkIncompatible = (conflicts, extra) => {
 		const count = conflicts.reduce((sum, tag) => {
-			sum += params.tags.indexOf(tag) !== -1;
+			sum += params.tags.includes(tag);
 			return sum;
 		}, 0);
 		if (count > 1) {
@@ -1939,7 +1962,7 @@ Twinkle.tag.callback.evaluate = (e) => {
 		// Maybe just sock this away in each function???
 	const checkParameter = (tag, parameter, description) => {
 		description ||= '理由';
-		if (params.tags.indexOf(tag) !== -1 && params[parameter].trim() === '') {
+		if (params.tags.includes(tag) && params[parameter].trim() === '') {
 			alert('您必须指定' + `{{${tag}}}的${description}。`);
 			return true;
 		}
@@ -1950,14 +1973,14 @@ Twinkle.tag.callback.evaluate = (e) => {
 	// [array two]] devoid of context. Likewise, all the checkParameter
 	// calls could be in one if, but could be similarly confusing.
 	switch (Twinkle.tag.mode) {
-		case '条目':
+		case '条目': {
 			params.tagsToRemove = form.getUnchecked('existingTags'); // not in `input`
 			params.tagsToRemain = params.existingTags || []; // container not created if none present
 
 			if (
-				params.tags.indexOf('Merge') !== -1 ||
-					params.tags.indexOf('Merge from') !== -1 ||
-					params.tags.indexOf('Merge to') !== -1
+				params.tags.includes('Merge') ||
+					params.tags.includes('Merge from') ||
+					params.tags.includes('Merge to')
 			) {
 				if (
 					checkIncompatible(
@@ -1973,7 +1996,7 @@ Twinkle.tag.callback.evaluate = (e) => {
 				}
 				if (
 					(params.mergeTagOther || params.mergeReason) &&
-						params.mergeTarget.indexOf('|') !== -1
+						params.mergeTarget.includes('|')
 				) {
 					alert(
 						'当前还不支持在一次合并中标记多个条目，与开启关于多个条目的讨论。请不要勾选“标记其他条目”并清空“理由”框后再提交。'
@@ -1992,8 +2015,9 @@ Twinkle.tag.callback.evaluate = (e) => {
 				return;
 			}
 			break;
+		}
 
-		case '文件':
+		case '文件': {
 			// Silly to provide the same string to each of these
 			if (
 				checkParameter('Obsolete', 'ObsoleteFile', '替换的文件名称') ||
@@ -2009,13 +2033,16 @@ Twinkle.tag.callback.evaluate = (e) => {
 				return;
 			}
 			break;
+		}
 
-		case '重定向':
+		case '重定向': {
 			break;
+		}
 
-		default:
+		default: {
 			alert(`Twinkle.tag：未知模式 ${Twinkle.tag.mode}`);
 			break;
+		}
 	}
 
 	// File/redirect: return if no tags selected

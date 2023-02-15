@@ -1,6 +1,4 @@
 /* eslint-disable quote-props */
-'use strict';
-
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
  * _addText: '{{Twinkle Header}}'
@@ -66,7 +64,7 @@ Twinkle.warn.makeVandalTalkLink = ($vandalTalkLink, pagename) => {
 	);
 	const extraParam = `vanarticle=${mw.util.rawurlencode(pagename)}`;
 	const href = $vandalTalkLink.attr('href');
-	if (href.indexOf('?') === -1) {
+	if (!href.includes('?')) {
 		$vandalTalkLink.attr('href', `${href}?${extraParam}`);
 	} else {
 		$vandalTalkLink.attr('href', `${href}&${extraParam}`);
@@ -99,7 +97,7 @@ Twinkle.warn.callback = () => {
 		tooltip: '您可在Twinkle参数设置中设置默认选择的选项',
 		event: Twinkle.warn.callback.change_category
 	});
-	const defaultGroup = parseInt(Twinkle.getPref('defaultWarningGroup'), 10);
+	const defaultGroup = Number.parseInt(Twinkle.getPref('defaultWarningGroup'), 10);
 	main_group.append({
 		type: 'option',
 		label: '自动选择层级（1-4）',
@@ -263,11 +261,9 @@ Twinkle.warn.callback = () => {
 		// Confirm edit wasn't too old for a warning
 		const checkStale = (vantimestamp) => {
 			const revDate = new Morebits.date(vantimestamp);
-			if (vantimestamp && revDate.isValid()) {
-				if (revDate.add(24, 'hours').isBefore(new Date())) {
-					message += '这笔编辑是在24小时前做出的，现在警告可能已过时。';
-					$('#twinkle-warn-warning-messages').text(`注意：${message}`);
-				}
+			if (vantimestamp && revDate.isValid() && revDate.add(24, 'hours').isBefore(new Date())) {
+				message += '这笔编辑是在24小时前做出的，现在警告可能已过时。';
+				$('#twinkle-warn-warning-messages').text(`注意：${message}`);
 			}
 		};
 		let vantimestamp = mw.util.getParamValue('vantimestamp');
@@ -1160,7 +1156,7 @@ Twinkle.warn.callback.change_category = (e) => {
 		}
 	}
 	while (sub_group.hasChildNodes()) {
-		sub_group.removeChild(sub_group.firstChild);
+		sub_group.firstChild.remove();
 	}
 	let selected = false;
 	// worker function to create the combo box entries
@@ -1178,7 +1174,7 @@ Twinkle.warn.callback.change_category = (e) => {
 				label: '可用模板'
 			});
 			wrapperOptgroup = wrapperOptgroup.render();
-			container.appendChild(wrapperOptgroup);
+			container.append(wrapperOptgroup);
 			container = wrapperOptgroup;
 		}
 		$.each(contents, (itemKey, itemProperties) => {
@@ -1200,15 +1196,16 @@ Twinkle.warn.callback.change_category = (e) => {
 			if (!selected && old_subvalue && old_subvalue_re.test(template)) {
 				elem.data.selected = selected = true;
 			}
-			const elemRendered = container.appendChild(elem.render());
+			const elemRendered = container.append(elem.render());
 			$(elemRendered).data('messageData', itemProperties);
 		});
 	};
 	switch (value) {
 		case 'singlenotice':
-		case 'singlewarn':
+		case 'singlewarn': {
 			createEntries(Twinkle.warn.messages[value], sub_group, true);
 			break;
+		}
 		case 'singlecombined': {
 			const unSortedSinglets = $.extend(
 				{},
@@ -1225,10 +1222,11 @@ Twinkle.warn.callback.change_category = (e) => {
 			createEntries(sortedSingletMessages, sub_group, true);
 			break;
 		}
-		case 'custom':
+		case 'custom': {
 			createEntries(Twinkle.getPref('customWarningList'), sub_group, true);
 			break;
-		case 'kitchensink':
+		}
+		case 'kitchensink': {
 			['level1', 'level2', 'level3', 'level4', 'level4im'].forEach((lvl) => {
 				$.each(Twinkle.warn.messages.levels, (_, levelGroup) => {
 					createEntries(levelGroup, sub_group, true, lvl);
@@ -1238,11 +1236,12 @@ Twinkle.warn.callback.change_category = (e) => {
 			createEntries(Twinkle.warn.messages.singlewarn, sub_group, true);
 			createEntries(Twinkle.getPref('customWarningList'), sub_group, true);
 			break;
+		}
 		case 'level1':
 		case 'level2':
 		case 'level3':
 		case 'level4':
-		case 'level4im':
+		case 'level4im': {
 			// Creates subgroup regardless of whether there is anything to place in it;
 			// leaves "Removal of deletion tags" empty for 4im
 			$.each(Twinkle.warn.messages.levels, (groupLabel, groupContents) => {
@@ -1251,11 +1250,12 @@ Twinkle.warn.callback.change_category = (e) => {
 					label: groupLabel
 				});
 				optgroup = optgroup.render();
-				sub_group.appendChild(optgroup);
+				sub_group.append(optgroup);
 				// create the options
 				createEntries(groupContents, optgroup, false);
 			});
 			break;
+		}
 		case 'autolevel': {
 			// Check user page to determine appropriate level
 			const autolevelProc = () => {
@@ -1278,7 +1278,7 @@ Twinkle.warn.callback.change_category = (e) => {
 						label: groupLabel
 					});
 					optgroup = optgroup.render();
-					sub_group.appendChild(optgroup);
+					sub_group.append(optgroup);
 					// create the options
 					createEntries(groupContents, optgroup, false, lvl);
 				});
@@ -1319,9 +1319,10 @@ Twinkle.warn.callback.change_category = (e) => {
 			}
 			break;
 		}
-		default:
+		default: {
 			alert('twinklewarn：未知的警告组');
 			break;
+		}
 	}
 
 	// Trigger subcategory change, add select menu, etc.
@@ -1374,8 +1375,7 @@ Twinkle.warn.callback.change_subcategory = (e) => {
 		'uw-aiv': '可选输入被警告的用户名（不含User:） '
 	};
 	if (
-		['singlenotice', 'singlewarn', 'singlecombined', 'kitchensink'].indexOf(main_group) !==
-			-1
+		['singlenotice', 'singlewarn', 'singlecombined', 'kitchensink'].includes(main_group)
 	) {
 		if (notLinkedArticle[value]) {
 			if (Twinkle.warn.prev_article === null) {
@@ -1423,11 +1423,7 @@ Twinkle.warn.callbacks = {
 		}
 		if (reason) {
 			// add extra message
-			if (templateName === 'uw-csd') {
-				text += `|3=${reason}`;
-			} else {
-				text += `|2=${reason}`;
-			}
+			text += templateName === 'uw-csd' ? `|3=${reason}` : `|2=${reason}`;
 		}
 		text += '|subst=subst:}}';
 		if (!noSign) {
@@ -1502,7 +1498,7 @@ Twinkle.warn.callbacks = {
 		 */
 	dateProcessing: (wikitext) => {
 		const history_re =
-				/<!--\s?Template:([uU]w-.*?)\s?-->.*?(\d{4})年(\d{1,2})月(\d{1,2})日 \([日一二三四五六]\) (\d{1,2}):(\d{1,2}) \(UTC\)/g;
+				/<!--\s?Template:([Uu]w-.*?)\s?-->.*?(\d{4})年(\d{1,2})月(\d{1,2})日 \([一三二五六四日]\) (\d{1,2}):(\d{1,2}) \(UTC\)/g;
 		const history = {};
 		const latest = {
 			date: new Morebits.date(0),
@@ -1543,30 +1539,28 @@ Twinkle.warn.callbacks = {
 		 * @returns {Array} - Array that contains the full template and just the warning level
 		 */
 	autolevelParseWikitext: (wikitext, params, latest, date, statelem) => {
-		let level; // undefined rather than '' means the isNaN below will return true
+		let level; // undefined rather than '' means the Number.isNaN below will return true
 		if (/\d(?:im)?$/.test(latest.type)) {
 			// level1-4im
-			level = parseInt(latest.type.replace(/.*(\d)(?:im)?$/, '$1'), 10);
+			level = Number.parseInt(latest.type.replace(/.*(\d)(?:im)?$/, '$1'), 10);
 		} else if (latest.type) {
 			// Non-numbered warning
 			// Try to leverage existing categorization of
 			// warnings, all but one are universally lowercased
-			const loweredType = /uw-multipleIPs/i.test(latest.type)
+			const loweredType = /uw-multipleips/i.test(latest.type)
 				? 'uw-multipleIPs'
 				: latest.type.toLowerCase();
 				// It would be nice to account for blocks, but in most
 				// cases the hidden message is terminal, not the sig
-			if (Twinkle.warn.messages.singlewarn[loweredType]) {
-				level = 3;
-			} else {
-				level = 1; // singlenotice or not found
-			}
+			level = Twinkle.warn.messages.singlewarn[loweredType] ?
+				3 :
+				1; // singlenotice or not found
 		}
 
 		const $autolevelMessage = $('<div>', {
 			id: 'twinkle-warn-autolevel-message'
 		});
-		if (isNaN(level)) {
+		if (Number.isNaN(level)) {
 			// No prior warnings found, this is the first
 			level = 1;
 		} else if (level > 4 || level < 1) {
@@ -1581,7 +1575,7 @@ Twinkle.warn.callbacks = {
 		} else {
 			date ||= new Date();
 			const autoTimeout = new Morebits.date(latest.date.getTime()).add(
-				parseInt(Twinkle.getPref('autolevelStaleDays'), 10),
+				Number.parseInt(Twinkle.getPref('autolevelStaleDays'), 10),
 				'day'
 			);
 			if (autoTimeout.isAfter(date)) {
@@ -1672,25 +1666,19 @@ Twinkle.warn.callbacks = {
 			// Update params now that we've selected a warning
 			params.sub_group = templateAndLevel[0];
 			messageData = params.messageData[`level${templateAndLevel[1]}`];
-		} else if (params.sub_group in history) {
-			if (new Morebits.date(history[params.sub_group]).add(1, 'day').isAfter(now)) {
-				if (
+		} else if (params.sub_group in history && new Morebits.date(history[params.sub_group]).add(1, 'day').isAfter(now) &&
 					!confirm(
 						`近24小时内一个同样的 ${params.sub_group} 模板已被发出。\n是否继续？`
 					)
-				) {
-					statelem.error('用户取消');
-					return;
-				}
-			}
+		) {
+			statelem.error('用户取消');
+			return;
 		}
 		latest.date.add(1, 'minute'); // after long debate, one minute is max
 
-		if (latest.date.isAfter(now)) {
-			if (!confirm(`近1分钟内 ${latest.type} 模板已被发出。\n是否继续？`)) {
-				statelem.error('用户取消');
-				return;
-			}
+		if (latest.date.isAfter(now) && !confirm(`近1分钟内 ${latest.type} 模板已被发出。\n是否继续？`)) {
+			statelem.error('用户取消');
+			return;
 		}
 
 		// build the edit summary
@@ -1699,27 +1687,33 @@ Twinkle.warn.callbacks = {
 			template = template.split('|')[0];
 			let prefix;
 			switch (template.slice(-1)) {
-				case '1':
+				case '1': {
 					prefix = '提醒';
 					break;
-				case '2':
+				}
+				case '2': {
 					prefix = '注意';
 					break;
-				case '3':
+				}
+				case '3': {
 					prefix = '警告';
 					break;
-				case '4':
+				}
+				case '4': {
 					prefix = '最后警告';
 					break;
-				case 'm':
+				}
+				case 'm': {
 					if (template.slice(-3) === '4im') {
 						prefix = '唯一警告';
 						break;
 					}
-					// falls through
-				default:
+				}
+				// falls through
+				default: {
 					prefix = '提醒';
 					break;
+				}
 			}
 			return `${prefix}：${Morebits.string.toUpperCaseFirstChar(messageData.label)}`;
 		};
@@ -1774,7 +1768,7 @@ Twinkle.warn.callbacks = {
 			// Only check sections if there are sections or there's a chance we won't create our own
 		if (!messageData.heading && text.length) {
 			// Get all sections
-			const sections = text.match(/^(==*).+\1/gm);
+			const sections = text.match(/^(=+).+\1/gm);
 			if (sections && sections.length !== 0) {
 				// Find the index of the section header in question
 				const dateHeaderRegex = now.monthHeaderRegex();
@@ -1816,27 +1810,33 @@ Twinkle.warn.callbacks = {
 			template = template.split('|')[0];
 			let prefix;
 			switch (template.slice(-1)) {
-				case '1':
+				case '1': {
 					prefix = '提醒';
 					break;
-				case '2':
+				}
+				case '2': {
 					prefix = '注意';
 					break;
-				case '3':
+				}
+				case '3': {
 					prefix = '警告';
 					break;
-				case '4':
+				}
+				case '4': {
 					prefix = '最后警告';
 					break;
-				case 'm':
+				}
+				case 'm': {
 					if (template.slice(-3) === '4im') {
 						prefix = '唯一警告';
 						break;
 					}
-					// falls through
-				default:
+				}
+				// falls through
+				default: {
 					prefix = '提醒';
 					break;
+				}
 			}
 			return `${prefix}：${Morebits.string.toUpperCaseFirstChar(messageData.label)}`;
 		};
@@ -1898,7 +1898,7 @@ Twinkle.warn.callback.evaluate = (e) => {
 			if (article.getFragment()) {
 				params.article += `#${article.getFragment()}`;
 			}
-		} catch (error) {
+		} catch {
 			alert(
 				'“页面链接”不合法，仅能输入一个页面名称，勿使用网址、[[ ]]，可使用Special:Diff。'
 			);

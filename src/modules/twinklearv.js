@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
  * _addText: '{{Twinkle Header}}'
@@ -134,7 +132,7 @@ Twinkle.arv.callback.changeCategory = (e) => {
 	switch (value) {
 		case 'aiv':
 			/* falls through */
-		default:
+		default: {
 			work_area = new Morebits.quickForm.element({
 				type: 'field',
 				label: '报告用户破坏',
@@ -214,9 +212,10 @@ Twinkle.arv.callback.changeCategory = (e) => {
 			work_area = work_area.render();
 			old_area.parentNode.replaceChild(work_area, old_area);
 			break;
+		}
 
-			// not using, but keeping it for reference
-		case 'username':
+		// not using, but keeping it for reference
+		case 'username': {
 			work_area = new Morebits.quickForm.element({
 				type: 'field',
 				label: '报告不当用户名',
@@ -265,7 +264,8 @@ Twinkle.arv.callback.changeCategory = (e) => {
 			work_area = work_area.render();
 			old_area.parentNode.replaceChild(work_area, old_area);
 			break;
-		case 'puppet':
+		}
+		case 'puppet': {
 			work_area = new Morebits.quickForm.element({
 				type: 'field',
 				label: '提报傀儡账号',
@@ -298,7 +298,8 @@ Twinkle.arv.callback.changeCategory = (e) => {
 			work_area = work_area.render();
 			old_area.parentNode.replaceChild(work_area, old_area);
 			break;
-		case 'sock':
+		}
+		case 'sock': {
 			work_area = new Morebits.quickForm.element({
 				type: 'field',
 				label: '提报傀儡主账号',
@@ -333,6 +334,7 @@ Twinkle.arv.callback.changeCategory = (e) => {
 			work_area = work_area.render();
 			old_area.parentNode.replaceChild(work_area, old_area);
 			break;
+		}
 	}
 };
 Twinkle.arv.callback.evaluate = (e) => {
@@ -357,18 +359,24 @@ Twinkle.arv.callback.evaluate = (e) => {
 			types = types
 				.map((v) => {
 					switch (v) {
-						case 'final':
+						case 'final': {
 							return '已发出最后警告';
-						case 'postblock':
+						}
+						case 'postblock': {
 							return '封禁过期后随即破坏';
-						case 'spambot':
+						}
+						case 'spambot': {
 							return '显而易见的spambot或失窃账户';
-						case 'vandalonly':
+						}
+						case 'vandalonly': {
 							return '显而易见的纯破坏用户';
-						case 'promoonly':
+						}
+						case 'promoonly': {
 							return '仅用来散发广告宣传的用户';
-						default:
+						}
+						default: {
 							return '未知理由';
+						}
 					}
 				})
 				.join('; ');
@@ -387,7 +395,7 @@ Twinkle.arv.callback.evaluate = (e) => {
 				reason += (reason === '' ? '' : '. ') + comment;
 			}
 			reason = reason.trim();
-			if (!/[.?!;]$/.test(reason)) {
+			if (!/[!.;?]$/.test(reason)) {
 				reason += '.';
 			}
 
@@ -436,17 +444,13 @@ Twinkle.arv.callback.evaluate = (e) => {
 		}
 		case 'username': {
 			types = form.getChecked('arvtype').map(Morebits.string.toLowerCaseFirstChar);
-			const hasShared = types.indexOf('shared') > -1;
+			const hasShared = types.includes('shared');
 			if (hasShared) {
 				types.splice(types.indexOf('shared'), 1);
 			}
-			if (types.length <= 2) {
-				types = types.join(' and ');
-			} else {
-				types = [types.slice(0, -1).join(', '), types.slice(-1)].join(' and ');
-			}
+			types = types.length <= 2 ? types.join(' and ') : [types.slice(0, -1).join(', '), types.slice(-1)].join(' and ');
 			let article = 'a';
-			if (/[aeiouwyh]/.test(types[0] || '')) {
+			if (/[aehiouwy]/.test(types[0] || '')) {
 				// non 100% correct, but whatever, including 'h' for Cockney
 				article = 'an';
 			}
@@ -585,7 +589,7 @@ Twinkle.arv.callback.evaluate = (e) => {
 			if (free_resolves) {
 				let query;
 				let diff, oldid;
-				const specialDiff = /Special:Diff\/(\d+)(?:\/(\S+))?/i.exec(free_resolves);
+				const specialDiff = /special:diff\/(\d+)(?:\/(\S+))?/i.exec(free_resolves);
 				if (specialDiff) {
 					if (specialDiff[2]) {
 						oldid = specialDiff[1];

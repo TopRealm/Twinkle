@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
  * _addText: '{{Twinkle Header}}'
@@ -23,7 +21,7 @@
  */
 
 Twinkle.close = () => {
-	if (Twinkle.getPref('XfdClose') === 'hide' || !/^Qiuwen:存废讨论\/记录\/\d+\/\d+\/\d+$/.test(mw.config.get('wgPageName'))) {
+	if (Twinkle.getPref('XfdClose') === 'hide' || !/^Qiuwen:存废讨论\/记录(?:\/\d+){3}$/.test(mw.config.get('wgPageName'))) {
 		return;
 	}
 	mw.hook('wikipage.content').add((item) => {
@@ -36,28 +34,28 @@ Twinkle.close.addLinks = () => {
 	const spanTag = (color, content) => {
 		const span = document.createElement('span');
 		span.style.color = color;
-		span.appendChild(document.createTextNode(content));
+		span.append(document.createTextNode(content));
 		return span;
 	};
 	$('h1:has(.mw-headline),h2:has(.mw-headline),h3:has(.mw-headline),h4:has(.mw-headline),h5:has(.mw-headline),h6:has(.mw-headline)', '#bodyContent').each((index, current) => {
-		current.setAttribute('data-section', index + 1);
+		current.dataset.section = index + 1;
 	});
 	const selector = ':has(.mw-headline a:only-of-type):not(:has(+ div.NavFrame))';
 	const titles = $('#bodyContent').find(`h2${ selector }:not(:has(+ p + h3)), h3${ selector}`); // really needs to work on
 
 	const delNode = document.createElement('strong');
 	const delLink = document.createElement('a');
-	delLink.appendChild(spanTag('Black', '['));
-	delLink.appendChild(spanTag('Red', '关闭讨论'));
-	delLink.appendChild(spanTag('Black', ']'));
-	delNode.appendChild(delLink);
+	delLink.append(spanTag('Black', '['));
+	delLink.append(spanTag('Red', '关闭讨论'));
+	delLink.append(spanTag('Black', ']'));
+	delNode.append(delLink);
 	titles.each((_key, current) => {
 		const headlinehref = $(current).find('.mw-headline a').attr('href');
 		if (headlinehref === undefined) {
 			return;
 		}
 		let title = null;
-		if (headlinehref.indexOf('redlink=1') !== -1) {
+		if (headlinehref.includes('redlink=1')) {
 			title = headlinehref.slice(19, -22);
 		} else {
 			const m = headlinehref.match(/\/wiki\/([^?]+)/, '$1');
@@ -71,16 +69,16 @@ Twinkle.close.addLinks = () => {
 		title = decodeURIComponent(title);
 		title = title.replace(/_/g, ' '); // Normalize for using in interface and summary
 		const pagenotexist = $(current).find('.mw-headline a').hasClass('new');
-		const section = current.getAttribute('data-section');
-		const node = current.getElementsByClassName('mw-headline')[0];
-		node.appendChild(document.createTextNode(' '));
+		const section = current.dataset.section;
+		const node = current.querySelectorAll('.mw-headline')[0];
+		node.append(document.createTextNode(' '));
 		const tmpNode = delNode.cloneNode(true);
 		tmpNode.firstChild.href = `#${ section}`;
 		$(tmpNode.firstChild).on('click', () => {
 			Twinkle.close.callback(title, section, pagenotexist);
 			return false;
 		});
-		node.appendChild(tmpNode);
+		node.append(tmpNode);
 	});
 };
 
@@ -291,11 +289,11 @@ Twinkle.close.callback = (title, section, noop) => {
 	const result = form.render();
 	Window.setContent(result);
 	Window.display();
-	const sub_group = result.getElementsByTagName('select')[0]; // hack
+	const sub_group = result.querySelectorAll('select')[0]; // hack
 
 	const resultData = {
 		title: title,
-		section: parseInt(section),
+		section: Number.parseInt(section),
 		noop: noop
 	};
 	$(result).data('resultData', resultData);
@@ -310,7 +308,7 @@ Twinkle.close.callback = (title, section, noop) => {
 				selected: itemProperties.selected,
 				disabled: Twinkle.getPref('XfdClose') !== 'all' && itemProperties.adminonly
 			});
-			const elemRendered = container.appendChild(elem.render());
+			const elemRendered = container.append(elem.render());
 			$(elemRendered).data('messageData', itemProperties);
 		});
 	};
@@ -320,7 +318,7 @@ Twinkle.close.callback = (title, section, noop) => {
 			label: groupLabel
 		});
 		optgroup = optgroup.render();
-		sub_group.appendChild(optgroup);
+		sub_group.append(optgroup);
 		// create the options
 		createEntries(groupContents, optgroup);
 	});
@@ -420,17 +418,19 @@ Twinkle.close.callback.evaluate = (e) => {
 		Twinkle.close.callbacks.talkend(params);
 	} else {
 		switch (messageData.action) {
-			case 'del':
+			case 'del': {
 				Twinkle.close.callbacks.del(params);
 				break;
+			}
 			case 'keep': {
 				const qiuwen_page = new Morebits.wiki.page(params.title, '移除存废讨论模板');
 				qiuwen_page.setCallbackParameters(params);
 				qiuwen_page.load(Twinkle.close.callbacks.keep);
 				break;
 			}
-			default:
+			default: {
 				alert(`关闭存废讨论：未定义 ${ code}`);
+			}
 		}
 	}
 };
@@ -542,14 +542,14 @@ Twinkle.close.callbacks = {
 			talkpage.setCreateOption('recreate');
 			talkpage.prepend();
 		}
-		let newtext = text.replace(/<noinclude>\s*\{\{([rsaiftcmv]fd)(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*<\/noinclude>\s*/gi, '');
-		newtext = newtext.replace(/\{\{([rsaiftcmv]fd)(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/gi, '');
+		let newtext = text.replace(/<noinclude>\s*{{([acfimr-tv]fd)(\|(?:{{[^{}]*}}|[^{}])*)?}}\s*<\/noinclude>\s*/gi, '');
+		newtext = newtext.replace(/{{([acfimr-tv]fd)(\|(?:{{[^{}]*}}|[^{}])*)?}}\s*/gi, '');
 		if (params.code !== 'tk') {
 			newtext = newtext.replace(
-				/\{\{(notability|fame|mair|知名度|重要性|显著性|顯著性|知名度不足|人物重要性|重要性不足|notable|关注度|关注度不足|關注度|關注度不足|重要|重要度)(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\n*/gi,
+				/{{(notability|fame|mair|知名度|重要性|显著性|顯著性|知名度不足|人物重要性|重要性不足|notable|关注度|关注度不足|關注度|關注度不足|重要|重要度)(\|(?:{{[^{}]*}}|[^{}])*)?}}\n*/gi,
 				''
 			);
-			newtext = newtext.replace(/\{\{(substub|小小作品|cod|小小條目|小小条目)(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\n*/gi, '');
+			newtext = newtext.replace(/{{(substub|小小作品|cod|小小條目|小小条目)(\|(?:{{[^{}]*}}|[^{}])*)?}}\n*/gi, '');
 		}
 		if (params.code === 'mergeapproved') {
 			const tag = `{{subst:Merge approved/auto|discuss=${ mw.config.get('wgPageName') }#${ params.title }}}\n`;
@@ -584,23 +584,19 @@ Twinkle.close.callbacks = {
 		const statelem = pageobj.getStatusElement();
 		let text = pageobj.getPageText();
 		const params = pageobj.getCallbackParameters();
-		if (text.indexOf('{{delh') !== -1) {
+		if (text.includes('{{delh')) {
 			statelem.error('讨论已被关闭');
 			return;
 		}
-		const sbegin = text.indexOf('<section begin=backlog />') !== -1;
-		const send = text.indexOf('<section end=backlog />') !== -1;
+		const sbegin = text.includes('<section begin=backlog />');
+		const send = text.includes('<section end=backlog />');
 		text = text.replace('\n<section begin=backlog />', '');
 		text = text.replace('\n<section end=backlog />', '');
 		const bar = text.split('\n----\n');
 		const split = bar[0].split('\n');
 		text = `${split[0] }\n{{delh|${ params.code }}}\n${ split.slice(1).join('\n')}`;
 		text += `\n<hr>\n: ${ params.messageData.label}`;
-		if (params.remark) {
-			text += `：${ Morebits.string.appendPunctuation(params.remark)}`;
-		} else {
-			text += '。';
-		}
+		text += params.remark ? `：${ Morebits.string.appendPunctuation(params.remark)}` : '。';
 		if (!Morebits.userIsSysop) {
 			text += '{{subst:NAC}}';
 		}

@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
  * _addText: '{{Twinkle Header}}'
@@ -50,12 +48,7 @@ Twinkle.unlink.callback = (presetReason) => {
 	);
 	const linkTextAfter = Morebits.htmlNode('code', '链接文字');
 	const linkPlainBefore = Morebits.htmlNode('code', `[[${Morebits.pageNameNorm}]]`);
-	let linkPlainAfter;
-	if (fileSpace) {
-		linkPlainAfter = Morebits.htmlNode('code', `<!-- [[${Morebits.pageNameNorm}]] -->`);
-	} else {
-		linkPlainAfter = Morebits.htmlNode('code', Morebits.pageNameNorm);
-	}
+	const linkPlainAfter = fileSpace ? Morebits.htmlNode('code', `<!-- [[${Morebits.pageNameNorm}]] -->`) : Morebits.htmlNode('code', Morebits.pageNameNorm);
 	form.append({
 		type: 'div',
 		style: 'margin-bottom: 0.5em; font-style: normal;',
@@ -151,8 +144,8 @@ Twinkle.unlink.callback.evaluate = (event) => {
 		qiuwen_page.setCallbackParameters(
 			$.extend(
 				{
-					doBacklinks: input.backlinks.indexOf(pageName) !== -1,
-					doImageusage: input.imageusage.indexOf(pageName) !== -1
+					doBacklinks: input.backlinks.includes(pageName),
+					doImageusage: input.imageusage.includes(pageName)
 				},
 				params
 			)

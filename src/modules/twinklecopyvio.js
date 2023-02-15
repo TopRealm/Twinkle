@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
  * _addText: '{{Twinkle Header}}'
@@ -31,8 +29,8 @@ Twinkle.copyvio = () => {
 		mw.config.get('wgNamespaceNumber') < 0 ||
 			!mw.config.get('wgArticleId') ||
 			mw.config.get('wgNamespaceNumber') === 6 &&
-				(document.getElementById('mw-sharedupload') ||
-					!document.getElementById('mw-imagepage-section-filehistory') &&
+				(document.querySelector('#mw-sharedupload') ||
+					!document.querySelector('#mw-imagepage-section-filehistory') &&
 						!Morebits.isPageRedirect())
 	) {
 		return;
@@ -76,7 +74,7 @@ Twinkle.copyvio.callbacks = {
 	tryTagging: (pageobj) => {
 		// 先尝试标记页面，如果发现已经标记则停止提报
 		const text = pageobj.getPageText();
-		if (text.indexOf('{{Copyvio|') === -1) {
+		if (!text.includes('{{Copyvio|')) {
 			Twinkle.copyvio.callbacks.taggingArticle(pageobj);
 
 			// Contributor specific edits
@@ -129,7 +127,7 @@ Twinkle.copyvio.callbacks = {
 			.replace(/^\* $/m, '')}|OldRevision=${revisionId}}}`;
 		const text = pageobj.getPageText();
 		const oldcsd = text.match(
-			/\{\{\s*(db(-\w*)?|d|delete)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}/i
+			/{{\s*(db(-\w*)?|d|delete)\s*(\|(?:{{[^{}]*}}|[^{}])*)?}}/i
 		);
 		if (
 			oldcsd &&
@@ -157,7 +155,7 @@ Twinkle.copyvio.callbacks = {
 			`^===+\\s*${date.getUTCMonth() + 1}月${date.getUTCDate()}日\\s*===+`,
 			'mg'
 		);
-		if (!dateHeaderRegex.exec(text)) {
+		if (!dateHeaderRegex.test(text)) {
 			output = `\n\n===${date.getUTCMonth() + 1}月${date.getUTCDate()}日===`;
 		}
 		output += `\n{{subst:CopyvioVFDRecord|${mw.config.get('wgPageName')}}}`;
