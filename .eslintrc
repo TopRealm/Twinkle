@@ -63,9 +63,10 @@
 		"strict": "off",
 		"quotes": [
 			1,
-			"double",
+			"single",
 			{
-				"avoidEscape": true
+				"avoidEscape": true,
+				"allowTemplateLiterals": true
 			}
 		],
 		"quote-props": [

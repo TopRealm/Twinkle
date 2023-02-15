@@ -4,6 +4,7 @@
 	"semi": true,
 	"singleQuote": true,
 	"trailingComma": "none",
-	"printWidth": 200,
-	"quoteProps": "preserve"
+	"printWidth": 100,
+	"quoteProps": "preserve",
+	"endOfLine": "auto"
 }
