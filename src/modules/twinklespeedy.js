@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
@@ -32,21 +32,31 @@ Twinkle.speedy = () => {
 	// Disable on:
 	// * special pages
 	// * non-existent pages
-	if (mw.config.get("wgNamespaceNumber") < 0 || !mw.config.get("wgArticleId")) {
+	if (mw.config.get('wgNamespaceNumber') < 0 || !mw.config.get('wgArticleId')) {
 		return;
 	}
-	Twinkle.addPortletLink(Twinkle.speedy.callback, "速删", "tw-csd", Morebits.userIsSysop ? "快速删除" : "请求快速删除");
+	Twinkle.addPortletLink(
+		Twinkle.speedy.callback,
+		'速删',
+		'tw-csd',
+		Morebits.userIsSysop ? '快速删除' : '请求快速删除'
+	);
 };
 
 // This function is run when the CSD tab/header link is clicked
 Twinkle.speedy.callback = () => {
-	Twinkle.speedy.initDialog(Morebits.userIsSysop ? Twinkle.speedy.callback.evaluateSysop : Twinkle.speedy.callback.evaluateUser, true);
+	Twinkle.speedy.initDialog(
+		Morebits.userIsSysop
+			? Twinkle.speedy.callback.evaluateSysop
+			: Twinkle.speedy.callback.evaluateUser,
+		true
+	);
 };
 
 // Used by unlink feature
 Twinkle.speedy.dialog = null;
 // Used throughout
-Twinkle.speedy.hasCSD = !!$("#delete-reason").length;
+Twinkle.speedy.hasCSD = !!$('#delete-reason').length;
 
 // The speedy criteria list can be in one of several modes
 Twinkle.speedy.mode = {
@@ -92,31 +102,40 @@ Twinkle.speedy.mode = {
 
 // Prepares the speedy deletion dialog and displays it
 Twinkle.speedy.initDialog = (callbackfunc) => {
-	Twinkle.speedy.dialog = new Morebits.simpleWindow(Twinkle.getPref("speedyWindowWidth"), Twinkle.getPref("speedyWindowHeight"));
+	Twinkle.speedy.dialog = new Morebits.simpleWindow(
+		Twinkle.getPref('speedyWindowWidth'),
+		Twinkle.getPref('speedyWindowHeight')
+	);
 	const dialog = Twinkle.speedy.dialog;
-	dialog.setTitle("选择快速删除理由");
-	dialog.setScriptName("Twinkle");
-	dialog.addFooterLink("快速删除方针", "QW:CSD");
-	dialog.addFooterLink("速删设置", "QW:TW/PREF#speedy");
-	dialog.addFooterLink("Twinkle帮助", "QW:TW/DOC#speedy");
-	const form = new Morebits.quickForm(callbackfunc, Twinkle.getPref("speedySelectionStyle") === "radioClick" ? "change" : null);
+	dialog.setTitle('选择快速删除理由');
+	dialog.setScriptName('Twinkle');
+	dialog.addFooterLink('快速删除方针', 'QW:CSD');
+	dialog.addFooterLink('速删设置', 'QW:TW/PREF#speedy');
+	dialog.addFooterLink('Twinkle帮助', 'QW:TW/DOC#speedy');
+	const form = new Morebits.quickForm(
+		callbackfunc,
+		Twinkle.getPref('speedySelectionStyle') === 'radioClick' ? 'change' : null
+	);
 	if (Morebits.userIsSysop) {
 		form.append({
-			type: "checkbox",
+			type: 'checkbox',
 			list: [
 				{
-					label: "只标记，不删除",
-					value: "tag_only",
-					name: "tag_only",
-					tooltip: "如果您只想标记此页面而不是将其删除",
-					checked: !(Twinkle.speedy.hasCSD || Twinkle.getPref("deleteSysopDefaultToDelete")),
+					label: '只标记，不删除',
+					value: 'tag_only',
+					name: 'tag_only',
+					tooltip: '如果您只想标记此页面而不是将其删除',
+					checked: !(
+						Twinkle.speedy.hasCSD || Twinkle.getPref('deleteSysopDefaultToDelete')
+					),
 					event: (event) => {
 						const cForm = event.target.form;
 						const cChecked = event.target.checked;
 						// enable/disable talk page checkbox
 						if (cForm.talkpage) {
 							cForm.talkpage.disabled = cChecked;
-							cForm.talkpage.checked = !cChecked && Twinkle.getPref("deleteTalkPageOnDelete");
+							cForm.talkpage.checked =
+									!cChecked && Twinkle.getPref('deleteTalkPageOnDelete');
 						}
 						// enable/disable redirects checkbox
 						cForm.redirects.disabled = cChecked;
@@ -141,24 +160,27 @@ Twinkle.speedy.initDialog = (callbackfunc) => {
 			]
 		});
 		const deleteOptions = form.append({
-			type: "div",
-			name: "delete_options"
+			type: 'div',
+			name: 'delete_options'
 		});
 		deleteOptions.append({
-			type: "header",
-			label: "删除相关选项"
+			type: 'header',
+			label: '删除相关选项'
 		});
-		if (mw.config.get("wgNamespaceNumber") % 2 === 0 && mw.config.get("wgNamespaceNumber") !== 2) {
+		if (
+			mw.config.get('wgNamespaceNumber') % 2 === 0 &&
+				mw.config.get('wgNamespaceNumber') !== 2
+		) {
 			// hide option for user pages, to avoid accidentally deleting user talk page
 			deleteOptions.append({
-				type: "checkbox",
+				type: 'checkbox',
 				list: [
 					{
-						label: "删除讨论页",
-						value: "talkpage",
-						name: "talkpage",
-						tooltip: "删除时附带删除此页面的讨论页。",
-						checked: Twinkle.getPref("deleteTalkPageOnDelete"),
+						label: '删除讨论页',
+						value: 'talkpage',
+						name: 'talkpage',
+						tooltip: '删除时附带删除此页面的讨论页。',
+						checked: Twinkle.getPref('deleteTalkPageOnDelete'),
 						event: (event) => {
 							event.stopPropagation();
 						}
@@ -167,14 +189,14 @@ Twinkle.speedy.initDialog = (callbackfunc) => {
 			});
 		}
 		deleteOptions.append({
-			type: "checkbox",
+			type: 'checkbox',
 			list: [
 				{
-					label: "删除重定向",
-					value: "redirects",
-					name: "redirects",
-					tooltip: "删除到此页的重定向。",
-					checked: Twinkle.getPref("deleteRedirectsOnDelete"),
+					label: '删除重定向',
+					value: 'redirects',
+					name: 'redirects',
+					tooltip: '删除到此页的重定向。',
+					checked: Twinkle.getPref('deleteRedirectsOnDelete'),
 					event: (event) => {
 						event.stopPropagation();
 					}
@@ -182,13 +204,13 @@ Twinkle.speedy.initDialog = (callbackfunc) => {
 			]
 		});
 		deleteOptions.append({
-			type: "checkbox",
+			type: 'checkbox',
 			list: [
 				{
-					label: "应用多个理由删除",
-					value: "delmultiple",
-					name: "delmultiple",
-					tooltip: "您可选择应用于该页的多个理由。",
+					label: '应用多个理由删除',
+					value: 'delmultiple',
+					name: 'delmultiple',
+					tooltip: '您可选择应用于该页的多个理由。',
 					event: (event) => {
 						Twinkle.speedy.callback.modeChanged(event.target.form);
 						event.stopPropagation();
@@ -197,37 +219,40 @@ Twinkle.speedy.initDialog = (callbackfunc) => {
 			]
 		});
 		deleteOptions.append({
-			type: "checkbox",
+			type: 'checkbox',
 			list: [
 				{
-					label: "开启用户讨论页",
-					value: "openusertalk",
-					name: "openusertalk",
-					tooltip: "此项的默认值为您的开启讨论页设置。在您选择应用多条理由删除时此项将保持不变。",
+					label: '开启用户讨论页',
+					value: 'openusertalk',
+					name: 'openusertalk',
+					tooltip:
+							'此项的默认值为您的开启讨论页设置。在您选择应用多条理由删除时此项将保持不变。',
 					checked: false
 				}
 			]
 		});
 	}
 	const tagOptions = form.append({
-		type: "div",
-		name: "tag_options"
+		type: 'div',
+		name: 'tag_options'
 	});
 	if (Morebits.userIsSysop) {
 		tagOptions.append({
-			type: "header",
-			label: "标记相关选项"
+			type: 'header',
+			label: '标记相关选项'
 		});
 	}
 	tagOptions.append({
-		type: "checkbox",
+		type: 'checkbox',
 		list: [
 			{
-				label: "如可能，通知创建者",
-				value: "notify",
-				name: "notify",
-				tooltip: "一个通知模板将会被加入创建者的讨论页，如果您启用了该理据的通知。",
-				checked: !Morebits.userIsSysop || !(Twinkle.speedy.hasCSD || Twinkle.getPref("deleteSysopDefaultToDelete")),
+				label: '如可能，通知创建者',
+				value: 'notify',
+				name: 'notify',
+				tooltip: '一个通知模板将会被加入创建者的讨论页，如果您启用了该理据的通知。',
+				checked:
+						!Morebits.userIsSysop ||
+						!(Twinkle.speedy.hasCSD || Twinkle.getPref('deleteSysopDefaultToDelete')),
 				event: (event) => {
 					event.stopPropagation();
 				}
@@ -235,13 +260,13 @@ Twinkle.speedy.initDialog = (callbackfunc) => {
 		]
 	});
 	tagOptions.append({
-		type: "checkbox",
+		type: 'checkbox',
 		list: [
 			{
-				label: "应用多个理由",
-				value: "multiple",
-				name: "multiple",
-				tooltip: "您可选择应用于该页的多个理由。",
+				label: '应用多个理由',
+				value: 'multiple',
+				name: 'multiple',
+				tooltip: '您可选择应用于该页的多个理由。',
 				event: (event) => {
 					Twinkle.speedy.callback.modeChanged(event.target.form);
 					event.stopPropagation();
@@ -250,29 +275,29 @@ Twinkle.speedy.initDialog = (callbackfunc) => {
 		]
 	});
 	tagOptions.append({
-		type: "checkbox",
+		type: 'checkbox',
 		list: [
 			{
-				label: "清空页面",
-				value: "blank",
-				name: "blank",
-				tooltip: "在标记模板前，先清空页面，适用于严重破坏或负面生者传记等。"
+				label: '清空页面',
+				value: 'blank',
+				name: 'blank',
+				tooltip: '在标记模板前，先清空页面，适用于严重破坏或负面生者传记等。'
 			}
 		]
 	});
 	form.append({
-		type: "div",
-		id: "prior-deletion-count"
+		type: 'div',
+		id: 'prior-deletion-count'
 	});
 	form.append({
-		type: "div",
-		name: "work_area",
-		label: "初始化CSD模块失败，请重试，或将这报告给Twinkle开发者。"
+		type: 'div',
+		name: 'work_area',
+		label: '初始化CSD模块失败，请重试，或将这报告给Twinkle开发者。'
 	});
-	if (Twinkle.getPref("speedySelectionStyle") !== "radioClick") {
+	if (Twinkle.getPref('speedySelectionStyle') !== 'radioClick') {
 		form.append({
-			type: "submit",
-			className: "tw-speedy-submit"
+			type: 'submit',
+			className: 'tw-speedy-submit'
 		}); // Renamed in modeChanged
 	}
 
@@ -299,55 +324,60 @@ Twinkle.speedy.callback.getMode = (form) => {
 			mode = Twinkle.speedy.mode.userSingleSubmit;
 		}
 	}
-	if (Twinkle.getPref("speedySelectionStyle") === "radioClick") {
+	if (Twinkle.getPref('speedySelectionStyle') === 'radioClick') {
 		mode++;
 	}
 	return mode;
 };
 Twinkle.speedy.callback.modeChanged = (form) => {
-	const namespace = mw.config.get("wgNamespaceNumber");
+	const namespace = mw.config.get('wgNamespaceNumber');
 
 	// first figure out what mode we're in
 	const mode = Twinkle.speedy.callback.getMode(form);
 	const isSysopMode = Twinkle.speedy.mode.isSysop(mode);
 	if (isSysopMode) {
-		$("[name=delete_options]").show();
-		$("[name=tag_options]").hide();
-		$("button.tw-speedy-submit").text("删除页面");
+		$('[name=delete_options]').show();
+		$('[name=tag_options]').hide();
+		$('button.tw-speedy-submit').text('删除页面');
 	} else {
-		$("[name=delete_options]").hide();
-		$("[name=tag_options]").show();
-		$("button.tw-speedy-submit").text("标记页面");
+		$('[name=delete_options]').hide();
+		$('[name=tag_options]').show();
+		$('button.tw-speedy-submit').text('标记页面');
 	}
 	const work_area = new Morebits.quickForm.element({
-		type: "div",
-		name: "work_area"
+		type: 'div',
+		name: 'work_area'
 	});
-	if (mode === Twinkle.speedy.mode.userMultipleRadioClick || mode === Twinkle.speedy.mode.sysopMultipleRadioClick) {
-		const evaluateType = Twinkle.speedy.mode.isSysop(mode) ? "evaluateSysop" : "evaluateUser";
+	if (
+		mode === Twinkle.speedy.mode.userMultipleRadioClick ||
+			mode === Twinkle.speedy.mode.sysopMultipleRadioClick
+	) {
+		const evaluateType = Twinkle.speedy.mode.isSysop(mode)
+			? 'evaluateSysop'
+			: 'evaluateUser';
 		work_area.append({
-			type: "div",
-			label: "当选择完成后，单击："
+			type: 'div',
+			label: '当选择完成后，单击：'
 		});
 		work_area.append({
-			type: "button",
-			name: "submit-multiple",
-			label: isSysopMode ? "删除页面" : "标记页面",
+			type: 'button',
+			name: 'submit-multiple',
+			label: isSysopMode ? '删除页面' : '标记页面',
 			event: (event) => {
 				Twinkle.speedy.callback[evaluateType](event);
 				event.stopPropagation();
 			}
 		});
 	}
-	const radioOrCheckbox = Twinkle.speedy.mode.isMultiple(mode) ? "checkbox" : "radio";
+	const radioOrCheckbox = Twinkle.speedy.mode.isMultiple(mode) ? 'checkbox' : 'radio';
 	if (isSysopMode && !Twinkle.speedy.mode.isMultiple(mode)) {
 		work_area.append({
-			type: "header",
-			label: "自定义理由"
+			type: 'header',
+			label: '自定义理由'
 		});
 		work_area.append({
 			type: radioOrCheckbox,
-			name: "csd",
+			name: 'csd',
 			list: Twinkle.speedy.generateCsdList(Twinkle.speedy.customRationale, mode)
 		});
 	}
@@ -355,37 +385,37 @@ Twinkle.speedy.callback.modeChanged = (form) => {
 		case 0:
 			// article and pseudo namespace
 			work_area.append({
-				type: "header",
-				label: "条目"
+				type: 'header',
+				label: '条目'
 			});
 			work_area.append({
 				type: radioOrCheckbox,
-				name: "csd",
+				name: 'csd',
 				list: Twinkle.speedy.generateCsdList(Twinkle.speedy.articleList, mode)
 			});
 			break;
 		case 2:
 			// user
 			work_area.append({
-				type: "header",
-				label: "用户页"
+				type: 'header',
+				label: '用户页'
 			});
 			work_area.append({
 				type: radioOrCheckbox,
-				name: "csd",
+				name: 'csd',
 				list: Twinkle.speedy.generateCsdList(Twinkle.speedy.userList, mode)
 			});
 			break;
 		case 3:
 			// user talk
-			if (mw.util.isIPAddress(mw.config.get("wgRelevantUserName"))) {
+			if (mw.util.isIPAddress(mw.config.get('wgRelevantUserName'))) {
 				work_area.append({
-					type: "header",
-					label: "用户讨论页"
+					type: 'header',
+					label: '用户讨论页'
 				});
 				work_area.append({
 					type: radioOrCheckbox,
-					name: "csd",
+					name: 'csd',
 					list: Twinkle.speedy.generateCsdList(Twinkle.speedy.usertalkList, mode)
 				});
 			}
@@ -393,54 +423,54 @@ Twinkle.speedy.callback.modeChanged = (form) => {
 		case 6:
 			// file
 			work_area.append({
-				type: "header",
-				label: "文件"
+				type: 'header',
+				label: '文件'
 			});
 			work_area.append({
 				type: radioOrCheckbox,
-				name: "csd",
+				name: 'csd',
 				list: Twinkle.speedy.generateCsdList(Twinkle.speedy.fileList, mode)
 			});
 			if (!Twinkle.speedy.mode.isSysop(mode)) {
 				work_area.append({
-					type: "div",
-					label: "标记快速删除F1（明显不符合本站著作权方针的文件）、F2（重复且不再被使用的文件），请使用Twinkle的“图权”功能。"
+					type: 'div',
+					label: '标记快速删除F1（明显不符合本站著作权方针的文件）、F2（重复且不再被使用的文件），请使用Twinkle的“图权”功能。'
 				});
 			}
 			break;
 		case 14:
 			// category
 			work_area.append({
-				type: "header",
-				label: "分类"
+				type: 'header',
+				label: '分类'
 			});
 			work_area.append({
 				type: radioOrCheckbox,
-				name: "csd",
+				name: 'csd',
 				list: Twinkle.speedy.generateCsdList(Twinkle.speedy.categoryList, mode)
 			});
 			break;
 		case 118:
 			// draft
 			work_area.append({
-				type: "header",
-				label: "草稿"
+				type: 'header',
+				label: '草稿'
 			});
 			work_area.append({
 				type: radioOrCheckbox,
-				name: "csd",
+				name: 'csd',
 				list: Twinkle.speedy.generateCsdList(Twinkle.speedy.draftList, mode)
 			});
 			break;
 		case namespace % 2 === 1 && namespace !== 3:
 			// show db-talk on talk pages, but not user talk pages
 			work_area.append({
-				type: "header",
-				label: "讨论页"
+				type: 'header',
+				label: '讨论页'
 			});
 			work_area.append({
 				type: radioOrCheckbox,
-				name: "csd",
+				name: 'csd',
 				list: Twinkle.speedy.generateCsdList(Twinkle.speedy.talkList, mode)
 			});
 			break;
@@ -454,68 +484,72 @@ Twinkle.speedy.callback.modeChanged = (form) => {
 		generalCriteria = Twinkle.speedy.customRationale.concat(generalCriteria);
 	}
 	work_area.append({
-		type: "header",
-		label: "常规"
+		type: 'header',
+		label: '常规'
 	});
 	work_area.append({
 		type: radioOrCheckbox,
-		name: "csd",
+		name: 'csd',
 		list: Twinkle.speedy.generateCsdList(generalCriteria, mode)
 	});
 	if (!Twinkle.speedy.mode.isSysop(mode)) {
 		work_area.append({
-			type: "div",
-			label: "提报侵权页面，请使用Twinkle的“侵权”功能。"
+			type: 'div',
+			label: '提报侵权页面，请使用Twinkle的“侵权”功能。'
 		});
 	}
-	if (mw.config.get("wgIsRedirect") || Morebits.userIsSysop) {
+	if (mw.config.get('wgIsRedirect') || Morebits.userIsSysop) {
 		work_area.append({
-			type: "header",
-			label: "重定向"
+			type: 'header',
+			label: '重定向'
 		});
 		work_area.append({
 			type: radioOrCheckbox,
-			name: "csd",
+			name: 'csd',
 			list: Twinkle.speedy.generateCsdList(Twinkle.speedy.redirectList, mode)
 		});
 	}
-	const old_area = Morebits.quickForm.getElements(form, "work_area")[0];
+	const old_area = Morebits.quickForm.getElements(form, 'work_area')[0];
 	form.replaceChild(work_area.render(), old_area);
 
 	// if sysop, check if CSD is already on the page and fill in custom rationale
 	if (isSysopMode && Twinkle.speedy.hasCSD) {
-		const customOption = $("input[name=csd][value=reason]")[0];
+		const customOption = $('input[name=csd][value=reason]')[0];
 		if (customOption) {
-			if (Twinkle.getPref("speedySelectionStyle") !== "radioClick") {
+			if (Twinkle.getPref('speedySelectionStyle') !== 'radioClick') {
 				// force listeners to re-init
 				customOption.click();
 				customOption.parentNode.appendChild(customOption.subgroup);
 			}
-			customOption.subgroup.querySelector("input").value = decodeURIComponent($("#delete-reason").text()).replace(/\+/g, " ");
+			customOption.subgroup.querySelector('input').value = decodeURIComponent(
+				$('#delete-reason').text()
+			).replace(/\+/g, ' ');
 		}
 	}
 
 	// enlarge G7 radio/checkbox and its label
 	if (document.querySelector('input[value="g7"]')) {
-		document.querySelector('input[value="g7"]').style = "height: 2em; width: 2em; height: -moz-initial; width: -moz-initial; -moz-transform: scale(2); -o-transform: scale(2);";
-		document.querySelector('input[value="g7"]').labels[0].style = "font-size: 1.5em; line-height: 1.5em;";
+		document.querySelector('input[value="g7"]').style =
+				'height: 2em; width: 2em; height: -moz-initial; width: -moz-initial; -moz-transform: scale(2); -o-transform: scale(2);';
+		document.querySelector('input[value="g7"]').labels[0].style =
+				'font-size: 1.5em; line-height: 1.5em;';
 	}
-	if (!isSysopMode && mw.config.get("wgPageContentModel") !== "wikitext") {
-		$("[name=tag_options]").hide();
-		$("[name=work_area]").empty();
+	if (!isSysopMode && mw.config.get('wgPageContentModel') !== 'wikitext') {
+		$('[name=tag_options]').hide();
+		$('[name=work_area]').empty();
 		const message = [
-			"Twinkle不支持在页面内容模型为",
-			mw.config.get("wgPageContentModel"),
-			"的页面上挂上快速删除模板，请参见",
-			$("<a>")
+			'Twinkle不支持在页面内容模型为',
+			mw.config.get('wgPageContentModel'),
+			'的页面上挂上快速删除模板，请参见',
+			$('<a>')
 				.attr({
-					target: "_blank",
-					href: mw.util.getUrl("QW:SPECIALSD")
+					target: '_blank',
+					href: mw.util.getUrl('QW:SPECIALSD')
 				})
-				.text("手动放置模板时的注意事项")[0],
-			"。"
+				.text('手动放置模板时的注意事项')[0],
+			'。'
 		];
-		$("[name=work_area]").append(message);
+		$('[name=work_area]').append(message);
 		Morebits.simpleWindow.setButtonsEnabled(false);
 	} else {
 		Morebits.simpleWindow.setButtonsEnabled(true);
@@ -523,44 +557,44 @@ Twinkle.speedy.callback.modeChanged = (form) => {
 };
 Twinkle.speedy.callback.priorDeletionCount = () => {
 	const query = {
-		action: "query",
-		format: "json",
-		list: "logevents",
-		letype: "delete",
-		leaction: "delete/delete",
+		action: 'query',
+		format: 'json',
+		list: 'logevents',
+		letype: 'delete',
+		leaction: 'delete/delete',
 		// Just pure page deletion, no redirect overwrites or revdel
-		letitle: mw.config.get("wgPageName"),
-		leprop: "",
+		letitle: mw.config.get('wgPageName'),
+		leprop: '',
 		// We're just counting we don't actually care about the entries
 		lelimit: 5 // A little bit goes a long way
 	};
 
-	new Morebits.wiki.api("检查之前的删除", query, (apiobj) => {
+	new Morebits.wiki.api('检查之前的删除', query, (apiobj) => {
 		const response = apiobj.getResponse();
 		const delCount = response.query.logevents.length;
 		if (delCount) {
-			let message = "被删除";
+			let message = '被删除';
 			if (response.continue) {
-				message += "超过";
+				message += '超过';
 			}
 			message += `${delCount}次`;
 
 			// 3+ seems problematic
 			if (delCount >= 3) {
-				$("#prior-deletion-count").css("color", "red");
+				$('#prior-deletion-count').css('color', 'red');
 			}
 
 			// Provide a link to page logs (CSD templates have one for sysops)
-			const link = Morebits.htmlNode("a", "（日志）");
+			const link = Morebits.htmlNode('a', '（日志）');
 			link.setAttribute(
-				"href",
-				mw.util.getUrl("Special:Log", {
-					page: mw.config.get("wgPageName")
+				'href',
+				mw.util.getUrl('Special:Log', {
+					page: mw.config.get('wgPageName')
 				})
 			);
-			link.setAttribute("target", "_blank");
-			$("#prior-deletion-count").text(message); // Space before log link
-			$("#prior-deletion-count").append(link);
+			link.setAttribute('target', '_blank');
+			$('#prior-deletion-count').text(message); // Space before log link
+			$('#prior-deletion-count').append(link);
 		}
 	}).post();
 };
@@ -570,14 +604,16 @@ Twinkle.speedy.generateCsdList = (list, mode) => {
 	const multiple = Twinkle.speedy.mode.isMultiple(mode);
 	const hasSubmitButton = Twinkle.speedy.mode.hasSubmitButton(mode);
 	const openSubgroupHandler = (e) => {
-		$(e.target.form).find("input").prop("disabled", true);
-		$(e.target.form).children().css("color", "gray");
-		$(e.target).parent().css("color", "black").find("input").prop("disabled", false);
-		$(e.target).parent().find("input:text")[0].focus();
+		$(e.target.form).find('input').prop('disabled', true);
+		$(e.target.form).children().css('color', 'gray');
+		$(e.target).parent().css('color', 'black').find('input').prop('disabled', false);
+		$(e.target).parent().find('input:text')[0].focus();
 		e.stopPropagation();
 	};
 	const submitSubgroupHandler = (e) => {
-		const evaluateType = Twinkle.speedy.mode.isSysop(mode) ? "evaluateSysop" : "evaluateUser";
+		const evaluateType = Twinkle.speedy.mode.isSysop(mode)
+			? 'evaluateSysop'
+			: 'evaluateUser';
 		Twinkle.speedy.callback[evaluateType](e);
 		e.stopPropagation();
 	};
@@ -613,30 +649,36 @@ Twinkle.speedy.generateCsdList = (list, mode) => {
 				criterion.subgroup = null;
 			}
 		}
-		if (mw.config.get("wgIsRedirect") && criterion.hideWhenRedirect) {
+		if (mw.config.get('wgIsRedirect') && criterion.hideWhenRedirect) {
 			return null;
 		}
-		if (criterion.showInNamespaces && criterion.showInNamespaces.indexOf(mw.config.get("wgNamespaceNumber")) < 0) {
+		if (
+			criterion.showInNamespaces &&
+				criterion.showInNamespaces.indexOf(mw.config.get('wgNamespaceNumber')) < 0
+		) {
 			return null;
-		} else if (criterion.hideInNamespaces && criterion.hideInNamespaces.indexOf(mw.config.get("wgNamespaceNumber")) > -1) {
+		} else if (
+			criterion.hideInNamespaces &&
+				criterion.hideInNamespaces.indexOf(mw.config.get('wgNamespaceNumber')) > -1
+		) {
 			return null;
 		}
 		if (criterion.subgroup && !hasSubmitButton) {
 			if (Array.isArray(criterion.subgroup)) {
 				criterion.subgroup.push({
-					type: "button",
-					name: "submit",
-					label: isSysopMode ? "删除页面" : "标记页面",
+					type: 'button',
+					name: 'submit',
+					label: isSysopMode ? '删除页面' : '标记页面',
 					event: submitSubgroupHandler
 				});
 			} else {
 				criterion.subgroup = [
 					criterion.subgroup,
 					{
-						type: "button",
-						name: "submit",
+						type: 'button',
+						name: 'submit',
 						// ends up being called "csd.submit" so this is OK
-						label: isSysopMode ? "删除页面" : "标记页面",
+						label: isSysopMode ? '删除页面' : '标记页面',
 						event: submitSubgroupHandler
 					}
 				];
@@ -649,305 +691,321 @@ Twinkle.speedy.generateCsdList = (list, mode) => {
 };
 Twinkle.speedy.customRationale = [
 	{
-		label: `自定义理由${Morebits.userIsSysop ? "（自定义删除理由）" : ""}`,
-		value: "reason",
-		tooltip: "该页至少应该符合一条快速删除的标准，并且您必须在理由中提到。",
+		label: `自定义理由${Morebits.userIsSysop ? '（自定义删除理由）' : ''}`,
+		value: 'reason',
+		tooltip: '该页至少应该符合一条快速删除的标准，并且您必须在理由中提到。',
 		subgroup: {
-			name: "reason_1",
-			type: "input",
-			label: "理由：",
+			name: 'reason_1',
+			type: 'input',
+			label: '理由：',
 			size: 60
 		}
 	}
 ];
 Twinkle.speedy.fileList = [
 	{
-		label: "F1：明显不符合本站著作权方针的文件",
-		value: "f1",
+		label: 'F1：明显不符合本站著作权方针的文件',
+		value: 'f1',
 		tooltip:
-				"包括以下情况：1.上传后3天内仍然来源不明、著作权不明的文件。2.上传者宣称拥有，而在其他来源找到的文件。3.文件宣称由某作者依据某自由著作权协议发布，但找不到该自由协议的声明。4.其他明显侵权的文件，可附加侵权理由。"
+				'包括以下情况：1.上传后3天内仍然来源不明、著作权不明的文件。2.上传者宣称拥有，而在其他来源找到的文件。3.文件宣称由某作者依据某自由著作权协议发布，但找不到该自由协议的声明。4.其他明显侵权的文件，可附加侵权理由。'
 	},
 	{
-		label: "F2：重复且不再被使用的文件",
-		value: "f2",
+		label: 'F2：重复且不再被使用的文件',
+		value: 'f2',
 		tooltip:
-				"包括以下情况：与现有文件完全相同（或与现有文件内容一致但尺寸较小），且没有客观需要（如某些场合需使用小尺寸图片）的文件。或是被更加清晰的文件、SVG格式文件所取代的文件。请提报者确定文件没有任何页面使用后再提报删除，并附注对应质量更好的文件名。",
+				'包括以下情况：与现有文件完全相同（或与现有文件内容一致但尺寸较小），且没有客观需要（如某些场合需使用小尺寸图片）的文件。或是被更加清晰的文件、SVG格式文件所取代的文件。请提报者确定文件没有任何页面使用后再提报删除，并附注对应质量更好的文件名。',
 		subgroup: {
-			name: "f2_filename",
-			type: "input",
-			label: "新文件名：",
-			tooltip: "可不含“File:”前缀。"
+			name: 'f2_filename',
+			type: 'input',
+			label: '新文件名：',
+			tooltip: '可不含“File:”前缀。'
 		}
 	}
 ];
 Twinkle.speedy.articleList = [
 	{
-		label: "A1：内容空泛或完全没有内容。",
-		value: "a1",
+		label: 'A1：内容空泛或完全没有内容。',
+		value: 'a1',
 		tooltip:
-				"条目的内容笼统，或甚至根本没有提及条目主体，使条目不能用以区分其他事物；或条目只包括外部链接、参见、参考来源、分类、模板，而没有文字描述。消歧义页、重定向页不适用此条。请注意有些用户可能会多次保存，若此类页面的最后一次编辑时间超过24小时，则可提请快速删除。"
+				'条目的内容笼统，或甚至根本没有提及条目主体，使条目不能用以区分其他事物；或条目只包括外部链接、参见、参考来源、分类、模板，而没有文字描述。消歧义页、重定向页不适用此条。请注意有些用户可能会多次保存，若此类页面的最后一次编辑时间超过24小时，则可提请快速删除。'
 	},
 	{
-		label: "A2：与其他条目或其历史版本重复，且不适合作为其重定向。",
-		value: "a2",
+		label: 'A2：与其他条目或其历史版本重复，且不适合作为其重定向。',
+		value: 'a2',
 		tooltip:
-				"条目创建时的内容，与其他现有条目（或其历史版本）内容完全相同或非常相似，且名称不适合作为后者的重定向。不包括拆分、合并、重组后产生的条目。如有疑虑，可转交删除讨论。若后创建的条目名称可作为重定向，可直接改为重定向；若先创建的条目宜作为后创建条目的重定向，请提请移动请求。",
+				'条目创建时的内容，与其他现有条目（或其历史版本）内容完全相同或非常相似，且名称不适合作为后者的重定向。不包括拆分、合并、重组后产生的条目。如有疑虑，可转交删除讨论。若后创建的条目名称可作为重定向，可直接改为重定向；若先创建的条目宜作为后创建条目的重定向，请提请移动请求。',
 		subgroup: {
-			name: "a2_pagename",
-			type: "input",
-			label: "现有条目名：",
-			tooltip: "不自动加上链接，若需要请自行加上[[]]。",
+			name: 'a2_pagename',
+			type: 'input',
+			label: '现有条目名：',
+			tooltip: '不自动加上链接，若需要请自行加上[[]]。',
 			size: 60
 		}
 	},
 	{
-		label: "A3：非现代汉语或翻译拙劣的条目",
-		value: "a3",
-		tooltip: "条目内容绝大部分非现代汉语，包括未翻译的外语、方言及文言文；或翻译质量低下，以至于难以理解或出现较多错误。"
+		label: 'A3：非现代汉语或翻译拙劣的条目',
+		value: 'a3',
+		tooltip:
+				'条目内容绝大部分非现代汉语，包括未翻译的外语、方言及文言文；或翻译质量低下，以至于难以理解或出现较多错误。'
 	}
 ];
 Twinkle.speedy.categoryList = [
 	{
-		label: "O2：空分类。",
-		value: "o2",
-		tooltip: "没有收录任何页面、文件、子分类的分类。Category:请勿删除的分类中的分类不适用。"
+		label: 'O2：空分类。',
+		value: 'o2',
+		tooltip: '没有收录任何页面、文件、子分类的分类。Category:请勿删除的分类中的分类不适用。'
 	}
 ];
 Twinkle.speedy.draftList = [
 	{
-		label: "O3：废弃草稿。",
-		value: "o3",
-		tooltip: "草稿名字空间内六个月内无编辑的页面。"
+		label: 'O3：废弃草稿。',
+		value: 'o3',
+		tooltip: '草稿名字空间内六个月内无编辑的页面。'
 	}
 ];
 Twinkle.speedy.userList = [
 	{
-		label: "O1：用户请求删除自己的用户页。",
-		value: "o1",
-		tooltip: "管理员需查看编辑历史，确认该页面不是从其他名字空间移动而来。"
+		label: 'O1：用户请求删除自己的用户页。',
+		value: 'o1',
+		tooltip: '管理员需查看编辑历史，确认该页面不是从其他名字空间移动而来。'
 	}
 ];
 Twinkle.speedy.generalList = [
 	{
-		label: "G1：明显违反法律法规或违背公序良俗的页面",
-		value: "g1",
-		tooltip: "明显违反服务器所在地的法律法规及有关规定，或突破社会公序良俗底线，按照中华人民共和国互联网管理规定应予删除的页面。"
-	},
-	{
-		label: "G2：没有实际内容的页面",
-		value: "g2",
-		tooltip: "仅包括无意义字符串而没有实际内容的页面。由用户本人创建的用户页、用户讨论页，及专为测试提供的沙盒，不适用此准则。若遇此类用户讨论页，任何人可将其替换为{{subst:welcome}}。"
-	},
-	{
-		label: "G3：纯粹破坏",
-		value: "g3",
-		tooltip: "包括但不限于明显的恶作剧、错误信息、人身攻击等，以及清理移动破坏时留下的重定向。若收到或发现严重的人身攻击与诋毁，管理员及其他用户应通知监督员进行监督隐藏。"
-	},
-	{
-		label: "G4：重新创建已被删除的页面",
-		value: "g4",
+		label: 'G1：明显违反法律法规或违背公序良俗的页面',
+		value: 'g1',
 		tooltip:
-				"若现有页面与曾在删除讨论（含页面存废讨论、文件存废讨论和侵权审核，不含快速删除）中被删除内容相同或非常相似，且现有内容仍然适用删除讨论中的结论，无论标题是否相同，都适用本标准。若现有页面标题与已删版本不一致，则提请速删者应一并注明已删版本的页面名；若该页面之前被快速删除，请以相同理由重新提请速删。若现有内容不适用删除讨论中的结论，应重新提出删除讨论。",
+				'明显违反服务器所在地的法律法规及有关规定，或突破社会公序良俗底线，按照中华人民共和国互联网管理规定应予删除的页面。'
+	},
+	{
+		label: 'G2：没有实际内容的页面',
+		value: 'g2',
+		tooltip:
+				'仅包括无意义字符串而没有实际内容的页面。由用户本人创建的用户页、用户讨论页，及专为测试提供的沙盒，不适用此准则。若遇此类用户讨论页，任何人可将其替换为{{subst:welcome}}。'
+	},
+	{
+		label: 'G3：纯粹破坏',
+		value: 'g3',
+		tooltip:
+				'包括但不限于明显的恶作剧、错误信息、人身攻击等，以及清理移动破坏时留下的重定向。若收到或发现严重的人身攻击与诋毁，管理员及其他用户应通知监督员进行监督隐藏。'
+	},
+	{
+		label: 'G4：重新创建已被删除的页面',
+		value: 'g4',
+		tooltip:
+				'若现有页面与曾在删除讨论（含页面存废讨论、文件存废讨论和侵权审核，不含快速删除）中被删除内容相同或非常相似，且现有内容仍然适用删除讨论中的结论，无论标题是否相同，都适用本标准。若现有页面标题与已删版本不一致，则提请速删者应一并注明已删版本的页面名；若该页面之前被快速删除，请以相同理由重新提请速删。若现有内容不适用删除讨论中的结论，应重新提出删除讨论。',
 		subgroup: [
 			{
-				name: "g4_pagename",
-				type: "input",
-				label: "已删版本页面名：",
+				name: 'g4_pagename',
+				type: 'input',
+				label: '已删版本页面名：',
 				size: 60
 			}
 		],
 		hideSubgroupWhenMultiple: true
 	},
 	{
-		label: "G5：因技术原因删除页面",
-		value: "g5",
-		tooltip: "包括以下情形：因移动请求而删除页面；以覆盖删除重定向；删除无用的MediaWiki页面，及其他技术团队或界面管理员认为有必要执行的快速删除情形。"
+		label: 'G5：因技术原因删除页面',
+		value: 'g5',
+		tooltip:
+				'包括以下情形：因移动请求而删除页面；以覆盖删除重定向；删除无用的MediaWiki页面，及其他技术团队或界面管理员认为有必要执行的快速删除情形。'
 	},
 	{
-		label: "G6：原作者提请删除或清空页面，且页面原作者仅有一人",
-		value: "g6",
+		label: 'G6：原作者提请删除或清空页面，且页面原作者仅有一人',
+		value: 'g6',
 		tooltip:
-				"页面原作者持合理理由提出的快速删除；或页面原作者（实际贡献者）清空页面，其他用户提交的快速删除。页面原作者（实际贡献者）仅一人时满足本准则。若页面实际贡献者多于一人，请持合理理由提交删除讨论。后一情形不包括用户页、用户讨论页，且应在页面最后一次编辑6小时后提出。被导入的页面，导入者视为原作者。",
+				'页面原作者持合理理由提出的快速删除；或页面原作者（实际贡献者）清空页面，其他用户提交的快速删除。页面原作者（实际贡献者）仅一人时满足本准则。若页面实际贡献者多于一人，请持合理理由提交删除讨论。后一情形不包括用户页、用户讨论页，且应在页面最后一次编辑6小时后提出。被导入的页面，导入者视为原作者。',
 		subgroup: {
-			name: "g6_rationale",
-			type: "input",
-			label: "删除原因：",
+			name: 'g6_rationale',
+			type: 'input',
+			label: '删除原因：',
 			size: 60
 		},
 		hideSubgroupWhenSysop: true
 	},
 	{
-		label: "G7：明显的广告宣传",
-		value: "g7",
+		label: 'G7：明显的广告宣传',
+		value: 'g7',
 		tooltip:
-				"应用于明显的广告宣传，或只有相关人物、组织等事物联系方法（包括但不限于电话、地址、电子邮箱、即时通讯软件联系方式（如QQ号、微信号）、社交媒体链接）。若宣传语气不明显，建议转交删除讨论。"
+				'应用于明显的广告宣传，或只有相关人物、组织等事物联系方法（包括但不限于电话、地址、电子邮箱、即时通讯软件联系方式（如QQ号、微信号）、社交媒体链接）。若宣传语气不明显，建议转交删除讨论。'
 	},
 	{
-		label: "G8：未列明可靠来源且语调负面的生者传记",
-		value: "g8",
-		tooltip: "本情况下有的页面严重侵犯他人名誉权，有时可能侵犯隐私权，可能需要提请监督。"
+		label: 'G8：未列明可靠来源且语调负面的生者传记',
+		value: 'g8',
+		tooltip: '本情况下有的页面严重侵犯他人名誉权，有时可能侵犯隐私权，可能需要提请监督。'
 	},
 	{
-		label: "G9：孤立页面",
-		value: "g9",
+		label: 'G9：孤立页面',
+		value: 'g9',
 		tooltip:
-				"包括以下几种类型：1.没有对应文件的文件页面；2.没有对应母页面的子页面（用户页子页面除外）；3.指向不存在页面的重定向；4.没有对应内容页面的讨论页（讨论页存档、用户讨论页，以及在主页面挂有{{CSD Placeholder}}模板的讨论页除外）；5.不存在注册用户的用户页及用户页子页面（随用户更名产生的用户页重定向除外）。请在删除时注意有无将内容移至他处的必要。"
+				'包括以下几种类型：1.没有对应文件的文件页面；2.没有对应母页面的子页面（用户页子页面除外）；3.指向不存在页面的重定向；4.没有对应内容页面的讨论页（讨论页存档、用户讨论页，以及在主页面挂有{{CSD Placeholder}}模板的讨论页除外）；5.不存在注册用户的用户页及用户页子页面（随用户更名产生的用户页重定向除外）。请在删除时注意有无将内容移至他处的必要。'
 	}
 ];
 Twinkle.speedy.redirectList = [
 	{
-		label: "R1：不能发挥实际作用的重定向。",
-		value: "r1",
+		label: 'R1：不能发挥实际作用的重定向。',
+		value: 'r1',
 		tooltip:
-				"包括以下情况：1.指向本身或循环的重定向，如A→B→C→……→A或A→A（繁简重定向不适用此项）；2.格式错误的重定向，包括标题仅为繁体、繁简混用、消歧义使用的括弧或空格错误、间隔号使用错误（因类推简化字未收录至《通用规范汉字表》导致的繁简混杂情形，或系统无法自动进行繁简处理的情形，则不适用）。如果重定向页面标题，与合乎命名常规的目标页面标题之间，仅存在繁简字体的区别，而不存在词语用法区别，则不保留该重定向。因系统无法自动繁简转换而必须保留的重定向页面除外。对于其他未列出的情况，若用户认为该重定向无法发挥实际作用，且依据常识没有任何争议，可凭合理理由提请速删，由管理员判断。指向不存在页面的重定向，适用G5准则。",
+				'包括以下情况：1.指向本身或循环的重定向，如A→B→C→……→A或A→A（繁简重定向不适用此项）；2.格式错误的重定向，包括标题仅为繁体、繁简混用、消歧义使用的括弧或空格错误、间隔号使用错误（因类推简化字未收录至《通用规范汉字表》导致的繁简混杂情形，或系统无法自动进行繁简处理的情形，则不适用）。如果重定向页面标题，与合乎命名常规的目标页面标题之间，仅存在繁简字体的区别，而不存在词语用法区别，则不保留该重定向。因系统无法自动繁简转换而必须保留的重定向页面除外。对于其他未列出的情况，若用户认为该重定向无法发挥实际作用，且依据常识没有任何争议，可凭合理理由提请速删，由管理员判断。指向不存在页面的重定向，适用G5准则。',
 		subgroup: {
-			name: "r1_type",
-			type: "select",
-			label: "适用类型：",
+			name: 'r1_type',
+			type: 'select',
+			label: '适用类型：',
 			list: [
 				{
-					label: "请选择",
-					value: ""
+					label: '请选择',
+					value: ''
 				},
 				{
-					label: "指向本身或循环的重定向",
-					value: "指向本身或循环的重定向。"
+					label: '指向本身或循环的重定向',
+					value: '指向本身或循环的重定向。'
 				},
 				{
-					label: "标题繁简混用",
-					value: "标题繁简混用。"
+					label: '标题繁简混用',
+					value: '标题繁简混用。'
 				},
 				{
-					label: "消歧义使用的括号或空格错误",
-					value: "消歧义使用的括号或空格错误。"
+					label: '消歧义使用的括号或空格错误',
+					value: '消歧义使用的括号或空格错误。'
 				},
 				{
-					label: "间隔号使用错误",
-					value: "间隔号使用错误。"
+					label: '间隔号使用错误',
+					value: '间隔号使用错误。'
 				},
 				{
-					label: "其他理由（请勾选上方“应用多个理由”，并填写自定义理由）",
-					value: ""
+					label: '其他理由（请勾选上方“应用多个理由”，并填写自定义理由）',
+					value: ''
 				}
 			]
 		}
 	},
 	{
-		label: "R2：名称与导向目标代表事物不一致或不完全一致的重定向。",
-		value: "r2",
+		label: 'R2：名称与导向目标代表事物不一致或不完全一致的重定向。',
+		value: 'r2',
 		tooltip:
-				"包括但不限于以下情况：1.由任何非条目页面（除用户页）导向条目页的重定向，以及由条目页导向任何非条目页面的重定向。2.明显笔误的重定向，如出现不常见的错别字等。（别称重定向不适用此项。若含错别字或有笔误的重定向使用频率高，此类重定向有助于帮助用户寻找到正确的页面，不适用此标准。有争议的此类重定向宜提交删除讨论。）3.明显与导向目标所涵盖的主题无关，或比导向目标所涵盖的主题更广泛的重定向。（若不明显，可改为提交删除讨论。）",
+				'包括但不限于以下情况：1.由任何非条目页面（除用户页）导向条目页的重定向，以及由条目页导向任何非条目页面的重定向。2.明显笔误的重定向，如出现不常见的错别字等。（别称重定向不适用此项。若含错别字或有笔误的重定向使用频率高，此类重定向有助于帮助用户寻找到正确的页面，不适用此标准。有争议的此类重定向宜提交删除讨论。）3.明显与导向目标所涵盖的主题无关，或比导向目标所涵盖的主题更广泛的重定向。（若不明显，可改为提交删除讨论。）',
 		subgroup: {
-			name: "r2_type",
-			type: "select",
-			label: "适用类型：",
+			name: 'r2_type',
+			type: 'select',
+			label: '适用类型：',
 			list: [
 				{
-					label: "请选择",
-					value: ""
+					label: '请选择',
+					value: ''
 				},
 				{
-					label: "由非条目页面（除用户页）导向条目页的重定向",
-					value: "由非条目页面（除用户页）导向条目页的重定向。"
+					label: '由非条目页面（除用户页）导向条目页的重定向',
+					value: '由非条目页面（除用户页）导向条目页的重定向。'
 				},
 				{
-					label: "由条目页导向非条目页面的重定向",
-					value: "由条目页导向任何非条目页面的重定向。"
+					label: '由条目页导向非条目页面的重定向',
+					value: '由条目页导向任何非条目页面的重定向。'
 				},
 				{
-					label: "明显笔误的重定向",
-					value: "明显笔误的重定向。"
+					label: '明显笔误的重定向',
+					value: '明显笔误的重定向。'
 				},
 				{
-					label: "与导向目标无关或比其范围更广泛的重定向",
-					value: "与导向目标无关或比其范围更广泛的重定向。"
+					label: '与导向目标无关或比其范围更广泛的重定向',
+					value: '与导向目标无关或比其范围更广泛的重定向。'
 				},
 				{
-					label: "其他理由（请勾选上方“应用多个理由”，并填写自定义理由）",
-					value: ""
+					label: '其他理由（请勾选上方“应用多个理由”，并填写自定义理由）',
+					value: ''
 				}
 			]
 		}
 	}
 ];
 Twinkle.speedy.normalizeHash = {
-	reason: "db",
-	multiple: "multiple",
-	"multiple-finish": "multiple-finish",
-	g1: "g1",
-	g2: "g2",
-	g3: "g3",
-	g4: "g4",
-	g5: "g5",
-	g6: "g6",
-	g7: "g7",
-	g8: "g8",
-	g9: "g9",
-	a1: "a1",
-	a2: "a2",
-	a3: "a3",
-	r1: "r1",
-	r2: "r2",
-	f1: "f1",
-	f2: "f2",
-	o1: "o1",
-	o2: "o2",
-	o3: "o3"
+	reason: 'db',
+	multiple: 'multiple',
+	'multiple-finish': 'multiple-finish',
+	g1: 'g1',
+	g2: 'g2',
+	g3: 'g3',
+	g4: 'g4',
+	g5: 'g5',
+	g6: 'g6',
+	g7: 'g7',
+	g8: 'g8',
+	g9: 'g9',
+	a1: 'a1',
+	a2: 'a2',
+	a3: 'a3',
+	r1: 'r1',
+	r2: 'r2',
+	f1: 'f1',
+	f2: 'f2',
+	o1: 'o1',
+	o2: 'o2',
+	o3: 'o3'
 };
 Twinkle.speedy.callbacks = {
 	getTemplateCodeAndParams: (params) => {
 		let code, parameters, i;
 		if (params.normalizeds.length > 1) {
-			code = "{{delete";
+			code = '{{delete';
 			params.utparams = {};
 			$.each(params.normalizeds, (index, norm) => {
-				if (norm !== "db") {
+				if (norm !== 'db') {
 					code += `|${norm.toUpperCase()}`;
 				}
 				parameters = params.templateParams[index] || [];
 				for (const i in parameters) {
-					if (typeof parameters[i] === "string") {
+					if (typeof parameters[i] === 'string') {
 						code += `|${parameters[i]}`;
 					}
 				}
-				$.extend(params.utparams, Twinkle.speedy.getUserTalkParameters(norm, parameters));
+				$.extend(
+					params.utparams,
+					Twinkle.speedy.getUserTalkParameters(norm, parameters)
+				);
 			});
-			code += "}}";
+			code += '}}';
 		} else {
 			parameters = params.templateParams[0] || [];
-			code = "{{delete";
-			if (params.values[0] !== "reason") {
+			code = '{{delete';
+			if (params.values[0] !== 'reason') {
 				code += `|${params.values[0]}`;
 			}
 			for (i in parameters) {
-				if (typeof parameters[i] === "string") {
+				if (typeof parameters[i] === 'string') {
 					code += `|${parameters[i]}`;
 				}
 			}
-			code += "}}";
-			params.utparams = Twinkle.speedy.getUserTalkParameters(params.normalizeds[0], parameters);
+			code += '}}';
+			params.utparams = Twinkle.speedy.getUserTalkParameters(
+				params.normalizeds[0],
+				parameters
+			);
 		}
 		return [code, params.utparams];
 	},
 	parseWikitext: (title, wikitext, callback) => {
 		const query = {
-			action: "parse",
-			prop: "text",
-			pst: "true",
+			action: 'parse',
+			prop: 'text',
+			pst: 'true',
 			text: wikitext,
-			contentmodel: "wikitext",
+			contentmodel: 'wikitext',
 			title: title
 		};
-		const statusIndicator = new Morebits.status("构造删除理由");
+		const statusIndicator = new Morebits.status('构造删除理由');
 		const api = new Morebits.wiki.api(
-			"解析删除模板",
+			'解析删除模板',
 			query,
 			(apiobj) => {
-				const reason = decodeURIComponent($(apiobj.getXML().querySelector("text").childNodes[0].nodeValue).find("#delete-reason").text().replace(/\+/g, " "));
+				const reason = decodeURIComponent(
+					$(apiobj.getXML().querySelector('text').childNodes[0].nodeValue)
+						.find('#delete-reason')
+						.text()
+						.replace(/\+/g, ' ')
+				);
 				if (!reason) {
-					statusIndicator.warn("未能从删除模板生成删除理由");
+					statusIndicator.warn('未能从删除模板生成删除理由');
 				} else {
-					statusIndicator.info("完成");
+					statusIndicator.info('完成');
 				}
 				callback(reason);
 			},
@@ -958,32 +1016,39 @@ Twinkle.speedy.callbacks = {
 	sysop: {
 		main: (params) => {
 			let reason;
-			if (!params.normalizeds.length && params.normalizeds[0] === "db") {
-				reason = prompt("输入删除理由：", "");
+			if (!params.normalizeds.length && params.normalizeds[0] === 'db') {
+				reason = prompt('输入删除理由：', '');
 				Twinkle.speedy.callbacks.sysop.deletePage(reason, params);
 			} else {
 				const code = Twinkle.speedy.callbacks.getTemplateCodeAndParams(params)[0];
-				Twinkle.speedy.callbacks.parseWikitext(mw.config.get("wgPageName"), code, (reason) => {
-					if (params.promptForSummary) {
-						reason = prompt("输入删除理由，或单击确定以接受自动生成的：", reason);
+				Twinkle.speedy.callbacks.parseWikitext(
+					mw.config.get('wgPageName'),
+					code,
+					(reason) => {
+						if (params.promptForSummary) {
+							reason = prompt(
+								'输入删除理由，或单击确定以接受自动生成的：',
+								reason
+							);
+						}
+						Twinkle.speedy.callbacks.sysop.deletePage(reason, params);
 					}
-					Twinkle.speedy.callbacks.sysop.deletePage(reason, params);
-				});
+				);
 			}
 		},
 		deletePage: (reason, params) => {
-			const thispage = new Morebits.wiki.page(mw.config.get("wgPageName"), "删除页面");
+			const thispage = new Morebits.wiki.page(mw.config.get('wgPageName'), '删除页面');
 			if (reason === null) {
-				return Morebits.status.error("询问理由", "用户取消操作。");
-			} else if (!reason || !reason.replace(/^\s*/, "").replace(/\s*$/, "")) {
-				return Morebits.status.error("询问理由", "你不给我理由……我就……不管了……");
+				return Morebits.status.error('询问理由', '用户取消操作。');
+			} else if (!reason || !reason.replace(/^\s*/, '').replace(/\s*$/, '')) {
+				return Morebits.status.error('询问理由', '你不给我理由……我就……不管了……');
 			}
 			const deleteMain = () => {
 				thispage.setEditSummary(reason);
 				thispage.setChangeTags(Twinkle.changeTags);
 				thispage.setWatchlist(params.watch);
 				thispage.deletePage(() => {
-					thispage.getStatusElement().info("完成");
+					thispage.getStatusElement().info('完成');
 					Twinkle.speedy.callbacks.sysop.deleteTalk(params);
 				});
 			};
@@ -1002,9 +1067,23 @@ Twinkle.speedy.callbacks = {
 		},
 		deleteTalk: (params) => {
 			// delete talk page
-			if (params.deleteTalkPage && params.normalized !== "f7" && params.normalized !== "o1" && !document.getElementById("ca-talk").classList.contains("new")) {
-				const talkpage = new Morebits.wiki.page(`${mw.config.get("wgFormattedNamespaces")[mw.config.get("wgNamespaceNumber") + 1]}:${mw.config.get("wgTitle")}`, "删除讨论页");
-				talkpage.setEditSummary(`[[QW:CSD#G9|G9]]: 孤立页面: 已删除页面“${Morebits.pageNameNorm}”的讨论页`);
+			if (
+				params.deleteTalkPage &&
+					params.normalized !== 'f7' &&
+					params.normalized !== 'o1' &&
+					!document.getElementById('ca-talk').classList.contains('new')
+			) {
+				const talkpage = new Morebits.wiki.page(
+					`${
+						mw.config.get('wgFormattedNamespaces')[
+							mw.config.get('wgNamespaceNumber') + 1
+						]
+					}:${mw.config.get('wgTitle')}`,
+					'删除讨论页'
+				);
+				talkpage.setEditSummary(
+					`[[QW:CSD#G9|G9]]: 孤立页面: 已删除页面“${Morebits.pageNameNorm}”的讨论页`
+				);
 				talkpage.setChangeTags(Twinkle.changeTags);
 				talkpage.deletePage();
 				// this is ugly, but because of the architecture of wiki.api, it is needed
@@ -1020,91 +1099,100 @@ Twinkle.speedy.callbacks = {
 			// delete redirects
 			if (params.deleteRedirects) {
 				const query = {
-					action: "query",
-					titles: mw.config.get("wgPageName"),
-					prop: "redirects",
+					action: 'query',
+					titles: mw.config.get('wgPageName'),
+					prop: 'redirects',
 					rdlimit: 5000 // 500 is max for normal users, 5000 for bots and sysops
 				};
 
-				const qiuwen_api = new Morebits.wiki.api("获取重定向列表……", query, Twinkle.speedy.callbacks.sysop.deleteRedirectsMain, new Morebits.status("删除重定向"));
+				const qiuwen_api = new Morebits.wiki.api(
+					'获取重定向列表……',
+					query,
+					Twinkle.speedy.callbacks.sysop.deleteRedirectsMain,
+					new Morebits.status('删除重定向')
+				);
 				qiuwen_api.params = params;
 				qiuwen_api.post();
 			}
 
 			// prompt for protect on G7
 			let $link, $bigtext;
-			if (params.normalized === "g7") {
-				$link = $("<a>", {
-					href: "#",
-					text: "单击这里施行保护",
+			if (params.normalized === 'g7') {
+				$link = $('<a>', {
+					href: '#',
+					text: '单击这里施行保护',
 					css: {
-						fontSize: "130%",
-						fontWeight: "bold"
+						fontSize: '130%',
+						fontWeight: 'bold'
 					},
 					click: () => {
 						Morebits.wiki.actionCompleted.redirect = null;
 						Twinkle.speedy.dialog.close();
-						mw.config.set("wgArticleId", 0);
+						mw.config.set('wgArticleId', 0);
 						Twinkle.protect.callback();
 					}
 				});
-				$bigtext = $("<span>", {
-					text: "白纸保护该页",
+				$bigtext = $('<span>', {
+					text: '白纸保护该页',
 					css: {
-						fontSize: "130%",
-						fontWeight: "bold"
+						fontSize: '130%',
+						fontWeight: 'bold'
 					}
 				});
 				Morebits.status.info($bigtext[0], $link[0]);
 			}
 
 			// promote Unlink tool
-			if (mw.config.get("wgNamespaceNumber") === 6 && params.normalized !== "f7") {
-				$link = $("<a>", {
-					href: "#",
-					text: "单击这里前往取消链入工具",
+			if (mw.config.get('wgNamespaceNumber') === 6 && params.normalized !== 'f7') {
+				$link = $('<a>', {
+					href: '#',
+					text: '单击这里前往取消链入工具',
 					css: {
-						fontWeight: "bold"
+						fontWeight: 'bold'
 					},
 					click: () => {
 						Morebits.wiki.actionCompleted.redirect = null;
 						Twinkle.speedy.dialog.close();
-						Twinkle.unlink.callback(`取消对已删除文件 ${Morebits.pageNameNorm} 的使用`);
+						Twinkle.unlink.callback(
+							`取消对已删除文件 ${Morebits.pageNameNorm} 的使用`
+						);
 					}
 				});
-				$bigtext = $("<span>", {
-					text: "取消对已删除文件的使用",
+				$bigtext = $('<span>', {
+					text: '取消对已删除文件的使用',
 					css: {
-						fontWeight: "bold"
+						fontWeight: 'bold'
 					}
 				});
 				Morebits.status.info($bigtext[0], $link[0]);
-			} else if (params.normalized !== "f7") {
-				$link = $("<a>", {
-					href: "#",
-					text: "单击这里前往取消链入工具",
+			} else if (params.normalized !== 'f7') {
+				$link = $('<a>', {
+					href: '#',
+					text: '单击这里前往取消链入工具',
 					css: {
-						fontWeight: "bold"
+						fontWeight: 'bold'
 					},
 					click: () => {
 						Morebits.wiki.actionCompleted.redirect = null;
 						Twinkle.speedy.dialog.close();
-						Twinkle.unlink.callback(`取消对已删除页面 ${Morebits.pageNameNorm} 的链接`);
+						Twinkle.unlink.callback(
+							`取消对已删除页面 ${Morebits.pageNameNorm} 的链接`
+						);
 					}
 				});
-				$bigtext = $("<span>", {
-					text: "取消对已删除页面的链接",
+				$bigtext = $('<span>', {
+					text: '取消对已删除页面的链接',
 					css: {
-						fontWeight: "bold"
+						fontWeight: 'bold'
 					}
 				});
 				Morebits.status.info($bigtext[0], $link[0]);
 			}
-			$link = $("<a>", {
-				href: mw.util.getUrl("Special:RandomInCategory/快速删除候选"),
-				text: "单击前往下一个快速删除候选"
+			$link = $('<a>', {
+				href: mw.util.getUrl('Special:RandomInCategory/快速删除候选'),
+				text: '单击前往下一个快速删除候选'
 			});
-			Morebits.status.info("工具", $link[0]);
+			Morebits.status.info('工具', $link[0]);
 		},
 		openUserTalkPage: (pageobj) => {
 			pageobj.getStatusElement().unlink(); // don't need it anymore
@@ -1112,62 +1200,78 @@ Twinkle.speedy.callbacks = {
 			const params = pageobj.getCallbackParameters();
 			const query = {
 				title: `User talk:${user}`,
-				action: "edit",
-				preview: "yes",
+				action: 'edit',
+				preview: 'yes',
 				vanarticle: Morebits.pageNameNorm
 			};
-			if (params.normalized === "db" || Twinkle.getPref("promptForSpeedyDeletionSummary").indexOf(params.normalized) !== -1) {
+			if (
+				params.normalized === 'db' ||
+					Twinkle.getPref('promptForSpeedyDeletionSummary').indexOf(params.normalized) !==
+						-1
+			) {
 				// provide a link to the user talk page
-				const $link = $("<a>", {
-					href: `${mw.util.wikiScript("index")}?${$.param(query)}`,
+				const $link = $('<a>', {
+					href: `${mw.util.wikiScript('index')}?${$.param(query)}`,
 					text: `点此打开User talk:${user}`,
-					target: "_blank",
+					target: '_blank',
 					css: {
-						fontSize: "130%",
-						fontWeight: "bold"
+						fontSize: '130%',
+						fontWeight: 'bold'
 					}
 				});
-				const $bigtext = $("<span>", {
-					text: "通知页面创建者",
+				const $bigtext = $('<span>', {
+					text: '通知页面创建者',
 					css: {
-						fontSize: "130%",
-						fontWeight: "bold"
+						fontSize: '130%',
+						fontWeight: 'bold'
 					}
 				});
 				Morebits.status.info($bigtext[0], $link[0]);
 			} else {
 				// open the initial contributor's talk page
-				const statusIndicator = new Morebits.status(`打开用户${user}的讨论页编辑窗口`, "打开中……");
-				switch (Twinkle.getPref("userTalkPageMode")) {
-					case "tab":
-						window.open(`${mw.util.wikiScript("index")}?${$.param(query)}`, "_blank");
+				const statusIndicator = new Morebits.status(
+					`打开用户${user}的讨论页编辑窗口`,
+					'打开中……'
+				);
+				switch (Twinkle.getPref('userTalkPageMode')) {
+					case 'tab':
+						window.open(
+							`${mw.util.wikiScript('index')}?${$.param(query)}`,
+							'_blank'
+						);
 						break;
-					case "blank":
-						window.open(`${mw.util.wikiScript("index")}?${$.param(query)}`, "_blank", "location=no,toolbar=no,status=no,directories=no,scrollbars=yes,width=1200,height=800");
+					case 'blank':
+						window.open(
+							`${mw.util.wikiScript('index')}?${$.param(query)}`,
+							'_blank',
+							'location=no,toolbar=no,status=no,directories=no,scrollbars=yes,width=1200,height=800'
+						);
 						break;
-					case "window":
+					case 'window':
 						/* falls through */
 					default:
 						window.open(
-							`${mw.util.wikiScript("index")}?${$.param(query)}`,
-							window.name === "twinklewarnwindow" ? "_blank" : "twinklewarnwindow",
-							"location=no,toolbar=no,status=no,directories=no,scrollbars=yes,width=1200,height=800"
+							`${mw.util.wikiScript('index')}?${$.param(query)}`,
+							window.name === 'twinklewarnwindow'
+								? '_blank'
+								: 'twinklewarnwindow',
+							'location=no,toolbar=no,status=no,directories=no,scrollbars=yes,width=1200,height=800'
 						);
 						break;
 				}
-				statusIndicator.info("完成");
+				statusIndicator.info('完成');
 			}
 		},
 		deleteRedirectsMain: (apiobj) => {
 			const xmlDoc = apiobj.getXML();
-			const $snapshot = $(xmlDoc).find("redirects rd");
+			const $snapshot = $(xmlDoc).find('redirects rd');
 			const total = $snapshot.length;
 			const statusIndicator = apiobj.statelem;
 			if (!total) {
-				statusIndicator.info("未发现重定向");
+				statusIndicator.info('未发现重定向');
 				return;
 			}
-			statusIndicator.status("0%");
+			statusIndicator.status('0%');
 			let current = 0;
 			const onsuccess = (apiobjInner) => {
 				const now = `${parseInt(100 * ++current / total, 10)}%`;
@@ -1180,9 +1284,11 @@ Twinkle.speedy.callbacks = {
 			};
 			Morebits.wiki.addCheckpoint();
 			$snapshot.each((_key, value) => {
-				const title = $(value).attr("title");
+				const title = $(value).attr('title');
 				const page = new Morebits.wiki.page(title, `删除重定向 "${title}"`);
-				page.setEditSummary(`[[QW:CSD#G9|G9]]: 孤立页面: 重定向到已删除页面“${Morebits.pageNameNorm}”`);
+				page.setEditSummary(
+					`[[QW:CSD#G9|G9]]: 孤立页面: 重定向到已删除页面“${Morebits.pageNameNorm}”`
+				);
 				page.setChangeTags(Twinkle.changeTags);
 				page.deletePage(onsuccess);
 			});
@@ -1192,28 +1298,42 @@ Twinkle.speedy.callbacks = {
 		main: (pageobj) => {
 			const statelem = pageobj.getStatusElement();
 			if (!pageobj.exists()) {
-				statelem.error("页面不存在，可能已被删除");
+				statelem.error('页面不存在，可能已被删除');
 				return;
 			}
 			let text = pageobj.getPageText();
 			const params = pageobj.getCallbackParameters();
-			statelem.status("检查页面已有标记……");
+			statelem.status('检查页面已有标记……');
 
 			// check for existing deletion tags
-			const textNoSd = text.replace(/\{\{\s*(db(-\w*)?|d|delete|deletebecause|speedy|csd|速刪|速删|快删|快刪)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/gi, "");
-			if (text !== textNoSd && !confirm("在页面上找到快速删除模板，要移除并加入新的吗？")) {
-				statelem.error("快速删除模板已被置于页面中。");
+			const textNoSd = text.replace(
+				/\{\{\s*(db(-\w*)?|d|delete|deletebecause|speedy|csd|速刪|速删|快删|快刪)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/gi,
+				''
+			);
+			if (
+				text !== textNoSd &&
+					!confirm('在页面上找到快速删除模板，要移除并加入新的吗？')
+			) {
+				statelem.error('快速删除模板已被置于页面中。');
 				return;
 			}
 			text = textNoSd;
 			const copyvio = /(?:\{\{\s*(copyvio|侵权|侵權)[^{}]*?\}\})/i.exec(text);
-			if (copyvio && !confirm("著作权验证模板已被置于页面中，您是否仍想加入一个快速删除模板？")) {
-				statelem.error("页面中已有著作权验证模板。");
+			if (
+				copyvio &&
+					!confirm('著作权验证模板已被置于页面中，您是否仍想加入一个快速删除模板？')
+			) {
+				statelem.error('页面中已有著作权验证模板。');
 				return;
 			}
 			const xfd = /(?:\{\{([rsaiftcmv]fd|md1|proposed deletion)[^{}]*?\}\})/i.exec(text);
-			if (xfd && !confirm(`删除相关模板{{${xfd[1]}}}已被置于页面中，您是否仍想加入一个快速删除模板？`)) {
-				statelem.error("页面已被提交至存废讨论。");
+			if (
+				xfd &&
+					!confirm(
+						`删除相关模板{{${xfd[1]}}}已被置于页面中，您是否仍想加入一个快速删除模板？`
+					)
+			) {
+				statelem.error('页面已被提交至存废讨论。');
 				return;
 			}
 
@@ -1222,39 +1342,45 @@ Twinkle.speedy.callbacks = {
 			const buildData = Twinkle.speedy.callbacks.getTemplateCodeAndParams(params);
 			let code = buildData[0];
 			params.utparams = buildData[1];
-			const thispage = new Morebits.wiki.page(mw.config.get("wgPageName"));
+			const thispage = new Morebits.wiki.page(mw.config.get('wgPageName'));
 			// patrol the page, if reached from Special:NewPages
-			if (Twinkle.getPref("markSpeedyPagesAsPatrolled")) {
+			if (Twinkle.getPref('markSpeedyPagesAsPatrolled')) {
 				thispage.patrol();
 			}
 
 			// Wrap SD template in noinclude tags if we are in template space.
 			// Won't work with userboxes in userspace, or any other transcluded page outside template space
-			if (mw.config.get("wgNamespaceNumber") === 10) {
+			if (mw.config.get('wgNamespaceNumber') === 10) {
 				// Template:
 				code = `<noinclude>${code}</noinclude>`;
 			}
 
 			// Remove tags that become superfluous with this action
-			text = text.replace(/\{\{\s*([Nn]ew unreviewed article|[Uu]nreviewed|[Uu]serspace draft)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/g, "");
-			if (mw.config.get("wgNamespaceNumber") === 6) {
+			text = text.replace(
+				/\{\{\s*([Nn]ew unreviewed article|[Uu]nreviewed|[Uu]serspace draft)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/g,
+				''
+			);
+			if (mw.config.get('wgNamespaceNumber') === 6) {
 				// remove "move to Commons" tag - deletion-tagged files cannot be moved to Commons
-				text = text.replace(/\{\{(mtc|(copy |move )?to ?commons|move to wikimedia commons|copy to wikimedia commons)[^}]*\}\}/gi, "");
+				text = text.replace(
+					/\{\{(mtc|(copy |move )?to ?commons|move to wikimedia commons|copy to wikimedia commons)[^}]*\}\}/gi,
+					''
+				);
 			}
 
 			// Generate edit summary for edit
 			let editsummary;
 			if (params.normalizeds.length > 1) {
-				editsummary = "请求快速删除（";
+				editsummary = '请求快速删除（';
 				$.each(params.normalizeds, (_index, norm) => {
-					if (norm !== "db") {
+					if (norm !== 'db') {
 						editsummary += `[[QW:CSD#${norm.toUpperCase()}|CSD ${norm.toUpperCase()}]]、`;
 					}
 				});
 				editsummary = editsummary.slice(0, Math.max(0, editsummary.length - 1)); // remove trailing comma
-				editsummary += "）";
-			} else if (params.normalizeds[0] === "db") {
-				editsummary = `请求[[QW:CSD|快速删除]]：${params.templateParams[0]["1"]}`;
+				editsummary += '）';
+			} else if (params.normalizeds[0] === 'db') {
+				editsummary = `请求[[QW:CSD|快速删除]]：${params.templateParams[0]['1']}`;
 			} else {
 				editsummary = `请求快速删除（[[QW:CSD#${params.normalizeds[0].toUpperCase()}|CSD ${params.normalizeds[0].toUpperCase()}]]）`;
 			}
@@ -1265,7 +1391,9 @@ Twinkle.speedy.callbacks = {
 			} else {
 				// Insert tag after short description or any hatnotes
 				const wikipage = new Morebits.wikitext.page(text);
-				text = wikipage.insertAfterTemplates(`${code}\n`, Twinkle.hatnoteRegex).getText();
+				text = wikipage
+					.insertAfterTemplates(`${code}\n`, Twinkle.hatnoteRegex)
+					.getText();
 			}
 			pageobj.setPageText(text);
 			pageobj.setEditSummary(editsummary);
@@ -1282,47 +1410,63 @@ Twinkle.speedy.callbacks = {
 					let initialContrib = pageobj.getCreator();
 
 					// disallow warning yourself
-					if (initialContrib === mw.config.get("wgUserName")) {
+					if (initialContrib === mw.config.get('wgUserName')) {
 						Morebits.status.warn(`您（${initialContrib}）创建了该页，跳过通知`);
 						initialContrib = null;
 
 						// don't notify users when their user talk page is nominated
-					} else if (initialContrib === mw.config.get("wgTitle") && mw.config.get("wgNamespaceNumber") === 3) {
-						Morebits.status.warn("通知页面创建者：用户创建了自己的讨论页");
+					} else if (
+						initialContrib === mw.config.get('wgTitle') &&
+							mw.config.get('wgNamespaceNumber') === 3
+					) {
+						Morebits.status.warn('通知页面创建者：用户创建了自己的讨论页');
 						initialContrib = null;
 
 						// quick hack to prevent excessive unwanted notifications. Should actually be configurable on recipient page...
-					} else if (initialContrib === "A2093064-bot" && params.normalizeds[0] === "G9") {
-						Morebits.status.warn("通知页面创建者：由机器人创建，跳过通知");
+					} else if (
+						initialContrib === 'A2093064-bot' &&
+							params.normalizeds[0] === 'G9'
+					) {
+						Morebits.status.warn('通知页面创建者：由机器人创建，跳过通知');
 						initialContrib = null;
 					} else {
 						const talkPageName = `User talk:${initialContrib}`;
 						Morebits.wiki.flow.check(
 							talkPageName,
 							() => {
-								const flowpage = new Morebits.wiki.flow(talkPageName, `通知页面创建者（${initialContrib}）`);
-								flowpage.setTopic(`[[:${Morebits.pageNameNorm}]]的快速删除通知`);
-								flowpage.setContent(`{{subst:db-notice|target=${Morebits.pageNameNorm}|flow=yes}}`);
+								const flowpage = new Morebits.wiki.flow(
+									talkPageName,
+									`通知页面创建者（${initialContrib}）`
+								);
+								flowpage.setTopic(
+									`[[:${Morebits.pageNameNorm}]]的快速删除通知`
+								);
+								flowpage.setContent(
+									`{{subst:db-notice|target=${Morebits.pageNameNorm}|flow=yes}}`
+								);
 								flowpage.newTopic();
 							},
 							() => {
-								const usertalkpage = new Morebits.wiki.page(talkPageName, `通知页面创建者（${initialContrib}）`);
+								const usertalkpage = new Morebits.wiki.page(
+									talkPageName,
+									`通知页面创建者（${initialContrib}）`
+								);
 								let notifytext;
 								notifytext = `\n{{subst:db-notice|target=${Morebits.pageNameNorm}`;
 
-								notifytext += "}}--~~" + "~~";
-								let editsummary = "通知：";
-								if (params.normalizeds.indexOf("g12") === -1) {
+								notifytext += '}}--~~' + '~~';
+								let editsummary = '通知：';
+								if (params.normalizeds.indexOf('g12') === -1) {
 									// no article name in summary for G10 deletions
 									editsummary += `页面[[${Morebits.pageNameNorm}]]`;
 								} else {
-									editsummary += "一攻击性页面";
+									editsummary += '一攻击性页面';
 								}
-								editsummary += "快速删除提名";
+								editsummary += '快速删除提名';
 								usertalkpage.setAppendText(notifytext);
 								usertalkpage.setEditSummary(editsummary);
 								usertalkpage.setChangeTags(Twinkle.changeTags);
-								usertalkpage.setCreateOption("recreate");
+								usertalkpage.setCreateOption('recreate');
 								usertalkpage.setFollowRedirect(true, false);
 								usertalkpage.append();
 							}
@@ -1346,27 +1490,31 @@ Twinkle.speedy.callbacks = {
 		//   for CSD: params.values, params.normalizeds  (note: normalizeds is an array)
 		//   for DI: params.fromDI = true, params.templatename, params.normalized  (note: normalized is a string)
 		addToLog: (params, initialContrib) => {
-			const usl = new Morebits.userspaceLogger(Twinkle.getPref("speedyLogPageName"));
+			const usl = new Morebits.userspaceLogger(Twinkle.getPref('speedyLogPageName'));
 			usl.initialText = `这是该用户使用[[H:TW|Twinkle]]的速删模块做出的[[QW:CSD|快速删除]]提名列表。\n\n如果您不再想保留此日志，请在[[${Twinkle.getPref(
-				"configPage"
-			)}|参数设置]]中关掉，并使用[[QW:O1|CSD O1]]提交快速删除。${Morebits.userIsSysop ? "\n\n此日志并不记录用Twinkle直接执行的删除。" : ""}`;
+				'configPage'
+			)}|参数设置]]中关掉，并使用[[QW:O1|CSD O1]]提交快速删除。${
+				Morebits.userIsSysop ? '\n\n此日志并不记录用Twinkle直接执行的删除。' : ''
+			}`;
 			let appendText = `# [[:${Morebits.pageNameNorm}]]：`;
 			if (params.fromDI) {
-				if (params.normalized === "f3 f4") {
-					appendText += "图版[[QW:F1|CSD F1]]（{{tl|no source no license/auto}}）";
+				if (params.normalized === 'f3 f4') {
+					appendText += '图版[[QW:F1|CSD F1]]（{{tl|no source no license/auto}}）';
 				} else {
-					appendText += `图版[[QW:CSD#${params.normalized.toUpperCase()}|CSD ${params.normalized.toUpperCase()}]]（{{tl|${params.templatename}}}）`;
+					appendText += `图版[[QW:CSD#${params.normalized.toUpperCase()}|CSD ${params.normalized.toUpperCase()}]]（{{tl|${
+						params.templatename
+					}}}）`;
 				}
 			} else {
 				if (params.normalizeds.length > 1) {
-					appendText += "多个理由（";
+					appendText += '多个理由（';
 					$.each(params.normalizeds, (_index, norm) => {
 						appendText += `[[QW:CSD#${norm.toUpperCase()}|${norm.toUpperCase()}]]、`;
 					});
 					appendText = appendText.slice(0, Math.max(0, appendText.length - 1)); // remove trailing comma
-					appendText += "）";
-				} else if (params.normalizeds[0] === "db") {
-					appendText += "自定义理由";
+					appendText += '）';
+				} else if (params.normalizeds[0] === 'db') {
+					appendText += '自定义理由';
 				} else {
 					appendText += `[[QW:CSD#${params.normalizeds[0].toUpperCase()}|CSD ${params.normalizeds[0].toUpperCase()}]]`;
 				}
@@ -1375,7 +1523,7 @@ Twinkle.speedy.callbacks = {
 				appendText += `；通知{{user|${initialContrib}}}`;
 			}
 
-			appendText += " ~~" + "~" + "~~\n";
+			appendText += ' ~~' + '~' + '~~\n';
 			usl.changeTags = Twinkle.changeTags;
 			usl.log(appendText, `记录对[[${Morebits.pageNameNorm}]]的快速删除提名`);
 		}
@@ -1389,70 +1537,73 @@ Twinkle.speedy.getParameters = (form, values) => {
 		const currentParams = [];
 		let redimage;
 		switch (value) {
-			case "reason":
-				if (form["csd.reason_1"]) {
-					const dbrationale = form["csd.reason_1"].value;
+			case 'reason':
+				if (form['csd.reason_1']) {
+					const dbrationale = form['csd.reason_1'].value;
 					if (!dbrationale || !dbrationale.trim()) {
-						alert("自定义理由：请指定理由。");
+						alert('自定义理由：请指定理由。');
 						parameters = null;
 						return false;
 					}
-					currentParams["1"] = dbrationale;
+					currentParams['1'] = dbrationale;
 				}
 				break;
-			case "a2":
-				if (form["csd.a2_pagename"]) {
-					const a2_otherpage = form["csd.a2_pagename"].value;
+			case 'a2':
+				if (form['csd.a2_pagename']) {
+					const a2_otherpage = form['csd.a2_pagename'].value;
 					if (!a2_otherpage || !a2_otherpage.trim()) {
-						alert("CSD A2：请提供现有条目的名称。");
+						alert('CSD A2：请提供现有条目的名称。');
 						parameters = null;
 						return false;
 					}
 					currentParams.pagename = a2_otherpage;
 				}
 				break;
-			case "g4":
-				if (form["csd.g4_pagename"]) {
-					const g4_otherpage = form["csd.g4_pagename"].value;
+			case 'g4':
+				if (form['csd.g4_pagename']) {
+					const g4_otherpage = form['csd.g4_pagename'].value;
 					if (!g4_otherpage || !g4_otherpage.trim()) {
-						alert("CSD G4：请提供已被删除页面的名称。");
+						alert('CSD G4：请提供已被删除页面的名称。');
 						parameters = null;
 						return false;
 					}
 					currentParams.pagename = g4_otherpage;
 				}
 				break;
-			case "f2":
-				if (form["csd.f2_filename"]) {
-					redimage = form["csd.f2_filename"].value;
+			case 'f2':
+				if (form['csd.f2_filename']) {
+					redimage = form['csd.f2_filename'].value;
 					if (!redimage || !redimage.trim()) {
-						alert("CSD F2：请提供另一文件的名称。");
+						alert('CSD F2：请提供另一文件的名称。');
 						parameters = null;
 						return false;
 					}
-					currentParams.filename = redimage.replace(new RegExp(`^\\s*${Morebits.namespaceRegex(6)}:`, "i"), "");
+					currentParams.filename = redimage.replace(
+						new RegExp(`^\\s*${Morebits.namespaceRegex(6)}:`, 'i'),
+						''
+					);
 				}
 				break;
-			case "r1":
-				if (form["csd.r1_type"]) {
-					const r1_redirtype = form["csd.r1_type"].value;
+			case 'r1':
+				if (form['csd.r1_type']) {
+					const r1_redirtype = form['csd.r1_type'].value;
 					if (!r1_redirtype) {
-						alert("CSD R1：请选择适用类型。");
+						alert('CSD R1：请选择适用类型。');
 						parameters = null;
 						return false;
 					}
-					currentParams["1"] = r1_redirtype;
+					currentParams['1'] = r1_redirtype;
 				}
 				break;
-			case "r2":
-				if (form["csd.r2_type"]) {
-					const r2_redirtype = form["csd.r2_type"].value;
+			case 'r2':
+				if (form['csd.r2_type']) {
+					const r2_redirtype = form['csd.r2_type'].value;
 					if (!r2_redirtype) {
-						alert("CSD R2：请选择适用类型。");
+						alert('CSD R2：请选择适用类型。');
 						parameters = null;
 						return false;
 					}
-					currentParams["1"] = r2_redirtype;
+					currentParams['1'] = r2_redirtype;
 				}
 				break;
 			default:
@@ -1479,16 +1630,20 @@ Twinkle.speedy.getUserTalkParameters = (normalized, parameters) => {
 	 * @returns {Array}
 	 */
 Twinkle.speedy.resolveCsdValues = (e) => {
-	const values = (e.target.form ? e.target.form : e.target).getChecked("csd");
+	const values = (e.target.form ? e.target.form : e.target).getChecked('csd');
 	if (values.length === 0) {
-		alert("请选择一个理据。");
+		alert('请选择一个理据。');
 		return null;
 	}
 	return values;
 };
 Twinkle.speedy.callback.evaluateSysop = (e) => {
 	const form = e.target.form ? e.target.form : e.target;
-	if (e.target.type === "checkbox" || e.target.type === "text" || e.target.type === "select") {
+	if (
+		e.target.type === 'checkbox' ||
+			e.target.type === 'text' ||
+			e.target.type === 'select'
+	) {
 		return;
 	}
 	const tag_only = form.tag_only;
@@ -1509,10 +1664,10 @@ Twinkle.speedy.callback.evaluateSysop = (e) => {
 	// analyse each criterion to determine whether to watch the page, prompt for summary, or notify the creator
 	let watchPage, promptForSummary;
 	normalizeds.forEach((norm) => {
-		if (Twinkle.getPref("watchSpeedyPages").indexOf(norm) !== -1) {
-			watchPage = Twinkle.getPref("watchSpeedyExpiry");
+		if (Twinkle.getPref('watchSpeedyPages').indexOf(norm) !== -1) {
+			watchPage = Twinkle.getPref('watchSpeedyExpiry');
 		}
-		if (Twinkle.getPref("promptForSpeedyDeletionSummary").indexOf(norm) !== -1) {
+		if (Twinkle.getPref('promptForSpeedyDeletionSummary').indexOf(norm) !== -1) {
 			promptForSummary = true;
 		}
 	});
@@ -1535,7 +1690,11 @@ Twinkle.speedy.callback.evaluateSysop = (e) => {
 };
 Twinkle.speedy.callback.evaluateUser = (e) => {
 	const form = e.target.form ? e.target.form : e.target;
-	if (e.target.type === "checkbox" || e.target.type === "text" || e.target.type === "select") {
+	if (
+		e.target.type === 'checkbox' ||
+			e.target.type === 'text' ||
+			e.target.type === 'select'
+	) {
 		return;
 	}
 	const values = Twinkle.speedy.resolveCsdValues(e);
@@ -1556,8 +1715,8 @@ Twinkle.speedy.callback.evaluateUser = (e) => {
 	// analyse each criterion to determine whether to watch the page/notify the creator
 	let watchPage = false;
 	$.each(normalizeds, (_index, norm) => {
-		if (Twinkle.getPref("watchSpeedyPages").indexOf(norm) !== -1) {
-			watchPage = Twinkle.getPref("watchSpeedyExpiry");
+		if (Twinkle.getPref('watchSpeedyPages').indexOf(norm) !== -1) {
+			watchPage = Twinkle.getPref('watchSpeedyExpiry');
 			return false; // break
 		}
 	});
@@ -1565,7 +1724,7 @@ Twinkle.speedy.callback.evaluateUser = (e) => {
 	let notifyuser = false;
 	if (form.notify.checked) {
 		$.each(normalizeds, (_index, norm) => {
-			if (Twinkle.getPref("notifyUserOnSpeedyDeletionNomination").indexOf(norm) !== -1) {
+			if (Twinkle.getPref('notifyUserOnSpeedyDeletionNomination').indexOf(norm) !== -1) {
 				notifyuser = true;
 				return false; // break
 			}
@@ -1573,9 +1732,9 @@ Twinkle.speedy.callback.evaluateUser = (e) => {
 	}
 
 	let csdlog = false;
-	if (Twinkle.getPref("logSpeedyNominations")) {
+	if (Twinkle.getPref('logSpeedyNominations')) {
 		$.each(normalizeds, (_index, norm) => {
-			if (Twinkle.getPref("noLogOnSpeedyNomination").indexOf(norm) === -1) {
+			if (Twinkle.getPref('noLogOnSpeedyNomination').indexOf(norm) === -1) {
 				csdlog = true;
 				return false; // break
 			}
@@ -1597,13 +1756,13 @@ Twinkle.speedy.callback.evaluateUser = (e) => {
 	}
 	Morebits.simpleWindow.setButtonsEnabled(false);
 	Morebits.status.init(form);
-	Morebits.wiki.actionCompleted.redirect = mw.config.get("wgPageName");
-	Morebits.wiki.actionCompleted.notice = "标记完成";
-	const qiuwen_page = new Morebits.wiki.page(mw.config.get("wgPageName"), "标记页面");
+	Morebits.wiki.actionCompleted.redirect = mw.config.get('wgPageName');
+	Morebits.wiki.actionCompleted.notice = '标记完成';
+	const qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'), '标记页面');
 	qiuwen_page.setChangeTags(Twinkle.changeTags);
 	qiuwen_page.setCallbackParameters(params);
 	qiuwen_page.load(Twinkle.speedy.callbacks.user.main);
 };
-Twinkle.addInitCallback(Twinkle.speedy, "speedy");
+Twinkle.addInitCallback(Twinkle.speedy, 'speedy');
 })(jQuery);
 /* </nowiki> */
