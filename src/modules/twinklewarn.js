@@ -1489,13 +1489,13 @@ Twinkle.warn.callbacks = {
 		}
 	},
 	/**
-		 * Used in the main and autolevel loops to determine when to warn
-		 * about excessively recent, stale, or identical warnings.
-		 *
-		 * @param {string} wikitext  The text of a user's talk page, from getPageText()
-		 * @returns {Object[]} - Array of objects: latest contains most recent
-		 * warning and date; history lists all prior warnings
-		 */
+	 * Used in the main and autolevel loops to determine when to warn
+	 * about excessively recent, stale, or identical warnings.
+	 *
+	 * @param {string} wikitext  The text of a user's talk page, from getPageText()
+	 * @returns {Object[]} - Array of objects: latest contains most recent
+	 * warning and date; history lists all prior warnings
+	 */
 	dateProcessing: (wikitext) => {
 		const history_re =
 				/<!--\s?Template:([Uu]w-.*?)\s?-->.*?(\d{4})年(\d{1,2})月(\d{1,2})日 \([一三二五六四日]\) (\d{1,2}):(\d{1,2}) \(UTC\)/g;
@@ -1521,23 +1521,23 @@ Twinkle.warn.callbacks = {
 		return [latest, history];
 	},
 	/**
-		 * Main loop for deciding what the level should increment to. Most of
-		 * this is really just error catching and updating the subsequent data.
-		 * May produce up to two notices in a twinkle-warn-autolevel-messages div
-		 *
-		 * @param {string} wikitext  The text of a user's talk page, from getPageText() (required)
-		 * @param {Object} params  Params object: sub_group is the template (required);
-		 * article is the user-provided article (form.article) used to link ARV on recent level4 warnings;
-		 * messageData is only necessary if getting the full template, as it's
-		 * used to ensure a valid template of that level exists
-		 * @param {Object} latest  First element of the array returned from
-		 * dateProcessing. Provided here rather than processed within to avoid
-		 * repeated call to dateProcessing
-		 * @param {(Date|Morebits.date)} date  Date from which staleness is determined
-		 * @param {Morebits.status} statelem  Status element, only used for handling error in final execution
-		 *
-		 * @returns {Array} - Array that contains the full template and just the warning level
-		 */
+	 * Main loop for deciding what the level should increment to. Most of
+	 * this is really just error catching and updating the subsequent data.
+	 * May produce up to two notices in a twinkle-warn-autolevel-messages div
+	 *
+	 * @param {string} wikitext  The text of a user's talk page, from getPageText() (required)
+	 * @param {Object} params  Params object: sub_group is the template (required);
+	 * article is the user-provided article (form.article) used to link ARV on recent level4 warnings;
+	 * messageData is only necessary if getting the full template, as it's
+	 * used to ensure a valid template of that level exists
+	 * @param {Object} latest  First element of the array returned from
+	 * dateProcessing. Provided here rather than processed within to avoid
+	 * repeated call to dateProcessing
+	 * @param {(Date|Morebits.date)} date  Date from which staleness is determined
+	 * @param {Morebits.status} statelem  Status element, only used for handling error in final execution
+	 *
+	 * @returns {Array} - Array that contains the full template and just the warning level
+	 */
 	autolevelParseWikitext: (wikitext, params, latest, date, statelem) => {
 		let level; // undefined rather than '' means the Number.isNaN below will return true
 		if (/\d(?:im)?$/.test(latest.type)) {

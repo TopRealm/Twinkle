@@ -939,14 +939,14 @@ Twinkle.protect.callback.changePreset = (e) => {
 		}
 
 		const reasonField = actiontype === 'protect' ? form.protectReason : form.reason;
-		reasonField.value = item.reason ?? '';
+		reasonField.value = item.reason || '';
 
 		// sort out tagging options, disabled if nonexistent or lua
 		if (
 			mw.config.get('wgArticleId') &&
 				mw.config.get('wgPageContentModel') !== 'Scribunto'
 		) {
-			form.tagtype.value = form.category.value === 'unprotect' ? 'none' : item.template ?? form.category.value;
+			form.tagtype.value = form.category.value === 'unprotect' ? 'none' : item.template || form.category.value;
 			Twinkle.protect.formevents.tagtype({ target: form.tagtype });
 
 			if (/template/.test(form.category.value)) {

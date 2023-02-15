@@ -92,13 +92,13 @@ Twinkle.fluff.linkBuilder = {
 		return link;
 	},
 	/**
-		 * @param {string} [vandal=null] - Username of the editor being reverted
-		 * Provide a falsey value if the username is hidden, defaults to null
-		 * @param {boolean} inline - True to create two links in a span, false
-		 * to create three links in a div (optional)
-		 * @param {number|string} [rev=wgCurRevisionId] - Revision ID being reverted (optional)
-		 * @param {string} [page=wgPageName] - Page being reverted (optional)
-		 */
+	 * @param {string} [vandal=null] - Username of the editor being reverted
+	 * Provide a falsey value if the username is hidden, defaults to null
+	 * @param {boolean} inline - True to create two links in a span, false
+	 * to create three links in a div (optional)
+	 * @param {number|string} [rev=wgCurRevisionId] - Revision ID being reverted (optional)
+	 * @param {string} [page=wgPageName] - Page being reverted (optional)
+	 */
 	rollbackLinks: (vandal, inline, rev, page) => {
 		vandal ||= null;
 		const elem = inline ? 'span' : 'div';

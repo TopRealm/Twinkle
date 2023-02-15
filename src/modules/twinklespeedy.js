@@ -1630,7 +1630,7 @@ Twinkle.speedy.getUserTalkParameters = (normalized, parameters) => {
 	 * @returns {Array}
 	 */
 Twinkle.speedy.resolveCsdValues = (e) => {
-	const values = (e.target.form ?? e.target).getChecked('csd');
+	const values = (e.target.form || e.target).getChecked('csd');
 	if (values.length === 0) {
 		alert('请选择一个理据。');
 		return null;
@@ -1638,7 +1638,7 @@ Twinkle.speedy.resolveCsdValues = (e) => {
 	return values;
 };
 Twinkle.speedy.callback.evaluateSysop = (e) => {
-	const form = e.target.form ?? e.target;
+	const form = e.target.form || e.target;
 	if (
 		e.target.type === 'checkbox' ||
 			e.target.type === 'text' ||
@@ -1689,7 +1689,7 @@ Twinkle.speedy.callback.evaluateSysop = (e) => {
 	Twinkle.speedy.callbacks.sysop.main(params);
 };
 Twinkle.speedy.callback.evaluateUser = (e) => {
-	const form = e.target.form ?? e.target;
+	const form = e.target.form || e.target;
 	if (
 		e.target.type === 'checkbox' ||
 			e.target.type === 'text' ||

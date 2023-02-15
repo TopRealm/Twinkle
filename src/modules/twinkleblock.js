@@ -1673,29 +1673,29 @@ Twinkle.block.callback.evaluate = (e) => {
 		}
 
 		/*
-			 * Check if block status changed while processing the form.
-			 *   There's a lot to consider here. list=blocks provides the
-			 * current block status, but there are at least two issues with
-			 * relying on it. First, the id doesn't update on a reblock,
-			 * meaning the individual parameters need to be compared. This
-			 * can be done roughly with JSON.stringify - we can thankfully
-			 * rely on order from the server, although sorting would be
-			 * fine if not - but falsey values are problematic and is
-			 * non-ideal. More importantly, list=blocks won't indicate if a
-			 * non-blocked user is blocked then unblocked. This should be
-			 * exceedingy rare, but regardless, we thus need to check
-			 * list=logevents, which has a nicely updating logid
-			 * parameter. We can't rely just on that, though, since it
-			 * doesn't account for blocks that have expired on their own.
-			 *    As such, we use both. Using some ternaries, the logid
-			 * variables are false if there's no logevents, so if they
-			 * aren't equal we defintely have a changed entry (send
-			 * confirmation). If they are equal, then either the user was
-			 * never blocked (the block statuses will be equal, no
-			 * confirmation) or there's no new block, in which case either
-			 * a block expired (different statuses, confirmation) or the
-			 * same block is still active (same status, no confirmation).
-			 */
+		 * Check if block status changed while processing the form.
+		 *   There's a lot to consider here. list=blocks provides the
+		 * current block status, but there are at least two issues with
+		 * relying on it. First, the id doesn't update on a reblock,
+		 * meaning the individual parameters need to be compared. This
+		 * can be done roughly with JSON.stringify - we can thankfully
+		 * rely on order from the server, although sorting would be
+		 * fine if not - but falsey values are problematic and is
+		 * non-ideal. More importantly, list=blocks won't indicate if a
+		 * non-blocked user is blocked then unblocked. This should be
+		 * exceedingy rare, but regardless, we thus need to check
+		 * list=logevents, which has a nicely updating logid
+		 * parameter. We can't rely just on that, though, since it
+		 * doesn't account for blocks that have expired on their own.
+		 *    As such, we use both. Using some ternaries, the logid
+		 * variables are false if there's no logevents, so if they
+		 * aren't equal we defintely have a changed entry (send
+		 * confirmation). If they are equal, then either the user was
+		 * never blocked (the block statuses will be equal, no
+		 * confirmation) or there's no new block, in which case either
+		 * a block expired (different statuses, confirmation) or the
+		 * same block is still active (same status, no confirmation).
+		 */
 		const query = {
 			format: 'json',
 			action: 'query',

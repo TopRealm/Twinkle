@@ -1525,12 +1525,12 @@ Twinkle.config.listDialog.display = (e) => {
 	// value column header
 	dlgth = document.createElement('th');
 	dlgth.style.width = '35%';
-	dlgth.textContent = curpref.customListValueTitle ?? '数值';
+	dlgth.textContent = curpref.customListValueTitle || '数值';
 	dlgtr.appendChild(dlgth);
 	// label column header
 	dlgth = document.createElement('th');
 	dlgth.style.width = '60%';
-	dlgth.textContent = curpref.customListLabelTitle ?? '标签';
+	dlgth.textContent = curpref.customListLabelTitle || '标签';
 	dlgtr.appendChild(dlgth);
 	dlgtbody.appendChild(dlgtr);
 

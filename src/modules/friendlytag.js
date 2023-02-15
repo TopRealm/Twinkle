@@ -61,7 +61,7 @@ Twinkle.tag.checkedTags = [];
 Twinkle.tag.callback = () => {
 	const Window = new Morebits.simpleWindow(630, Twinkle.tag.mode === '条目' ? 500 : 400);
 	Window.setScriptName('Twinkle');
-	// anyone got a good policy/guideline/info page/instructional page link??
+	// anyone got a good policy/guideline/info page/instructional page link?
 	Window.addFooterLink('参数设置', 'H:TW/PREF#tag');
 	Window.addFooterLink('帮助文档', 'H:TW/DOC#tag');
 	Window.addFooterLink('问题反馈', 'HT:TW');
@@ -1205,9 +1205,9 @@ Twinkle.tag.callbacks = {
 		const params = pageobj.getCallbackParameters();
 
 		/**
-			 * Saves the page following the removal of tags if any. The last step.
-			 * Called from removeTags()
-			 */
+		 * Saves the page following the removal of tags if any. The last step.
+		 * Called from removeTags()
+		 */
 		const postRemoval = () => {
 			if (params.tagsToRemove.length) {
 				// Remove empty {{multiple issues}} if found
@@ -1333,9 +1333,9 @@ Twinkle.tag.callbacks = {
 		};
 
 		/**
-			 * Removes the existing tags that were deselected (if any)
-			 * Calls postRemoval() when done
-			 */
+		 * Removes the existing tags that were deselected (if any)
+		 * Calls postRemoval() when done
+		 */
 		const removeTags = () => {
 			if (params.tagsToRemove.length === 0) {
 				postRemoval();
@@ -1550,10 +1550,10 @@ Twinkle.tag.callbacks = {
 		};
 
 		/**
-			 * Adds the tags which go outside {{multiple issues}}, either because
-			 * these tags aren't supported in {{multiple issues}} or because
-			 * {{multiple issues}} is not being added to the page at all
-			 */
+		 * Adds the tags which go outside {{multiple issues}}, either because
+		 * these tags aren't supported in {{multiple issues}} or because
+		 * {{multiple issues}} is not being added to the page at all
+		 */
 		const addUngroupedTags = () => {
 			$.each(tags, addTag);
 
@@ -1655,8 +1655,8 @@ Twinkle.tag.callbacks = {
 			tagText += '{{Multiple issues|\n';
 
 			/**
-				 * Adds newly added tags to MI
-				 */
+			 * Adds newly added tags to MI
+			 */
 			const addNewTagsToMI = () => {
 				$.each(groupableTags, addTag);
 				tagText += '}}\n';
@@ -1959,7 +1959,7 @@ Twinkle.tag.callback.evaluate = (e) => {
 		}
 	};
 		// Given a tag, ensure an associate parameter is present
-		// Maybe just sock this away in each function???
+		// Maybe just sock this away in each function?
 	const checkParameter = (tag, parameter, description) => {
 		description ||= '理由';
 		if (params.tags.includes(tag) && params[parameter].trim() === '') {
