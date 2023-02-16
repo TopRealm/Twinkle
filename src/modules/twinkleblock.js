@@ -65,7 +65,7 @@ Twinkle.block.callback = () => {
 			{
 				label: '封禁用户',
 				value: 'block',
-				tooltip: '用选择的选项全站封禁相关用户，如果未勾选部分封禁则为全站封禁。',
+				tooltip: '用选择的选项全站封禁相关用户，若未勾选部分封禁则为全站封禁。',
 				hidden: !Morebits.userIsSysop,
 				checked: Morebits.userIsSysop
 			},
@@ -80,7 +80,7 @@ Twinkle.block.callback = () => {
 				label: '加入封禁模板到用户讨论页',
 				value: 'template',
 				tooltip:
-						'如果执行封禁的管理员忘记发出封禁模板，或你封禁了用户而没有给其发出模板，则你可以用此来发出合适的模板。勾选部分封禁以使用部分封禁模板。',
+						'若执行封禁的管理员忘记发出封禁模板，或你封禁了用户而没有给其发出模板，则你可以用此来发出合适的模板。勾选部分封禁以使用部分封禁模板。',
 				hidden: !Morebits.userIsSysop,
 				checked: Morebits.userIsSysop
 			},
@@ -437,7 +437,7 @@ Twinkle.block.callback.change_action = (e) => {
 				name: 'disabletalk',
 				value: '1',
 				tooltip: partialBox
-					? '如果使用部分封禁，不应选择此项，除非您也想要禁止编辑用户讨论页。'
+					? '若使用部分封禁，不应选择此项，除非您也想要禁止编辑用户讨论页。'
 					: ''
 			}
 		];

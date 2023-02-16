@@ -122,7 +122,7 @@ Twinkle.speedy.initDialog = (callbackfunc) => {
 					label: '只标记，不删除',
 					value: 'tag_only',
 					name: 'tag_only',
-					tooltip: '如果您只想标记此页面而不是将其删除',
+					tooltip: '若您只想标记此页面而不是将其删除',
 					checked: !(
 						Twinkle.speedy.hasCSD || Twinkle.getPref('deleteSysopDefaultToDelete')
 					),
@@ -247,7 +247,7 @@ Twinkle.speedy.initDialog = (callbackfunc) => {
 				label: '如可能，通知创建者',
 				value: 'notify',
 				name: 'notify',
-				tooltip: '一个通知模板将会被加入创建者的讨论页，如果您启用了该理据的通知。',
+				tooltip: '一个通知模板将会被加入创建者的讨论页，若您启用了该理据的通知。',
 				checked:
 						!Morebits.userIsSysop ||
 						!(Twinkle.speedy.hasCSD || Twinkle.getPref('deleteSysopDefaultToDelete')),
@@ -844,7 +844,7 @@ Twinkle.speedy.redirectList = [
 		label: 'R1：不能发挥实际作用的重定向。',
 		value: 'r1',
 		tooltip:
-				'包括以下情况：1.指向本身或循环的重定向，如A→B→C→……→A或A→A（繁简重定向不适用此项）；2.格式错误的重定向，包括标题仅为繁体、繁简混用、消歧义使用的括弧或空格错误、间隔号使用错误（因类推简化字未收录至《通用规范汉字表》导致的繁简混杂情形，或系统无法自动进行繁简处理的情形，则不适用）。如果重定向页面标题，与合乎命名常规的目标页面标题之间，仅存在繁简字体的区别，而不存在词语用法区别，则不保留该重定向。因系统无法自动繁简转换而必须保留的重定向页面除外。对于其他未列出的情况，若用户认为该重定向无法发挥实际作用，且依据常识没有任何争议，可凭合理理由提请速删，由管理员判断。指向不存在页面的重定向，适用G5准则。',
+				'包括以下情况：1.指向本身或循环的重定向，如A→B→C→……→A或A→A（繁简重定向不适用此项）；2.格式错误的重定向，包括标题仅为繁体、繁简混用、消歧义使用的括弧或空格错误、间隔号使用错误（因类推简化字未收录至《通用规范汉字表》导致的繁简混杂情形，或系统无法自动进行繁简处理的情形，则不适用）。若重定向页面标题，与合乎命名常规的目标页面标题之间，仅存在繁简字体的区别，而不存在词语用法区别，则不保留该重定向。因系统无法自动繁简转换而必须保留的重定向页面除外。对于其他未列出的情况，若用户认为该重定向无法发挥实际作用，且依据常识没有任何争议，可凭合理理由提请速删，由管理员判断。指向不存在页面的重定向，适用G5准则。',
 		subgroup: {
 			name: 'r1_type',
 			type: 'select',
@@ -1487,7 +1487,7 @@ Twinkle.speedy.callbacks = {
 		//   for DI: params.fromDI = true, params.templatename, params.normalized  (note: normalized is a string)
 		addToLog: (params, initialContrib) => {
 			const usl = new Morebits.userspaceLogger(Twinkle.getPref('speedyLogPageName'));
-			usl.initialText = `这是该用户使用[[H:TW|Twinkle]]的速删模块做出的[[QW:CSD|快速删除]]提名列表。\n\n如果您不再想保留此日志，请在[[${Twinkle.getPref(
+			usl.initialText = `这是该用户使用[[H:TW|Twinkle]]的速删模块做出的[[QW:CSD|快速删除]]提名列表。\n\n若您不再想保留此日志，请在[[${Twinkle.getPref(
 				'configPage'
 			)}|参数设置]]中关掉，并使用[[QW:O1|CSD O1]]提交快速删除。${
 				Morebits.userIsSysop ? '\n\n此日志并不记录用Twinkle直接执行的删除。' : ''

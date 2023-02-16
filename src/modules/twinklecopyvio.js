@@ -72,7 +72,7 @@ Twinkle.copyvio.callback = () => {
 };
 Twinkle.copyvio.callbacks = {
 	tryTagging: (pageobj) => {
-		// 先尝试标记页面，如果发现已经标记则停止提报
+		// 先尝试标记页面，若发现已经标记则停止提报
 		const text = pageobj.getPageText();
 		if (!text.includes('{{Copyvio|')) {
 			Twinkle.copyvio.callbacks.taggingArticle(pageobj);

@@ -4041,7 +4041,7 @@ Morebits.wiki.page = function (pageName, status) {
 				}
 				case 'abusefilter-disallowed': {
 					ctx.statusElement.error(
-						`编辑被防滥用过滤器规则“${errorData.abusefilter.description}”阻止；如果您认为您的该次编辑是有意义的，请至“Qiuwen:防滥用过滤器”提报。`
+						`编辑被防滥用过滤器规则“${errorData.abusefilter.description}”阻止；若您认为您的该次编辑是有意义的，请至“Qiuwen:防滥用过滤器”提报。`
 					);
 					break;
 				}
@@ -4049,7 +4049,7 @@ Morebits.wiki.page = function (pageName, status) {
 					ctx.statusElement.error([
 						'编辑被防滥用过滤器规则“',
 						errorData.abusefilter.description,
-						'”警告；如果您仍希望做出该编辑，请尝试重新提交——根据过滤器的设置，您可能仍可以作出此编辑；如果您认为您的该次编辑是有意义的，请至“Qiuwen:防滥用过滤器”提报。'
+						'”警告；若您仍希望做出该编辑，请尝试重新提交——根据过滤器的设置，您可能仍可以作出此编辑；若您认为您的该次编辑是有意义的，请至“Qiuwen:防滥用过滤器”提报。'
 					]);
 					// We should provide the user with a way to automatically retry the action if they so choose -
 					// I can't see how to do this without creating a UI dependency on Morebits.wiki.page though -- TTO
@@ -4622,7 +4622,7 @@ Morebits.wiki.preview = function (previewbox) {
 		previewbox.appendChild(statusspan);
 		Morebits.status.init(statusspan);
 
-		// 如果页面不是wikitext（例如用户js/css等），那么找一个wikitext页面来预览。
+		// 若页面不是wikitext（例如用户js/css等），那么找一个wikitext页面来预览。
 		let pageName = mw.config.get('wgPageName');
 		if (mw.config.get('wgPageContentModel') !== 'wikitext') {
 			pageName = `Draft:${pageName}`;

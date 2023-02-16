@@ -43,7 +43,7 @@ Twinkle.image.callback = () => {
 				label: '通知上传者',
 				value: 'notify',
 				name: 'notify',
-				tooltip: '如果您在标记同一用户的很多文件，请取消此复选框以避免发送过多消息。',
+				tooltip: '若您在标记同一用户的很多文件，请取消此复选框以避免发送过多消息。',
 				checked: Twinkle.getPref('notifyUserOnDeli')
 			}
 		]
@@ -305,7 +305,7 @@ Twinkle.image.callbacks = {
 	},
 	addToLog: (params, initialContrib) => {
 		const usl = new Morebits.userspaceLogger(Twinkle.getPref('speedyLogPageName'));
-		usl.initialText = `这是该用户使用[[H:TW|Twinkle]]的速删模块做出的[[QW:CSD|快速删除]]提名列表。\n\n如果您不再想保留此日志，请在[[${Twinkle.getPref(
+		usl.initialText = `这是该用户使用[[H:TW|Twinkle]]的速删模块做出的[[QW:CSD|快速删除]]提名列表。\n\n若您不再想保留此日志，请在[[${Twinkle.getPref(
 			'configPage'
 		)}|参数设置]]中关掉，并使用[[QW:O1|CSD O1]]提交快速删除。${
 			Morebits.userIsSysop ? '\n\n此日志并不记录用Twinkle直接执行的删除。' : ''

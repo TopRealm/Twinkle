@@ -43,7 +43,7 @@ Twinkle.xfd.printRationale = () => {
 	if (Twinkle.xfd.currentRationale) {
 		Morebits.status.printUserText(
 			Twinkle.xfd.currentRationale,
-			'您的理由已在下方提供，如果您想重新提交，请将其复制到一新窗口中：'
+			'您的理由已在下方提供，若您想重新提交，请将其复制到一新窗口中：'
 		);
 		// only need to print the rationale once
 		Twinkle.xfd.currentRationale = null;
@@ -137,7 +137,7 @@ Twinkle.xfd.callback.change_category = (e) => {
 			label: '提删理由：',
 			value: oldreason,
 			tooltip:
-					'您可以使用Wikitext，Twinkle将自动为您加入签名。如果您使用批量提删功能，存废讨论页只会使用第一次提交的理由，但之后您仍需提供以用于删除通告模板的参数。',
+					'您可以使用Wikitext，Twinkle将自动为您加入签名。若您使用批量提删功能，存废讨论页只会使用第一次提交的理由，但之后您仍需提供以用于删除通告模板的参数。',
 			placeholder:
 					'此值亦显示于页面的删除通告模板内，故务必提供此值，避免使用“同上”等用语。'
 		});
@@ -637,7 +637,7 @@ Twinkle.xfd.callbacks = {
 	addToLog: (params, initialContrib) => {
 		const editsummary = `记录对[[${Morebits.pageNameNorm}]]的存废讨论提名`;
 		const usl = new Morebits.userspaceLogger(Twinkle.getPref('xfdLogPageName'));
-		usl.initialText = `这是该用户使用[[H:TW|Twinkle]]的提删模块做出的[[QW:XFD|存废讨论]]提名列表。\n\n如果您不再想保留此日志，请在[[${Twinkle.getPref(
+		usl.initialText = `这是该用户使用[[H:TW|Twinkle]]的提删模块做出的[[QW:XFD|存废讨论]]提名列表。\n\n若您不再想保留此日志，请在[[${Twinkle.getPref(
 			'configPage'
 		)}|参数设置]]中关掉，并使用[[QW:CSD#O1|CSD O1]]提交快速删除。`;
 		let xfdCatName;

@@ -71,7 +71,7 @@ Twinkle.protect.callback = () => {
 			{
 				label: '请求保护页面',
 				value: 'request',
-				tooltip: `如果您想在管理员通告版请求保护此页${
+				tooltip: `若您想在管理员通告版请求保护此页${
 					Morebits.userIsSysop ? '而不是自行完成。' : '。'
 				}`,
 				checked: !Morebits.userIsSysop
@@ -296,7 +296,7 @@ Twinkle.protect.callback.changeAction = (e) => {
 						{
 							label: '修改编辑权限',
 							name: 'editmodify',
-							tooltip: '如果此项关闭，编辑权限将不会修改。',
+							tooltip: '若此项关闭，编辑权限将不会修改。',
 							checked: true
 						}
 					]
@@ -333,7 +333,7 @@ Twinkle.protect.callback.changeAction = (e) => {
 						{
 							label: '修改移动权限',
 							name: 'movemodify',
-							tooltip: '如果此项被关闭，移动权限将不被修改。',
+							tooltip: '若此项被关闭，移动权限将不被修改。',
 							checked: true
 						}
 					]
@@ -1122,7 +1122,7 @@ Twinkle.protect.callback.evaluate = (e) => {
 				protectIt(allDone);
 			} else {
 				alert(
-					'请告诉Twinkle要做什么！\n如果您只是想标记该页，请选择上面的“用保护模板标记此页”选项。'
+					'请告诉Twinkle要做什么！\n若您只是想标记该页，请选择上面的“用保护模板标记此页”选项。'
 				);
 			}
 

@@ -179,7 +179,7 @@ Twinkle.tag.callback = () => {
 						value: 'group',
 						name: 'group',
 						tooltip:
-								'如果加入{{multiple issues}}支持的三个以上的模板，所有支持的模板都会被合并入{{multiple issues}}模板中。',
+								'若加入{{multiple issues}}支持的三个以上的模板，所有支持的模板都会被合并入{{multiple issues}}模板中。',
 						checked: Twinkle.getPref('groupByDefault')
 					}
 				]
@@ -190,7 +190,7 @@ Twinkle.tag.callback = () => {
 				label: '理由：',
 				name: 'reason',
 				tooltip:
-						'附加于编辑摘要的可选理由，例如指出条目内容的哪些部分有问题或移除模板的理由，但如果理由很长则应该发表在讨论页。',
+						'附加于编辑摘要的可选理由，例如指出条目内容的哪些部分有问题或移除模板的理由，但若理由很长则应该发表在讨论页。',
 				size: '80'
 			});
 
@@ -1130,7 +1130,7 @@ Twinkle.tag.fileList = [
 						name: 'keeplocalName',
 						label: '共享资源的不同图像名称：',
 						tooltip:
-								'输入在共享资源的图像名称（如果不同于本地名称），不包括 File: 前缀'
+								'输入在共享资源的图像名称（若不同于本地名称），不包括 File: 前缀'
 					},
 					{
 						type: 'input',
@@ -1147,7 +1147,7 @@ Twinkle.tag.fileList = [
 					type: 'input',
 					name: 'nowcommonsName',
 					label: '共享资源的不同图像名称：',
-					tooltip: '输入在共享资源的图像名称（如果不同于本地名称），不包括 File: 前缀'
+					tooltip: '输入在共享资源的图像名称（若不同于本地名称），不包括 File: 前缀'
 				}
 			}
 		]
@@ -1985,7 +1985,7 @@ Twinkle.tag.callback.evaluate = (e) => {
 				if (
 					checkIncompatible(
 						['Merge', 'Merge from', 'Merge to'],
-						'如果需要多次合并，请使用{{Merge}}并用管道符分隔条目名（但在这种情形中Twinkle不能自动标记其他条目）。'
+						'若需要多次合并，请使用{{Merge}}并用管道符分隔条目名（但在这种情形中Twinkle不能自动标记其他条目）。'
 					)
 				) {
 					return;

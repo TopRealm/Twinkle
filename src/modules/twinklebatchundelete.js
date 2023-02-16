@@ -46,7 +46,7 @@ Twinkle.batchundelete.callback = () => {
 		type: 'checkbox',
 		list: [
 			{
-				label: '如果存在已删除的讨论页，也恢复',
+				label: '若存在已删除的讨论页，也恢复',
 				name: 'undel_talk',
 				value: 'undel_talk',
 				checked: true

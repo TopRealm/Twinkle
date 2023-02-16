@@ -60,7 +60,7 @@ Twinkle.warn = () => {
 };
 Twinkle.warn.makeVandalTalkLink = ($vandalTalkLink, pagename) => {
 	$vandalTalkLink.wrapInner(
-		$('<span>').attr('title', '如果合适，您可以用Twinkle在该用户讨论页上做出警告。')
+		$('<span>').attr('title', '若合适，您可以用Twinkle在该用户讨论页上做出警告。')
 	);
 	const extraParam = `vanarticle=${mw.util.rawurlencode(pagename)}`;
 	const href = $vandalTalkLink.attr('href');

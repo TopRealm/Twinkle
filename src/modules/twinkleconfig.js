@@ -368,7 +368,7 @@ Twinkle.config.sections = [
 			{
 				name: 'watchProtectedPages',
 				label: '实施页面保护时，将被保护页面加入到监视列表',
-				helptip: '如果在保护后也标记页面，则使用标记页面的参数设置。',
+				helptip: '若在保护后也标记页面，则使用标记页面的参数设置。',
 				adminOnly: true,
 				type: 'enum',
 				enumValues: Twinkle.config.watchlistEnums
@@ -582,7 +582,7 @@ Twinkle.config.sections = [
 			{
 				name: 'deleteSysopDefaultToDelete',
 				label: '默认为直接删除而不是标记',
-				helptip: '如果已放置快速删除标记，则永远默认为删除模式。',
+				helptip: '若已放置快速删除标记，则永远默认为删除模式。',
 				adminOnly: true,
 				type: 'boolean'
 			},
@@ -598,7 +598,7 @@ Twinkle.config.sections = [
 			{
 				name: 'speedyWindowHeight',
 				label: '快速删除对话框高度（像素）',
-				helptip: '如果您有一台很大的显示器，您可以将此调高。',
+				helptip: '若您有一台很大的显示器，您可以将此调高。',
 				type: 'integer'
 			},
 			{
@@ -813,7 +813,7 @@ Twinkle.config.sections = [
 			{
 				name: 'watchWarnings',
 				label: '警告时加入用户讨论页到监视列表',
-				helptip: '注意：如果对方使用Flow，对应讨论串总会加到监视列表中。',
+				helptip: '注意：若对方使用Flow，对应讨论串总会加到监视列表中。',
 				type: 'enum',
 				enumValues: Twinkle.config.watchlistEnums
 			},
@@ -1426,7 +1426,7 @@ Twinkle.config.init = () => {
 		) {
 			// place "Looking for Twinkle options?" notice
 			box.setAttribute('class', 'config-userskin-box');
-			box.appendChild(document.createTextNode('如果您想配置您的Twinkle，请使用'));
+			box.appendChild(document.createTextNode('若您想配置您的Twinkle，请使用'));
 			link = document.createElement('a');
 			link.setAttribute('href', mw.util.getUrl(Twinkle.getPref('configPage')));
 			link.appendChild(document.createTextNode('Twinkle参数设置面板'));
