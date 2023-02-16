@@ -1390,7 +1390,7 @@ Twinkle.block.callback.change_expiry = (e) => {
 	}
 };
 Twinkle.block.seeAlsos = [];
-Twinkle.block.callback.toggle_see_alsos = function twinkleblockCallbackToggleSeeAlso() {
+Twinkle.block.callback.toggle_see_alsos = function () {
 	const reason = this.form.reason.value.replace(
 		new RegExp(`(<!-- )(参见|參見)${Twinkle.block.seeAlsos.join('、')}( -->)`),
 		''
