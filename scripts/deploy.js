@@ -65,10 +65,10 @@
  */
 const fs = require('fs/promises');
 const {
-  mwn
+	mwn
 } = require('mwn');
 const {
-  execSync
+	execSync
 } = require('child_process');
 const prompts = require('prompts');
 const chalk = require('chalk');
@@ -78,187 +78,187 @@ const minimist = require('minimist');
 // All file paths are with respect to repository root
 // Remove twinkle-pagestyles.css if deploying as user script
 const deployTargets = [{
-  file: 'dist/twinkle.js',
-  target: 'MediaWiki:Gadget-Twinkle.js'
+	file: 'dist/twinkle.js',
+	target: 'MediaWiki:Gadget-Twinkle.js'
 }, {
-  file: 'src/twinkle.css',
-  target: 'MediaWiki:Gadget-Twinkle.css'
+	file: 'src/twinkle.css',
+	target: 'MediaWiki:Gadget-Twinkle.css'
 }, {
-  file: 'dist/morebits.js',
-  target: 'MediaWiki:Gadget-morebits.js'
+	file: 'dist/morebits.js',
+	target: 'MediaWiki:Gadget-morebits.js'
 }, {
-  file: 'src/morebits.css',
-  target: 'MediaWiki:Gadget-morebits.css'
+	file: 'src/morebits.css',
+	target: 'MediaWiki:Gadget-morebits.css'
 }, {
-  file: 'src/twinkle-pagestyles.css',
-  target: 'MediaWiki:Gadget-Twinkle-pagestyles.css'
+	file: 'src/twinkle-pagestyles.css',
+	target: 'MediaWiki:Gadget-Twinkle-pagestyles.css'
 }, {
-  file: 'dist/modules/friendlytag.js',
-  target: 'MediaWiki:Gadget-friendlytag.js'
+	file: 'dist/modules/friendlytag.js',
+	target: 'MediaWiki:Gadget-friendlytag.js'
 }, {
-  file: 'dist/modules/friendlytalkback.js',
-  target: 'MediaWiki:Gadget-friendlytalkback.js'
+	file: 'dist/modules/friendlytalkback.js',
+	target: 'MediaWiki:Gadget-friendlytalkback.js'
 }, {
-  file: 'dist/modules/twinklearv.js',
-  target: 'MediaWiki:Gadget-twinklearv.js'
+	file: 'dist/modules/twinklearv.js',
+	target: 'MediaWiki:Gadget-twinklearv.js'
 }, {
-  file: 'dist/modules/twinklebatchprotect.js',
-  target: 'MediaWiki:Gadget-twinklebatchprotect.js'
+	file: 'dist/modules/twinklebatchprotect.js',
+	target: 'MediaWiki:Gadget-twinklebatchprotect.js'
 }, {
-  file: 'dist/modules/twinklebatchdelete.js',
-  target: 'MediaWiki:Gadget-twinklebatchdelete.js'
+	file: 'dist/modules/twinklebatchdelete.js',
+	target: 'MediaWiki:Gadget-twinklebatchdelete.js'
 }, {
-  file: 'dist/modules/twinklebatchundelete.js',
-  target: 'MediaWiki:Gadget-twinklebatchundelete.js'
+	file: 'dist/modules/twinklebatchundelete.js',
+	target: 'MediaWiki:Gadget-twinklebatchundelete.js'
 }, {
-  file: 'dist/modules/twinkleblock.js',
-  target: 'MediaWiki:Gadget-twinkleblock.js'
+	file: 'dist/modules/twinkleblock.js',
+	target: 'MediaWiki:Gadget-twinkleblock.js'
 }, {
-  file: 'dist/modules/twinkleclose.js',
-  target: 'MediaWiki:Gadget-twinkleclose.js'
+	file: 'dist/modules/twinkleclose.js',
+	target: 'MediaWiki:Gadget-twinkleclose.js'
 }, {
-  file: 'dist/modules/twinkleconfig.js',
-  target: 'MediaWiki:Gadget-twinkleconfig.js'
+	file: 'dist/modules/twinkleconfig.js',
+	target: 'MediaWiki:Gadget-twinkleconfig.js'
 }, {
-  file: 'dist/modules/twinklecopyvio.js',
-  target: 'MediaWiki:Gadget-twinklecopyvio.js'
+	file: 'dist/modules/twinklecopyvio.js',
+	target: 'MediaWiki:Gadget-twinklecopyvio.js'
 }, {
-  file: 'dist/modules/twinklediff.js',
-  target: 'MediaWiki:Gadget-twinklediff.js'
+	file: 'dist/modules/twinklediff.js',
+	target: 'MediaWiki:Gadget-twinklediff.js'
 }, {
-  file: 'dist/modules/twinklefluff.js',
-  target: 'MediaWiki:Gadget-twinklefluff.js'
+	file: 'dist/modules/twinklefluff.js',
+	target: 'MediaWiki:Gadget-twinklefluff.js'
 }, {
-  file: 'dist/modules/twinkleimage.js',
-  target: 'MediaWiki:Gadget-twinkleimage.js'
+	file: 'dist/modules/twinkleimage.js',
+	target: 'MediaWiki:Gadget-twinkleimage.js'
 }, {
-  file: 'dist/modules/twinkleprotect.js',
-  target: 'MediaWiki:Gadget-twinkleprotect.js'
+	file: 'dist/modules/twinkleprotect.js',
+	target: 'MediaWiki:Gadget-twinkleprotect.js'
 }, {
-  file: 'dist/modules/twinklespeedy.js',
-  target: 'MediaWiki:Gadget-twinklespeedy.js'
+	file: 'dist/modules/twinklespeedy.js',
+	target: 'MediaWiki:Gadget-twinklespeedy.js'
 }, {
-  file: 'dist/modules/twinklestub.js',
-  target: 'MediaWiki:Gadget-twinklestub.js'
+	file: 'dist/modules/twinklestub.js',
+	target: 'MediaWiki:Gadget-twinklestub.js'
 }, {
-  file: 'dist/modules/twinkleunlink.js',
-  target: 'MediaWiki:Gadget-twinkleunlink.js'
+	file: 'dist/modules/twinkleunlink.js',
+	target: 'MediaWiki:Gadget-twinkleunlink.js'
 }, {
-  file: 'dist/modules/twinklewarn.js',
-  target: 'MediaWiki:Gadget-twinklewarn.js'
+	file: 'dist/modules/twinklewarn.js',
+	target: 'MediaWiki:Gadget-twinklewarn.js'
 }, {
-  file: 'dist/modules/twinklexfd.js',
-  target: 'MediaWiki:Gadget-twinklexfd.js'
+	file: 'dist/modules/twinklexfd.js',
+	target: 'MediaWiki:Gadget-twinklexfd.js'
 }];
 class Deploy {
-  async deploy() {
-    if (!isGitWorkDirClean()) {
-      log('red', '[WARN] Git working directory is not clean.');
-    }
-    const config = this.loadConfig();
-    await this.getApi(config);
-    await this.login();
-    await this.makeEditSummary();
-    await this.savePages();
-  }
-  loadConfig() {
-    try {
-      return require(__dirname + '/credentials.json');
-    } catch (e) {
-      log('red', 'No credentials.json file found.');
-      return {};
-    }
-  }
-  async getApi(config) {
-    this.api = new mwn(config);
-    try {
-      this.api.initOAuth();
-      this.usingOAuth = true;
-    } catch (e) {
-      if (!config.username) {
-        config.username = await input('> Enter username');
-      }
-      if (!config.password) {
-        config.password = await input('> Enter bot password', 'password');
-      }
-    }
-    if (args.testwiki) {
-      config.apiUrl = `https://test2.qiuwen.wiki/api.php`;
-    } else {
-      if (!config.apiUrl) {
-        if (Object.keys(config).length) {
-          log('yellow', 'Tip: you can avoid this prompt by setting the apiUrl as well in credentials.json');
-        }
-        const site = await input('> Enter sitename (eg. test.qiuwen.org)');
-        config.apiUrl = `https://${site}/api.php`;
-      }
-    }
-    this.api.setOptions(config);
-  }
-  async login() {
-    this.siteName = this.api.options.apiUrl.replace(/^https:\/\//, '').replace(/\/.*/, '');
-    log('yellow', '--- Logging in ...');
-    if (this.usingOAuth) {
-      await this.api.getTokensAndSiteInfo();
-    } else {
-      await this.api.login();
-    }
-  }
-  async makeEditSummary() {
-    const sha = execSync('git rev-parse --short HEAD').toString('utf8').trim();
-    const message = await input('> Edit summary message (optional): ');
-    this.editSummary = `版本 ${sha}: ${message || '代码仓库同步更新'}`;
-    console.log(`Edit summary is: "${this.editSummary}"`);
-  }
-  async readFile(filepath) {
-    return (await fs.readFile(__dirname + '/../' + filepath)).toString();
-  }
-  async savePages() {
-    await input(`> Press [Enter] to start deploying to ${this.siteName} or [ctrl + C] to cancel`);
-    log('yellow', '--- starting deployment ---');
-    for await (let {
-      file,
-      target
-    } of deployTargets) {
-      let fileText = await this.readFile(file);
-      try {
-        const response = await this.api.save(target, fileText, this.editSummary);
-        if (response && response.nochange) {
-          log('yellow', `━ No change saving ${file} to ${target} on ${this.siteName}`);
-        } else {
-          log('green', `✔ Successfully saved ${file} to ${target} on ${this.siteName}`);
-        }
-      } catch (error) {
-        log('red', `✘ Failed to save ${file} to ${target} on ${this.siteName}`);
-        logError(error);
-      }
-    }
-    log('yellow', '--- end of deployment ---');
-  }
+	async deploy() {
+		if (!isGitWorkDirClean()) {
+		  log('red', '[WARN] Git working directory is not clean.');
+		}
+		const config = this.loadConfig();
+		await this.getApi(config);
+		await this.login();
+		await this.makeEditSummary();
+		await this.savePages();
+	}
+	loadConfig() {
+		try {
+		  return require(__dirname + '/credentials.json');
+		} catch (e) {
+		  log('red', 'No credentials.json file found.');
+		  return {};
+		}
+	}
+	async getApi(config) {
+		this.api = new mwn(config);
+		try {
+		  this.api.initOAuth();
+		  this.usingOAuth = true;
+		} catch (e) {
+		  if (!config.username) {
+				config.username = await input('> Enter username');
+		  }
+		  if (!config.password) {
+				config.password = await input('> Enter bot password', 'password');
+		  }
+		}
+		if (args.testwiki) {
+		  config.apiUrl = `https://test2.qiuwen.wiki/api.php`;
+		} else {
+		  if (!config.apiUrl) {
+				if (Object.keys(config).length) {
+				  log('yellow', 'Tip: you can avoid this prompt by setting the apiUrl as well in credentials.json');
+				}
+				const site = await input('> Enter sitename (eg. test.qiuwen.org)');
+				config.apiUrl = `https://${site}/api.php`;
+		  }
+		}
+		this.api.setOptions(config);
+	}
+	async login() {
+		this.siteName = this.api.options.apiUrl.replace(/^https:\/\//, '').replace(/\/.*/, '');
+		log('yellow', '--- Logging in ...');
+		if (this.usingOAuth) {
+		  await this.api.getTokensAndSiteInfo();
+		} else {
+		  await this.api.login();
+		}
+	}
+	async makeEditSummary() {
+		const sha = execSync('git rev-parse --short HEAD').toString('utf8').trim();
+		const message = await input('> Edit summary message (optional): ');
+		this.editSummary = `版本 ${sha}: ${message || '代码仓库同步更新'}`;
+		console.log(`Edit summary is: "${this.editSummary}"`);
+	}
+	async readFile(filepath) {
+		return (await fs.readFile(__dirname + '/../' + filepath)).toString();
+	}
+	async savePages() {
+		await input(`> Press [Enter] to start deploying to ${this.siteName} or [ctrl + C] to cancel`);
+		log('yellow', '--- starting deployment ---');
+		for await (let {
+		  file,
+		  target
+		} of deployTargets) {
+		  let fileText = await this.readFile(file);
+		  try {
+				const response = await this.api.save(target, fileText, this.editSummary);
+				if (response && response.nochange) {
+				  log('yellow', `━ No change saving ${file} to ${target} on ${this.siteName}`);
+				} else {
+				  log('green', `✔ Successfully saved ${file} to ${target} on ${this.siteName}`);
+				}
+		  } catch (error) {
+				log('red', `✘ Failed to save ${file} to ${target} on ${this.siteName}`);
+				logError(error);
+		  }
+		}
+		log('yellow', '--- end of deployment ---');
+	}
 }
-function isGitWorkDirClean() {
-  try {
-    execSync('git diff-index --quiet HEAD --');
-    return true;
-  } catch (e) {
-    return false;
-  }
+const isGitWorkDirClean = () => {
+	try {
+		execSync('git diff-index --quiet HEAD --');
+		return true;
+	} catch (e) {
+		return false;
+	}
 }
-async function input(message, type = 'text', initial = '') {
-  let name = String(Math.random());
-  return (await prompts({
-    type,
-    name,
-    message,
-    initial
-  }))[name];
+const input = async (message, type = 'text', initial = '') => {
+	let name = String(Math.random());
+	return (await prompts({
+		type,
+		name,
+		message,
+		initial
+	}))[name];
 }
-function logError(error) {
-  error = error || {};
-  console.log((error.info || 'Unknown error') + '\n', error.response || error);
+const logError = (error) => {
+	error = error || {};
+	console.log((error.info || 'Unknown error') + '\n', error.response || error);
 }
-function log(color, ...args) {
-  console.log(chalk[color](...args));
+const log = (color, ...args) => {
+	console.log(chalk[color](...args));
 }
 const args = minimist(process.argv.slice(2));
 new Deploy().deploy();
