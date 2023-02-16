@@ -1,3 +1,4 @@
+/* eslint-disable quote-props */
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
  * _addText: '{{Twinkle Header}}'
@@ -10,7 +11,6 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - twinklestub.js */
-/* eslint-disable quote-props */
 /* <nowiki> */
 (($) => {
 /**
