@@ -1444,7 +1444,7 @@ Twinkle.config.legacyPrefsNotice = (pageobj) => {
 	if (text.includes('TwinkleConfig') || text.includes('FriendlyConfig')) {
 		contentnotice.innerHTML =
 				'<table class="plainlinks ombox ombox-content"><tr><td class="mbox-image">' +
-				'<img alt="" src="https://tu.zhongwen.wiki/images/thumb/8/8f/Alert_Mark_%28Orange%29.svg/40px-Alert_Mark_%28Orange%29.svg.png" /></td>' +
+				'<img alt="" src="https://tu.zhongwen.wiki/images/qiuwen/thumb/8/8f/Alert_Mark_%28Orange%29.svg/40px-Alert_Mark_%28Orange%29.svg.png" /></td>' +
 				'<td class="mbox-text"><p><big><b>在这里修改您的参数设置之前，</b>您必须移除在用户JavaScript文件中任何旧的Friendly设置。</big></p>' +
 				`<p>要这样做，您可以<a href="${mw.config.get(
 					'wgScript'
