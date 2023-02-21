@@ -1102,7 +1102,7 @@ Twinkle.tag.fileList = [
 			}
 		]
 	},
-	{
+	/* {
 		key: '维基共享资源相关标签',
 		value: [
 			{
@@ -1141,7 +1141,7 @@ Twinkle.tag.fileList = [
 				]
 			},
 			{
-				label: '{{Now Commons}}：' + '文件已被复制到维基共享资源（CSD F7）',
+				label: '{{Now Commons}}：' + '文件已被复制到维基共享资源',
 				value: 'Now Commons',
 				subgroup: {
 					type: 'input',
@@ -1151,7 +1151,7 @@ Twinkle.tag.fileList = [
 				}
 			}
 		]
-	},
+	}, */
 	{
 		key: '清理标签',
 		value: [
