@@ -13,10 +13,10 @@
 /* <nowiki> */
 (($) => {
 /**
-	 * twinklearv.js: ARV module
-	 * Mode of invocation:  Tab ("ARV")
-	 * Active on:           Any page with relevant user name (userspace, contribs, etc.)
-	 */
+ * twinklearv.js: ARV module
+ * Mode of invocation:  Tab ("ARV")
+ * Active on:           Any page with relevant user name (userspace, contribs, etc.)
+ */
 
 Twinkle.arv = () => {
 	const username = mw.config.get('wgRelevantUserName');
@@ -448,7 +448,10 @@ Twinkle.arv.callback.evaluate = (e) => {
 			if (hasShared) {
 				types.splice(types.indexOf('shared'), 1);
 			}
-			types = types.length <= 2 ? types.join(' and ') : [types.slice(0, -1).join(', '), types.slice(-1)].join(' and ');
+			types =
+					types.length <= 2
+						? types.join(' and ')
+						: [types.slice(0, -1).join(', '), types.slice(-1)].join(' and ');
 			let article = 'a';
 			if (/[aehiouwy]/.test(types[0] || '')) {
 				// non 100% correct, but whatever, including 'h' for Cockney
@@ -780,14 +783,10 @@ Twinkle.arv.processAN3 = (params) => {
 				}
 				ret += sub
 					.reverse()
-					.map((v) => {
-						return `${sub.length >= 2 ? '#' : ''}# {{diff2|${
-							v.revid
-						}|${new Morebits.date(v.timestamp).format(
-							'HH:mm, D MMMM YYYY',
-							'utc'
-						)} (UTC)}} ${hasHiddenComment(v)}`;
-					})
+					.map((v) => `${sub.length >= 2 ? '#' : ''}# {{diff2|${v.revid}|${new Morebits.date(v.timestamp).format(
+						'HH:mm, D MMMM YYYY',
+						'utc'
+					)} (UTC)}} ${hasHiddenComment(v)}`)
 					.join('\n');
 				return ret;
 			})
@@ -795,21 +794,17 @@ Twinkle.arv.processAN3 = (params) => {
 				.join('\n');
 			const warningtext = params.warnings
 				.reverse()
-				.map((v) => {
-					return `#  {{diff2|${v.revid}|${new Morebits.date(v.timestamp).format(
-						'HH:mm, D MMMM YYYY',
-						'utc'
-					)} (UTC)}} ${hasHiddenComment(v)}`;
-				})
+				.map((v) => `#  {{diff2|${v.revid}|${new Morebits.date(v.timestamp).format(
+					'HH:mm, D MMMM YYYY',
+					'utc'
+				)} (UTC)}} ${hasHiddenComment(v)}`)
 				.join('\n');
 			let resolvetext = params.resolves
 				.reverse()
-				.map((v) => {
-					return `#  {{diff2|${v.revid}|${new Morebits.date(v.timestamp).format(
-						'HH:mm, D MMMM YYYY',
-						'utc'
-					)} (UTC)}} ${hasHiddenComment(v)}`;
-				})
+				.map((v) => `#  {{diff2|${v.revid}|${new Morebits.date(v.timestamp).format(
+					'HH:mm, D MMMM YYYY',
+					'utc'
+				)} (UTC)}} ${hasHiddenComment(v)}`)
 				.join('\n');
 			if (params.free_resolves) {
 				const page = params.free_resolves;

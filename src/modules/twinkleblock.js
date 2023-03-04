@@ -13,10 +13,10 @@
 /* <nowiki> */
 (($) => {
 /**
-	 * twinkleblock.js: Block module
-	 * Mode of invocation:     Tab ("Block")
-	 * Active on:              Any page with relevant user name (userspace, contribs, etc.)
-	 */
+ * twinkleblock.js: Block module
+ * Mode of invocation:     Tab ("Block")
+ * Active on:              Any page with relevant user name (userspace, contribs, etc.)
+ */
 const api = new mw.Api();
 let relevantUserName = mw.config.get('wgRelevantUserName');
 const menuFormattedNamespaces = $.extend({}, mw.config.get('wgFormattedNamespaces'));
@@ -189,9 +189,7 @@ Twinkle.block.fetchUserInfo = (fn) => {
 				Twinkle.block.userIsBot =
 						!!userinfo.groupmemberships &&
 						userinfo.groupmemberships
-							.map((e) => {
-								return e.group;
-							})
+							.map((e) => e.group)
 							.includes('bot');
 			} else {
 				relevantUserName = userName;
@@ -456,17 +454,20 @@ Twinkle.block.callback.change_action = (e) => {
 				value: '1'
 			});
 		}
-		blockoptions.push({
-			checked: Twinkle.block.field_block_options.watchuser,
-			label: '监视该用户的用户页和讨论页',
-			name: 'watchuser',
-			value: '1'
-		}, {
-			checked: true,
-			label: '标记当前的破坏中的请求',
-			name: 'closevip',
-			value: '1'
-		});
+		blockoptions.push(
+			{
+				checked: Twinkle.block.field_block_options.watchuser,
+				label: '监视该用户的用户页和讨论页',
+				name: 'watchuser',
+				value: '1'
+			},
+			{
+				checked: true,
+				label: '标记当前的破坏中的请求',
+				name: 'closevip',
+				value: '1'
+			}
+		);
 		field_block_options.append({
 			type: 'checkbox',
 			name: 'blockoptions',
@@ -909,35 +910,35 @@ Twinkle.block.callback.change_action = (e) => {
 };
 
 /*
-	 * Keep alphabetized by key name, Twinkle.block.blockGroups establishes
-	 *  the order they will appear in the interface
-	 *
-	 * Block preset format, all keys accept only 'true' (omit for false) except where noted:
-	 * <title of block template> : {
-	 *   autoblock: <autoblock any IP addresses used (for registered users only)>
-	 *   disabletalk: <disable user from editing their own talk page while blocked>
-	 *   expiry: <string - expiry timestamp, can include relative times like "5 months", "2 weeks" etc, use "infinity" for indefinite>
-	 *   forAnonOnly: <show block option in the interface only if the relevant user is an IP>
-	 *   forRegisteredOnly: <show block option in the interface only if the relevant user is registered>
-	 *   label: <string - label for the option of the dropdown in the interface (keep brief)>
-	 *   noemail: prevent the user from sending email through Special:Emailuser
-	 *   pageParam: <set if the associated block template accepts a page parameter>
-	 *   prependReason: <string - prepends the value of 'reason' to the end of the existing reason, namely for when revoking talk page access>
-	 *   nocreate: <block account creation from the user's IP (for anonymous users only)>
-	 *   nonstandard: <template does not conform to stewardship of WikiProject User Warnings and may not accept standard parameters>
-	 *   reason: <string - block rationale, as would appear in the block log,
-	 *   and the edit summary for when adding block template, unless 'summary' is set>
-	 *   reasonParam: <set if the associated block template accepts a reason parameter>
-	 *   sig: <string - set to ~~ ~~ if block template does not accept "true" as the value, or set null to omit sig param altogether>
-	 *   summary: <string - edit summary for when adding block template to user's talk page, if not set, 'reason' is used>
-	 *   suppressArticleInSummary: <set to suppress showing the article name in the edit summary, as with attack pages>
-	 *   templateName: <string - name of template to use (instead of key name), entry will be omitted from the Templates list.
-	 *   (e.g. use another template but with different block options)>
-	 *   useInitialOptions: <when preset is chosen, only change given block options, leave others as they were>
-	 *
-	 * WARNING: 'anononly' and 'allowusertalk' are enabled by default.
-	 *   To disable, set 'hardblock' and 'disabletalk', respectively
-	 */
+ * Keep alphabetized by key name, Twinkle.block.blockGroups establishes
+ *  the order they will appear in the interface
+ *
+ * Block preset format, all keys accept only 'true' (omit for false) except where noted:
+ * <title of block template> : {
+ *   autoblock: <autoblock any IP addresses used (for registered users only)>
+ *   disabletalk: <disable user from editing their own talk page while blocked>
+ *   expiry: <string - expiry timestamp, can include relative times like "5 months", "2 weeks" etc, use "infinity" for indefinite>
+ *   forAnonOnly: <show block option in the interface only if the relevant user is an IP>
+ *   forRegisteredOnly: <show block option in the interface only if the relevant user is registered>
+ *   label: <string - label for the option of the dropdown in the interface (keep brief)>
+ *   noemail: prevent the user from sending email through Special:Emailuser
+ *   pageParam: <set if the associated block template accepts a page parameter>
+ *   prependReason: <string - prepends the value of 'reason' to the end of the existing reason, namely for when revoking talk page access>
+ *   nocreate: <block account creation from the user's IP (for anonymous users only)>
+ *   nonstandard: <template does not conform to stewardship of WikiProject User Warnings and may not accept standard parameters>
+ *   reason: <string - block rationale, as would appear in the block log,
+ *   and the edit summary for when adding block template, unless 'summary' is set>
+ *   reasonParam: <set if the associated block template accepts a reason parameter>
+ *   sig: <string - set to ~~ ~~ if block template does not accept "true" as the value, or set null to omit sig param altogether>
+ *   summary: <string - edit summary for when adding block template to user's talk page, if not set, 'reason' is used>
+ *   suppressArticleInSummary: <set to suppress showing the article name in the edit summary, as with attack pages>
+ *   templateName: <string - name of template to use (instead of key name), entry will be omitted from the Templates list.
+ *   (e.g. use another template but with different block options)>
+ *   useInitialOptions: <when preset is chosen, only change given block options, leave others as they were>
+ *
+ * WARNING: 'anononly' and 'allowusertalk' are enabled by default.
+ *   To disable, set 'hardblock' and 'disabletalk', respectively
+ */
 Twinkle.block.blockPresetsInfo = {
 	anonblock: {
 		expiry: '3 days',
@@ -1395,14 +1396,14 @@ Twinkle.block.callback.toggle_see_alsos = function () {
 		new RegExp(`(<!-- )(参见|參見)${Twinkle.block.seeAlsos.join('、')}( -->)`),
 		''
 	);
-	Twinkle.block.seeAlsos = Twinkle.block.seeAlsos.filter((el) => {
-		return el !== this.value;
-	});
+	Twinkle.block.seeAlsos = Twinkle.block.seeAlsos.filter((el) => el !== this.value);
 	if (this.checked) {
 		Twinkle.block.seeAlsos.push(this.value);
 	}
 	const seeAlsoMessage = Twinkle.block.seeAlsos.join('、');
-	this.form.reason.value = !Twinkle.block.seeAlsos.length ? reason : `${reason}<!-- 参见${seeAlsoMessage} -->`;
+	this.form.reason.value = !Twinkle.block.seeAlsos.length
+		? reason
+		: `${reason}<!-- 参见${seeAlsoMessage} -->`;
 };
 Twinkle.block.callback.update_form = (e, data) => {
 	const form = e.target.form;
@@ -1446,7 +1447,10 @@ Twinkle.block.callback.update_form = (e, data) => {
 			const check = data[el.name] === '' || !!data[el.name];
 			$(el).prop('checked', check);
 		});
-	form.reason.value = data.prependReason && data.reason ? `${data.reason}; ${form.reason.value}` : data.reason || '';
+	form.reason.value =
+			data.prependReason && data.reason
+				? `${data.reason}; ${form.reason.value}`
+				: data.reason || '';
 };
 Twinkle.block.callback.change_template = (e) => {
 	const form = e.target.form,
@@ -1625,10 +1629,7 @@ Twinkle.block.callback.evaluate = (e) => {
 	}
 	if (toBlock) {
 		if (blockoptions.partial) {
-			if (
-				blockoptions.disabletalk &&
-					!blockoptions.namespacerestrictions.includes('3')
-			) {
+			if (blockoptions.disabletalk && !blockoptions.namespacerestrictions.includes('3')) {
 				return alert(
 					'部分封禁无法阻止编辑自己的讨论页，除非也封禁了User talk命名空间！'
 				);
@@ -1941,7 +1942,9 @@ Twinkle.block.callback.closeRequest = (vipPage) => {
 		summary = '标记为已处理';
 	} else {
 		summary = `/* ${userName} */ `;
-		summary += Morebits.string.isInfinity(params.expiry) ? '不限期封禁' : `封禁${expiryText}`;
+		summary += Morebits.string.isInfinity(params.expiry)
+			? '不限期封禁'
+			: `封禁${expiryText}`;
 	}
 	vipPage.setEditSummary(summary);
 	vipPage.setChangeTags(Twinkle.changeTags);

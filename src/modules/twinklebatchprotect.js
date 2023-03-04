@@ -13,11 +13,11 @@
 /* <nowiki> */
 (($) => {
 /**
-	 * twinklebatchprotect.js: Batch protect module (sysops only)
-	 * Mode of invocation:     Tab ("P-batch")
-	 * Active on:              Existing project pages and user pages; existing and
-	 *                         non-existing categories; Special:PrefixIndex
-	 */
+ * twinklebatchprotect.js: Batch protect module (sysops only)
+ * Mode of invocation:     Tab ("P-batch")
+ * Active on:              Existing project pages and user pages; existing and
+ *                         non-existing categories; Special:PrefixIndex
+ */
 
 Twinkle.batchprotect = () => {
 	if (
@@ -215,16 +215,17 @@ Twinkle.batchprotect.callback = () => {
 						metadata.push('重定向');
 					}
 					if (page.ns === 6) {
-						metadata.push(`上传者：${page.imageinfo[0].user}`, `最后编辑者：${page.revisions[0].user}`);
+						metadata.push(
+							`上传者：${page.imageinfo[0].user}`,
+							`最后编辑者：${page.revisions[0].user}`
+						);
 					} else {
 						metadata.push(
 							`${mw.language.convertNumber(page.revisions[0].size)}字节`
 						);
 					}
 					editProt = page.protection
-						.filter((pr) => {
-							return pr.type === 'edit' && pr.level === 'sysop';
-						})
+						.filter((pr) => pr.type === 'edit' && pr.level === 'sysop')
 						.pop();
 				}
 				if (editProt) {
@@ -300,9 +301,7 @@ Twinkle.batchprotect.callback.evaluate = (event) => {
 	Morebits.wiki.actionCompleted.notice = '批量保护完成';
 	const form = event.target;
 	const numProtected = $(Morebits.quickForm.getElements(form, '个页面')).filter(
-		(index, element) => {
-			return element.checked && element.nextElementSibling.style.color === 'red';
-		}
+		(index, element) => element.checked && element.nextElementSibling.style.color === 'red'
 	).length;
 	if (
 		numProtected > 0 &&

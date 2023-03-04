@@ -13,10 +13,10 @@
 /* <nowiki> */
 (($) => {
 /**
-	 * twinklebatchundelete.js: Batch undelete module
-	 * Mode of invocation:     Tab ("Und-batch")
-	 * Active on:              Existing user and project pages
-	 */
+ * twinklebatchundelete.js: Batch undelete module
+ * Mode of invocation:     Tab ("Und-batch")
+ * Active on:              Existing user and project pages
+ */
 
 Twinkle.batchundelete = () => {
 	if (
@@ -148,9 +148,7 @@ Twinkle.batchundelete.callback.evaluate = (event) => {
 	Morebits.wiki.actionCompleted.notice = '反删除已完成';
 
 	const numProtected = $(Morebits.quickForm.getElements(event.target, 'pages')).filter(
-		(_index, element) => {
-			return element.checked && element.nextElementSibling.style.color === 'red';
-		}
+		(_index, element) => element.checked && element.nextElementSibling.style.color === 'red'
 	).length;
 	if (numProtected > 0 && !confirm(`您正要反删除 ${numProtected} 个全保护页面，您确定吗？`)) {
 		return;

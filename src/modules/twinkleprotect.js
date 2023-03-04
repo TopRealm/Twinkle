@@ -13,10 +13,10 @@
 /* <nowiki> */
 (($) => {
 /**
-	 * twinkleprotect.js: Protect/RPP module
-	 * Mode of invocation:  Tab ("PP"/"RPP")
-	 * Active on:           Non-special, non-MediaWiki pages
-	 */
+ * twinkleprotect.js: Protect/RPP module
+ * Mode of invocation:  Tab ("PP"/"RPP")
+ * Active on:           Non-special, non-MediaWiki pages
+ */
 
 // Note: a lot of code in this module is re-used/called by batchprotect.
 
@@ -946,7 +946,10 @@ Twinkle.protect.callback.changePreset = (e) => {
 			mw.config.get('wgArticleId') &&
 				mw.config.get('wgPageContentModel') !== 'Scribunto'
 		) {
-			form.tagtype.value = form.category.value === 'unprotect' ? 'none' : item.template || form.category.value;
+			form.tagtype.value =
+					form.category.value === 'unprotect'
+						? 'none'
+						: item.template || form.category.value;
 			Twinkle.protect.formevents.tagtype({ target: form.tagtype });
 
 			if (/template/.test(form.category.value)) {
@@ -1038,11 +1041,13 @@ Twinkle.protect.callback.evaluate = (e) => {
 
 						break;
 					}
-				// No default
+						// No default
 				}
 			} else if (
 				input.movemodify &&
-					['officialprotected', 'revisionprotected', 'sysop', 'templateeditor'].includes(input.movelevel)
+					['officialprotected', 'revisionprotected', 'sysop', 'templateeditor'].includes(
+						input.movelevel
+					)
 			) {
 				closeparams.type = 'move';
 				closeparams.expiry = input.moveexpiry;
@@ -1305,12 +1310,13 @@ Twinkle.protect.callbacks = {
 		const oldtag_re =
 				/(?:<noinclude>)?[\t ]*{{\s*(pp-[^{}]*?|protected|(?:t|v|s|p-|usertalk-v|usertalk-s|sb|move)protected2?|protected template|privacy protection)\s*?}}\s*(?:<\/noinclude>)?\s*/gi;
 		const re_result = oldtag_re.exec(text);
-		if (re_result && (
-			params.tag === 'none' ||
+		if (
+			re_result &&
+				(params.tag === 'none' ||
 					confirm(
 						`在页面上找到{{${re_result[1]}}}\n单击确定以移除，或单击取消以取消操作。`
-					)
-		)) {
+					))
+		) {
 			text = text.replace(oldtag_re, '');
 		}
 
@@ -1450,7 +1456,10 @@ Twinkle.protect.callbacks = {
 						: '。'
 				}--~~` + '~~';
 
-		const reg = params.category === 'unprotect' ? /(==\s*请求解除保护\s*==)/ : /({{\s*\/header\s*}})/;
+		const reg =
+				params.category === 'unprotect'
+					? /(==\s*请求解除保护\s*==)/
+					: /({{\s*\/header\s*}})/;
 
 		const originalTextLength = text.length;
 		text = text.replace(reg, `$1\n${newtag}\n`);
@@ -1545,7 +1554,10 @@ Twinkle.protect.callbacks = {
 			return;
 		}
 
-		text = params.type === 'unprotect' ? sections[0] + requestList.join('') : requestList.join('') + sections[1];
+		text =
+				params.type === 'unprotect'
+					? sections[0] + requestList.join('')
+					: requestList.join('') + sections[1];
 
 		let summary = '';
 

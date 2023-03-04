@@ -13,10 +13,10 @@
 /* <nowiki> */
 (($) => {
 /**
-	 * twinklebatchdelete.js: Batch delete module (sysops only)
-	 * Mode of invocation:     Tab ("D-batch")
-	 * Active on:              Existing non-articles, and Special:PrefixIndex
-	 */
+ * twinklebatchdelete.js: Batch delete module (sysops only)
+ * Mode of invocation:     Tab ("D-batch")
+ * Active on:              Existing non-articles, and Special:PrefixIndex
+ */
 Twinkle.batchdelete = () => {
 	if (
 		Morebits.userIsSysop &&
@@ -203,7 +203,10 @@ Twinkle.batchdelete.callback = () => {
 					);
 				}
 				if (page.ns === 6) {
-					metadata.push(`上传者：${page.imageinfo[0].user}`, `最后编辑：${page.revisions[0].user}`);
+					metadata.push(
+						`上传者：${page.imageinfo[0].user}`,
+						`最后编辑：${page.revisions[0].user}`
+					);
 				} else {
 					metadata.push(`${mw.language.convertNumber(page.revisions[0].size)}字节`);
 				}
@@ -436,7 +439,10 @@ Twinkle.batchdelete.callback.toggleSubpages = (e) => {
 								);
 							}
 							if (page.ns === 6) {
-								metadata.push(`上传者：${page.imageinfo[0].user}`, `最后编辑：${page.revisions[0].user}`);
+								metadata.push(
+									`上传者：${page.imageinfo[0].user}`,
+									`最后编辑：${page.revisions[0].user}`
+								);
 							} else {
 								metadata.push(
 									`${mw.language.convertNumber(page.revisions[0].size)}字节`
@@ -755,7 +761,10 @@ Twinkle.batchdelete.callbacks = {
 			return;
 		}
 		let text;
-		text = params.title in Twinkle.batchdelete.unlinkCache ? Twinkle.batchdelete.unlinkCache[params.title] : pageobj.getPageText();
+		text =
+				params.title in Twinkle.batchdelete.unlinkCache
+					? Twinkle.batchdelete.unlinkCache[params.title]
+					: pageobj.getPageText();
 		const old_text = text;
 		const wikiPage = new Morebits.wikitext.page(text);
 		text = wikiPage.removeLink(params.page).getText();
@@ -800,7 +809,10 @@ Twinkle.batchdelete.callbacks = {
 		}
 		const image = params.page.replace(new RegExp(`^${Morebits.namespaceRegex(6)}:`), '');
 		let text;
-		text = params.title in Twinkle.batchdelete.unlinkCache ? Twinkle.batchdelete.unlinkCache[params.title] : pageobj.getPageText();
+		text =
+				params.title in Twinkle.batchdelete.unlinkCache
+					? Twinkle.batchdelete.unlinkCache[params.title]
+					: pageobj.getPageText();
 		const old_text = text;
 		const wikiPage = new Morebits.wikitext.page(text);
 		text = wikiPage.commentOutImage(image, '因文件已删，故注释之').getText();

@@ -13,18 +13,18 @@
 /* <nowiki> */
 (($) => {
 /**
-	 * twinklespeedy.js: CSD module
-	 * Mode of invocation:  Tab ("CSD")
-	 * Active on:           Non-special, existing pages
-	 * Mode of invocation:  Tab ("CSD")
-	 * Active on:           Non-special, existing pages
-	 *
-	 * NOTE FOR DEVELOPERS:
-	 *   If adding a new criterion, add it to the appropriate places at the top of
-	 *   twinkleconfig.js.  Also check out the default values of the CSD preferences
-	 *   in twinkle.js, and add your new criterion to those if you think it would be
-	 *   good.
-	 */
+ * twinklespeedy.js: CSD module
+ * Mode of invocation:  Tab ("CSD")
+ * Active on:           Non-special, existing pages
+ * Mode of invocation:  Tab ("CSD")
+ * Active on:           Non-special, existing pages
+ *
+ * NOTE FOR DEVELOPERS:
+ *   If adding a new criterion, add it to the appropriate places at the top of
+ *   twinkleconfig.js.  Also check out the default values of the CSD preferences
+ *   in twinkle.js, and add your new criterion to those if you think it would be
+ *   good.
+ */
 
 Twinkle.speedy = () => {
 	// Disable on:
@@ -310,9 +310,13 @@ Twinkle.speedy.initDialog = (callbackfunc) => {
 Twinkle.speedy.callback.getMode = (form) => {
 	let mode = Twinkle.speedy.mode.userSingleSubmit;
 	if (form.tag_only && !form.tag_only.checked) {
-		mode = form.delmultiple.checked ? Twinkle.speedy.mode.sysopMultipleSubmit : Twinkle.speedy.mode.sysopSingleSubmit;
+		mode = form.delmultiple.checked
+			? Twinkle.speedy.mode.sysopMultipleSubmit
+			: Twinkle.speedy.mode.sysopSingleSubmit;
 	} else {
-		mode = form.multiple.checked ? Twinkle.speedy.mode.userMultipleSubmit : Twinkle.speedy.mode.userSingleSubmit;
+		mode = form.multiple.checked
+			? Twinkle.speedy.mode.userMultipleSubmit
+			: Twinkle.speedy.mode.userSingleSubmit;
 	}
 	if (Twinkle.getPref('speedySelectionStyle') === 'radioClick') {
 		mode++;
@@ -1454,10 +1458,10 @@ Twinkle.speedy.callbacks = {
 
 								notifytext += '}}--~~' + '~~';
 								let editsummary = '通知：';
-								editsummary += !params.normalizeds.includes('g12') ?
-									// no article name in summary for G10 deletions
-									`页面[[${Morebits.pageNameNorm}]]`:
-									'攻击性页面';
+								editsummary += !params.normalizeds.includes('g12')
+									? // no article name in summary for G10 deletions
+									`页面[[${Morebits.pageNameNorm}]]`
+									: '攻击性页面';
 								editsummary += '快速删除提名';
 								usertalkpage.setAppendText(notifytext);
 								usertalkpage.setEditSummary(editsummary);
@@ -1494,9 +1498,12 @@ Twinkle.speedy.callbacks = {
 			}`;
 			let appendText = `# [[:${Morebits.pageNameNorm}]]：`;
 			if (params.fromDI) {
-				appendText += params.normalized === 'f3 f4' ? '图版[[QW:F1|CSD F1]]（{{tl|no source no license/auto}}）' : `图版[[QW:CSD#${params.normalized.toUpperCase()}|CSD ${params.normalized.toUpperCase()}]]（{{tl|${
-					params.templatename
-				}}}）`;
+				appendText +=
+						params.normalized === 'f3 f4'
+							? '图版[[QW:F1|CSD F1]]（{{tl|no source no license/auto}}）'
+							: `图版[[QW:CSD#${params.normalized.toUpperCase()}|CSD ${params.normalized.toUpperCase()}]]（{{tl|${
+								params.templatename
+							}}}）`;
 			} else {
 				if (params.normalizeds.length > 1) {
 					appendText += '多个理由（';
@@ -1625,9 +1632,9 @@ Twinkle.speedy.getUserTalkParameters = (normalized) => {
 };
 
 /**
-	 * @param {Event} e
-	 * @returns {Array}
-	 */
+ * @param {Event} e
+ * @returns {Array}
+ */
 Twinkle.speedy.resolveCsdValues = (e) => {
 	const values = (e.target.form || e.target).getChecked('csd');
 	if (values.length === 0) {

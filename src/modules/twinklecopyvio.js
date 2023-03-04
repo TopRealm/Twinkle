@@ -13,11 +13,11 @@
 /* <nowiki> */
 (() => {
 /**
-	 * twinklecopyvio.js: Copyvio module
-	 * Mode of invocation:    Tab ("Copyvio")
-	 * Active on:             Existing, non-special pages, except for file pages with no local (non-Commons) file which are not redirects
-	 * Config directives in:  TwinkleConfig
-	 */
+ * twinklecopyvio.js: Copyvio module
+ * Mode of invocation:    Tab ("Copyvio")
+ * Active on:             Existing, non-special pages, except for file pages with no local (non-Commons) file which are not redirects
+ * Config directives in:  TwinkleConfig
+ */
 
 Twinkle.copyvio = () => {
 	// Disable on:
@@ -126,9 +126,7 @@ Twinkle.copyvio.callbacks = {
 			.replace(/^\s*([^*])/gm, '* $1')
 			.replace(/^\* $/m, '')}|OldRevision=${revisionId}}}`;
 		const text = pageobj.getPageText();
-		const oldcsd = text.match(
-			/{{\s*(db(-\w*)?|d|delete)\s*(\|(?:{{[^{}]*}}|[^{}])*)?}}/i
-		);
+		const oldcsd = text.match(/{{\s*(db(-\w*)?|d|delete)\s*(\|(?:{{[^{}]*}}|[^{}])*)?}}/i);
 		if (
 			oldcsd &&
 				confirm(

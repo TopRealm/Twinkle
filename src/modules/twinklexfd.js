@@ -13,10 +13,10 @@
 /* <nowiki> */
 (($) => {
 /**
-	 * twinklexfd.js: XFD module
-	 * Mode of invocation:  Tab ("XFD")
-	 * Active on:           Existing, non-special pages, except for file pages with no local (non-Commons) file which are not redirects
-	 */
+ * twinklexfd.js: XFD module
+ * Mode of invocation:  Tab ("XFD")
+ * Active on:           Existing, non-special pages, except for file pages with no local (non-Commons) file which are not redirects
+ */
 
 Twinkle.xfd = () => {
 	// Disable on:
@@ -280,10 +280,9 @@ Twinkle.xfd.callback.change_afd_category = (e) => {
 			e.target.form.mergeinto.parentNode.removeAttribute('hidden');
 			e.target.form.fwdcsdreason.parentNode.removeAttribute('hidden');
 			e.target.form.mergeinto.previousElementSibling.innerHTML = '提交人：';
-			e.target.form.xfdreason.value = decodeURIComponent($('#delete-reason').text()).replace(
-				/\+/g,
-				' '
-			);
+			e.target.form.xfdreason.value = decodeURIComponent(
+				$('#delete-reason').text()
+			).replace(/\+/g, ' ');
 
 			break;
 		}

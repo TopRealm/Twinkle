@@ -14,11 +14,11 @@
 /* <nowiki> */
 (($) => {
 /**
-	 * twinklewarn.js: Warn module
-	 * Mode of invocation:  Tab ("Warn")
-	 * Active on:           Any page with relevant user name (userspace, contribs,
-	 *                      etc.), as well as the rollback success page
-	 */
+ * twinklewarn.js: Warn module
+ * Mode of invocation:  Tab ("Warn")
+ * Active on:           Any page with relevant user name (userspace, contribs,
+ *                      etc.), as well as the rollback success page
+ */
 
 const relevantUserName = mw.config.get('wgRelevantUserName');
 Twinkle.warn = () => {
@@ -261,7 +261,11 @@ Twinkle.warn.callback = () => {
 		// Confirm edit wasn't too old for a warning
 		const checkStale = (vantimestamp) => {
 			const revDate = new Morebits.date(vantimestamp);
-			if (vantimestamp && revDate.isValid() && revDate.add(24, 'hours').isBefore(new Date())) {
+			if (
+				vantimestamp &&
+					revDate.isValid() &&
+					revDate.add(24, 'hours').isBefore(new Date())
+			) {
 				message += '这笔编辑是在24小时前做出的，现在警告可能已过时。';
 				$('#twinkle-warn-warning-messages').text(`注意：${message}`);
 			}
@@ -1374,9 +1378,7 @@ Twinkle.warn.callback.change_subcategory = (e) => {
 		'uw-username': '用户名违反方针，因为…… ',
 		'uw-aiv': '可选输入被警告的用户名（不含User:） '
 	};
-	if (
-		['singlenotice', 'singlewarn', 'singlecombined', 'kitchensink'].includes(main_group)
-	) {
+	if (['singlenotice', 'singlewarn', 'singlecombined', 'kitchensink'].includes(main_group)) {
 		if (notLinkedArticle[value]) {
 			if (Twinkle.warn.prev_article === null) {
 				Twinkle.warn.prev_article = e.target.form.article.value;
@@ -1552,9 +1554,7 @@ Twinkle.warn.callbacks = {
 				: latest.type.toLowerCase();
 				// It would be nice to account for blocks, but in most
 				// cases the hidden message is terminal, not the sig
-			level = Twinkle.warn.messages.singlewarn[loweredType] ?
-				3 :
-				1; // singlenotice or not found
+			level = Twinkle.warn.messages.singlewarn[loweredType] ? 3 : 1; // singlenotice or not found
 		}
 
 		const $autolevelMessage = $('<div>', {
@@ -1666,17 +1666,20 @@ Twinkle.warn.callbacks = {
 			// Update params now that we've selected a warning
 			params.sub_group = templateAndLevel[0];
 			messageData = params.messageData[`level${templateAndLevel[1]}`];
-		} else if (params.sub_group in history && new Morebits.date(history[params.sub_group]).add(1, 'day').isAfter(now) &&
-					!confirm(
-						`近24小时内一个同样的 ${params.sub_group} 模板已被发出。\n是否继续？`
-					)
+		} else if (
+			params.sub_group in history &&
+				new Morebits.date(history[params.sub_group]).add(1, 'day').isAfter(now) &&
+				!confirm(`近24小时内一个同样的 ${params.sub_group} 模板已被发出。\n是否继续？`)
 		) {
 			statelem.error('用户取消');
 			return;
 		}
 		latest.date.add(1, 'minute'); // after long debate, one minute is max
 
-		if (latest.date.isAfter(now) && !confirm(`近1分钟内 ${latest.type} 模板已被发出。\n是否继续？`)) {
+		if (
+			latest.date.isAfter(now) &&
+				!confirm(`近1分钟内 ${latest.type} 模板已被发出。\n是否继续？`)
+		) {
 			statelem.error('用户取消');
 			return;
 		}
@@ -1774,13 +1777,11 @@ Twinkle.warn.callbacks = {
 				const dateHeaderRegex = now.monthHeaderRegex();
 				sectionNumber = 0;
 				// Find this month's section among L2 sections, preferring the bottom-most
-				sectionExists = sections.reverse().some((sec, idx) => {
-					return (
-						/^(==)[^=].+\1/m.test(sec) &&
-							dateHeaderRegex.test(sec) &&
-							typeof (sectionNumber = sections.length - 1 - idx) === 'number'
-					);
-				});
+				sectionExists = sections.reverse().some((sec, idx) => 
+					/^(==)[^=].+\1/m.test(sec) &&
+					dateHeaderRegex.test(sec) &&
+					typeof (sectionNumber = sections.length - 1 - idx) === 'number'
+				);
 			}
 		}
 		if (sectionExists) {

@@ -177,10 +177,10 @@ class Deploy {
 		} catch (e) {
 		  if (!config.username) {
 		    config.username = await input('> Enter username');
-		  }
+		}
 		  if (!config.password) {
 		    config.password = await input('> Enter bot password', 'password');
-		  }
+		}
 		}
 		if (args.testwiki) {
 		  config.apiUrl = `https://test2.qiuwen.wiki/api.php`;
@@ -191,7 +191,7 @@ class Deploy {
 		    }
 		    const site = await input('> Enter sitename (eg. test.qiuwen.org)');
 		    config.apiUrl = `https://${site}/api.php`;
-		  }
+		}
 		}
 		this.api.setOptions(config);
 	}
@@ -228,10 +228,10 @@ class Deploy {
 		    } else {
 		      log('green', `✔ Successfully saved ${file} to ${target} on ${this.siteName}`);
 		    }
-		  } catch (error) {
+		} catch (error) {
 		    log('red', `✘ Failed to save ${file} to ${target} on ${this.siteName}`);
 		    logError(error);
-		  }
+		}
 		}
 		log('yellow', '--- end of deployment ---');
 	}

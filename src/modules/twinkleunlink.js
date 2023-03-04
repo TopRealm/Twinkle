@@ -13,10 +13,10 @@
 /* <nowiki> */
 (($) => {
 /**
-	 * twinkleunlink.js: Unlink module
-	 * Mode of invocation:  Tab ("Unlink")
-	 * Active on:           Non-special pages, except Qiuwen:Sandbox
-	 */
+ * twinkleunlink.js: Unlink module
+ * Mode of invocation:  Tab ("Unlink")
+ * Active on:           Non-special pages, except Qiuwen:Sandbox
+ */
 
 Twinkle.unlink = () => {
 	if (
@@ -48,7 +48,9 @@ Twinkle.unlink.callback = (presetReason) => {
 	);
 	const linkTextAfter = Morebits.htmlNode('code', '链接文字');
 	const linkPlainBefore = Morebits.htmlNode('code', `[[${Morebits.pageNameNorm}]]`);
-	const linkPlainAfter = fileSpace ? Morebits.htmlNode('code', `<!-- [[${Morebits.pageNameNorm}]] -->`) : Morebits.htmlNode('code', Morebits.pageNameNorm);
+	const linkPlainAfter = fileSpace
+		? Morebits.htmlNode('code', `<!-- [[${Morebits.pageNameNorm}]] -->`)
+		: Morebits.htmlNode('code', Morebits.pageNameNorm);
 	form.append({
 		type: 'div',
 		style: 'margin-bottom: 0.5em; font-style: normal;',

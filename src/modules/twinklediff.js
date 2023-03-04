@@ -13,10 +13,10 @@
 /* <nowiki> */
 (($) => {
 /**
-	 * twinklediff.js: Diff module
-	 * Mode of invocation:  Tab on non-diff pages ("Last"); tabs on diff pages ("Since", "Since mine", "Current")
-	 * Active on:           Existing non-special pages
-	 */
+ * twinklediff.js: Diff module
+ * Mode of invocation:  Tab on non-diff pages ("Last"); tabs on diff pages ("Since", "Since mine", "Current")
+ * Active on:           Existing non-special pages
+ */
 
 Twinkle.diff = () => {
 	if (mw.config.get('wgNamespaceNumber') < 0 || !mw.config.get('wgArticleId')) {

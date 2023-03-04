@@ -14,12 +14,12 @@
 /* <nowiki> */
 (($) => {
 /**
-	 * twinkleconfig.js: Preferences module
-	 * Mode of invocation:  Adds configuration form to Help:Twinkle/参数设置,
-	 *                      and adds an ad box to the top of user subpages belonging to the
-	 *                      currently logged-in user which end in '.js'
-	 * Active on:           What I just said. Yeah.
-	 */
+ * twinkleconfig.js: Preferences module
+ * Mode of invocation:  Adds configuration form to Help:Twinkle/参数设置,
+ *                      and adds an ad box to the top of user subpages belonging to the
+ *                      currently logged-in user which end in '.js'
+ * Active on:           What I just said. Yeah.
+ */
 
 Twinkle.config = {};
 Twinkle.config.watchlistEnums = {
@@ -189,32 +189,32 @@ Twinkle.config.commonSets = {
 };
 
 /**
-	 * Section entry format:
-	 *
-	 * {
-	 *   title: <human-readable section title>,
-	 *   module: <name of the associated module, used to link to sections>,
-	 *   adminOnly: <true for admin-only sections>,
-	 *   hidden: <true for advanced preferences that rarely need to be changed - they can still be modified by manually editing twinkleoptions.js>,
-	 *   preferences: [
-	 *     {
-	 *       name: <TwinkleConfig property name>,
-	 *       label: <human-readable short description - used as a form label>,
-	 *       helptip: <(optional) human-readable text (using valid HTML) that complements the description, like limits, warnings, etc.>
-	 *       adminOnly: <true for admin-only preferences>,
-	 *       type: <string|boolean|integer|enum|set|customList> (customList stores an array of JSON objects { value, label }),
-	 *       enumValues: <for type = "enum": a JSON object where the keys are the internal names and the values are human-readable strings>,
-	 *       setValues: <for type = "set": a JSON object where the keys are the internal names and the values are human-readable strings>,
-	 *       setDisplayOrder: <(optional) for type = "set": an array containing the keys of setValues (as strings) in the order that they are displayed>,
-	 *       customListValueTitle: <for type = "customList": the heading for the left "value" column in the custom list editor>,
-	 *       customListLabelTitle: <for type = "customList": the heading for the right "label" column in the custom list editor>
-	 *     },
-	 *     . . .
-	 *   ]
-	 * },
-	 * . . .
-	 *
-	 */
+ * Section entry format:
+ *
+ * {
+ *   title: <human-readable section title>,
+ *   module: <name of the associated module, used to link to sections>,
+ *   adminOnly: <true for admin-only sections>,
+ *   hidden: <true for advanced preferences that rarely need to be changed - they can still be modified by manually editing twinkleoptions.js>,
+ *   preferences: [
+ *     {
+ *       name: <TwinkleConfig property name>,
+ *       label: <human-readable short description - used as a form label>,
+ *       helptip: <(optional) human-readable text (using valid HTML) that complements the description, like limits, warnings, etc.>
+ *       adminOnly: <true for admin-only preferences>,
+ *       type: <string|boolean|integer|enum|set|customList> (customList stores an array of JSON objects { value, label }),
+ *       enumValues: <for type = "enum": a JSON object where the keys are the internal names and the values are human-readable strings>,
+ *       setValues: <for type = "set": a JSON object where the keys are the internal names and the values are human-readable strings>,
+ *       setDisplayOrder: <(optional) for type = "set": an array containing the keys of setValues (as strings) in the order that they are displayed>,
+ *       customListValueTitle: <for type = "customList": the heading for the left "value" column in the custom list editor>,
+ *       customListLabelTitle: <for type = "customList": the heading for the right "label" column in the custom list editor>
+ *     },
+ *     . . .
+ *   ]
+ * },
+ * . . .
+ *
+ */
 
 Twinkle.config.sections = [
 	{
@@ -1268,7 +1268,11 @@ Twinkle.config.init = () => {
 								check.setAttribute('checked', 'checked');
 							}
 							// cater for legacy integer array values for unlinkNamespaces (this can be removed a few years down the track...)
-							if (pref.name === 'unlinkNamespaces' && gotPref && gotPref.includes(Number.parseInt(itemkey, 10))) {
+							if (
+								pref.name === 'unlinkNamespaces' &&
+									gotPref &&
+									gotPref.includes(Number.parseInt(itemkey, 10))
+							) {
 								check.setAttribute('checked', 'checked');
 							}
 							checklabel.appendChild(check);

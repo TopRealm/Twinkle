@@ -13,10 +13,10 @@
 /* <nowiki> */
 (($) => {
 /**
-	 * twinkleimage.js: Image CSD module
-	 * Mode of invocation:  Tab ("DI")
-	 * Active on:           Local nonredirect file pages (not on Commons)
-	 */
+ * twinkleimage.js: Image CSD module
+ * Mode of invocation:  Tab ("DI")
+ * Active on:           Local nonredirect file pages (not on Commons)
+ */
 
 Twinkle.image = () => {
 	if (

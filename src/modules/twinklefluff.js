@@ -13,14 +13,14 @@
 /* <nowiki> */
 (($) => {
 /**
-	 * twinklefluff.js: Revert/rollback module
-	 * Mode of invocation:  Links on contributions, recent changes, history, and diff pages
-	 * Active on:           Diff pages, history pages, Special:RecentChanges(Linked), and Special:Contributions
-	 */
+ * twinklefluff.js: Revert/rollback module
+ * Mode of invocation:  Links on contributions, recent changes, history, and diff pages
+ * Active on:           Diff pages, history pages, Special:RecentChanges(Linked), and Special:Contributions
+ */
 
 /**
-	 * Twinklefluff revert and antivandalism utility
-	 */
+ * Twinklefluff revert and antivandalism utility
+ */
 
 Twinkle.fluff = () => {
 	// Only proceed if the user can actually edit the page in question
@@ -501,10 +501,9 @@ Twinkle.fluff.callbacks = {
 			undoafter: revertToRevID,
 			basetimestamp: touched,
 			starttimestamp: loadtimestamp,
-			minor:
-					Twinkle.getPref('markRevertedPagesAsMinor').includes('torev')
-						? true
-						: undefined,
+			minor: Twinkle.getPref('markRevertedPagesAsMinor').includes('torev')
+				? true
+				: undefined,
 			format: 'json'
 		};
 			// Handle watching, possible expiry
@@ -822,10 +821,9 @@ Twinkle.fluff.callbacks = {
 			undoafter: params.goodid,
 			basetimestamp: touched,
 			starttimestamp: loadtimestamp,
-			minor:
-					Twinkle.getPref('markRevertedPagesAsMinor').includes(params.type)
-						? true
-						: undefined,
+			minor: Twinkle.getPref('markRevertedPagesAsMinor').includes(params.type)
+				? true
+				: undefined,
 			format: 'json'
 		};
 			// Handle watching, possible expiry
@@ -938,12 +936,11 @@ Twinkle.fluff.formatSummary = (builtInString, userName, customString) => {
 			const contribsLen = unescape(encodeURIComponent(contribsLink)).length;
 			if (resultLen + contribsLen <= 499) {
 				const talkLink = `（[[User talk:${userName}|讨论]]）`;
-				result = resultLen + contribsLen + unescape(encodeURIComponent(talkLink)).length <=
-						499 ? Morebits.string.safeReplace(
-						result,
-						'$USER',
-						contribsLink + talkLink
-					) : Morebits.string.safeReplace(result, '$USER', contribsLink);
+				result =
+						resultLen + contribsLen + unescape(encodeURIComponent(talkLink)).length <=
+						499
+							? Morebits.string.safeReplace(result, '$USER', contribsLink + talkLink)
+							: Morebits.string.safeReplace(result, '$USER', contribsLink);
 			} else {
 				result = Morebits.string.safeReplace(result, '$USER', userName);
 			}

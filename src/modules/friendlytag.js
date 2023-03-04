@@ -13,11 +13,11 @@
 /* <nowiki> */
 (($) => {
 /**
-	 * friendlytag.js: Tag module
-	 * Mode of invocation:     Tab ("Tag")
-	 * Active on:              Existing articles and drafts; file pages with a corresponding file
-	 *                         which is local (not on Commons); all redirects
-	 */
+ * friendlytag.js: Tag module
+ * Mode of invocation:     Tab ("Tag")
+ * Active on:              Existing articles and drafts; file pages with a corresponding file
+ *                         which is local (not on Commons); all redirects
+ */
 Twinkle.tag = () => {
 	// redirect tagging
 	if (Morebits.isPageRedirect()) {
@@ -234,13 +234,11 @@ Twinkle.tag.callback = () => {
 				form.append({
 					type: 'checkbox',
 					name: 'tags',
-					list: group.value.map((item) => {
-						return {
-							value: item.tag,
-							label: `{{${item.tag}}}：${item.description}`,
-							subgroup: item.subgroup
-						};
-					})
+					list: group.value.map((item) => ({
+						value: item.tag,
+						label: `{{${item.tag}}}：${item.description}`,
+						subgroup: item.subgroup
+					}))
 				});
 			});
 
@@ -744,10 +742,10 @@ Twinkle.tag.updateSortOrder = (e) => {
 };
 
 /**
-	 * Adds a link to each template's description page
-	 *
-	 * @param {Morebits.quickForm.element} checkbox  associated with the template
-	 */
+ * Adds a link to each template's description page
+ *
+ * @param {Morebits.quickForm.element} checkbox  associated with the template
+ */
 const generateLinks = (checkbox) => {
 	const link = Morebits.htmlNode('a', '>');
 	link.setAttribute('class', 'tag-template-link');
@@ -1424,11 +1422,11 @@ Twinkle.tag.callbacks = {
 			groupableExistingTags = [];
 			// Executes first: addition of selected tags
 			/**
-			 * Updates `tagText` with the syntax of `tagName` template with its parameters
-			 *
-			 * @param {number} tagIndex
-			 * @param {string} tagName
-			 */
+		 * Updates `tagText` with the syntax of `tagName` template with its parameters
+		 *
+		 * @param {number} tagIndex
+		 * @param {string} tagName
+		 */
 		const addTag = (tagIndex, tagName) => {
 			let currentTag = '';
 			if (tagName === 'Uncategorized' || tagName === 'Improve categories') {
@@ -1768,7 +1766,11 @@ Twinkle.tag.callbacks = {
 				if (params.altLangFrom) {
 					tagText += `|1=${params.altLangFrom}`;
 				}
-			} else if ((tagName === '条目请求重定向' || tagName === '條目請求重定向') && params.reqArticleLang && params.reqArticleTitle) {
+			} else if (
+				(tagName === '条目请求重定向' || tagName === '條目請求重定向') &&
+					params.reqArticleLang &&
+					params.reqArticleTitle
+			) {
 				tagText += `|1=${params.reqArticleLang}`;
 				tagText += `|2=${params.reqArticleTitle}`;
 			}
@@ -1850,9 +1852,7 @@ Twinkle.tag.callbacks = {
 				currentTag;
 			$.each(params.tags, (k, tag) => {
 				// when other commons-related tags are placed, remove "move to Commons" tag
-				if (
-					['Keep local', 'Now Commons', 'Do not move to Commons'].includes(tag)
-				) {
+				if (['Keep local', 'Now Commons', 'Do not move to Commons'].includes(tag)) {
 					text = text.replace(
 						/{{(mtc|(copy |move )?to ?commons|move to wikimedia commons|copy to wikimedia commons)[^}]*}}/gi,
 						''
