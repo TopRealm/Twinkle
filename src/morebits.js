@@ -2554,7 +2554,7 @@ let morebitsWikiApiUserAgent = 'Qiuwen/1.1 (morebits.js)';
  * value.
  */
 Morebits.wiki.api.setApiUserAgent = (ua) => {
-	morebitsWikiApiUserAgent = `Qiuwen/1.1 (morebits.js${ua ? `; ${ua}` : ''}`;
+	morebitsWikiApiUserAgent = `Qiuwen/1.1 (morebits.js${ua ? `; ${ua}` : ''})`;
 };
 
 /**
