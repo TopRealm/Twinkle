@@ -183,7 +183,7 @@ Twinkle.unlink.callbacks = {
 						label: '文件使用'
 					});
 					namespaces = [];
-					$.each(Twinkle.getPref('unlinkNamespaces'), (k, v) => {
+					$.each(Twinkle.getPref('unlinkNamespaces'), (_k, v) => {
 						namespaces.push(
 							v === '0' ? '（条目）' : mw.config.get('wgFormattedNamespaces')[v]
 						);
@@ -244,7 +244,7 @@ Twinkle.unlink.callbacks = {
 					label: '链入'
 				});
 				namespaces = [];
-				$.each(Twinkle.getPref('unlinkNamespaces'), (k, v) => {
+				$.each(Twinkle.getPref('unlinkNamespaces'), (_k, v) => {
 					namespaces.push(
 						v === '0' ? '（条目）' : mw.config.get('wgFormattedNamespaces')[v]
 					);

@@ -301,7 +301,7 @@ Twinkle.batchprotect.callback.evaluate = (event) => {
 	Morebits.wiki.actionCompleted.notice = '批量保护完成';
 	const form = event.target;
 	const numProtected = $(Morebits.quickForm.getElements(form, '个页面')).filter(
-		(index, element) => element.checked && element.nextElementSibling.style.color === 'red'
+		(_index, element) => element.checked && element.nextElementSibling.style.color === 'red'
 	).length;
 	if (
 		numProtected > 0 &&

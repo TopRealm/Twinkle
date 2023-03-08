@@ -365,7 +365,7 @@ Twinkle.batchdelete.callback.toggleSubpages = (e) => {
 		// If lists of subpages were already loaded once, they are
 		// available without use of any API calls
 		if (subpagesLoaded) {
-			$.each(Twinkle.batchdelete.pages, (i, el) => {
+			$.each(Twinkle.batchdelete.pages, (_i, el) => {
 				// Get back the subgroup from subgroup_, where we saved it
 				if (el.subgroup === null && el.subgroup_) {
 					el.subgroup = el.subgroup_;
@@ -386,7 +386,7 @@ Twinkle.batchdelete.callback.toggleSubpages = (e) => {
 		const loadingText = '<strong id="dbatch-subpage-loading">加载中...</strong>';
 		$(e.target).after(loadingText);
 		const pages = $(form.pages)
-			.map((i, el) => el.value)
+			.map((_i, el) => el.value)
 			.get();
 		const subpageLister = new Morebits.batchOperation();
 		subpageLister.setOption('chunkSize', Twinkle.getPref('batchChunks'));
@@ -497,7 +497,7 @@ Twinkle.batchdelete.callback.toggleSubpages = (e) => {
 			}
 		);
 	} else if (!e.target.checked) {
-		$.each(Twinkle.batchdelete.pages, (i, el) => {
+		$.each(Twinkle.batchdelete.pages, (_i, el) => {
 			if (el.subgroup) {
 				// Remove subgroup after saving its contents in subgroup_
 				// so that it can be retrieved easily if user decides to
@@ -517,7 +517,7 @@ Twinkle.batchdelete.callback.evaluate = (event) => {
 	Morebits.wiki.actionCompleted.notice = '批量删除已完成';
 	const form = event.target;
 	const numProtected = $(Morebits.quickForm.getElements(form, 'pages')).filter(
-		(index, element) => element.checked && element.nextElementSibling.style.color === 'red'
+		(_index, element) => element.checked && element.nextElementSibling.style.color === 'red'
 	).length;
 	if (
 		numProtected > 0 &&

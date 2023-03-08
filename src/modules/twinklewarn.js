@@ -1416,7 +1416,7 @@ Twinkle.warn.callback.change_subcategory = (e) => {
 	}
 };
 Twinkle.warn.callbacks = {
-	getWarningWikitext: (templateName, article, reason, isCustom, noSign) => {
+	getWarningWikitext: (templateName, article, reason, _isCustom, noSign) => {
 		let text = `{{subst:${templateName}`;
 
 		// add linked article for user warnings
@@ -1527,7 +1527,7 @@ Twinkle.warn.callbacks = {
 	 * this is really just error catching and updating the subsequent data.
 	 * May produce up to two notices in a twinkle-warn-autolevel-messages div
 	 *
-	 * @param {string} wikitext  The text of a user's talk page, from getPageText() (required)
+	 * @param {string} _wikitext  The text of a user's talk page, from getPageText() (required)
 	 * @param {Object} params  Params object: sub_group is the template (required);
 	 * article is the user-provided article (form.article) used to link ARV on recent level4 warnings;
 	 * messageData is only necessary if getting the full template, as it's
@@ -1540,7 +1540,7 @@ Twinkle.warn.callbacks = {
 	 *
 	 * @returns {Array} - Array that contains the full template and just the warning level
 	 */
-	autolevelParseWikitext: (wikitext, params, latest, date, statelem) => {
+	autolevelParseWikitext: (_wikitext, params, latest, date, statelem) => {
 		let level; // undefined rather than '' means the Number.isNaN below will return true
 		if (/\d(?:im)?$/.test(latest.type)) {
 			// level1-4im
@@ -1777,7 +1777,7 @@ Twinkle.warn.callbacks = {
 				const dateHeaderRegex = now.monthHeaderRegex();
 				sectionNumber = 0;
 				// Find this month's section among L2 sections, preferring the bottom-most
-				sectionExists = sections.reverse().some((sec, idx) => 
+				sectionExists = sections.reverse().some((sec, idx) =>
 					/^(==)[^=].+\1/m.test(sec) &&
 					dateHeaderRegex.test(sec) &&
 					typeof (sectionNumber = sections.length - 1 - idx) === 'number'

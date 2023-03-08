@@ -73,7 +73,7 @@ Twinkle.tag.callback = () => {
 		size: '30',
 		event: function () {
 			// flush the DOM of all existing underline spans
-			$allCheckboxDivs.find('.search-hit').each((i, e) => {
+			$allCheckboxDivs.find('.search-hit').each((_i, e) => {
 				const label_element = e.parentElement;
 				// This would convert <label>Hello <span class=search-hit>wo</span>rld</label>
 				// to <label>Hello world</label>
@@ -299,7 +299,7 @@ Twinkle.tag.callback = () => {
 			// except when they are within {{multiple issues}}
 			$('.mw-parser-output')
 				.children()
-				.each((i, e) => {
+				.each((_i, e) => {
 					// break out on encountering the first heading, which means we are no
 					// longer in the lead section
 					if (e.tagName === 'H2') {
@@ -314,7 +314,7 @@ Twinkle.tag.callback = () => {
 						if (e.classList[0] === 'box-问题条目') {
 							$(e)
 								.find('.ambox')
-								.each((idx, e) => {
+								.each((_idx, e) => {
 									if (e.classList[0].indexOf('box-') === 0) {
 										const tag = e.classList[0]
 											.slice('box-'.length)
@@ -630,7 +630,7 @@ Twinkle.tag.updateSortOrder = (e) => {
 		// function to iterate through the tags and create a checkbox for each one
 		const doCategoryCheckboxes = (subdiv, subgroup) => {
 			const checkboxes = [];
-			$.each(subgroup, (k, item) => {
+			$.each(subgroup, (_k, item) => {
 				if (!Twinkle.tag.alreadyPresentTags.includes(item.tag)) {
 					checkboxes.push(makeCheckbox(item.tag, item.description));
 				}
@@ -1379,11 +1379,11 @@ Twinkle.tag.callbacks = {
 				(apiobj) => {
 					$(apiobj.responseXML)
 						.find('page')
-						.each((idx, page) => {
+						.each((_idx, page) => {
 							let removed = false;
 							$(page)
 								.find('lh')
-								.each((idx, el) => {
+								.each((_idx, el) => {
 									const tag = $(el).attr('title').slice(9);
 									const tag_re = new RegExp(
 										`\\{\\{${Morebits.pageNameRegex(
@@ -1424,10 +1424,10 @@ Twinkle.tag.callbacks = {
 			/**
 		 * Updates `tagText` with the syntax of `tagName` template with its parameters
 		 *
-		 * @param {number} tagIndex
+		 * @param {number} _tagIndex
 		 * @param {string} tagName
 		 */
-		const addTag = (tagIndex, tagName) => {
+		const addTag = (_tagIndex, tagName) => {
 			let currentTag = '';
 			if (tagName === 'Uncategorized' || tagName === 'Improve categories') {
 				pageText += `\n\n{{${tagName}|time={{subst:#time:c}}}}`;
@@ -1697,11 +1697,11 @@ Twinkle.tag.callbacks = {
 				(apiobj) => {
 					$(apiobj.responseXML)
 						.find('page')
-						.each((idx, page) => {
+						.each((_idx, page) => {
 							let found = false;
 							$(page)
 								.find('lh')
-								.each((idx, el) => {
+								.each((_idx, el) => {
 									const tag = $(el).attr('title').slice(9);
 									const tag_re = new RegExp(
 										`(\\{\\{${Morebits.pageNameRegex(
@@ -1850,7 +1850,7 @@ Twinkle.tag.callbacks = {
 		if (params.tags.length) {
 			let tagtext = '',
 				currentTag;
-			$.each(params.tags, (k, tag) => {
+			$.each(params.tags, (_k, tag) => {
 				// when other commons-related tags are placed, remove "move to Commons" tag
 				if (['Keep local', 'Now Commons', 'Do not move to Commons'].includes(tag)) {
 					text = text.replace(
