@@ -31,17 +31,17 @@
  * You must have interface-admin rights to deploy as gadget.
  *
  * ----------------------------------------------------------------------------
- *  Set up:
+ *	Set up:
  * ----------------------------------------------------------------------------
  * 1) Use [[Special:BotPasswords]] to get credentials. Make sure you enable
- *  sufficient permissions.
+ *	sufficient permissions.
  * 2) Create a JSON file to store the username and password. This should be
- *  a plain JSON object with keys "username" and "password", see README
- *  file for an example. Save it here in the "scripts" directory with file
- *  name "credentials.json".
+ *	a plain JSON object with keys "username" and "password", see README
+ *	file for an example. Save it here in the "scripts" directory with file
+ *	name "credentials.json".
  *
  * ---------------------------------------------------------------------------
- *  Pre-deployment checklist:
+ *	Pre-deployment checklist:
  * ---------------------------------------------------------------------------
  * 1) Changes committed and merged to master branch on GitHub repo
  * 2) Currently on master branch, and synced with GitHub repo
@@ -49,17 +49,17 @@
  * When all of the above are done → you are ready to proceed with deployment
  *
  * --------------------------------------------------------------------------
- *  Usage:
+ *	Usage:
  * --------------------------------------------------------------------------
  * Ensure the pre-deployment steps above are completed, unless you are only
  * deploying to the testwiki (test.qiuwen.org). Then, run this script:
  * In the terminal, enter
- *   node deploy.js
+ *	 node deploy.js
  * and supply the requested details.
  * Notes:
  * - The default summary if not specified is "Updated from repository"
  * - Edit summaries will be prepended with the version number from
- *   the package.json file
+ *	 the package.json file
  * - Changes to gadget definitions need to be done manually
  *
  */
@@ -153,7 +153,7 @@ const deployTargets = [{
 class Deploy {
 	async deploy() {
 		if (!isGitWorkDirClean()) {
-		  log('red', '[WARN] Git working directory is not clean.');
+			log('red', '[WARN] Git working directory is not clean.');
 		}
 		const config = this.loadConfig();
 		await this.getApi(config);
@@ -163,34 +163,34 @@ class Deploy {
 	}
 	loadConfig() {
 		try {
-		  return require(__dirname + '/credentials.json');
+			return require(__dirname + '/credentials.json');
 		} catch (e) {
-		  log('red', 'No credentials.json file found.');
-		  return {};
+			log('red', 'No credentials.json file found.');
+			return {};
 		}
 	}
 	async getApi(config) {
 		this.api = new mwn(config);
 		try {
-		  this.api.initOAuth();
-		  this.usingOAuth = true;
+			this.api.initOAuth();
+			this.usingOAuth = true;
 		} catch (e) {
-		  if (!config.username) {
-		    config.username = await input('> Enter username');
+			if (!config.username) {
+				config.username = await input('> Enter username');
 		}
-		  if (!config.password) {
-		    config.password = await input('> Enter bot password', 'password');
+			if (!config.password) {
+				config.password = await input('> Enter bot password', 'password');
 		}
 		}
 		if (args.testwiki) {
-		  config.apiUrl = `https://test2.qiuwen.wiki/api.php`;
+			config.apiUrl = `https://test2.qiuwen.wiki/api.php`;
 		} else {
-		  if (!config.apiUrl) {
-		    if (Object.keys(config).length) {
-		      log('yellow', 'Tip: you can avoid this prompt by setting the apiUrl as well in credentials.json');
-		    }
-		    const site = await input('> Enter sitename (eg. test.qiuwen.org)');
-		    config.apiUrl = `https://${site}/api.php`;
+			if (!config.apiUrl) {
+				if (Object.keys(config).length) {
+					log('yellow', 'Tip: you can avoid this prompt by setting the apiUrl as well in credentials.json');
+				}
+				const site = await input('> Enter sitename (eg. test.qiuwen.org)');
+				config.apiUrl = `https://${site}/api.php`;
 		}
 		}
 		this.api.setOptions(config);
@@ -199,9 +199,9 @@ class Deploy {
 		this.siteName = this.api.options.apiUrl.replace(/^https:\/\//, '').replace(/\/.*/, '');
 		log('yellow', '--- Logging in ...');
 		if (this.usingOAuth) {
-		  await this.api.getTokensAndSiteInfo();
+			await this.api.getTokensAndSiteInfo();
 		} else {
-		  await this.api.login();
+			await this.api.login();
 		}
 	}
 	async makeEditSummary() {
@@ -217,20 +217,20 @@ class Deploy {
 		await input(`> Press [Enter] to start deploying to ${this.siteName} or [ctrl + C] to cancel`);
 		log('yellow', '--- starting deployment ---');
 		for await (let {
-		  file,
-		  target
+			file,
+			target
 		} of deployTargets) {
-		  let fileText = await this.readFile(file);
-		  try {
-		    const response = await this.api.save(target, fileText, this.editSummary);
-		    if (response && response.nochange) {
-		      log('yellow', `━ No change saving ${file} to ${target} on ${this.siteName}`);
-		    } else {
-		      log('green', `✔ Successfully saved ${file} to ${target} on ${this.siteName}`);
-		    }
+			let fileText = await this.readFile(file);
+			try {
+				const response = await this.api.save(target, fileText, this.editSummary);
+				if (response && response.nochange) {
+					log('yellow', `━ No change saving ${file} to ${target} on ${this.siteName}`);
+				} else {
+					log('green', `✔ Successfully saved ${file} to ${target} on ${this.siteName}`);
+				}
 		} catch (error) {
-		    log('red', `✘ Failed to save ${file} to ${target} on ${this.siteName}`);
-		    logError(error);
+				log('red', `✘ Failed to save ${file} to ${target} on ${this.siteName}`);
+				logError(error);
 		}
 		}
 		log('yellow', '--- end of deployment ---');
