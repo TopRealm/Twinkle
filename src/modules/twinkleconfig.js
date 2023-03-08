@@ -1044,32 +1044,6 @@ Twinkle.config.init = () => {
 		const contentdiv = document.querySelector('#twinkle-config-content');
 		contentdiv.textContent = ''; // clear children
 
-		// let user know about possible conflict with skin js/common.js file
-		// (settings in that file will still work, but they will be overwritten by twinkleoptions.js settings)
-		const contentnotice = document.createElement('p');
-		// I hate innerHTML, but this is one thing it *is* good for...
-		contentnotice.innerHTML =
-				'<b>' +
-				'在这里修改您的参数设置之前，' +
-				'</b>' +
-				'确认您已移除了' +
-				`<a href="${mw.util.getUrl(
-					'Special:MyPage/skin.js'
-				)}" title="Special:MyPage/skin.js">` +
-				'用户JavaScript文件' +
-				'</a>' +
-				'中任何旧的' +
-				'<code>FriendlyConfig</code>' +
-				'设置。';
-		contentdiv.appendChild(contentnotice);
-
-		// look and see if the user does in fact have any old settings in their skin JS file
-		const skinjs = new Morebits.wiki.page(
-			`User:${mw.config.get('wgUserName')}/${mw.config.get('skin')}.js`
-		);
-		skinjs.setCallbackParameters(contentnotice);
-		skinjs.load(Twinkle.config.legacyPrefsNotice);
-
 		// start a table of contents
 		const toctable = document.createElement('div');
 		toctable.className = 'toc';
@@ -1438,26 +1412,6 @@ Twinkle.config.init = () => {
 			box.appendChild(document.createTextNode('。'));
 			$(box).insertAfter($('#contentSub'));
 		}
-	}
-};
-
-// Morebits.wiki.page callback from init code
-Twinkle.config.legacyPrefsNotice = (pageobj) => {
-	const text = pageobj.getPageText();
-	const contentnotice = pageobj.getCallbackParameters();
-	if (text.includes('TwinkleConfig') || text.includes('FriendlyConfig')) {
-		contentnotice.innerHTML =
-				'<table class="plainlinks ombox ombox-content"><tr><td class="mbox-image">' +
-				'<img alt="" src="https://tu.zhongwen.wiki/images/qiuwen/thumb/8/8f/Alert_Mark_%28Orange%29.svg/40px-Alert_Mark_%28Orange%29.svg.png" /></td>' +
-				'<td class="mbox-text"><p><big><b>在这里修改您的参数设置之前，</b>您必须移除在用户JavaScript文件中任何旧的Friendly设置。</big></p>' +
-				`<p>要这样做，您可以<a href="${mw.config.get(
-					'wgScript'
-				)}?title=User:${encodeURIComponent(mw.config.get('wgUserName'))}/${mw.config.get(
-					'skin'
-				)}.js&action=edit" target="_blank"><b>编辑您的个人JavaScript</b></a>。删除提到<code>FriendlyConfig</code>的代码。</p>` +
-				'</td></tr></table>';
-	} else {
-		$(contentnotice).remove();
 	}
 };
 
