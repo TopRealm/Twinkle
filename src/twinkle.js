@@ -71,7 +71,7 @@ Twinkle.defaultConfig = {};
  * |Twinkle.config.sections| in twinkleconfig.js, so they are configurable via the Twinkle preferences panel.
  * For help on the actual preferences, see the comments in twinkleconfig.js.
  *
- * Formerly Twinkle.defaultConfig.twinkle and Twinkle.defaultConfig.friendly
+ * Formerly Twinkle.defaultConfig.twinkle
  */
 Twinkle.defaultConfig = {
 	// General
@@ -209,7 +209,6 @@ Twinkle.defaultConfig = {
 	deletionSummaryAd: '（[[H:TW|Twinkle]]）',
 	protectionSummaryAd: '（[[H:TW|Twinkle]]）',
 	blockSummaryAd: '（[[H:TW|Twinkle]]）',
-	// Formerly defaultConfig.friendly:
 	// Tag
 	groupByDefault: true,
 	watchTaggedPages: 'yes',
@@ -276,12 +275,6 @@ Twinkle.getPref = (name) => {
 	// Old preferences format, used before twinkleoptions.js was a thing
 	if (typeof window.TwinkleConfig === 'object' && window.TwinkleConfig[name] !== undefined) {
 		return window.TwinkleConfig[name];
-	}
-	if (
-		typeof window.FriendlyConfig === 'object' &&
-			window.FriendlyConfig[name] !== undefined
-	) {
-		return window.FriendlyConfig[name];
 	}
 	return Twinkle.defaultConfig[name];
 };
