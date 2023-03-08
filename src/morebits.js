@@ -111,9 +111,9 @@ Morebits.userIsSysop = Morebits.userIsInGroup('sysop') || Morebits.userIsInGroup
  */
 Morebits.isPageRedirect = () => !!(
 	mw.config.get('wgIsRedirect') ||
-	document.querySelector('#softredirect') ||
-	$('.box-RfD').length ||
-	$('.box-Redirect_category_shell').length
+		document.querySelector('#softredirect') ||
+		$('.box-RfD').length ||
+		$('.box-Redirect_category_shell').length
 );
 
 /**
@@ -259,259 +259,37 @@ Morebits.namespaceRegex = (namespaces) => {
  * @param {event} event - Function to execute when form is submitted.
  * @param {string} [eventType=submit] - Type of the event.
  */
-Morebits.quickForm = class QuickForm {
-	constructor(event, eventType) {
-		this.root = new Morebits.quickForm.element({
-			type: 'form',
-			event: event,
-			eventType: eventType
-		});
-	}
-	// Some utility methods for manipulating quickForms after their creation:
-	// (None of these work for "dyninput" type fields at present)
-	/**
-	 * Returns an object containing all filled form data entered by the user, with the object
-	 * keys being the form element names. Disabled fields will be ignored, but not hidden fields.
-	 *
-	 * @memberof Morebits.quickForm
-	 * @param {HTMLFormElement} form
-	 * @returns {Object} With field names as keys, input data as values.
-	 */
-	static getInputData(form) {
-		const result = {};
-		for (let i = 0; i < form.elements.length; i++) {
-			const field = form.elements[i];
-			if (field.disabled ||
-				!field.name ||
-				!field.type ||
-				field.type === 'submit' ||
-				field.type === 'button') {
-				continue;
-			}
-
-			// For elements in subgroups, quickform prepends element names with
-			// name of the parent group followed by a period, get rid of that.
-			const fieldNameNorm = field.name.slice(field.name.indexOf('.') + 1);
-			switch (field.type) {
-				case 'radio': {
-					if (field.checked) {
-						result[fieldNameNorm] = field.value;
-					}
-					break;
-				}
-				case 'checkbox': {
-					if (field.dataset.single) {
-						result[fieldNameNorm] = field.checked; // boolean
-					} else {
-						result[fieldNameNorm] ||= [];
-						if (field.checked) {
-							result[fieldNameNorm].push(field.value);
-						}
-					}
-					break;
-				}
-				case 'select-multiple': {
-					result[fieldNameNorm] = $(field).val(); // field.value doesn't work
-					break;
-				}
-				case 'text': // falls through
-				case 'textarea': {
-					result[fieldNameNorm] = field.value.trim();
-					break;
-				}
-				default: {
-					// could be select-one, date, number, email, etc
-					if (field.value) {
-						result[fieldNameNorm] = field.value;
-					}
-					break;
-				}
-			}
-		}
-		return result;
-	}
-	/**
-	 * Returns all form elements with a given field name or ID.
-	 *
-	 * @memberof Morebits.quickForm
-	 * @param {HTMLFormElement} form
-	 * @param {string} fieldName - The name or id of the fields.
-	 * @returns {HTMLElement[]} - Array of matching form elements.
-	 */
-	static getElements(form, fieldName) {
-		const $form = $(form);
-		fieldName = $.escapeSelector(fieldName); // sanitize input
-		let $elements = $form.find(`[name="${fieldName}"]`);
-		if ($elements.length > 0) {
-			return $elements.toArray();
-		}
-		$elements = $form.find(`#${fieldName}`);
-		return $elements.toArray();
-	}
-	/**
-	 * Searches the array of elements for a checkbox or radio button with a certain
-	 * `value` attribute, and returns the first such element. Returns null if not found.
-	 *
-	 * @memberof Morebits.quickForm
-	 * @param {HTMLInputElement[]} elementArray - Array of checkbox or radio elements.
-	 * @param {string} value - Value to search for.
-	 * @returns {HTMLInputElement}
-	 */
-	static getCheckboxOrRadio(elementArray, value) {
-		const found = $.grep(elementArray, (el) => el.value === value);
-		if (found.length > 0) {
-			return found[0];
-		}
-		return null;
-	}
-	/**
-	 * Returns the &lt;div> containing the form element, or the form element itself
-	 * May not work as expected on checkboxes or radios.
-	 *
-	 * @memberof Morebits.quickForm
-	 * @param {HTMLElement} element
-	 * @returns {HTMLElement}
-	 */
-	static getElementContainer(element) {
-		// for divs, headings and fieldsets, the container is the element itself
-		if (element instanceof HTMLFieldSetElement ||
-			element instanceof HTMLDivElement ||
-			element instanceof HTMLHeadingElement) {
-			return element;
-		}
-
-		// for others, just return the parent node
-		return element.parentNode;
-	}
-	/**
-	 * Gets the HTML element that contains the label of the given form element
-	 * (mainly for internal use).
-	 *
-	 * @memberof Morebits.quickForm
-	 * @param {(HTMLElement|Morebits.quickForm.element)} element
-	 * @returns {HTMLElement}
-	 */
-	static getElementLabelObject(element) {
-		// for buttons, divs and headers, the label is on the element itself
-		if (element.type === 'button' ||
-			element.type === 'submit' ||
-			element instanceof HTMLDivElement ||
-			element instanceof HTMLHeadingElement) {
-			return element;
-			// for fieldsets, the label is the child <legend> element
-		} else if (element instanceof HTMLFieldSetElement) {
-			return element.querySelectorAll('legend')[0];
-			// for textareas, the label is the sibling <h5> element
-		} else if (element instanceof HTMLTextAreaElement) {
-			return element.parentNode.querySelectorAll('h5')[0];
-		}
-		// for others, the label is the sibling <label> element
-		return element.parentNode.querySelectorAll('label')[0];
-	}
-	/**
-	 * Gets the label text of the element.
-	 *
-	 * @memberof Morebits.quickForm
-	 * @param {(HTMLElement|Morebits.quickForm.element)} element
-	 * @returns {string}
-	 */
-	static getElementLabel(element) {
-		const labelElement = Morebits.quickForm.getElementLabelObject(element);
-		if (!labelElement) {
-			return null;
-		}
-		return labelElement.firstChild.textContent;
-	}
-	/**
-	 * Sets the label of the element to the given text.
-	 *
-	 * @memberof Morebits.quickForm
-	 * @param {(HTMLElement|Morebits.quickForm.element)} element
-	 * @param {string} labelText
-	 * @returns {boolean} True if succeeded, false if the label element is unavailable.
-	 */
-	static setElementLabel(element, labelText) {
-		const labelElement = Morebits.quickForm.getElementLabelObject(element);
-		if (!labelElement) {
-			return false;
-		}
-		labelElement.firstChild.textContent = labelText;
-		return true;
-	}
-	/**
-	 * Stores the element's current label, and temporarily sets the label to the given text.
-	 *
-	 * @memberof Morebits.quickForm
-	 * @param {(HTMLElement|Morebits.quickForm.element)} element
-	 * @param {string} temporaryLabelText
-	 * @returns {boolean} `true` if succeeded, `false` if the label element is unavailable.
-	 */
-	static overrideElementLabel(element, temporaryLabelText) {
-		if (!Object.hasOwn(element.dataset, 'oldlabel')) {
-			element.dataset.oldlabel = Morebits.quickForm.getElementLabel(element);
-		}
-		return Morebits.quickForm.setElementLabel(element, temporaryLabelText);
-	}
-	/**
-	 * Restores the label stored by overrideElementLabel.
-	 *
-	 * @memberof Morebits.quickForm
-	 * @param {(HTMLElement|Morebits.quickForm.element)} element
-	 * @returns {boolean} True if succeeded, false if the label element is unavailable.
-	 */
-	static resetElementLabel(element) {
-		if (Object.hasOwn(element.dataset, 'oldlabel')) {
-			return Morebits.quickForm.setElementLabel(element, element.dataset.oldlabel);
-		}
-		return null;
-	}
-	/**
-	 * Shows or hides a form element plus its label and tooltip.
-	 *
-	 * @memberof Morebits.quickForm
-	 * @param {(HTMLElement|jQuery|string)} element - HTML/jQuery element, or jQuery selector string.
-	 * @param {boolean} [visibility] - Skip this to toggle visibility.
-	 */
-	static setElementVisibility(element, visibility) {
-		$(element).toggle(visibility);
-	}
-	/**
-	 * Shows or hides the question mark icon (which displays the tooltip) next to a form element.
-	 *
-	 * @memberof Morebits.quickForm
-	 * @param {(HTMLElement|jQuery)} element
-	 * @param {boolean} [visibility] - Skip this to toggle visibility.
-	 */
-	static setElementTooltipVisibility(element, visibility) {
-		$(Morebits.quickForm.getElementContainer(element))
-			.find('.morebits-tooltipButton')
-			.toggle(visibility);
-	}
-	/**
-	 * Renders the HTML output of the quickForm.
-	 *
-	 * @memberof Morebits.quickForm
-	 * @returns {HTMLElement}
-	 */
-	render() {
-		const ret = this.root.render();
-		ret.names = {};
-		return ret;
-	}
-	/**
-	 * Append element to the form.
-	 *
-	 * @memberof Morebits.quickForm
-	 * @param {(object|Morebits.quickForm.element)} data - A quickform element, or the object with which
-	 * a quickform element is constructed.
-	 * @returns {Morebits.quickForm.element} - Same as what is passed to the function.
-	 */
-	append(data) {
-		return this.root.append(data);
-	}
+Morebits.quickForm = function QuickForm(event, eventType) {
+	this.root = new Morebits.quickForm.element({
+		type: 'form',
+		event: event,
+		eventType: eventType
+	});
 };
 
+/**
+ * Renders the HTML output of the quickForm.
+ *
+ * @memberof Morebits.quickForm
+ * @returns {HTMLElement}
+ */
+Morebits.quickForm.prototype.render = function QuickFormRender() {
+	const ret = this.root.render();
+	ret.names = {};
+	return ret;
+};
 
+/**
+ * Append element to the form.
+ *
+ * @memberof Morebits.quickForm
+ * @param {(object|Morebits.quickForm.element)} data - A quickform element, or the object with which
+ * a quickform element is constructed.
+ * @returns {Morebits.quickForm.element} - Same as what is passed to the function.
+ */
+Morebits.quickForm.prototype.append = function QuickFormAppend(data) {
+	return this.root.append(data);
+};
 
 /**
  * Create a new element for the the form.
@@ -570,543 +348,9 @@ Morebits.quickForm = class QuickForm {
  *     required: true
  * });
  */
-Morebits.quickForm.element = class QuickFormElement {
-	constructor(data) {
-		this.data = data;
-		this.childs = [];
-	}
-	/**
-	 * Create a jQuery UI-based tooltip.
-	 *
-	 * @memberof Morebits.quickForm.element
-	 * @requires jquery.ui
-	 * @param {HTMLElement} node - The HTML element beside which a tooltip is to be generated.
-	 * @param {Object} data - Tooltip-related configuration data.
-	 */
-	static generateTooltip(node, data) {
-		const tooltipButton = node.appendChild(document.createElement('span'));
-		tooltipButton.className = 'morebits-tooltipButton';
-		tooltipButton.title = data.tooltip; // Provides the content for jQuery UI
-		tooltipButton.appendChild(document.createTextNode('?'));
-		$(tooltipButton).tooltip({
-			position: {
-				my: 'left top',
-				at: 'center bottom',
-				collision: 'flipfit'
-			},
-			// Deprecated in UI 1.12, but MW stuck on 1.9.2 indefinitely; see #398 and T71386
-			tooltipClass: 'morebits-ui-tooltip'
-		});
-	}
-	/**
-	 * Appends an element to current element.
-	 *
-	 * @memberof Morebits.quickForm.element
-	 * @param {Morebits.quickForm.element} data - A quickForm element or the object required to
-	 * create the quickForm element.
-	 * @returns {Morebits.quickForm.element} The same element passed in.
-	 */
-	append(data) {
-		const child = data instanceof Morebits.quickForm.element
-			? data
-			: new Morebits.quickForm.element(data);
-		this.childs.push(child);
-		return child;
-	}
-	/**
-	 * Renders the HTML output for the quickForm element.  This should be called
-	 * without parameters: `form.render()`.
-	 *
-	 * @memberof Morebits.quickForm.element
-	 * @returns {HTMLElement}
-	 */
-	render(internal_subgroup_id) {
-		const currentNode = this.compute(this.data, internal_subgroup_id);
-		for (let i = 0; i < this.childs.length; ++i) {
-			// do not pass internal_subgroup_id to recursive calls
-			currentNode[1].appendChild(this.childs[i].render());
-		}
-		return currentNode[0];
-	}
-	/** @memberof Morebits.quickForm.element */
-	compute(data, in_id) {
-		let node;
-		let childContainer = null;
-		let label;
-		const id = `${in_id ? `${in_id}_` : ''}node_${Morebits.quickForm.element.id++}`;
-		if (data.adminonly && !Morebits.userIsSysop) {
-			// hell hack alpha
-			data.type = 'hidden';
-		}
-		let i, current, subnode;
-		switch (data.type) {
-			case 'form': {
-				node = document.createElement('form');
-				node.className = 'quickform';
-				node.setAttribute('action', 'javascript:void(0);');
-				if (data.event) {
-					node.addEventListener(data.eventType || 'submit', data.event, false);
-				}
-				break;
-			}
-			case 'fragment': {
-				node = document.createDocumentFragment();
-				// fragments can't have any attributes, so just return it straight away
-				return [node, node];
-			}
-			case 'select': {
-				node = document.createElement('div');
-				node.setAttribute('id', `div_${id}`);
-				if (data.label) {
-					label = node.appendChild(document.createElement('label'));
-					label.setAttribute('for', id);
-					label.appendChild(Morebits.createHtml(data.label));
-				}
-				const select = node.appendChild(document.createElement('select'));
-				if (data.event) {
-					select.addEventListener('change', data.event, false);
-				}
-				if (data.multiple) {
-					select.setAttribute('multiple', 'multiple');
-				}
-				if (data.size) {
-					select.setAttribute('size', data.size);
-				}
-				if (data.disabled) {
-					select.setAttribute('disabled', 'disabled');
-				}
-				select.setAttribute('name', data.name);
-				if (data.list) {
-					for (i = 0; i < data.list.length; ++i) {
-						current = data.list[i];
-						current.type = current.list ? 'optgroup' : 'option';
-						subnode = this.compute(current);
-						select.appendChild(subnode[0]);
-					}
-				}
-				childContainer = select;
-				break;
-			}
-			case 'option': {
-				node = document.createElement('option');
-				node.values = data.value;
-				node.setAttribute('value', data.value);
-				if (data.selected) {
-					node.setAttribute('selected', 'selected');
-				}
-				if (data.disabled) {
-					node.setAttribute('disabled', 'disabled');
-				}
-				node.setAttribute('label', data.label);
-				node.appendChild(document.createTextNode(data.label));
-				break;
-			}
-			case 'optgroup': {
-				node = document.createElement('optgroup');
-				node.setAttribute('label', data.label);
-				if (data.list) {
-					for (i = 0; i < data.list.length; ++i) {
-						current = data.list[i];
-						current.type = 'option'; // must be options here
-
-						subnode = this.compute(current);
-						node.appendChild(subnode[0]);
-					}
-				}
-				break;
-			}
-			case 'field': {
-				node = document.createElement('fieldset');
-				label = node.appendChild(document.createElement('legend'));
-				label.appendChild(Morebits.createHtml(data.label));
-				if (data.name) {
-					node.setAttribute('name', data.name);
-				}
-				if (data.disabled) {
-					node.setAttribute('disabled', 'disabled');
-				}
-				break;
-			}
-			case 'checkbox':
-			case 'radio': {
-				node = document.createElement('div');
-				if (data.list) {
-					for (i = 0; i < data.list.length; ++i) {
-						const cur_id = `${id}_${i}`;
-						current = data.list[i];
-						let cur_div;
-						if (current.type === 'header') {
-							// inline hack
-							cur_div = node.appendChild(document.createElement('h6'));
-							cur_div.appendChild(document.createTextNode(current.label));
-							if (current.tooltip) {
-								Morebits.quickForm.element.generateTooltip(cur_div, current);
-							}
-							continue;
-						}
-						cur_div = node.appendChild(document.createElement('div'));
-						// Add hidden attr
-						if (current.hidden) {
-							cur_div.setAttribute('hidden', '');
-						}
-						subnode = cur_div.appendChild(document.createElement('input'));
-						subnode.values = current.value;
-						subnode.setAttribute('value', current.value);
-						subnode.setAttribute('type', data.type);
-						subnode.setAttribute('id', cur_id);
-						subnode.setAttribute('name', current.name || data.name);
-
-						// If name is provided on the individual checkbox, add a data-single
-						// attribute which indicates it isn't part of a list of checkboxes with
-						// same name. Used in getInputData()
-						if (current.name) {
-							subnode.dataset.single = 'data-single';
-						}
-						if (current.checked) {
-							subnode.setAttribute('checked', 'checked');
-						}
-						if (current.disabled) {
-							subnode.setAttribute('disabled', 'disabled');
-						}
-						label = cur_div.appendChild(document.createElement('label'));
-						label.appendChild(Morebits.createHtml(current.label));
-						label.setAttribute('for', cur_id);
-						if (current.tooltip) {
-							Morebits.quickForm.element.generateTooltip(label, current);
-						}
-						// styles go on the label, doesn't make sense to style a checkbox/radio
-						if (current.style) {
-							label.setAttribute('style', current.style);
-						}
-						let event;
-						if (current.subgroup) {
-							let tmpgroup = current.subgroup;
-							if (!Array.isArray(tmpgroup)) {
-								tmpgroup = [tmpgroup];
-							}
-							const subgroupRaw = new Morebits.quickForm.element({
-								type: 'div',
-								id: `${id}_${i}_subgroup`
-							});
-							// eslint-disable-next-line no-loop-func
-							$.each(tmpgroup, (_idx, el) => {
-								const newEl = $.extend({}, el);
-								if (!newEl.type) {
-									newEl.type = data.type;
-								}
-								newEl.name = `${current.name || data.name}.${newEl.name}`;
-								subgroupRaw.append(newEl);
-							});
-							const subgroup = subgroupRaw.render(cur_id);
-							subgroup.className = 'quickformSubgroup';
-							subnode.subgroup = subgroup;
-							subnode.shown = false;
-							event = (e) => {
-								if (e.target.checked) {
-									e.target.parentNode.appendChild(e.target.subgroup);
-									if (e.target.type === 'radio') {
-										const name = e.target.name;
-										if (e.target.form.names[name] !== undefined) {
-											e.target.form.names[name].subgroup.remove();
-										}
-										e.target.form.names[name] = e.target;
-									}
-								} else {
-									e.target.subgroup.remove();
-								}
-							};
-							subnode.addEventListener('change', event, true);
-							if (current.checked) {
-								subnode.parentNode.appendChild(subgroup);
-							}
-						} else if (data.type === 'radio') {
-							event = (e) => {
-								if (e.target.checked) {
-									const name = e.target.name;
-									if (e.target.form.names[name] !== undefined) {
-										e.target.form.names[name].subgroup.remove();
-									}
-									delete e.target.form.names[name];
-								}
-							};
-							subnode.addEventListener('change', event, true);
-						}
-						// add users' event last, so it can interact with the subgroup
-						if (data.event) {
-							subnode.addEventListener('change', data.event, false);
-						} else if (current.event) {
-							subnode.addEventListener('change', current.event, true);
-						}
-					}
-				}
-				if (data.shiftClickSupport && data.type === 'checkbox') {
-					Morebits.checkboxShiftClickSupport(
-						Morebits.quickForm.getElements(node, data.name)
-					);
-				}
-				break;
-			}
-			// input is actually a text-type, so number here inherits the same stuff
-			case 'number':
-			case 'input': {
-				node = document.createElement('div');
-				node.setAttribute('id', `div_${id}`);
-				// Add hidden attr
-				if (data.hidden) {
-					node.setAttribute('hidden', '');
-				}
-				if (data.label) {
-					label = node.appendChild(document.createElement('label'));
-					label.appendChild(Morebits.createHtml(data.label));
-					label.setAttribute('for', data.id || id);
-				}
-				subnode = node.appendChild(document.createElement('input'));
-				// Add value and placeholder attrs
-				if (data.value) {
-					subnode.setAttribute('value', data.value);
-				}
-				if (data.placeholder) {
-					subnode.setAttribute('placeholder', data.placeholder);
-				}
-				subnode.setAttribute('name', data.name);
-				if (data.type === 'input') {
-					subnode.setAttribute('type', 'text');
-				} else {
-					subnode.setAttribute('type', 'number');
-					['min', 'max', 'step', 'list'].forEach((att) => {
-						if (data[att]) {
-							subnode.setAttribute(att, data[att]);
-						}
-					});
-				}
-				['value', 'size', 'placeholder', 'maxlength'].forEach((att) => {
-					if (data[att]) {
-						subnode.setAttribute(att, data[att]);
-					}
-				});
-				['disabled', 'required', 'readonly'].forEach((att) => {
-					if (data[att]) {
-						subnode.setAttribute(att, att);
-					}
-				});
-				if (data.event) {
-					subnode.addEventListener('keyup', data.event, false);
-				}
-				childContainer = subnode;
-				break;
-			}
-			case 'dyninput': {
-				const min = data.min || 1;
-				const max = data.max || Number.POSITIVE_INFINITY;
-				node = document.createElement('div');
-				label = node.appendChild(document.createElement('h5'));
-				label.appendChild(Morebits.createHtml(data.label));
-				const listNode = node.appendChild(document.createElement('div'));
-				const more = this.compute({
-					type: 'button',
-					label: '更多',
-					disabled: min >= max,
-					event: (e) => {
-						const new_node = new Morebits.quickForm.element(e.target.sublist);
-						e.target.area.appendChild(new_node.render());
-						if (++e.target.counter >= e.target.max) {
-							e.target.setAttribute('disabled', 'disabled');
-						}
-						e.stopPropagation();
-					}
-				});
-				node.appendChild(more[0]);
-				const moreButton = more[1];
-				const sublist = {
-					type: '_dyninput_element',
-					label: data.sublabel || data.label,
-					name: data.name,
-					value: data.value,
-					size: data.size,
-					remove: false,
-					maxlength: data.maxlength,
-					event: data.event
-				};
-				for (i = 0; i < min; ++i) {
-					const elem = new Morebits.quickForm.element(sublist);
-					listNode.appendChild(elem.render());
-				}
-				sublist.remove = true;
-				sublist.morebutton = moreButton;
-				sublist.listnode = listNode;
-				moreButton.sublist = sublist;
-				moreButton.area = listNode;
-				moreButton.max = max - min;
-				moreButton.counter = 0;
-				break;
-			}
-			case '_dyninput_element': {
-				// Private, similar to normal input
-				node = document.createElement('div');
-				if (data.label) {
-					label = node.appendChild(document.createElement('label'));
-					label.appendChild(document.createTextNode(data.label));
-					label.setAttribute('for', id);
-				}
-				subnode = node.appendChild(document.createElement('input'));
-				if (data.value) {
-					subnode.setAttribute('value', data.value);
-				}
-				subnode.setAttribute('name', data.name);
-				subnode.setAttribute('type', 'text');
-				if (data.size) {
-					subnode.setAttribute('size', data.size);
-				}
-				if (data.maxlength) {
-					subnode.setAttribute('maxlength', data.maxlength);
-				}
-				if (data.event) {
-					subnode.addEventListener('keyup', data.event, false);
-				}
-				if (data.remove) {
-					const remove = this.compute({
-						type: 'button',
-						label: '移除',
-						event: (e) => {
-							const node = e.target.inputnode;
-							const more = e.target.morebutton;
-							node.remove();
-							--more.counter;
-							more.removeAttribute('disabled');
-							e.stopPropagation();
-						}
-					});
-					node.appendChild(remove[0]);
-					const removeButton = remove[1];
-					removeButton.inputnode = node;
-					removeButton.listnode = data.listnode;
-					removeButton.morebutton = data.morebutton;
-				}
-				break;
-			}
-			case 'hidden': {
-				node = document.createElement('input');
-				node.setAttribute('type', 'hidden');
-				node.values = data.value;
-				node.setAttribute('value', data.value);
-				node.setAttribute('name', data.name);
-				break;
-			}
-			case 'header': {
-				node = document.createElement('h5');
-				node.appendChild(Morebits.createHtml(data.label));
-				break;
-			}
-			case 'div': {
-				node = document.createElement('div');
-				if (data.name) {
-					node.setAttribute('name', data.name);
-				}
-				if (data.label) {
-					const result = document.createElement('span');
-					result.className = 'quickformDescription';
-					result.appendChild(Morebits.createHtml(data.label));
-					node.appendChild(result);
-				}
-				break;
-			}
-			case 'submit': {
-				node = document.createElement('span');
-				childContainer = node.appendChild(document.createElement('input'));
-				childContainer.setAttribute('type', 'submit');
-				if (data.label) {
-					childContainer.setAttribute('value', data.label);
-				}
-				childContainer.setAttribute('name', data.name || 'submit');
-				if (data.disabled) {
-					childContainer.setAttribute('disabled', 'disabled');
-				}
-				break;
-			}
-			case 'button': {
-				node = document.createElement('span');
-				childContainer = node.appendChild(document.createElement('input'));
-				childContainer.setAttribute('type', 'button');
-				if (data.label) {
-					childContainer.setAttribute('value', data.label);
-				}
-				childContainer.setAttribute('name', data.name);
-				if (data.disabled) {
-					childContainer.setAttribute('disabled', 'disabled');
-				}
-				if (data.event) {
-					childContainer.addEventListener('click', data.event, false);
-				}
-				break;
-			}
-			case 'textarea': {
-				node = document.createElement('div');
-				node.setAttribute('id', `div_${id}`);
-				// Add hidden attr
-				if (data.hidden) {
-					node.setAttribute('hidden', '');
-				}
-				if (data.label) {
-					label = node.appendChild(document.createElement('h5'));
-					const labelElement = document.createElement('label');
-					labelElement.appendChild(Morebits.createHtml(data.label));
-					labelElement.setAttribute('for', data.id || id);
-					label.appendChild(labelElement);
-				}
-				subnode = node.appendChild(document.createElement('textarea'));
-				subnode.setAttribute('name', data.name);
-				if (data.cols) {
-					subnode.setAttribute('cols', data.cols);
-				}
-				if (data.rows) {
-					subnode.setAttribute('rows', data.rows);
-				}
-				if (data.disabled) {
-					subnode.setAttribute('disabled', 'disabled');
-				}
-				if (data.required) {
-					subnode.setAttribute('required', 'required');
-				}
-				if (data.readonly) {
-					subnode.setAttribute('readonly', 'readonly');
-				}
-				if (data.value) {
-					subnode.value = data.value;
-				}
-				// Add placeholder attr
-				if (data.placeholder) {
-					subnode.placeholder = data.placeholder;
-				}
-				childContainer = subnode;
-				break;
-			}
-			default: {
-				throw new Error(`Morebits.quickForm: unknown element type ${data.type.toString()}`);
-			}
-		}
-		if (!childContainer) {
-			childContainer = node;
-		}
-		if (data.tooltip) {
-			Morebits.quickForm.element.generateTooltip(label || node, data);
-		}
-		if (data.extra) {
-			childContainer.extra = data.extra;
-		}
-		if (data.$data) {
-			$(childContainer).data(data.$data);
-		}
-		if (data.style) {
-			childContainer.setAttribute('style', data.style);
-		}
-		if (data.className) {
-			childContainer.className = childContainer.className
-				? `${childContainer.className} ${data.className}`
-				: data.className;
-		}
-		childContainer.setAttribute('id', data.id || id);
-		return [node, childContainer];
-	}
+Morebits.quickForm.element = function QuickFormElement(data) {
+	this.data = data;
+	this.childs = [];
 };
 
 /**
@@ -1115,20 +359,781 @@ Morebits.quickForm.element = class QuickFormElement {
  */
 Morebits.quickForm.element.id = 0;
 
+/**
+ * Appends an element to current element.
+ *
+ * @memberof Morebits.quickForm.element
+ * @param {Morebits.quickForm.element} data - A quickForm element or the object required to
+ * create the quickForm element.
+ * @returns {Morebits.quickForm.element} The same element passed in.
+ */
+Morebits.quickForm.element.prototype.append = function QuickFormElementAppend(data) {
+	const child =
+				data instanceof Morebits.quickForm.element
+					? data
+					: new Morebits.quickForm.element(data);
+	this.childs.push(child);
+	return child;
+};
 
+/**
+ * Renders the HTML output for the quickForm element.  This should be called
+ * without parameters: `form.render()`.
+ *
+ * @memberof Morebits.quickForm.element
+ * @returns {HTMLElement}
+ */
+Morebits.quickForm.element.prototype.render = function QuickFormElementRender(
+	internal_subgroup_id
+) {
+	const currentNode = this.compute(this.data, internal_subgroup_id);
+	for (let i = 0; i < this.childs.length; ++i) {
+		// do not pass internal_subgroup_id to recursive calls
+		currentNode[1].appendChild(this.childs[i].render());
+	}
+	return currentNode[0];
+};
 
+/** @memberof Morebits.quickForm.element */
+Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(data, in_id) {
+	let node;
+	let childContainer = null;
+	let label;
+	const id = `${in_id ? `${in_id}_` : ''}node_${Morebits.quickForm.element.id++}`;
+	if (data.adminonly && !Morebits.userIsSysop) {
+		// hell hack alpha
+		data.type = 'hidden';
+	}
+	let i, current, subnode;
+	switch (data.type) {
+		case 'form': {
+			node = document.createElement('form');
+			node.className = 'quickform';
+			node.setAttribute('action', 'javascript:void(0);');
+			if (data.event) {
+				node.addEventListener(data.eventType || 'submit', data.event, false);
+			}
+			break;
+		}
+		case 'fragment': {
+			node = document.createDocumentFragment();
+			// fragments can't have any attributes, so just return it straight away
+			return [node, node];
+		}
+		case 'select': {
+			node = document.createElement('div');
+			node.setAttribute('id', `div_${id}`);
+			if (data.label) {
+				label = node.appendChild(document.createElement('label'));
+				label.setAttribute('for', id);
+				label.appendChild(Morebits.createHtml(data.label));
+			}
+			const select = node.appendChild(document.createElement('select'));
+			if (data.event) {
+				select.addEventListener('change', data.event, false);
+			}
+			if (data.multiple) {
+				select.setAttribute('multiple', 'multiple');
+			}
+			if (data.size) {
+				select.setAttribute('size', data.size);
+			}
+			if (data.disabled) {
+				select.setAttribute('disabled', 'disabled');
+			}
+			select.setAttribute('name', data.name);
+			if (data.list) {
+				for (i = 0; i < data.list.length; ++i) {
+					current = data.list[i];
+					current.type = current.list ? 'optgroup' : 'option';
+					subnode = this.compute(current);
+					select.appendChild(subnode[0]);
+				}
+			}
+			childContainer = select;
+			break;
+		}
+		case 'option': {
+			node = document.createElement('option');
+			node.values = data.value;
+			node.setAttribute('value', data.value);
+			if (data.selected) {
+				node.setAttribute('selected', 'selected');
+			}
+			if (data.disabled) {
+				node.setAttribute('disabled', 'disabled');
+			}
+			node.setAttribute('label', data.label);
+			node.appendChild(document.createTextNode(data.label));
+			break;
+		}
+		case 'optgroup': {
+			node = document.createElement('optgroup');
+			node.setAttribute('label', data.label);
+			if (data.list) {
+				for (i = 0; i < data.list.length; ++i) {
+					current = data.list[i];
+					current.type = 'option'; // must be options here
 
+					subnode = this.compute(current);
+					node.appendChild(subnode[0]);
+				}
+			}
+			break;
+		}
+		case 'field': {
+			node = document.createElement('fieldset');
+			label = node.appendChild(document.createElement('legend'));
+			label.appendChild(Morebits.createHtml(data.label));
+			if (data.name) {
+				node.setAttribute('name', data.name);
+			}
+			if (data.disabled) {
+				node.setAttribute('disabled', 'disabled');
+			}
+			break;
+		}
+		case 'checkbox':
+		case 'radio': {
+			node = document.createElement('div');
+			if (data.list) {
+				for (i = 0; i < data.list.length; ++i) {
+					const cur_id = `${id}_${i}`;
+					current = data.list[i];
+					let cur_div;
+					if (current.type === 'header') {
+						// inline hack
+						cur_div = node.appendChild(document.createElement('h6'));
+						cur_div.appendChild(document.createTextNode(current.label));
+						if (current.tooltip) {
+							Morebits.quickForm.element.generateTooltip(cur_div, current);
+						}
+						continue;
+					}
+					cur_div = node.appendChild(document.createElement('div'));
+					// Add hidden attr
+					if (current.hidden) {
+						cur_div.setAttribute('hidden', '');
+					}
+					subnode = cur_div.appendChild(document.createElement('input'));
+					subnode.values = current.value;
+					subnode.setAttribute('value', current.value);
+					subnode.setAttribute('type', data.type);
+					subnode.setAttribute('id', cur_id);
+					subnode.setAttribute('name', current.name || data.name);
 
+					// If name is provided on the individual checkbox, add a data-single
+					// attribute which indicates it isn't part of a list of checkboxes with
+					// same name. Used in getInputData()
+					if (current.name) {
+						subnode.dataset.single = 'data-single';
+					}
+					if (current.checked) {
+						subnode.setAttribute('checked', 'checked');
+					}
+					if (current.disabled) {
+						subnode.setAttribute('disabled', 'disabled');
+					}
+					label = cur_div.appendChild(document.createElement('label'));
+					label.appendChild(Morebits.createHtml(current.label));
+					label.setAttribute('for', cur_id);
+					if (current.tooltip) {
+						Morebits.quickForm.element.generateTooltip(label, current);
+					}
+					// styles go on the label, doesn't make sense to style a checkbox/radio
+					if (current.style) {
+						label.setAttribute('style', current.style);
+					}
+					let event;
+					if (current.subgroup) {
+						let tmpgroup = current.subgroup;
+						if (!Array.isArray(tmpgroup)) {
+							tmpgroup = [tmpgroup];
+						}
+						const subgroupRaw = new Morebits.quickForm.element({
+							type: 'div',
+							id: `${id}_${i}_subgroup`
+						});
+						// eslint-disable-next-line no-loop-func
+						$.each(tmpgroup, (_idx, el) => {
+							const newEl = $.extend({}, el);
+							if (!newEl.type) {
+								newEl.type = data.type;
+							}
+							newEl.name = `${current.name || data.name}.${newEl.name}`;
+							subgroupRaw.append(newEl);
+						});
+						const subgroup = subgroupRaw.render(cur_id);
+						subgroup.className = 'quickformSubgroup';
+						subnode.subgroup = subgroup;
+						subnode.shown = false;
+						event = (e) => {
+							if (e.target.checked) {
+								e.target.parentNode.appendChild(e.target.subgroup);
+								if (e.target.type === 'radio') {
+									const name = e.target.name;
+									if (e.target.form.names[name] !== undefined) {
+										e.target.form.names[name].subgroup.remove();
+									}
+									e.target.form.names[name] = e.target;
+								}
+							} else {
+								e.target.subgroup.remove();
+							}
+						};
+						subnode.addEventListener('change', event, true);
+						if (current.checked) {
+							subnode.parentNode.appendChild(subgroup);
+						}
+					} else if (data.type === 'radio') {
+						event = (e) => {
+							if (e.target.checked) {
+								const name = e.target.name;
+								if (e.target.form.names[name] !== undefined) {
+									e.target.form.names[name].subgroup.remove();
+								}
+								delete e.target.form.names[name];
+							}
+						};
+						subnode.addEventListener('change', event, true);
+					}
+					// add users' event last, so it can interact with the subgroup
+					if (data.event) {
+						subnode.addEventListener('change', data.event, false);
+					} else if (current.event) {
+						subnode.addEventListener('change', current.event, true);
+					}
+				}
+			}
+			if (data.shiftClickSupport && data.type === 'checkbox') {
+				Morebits.checkboxShiftClickSupport(
+					Morebits.quickForm.getElements(node, data.name)
+				);
+			}
+			break;
+		}
+		// input is actually a text-type, so number here inherits the same stuff
+		case 'number':
+		case 'input': {
+			node = document.createElement('div');
+			node.setAttribute('id', `div_${id}`);
+			// Add hidden attr
+			if (data.hidden) {
+				node.setAttribute('hidden', '');
+			}
+			if (data.label) {
+				label = node.appendChild(document.createElement('label'));
+				label.appendChild(Morebits.createHtml(data.label));
+				label.setAttribute('for', data.id || id);
+			}
+			subnode = node.appendChild(document.createElement('input'));
+			// Add value and placeholder attrs
+			if (data.value) {
+				subnode.setAttribute('value', data.value);
+			}
+			if (data.placeholder) {
+				subnode.setAttribute('placeholder', data.placeholder);
+			}
+			subnode.setAttribute('name', data.name);
+			if (data.type === 'input') {
+				subnode.setAttribute('type', 'text');
+			} else {
+				subnode.setAttribute('type', 'number');
+				['min', 'max', 'step', 'list'].forEach((att) => {
+					if (data[att]) {
+						subnode.setAttribute(att, data[att]);
+					}
+				});
+			}
+			['value', 'size', 'placeholder', 'maxlength'].forEach((att) => {
+				if (data[att]) {
+					subnode.setAttribute(att, data[att]);
+				}
+			});
+			['disabled', 'required', 'readonly'].forEach((att) => {
+				if (data[att]) {
+					subnode.setAttribute(att, att);
+				}
+			});
+			if (data.event) {
+				subnode.addEventListener('keyup', data.event, false);
+			}
+			childContainer = subnode;
+			break;
+		}
+		case 'dyninput': {
+			const min = data.min || 1;
+			const max = data.max || Number.POSITIVE_INFINITY;
+			node = document.createElement('div');
+			label = node.appendChild(document.createElement('h5'));
+			label.appendChild(Morebits.createHtml(data.label));
+			const listNode = node.appendChild(document.createElement('div'));
+			const more = this.compute({
+				type: 'button',
+				label: '更多',
+				disabled: min >= max,
+				event: (e) => {
+					const new_node = new Morebits.quickForm.element(e.target.sublist);
+					e.target.area.appendChild(new_node.render());
+					if (++e.target.counter >= e.target.max) {
+						e.target.setAttribute('disabled', 'disabled');
+					}
+					e.stopPropagation();
+				}
+			});
+			node.appendChild(more[0]);
+			const moreButton = more[1];
+			const sublist = {
+				type: '_dyninput_element',
+				label: data.sublabel || data.label,
+				name: data.name,
+				value: data.value,
+				size: data.size,
+				remove: false,
+				maxlength: data.maxlength,
+				event: data.event
+			};
+			for (i = 0; i < min; ++i) {
+				const elem = new Morebits.quickForm.element(sublist);
+				listNode.appendChild(elem.render());
+			}
+			sublist.remove = true;
+			sublist.morebutton = moreButton;
+			sublist.listnode = listNode;
+			moreButton.sublist = sublist;
+			moreButton.area = listNode;
+			moreButton.max = max - min;
+			moreButton.counter = 0;
+			break;
+		}
+		case '_dyninput_element': {
+			// Private, similar to normal input
+			node = document.createElement('div');
+			if (data.label) {
+				label = node.appendChild(document.createElement('label'));
+				label.appendChild(document.createTextNode(data.label));
+				label.setAttribute('for', id);
+			}
+			subnode = node.appendChild(document.createElement('input'));
+			if (data.value) {
+				subnode.setAttribute('value', data.value);
+			}
+			subnode.setAttribute('name', data.name);
+			subnode.setAttribute('type', 'text');
+			if (data.size) {
+				subnode.setAttribute('size', data.size);
+			}
+			if (data.maxlength) {
+				subnode.setAttribute('maxlength', data.maxlength);
+			}
+			if (data.event) {
+				subnode.addEventListener('keyup', data.event, false);
+			}
+			if (data.remove) {
+				const remove = this.compute({
+					type: 'button',
+					label: '移除',
+					event: (e) => {
+						const node = e.target.inputnode;
+						const more = e.target.morebutton;
+						node.remove();
+						--more.counter;
+						more.removeAttribute('disabled');
+						e.stopPropagation();
+					}
+				});
+				node.appendChild(remove[0]);
+				const removeButton = remove[1];
+				removeButton.inputnode = node;
+				removeButton.listnode = data.listnode;
+				removeButton.morebutton = data.morebutton;
+			}
+			break;
+		}
+		case 'hidden': {
+			node = document.createElement('input');
+			node.setAttribute('type', 'hidden');
+			node.values = data.value;
+			node.setAttribute('value', data.value);
+			node.setAttribute('name', data.name);
+			break;
+		}
+		case 'header': {
+			node = document.createElement('h5');
+			node.appendChild(Morebits.createHtml(data.label));
+			break;
+		}
+		case 'div': {
+			node = document.createElement('div');
+			if (data.name) {
+				node.setAttribute('name', data.name);
+			}
+			if (data.label) {
+				const result = document.createElement('span');
+				result.className = 'quickformDescription';
+				result.appendChild(Morebits.createHtml(data.label));
+				node.appendChild(result);
+			}
+			break;
+		}
+		case 'submit': {
+			node = document.createElement('span');
+			childContainer = node.appendChild(document.createElement('input'));
+			childContainer.setAttribute('type', 'submit');
+			if (data.label) {
+				childContainer.setAttribute('value', data.label);
+			}
+			childContainer.setAttribute('name', data.name || 'submit');
+			if (data.disabled) {
+				childContainer.setAttribute('disabled', 'disabled');
+			}
+			break;
+		}
+		case 'button': {
+			node = document.createElement('span');
+			childContainer = node.appendChild(document.createElement('input'));
+			childContainer.setAttribute('type', 'button');
+			if (data.label) {
+				childContainer.setAttribute('value', data.label);
+			}
+			childContainer.setAttribute('name', data.name);
+			if (data.disabled) {
+				childContainer.setAttribute('disabled', 'disabled');
+			}
+			if (data.event) {
+				childContainer.addEventListener('click', data.event, false);
+			}
+			break;
+		}
+		case 'textarea': {
+			node = document.createElement('div');
+			node.setAttribute('id', `div_${id}`);
+			// Add hidden attr
+			if (data.hidden) {
+				node.setAttribute('hidden', '');
+			}
+			if (data.label) {
+				label = node.appendChild(document.createElement('h5'));
+				const labelElement = document.createElement('label');
+				labelElement.appendChild(Morebits.createHtml(data.label));
+				labelElement.setAttribute('for', data.id || id);
+				label.appendChild(labelElement);
+			}
+			subnode = node.appendChild(document.createElement('textarea'));
+			subnode.setAttribute('name', data.name);
+			if (data.cols) {
+				subnode.setAttribute('cols', data.cols);
+			}
+			if (data.rows) {
+				subnode.setAttribute('rows', data.rows);
+			}
+			if (data.disabled) {
+				subnode.setAttribute('disabled', 'disabled');
+			}
+			if (data.required) {
+				subnode.setAttribute('required', 'required');
+			}
+			if (data.readonly) {
+				subnode.setAttribute('readonly', 'readonly');
+			}
+			if (data.value) {
+				subnode.value = data.value;
+			}
+			// Add placeholder attr
+			if (data.placeholder) {
+				subnode.placeholder = data.placeholder;
+			}
+			childContainer = subnode;
+			break;
+		}
+		default: {
+			throw new Error(`Morebits.quickForm: unknown element type ${data.type.toString()}`);
+		}
+	}
+	if (!childContainer) {
+		childContainer = node;
+	}
+	if (data.tooltip) {
+		Morebits.quickForm.element.generateTooltip(label || node, data);
+	}
+	if (data.extra) {
+		childContainer.extra = data.extra;
+	}
+	if (data.$data) {
+		$(childContainer).data(data.$data);
+	}
+	if (data.style) {
+		childContainer.setAttribute('style', data.style);
+	}
+	if (data.className) {
+		childContainer.className = childContainer.className
+			? `${childContainer.className} ${data.className}`
+			: data.className;
+	}
+	childContainer.setAttribute('id', data.id || id);
+	return [node, childContainer];
+};
 
+/**
+ * Create a jQuery UI-based tooltip.
+ *
+ * @memberof Morebits.quickForm.element
+ * @requires jquery.ui
+ * @param {HTMLElement} node - The HTML element beside which a tooltip is to be generated.
+ * @param {Object} data - Tooltip-related configuration data.
+ */
+Morebits.quickForm.element.generateTooltip = (node, data) => {
+	const tooltipButton = node.appendChild(document.createElement('span'));
+	tooltipButton.className = 'morebits-tooltipButton';
+	tooltipButton.title = data.tooltip; // Provides the content for jQuery UI
+	tooltipButton.appendChild(document.createTextNode('?'));
+	$(tooltipButton).tooltip({
+		position: {
+			my: 'left top',
+			at: 'center bottom',
+			collision: 'flipfit'
+		},
+		// Deprecated in UI 1.12, but MW stuck on 1.9.2 indefinitely; see #398 and T71386
+		tooltipClass: 'morebits-ui-tooltip'
+	});
+};
 
+// Some utility methods for manipulating quickForms after their creation:
+// (None of these work for "dyninput" type fields at present)
+/**
+ * Returns an object containing all filled form data entered by the user, with the object
+ * keys being the form element names. Disabled fields will be ignored, but not hidden fields.
+ *
+ * @memberof Morebits.quickForm
+ * @param {HTMLFormElement} form
+ * @returns {Object} With field names as keys, input data as values.
+ */
+Morebits.quickForm.getInputData = (form) => {
+	const result = {};
+	for (let i = 0; i < form.elements.length; i++) {
+		const field = form.elements[i];
+		if (
+			field.disabled ||
+					!field.name ||
+					!field.type ||
+					field.type === 'submit' ||
+					field.type === 'button'
+		) {
+			continue;
+		}
 
+		// For elements in subgroups, quickform prepends element names with
+		// name of the parent group followed by a period, get rid of that.
+		const fieldNameNorm = field.name.slice(field.name.indexOf('.') + 1);
+		switch (field.type) {
+			case 'radio': {
+				if (field.checked) {
+					result[fieldNameNorm] = field.value;
+				}
+				break;
+			}
+			case 'checkbox': {
+				if (field.dataset.single) {
+					result[fieldNameNorm] = field.checked; // boolean
+				} else {
+					result[fieldNameNorm] ||= [];
+					if (field.checked) {
+						result[fieldNameNorm].push(field.value);
+					}
+				}
+				break;
+			}
+			case 'select-multiple': {
+				result[fieldNameNorm] = $(field).val(); // field.value doesn't work
+				break;
+			}
+			case 'text': // falls through
+			case 'textarea': {
+				result[fieldNameNorm] = field.value.trim();
+				break;
+			}
+			default: {
+				// could be select-one, date, number, email, etc
+				if (field.value) {
+					result[fieldNameNorm] = field.value;
+				}
+				break;
+			}
+		}
+	}
+	return result;
+};
 
+/**
+ * Returns all form elements with a given field name or ID.
+ *
+ * @memberof Morebits.quickForm
+ * @param {HTMLFormElement} form
+ * @param {string} fieldName - The name or id of the fields.
+ * @returns {HTMLElement[]} - Array of matching form elements.
+ */
+Morebits.quickForm.getElements = (form, fieldName) => {
+	const $form = $(form);
+	fieldName = $.escapeSelector(fieldName); // sanitize input
+	let $elements = $form.find(`[name="${fieldName}"]`);
+	if ($elements.length > 0) {
+		return $elements.toArray();
+	}
+	$elements = $form.find(`#${fieldName}`);
+	return $elements.toArray();
+};
 
+/**
+ * Searches the array of elements for a checkbox or radio button with a certain
+ * `value` attribute, and returns the first such element. Returns null if not found.
+ *
+ * @memberof Morebits.quickForm
+ * @param {HTMLInputElement[]} elementArray - Array of checkbox or radio elements.
+ * @param {string} value - Value to search for.
+ * @returns {HTMLInputElement}
+ */
+Morebits.quickForm.getCheckboxOrRadio = (elementArray, value) => {
+	const found = $.grep(elementArray, (el) => el.value === value);
+	if (found.length > 0) {
+		return found[0];
+	}
+	return null;
+};
 
+/**
+ * Returns the &lt;div> containing the form element, or the form element itself
+ * May not work as expected on checkboxes or radios.
+ *
+ * @memberof Morebits.quickForm
+ * @param {HTMLElement} element
+ * @returns {HTMLElement}
+ */
+Morebits.quickForm.getElementContainer = (element) => {
+	// for divs, headings and fieldsets, the container is the element itself
+	if (
+		element instanceof HTMLFieldSetElement ||
+				element instanceof HTMLDivElement ||
+				element instanceof HTMLHeadingElement
+	) {
+		return element;
+	}
 
+	// for others, just return the parent node
+	return element.parentNode;
+};
 
+/**
+ * Gets the HTML element that contains the label of the given form element
+ * (mainly for internal use).
+ *
+ * @memberof Morebits.quickForm
+ * @param {(HTMLElement|Morebits.quickForm.element)} element
+ * @returns {HTMLElement}
+ */
+Morebits.quickForm.getElementLabelObject = (element) => {
+	// for buttons, divs and headers, the label is on the element itself
+	if (
+		element.type === 'button' ||
+				element.type === 'submit' ||
+				element instanceof HTMLDivElement ||
+				element instanceof HTMLHeadingElement
+	) {
+		return element;
+		// for fieldsets, the label is the child <legend> element
+	} else if (element instanceof HTMLFieldSetElement) {
+		return element.querySelectorAll('legend')[0];
+		// for textareas, the label is the sibling <h5> element
+	} else if (element instanceof HTMLTextAreaElement) {
+		return element.parentNode.querySelectorAll('h5')[0];
+	}
+	// for others, the label is the sibling <label> element
+	return element.parentNode.querySelectorAll('label')[0];
+};
 
+/**
+ * Gets the label text of the element.
+ *
+ * @memberof Morebits.quickForm
+ * @param {(HTMLElement|Morebits.quickForm.element)} element
+ * @returns {string}
+ */
+Morebits.quickForm.getElementLabel = (element) => {
+	const labelElement = Morebits.quickForm.getElementLabelObject(element);
+	if (!labelElement) {
+		return null;
+	}
+	return labelElement.firstChild.textContent;
+};
 
+/**
+ * Sets the label of the element to the given text.
+ *
+ * @memberof Morebits.quickForm
+ * @param {(HTMLElement|Morebits.quickForm.element)} element
+ * @param {string} labelText
+ * @returns {boolean} True if succeeded, false if the label element is unavailable.
+ */
+Morebits.quickForm.setElementLabel = (element, labelText) => {
+	const labelElement = Morebits.quickForm.getElementLabelObject(element);
+	if (!labelElement) {
+		return false;
+	}
+	labelElement.firstChild.textContent = labelText;
+	return true;
+};
+
+/**
+ * Stores the element's current label, and temporarily sets the label to the given text.
+ *
+ * @memberof Morebits.quickForm
+ * @param {(HTMLElement|Morebits.quickForm.element)} element
+ * @param {string} temporaryLabelText
+ * @returns {boolean} `true` if succeeded, `false` if the label element is unavailable.
+ */
+Morebits.quickForm.overrideElementLabel = (element, temporaryLabelText) => {
+	if (!Object.hasOwn(element.dataset, 'oldlabel')) {
+		element.dataset.oldlabel = Morebits.quickForm.getElementLabel(element);
+	}
+	return Morebits.quickForm.setElementLabel(element, temporaryLabelText);
+};
+
+/**
+ * Restores the label stored by overrideElementLabel.
+ *
+ * @memberof Morebits.quickForm
+ * @param {(HTMLElement|Morebits.quickForm.element)} element
+ * @returns {boolean} True if succeeded, false if the label element is unavailable.
+ */
+Morebits.quickForm.resetElementLabel = (element) => {
+	if (Object.hasOwn(element.dataset, 'oldlabel')) {
+		return Morebits.quickForm.setElementLabel(element, element.dataset.oldlabel);
+	}
+	return null;
+};
+
+/**
+ * Shows or hides a form element plus its label and tooltip.
+ *
+ * @memberof Morebits.quickForm
+ * @param {(HTMLElement|jQuery|string)} element - HTML/jQuery element, or jQuery selector string.
+ * @param {boolean} [visibility] - Skip this to toggle visibility.
+ */
+Morebits.quickForm.setElementVisibility = (element, visibility) => {
+	$(element).toggle(visibility);
+};
+
+/**
+ * Shows or hides the question mark icon (which displays the tooltip) next to a form element.
+ *
+ * @memberof Morebits.quickForm
+ * @param {(HTMLElement|jQuery)} element
+ * @param {boolean} [visibility] - Skip this to toggle visibility.
+ */
+Morebits.quickForm.setElementTooltipVisibility = (element, visibility) => {
+	$(Morebits.quickForm.getElementContainer(element))
+		.find('.morebits-tooltipButton')
+		.toggle(visibility);
+};
 
 /**
  * @external HTMLFormElement
@@ -1474,9 +1479,9 @@ Morebits.string = {
 	 */
 	formatReasonForLog: (str) =>
 		str
-		// handle line breaks, which otherwise break numbering
+			// handle line breaks, which otherwise break numbering
 			.replace(/\n+/g, '{{pb}}')
-		// put an extra # in front before bulleted or numbered list items
+			// put an extra # in front before bulleted or numbered list items
 			.replace(/^(#+)/gm, '#$1')
 			.replace(/^(\*+)/gm, '#$1'),
 	/**
@@ -1643,8 +1648,8 @@ Morebits.select2 = {
 			const result = originalMatcher(params, data);
 			if (
 				result &&
-					params.term &&
-					data.text.toUpperCase().includes(params.term.toUpperCase())
+						params.term &&
+						data.text.toUpperCase().includes(params.term.toUpperCase())
 			) {
 				result.children = data.children;
 			}
@@ -1656,10 +1661,10 @@ Morebits.select2 = {
 			const result = originalMatcher(params, data);
 			if (
 				!params.term ||
-					result &&
-						new RegExp(`\\b${mw.util.escapeRegExp(params.term)}`, 'i').test(
-							result.text
-						)
+						result &&
+							new RegExp(`\\b${mw.util.escapeRegExp(params.term)}`, 'i').test(
+								result.text
+							)
 			) {
 				return result;
 			}
@@ -1705,8 +1710,8 @@ Morebits.select2 = {
 		target = target.prev();
 		target.select2('open');
 		const search =
-				target.data('select2').dropdown.$search || target.data('select2').selection.$search;
-			// Use DOM .focus() to work around a jQuery 3.6.0 regression (https://github.com/select2/select2/issues/5993)
+					target.data('select2').dropdown.$search || target.data('select2').selection.$search;
+		// Use DOM .focus() to work around a jQuery 3.6.0 regression (https://github.com/select2/select2/issues/5993)
 		search[0].focus();
 	}
 };
@@ -1723,27 +1728,16 @@ Morebits.select2 = {
  * u.content = u.content.replace(/world/g, 'earth');
  * u.rebind(); // gives 'Hello earth <!-- world --> earth'
  */
-Morebits.unbinder = class Unbinder {
-	constructor(string) {
-		if (typeof string !== 'string') {
-			throw new TypeError('not a string');
-		}
-		/** The text being processed. */
-		this.content = string;
-		this.counter = 0;
-		this.history = {};
-		this.prefix = `%UNIQ::${Math.random()}::`;
-		this.postfix = '::UNIQ%';
+Morebits.unbinder = function Unbinder(string) {
+	if (typeof string !== 'string') {
+		throw new TypeError('not a string');
 	}
-	/** @memberof Morebits.unbinder */
-	static getCallback(self) {
-		return (match) => {
-			const current = self.prefix + self.counter + self.postfix;
-			self.history[current] = match;
-			++self.counter;
-			return current;
-		};
-	}
+	/** The text being processed. */
+	this.content = string;
+	this.counter = 0;
+	this.history = {};
+	this.prefix = `%UNIQ::${Math.random()}::`;
+	this.postfix = '::UNIQ%';
 };
 Morebits.unbinder.prototype = {
 	/**
@@ -1787,6 +1781,13 @@ Morebits.unbinder.prototype = {
 	// 0++
 	history: null // {}
 };
+/** @memberof Morebits.unbinder */
+Morebits.unbinder.getCallback = (self) => (match) => {
+	const current = self.prefix + self.counter + self.postfix;
+	self.history[current] = match;
+	++self.counter;
+	return current;
+};
 
 /* **************** Morebits.date **************** */
 /**
@@ -1797,306 +1798,47 @@ Morebits.unbinder.prototype = {
  * @memberof Morebits
  * @class
  */
-Morebits.date = class {
-	constructor() {
-		const args = Array.prototype.slice.call(arguments);
+Morebits.date = function () {
+	const args = Array.prototype.slice.call(arguments);
 
-		// Check MediaWiki formats
-		// Must be first since firefox erroneously accepts the timestamp
-		// format, sans timezone (See also: #921, #936, #1174, #1187), and the
-		// 14-digit string will be interpreted differently.
-		if (args.length === 1) {
-			const param = args[0];
-			if (/^\d{14}$/.test(param)) {
-				// YYYYMMDDHHmmss
-				const digitMatch = /(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/.exec(param);
-				if (digitMatch) {
-					// ..... year ... month .. date ... hour .... minute ..... second
-					this._d = new Date(
-						Reflect.apply(Date.UTC, null, [
-							digitMatch[1],
-							digitMatch[2] - 1,
-							digitMatch[3],
-							digitMatch[4],
-							digitMatch[5],
-							digitMatch[6]
-						])
-					);
-				}
-			} else if (typeof param === 'string') {
-				// Wikitext signature timestamp
-				const dateParts = Morebits.l10n.signatureTimestampFormat(param);
-				if (dateParts) {
-					this._d = new Date(Date.UTC.apply(null, dateParts));
-				}
+	// Check MediaWiki formats
+	// Must be first since firefox erroneously accepts the timestamp
+	// format, sans timezone (See also: #921, #936, #1174, #1187), and the
+	// 14-digit string will be interpreted differently.
+	if (args.length === 1) {
+		const param = args[0];
+		if (/^\d{14}$/.test(param)) {
+			// YYYYMMDDHHmmss
+			const digitMatch = /(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/.exec(param);
+			if (digitMatch) {
+				// ..... year ... month .. date ... hour .... minute ..... second
+				this._d = new Date(
+					Reflect.apply(Date.UTC, null, [
+						digitMatch[1],
+						digitMatch[2] - 1,
+						digitMatch[3],
+						digitMatch[4],
+						digitMatch[5],
+						digitMatch[6]
+					])
+				);
+			}
+		} else if (typeof param === 'string') {
+			// Wikitext signature timestamp
+			const dateParts = Morebits.l10n.signatureTimestampFormat(param);
+			if (dateParts) {
+				this._d = new Date(Date.UTC.apply(null, dateParts));
 			}
 		}
-		if (!this._d) {
-			// Try standard date
-			this._d = new (Function.prototype.bind.apply(Date, [Date].concat(args)))();
-		}
+	}
+	if (!this._d) {
+		// Try standard date
+		this._d = new (Function.prototype.bind.apply(Date, [Date].concat(args)))();
+	}
 
-		// Still no?
-		if (!this.isValid()) {
-			mw.log.warn('Invalid Morebits.date initialisation:', args);
-		}
-	}
-	/** @returns {boolean} */
-	isValid() {
-		return !Number.isNaN(this.getTime());
-	}
-	/**
-	 * @param {(Date|Morebits.date)} date
-	 * @returns {boolean}
-	 */
-	isBefore(date) {
-		return this.getTime() < date.getTime();
-	}
-	/**
-	 * @param {(Date|Morebits.date)} date
-	 * @returns {boolean}
-	 */
-	isAfter(date) {
-		return this.getTime() > date.getTime();
-	}
-	/** @returns {string} */
-	getUTCMonthName() {
-		return Morebits.date.localeData.months[this.getUTCMonth()];
-	}
-	/** @returns {string} */
-	getUTCMonthNameAbbrev() {
-		return Morebits.date.localeData.monthsShort[this.getUTCMonth()];
-	}
-	/** @returns {string} */
-	getMonthName() {
-		return Morebits.date.localeData.months[this.getMonth()];
-	}
-	/** @returns {string} */
-	getMonthNameAbbrev() {
-		return Morebits.date.localeData.monthsShort[this.getMonth()];
-	}
-	/** @returns {string} */
-	getUTCDayName() {
-		return Morebits.date.localeData.days[this.getUTCDay()];
-	}
-	/** @returns {string} */
-	getUTCDayNameAbbrev() {
-		return Morebits.date.localeData.daysShort[this.getUTCDay()];
-	}
-	/** @returns {string} */
-	getDayName() {
-		return Morebits.date.localeData.days[this.getDay()];
-	}
-	/** @returns {string} */
-	getDayNameAbbrev() {
-		return Morebits.date.localeData.daysShort[this.getDay()];
-	}
-	/**
-	 * Add a given number of minutes, hours, days, weeks, months, or years to the date.
-	 * This is done in-place. The modified date object is also returned, allowing chaining.
-	 *
-	 * @param {number} number - Should be an integer.
-	 * @param {string} unit
-	 * @throws If invalid or unsupported unit is given.
-	 * @returns {Morebits.date}
-	 */
-	add(number, unit) {
-		let num = Number.parseInt(number, 10); // normalize
-		if (Number.isNaN(num)) {
-			throw new TypeError(`Invalid number "${number}" provided.`);
-		}
-		unit = unit.toLowerCase(); // normalize
-		const unitMap = Morebits.date.unitMap;
-		let unitNorm = unitMap[unit] || unitMap[`${unit}s`]; // so that both singular and  plural forms work
-		if (unitNorm) {
-			// No built-in week functions, so rather than build out ISO's getWeek/setWeek, just multiply
-			// Probably can't be used for Julian->Gregorian changeovers, etc.
-			if (unitNorm === 'Week') {
-				unitNorm = 'Date';
-				num *= 7;
-			}
-			this[`set${unitNorm}`](this[`get${unitNorm}`]() + num);
-			return this;
-		}
-		throw new Error(
-			`Invalid unit "${unit}": Only ${Object.keys(unitMap).join(', ')} are allowed.`
-		);
-	}
-	/**
-	 * Subtracts a given number of minutes, hours, days, weeks, months, or years to the date.
-	 * This is done in-place. The modified date object is also returned, allowing chaining.
-	 *
-	 * @param {number} number - Should be an integer.
-	 * @param {string} unit
-	 * @throws If invalid or unsupported unit is given.
-	 * @returns {Morebits.date}
-	 */
-	subtract(number, unit) {
-		return this.add(-number, unit);
-	}
-	/**
-	 * Format the date into a string per the given format string.
-	 * Replacement syntax is a subset of that in moment.js:
-	 *
-	 * | Syntax | Output |
-	 * |--------|--------|
-	 * | H | Hours (24-hour) |
-	 * | HH | Hours (24-hour, padded to 2 digits) |
-	 * | h | Hours (12-hour) |
-	 * | hh | Hours (12-hour, padded to 2 digits) |
-	 * | A | AM or PM |
-	 * | m | Minutes |
-	 * | mm | Minutes (padded to 2 digits) |
-	 * | s | Seconds |
-	 * | ss | Seconds (padded to 2 digits) |
-	 * | SSS | Milliseconds fragment, 3 digits |
-	 * | d | Day number of the week (Sun=0) |
-	 * | ddd | Abbreviated day name |
-	 * | dddd | Full day name |
-	 * | D | Date |
-	 * | DD | Date (padded to 2 digits) |
-	 * | M | Month number (1-indexed) |
-	 * | MM | Month number (1-indexed, padded to 2 digits) |
-	 * | MMM | Abbreviated month name |
-	 * | MMMM | Full month name |
-	 * | Y | Year |
-	 * | YY | Final two digits of year (20 for 2020, 42 for 1942) |
-	 * | YYYY | Year (same as `Y`) |
-	 *
-	 * @param {string} formatstr - Format the date into a string, using
-	 * the replacement syntax.  Use `[` and `]` to escape items.  If not
-	 * provided, will return the ISO-8601-formatted string.
-	 * @param {(string|number)} [zone=system] - `system` (for browser-default time zone),
-	 * `utc`, or specify a time zone as number of minutes relative to UTC.
-	 * @returns {string}
-	 */
-	format(formatstr, zone) {
-		if (!this.isValid()) {
-			return 'Invalid date'; // Put the truth out, preferable to "NaNNaNNan NaN:NaN" or whatever
-		}
-
-		let udate = this;
-		// create a new date object that will contain the date to display as system time
-		if (zone === 'utc') {
-			udate = new Morebits.date(this.getTime()).add(this.getTimezoneOffset(), 'minutes');
-		} else if (typeof zone === 'number') {
-			// convert to utc, then add the utc offset given
-			udate = new Morebits.date(this.getTime()).add(
-				this.getTimezoneOffset() + zone,
-				'minutes'
-			);
-		}
-
-		// default to ISOString
-		if (!formatstr) {
-			return udate.toISOString();
-		}
-		const pad = (num, len) => {
-			len ||= 2; // Up to length of 00 + 1
-			return `00${num}`.toString().slice(0 - len);
-		};
-		const h24 = udate.getHours(), m = udate.getMinutes(), s = udate.getSeconds(), ms = udate.getMilliseconds();
-		const D = udate.getDate(), M = udate.getMonth() + 1, Y = udate.getFullYear();
-		const h12 = h24 % 12 || 12, amOrPm = h24 >= 12 ? '下午' : '上午';
-		const replacementMap = {
-			HH: pad(h24),
-			H: h24,
-			hh: pad(h12),
-			h: h12,
-			A: amOrPm,
-			mm: pad(m),
-			m: m,
-			ss: pad(s),
-			s: s,
-			SSS: pad(ms, 3),
-			dddd: udate.getDayName(),
-			ddd: udate.getDayNameAbbrev(),
-			d: udate.getDay(),
-			DD: pad(D),
-			D: D,
-			MMMM: udate.getMonthName(),
-			MMM: udate.getMonthNameAbbrev(),
-			MM: pad(M),
-			M: M,
-			YYYY: Y,
-			YY: pad(Y % 100),
-			Y: Y
-		};
-		const unbinder = new Morebits.unbinder(formatstr); // escape stuff between [...]
-		unbinder.unbind('\\[', '\\]');
-		unbinder.content = unbinder.content.replace(
-			/* Regex notes:
-			 * d(d{2,3})? matches exactly 1, 3 or 4 occurrences of 'd' ('dd' is treated as a double match of 'd')
-			 * Y{1,2}(Y{2})? matches exactly 1, 2 or 4 occurrences of 'Y'
-			 */
-			/H{1,2}|h{1,2}|m{1,2}|s{1,2}|SSS|d(d{2,3})?|D{1,2}|M{1,4}|Y{1,2}(Y{2})?|A/g,
-			(match) => replacementMap[match]
-		);
-		return unbinder.rebind().replace(/\[(.*?)]/g, '$1');
-	}
-	/**
-	 * Gives a readable relative time string such as "Yesterday at 6:43 PM" or "Last Thursday at 11:45 AM".
-	 * Similar to `calendar` in moment.js, but with time zone support.
-	 *
-	 * @param {(string|number)} [zone=system] - 'system' (for browser-default time zone),
-	 * 'utc' (for UTC), or specify a time zone as number of minutes past UTC.
-	 * @returns {string}
-	 */
-	calendar(zone) {
-		// Zero out the hours, minutes, seconds and milliseconds - keeping only the date;
-		// find the difference. Note that setHours() returns the same thing as getTime().
-		const dateDiff = (new Date().setHours(0, 0, 0, 0) - new Date(this).setHours(0, 0, 0, 0)) / 8.64e7;
-		switch (true) {
-			case dateDiff === 0: {
-				return this.format(Morebits.date.localeData.relativeTimes.thisDay, zone);
-			}
-			case dateDiff === 1: {
-				return this.format(Morebits.date.localeData.relativeTimes.prevDay, zone);
-			}
-			case dateDiff > 0 && dateDiff < 7: {
-				return this.format(Morebits.date.localeData.relativeTimes.pastWeek, zone);
-			}
-			case dateDiff === -1: {
-				return this.format(Morebits.date.localeData.relativeTimes.nextDay, zone);
-			}
-			case dateDiff < 0 && dateDiff > -7: {
-				return this.format(Morebits.date.localeData.relativeTimes.thisWeek, zone);
-			}
-			default: {
-				return this.format(Morebits.date.localeData.relativeTimes.other, zone);
-			}
-		}
-	}
-	/**
-	 * Get a regular expression that matches wikitext section titles, such
-	 * as `==December 2019==` or `=== Jan 2018 ===`.
-	 *
-	 * @returns {RegExp}
-	 */
-	monthHeaderRegex() {
-		return new RegExp(
-			`^(==+)\\s*${this.getUTCFullYear()}年(?:${this.getUTCMonthName()}|${this.getUTCMonthNameAbbrev()})\\s*\\1`,
-			'mg'
-		);
-	}
-	/**
-	 * Creates a wikitext section header with the month and year.
-	 *
-	 * @param {number} [level=2] - Header level.  Pass 0 for just the text
-	 * with no wikitext markers (==).
-	 * @returns {string}
-	 */
-	monthHeader(level) {
-		// Default to 2, but allow for 0 or stringy numbers
-		level = Number.parseInt(level, 10);
-		level = Number.isNaN(level) ? 2 : level;
-		const header = Array.from({ length: level + 1 }).join('='); // String.prototype.repeat not supported in IE 11
-		const text = `${this.getUTCFullYear()}年${this.getUTCMonthName()}`;
-		if (header.length) {
-			// wikitext-formatted header
-			return `${header} ${text} ${header}`;
-		}
-		return text; // Just the string
+	// Still no?
+	if (!this.isValid()) {
+		mw.log.warn('Invalid Morebits.date initialisation:', args);
 	}
 };
 
@@ -2177,6 +1919,272 @@ Morebits.date.unitMap = {
 	// Not a function but handled in `add` through cunning use of multiplication
 	months: 'Month',
 	years: 'FullYear'
+};
+Morebits.date.prototype = {
+	/** @returns {boolean} */
+	isValid: function () {
+		return !Number.isNaN(this.getTime());
+	},
+	/**
+	 * @param {(Date|Morebits.date)} date
+	 * @returns {boolean}
+	 */
+	isBefore: function (date) {
+		return this.getTime() < date.getTime();
+	},
+	/**
+	 * @param {(Date|Morebits.date)} date
+	 * @returns {boolean}
+	 */
+	isAfter: function (date) {
+		return this.getTime() > date.getTime();
+	},
+	/** @returns {string} */
+	getUTCMonthName: function () {
+		return Morebits.date.localeData.months[this.getUTCMonth()];
+	},
+	/** @returns {string} */
+	getUTCMonthNameAbbrev: function () {
+		return Morebits.date.localeData.monthsShort[this.getUTCMonth()];
+	},
+	/** @returns {string} */
+	getMonthName: function () {
+		return Morebits.date.localeData.months[this.getMonth()];
+	},
+	/** @returns {string} */
+	getMonthNameAbbrev: function () {
+		return Morebits.date.localeData.monthsShort[this.getMonth()];
+	},
+	/** @returns {string} */
+	getUTCDayName: function () {
+		return Morebits.date.localeData.days[this.getUTCDay()];
+	},
+	/** @returns {string} */
+	getUTCDayNameAbbrev: function () {
+		return Morebits.date.localeData.daysShort[this.getUTCDay()];
+	},
+	/** @returns {string} */
+	getDayName: function () {
+		return Morebits.date.localeData.days[this.getDay()];
+	},
+	/** @returns {string} */
+	getDayNameAbbrev: function () {
+		return Morebits.date.localeData.daysShort[this.getDay()];
+	},
+	/**
+	 * Add a given number of minutes, hours, days, weeks, months, or years to the date.
+	 * This is done in-place. The modified date object is also returned, allowing chaining.
+	 *
+	 * @param {number} number - Should be an integer.
+	 * @param {string} unit
+	 * @throws If invalid or unsupported unit is given.
+	 * @returns {Morebits.date}
+	 */
+	add: function (number, unit) {
+		let num = Number.parseInt(number, 10); // normalize
+		if (Number.isNaN(num)) {
+			throw new TypeError(`Invalid number "${number}" provided.`);
+		}
+		unit = unit.toLowerCase(); // normalize
+		const unitMap = Morebits.date.unitMap;
+		let unitNorm = unitMap[unit] || unitMap[`${unit}s`]; // so that both singular and  plural forms work
+		if (unitNorm) {
+			// No built-in week functions, so rather than build out ISO's getWeek/setWeek, just multiply
+			// Probably can't be used for Julian->Gregorian changeovers, etc.
+			if (unitNorm === 'Week') {
+				unitNorm = 'Date';
+				num *= 7;
+			}
+			this[`set${unitNorm}`](this[`get${unitNorm}`]() + num);
+			return this;
+		}
+		throw new Error(
+			`Invalid unit "${unit}": Only ${Object.keys(unitMap).join(', ')} are allowed.`
+		);
+	},
+	/**
+	 * Subtracts a given number of minutes, hours, days, weeks, months, or years to the date.
+	 * This is done in-place. The modified date object is also returned, allowing chaining.
+	 *
+	 * @param {number} number - Should be an integer.
+	 * @param {string} unit
+	 * @throws If invalid or unsupported unit is given.
+	 * @returns {Morebits.date}
+	 */
+	subtract: function (number, unit) {
+		return this.add(-number, unit);
+	},
+	/**
+	 * Format the date into a string per the given format string.
+	 * Replacement syntax is a subset of that in moment.js:
+	 *
+	 * | Syntax | Output |
+	 * |--------|--------|
+	 * | H | Hours (24-hour) |
+	 * | HH | Hours (24-hour, padded to 2 digits) |
+	 * | h | Hours (12-hour) |
+	 * | hh | Hours (12-hour, padded to 2 digits) |
+	 * | A | AM or PM |
+	 * | m | Minutes |
+	 * | mm | Minutes (padded to 2 digits) |
+	 * | s | Seconds |
+	 * | ss | Seconds (padded to 2 digits) |
+	 * | SSS | Milliseconds fragment, 3 digits |
+	 * | d | Day number of the week (Sun=0) |
+	 * | ddd | Abbreviated day name |
+	 * | dddd | Full day name |
+	 * | D | Date |
+	 * | DD | Date (padded to 2 digits) |
+	 * | M | Month number (1-indexed) |
+	 * | MM | Month number (1-indexed, padded to 2 digits) |
+	 * | MMM | Abbreviated month name |
+	 * | MMMM | Full month name |
+	 * | Y | Year |
+	 * | YY | Final two digits of year (20 for 2020, 42 for 1942) |
+	 * | YYYY | Year (same as `Y`) |
+	 *
+	 * @param {string} formatstr - Format the date into a string, using
+	 * the replacement syntax.  Use `[` and `]` to escape items.  If not
+	 * provided, will return the ISO-8601-formatted string.
+	 * @param {(string|number)} [zone=system] - `system` (for browser-default time zone),
+	 * `utc`, or specify a time zone as number of minutes relative to UTC.
+	 * @returns {string}
+	 */
+	format: function (formatstr, zone) {
+		if (!this.isValid()) {
+			return 'Invalid date'; // Put the truth out, preferable to "NaNNaNNan NaN:NaN" or whatever
+		}
+
+		let udate = this;
+		// create a new date object that will contain the date to display as system time
+		if (zone === 'utc') {
+			udate = new Morebits.date(this.getTime()).add(this.getTimezoneOffset(), 'minutes');
+		} else if (typeof zone === 'number') {
+			// convert to utc, then add the utc offset given
+			udate = new Morebits.date(this.getTime()).add(
+				this.getTimezoneOffset() + zone,
+				'minutes'
+			);
+		}
+
+		// default to ISOString
+		if (!formatstr) {
+			return udate.toISOString();
+		}
+		const pad = (num, len) => {
+			len ||= 2; // Up to length of 00 + 1
+			return `00${num}`.toString().slice(0 - len);
+		};
+		const h24 = udate.getHours(),
+			m = udate.getMinutes(),
+			s = udate.getSeconds(),
+			ms = udate.getMilliseconds();
+		const D = udate.getDate(),
+			M = udate.getMonth() + 1,
+			Y = udate.getFullYear();
+		const h12 = h24 % 12 || 12,
+			amOrPm = h24 >= 12 ? '下午' : '上午';
+		const replacementMap = {
+			HH: pad(h24),
+			H: h24,
+			hh: pad(h12),
+			h: h12,
+			A: amOrPm,
+			mm: pad(m),
+			m: m,
+			ss: pad(s),
+			s: s,
+			SSS: pad(ms, 3),
+			dddd: udate.getDayName(),
+			ddd: udate.getDayNameAbbrev(),
+			d: udate.getDay(),
+			DD: pad(D),
+			D: D,
+			MMMM: udate.getMonthName(),
+			MMM: udate.getMonthNameAbbrev(),
+			MM: pad(M),
+			M: M,
+			YYYY: Y,
+			YY: pad(Y % 100),
+			Y: Y
+		};
+		const unbinder = new Morebits.unbinder(formatstr); // escape stuff between [...]
+		unbinder.unbind('\\[', '\\]');
+		unbinder.content = unbinder.content.replace(
+			/* Regex notes:
+			 * d(d{2,3})? matches exactly 1, 3 or 4 occurrences of 'd' ('dd' is treated as a double match of 'd')
+			 * Y{1,2}(Y{2})? matches exactly 1, 2 or 4 occurrences of 'Y'
+			 */
+			/H{1,2}|h{1,2}|m{1,2}|s{1,2}|SSS|d(d{2,3})?|D{1,2}|M{1,4}|Y{1,2}(Y{2})?|A/g,
+			(match) => replacementMap[match]
+		);
+		return unbinder.rebind().replace(/\[(.*?)]/g, '$1');
+	},
+	/**
+	 * Gives a readable relative time string such as "Yesterday at 6:43 PM" or "Last Thursday at 11:45 AM".
+	 * Similar to `calendar` in moment.js, but with time zone support.
+	 *
+	 * @param {(string|number)} [zone=system] - 'system' (for browser-default time zone),
+	 * 'utc' (for UTC), or specify a time zone as number of minutes past UTC.
+	 * @returns {string}
+	 */
+	calendar: function (zone) {
+		// Zero out the hours, minutes, seconds and milliseconds - keeping only the date;
+		// find the difference. Note that setHours() returns the same thing as getTime().
+		const dateDiff =
+					(new Date().setHours(0, 0, 0, 0) - new Date(this).setHours(0, 0, 0, 0)) / 8.64e7;
+		switch (true) {
+			case dateDiff === 0: {
+				return this.format(Morebits.date.localeData.relativeTimes.thisDay, zone);
+			}
+			case dateDiff === 1: {
+				return this.format(Morebits.date.localeData.relativeTimes.prevDay, zone);
+			}
+			case dateDiff > 0 && dateDiff < 7: {
+				return this.format(Morebits.date.localeData.relativeTimes.pastWeek, zone);
+			}
+			case dateDiff === -1: {
+				return this.format(Morebits.date.localeData.relativeTimes.nextDay, zone);
+			}
+			case dateDiff < 0 && dateDiff > -7: {
+				return this.format(Morebits.date.localeData.relativeTimes.thisWeek, zone);
+			}
+			default: {
+				return this.format(Morebits.date.localeData.relativeTimes.other, zone);
+			}
+		}
+	},
+	/**
+	 * Get a regular expression that matches wikitext section titles, such
+	 * as `==December 2019==` or `=== Jan 2018 ===`.
+	 *
+	 * @returns {RegExp}
+	 */
+	monthHeaderRegex: function () {
+		return new RegExp(
+			`^(==+)\\s*${this.getUTCFullYear()}年(?:${this.getUTCMonthName()}|${this.getUTCMonthNameAbbrev()})\\s*\\1`,
+			'mg'
+		);
+	},
+	/**
+	 * Creates a wikitext section header with the month and year.
+	 *
+	 * @param {number} [level=2] - Header level.  Pass 0 for just the text
+	 * with no wikitext markers (==).
+	 * @returns {string}
+	 */
+	monthHeader: function (level) {
+		// Default to 2, but allow for 0 or stringy numbers
+		level = Number.parseInt(level, 10);
+		level = Number.isNaN(level) ? 2 : level;
+		const header = Array.from({ length: level + 1 }).join('='); // String.prototype.repeat not supported in IE 11
+		const text = `${this.getUTCFullYear()}年${this.getUTCMonthName()}`;
+		if (header.length) {
+			// wikitext-formatted header
+			return `${header} ${text} ${header}`;
+		}
+		return text; // Just the string
+	}
 };
 
 // Allow native Date.prototype methods to be used on Morebits.date objects
@@ -2281,9 +2289,9 @@ Morebits.wiki.actionCompleted.event = () => {
 
 /** @memberof Morebits.wiki */
 Morebits.wiki.actionCompleted.timeOut =
-		typeof window.wpActionCompletedTimeOut === 'undefined'
-			? 5000
-			: window.wpActionCompletedTimeOut;
+			typeof window.wpActionCompletedTimeOut === 'undefined'
+				? 5000
+				: window.wpActionCompletedTimeOut;
 /** @memberof Morebits.wiki */
 Morebits.wiki.actionCompleted.redirect = null;
 /** @memberof Morebits.wiki */
@@ -2323,73 +2331,40 @@ Morebits.wiki.removeCheckpoint = () => {
  * @param {Morebits.status} [statusElement] - A Morebits.status object to use for status messages.
  * @param {Function} [onError] - The function to call if an error occurs.
  */
-Morebits.wiki.api = class {
-	constructor(currentAction, query, onSuccess, statusElement, onError) {
-		this.currentAction = currentAction;
-		this.query = query;
-		this.query.assert = 'user';
-		// Enforce newer error formats, preferring html
-		if (!query.errorformat || !['wikitext', 'plaintext'].includes(query.errorformat)) {
-			this.query.errorformat = 'html';
-		}
-		// Explicitly use the wiki's content language to minimize confusion,
-		// see #1179 for discussion
-		this.query.uselang ||= 'content'; // Use wgUserLanguage for preview
-		this.query.errorlang = 'uselang';
-		this.query.errorsuselocal = 1;
-		this.onSuccess = onSuccess;
-		this.onError = onError;
-		if (statusElement) {
-			this.setStatusElement(statusElement);
-		} else {
-			this.statelem = new Morebits.status(currentAction);
-		}
-		// JSON is used throughout Morebits/Twinkle, but xml remains the default for backwards compatibility
-		if (!query.format) {
-			this.query.format = 'xml';
-		} else if (query.format === 'json' && !query.formatversion) {
-			this.query.formatversion = '2';
-		} else if (!['xml', 'json'].includes(query.format)) {
-			this.statelem.error('Invalid API format: only xml and json are supported.');
-		}
+Morebits.wiki.api = function (currentAction, query, onSuccess, statusElement, onError) {
+	this.currentAction = currentAction;
+	this.query = query;
+	this.query.assert = 'user';
+	// Enforce newer error formats, preferring html
+	if (!query.errorformat || !['wikitext', 'plaintext'].includes(query.errorformat)) {
+		this.query.errorformat = 'html';
+	}
+	// Explicitly use the wiki's content language to minimize confusion,
+	// see #1179 for discussion
+	this.query.uselang ||= 'content'; // Use wgUserLanguage for preview
+	this.query.errorlang = 'uselang';
+	this.query.errorsuselocal = 1;
+	this.onSuccess = onSuccess;
+	this.onError = onError;
+	if (statusElement) {
+		this.setStatusElement(statusElement);
+	} else {
+		this.statelem = new Morebits.status(currentAction);
+	}
+	// JSON is used throughout Morebits/Twinkle, but xml remains the default for backwards compatibility
+	if (!query.format) {
+		this.query.format = 'xml';
+	} else if (query.format === 'json' && !query.formatversion) {
+		this.query.formatversion = '2';
+	} else if (!['xml', 'json'].includes(query.format)) {
+		this.statelem.error('Invalid API format: only xml and json are supported.');
+	}
 
-		// Ignore tags for queries and most common unsupported actions, produces warnings
-		if (query.action && ['query', 'review', 'watch'].includes(query.action)) {
-			delete query.tags;
-		} else if (!query.tags && morebitsWikiChangeTag) {
-			query.tags = morebitsWikiChangeTag;
-		}
-	}
-	/**
-	 * Set the custom user agent header, which is used for server-side logging.
-	 * Note that doing so will set the useragent for every `Morebits.wiki.api`
-	 * process performed thereafter.
-	 *
-	 * @see {@link https://lists.wikimedia.org/pipermail/mediawiki-api-announce/2014-November/000075.html}
-	 * for original announcement.
-	 *
-	 * @memberof Morebits.wiki.api
-	 * @param {string} [ua=morebits.js] - User agent.  The default
-	 * value of `morebits.js` will be appended to any provided
-	 * value.
-	 */
-	static setApiUserAgent(ua) {
-		morebitsWikiApiUserAgent = `Qiuwen/1.1 (morebits.js${ua ? `; ${ua}` : ''})`;
-	}
-	/**
-	 * Get a new CSRF token on encountering token errors.
-	 *
-	 * @memberof Morebits.wiki.api
-	 * @returns {string} MediaWiki CSRF token.
-	 */
-	static getToken() {
-		const tokenApi = new Morebits.wiki.api('获取令牌', {
-			action: 'query',
-			meta: 'tokens',
-			type: 'csrf',
-			format: 'json'
-		});
-		return tokenApi.post().then((apiobj) => apiobj.response.query.tokens.csrftoken);
+	// Ignore tags for queries and most common unsupported actions, produces warnings
+	if (query.action && ['query', 'review', 'watch'].includes(query.action)) {
+		delete query.tags;
+	} else if (!query.tags && morebitsWikiChangeTag) {
+		query.tags = morebitsWikiChangeTag;
 	}
 };
 Morebits.wiki.api.prototype = {
@@ -2443,7 +2418,7 @@ Morebits.wiki.api.prototype = {
 		})
 			.join('&')
 			.replace(/^(.*?)(\btoken=[^&]*)&(.*)/, '$1$3&$2');
-			// token should always be the last item in the query string (bug TW-B-0013)
+		// token should always be the last item in the query string (bug TW-B-0013)
 		const ajaxparams = $.extend(
 			{},
 			{
@@ -2469,7 +2444,7 @@ Morebits.wiki.api.prototype = {
 						this.errorText = response.errors && response.errors[0].html;
 					} else if (
 						this.query.errorformat === 'wikitext' ||
-							this.query.errorformat === 'plaintext'
+								this.query.errorformat === 'plaintext'
 					) {
 						this.errorText = response.errors && response.errors[0].text;
 					}
@@ -2565,6 +2540,22 @@ Morebits.wiki.getCachedJson = (title) => {
 	});
 };
 let morebitsWikiApiUserAgent = 'Qiuwen/1.1 (morebits.js)';
+/**
+ * Set the custom user agent header, which is used for server-side logging.
+ * Note that doing so will set the useragent for every `Morebits.wiki.api`
+ * process performed thereafter.
+ *
+ * @see {@link https://lists.wikimedia.org/pipermail/mediawiki-api-announce/2014-November/000075.html}
+ * for original announcement.
+ *
+ * @memberof Morebits.wiki.api
+ * @param {string} [ua=morebits.js] - User agent.  The default
+ * value of `morebits.js` will be appended to any provided
+ * value.
+ */
+Morebits.wiki.api.setApiUserAgent = (ua) => {
+	morebitsWikiApiUserAgent = `Qiuwen/1.1 (morebits.js${ua ? `; ${ua}` : ''})`;
+};
 
 /**
  * Change/revision tag applied to Morebits actions when no other tags are specified.
@@ -2576,6 +2567,21 @@ let morebitsWikiApiUserAgent = 'Qiuwen/1.1 (morebits.js)';
  */
 const morebitsWikiChangeTag = '';
 
+/**
+ * Get a new CSRF token on encountering token errors.
+ *
+ * @memberof Morebits.wiki.api
+ * @returns {string} MediaWiki CSRF token.
+ */
+Morebits.wiki.api.getToken = () => {
+	const tokenApi = new Morebits.wiki.api('获取令牌', {
+		action: 'query',
+		meta: 'tokens',
+		type: 'csrf',
+		format: 'json'
+	});
+	return tokenApi.post().then((apiobj) => apiobj.response.query.tokens.csrftoken);
+};
 
 /* **************** Morebits.wiki.page **************** */
 /**
@@ -2829,16 +2835,16 @@ Morebits.wiki.page = function (pageName, status) {
 		// shouldn't happen if canUseMwUserToken === true
 		if (
 			ctx.fullyProtected &&
-				!ctx.suppressProtectWarning &&
-				!confirm(
-					ctx.fullyProtected === 'infinity'
-						? `您即将编辑全保护页面“${ctx.pageName}”（永久）。\n\n单击“确定”以确认操作，或单击“取消”以取消操作。`
-						: `You are about to make an edit to the fully protected page "${
-							ctx.pageName
-						}"（保护期至：${new Morebits.date(ctx.fullyProtected).calendar(
-							'utc'
-						)} (UTC)）。\n\n单击“确定”以确认操作，或单击“取消”以取消操作。`
-				)
+					!ctx.suppressProtectWarning &&
+					!confirm(
+						ctx.fullyProtected === 'infinity'
+							? `您即将编辑全保护页面“${ctx.pageName}”（永久）。\n\n单击“确定”以确认操作，或单击“取消”以取消操作。`
+							: `You are about to make an edit to the fully protected page "${
+								ctx.pageName
+							}"（保护期至：${new Morebits.date(ctx.fullyProtected).calendar(
+								'utc'
+							)} (UTC)）。\n\n单击“确定”以确认操作，或单击“取消”以取消操作。`
+					)
 		) {
 			ctx.statusElement.error('已取消对全保护页面的编辑。');
 			ctx.onSaveFailure(this);
@@ -3146,7 +3152,7 @@ Morebits.wiki.page = function (pageName, status) {
 			watchlistExpiry = 'infinity';
 		} else if (
 			watchlistExpiry instanceof Morebits.date ||
-				watchlistExpiry instanceof Date
+					watchlistExpiry instanceof Date
 		) {
 			watchlistExpiry = watchlistExpiry.toISOString();
 		}
@@ -3210,7 +3216,7 @@ Morebits.wiki.page = function (pageName, status) {
 			watchlistExpiry = 'infinity';
 		} else if (
 			watchlistExpiry instanceof Morebits.date ||
-				watchlistExpiry instanceof Date
+					watchlistExpiry instanceof Date
 		) {
 			watchlistExpiry = watchlistExpiry.toISOString();
 		}
@@ -3260,9 +3266,9 @@ Morebits.wiki.page = function (pageName, status) {
 		}
 		ctx.followRedirect = followRedirect;
 		ctx.followCrossNsRedirect =
-				typeof followCrossNsRedirect !== 'undefined'
-					? followCrossNsRedirect
-					: ctx.followCrossNsRedirect;
+					typeof followCrossNsRedirect !== 'undefined'
+						? followCrossNsRedirect
+						: ctx.followCrossNsRedirect;
 	};
 
 	// lookup-creation setter function
@@ -3709,7 +3715,7 @@ Morebits.wiki.page = function (pageName, status) {
 		if (Morebits.userIsSysop && !ctx.suppressProtectWarning) {
 			if (
 				new mw.Title(Morebits.pageNameNorm).getPrefixedText() !==
-					new mw.Title(ctx.pageName).getPrefixedText()
+						new mw.Title(ctx.pageName).getPrefixedText()
 			) {
 				return false;
 			}
@@ -3748,7 +3754,7 @@ Morebits.wiki.page = function (pageName, status) {
 			inprop: 'watched',
 			format: 'json'
 		};
-			// Protection not checked for flagged-revs or non-sysop moves
+		// Protection not checked for flagged-revs or non-sysop moves
 		if (action !== 'move' || Morebits.userIsSysop) {
 			query.inprop += '|protection';
 		}
@@ -3835,8 +3841,8 @@ Morebits.wiki.page = function (pageName, status) {
 			}
 			// set revert edit summary
 			ctx.editSummary =
-					`[[QW:UNDO|撤销]]由 ${ctx.revertUser} 所做出的` +
-					`修订 ${ctx.revertOldID}：${ctx.editSummary}`;
+						`[[QW:UNDO|撤销]]由 ${ctx.revertUser} 所做出的` +
+						`修订 ${ctx.revertOldID}：${ctx.editSummary}`;
 		}
 		ctx.pageLoaded = true;
 
@@ -4000,7 +4006,7 @@ Morebits.wiki.page = function (pageName, status) {
 			// check for network or server error
 		} else if (
 			(errorCode === null || errorCode === undefined) &&
-				ctx.retries++ < ctx.maxRetries
+					ctx.retries++ < ctx.maxRetries
 		) {
 			// the error might be transient, so try again
 			ctx.statusElement.info('保存失败，在2秒后重试…');
@@ -4015,9 +4021,9 @@ Morebits.wiki.page = function (pageName, status) {
 		} else {
 			const response = ctx.saveApi.getResponse();
 			const errorData =
-					response.error ||
-					// bc error format
-					response.errors[0].data; // html/wikitext/plaintext error format
+						response.error ||
+						// bc error format
+						response.errors[0].data; // html/wikitext/plaintext error format
 
 			switch (errorCode) {
 				case 'protectedpage': {
@@ -4178,7 +4184,7 @@ Morebits.wiki.page = function (pageName, status) {
 		// No undelete as an existing page could have deleted revisions
 		const actionMissing = missing && ['delete', 'move'].includes(action);
 		const protectMissing =
-				action === 'protect' && missing && (ctx.protectEdit || ctx.protectMove);
+					action === 'protect' && missing && (ctx.protectEdit || ctx.protectMove);
 		const saltMissing = action === 'protect' && !missing && ctx.protectCreate;
 		if (actionMissing || protectMissing || saltMissing) {
 			ctx.statusElement.error(
@@ -4202,16 +4208,16 @@ Morebits.wiki.page = function (pageName, status) {
 		}
 		if (
 			editprot &&
-				!ctx.suppressProtectWarning &&
-				!confirm(
-					`您即将对全保护页面“${ctx.pageName}${
-						editprot.expiry === 'infinity'
-							? '”（永久）'
-							: `”（到期：${new Morebits.date(editprot.expiry).calendar(
-								'utc'
-							)} (UTC)）`
-					}”进行“${action}”操作` + '。\n\n单击确定以继续操作，或单击取消以取消操作。'
-				)
+					!ctx.suppressProtectWarning &&
+					!confirm(
+						`您即将对全保护页面“${ctx.pageName}${
+							editprot.expiry === 'infinity'
+								? '”（永久）'
+								: `”（到期：${new Morebits.date(editprot.expiry).calendar(
+									'utc'
+								)} (UTC)）`
+						}”进行“${action}”操作` + '。\n\n单击确定以继续操作，或单击取消以取消操作。'
+					)
 		) {
 			ctx.statusElement.error('已取消对全保护页面的操作。');
 			onFailure(this);
@@ -4505,14 +4511,14 @@ Morebits.wiki.page = function (pageName, status) {
 			// but seems reasonable to avoid dumb values and misleading log entries (T265626)
 			if (
 				(!ctx.protectEdit ||
-						ctx.protectEdit.level !== 'sysop' ||
-						!ctx.protectMove ||
-						ctx.protectMove.level !== 'sysop') &&
-					!confirm(
-						`您已对“${ctx.pageName}”启用了连锁保护` +
-							'，但没有设置仅管理员的保护级别。\n\n' +
-							'单击确认以自动调整并继续连锁全保护，单击取消以跳过此操作'
-					)
+							ctx.protectEdit.level !== 'sysop' ||
+							!ctx.protectMove ||
+							ctx.protectMove.level !== 'sysop') &&
+						!confirm(
+							`您已对“${ctx.pageName}”启用了连锁保护` +
+								'，但没有设置仅管理员的保护级别。\n\n' +
+								'单击确认以自动调整并继续连锁全保护，单击取消以跳过此操作'
+						)
 			) {
 				ctx.statusElement.error('连锁保护已取消。');
 				ctx.onProtectFailure(this);
@@ -4547,7 +4553,7 @@ Morebits.wiki.page = function (pageName, status) {
 			watchlist: ctx.watchlistOption,
 			format: 'json'
 		};
-			// Only shows up in logs, not page history [[phab:T259983]]
+		// Only shows up in logs, not page history [[phab:T259983]]
 		if (ctx.changeTags) {
 			query.tags = ctx.changeTags;
 		}
@@ -4752,7 +4758,7 @@ Morebits.wikitext.parseTemplate = (text, start) => {
 		// Either leaving a link or template/parser function
 		if (
 			test2 === '}}' && level[level.length - 1] === 2 ||
-				test2 === ']]' && level[level.length - 1] === 'wl'
+					test2 === ']]' && level[level.length - 1] === 'wl'
 		) {
 			current += test2;
 			++i;
@@ -4788,10 +4794,8 @@ Morebits.wikitext.parseTemplate = (text, start) => {
  * @memberof Morebits.wikitext
  * @param {string} text - Wikitext to be manipulated.
  */
-Morebits.wikitext.page = class mediawikiPage {
-	constructor(text) {
-		this.text = text;
-	}
+Morebits.wikitext.page = function mediawikiPage(text) {
+	this.text = text;
 };
 Morebits.wikitext.page.prototype = {
 	text: '',
@@ -4968,26 +4972,26 @@ Morebits.wikitext.page.prototype = {
 			new RegExp(
 				// leading whitespace
 				'^\\s*' +
-						// capture template(s)
-						`(?:((?:\\s*${
-							// Pre-template regex, such as leading html comments
-							preRegex
-						}|` +
-						// begin template format
-						`\\{\\{\\s*(?:${
-							// Template regex
-							regex
-							// end main template name, optionally with a number
-							// Probably remove the (?:) though
-						})\\d*\\s*` +
-						// template parameters
-						'(\\|(?:\\{\\{[^{}]*\\}\\}|[^{}])*)?' +
-						// end template format
-						'\\}\\})+' +
-						// end capture
-						'(?:\\s*\\n)?)' +
-						// trailing whitespace
-						'\\s*)?',
+							// capture template(s)
+							`(?:((?:\\s*${
+								// Pre-template regex, such as leading html comments
+								preRegex
+							}|` +
+							// begin template format
+							`\\{\\{\\s*(?:${
+								// Template regex
+								regex
+								// end main template name, optionally with a number
+								// Probably remove the (?:) though
+							})\\d*\\s*` +
+							// template parameters
+							'(\\|(?:\\{\\{[^{}]*\\}\\}|[^{}])*)?' +
+							// end template format
+							'\\}\\})+' +
+							// end capture
+							'(?:\\s*\\n)?)' +
+							// trailing whitespace
+							'\\s*)?',
 				flags
 			),
 			`$1${tag}`
@@ -5080,111 +5084,47 @@ Morebits.userspaceLogger = function (logPageName) {
  * line, allowable values are: `status` (blue), `info` (green), `warn` (red),
  * or `error` (bold red).
  */
-Morebits.status = class Status {
-	constructor(text, stat, type) {
-		this.textRaw = text;
-		this.text = Morebits.createHtml(text);
-		this.type = type || 'status';
-		this.generate();
-		if (stat) {
-			this.update(stat, type);
-		}
-	}
-	/**
-	 * Specify an area for status message elements to be added to.
-	 *
-	 * @memberof Morebits.status
-	 * @param {HTMLElement} root - Usually a div element.
-	 * @throws If `root` is not an `HTMLElement`.
-	 */
-	static init(root) {
-		if (!(root instanceof Element)) {
-			throw new TypeError('object not an instance of Element');
-		}
-		while (root.hasChildNodes()) {
-			root.firstChild.remove();
-		}
-		Morebits.status.root = root;
-		Morebits.status.errorEvent = null;
-	}
-	/**
-	 * @memberof Morebits.status
-	 * @param {Function} handler - Function to execute on error.
-	 * @throws When `handler` is not a function.
-	 */
-	static onError(handler) {
-		if (typeof handler === 'function') {
-			Morebits.status.errorEvent = handler;
-		} else {
-			throw new TypeError('Morebits.status.onError: handler is not a function');
-		}
-	}
-	/**
-	 * @memberof Morebits.status
-	 * @param {string} text - Before colon
-	 * @param {string} status - After colon
-	 * @returns {Morebits.status} - `status`-type (blue)
-	 */
-	static status(text, status) { return new Morebits.status(text, status); }
-	/**
-	 * @memberof Morebits.status
-	 * @param {string} text - Before colon
-	 * @param {string} status - After colon
-	 * @returns {Morebits.status} - `info`-type (green)
-	 */
-	static info(text, status) { return new Morebits.status(text, status, 'info'); }
-	/**
-	 * @memberof Morebits.status
-	 * @param {string} text - Before colon
-	 * @param {string} status - After colon
-	 * @returns {Morebits.status} - `warn`-type (red)
-	 */
-	static warn(text, status) { return new Morebits.status(text, status, 'warn'); }
-	/**
-	 * @memberof Morebits.status
-	 * @param {string} text - Before colon
-	 * @param {string} status - After colon
-	 * @returns {Morebits.status} - `error`-type (bold red)
-	 */
-	static error(text, status) { return new Morebits.status(text, status, 'error'); }
-	/**
-	 * For the action complete message at the end, create a status line without
-	 * a colon separator.
-	 *
-	 * @memberof Morebits.status
-	 * @param {string} text
-	 */
-	static actionCompleted(text) {
-		const node = document.createElement('div');
-		node.appendChild(document.createElement('b')).appendChild(document.createTextNode(text));
-		node.className = 'morebits_status_info morebits_action_complete';
-		if (Morebits.status.root) {
-			Morebits.status.root.appendChild(node);
-		}
-	}
-	/**
-	 * Display the user's rationale, comments, etc. Back to them after a failure,
-	 * so that they may re-use it.
-	 *
-	 * @memberof Morebits.status
-	 * @param {string} comments
-	 * @param {string} message
-	 */
-	static printUserText(comments, message) {
-		const p = document.createElement('p');
-		p.innerHTML = message;
-		const div = document.createElement('div');
-		div.className = 'toccolours';
-		div.style.marginTop = '0';
-		div.style.whiteSpace = 'pre-wrap';
-		div.textContent = comments;
-		p.appendChild(div);
-		Morebits.status.root.appendChild(p);
+Morebits.status = function Status(text, stat, type) {
+	this.textRaw = text;
+	this.text = Morebits.createHtml(text);
+	this.type = type || 'status';
+	this.generate();
+	if (stat) {
+		this.update(stat, type);
 	}
 };
 
+/**
+ * Specify an area for status message elements to be added to.
+ *
+ * @memberof Morebits.status
+ * @param {HTMLElement} root - Usually a div element.
+ * @throws If `root` is not an `HTMLElement`.
+ */
+Morebits.status.init = (root) => {
+	if (!(root instanceof Element)) {
+		throw new TypeError('object not an instance of Element');
+	}
+	while (root.hasChildNodes()) {
+		root.firstChild.remove();
+	}
+	Morebits.status.root = root;
+	Morebits.status.errorEvent = null;
+};
 Morebits.status.root = null;
 
+/**
+ * @memberof Morebits.status
+ * @param {Function} handler - Function to execute on error.
+ * @throws When `handler` is not a function.
+ */
+Morebits.status.onError = (handler) => {
+	if (typeof handler === 'function') {
+		Morebits.status.errorEvent = handler;
+	} else {
+		throw new TypeError('Morebits.status.onError: handler is not a function');
+	}
+};
 Morebits.status.prototype = {
 	stat: null,
 	statRaw: null,
@@ -5269,8 +5209,70 @@ Morebits.status.prototype = {
 		this.update(status, 'error');
 	}
 };
+/**
+ * @memberof Morebits.status
+ * @param {string} text - Before colon
+ * @param {string} status - After colon
+ * @returns {Morebits.status} - `status`-type (blue)
+ */
+Morebits.status.status = (text, status) => new Morebits.status(text, status);
+/**
+ * @memberof Morebits.status
+ * @param {string} text - Before colon
+ * @param {string} status - After colon
+ * @returns {Morebits.status} - `info`-type (green)
+ */
+Morebits.status.info = (text, status) => new Morebits.status(text, status, 'info');
+/**
+ * @memberof Morebits.status
+ * @param {string} text - Before colon
+ * @param {string} status - After colon
+ * @returns {Morebits.status} - `warn`-type (red)
+ */
+Morebits.status.warn = (text, status) => new Morebits.status(text, status, 'warn');
+/**
+ * @memberof Morebits.status
+ * @param {string} text - Before colon
+ * @param {string} status - After colon
+ * @returns {Morebits.status} - `error`-type (bold red)
+ */
+Morebits.status.error = (text, status) => new Morebits.status(text, status, 'error');
 
+/**
+ * For the action complete message at the end, create a status line without
+ * a colon separator.
+ *
+ * @memberof Morebits.status
+ * @param {string} text
+ */
+Morebits.status.actionCompleted = (text) => {
+	const node = document.createElement('div');
+	node.appendChild(document.createElement('b')).appendChild(document.createTextNode(text));
+	node.className = 'morebits_status_info morebits_action_complete';
+	if (Morebits.status.root) {
+		Morebits.status.root.appendChild(node);
+	}
+};
 
+/**
+ * Display the user's rationale, comments, etc. Back to them after a failure,
+ * so that they may re-use it.
+ *
+ * @memberof Morebits.status
+ * @param {string} comments
+ * @param {string} message
+ */
+Morebits.status.printUserText = (comments, message) => {
+	const p = document.createElement('p');
+	p.innerHTML = message;
+	const div = document.createElement('div');
+	div.className = 'toccolours';
+	div.style.marginTop = '0';
+	div.style.whiteSpace = 'pre-wrap';
+	div.textContent = comments;
+	p.appendChild(div);
+	Morebits.status.root.appendChild(p);
+};
 
 /**
  * Simple helper function to create a simple node.
@@ -5539,8 +5541,8 @@ Morebits.batchOperation = function (currentAction) {
 			// we haven't already started the next one
 			if (
 				ctx.countFinished >=
-						ctx.countStarted - Math.max(ctx.options.chunkSize / 10, 2) &&
-					Math.floor(ctx.countFinished / ctx.options.chunkSize) > ctx.currentChunkIndex
+							ctx.countStarted - Math.max(ctx.options.chunkSize / 10, 2) &&
+						Math.floor(ctx.countFinished / ctx.options.chunkSize) > ctx.currentChunkIndex
 			) {
 				fnStartNewChunk();
 			}
@@ -5651,83 +5653,67 @@ Morebits.taskManager = function (context) {
  * @param {number} width
  * @param {number} height - The maximum allowable height for the content area.
  */
-Morebits.simpleWindow = class SimpleWindow {
-	constructor(width, height) {
-		const content = document.createElement('div');
-		this.content = content;
-		content.className = 'morebits-dialog-content';
-		content.id = `morebits-dialog-content-${Math.round(Math.random() * 1e15)}`;
-		this.height = height;
-		$(this.content).dialog({
-			autoOpen: false,
-			buttons: {
-				'Placeholder button': () => {}
-			},
-			dialogClass: 'morebits-dialog',
-			width: Math.min(
-				Number.parseInt(window.innerWidth, 10),
-				Number.parseInt(width || 800, 10)
-			),
-			// give jQuery the given height value (which represents the anticipated height of the dialog) here, so
-			// it can position the dialog appropriately
-			// the 20 pixels represents adjustment for the extra height of the jQuery dialog "chrome", compared
-			// to that of the old SimpleWindow
-			height: height + 20,
-			close: (event) => {
-				// dialogs and their content can be destroyed once closed
-				$(event.target).dialog('destroy').remove();
-			},
-			resizeStart: function () {
-				this.scrollbox = $(this).find('.morebits-scrollbox')[0];
-				if (this.scrollbox) {
-					this.scrollbox.style.maxHeight = 'none';
-				}
-			},
-			resizeStop: function () {
-				this.scrollbox = null;
-			},
-			resize: function () {
-				this.style.maxHeight = '';
-				if (this.scrollbox) {
-					this.scrollbox.style.width = '';
-				}
+Morebits.simpleWindow = function SimpleWindow(width, height) {
+	const content = document.createElement('div');
+	this.content = content;
+	content.className = 'morebits-dialog-content';
+	content.id = `morebits-dialog-content-${Math.round(Math.random() * 1e15)}`;
+	this.height = height;
+	$(this.content).dialog({
+		autoOpen: false,
+		buttons: {
+			'Placeholder button': () => {}
+		},
+		dialogClass: 'morebits-dialog',
+		width: Math.min(
+			Number.parseInt(window.innerWidth, 10),
+			Number.parseInt(width || 800, 10)
+		),
+		// give jQuery the given height value (which represents the anticipated height of the dialog) here, so
+		// it can position the dialog appropriately
+		// the 20 pixels represents adjustment for the extra height of the jQuery dialog "chrome", compared
+		// to that of the old SimpleWindow
+		height: height + 20,
+		close: (event) => {
+			// dialogs and their content can be destroyed once closed
+			$(event.target).dialog('destroy').remove();
+		},
+		resizeStart: function () {
+			this.scrollbox = $(this).find('.morebits-scrollbox')[0];
+			if (this.scrollbox) {
+				this.scrollbox.style.maxHeight = 'none';
 			}
-		});
-		const $widget = $(this.content).dialog('widget');
+		},
+		resizeStop: function () {
+			this.scrollbox = null;
+		},
+		resize: function () {
+			this.style.maxHeight = '';
+			if (this.scrollbox) {
+				this.scrollbox.style.width = '';
+			}
+		}
+	});
+	const $widget = $(this.content).dialog('widget');
 
-		// delete the placeholder button (it's only there so the buttonpane gets created)
-		$widget.find('button').each((_key, value) => {
-			value.remove();
-		});
+	// delete the placeholder button (it's only there so the buttonpane gets created)
+	$widget.find('button').each((_key, value) => {
+		value.remove();
+	});
 
-		// add container for the buttons we add, and the footer links (if any)
-		const buttonspan = document.createElement('span');
-		buttonspan.className = 'morebits-dialog-buttons';
-		const linksspan = document.createElement('span');
-		linksspan.className = 'morebits-dialog-footerlinks';
-		$widget.find('.ui-dialog-buttonpane').append(buttonspan, linksspan);
+	// add container for the buttons we add, and the footer links (if any)
+	const buttonspan = document.createElement('span');
+	buttonspan.className = 'morebits-dialog-buttons';
+	const linksspan = document.createElement('span');
+	linksspan.className = 'morebits-dialog-footerlinks';
+	$widget.find('.ui-dialog-buttonpane').append(buttonspan, linksspan);
 
-		// resize the scrollbox with the dialog, if one is present
-		$widget.resizable(
-			'option',
-			'alsoResize',
-			`#${this.content.id} .morebits-scrollbox, #${this.content.id}`
-		);
-	}
-	/**
-	 * Enables or disables all footer buttons on all {@link Morebits.simpleWindow}s in the current page.
-	 * This should be called with `false` when the button(s) become irrelevant (e.g. just before
-	 * {@link Morebits.status.init} is called).
-	 * This is not an instance method so that consumers don't have to keep a reference to the
-	 * original `Morebits.simpleWindow` object sitting around somewhere. Anyway, most of the time
-	 * there will only be one `Morebits.simpleWindow` open, so this shouldn't matter.
-	 *
-	 * @memberof Morebits.simpleWindow
-	 * @param {boolean} enabled
-	 */
-	static setButtonsEnabled(enabled) {
-		$('.morebits-dialog-buttons button').prop('disabled', !enabled);
-	}
+	// resize the scrollbox with the dialog, if one is present
+	$widget.resizable(
+		'option',
+		'alsoResize',
+		`#${this.content.id} .morebits-scrollbox, #${this.content.id}`
+	);
 };
 Morebits.simpleWindow.prototype = {
 	buttons: [],
@@ -5900,7 +5886,7 @@ Morebits.simpleWindow.prototype = {
 				.append(this.buttons)[0].dataset.empty;
 		} else {
 			$(this.content).dialog('widget').find('.morebits-dialog-buttons')[0].dataset.empty =
-					'data-empty'; // used by CSS
+						'data-empty'; // used by CSS
 		}
 
 		return this;
@@ -5971,6 +5957,20 @@ Morebits.simpleWindow.prototype = {
 	}
 };
 
+/**
+ * Enables or disables all footer buttons on all {@link Morebits.simpleWindow}s in the current page.
+ * This should be called with `false` when the button(s) become irrelevant (e.g. just before
+ * {@link Morebits.status.init} is called).
+ * This is not an instance method so that consumers don't have to keep a reference to the
+ * original `Morebits.simpleWindow` object sitting around somewhere. Anyway, most of the time
+ * there will only be one `Morebits.simpleWindow` open, so this shouldn't matter.
+ *
+ * @memberof Morebits.simpleWindow
+ * @param {boolean} enabled
+ */
+Morebits.simpleWindow.setButtonsEnabled = (enabled) => {
+	$('.morebits-dialog-buttons button').prop('disabled', !enabled);
+};
 })(window, document, jQuery); // End wrap with anonymous function
 
 /**
