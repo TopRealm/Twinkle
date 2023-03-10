@@ -1446,9 +1446,7 @@ Twinkle.protect.callbacks = {
 
 		words += params.typename;
 
-		newtag += `* <small>当前保护状态：{{protection status|${mw.config.get(
-			'wgPageName'
-		)}}}</small>\n`;
+		newtag += `* <small>当前保护状态：{{protection status|${ /=/.test(Morebits.pageNameNorm) ? '1=' : '' }${Morebits.pageNameNorm }}}</small>\n`;
 		newtag +=
 				`请求${Morebits.string.toUpperCaseFirstChar(words)}${
 					params.reason !== ''
