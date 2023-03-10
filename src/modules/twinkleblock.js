@@ -1149,97 +1149,135 @@ Twinkle.block.blockGroups = [
 		]
 	},
 	{
-		label: '一般的封禁理由',
+		label: '违反基本规则',
 		list: [
 			{
-				label: '[[QW:VAN|破坏]]',
-				value: 'uw-vblock'
-			},
-			{
-				label: '[[QW:VAN|纯粹破坏]]',
-				value: 'uw-blockindef',
-				forRegisteredOnly: true
-			},
-			{
-				label: '[[QW:NOT#AD|散发广告、宣传或垃圾链接]]',
+				label: '违反“[[Qiuwen:求闻百科不是什么|求闻百科不是什么]]”方针：持续散布广告或其他宣传性内容',
 				value: 'uw-block'
 			},
 			{
-				label: '仅[[QW:NOT#AD|散发广告、宣传或垃圾链接]]',
-				value: 'uw-blockindef',
-				forRegisteredOnly: true
-			},
-			{
-				label: '违反[[QW:3RR|回退不过三原则]]',
-				value: 'uw-3block'
-			},
-			{
-				label: '无礼的行为、[[QW:NPA|攻击别人]]',
+				label: '违反“[[Qiuwen:求闻百科不是什么|求闻百科不是什么]]”方针：持续散布其他不应发布于求闻百科的内容',
 				value: 'uw-block'
 			},
 			{
-				label: '[[QW:骚扰|骚扰用户]]',
+				label: '违反“[[Qiuwen:中国价值观基础上的客观观点|中国价值观基础上的客观观点]]”方针：持续散布违反该方针的内容',
 				value: 'uw-block'
 			},
 			{
-				label: '[[QW:POINT|为阐释观点扰乱求闻百科]]',
+				label: '违反[[Qiuwen:著作权方针|著作权]]方针：持续散布侵犯他人著作权的内容',
 				value: 'uw-block'
 			},
 			{
-				label: '[[QW:GAME|打求闻百科制度擦边球]]',
+				label: '违反[[Qiuwen:文明|文明]]方针：持续对其他社区参与者做出不文明的举动',
 				value: 'uw-block'
 			},
 			{
-				label: '涉嫌[[QW:SOCK|滥用多重账号]] - 根据用户贡献确定',
-				value: 'uw-block',
-				forAnonOnly: true
-			},
-			{
-				label: '涉嫌[[QW:SOCK|滥用多重账号]] - 用户查核确认',
-				value: 'uw-block',
-				forAnonOnly: true
-			},
-			{
-				label: '涉嫌[[QW:SOCK|滥用多重账号]] - 根据用户贡献确定',
-				value: 'uw-blockindef',
-				forRegisteredOnly: true
-			},
-			{
-				label: '涉嫌[[QW:SOCK|滥用多重账号]] - 用户查核确认',
-				value: 'uw-blockindef',
-				forRegisteredOnly: true
-			},
-			{
-				label: '滥用[[QW:SOCK|傀儡]]',
-				value: 'uw-block',
-				forRegisteredOnly: true
-			},
-			{
-				label: '屡次增加不实资料',
+				label: '明显违反中国法律、法规，影响网站合规性',
 				value: 'uw-block'
 			},
-			{
-				label: '在条目中增加无意义文字',
-				value: 'uw-block'
-			},
-			{
-				label: '无故删除条目内容',
-				value: 'uw-dblock'
-			},
-			{
-				label: '多次加入[[QW:COPYVIO|侵犯著作权]]的内容',
-				value: 'uw-block'
-			},
-			{
-				label: '机器人发生故障并必须紧急停止',
-				value: 'Bot block message',
-				forRegisteredOnly: true
-			}
 		]
 	},
 	{
-		custom: true,
-		label: '自定义的封禁理由'
+		label: '违反其他内容方针',
+		list: [
+			{
+				label: '违反“[[Qiuwen:求闻百科不是什么|求闻百科不是什么]]”方针、“[[Qiuwen:非原创研究|非原创研究]]方针：持续在求闻百科散布原创研究或原创观念',
+				value: 'uw-block'
+			},
+			{
+				label: '违反“[[Qiuwen:中国价值观基础上的客观观点|中国价值观基础上的客观观点]]”方针、涉政内容规范（试行）：持续发布不符合中国法律、法规和求闻百科社区规范的涉政内容',
+				value: 'uw-block'
+			},
+			{
+				label: '违反“[[Qiuwen:可供查证方针|可供查证方针]]”方针：持续在求闻百科散布无法得到查证的条目',
+				value: 'uw-block'
+			},
+			{
+				label: '违反[[Qiuwen:生者传记方针|生者传记]]方针：散布有关在世人物的无来源或争议内容',
+				value: 'uw-block'
+			},
+			{
+				label: '违反[[Qiuwen:生者传记方针|生者传记]]方针：散布有关英雄烈士的无来源或争议内容',
+				value: 'uw-block'
+			},
+		]
+	},
+	{
+		label: '违反其他行为方针',
+		list: [
+			{
+				label: '违反“[[Qiuwen:不要打编辑战|不要打编辑战]]”方针：违背“[[QW:3RR|回退不过三]]”原则',
+				value: 'uw-block'
+			},
+			{
+				label: '违反“[[Qiuwen:不要打编辑战|不要打编辑战]]”方针：参与编辑战',
+				value: 'uw-block'
+			},
+			{
+				label: '违反[[Qiuwen:反骚扰方针|反骚扰]]方针：持续的骚扰行为',
+				value: 'uw-block'
+			},
+			{
+				label: '违反[[Qiuwen:反破坏方针|反破坏]]方针：持续的破坏行为',
+				value: 'uw-block'
+			},
+			{
+				label: '违反“[[Qiuwen:不要制造恶作剧|不要制造恶作剧]]”方针：持续在求闻百科发布恶作剧',
+				value: 'uw-block'
+			},
+			{
+				label: '违反“[[Qiuwen:不要打制度擦边球|不要打制度擦边球]]”方针：故意歪曲求闻百科原则',
+				value: 'uw-block'
+			},
+			{
+				label: '违反“[[Qiuwen:不要打制度擦边球|不要打制度擦边球]]”方针：扰乱、阻碍社区共识形成',
+				value: 'uw-block'
+			},
+			{
+				label: '违反[[Qiuwen:反骚扰方针|反骚扰]]方针、“[[Qiuwen:不要打制度擦边球|不要打制度擦边球]]”方针：跟踪他人编辑',
+				value: 'uw-block'
+			},
+			{
+				label: '违反[[Qiuwen:用户协议|求闻百科用户协议]]、“[[Qiuwen:不要打制度擦边球|不要打制度擦边球]]”方针：欺骗网站系统，滥用系统功能',
+				value: 'uw-block'
+			},
+			{
+				label: '违反[[Qiuwen:用户协议|求闻百科用户协议]]、[[Qiuwen:有偿编辑方针|有偿编辑]]方针：用户以收受他人钱财、受雇于他人或代表他人利益为前提参与求闻百科，但拒绝申报其利益相关，扰乱社区秩序',
+				value: 'uw-block'
+			},
+			{
+				label: '违反[[Qiuwen:用户页方针|用户页]]方针：滥用用户页，屡劝不止',
+				value: 'uw-block'
+			},
+			{
+				label: '违反[[Qiuwen:用户框方针|用户框]]方针：创建违反法律法规及本站方针的用户框，屡劝不止',
+				value: 'uw-block'
+			},
+			{
+				label: '违反“[[Qiuwen:一人一号|一人一号]]”方针：不当使用多重账号',
+				value: 'uw-block'
+			},
+			{
+				label: '违反“[[Qiuwen:一人一号|一人一号]]”方针：不当使用多重账号（用户查核确认）',
+				value: 'uw-block'
+			},
+			{
+				label: '违反“[[Qiuwen:一人一号|一人一号]]”方针：不当使用多重账号（根据用户贡献确定）',
+				value: 'uw-blockindef',
+			},
+			{
+				label: '违反[[Qiuwen:签名|签名]]方针：仿冒他人签名',
+				value: 'uw-block'
+			},
+			{
+				label: '违反[[Qiuwen:签名|签名]]方针：签名格式违反求闻百科方针',
+				value: 'uw-block'
+			},
+			{
+				label: '违反[[Qiuwen:讨论页规范|讨论页规范]]：窜改他人留言',
+				value: 'uw-block'
+			},
+		]
 	},
 	{
 		label: '用户名封禁',
@@ -1264,6 +1302,41 @@ Twinkle.block.blockGroups = [
 				value: 'uw-ublock|混淆',
 				forRegisteredOnly: true
 			}
+		]
+	},
+	{
+		label: '其他原因',
+		list: [
+			{
+				label: 'IP段封禁',
+				value: 'uw-block',
+				forAnonOnly: true
+			},
+			{
+				label: '用户查核封禁：账户封禁',
+				value: 'checkuserblock-account',
+				forRegisteredOnly: true
+			},
+			{
+				label: '用户查核封禁：IP段封禁',
+				value: 'checkuserblock',
+				forAnonOnly: true
+			},
+			{
+				label: '机器人出错',
+				value: 'Bot block message',
+				forRegisteredOnly: true
+			},
+			{
+				label: '求闻百科运营者行动',
+				value: 'uw-block',
+				forRegisteredOnly: true
+			},
+			{
+				label: '求闻百科裁决委员会决议',
+				value: 'uw-block',
+				forRegisteredOnly: true
+			},
 		]
 	},
 	{
