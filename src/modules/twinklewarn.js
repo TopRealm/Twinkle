@@ -1100,10 +1100,6 @@ Twinkle.warn.messages = {
 			label: '长期的破坏',
 			summary: '警告：长期的破坏'
 		},
-		'uw-multipleIPs': {
-			label: '使用多个IP地址进行破坏',
-			summary: '警告：使用多个IP地址进行破坏'
-		},
 		'uw-npov-tvd': {
 			label: '在剧集条目中加入奸角等非中立描述',
 			summary: '警告：在剧集条目中加入奸角等非中立描述'
@@ -1549,11 +1545,9 @@ Twinkle.warn.callbacks = {
 			// Non-numbered warning
 			// Try to leverage existing categorization of
 			// warnings, all but one are universally lowercased
-			const loweredType = /uw-multipleips/i.test(latest.type)
-				? 'uw-multipleIPs'
-				: latest.type.toLowerCase();
-				// It would be nice to account for blocks, but in most
-				// cases the hidden message is terminal, not the sig
+			const loweredType = latest.type.toLowerCase();
+			// It would be nice to account for blocks, but in most
+			// cases the hidden message is terminal, not the sig
 			level = Twinkle.warn.messages.singlewarn[loweredType] ? 3 : 1; // singlenotice or not found
 		}
 
