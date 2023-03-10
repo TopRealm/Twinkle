@@ -940,16 +940,6 @@ Twinkle.block.callback.change_action = (e) => {
  *   To disable, set 'hardblock' and 'disabletalk', respectively
  */
 Twinkle.block.blockPresetsInfo = {
-	anonblock: {
-		expiry: '3 days',
-		forAnonOnly: true,
-		nocreate: true,
-		nonstandard: true,
-		reason: '{{anonblock}}',
-		summary: '匿名编辑封禁',
-
-		sig: '~~' + '~~'
-	},
 	'blocked proxy': {
 		expiry: '2 years',
 		nocreate: true,
@@ -1245,7 +1235,6 @@ Twinkle.block.blockGroups = [
 				value: 'Bot block message',
 				forRegisteredOnly: true
 			}
-			// { label: '剥夺编辑讨论页权限', value: '' }
 		]
 	},
 	{
@@ -1284,11 +1273,6 @@ Twinkle.block.blockGroups = [
 				label: '',
 				value: 'uw-ublock',
 				forRegisteredOnly: true
-			},
-			{
-				label: '',
-				value: 'anonblock',
-				forAnonOnly: true
 			},
 			{
 				label: '',
