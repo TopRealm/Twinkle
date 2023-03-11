@@ -700,20 +700,6 @@ Twinkle.warn.messages = {
 			}
 		},
 		'非能接受且违反方针或指引的单方面行为或操作': {
-			'uw-notcensored': {
-				level1: {
-					label: '因为“内容使人反感”而删除条目内容',
-					summary: '提醒：审查条目内容'
-				},
-				level2: {
-					label: '内容审查',
-					summary: '注意：内容审查'
-				},
-				level3: {
-					label: '审查内容',
-					summary: '警告：审查内容'
-				}
-			},
 			'uw-mos': {
 				level1: {
 					label: '不恰当的条目格式、日期、语言等',
@@ -1091,10 +1077,6 @@ Twinkle.warn.messages = {
 		'uw-incompletecite': {
 			label: '列出的资料来源欠缺若干详情而不易查找',
 			summary: '警告：列出的资料来源欠缺若干详情而不易查找'
-		},
-		'uw-legal': {
-			label: '诉诸法律威胁',
-			summary: '警告：诉诸法律威胁'
 		},
 		'uw-longterm': {
 			label: '长期的破坏',
