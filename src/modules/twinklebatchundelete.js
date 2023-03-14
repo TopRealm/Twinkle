@@ -5,8 +5,8 @@
  * @source https://git.qiuwen.wiki/InterfaceAdmin/Twinkle
  * @source https://git.qiuwen.wiki/Mirror/xiplus-twinkle
  * @author © 2011-2022 English Wikipedia Contributors
- * @author © 2011-2021 Chinese Wikipedia Contributors
- * @author © 2021-     Qiuwen Baike Contributors
+ * @author © 2011-2023 Chinese Wikipedia Contributors
+ * @author © 2011-2023 Qiuwen Baike Contributors
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - twinklebatchundelete.js */
