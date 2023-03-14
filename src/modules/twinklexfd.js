@@ -671,7 +671,7 @@ Twinkle.xfd.callbacks = {
 			}
 		}
 
-		// If a logged file is deleted but exists on commons, the wikilink will be blue, so provide a link to the log
+		// If a logged file is deleted but exists on Qiuwen Share, the wikilink will be blue, so provide a link to the log
 		let appendText = `# [[:${Morebits.pageNameNorm}]]`;
 		if (mw.config.get('wgNamespaceNumber') === 6) {
 			appendText += `（[{{fullurl:Special:Log|page=${mw.util.wikiUrlencode(

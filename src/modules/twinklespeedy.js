@@ -1365,7 +1365,7 @@ Twinkle.speedy.callbacks = {
 			if (mw.config.get('wgNamespaceNumber') === 6) {
 				// remove "move to Commons" tag - deletion-tagged files cannot be moved to Commons
 				text = text.replace(
-					/{{(mtc|(copy |move )?to ?commons|move to wikimedia commons|copy to wikimedia commons)[^}]*}}/gi,
+					/{{(mtc|(copy |move )?to ?commons|move to qiuwen share|copy to qiuwen share)[^}]*}}/gi,
 					''
 				);
 			}

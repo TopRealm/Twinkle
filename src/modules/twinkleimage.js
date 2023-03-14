@@ -239,7 +239,7 @@ Twinkle.image.callbacks = {
 		const params = pageobj.getCallbackParameters();
 
 		// remove "move to Commons" tag - deletion-tagged files cannot be moved to Commons
-		// text = text.replace(/\{\{(mtc|(copy |move )?to ?commons|move to wikimedia commons|copy to wikimedia commons)[^}]*\}\}/gi, '');
+		// text = text.replace(/\{\{(mtc|(copy |move )?to ?share|move to qiuwen share|copy to qiuwen share)[^}]*\}\}/gi, '');
 		let tag = `{{di-${params.templatename}|date={{subst:#time:c}}`;
 		switch (params.type) {
 			case 'no source no license':
@@ -318,7 +318,7 @@ Twinkle.image.callbacks = {
 		};
 		let extraInfo = '';
 
-		// If a logged file is deleted but exists on commons, the wikilink will be blue, so provide a link to the log
+		// If a logged file is deleted but exists on Qiuwen Share, the wikilink will be blue, so provide a link to the log
 		const fileLogLink = ` ([{{fullurl:Special:Log|page=${mw.util.wikiUrlencode(
 			mw.config.get('wgPageName')
 		)}}} log])`;
