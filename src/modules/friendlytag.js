@@ -378,7 +378,7 @@ Twinkle.tag.updateSortOrder = (e) => {
 			checkbox.checked = true;
 		}
 		switch (tag) {
-			case 'Expand language': {
+			/* case 'Expand language': {
 				checkbox.subgroup = [
 					{
 						name: 'expandLanguage',
@@ -424,7 +424,7 @@ Twinkle.tag.updateSortOrder = (e) => {
 					}
 				];
 				break;
-			}
+			} */
 			case 'Expert needed': {
 				checkbox.subgroup = [
 					{
@@ -867,7 +867,7 @@ Twinkle.tag.article.tagList = [
 			{
 				key: '内容',
 				value: [
-					{ tag: 'Expand language', description: '可以根据其他语言版本扩展' }, // these three have a subgroup with several options
+					/* { tag: 'Expand language', description: '可以根据其他语言版本扩展' }, */ // these three have a subgroup with several options
 					{ tag: 'Missing information', description: '缺少必要的信息' }, // these three have a subgroup with several options
 					{ tag: 'Substub', description: '过于短小', excludeMI: true },
 					{ tag: 'Unencyclopedic', description: '可能不适合写入百科全书' }
@@ -1435,7 +1435,7 @@ Twinkle.tag.callbacks = {
 				currentTag += `{{${tagName}`;
 				// fill in other parameters, based on the tag
 				switch (tagName) {
-					case 'Expand language': {
+					/* case 'Expand language': {
 						currentTag += `|1=${params.expandLanguage}`;
 						if (params.highQualityArticle) {
 							currentTag += '|status=yes';
@@ -1453,7 +1453,7 @@ Twinkle.tag.callbacks = {
 							}
 						}
 						break;
-					}
+					} */
 					case 'Expert needed': {
 						currentTag += `|subject=${params.expert}`;
 						if (params.expert2) {
@@ -2005,9 +2005,9 @@ Twinkle.tag.callback.evaluate = (e) => {
 				}
 			}
 
-			if (checkParameter('Expand language', 'expandLanguage', '语言代码')) {
+			/* if (checkParameter('Expand language', 'expandLanguage', '语言代码')) {
 				return;
-			}
+			} */
 			if (checkParameter('Missing information', 'missingInformation', '缺少的内容')) {
 				return;
 			}
