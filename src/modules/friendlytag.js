@@ -16,7 +16,7 @@
  * friendlytag.js: Tag module
  * Mode of invocation:     Tab ("Tag")
  * Active on:              Existing articles and drafts; file pages with a corresponding file
- *                         which is local (not on Commons); all redirects
+ *                         which is local (not on Share); all redirects
  */
 Twinkle.tag = () => {
 	// redirect tagging
@@ -777,11 +777,11 @@ Twinkle.tag.article.tagList = [
 				value: [
 					{
 						tag: 'Cleanup',
-						description: '可能需要进行清理，以符合维基百科的质量标准'
+						description: '可能需要进行清理，以符合求闻百科的质量标准'
 					},
 					{
 						tag: 'Cleanup rewrite',
-						description: '不符合维基百科的质量标准，需要完全重写'
+						description: '不符合求闻百科的质量标准，需要完全重写'
 					},
 					{
 						tag: 'Cleanup-jargon',
@@ -799,7 +799,7 @@ Twinkle.tag.article.tagList = [
 					{ tag: 'Copypaste', description: '内容可能是从某个来源处拷贝后粘贴' },
 					{
 						tag: 'External links',
-						description: '使用外部链接的方式可能不符合维基百科的方针或指引'
+						description: '使用外部链接的方式可能不符合求闻百科的方针或指引'
 					},
 					{
 						tag: 'Non-free',
@@ -917,7 +917,7 @@ Twinkle.tag.article.tagList = [
 			{
 				key: '可供查证和来源',
 				value: [
-					{ tag: 'BLPdispute', description: '可能违反了维基百科关于生者传记的方针' },
+					{ tag: 'BLPdispute', description: '可能违反了求闻百科关于生者传记的方针' },
 					{ tag: 'BLPsources', description: '生者传记需要补充更多可供查证的来源' },
 					{ tag: 'BLP unsourced', description: '生者传记没有列出任何参考或来源' },
 					{
@@ -1070,7 +1070,7 @@ Twinkle.tag.redirectList = [
 					}
 				]
 			},
-			{ tag: '快捷方式重定向', description: '维基百科快捷方式' }
+			{ tag: '快捷方式重定向', description: '求闻百科快捷方式' }
 		]
 	},
 	{
@@ -1101,26 +1101,26 @@ Twinkle.tag.fileList = [
 		]
 	},
 	/* {
-		key: '维基共享资源相关标签',
+		key: '求闻共享资源相关标签',
 		value: [
 			{
 				label:
-						'{{Copy to Wikimedia Commons}}：' +
-						'自由著作权文件应该被移动至维基共享资源',
-				value: 'Copy to Wikimedia Commons'
+						'{{Copy to Qiuwen Share}}：' +
+						'自由著作权文件应该被移动至求闻共享资源',
+				value: 'Copy to Qiuwen Share'
 			},
 			{
-				label: '{{Do not move to Commons}}：' + '不要移动至维基共享资源',
-				value: 'Do not move to Commons',
+				label: '{{Do not move to Share}}：' + '不要移动至求闻共享资源',
+				value: 'Do not move to Share',
 				subgroup: {
 					type: 'input',
-					name: 'DoNotMoveToCommons_reason',
+					name: 'DoNotMoveToShare_reason',
 					label: '原因：',
-					tooltip: '输入不应该将该图像移动到维基共享资源的原因（必填）。'
+					tooltip: '输入不应该将该图像移动到求闻共享资源的原因（必填）。'
 				}
 			},
 			{
-				label: '{{Keep local}}：' + '请求在本地保留维基共享资源的文件副本',
+				label: '{{Keep local}}：' + '请求在本地保留求闻共享资源的文件副本',
 				value: 'Keep local',
 				subgroup: [
 					{
@@ -1139,11 +1139,11 @@ Twinkle.tag.fileList = [
 				]
 			},
 			{
-				label: '{{Now Commons}}：' + '文件已被复制到维基共享资源',
-				value: 'Now Commons',
+				label: '{{Now Share}}：' + '文件已被复制到求闻共享资源',
+				value: 'Now Share',
 				subgroup: {
 					type: 'input',
-					name: 'nowcommonsName',
+					name: 'nowshareName',
 					label: '共享资源的不同图像名称：',
 					tooltip: '输入在共享资源的图像名称（若不同于本地名称），不包括 File: 前缀'
 				}
@@ -1851,10 +1851,10 @@ Twinkle.tag.callbacks = {
 			let tagtext = '',
 				currentTag;
 			$.each(params.tags, (_k, tag) => {
-				// when other commons-related tags are placed, remove "move to Commons" tag
-				if (['Keep local', 'Now Commons', 'Do not move to Commons'].includes(tag)) {
+				// when other Qiuwen Share-related tags are placed, remove "move to Share" tag
+				if (['Keep local', 'Now Share', 'Do not move to Share'].includes(tag)) {
 					text = text.replace(
-						/{{(mtc|(copy |move )?to ?commons|move to wikimedia commons|copy to wikimedia commons)[^}]*}}/gi,
+						/{{(mtc|(copy |move )?to ?share|move to qiuwen share|copy to qiuwen share)[^}]*}}/gi,
 						''
 					);
 				}
@@ -1868,10 +1868,10 @@ Twinkle.tag.callbacks = {
 				currentTag = tag;
 
 				switch (tag) {
-					case 'Now Commons': {
+					case 'Now Share': {
 						currentTag = `subst:${currentTag}`; // subst
-						if (params.nowcommonsName !== '') {
-							currentTag += `|1=${params.nowcommonsName}`;
+						if (params.nowshareName !== '') {
+							currentTag += `|1=${params.nowshareName}`;
 						}
 						break;
 					}
@@ -1899,11 +1899,11 @@ Twinkle.tag.callbacks = {
 						currentTag += `|1=${params[`${tag.replace(/ /g, '_')}File`]}`;
 						break;
 					}
-					case 'Do not move to Commons': {
-						currentTag += `|reason=${params.DoNotMoveToCommons_reason}`;
+					case 'Do not move to Share': {
+						currentTag += `|reason=${params.DoNotMoveToShare_reason}`;
 						break;
 					}
-					case 'Copy to Wikimedia Commons': {
+					case 'Copy to Qiuwen Share': {
 						currentTag += `|human=${mw.config.get('wgUserName')}`;
 						break;
 					}
@@ -2029,7 +2029,7 @@ Twinkle.tag.callback.evaluate = (e) => {
 			) {
 				return;
 			}
-			if (checkParameter('Do not move to Commons', 'DoNotMoveToCommons_reason')) {
+			if (checkParameter('Do not move to Share', 'DoNotMoveToShare_reason')) {
 				return;
 			}
 			break;
