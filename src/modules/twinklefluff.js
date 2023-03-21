@@ -931,13 +931,13 @@ Twinkle.fluff.formatSummary = (builtInString, userName, customString) => {
 	// over the 499-byte limit
 	if (/\$USER/.test(builtInString)) {
 		if (userName) {
-			const resultLen = unescape(encodeURIComponent(result.replace('$USER', ''))).length;
+			const resultLen = decodeURIComponent(encodeURIComponent(result.replace('$USER', ''))).length;
 			const contribsLink = `[[Special:Contribs/${userName}|${userName}]]`;
-			const contribsLen = unescape(encodeURIComponent(contribsLink)).length;
+			const contribsLen = decodeURIComponent(encodeURIComponent(contribsLink)).length;
 			if (resultLen + contribsLen <= 499) {
 				const talkLink = `（[[User talk:${userName}|讨论]]）`;
 				result =
-						resultLen + contribsLen + unescape(encodeURIComponent(talkLink)).length <=
+						resultLen + contribsLen + decodeURIComponent(encodeURIComponent(talkLink)).length <=
 						499
 							? Morebits.string.safeReplace(result, '$USER', contribsLink + talkLink)
 							: Morebits.string.safeReplace(result, '$USER', contribsLink);
