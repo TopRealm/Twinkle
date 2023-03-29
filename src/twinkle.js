@@ -1,3 +1,4 @@
+/* <nowiki> */
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
  * _addText: '{{Twinkle Header}}'
@@ -10,7 +11,6 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - twinkle.js */
-/* <nowiki> */
 /**
  * +-------------------------------------------------------+
  * |         === WARNING: GLOBAL GADGET FILE ===           |
@@ -631,4 +631,5 @@ Twinkle.generateBatchPageLinks = (checkbox) => {
 	$checkbox.next().prepend([link, ' ']);
 };
 })(window, document, jQuery); // End wrap with anonymous function
+
 /* </nowiki> */

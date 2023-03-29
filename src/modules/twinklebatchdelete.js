@@ -1,3 +1,4 @@
+/* <nowiki> */
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
  * _addText: '{{Twinkle Header}}'
@@ -10,7 +11,6 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - twinklebatchdelete.js */
-/* <nowiki> */
 (($) => {
 /**
  * twinklebatchdelete.js: Batch delete module (sysops only)
@@ -834,4 +834,5 @@ Twinkle.batchdelete.callbacks = {
 };
 Twinkle.addInitCallback(Twinkle.batchdelete, 'batchdelete');
 })(jQuery);
+
 /* </nowiki> */

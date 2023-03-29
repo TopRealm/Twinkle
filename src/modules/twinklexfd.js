@@ -1,3 +1,4 @@
+/* <nowiki> */
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
  * _addText: '{{Twinkle Header}}'
@@ -10,7 +11,6 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - twinkleblock.js */
-/* <nowiki> */
 (($) => {
 /**
  * twinklexfd.js: XFD module
@@ -801,4 +801,5 @@ Twinkle.xfd.callback.evaluate = (e) => {
 };
 Twinkle.addInitCallback(Twinkle.xfd, 'xfd');
 })(jQuery);
+
 /* </nowiki> */

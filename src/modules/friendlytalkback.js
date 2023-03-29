@@ -1,3 +1,4 @@
+/* <nowiki> */
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
  * _addText: '{{Twinkle Header}}'
@@ -10,7 +11,6 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - friendlytalkback.js */
-/* <nowiki> */
 (($) => {
 /**
  * friendlytalkback.js: Talkback module
@@ -427,4 +427,5 @@ Twinkle.talkback.callbacks = {
 };
 Twinkle.addInitCallback(Twinkle.talkback, 'talkback');
 })(jQuery);
+
 /* </nowiki> */

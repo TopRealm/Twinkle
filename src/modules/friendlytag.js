@@ -1,3 +1,4 @@
+/* <nowiki> */
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
  * _addText: '{{Twinkle Header}}'
@@ -10,7 +11,6 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - friendlytag.js */
-/* <nowiki> */
 (($) => {
 /**
  * friendlytag.js: Tag module
@@ -2074,4 +2074,5 @@ Twinkle.tag.callback.evaluate = (e) => {
 
 Twinkle.addInitCallback(Twinkle.tag, 'tag');
 })(jQuery);
+
 /* </nowiki> */

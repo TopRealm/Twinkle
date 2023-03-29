@@ -1,3 +1,4 @@
+/* <nowiki> */
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
  * _addText: '{{Twinkle Header}}'
@@ -10,7 +11,6 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - twinklediff.js */
-/* <nowiki> */
 (($) => {
 /**
  * twinklediff.js: Diff module
@@ -116,4 +116,5 @@ Twinkle.diff.callbacks = {
 };
 Twinkle.addInitCallback(Twinkle.diff, 'diff');
 })(jQuery);
+
 /* </nowiki> */

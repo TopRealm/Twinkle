@@ -1,4 +1,5 @@
 /* eslint-disable quote-props */
+/* <nowiki> */
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
  * _addText: '{{Twinkle Header}}'
@@ -11,7 +12,6 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - twinklewarn.js */
-/* <nowiki> */
 (($) => {
 /**
  * twinklewarn.js: Warn module
@@ -1905,4 +1905,5 @@ Twinkle.warn.callback.evaluate = (e) => {
 };
 Twinkle.addInitCallback(Twinkle.warn, 'warn');
 })(jQuery);
+
 /* </nowiki> */

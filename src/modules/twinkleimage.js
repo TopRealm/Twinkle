@@ -1,3 +1,4 @@
+/* <nowiki> */
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
  * _addText: '{{Twinkle Header}}'
@@ -10,7 +11,6 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - twinkleimage.js */
-/* <nowiki> */
 (($) => {
 /**
  * twinkleimage.js: Image CSD module
@@ -352,4 +352,5 @@ Twinkle.image.callbacks = {
 };
 Twinkle.addInitCallback(Twinkle.image, 'image');
 })(jQuery);
+
 /* </nowiki> */

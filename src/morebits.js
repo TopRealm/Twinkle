@@ -1,3 +1,4 @@
+/* <nowiki> */
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
  * _addText: '{{Twinkle Header}}'
@@ -10,7 +11,6 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - morebits.js */
-/* <nowiki> */
 /**
  * A library full of lots of goodness for user scripts on MediaWiki wikis.
  *
@@ -5989,5 +5989,6 @@ if (typeof arguments === 'undefined') {
 	window.QuickForm = Morebits.quickForm;
 	window.Status = Morebits.status;
 }
+
 
 /* </nowiki> */

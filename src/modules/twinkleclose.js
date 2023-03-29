@@ -1,4 +1,5 @@
 /* eslint-disable quote-props */
+/* <nowiki> */
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
  * _addText: '{{Twinkle Header}}'
@@ -11,7 +12,6 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - twinkleclose.js */
-/* <nowiki> */
 (($) => {
 /**
  * twinkleclose.js: XFD closing module
@@ -625,4 +625,5 @@ Twinkle.close.callbacks = {
 };
 Twinkle.addInitCallback(Twinkle.close, 'close');
 })(jQuery);
+
 /* </nowiki> */

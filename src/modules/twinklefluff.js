@@ -1,3 +1,4 @@
+/* <nowiki> */
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
  * _addText: '{{Twinkle Header}}'
@@ -10,7 +11,6 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - twinklefluff.js */
-/* <nowiki> */
 (($) => {
 /**
  * twinklefluff.js: Revert/rollback module
@@ -952,4 +952,5 @@ Twinkle.fluff.formatSummary = (builtInString, userName, customString) => {
 };
 Twinkle.addInitCallback(Twinkle.fluff, 'fluff');
 })(jQuery);
+
 /* </nowiki> */

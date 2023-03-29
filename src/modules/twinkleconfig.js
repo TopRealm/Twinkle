@@ -1,3 +1,4 @@
+/* <nowiki> */
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
  * _addText: '{{Twinkle Header}}'
@@ -11,7 +12,6 @@
  */
 /* Twinkle.js - twinkleconfig.js */
 
-/* <nowiki> */
 (($) => {
 /**
  * twinkleconfig.js: Preferences module
@@ -1825,4 +1825,5 @@ Twinkle.config.saveSuccess = (pageobj) => {
 };
 Twinkle.addInitCallback(Twinkle.config.init);
 })(jQuery);
+
 /* </nowiki> */

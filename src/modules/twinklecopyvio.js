@@ -1,3 +1,4 @@
+/* <nowiki> */
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
  * _addText: '{{Twinkle Header}}'
@@ -10,7 +11,6 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - twinklecopyvio.js */
-/* <nowiki> */
 (() => {
 /**
  * twinklecopyvio.js: Copyvio module
@@ -196,4 +196,5 @@ Twinkle.copyvio.callback.evaluate = (e) => {
 };
 Twinkle.addInitCallback(Twinkle.copyvio, 'copyvio');
 })();
+
 /* </nowiki> */

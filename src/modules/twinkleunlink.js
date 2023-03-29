@@ -1,3 +1,4 @@
+/* <nowiki> */
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
  * _addText: '{{Twinkle Header}}'
@@ -10,7 +11,6 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - twinkleunlink.js */
-/* <nowiki> */
 (($) => {
 /**
  * twinkleunlink.js: Unlink module
@@ -354,4 +354,5 @@ Twinkle.unlink.callbacks = {
 };
 Twinkle.addInitCallback(Twinkle.unlink, 'unlink');
 })(jQuery);
+
 /* </nowiki> */

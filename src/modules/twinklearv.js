@@ -1,3 +1,4 @@
+/* <nowiki> */
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
  * _addText: '{{Twinkle Header}}'
@@ -10,7 +11,6 @@
  * @license <https://creativecommons.org/licenses/by-sa/4.0/>
  */
 /* Twinkle.js - twinklearv.js */
-/* <nowiki> */
 (($) => {
 /**
  * twinklearv.js: ARV module
@@ -873,4 +873,5 @@ Twinkle.arv.processAN3 = (params) => {
 
 Twinkle.addInitCallback(Twinkle.arv, 'arv');
 })(jQuery);
+
 /* </nowiki> */
