@@ -101,13 +101,14 @@ Twinkle.image.callback = () => {
 			{
 				label: '没有填写任何合理使用依据的非自由著作权文件（CSD F1）',
 				value: 'no fair use rationale',
-				tooltip: '不适用于有争议但完整的合理使用依据。如果非自由著作权文件只有部分条目的使用依据，但同时被使用于未提供合理使用依据的条目，则本方针也不适用。'
+				tooltip:
+						'不适用于有争议但完整的合理使用依据。如果非自由著作权文件只有部分条目的使用依据，但同时被使用于未提供合理使用依据的条目，则本方针也不适用。'
 			},
 			{
 				label: '重复且不再使用的文件（CSD F2）',
 				value: 'duplicate',
 				tooltip:
-							'包括以下情况：与现有文件完全相同（或与现有文件内容一致但尺寸较小），且没有客观需要（如某些场合需使用小尺寸图片）的文件；被更加清晰的文件、SVG格式文件所取代的文件。'
+						'包括以下情况：与现有文件完全相同（或与现有文件内容一致但尺寸较小），且没有客观需要（如某些场合需使用小尺寸图片）的文件；被更加清晰的文件、SVG格式文件所取代的文件。'
 			}
 		]
 	});
@@ -155,7 +156,9 @@ Twinkle.image.callback.evaluate = (event) => {
 		}
 	}
 
-	const lognomination = Twinkle.getPref('logSpeedyNominations') && !Twinkle.getPref('noLogOnSpeedyNomination').includes(csdcrit.toLowerCase());
+	const lognomination =
+			Twinkle.getPref('logSpeedyNominations') &&
+			!Twinkle.getPref('noLogOnSpeedyNomination').includes(csdcrit.toLowerCase());
 	const templatename = type;
 
 	const params = {
@@ -190,8 +193,16 @@ Twinkle.image.callback.evaluate = (event) => {
 		// No auto-notification, display what was going to be added.
 		if (type !== 'orphaned fair use') {
 			const noteData = document.createElement('pre');
-			noteData.appendChild(document.createTextNode(`{{subst:Uploadvionotice|${Morebits.pageNameNorm}}}--~~~~`));
-			Morebits.status.info('提示', ['这些内容应贴进上传者对话页：', document.createElement('br'), noteData]);
+			noteData.appendChild(
+				document.createTextNode(
+					`{{subst:Uploadvionotice|${Morebits.pageNameNorm}}}--~~~~`
+				)
+			);
+			Morebits.status.info('提示', [
+				'这些内容应贴进上传者对话页：',
+				document.createElement('br'),
+				noteData
+			]);
 		}
 	}
 };
@@ -202,10 +213,16 @@ Twinkle.image.callbacks = {
 		const params = pageobj.getCallbackParameters();
 
 		// remove "move to Commons" tag - deletion-tagged files cannot be moved to Commons
-		text = text.replace(/{{(mtc|(copy |move )?to ?commons|move to wikimedia commons|copy to wikimedia commons)[^}]*}}/gi, '');
+		text = text.replace(
+			/{{(mtc|(copy |move )?to ?commons|move to wikimedia commons|copy to wikimedia commons)[^}]*}}/gi,
+			''
+		);
 		// Adding discussion
 		if (params.type !== 'orphaned fair use') {
-			const qiuwen_page = new Morebits.wiki.page('Qiuwen:存废讨论/文件快速删除提报', '加入快速删除记录项');
+			const qiuwen_page = new Morebits.wiki.page(
+				'Qiuwen:存废讨论/文件快速删除提报',
+				'加入快速删除记录项'
+			);
 			qiuwen_page.setFollowRedirect(true);
 			qiuwen_page.setCallbackParameters(params);
 			qiuwen_page.load(Twinkle.image.callbacks.imageList);
@@ -218,7 +235,11 @@ Twinkle.image.callbacks = {
 				break;
 			}
 			case 'no permission': {
-				tag = `{{subst:${params.templatename}/auto|1=${params.f1_source.replace(/http/g, '&#104;ttp').replace(/\n+/g, '\n').replace(/^\s*([^*])/gm, '* $1').replace(/^\* $/m, '')}}}\n`;
+				tag = `{{subst:${params.templatename}/auto|1=${params.f1_source
+					.replace(/http/g, '&#104;ttp')
+					.replace(/\n+/g, '\n')
+					.replace(/^\s*([^*])/gm, '* $1')
+					.replace(/^\* $/m, '')}}}\n`;
 				break;
 			}
 			case 'replaceable fair use': {
@@ -231,7 +252,10 @@ Twinkle.image.callbacks = {
 			}
 		}
 
-		const textNoSd = text.replace(/{{\s*(db(-\w*)?|d|delete|(?:hang|hold)[ -]?on)\s*(\|(?:{{[^{}]*}}|[^{}])*)?}}\s*/gi, '');
+		const textNoSd = text.replace(
+			/{{\s*(db(-\w*)?|d|delete|(?:hang|hold)[ -]?on)\s*(\|(?:{{[^{}]*}}|[^{}])*)?}}\s*/gi,
+			''
+		);
 		if (text !== textNoSd && confirm('在页面上找到快速删除模板，要移除吗？')) {
 			text = textNoSd;
 		}
@@ -239,7 +263,9 @@ Twinkle.image.callbacks = {
 		pageobj.setPageText(tag + text);
 
 		let editSummary = '请求快速删除（';
-		editSummary += params.normalized === `[[QW:CSD#${params.normalized.toUpperCase()}|CSD ${params.normalized.toUpperCase()}]]`;
+		editSummary +=
+				params.normalized ===
+				`[[QW:CSD#${params.normalized.toUpperCase()}|CSD ${params.normalized.toUpperCase()}]]`;
 		editSummary += '）';
 		pageobj.setEditSummary(editSummary);
 		pageobj.setChangeTags(Twinkle.changeTags);
@@ -265,7 +291,7 @@ Twinkle.image.callbacks = {
 			);
 			const notifytext = `\n{{subst:Di-${params.templatename}-notice|1=${Morebits.pageNameNorm}}}--~~~~`;
 			usertalkpage.setAppendText(notifytext);
-			usertalkpage.setEditSummary(`通知：文件[[${ Morebits.pageNameNorm }]]快速删除提名`);
+			usertalkpage.setEditSummary(`通知：文件[[${Morebits.pageNameNorm}]]快速删除提名`);
 			usertalkpage.setChangeTags(Twinkle.changeTags);
 			usertalkpage.setCreateOption('recreate');
 			usertalkpage.setWatchlist(Twinkle.getPref('deliWatchUser'));
@@ -288,7 +314,6 @@ Twinkle.image.callbacks = {
 		pageobj.setCreateOption('recreate');
 		pageobj.save();
 	}
-
 };
 
 Twinkle.addInitCallback(Twinkle.image, 'image');

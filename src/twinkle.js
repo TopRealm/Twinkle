@@ -610,7 +610,8 @@ Twinkle.makeFindSourcesDiv = (divID) => {
 /** Twinkle-specific utility functions shared by multiple modules */
 // Used in batch, unlink, and deprod to sort pages by namespace, as
 // json formatversion=2 sorts by pageid instead
-Twinkle.sortByNamespace = (first, second) => first.ns - second.ns || (first.title > second.title ? 1 : -1);
+Twinkle.sortByNamespace = (first, second) =>
+	first.ns - second.ns || (first.title > second.title ? 1 : -1);
 
 // Used in batch listings to link to the page in question with >
 Twinkle.generateArrowLinks = (checkbox) => {

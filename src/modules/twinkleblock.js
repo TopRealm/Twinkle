@@ -188,9 +188,7 @@ Twinkle.block.fetchUserInfo = (fn) => {
 				relevantUserName = `User:${userName}`;
 				Twinkle.block.userIsBot =
 						!!userinfo.groupmemberships &&
-						userinfo.groupmemberships
-							.map((e) => e.group)
-							.includes('bot');
+						userinfo.groupmemberships.map((e) => e.group).includes('bot');
 			} else {
 				relevantUserName = userName;
 				Twinkle.block.userIsBot = false;
@@ -1174,7 +1172,7 @@ Twinkle.block.blockGroups = [
 			{
 				label: '明显违反中国法律、法规，影响网站合规性',
 				value: 'uw-block'
-			},
+			}
 		]
 	},
 	{
@@ -1199,7 +1197,7 @@ Twinkle.block.blockGroups = [
 			{
 				label: '违反[[Qiuwen:生者传记方针|生者传记]]方针：散布有关英雄烈士的无来源或争议内容',
 				value: 'uw-block'
-			},
+			}
 		]
 	},
 	{
@@ -1263,7 +1261,7 @@ Twinkle.block.blockGroups = [
 			},
 			{
 				label: '违反“[[Qiuwen:一人一号|一人一号]]”方针：不当使用多重账号（根据用户贡献确定）',
-				value: 'uw-blockindef',
+				value: 'uw-blockindef'
 			},
 			{
 				label: '违反[[Qiuwen:签名|签名]]方针：仿冒他人签名',
@@ -1276,7 +1274,7 @@ Twinkle.block.blockGroups = [
 			{
 				label: '违反[[Qiuwen:讨论页规范|讨论页规范]]：窜改他人留言',
 				value: 'uw-block'
-			},
+			}
 		]
 	},
 	{
@@ -1336,7 +1334,7 @@ Twinkle.block.blockGroups = [
 				label: '求闻百科裁决委员会决议',
 				value: 'uw-block',
 				forRegisteredOnly: true
-			},
+			}
 		]
 	},
 	{

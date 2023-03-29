@@ -783,10 +783,15 @@ Twinkle.arv.processAN3 = (params) => {
 				}
 				ret += sub
 					.reverse()
-					.map((v) => `${sub.length >= 2 ? '#' : ''}# {{diff2|${v.revid}|${new Morebits.date(v.timestamp).format(
-						'HH:mm, D MMMM YYYY',
-						'utc'
-					)} (UTC)}} ${hasHiddenComment(v)}`)
+					.map(
+						(v) =>
+							`${sub.length >= 2 ? '#' : ''}# {{diff2|${
+								v.revid
+							}|${new Morebits.date(v.timestamp).format(
+								'HH:mm, D MMMM YYYY',
+								'utc'
+							)} (UTC)}} ${hasHiddenComment(v)}`
+					)
 					.join('\n');
 				return ret;
 			})
@@ -794,17 +799,23 @@ Twinkle.arv.processAN3 = (params) => {
 				.join('\n');
 			const warningtext = params.warnings
 				.reverse()
-				.map((v) => `#  {{diff2|${v.revid}|${new Morebits.date(v.timestamp).format(
-					'HH:mm, D MMMM YYYY',
-					'utc'
-				)} (UTC)}} ${hasHiddenComment(v)}`)
+				.map(
+					(v) =>
+						`#  {{diff2|${v.revid}|${new Morebits.date(v.timestamp).format(
+							'HH:mm, D MMMM YYYY',
+							'utc'
+						)} (UTC)}} ${hasHiddenComment(v)}`
+				)
 				.join('\n');
 			let resolvetext = params.resolves
 				.reverse()
-				.map((v) => `#  {{diff2|${v.revid}|${new Morebits.date(v.timestamp).format(
-					'HH:mm, D MMMM YYYY',
-					'utc'
-				)} (UTC)}} ${hasHiddenComment(v)}`)
+				.map(
+					(v) =>
+						`#  {{diff2|${v.revid}|${new Morebits.date(v.timestamp).format(
+							'HH:mm, D MMMM YYYY',
+							'utc'
+						)} (UTC)}} ${hasHiddenComment(v)}`
+				)
 				.join('\n');
 			if (params.free_resolves) {
 				const page = params.free_resolves;
