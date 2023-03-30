@@ -260,7 +260,7 @@ Morebits.namespaceRegex = (namespaces) => {
  * @param {event} event - Function to execute when form is submitted.
  * @param {string} [eventType=submit] - Type of the event.
  */
-Morebits.quickForm = function QuickForm(event, eventType) {
+Morebits.quickForm = function QuickForm (event, eventType) {
 	this.root = new Morebits.quickForm.element({
 		type: 'form',
 		event: event,
@@ -274,7 +274,7 @@ Morebits.quickForm = function QuickForm(event, eventType) {
  * @memberof Morebits.quickForm
  * @returns {HTMLElement}
  */
-Morebits.quickForm.prototype.render = function QuickFormRender() {
+Morebits.quickForm.prototype.render = function QuickFormRender () {
 	const ret = this.root.render();
 	ret.names = {};
 	return ret;
@@ -288,7 +288,7 @@ Morebits.quickForm.prototype.render = function QuickFormRender() {
  * a quickform element is constructed.
  * @returns {Morebits.quickForm.element} - Same as what is passed to the function.
  */
-Morebits.quickForm.prototype.append = function QuickFormAppend(data) {
+Morebits.quickForm.prototype.append = function QuickFormAppend (data) {
 	return this.root.append(data);
 };
 
@@ -349,7 +349,7 @@ Morebits.quickForm.prototype.append = function QuickFormAppend(data) {
  *     required: true
  * });
  */
-Morebits.quickForm.element = function QuickFormElement(data) {
+Morebits.quickForm.element = function QuickFormElement (data) {
 	this.data = data;
 	this.childs = [];
 };
@@ -368,7 +368,7 @@ Morebits.quickForm.element.id = 0;
  * create the quickForm element.
  * @returns {Morebits.quickForm.element} The same element passed in.
  */
-Morebits.quickForm.element.prototype.append = function QuickFormElementAppend(data) {
+Morebits.quickForm.element.prototype.append = function QuickFormElementAppend (data) {
 	const child =
 			data instanceof Morebits.quickForm.element
 				? data
@@ -384,7 +384,7 @@ Morebits.quickForm.element.prototype.append = function QuickFormElementAppend(da
  * @memberof Morebits.quickForm.element
  * @returns {HTMLElement}
  */
-Morebits.quickForm.element.prototype.render = function QuickFormElementRender(
+Morebits.quickForm.element.prototype.render = function QuickFormElementRender (
 	internal_subgroup_id
 ) {
 	const currentNode = this.compute(this.data, internal_subgroup_id);
@@ -396,7 +396,7 @@ Morebits.quickForm.element.prototype.render = function QuickFormElementRender(
 };
 
 /** @memberof Morebits.quickForm.element */
-Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(data, in_id) {
+Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute (data, in_id) {
 	let node;
 	let childContainer = null;
 	let label;
@@ -1729,7 +1729,7 @@ Morebits.select2 = {
  * u.content = u.content.replace(/world/g, 'earth');
  * u.rebind(); // gives 'Hello earth <!-- world --> earth'
  */
-Morebits.unbinder = function Unbinder(string) {
+Morebits.unbinder = function Unbinder (string) {
 	if (typeof string !== 'string') {
 		throw new TypeError('not a string');
 	}
@@ -1750,7 +1750,7 @@ Morebits.unbinder.prototype = {
 	 * @param {string} postfix
 	 * @throws If either `prefix` or `postfix` is missing.
 	 */
-	unbind: function UnbinderUnbind(prefix, postfix) {
+	unbind: function UnbinderUnbind (prefix, postfix) {
 		if (!prefix || !postfix) {
 			throw new Error('Both prefix and postfix must be provided');
 		}
@@ -1762,7 +1762,7 @@ Morebits.unbinder.prototype = {
 	 *
 	 * @returns {string} The processed output.
 	 */
-	rebind: function UnbinderRebind() {
+	rebind: function UnbinderRebind () {
 		let content = this.content;
 		content.self = this;
 		for (const current in this.history) {
@@ -2435,7 +2435,7 @@ Morebits.wiki.api.prototype = {
 			callerAjaxParameters
 		);
 		return $.ajax(ajaxparams).then(
-			function onAPIsuccess(response, statusText) {
+			function onAPIsuccess (response, statusText) {
 				this.statusText = statusText;
 				this.response = this.responseXML = response;
 				// Limit to first error
@@ -2471,7 +2471,7 @@ Morebits.wiki.api.prototype = {
 				return $.Deferred().resolveWith(this.parent, [this]);
 			},
 			// only network and server errors reach here - complaints from the API itself are caught in success()
-			function onAPIfailure(error, statusText, errorThrown) {
+			function onAPIfailure (error, statusText, errorThrown) {
 				this.statusText = statusText;
 				this.errorThrown = errorThrown; // frequently undefined
 				this.errorText = `${statusText}在调用API时发生了错误“${error.statusText}”`;
@@ -4795,7 +4795,7 @@ Morebits.wikitext.parseTemplate = (text, start) => {
  * @memberof Morebits.wikitext
  * @param {string} text - Wikitext to be manipulated.
  */
-Morebits.wikitext.page = function mediawikiPage(text) {
+Morebits.wikitext.page = function mediawikiPage (text) {
 	this.text = text;
 };
 Morebits.wikitext.page.prototype = {
@@ -5085,7 +5085,7 @@ Morebits.userspaceLogger = function (logPageName) {
  * line, allowable values are: `status` (blue), `info` (green), `warn` (red),
  * or `error` (bold red).
  */
-Morebits.status = function Status(text, stat, type) {
+Morebits.status = function Status (text, stat, type) {
 	this.textRaw = text;
 	this.text = Morebits.createHtml(text);
 	this.type = type || 'status';
@@ -5654,7 +5654,7 @@ Morebits.taskManager = function (context) {
  * @param {number} width
  * @param {number} height - The maximum allowable height for the content area.
  */
-Morebits.simpleWindow = function SimpleWindow(width, height) {
+Morebits.simpleWindow = function SimpleWindow (width, height) {
 	const content = document.createElement('div');
 	this.content = content;
 	content.className = 'morebits-dialog-content';
