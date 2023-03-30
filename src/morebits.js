@@ -263,8 +263,8 @@ Morebits.namespaceRegex = (namespaces) => {
 Morebits.quickForm = function QuickForm (event, eventType) {
 	this.root = new Morebits.quickForm.element({
 		type: 'form',
-		event: event,
-		eventType: eventType
+		event,
+		eventType
 	});
 };
 
@@ -911,8 +911,8 @@ Morebits.quickForm.element.generateTooltip = (node, data) => {
  */
 Morebits.quickForm.getInputData = (form) => {
 	const result = {};
-	for (let i = 0; i < form.elements.length; i++) {
-		const field = form.elements[i];
+
+	for (const field of form.elements) {
 		if (
 			field.disabled ||
 				!field.name ||
@@ -962,6 +962,7 @@ Morebits.quickForm.getInputData = (form) => {
 			}
 		}
 	}
+
 	return result;
 };
 
@@ -1923,53 +1924,53 @@ Morebits.date.unitMap = {
 };
 Morebits.date.prototype = {
 	/** @returns {boolean} */
-	isValid: function () {
+	isValid () {
 		return !Number.isNaN(this.getTime());
 	},
 	/**
 	 * @param {(Date|Morebits.date)} date
 	 * @returns {boolean}
 	 */
-	isBefore: function (date) {
+	isBefore (date) {
 		return this.getTime() < date.getTime();
 	},
 	/**
 	 * @param {(Date|Morebits.date)} date
 	 * @returns {boolean}
 	 */
-	isAfter: function (date) {
+	isAfter (date) {
 		return this.getTime() > date.getTime();
 	},
 	/** @returns {string} */
-	getUTCMonthName: function () {
+	getUTCMonthName () {
 		return Morebits.date.localeData.months[this.getUTCMonth()];
 	},
 	/** @returns {string} */
-	getUTCMonthNameAbbrev: function () {
+	getUTCMonthNameAbbrev () {
 		return Morebits.date.localeData.monthsShort[this.getUTCMonth()];
 	},
 	/** @returns {string} */
-	getMonthName: function () {
+	getMonthName () {
 		return Morebits.date.localeData.months[this.getMonth()];
 	},
 	/** @returns {string} */
-	getMonthNameAbbrev: function () {
+	getMonthNameAbbrev () {
 		return Morebits.date.localeData.monthsShort[this.getMonth()];
 	},
 	/** @returns {string} */
-	getUTCDayName: function () {
+	getUTCDayName () {
 		return Morebits.date.localeData.days[this.getUTCDay()];
 	},
 	/** @returns {string} */
-	getUTCDayNameAbbrev: function () {
+	getUTCDayNameAbbrev () {
 		return Morebits.date.localeData.daysShort[this.getUTCDay()];
 	},
 	/** @returns {string} */
-	getDayName: function () {
+	getDayName () {
 		return Morebits.date.localeData.days[this.getDay()];
 	},
 	/** @returns {string} */
-	getDayNameAbbrev: function () {
+	getDayNameAbbrev () {
 		return Morebits.date.localeData.daysShort[this.getDay()];
 	},
 	/**
@@ -1981,7 +1982,7 @@ Morebits.date.prototype = {
 	 * @throws If invalid or unsupported unit is given.
 	 * @returns {Morebits.date}
 	 */
-	add: function (number, unit) {
+	add (number, unit) {
 		let num = Number.parseInt(number, 10); // normalize
 		if (Number.isNaN(num)) {
 			throw new TypeError(`Invalid number "${number}" provided.`);
@@ -2012,7 +2013,7 @@ Morebits.date.prototype = {
 	 * @throws If invalid or unsupported unit is given.
 	 * @returns {Morebits.date}
 	 */
-	subtract: function (number, unit) {
+	subtract (number, unit) {
 		return this.add(-number, unit);
 	},
 	/**
@@ -2051,7 +2052,7 @@ Morebits.date.prototype = {
 	 * `utc`, or specify a time zone as number of minutes relative to UTC.
 	 * @returns {string}
 	 */
-	format: function (formatstr, zone) {
+	format (formatstr, zone) {
 		if (!this.isValid()) {
 			return 'Invalid date'; // Put the truth out, preferable to "NaNNaNNan NaN:NaN" or whatever
 		}
@@ -2092,22 +2093,22 @@ Morebits.date.prototype = {
 			h: h12,
 			A: amOrPm,
 			mm: pad(m),
-			m: m,
+			m,
 			ss: pad(s),
-			s: s,
+			s,
 			SSS: pad(ms, 3),
 			dddd: udate.getDayName(),
 			ddd: udate.getDayNameAbbrev(),
 			d: udate.getDay(),
 			DD: pad(D),
-			D: D,
+			D,
 			MMMM: udate.getMonthName(),
 			MMM: udate.getMonthNameAbbrev(),
 			MM: pad(M),
-			M: M,
+			M,
 			YYYY: Y,
 			YY: pad(Y % 100),
-			Y: Y
+			Y
 		};
 		const unbinder = new Morebits.unbinder(formatstr); // escape stuff between [...]
 		unbinder.unbind('\\[', '\\]');
@@ -2129,7 +2130,7 @@ Morebits.date.prototype = {
 	 * 'utc' (for UTC), or specify a time zone as number of minutes past UTC.
 	 * @returns {string}
 	 */
-	calendar: function (zone) {
+	calendar (zone) {
 		// Zero out the hours, minutes, seconds and milliseconds - keeping only the date;
 		// find the difference. Note that setHours() returns the same thing as getTime().
 		const dateDiff =
@@ -2161,7 +2162,7 @@ Morebits.date.prototype = {
 	 *
 	 * @returns {RegExp}
 	 */
-	monthHeaderRegex: function () {
+	monthHeaderRegex () {
 		return new RegExp(
 			`^(==+)\\s*${this.getUTCFullYear()}年(?:${this.getUTCMonthName()}|${this.getUTCMonthNameAbbrev()})\\s*\\1`,
 			'mg'
@@ -2174,7 +2175,7 @@ Morebits.date.prototype = {
 	 * with no wikitext markers (==).
 	 * @returns {string}
 	 */
-	monthHeader: function (level) {
+	monthHeader (level) {
 		// Default to 2, but allow for 0 or stringy numbers
 		level = Number.parseInt(level, 10);
 		level = Number.isNaN(level) ? 2 : level;
@@ -2192,8 +2193,8 @@ Morebits.date.prototype = {
 Object.getOwnPropertyNames(Date.prototype).forEach((func) => {
 	// Exclude methods that collide with PageTriage's Date.js external, which clobbers native Date: [[phab:T268513]]
 	if (!['add', 'getDayName', 'getMonthName'].includes(func)) {
-		Morebits.date.prototype[func] = function () {
-			return this._d[func].apply(this._d, Array.prototype.slice.call(arguments));
+		Morebits.date.prototype[func] = function (...args) {
+			return this._d[func](...Array.prototype.slice.call(args));
 		};
 	}
 });
@@ -2393,11 +2394,11 @@ Morebits.wiki.api.prototype = {
 	 *
 	 * @param {*} parent
 	 */
-	setParent: function (parent) {
+	setParent (parent) {
 		this.parent = parent;
 	},
 	/** @param {Morebits.status} statusElement */
-	setStatusElement: function (statusElement) {
+	setStatusElement (statusElement) {
 		this.statelem = statusElement;
 		this.statelem.status(this.currentAction);
 	},
@@ -2408,7 +2409,7 @@ Morebits.wiki.api.prototype = {
 	 * really want to give jQuery some extra parameters.
 	 * @returns {@Promise} - A jQuery promise object that is resolved or rejected with the api object.
 	 */
-	post: function (callerAjaxParameters) {
+	post (callerAjaxParameters) {
 		++Morebits.wiki.numberOfActionsLeft;
 		const queryString = $.map(this.query, (val, i) => {
 			if (Array.isArray(val)) {
@@ -2479,7 +2480,7 @@ Morebits.wiki.api.prototype = {
 			}
 		);
 	},
-	returnError: function (callerAjaxParameters) {
+	returnError (callerAjaxParameters) {
 		if (this.errorCode === 'badtoken' && !this.badtokenRetry) {
 			this.statelem.warn('无效令牌，获取新的令牌并重试……');
 			this.badtokenRetry = true;
@@ -2501,20 +2502,20 @@ Morebits.wiki.api.prototype = {
 		// don't complete the action so that the error remains displayed
 		return $.Deferred().rejectWith(this.parent, [this]);
 	},
-	getStatusElement: function () {
+	getStatusElement () {
 		return this.statelem;
 	},
-	getErrorCode: function () {
+	getErrorCode () {
 		return this.errorCode;
 	},
-	getErrorText: function () {
+	getErrorText () {
 		return this.errorText;
 	},
-	getXML: function () {
+	getXML () {
 		// retained for backwards compatibility, use getResponse() instead
 		return this.responseXML;
 	},
-	getResponse: function () {
+	getResponse () {
 		return this.response;
 	}
 };
@@ -2647,7 +2648,7 @@ Morebits.wiki.page = function (pageName, status) {
 	 */
 	const ctx = {
 		// backing fields for public properties
-		pageName: pageName,
+		pageName,
 		pageExists: false,
 		editSummary: null,
 		changeTags: null,
@@ -3320,19 +3321,19 @@ Morebits.wiki.page = function (pageName, status) {
 	 */
 	this.setEditProtection = (level, expiry) => {
 		ctx.protectEdit = {
-			level: level,
+			level,
 			expiry: expiry || 'infinity'
 		};
 	};
 	this.setMoveProtection = (level, expiry) => {
 		ctx.protectMove = {
-			level: level,
+			level,
 			expiry: expiry || 'infinity'
 		};
 	};
 	this.setCreateProtection = (level, expiry) => {
 		ctx.protectCreate = {
-			level: level,
+			level,
 			expiry: expiry || 'infinity'
 		};
 	};
@@ -4252,7 +4253,7 @@ Morebits.wiki.page = function (pageName, status) {
 			action: 'move',
 			from: pageTitle,
 			to: ctx.moveDestination,
-			token: token,
+			token,
 			reason: ctx.editSummary,
 			watchlist: ctx.watchlistOption,
 			format: 'json'
@@ -4337,7 +4338,7 @@ Morebits.wiki.page = function (pageName, status) {
 		const query = {
 			action: 'delete',
 			title: pageTitle,
-			token: token,
+			token,
 			reason: ctx.editSummary,
 			watchlist: ctx.watchlistOption,
 			format: 'json'
@@ -4401,7 +4402,7 @@ Morebits.wiki.page = function (pageName, status) {
 		const query = {
 			action: 'undelete',
 			title: pageTitle,
-			token: token,
+			token,
 			reason: ctx.editSummary,
 			watchlist: ctx.watchlistOption,
 			format: 'json'
@@ -4547,7 +4548,7 @@ Morebits.wiki.page = function (pageName, status) {
 		const query = {
 			action: 'protect',
 			title: pageTitle,
-			token: token,
+			token,
 			protections: protections.join('|'),
 			expiry: expirys.join('|'),
 			reason: ctx.editSummary,
@@ -4806,7 +4807,7 @@ Morebits.wikitext.page.prototype = {
 	 * @param {string} link_target
 	 * @returns {Morebits.wikitext.page}
 	 */
-	removeLink: function (link_target) {
+	removeLink (link_target) {
 		const mwTitle = mw.Title.newFromText(link_target);
 		const namespaceID = mwTitle.getNamespaceId();
 		const title = mwTitle.getMainText();
@@ -4836,7 +4837,7 @@ Morebits.wikitext.page.prototype = {
 	 * @param {string} [reason] - Reason to be included in comment, alongside the commented-out image.
 	 * @returns {Morebits.wikitext.page}
 	 */
-	commentOutImage: function (image, reason) {
+	commentOutImage (image, reason) {
 		const unbinder = new Morebits.unbinder(this.text);
 		unbinder.unbind('<!--', '-->');
 		reason = reason ? `${reason}: ` : '';
@@ -4889,7 +4890,7 @@ Morebits.wikitext.page.prototype = {
 	 * @param {string} data - The display options.
 	 * @returns {Morebits.wikitext.page}
 	 */
-	addToImageComment: function (image, data) {
+	addToImageComment (image, data) {
 		const image_re_string = Morebits.pageNameRegex(image);
 		const links_re = new RegExp(
 			`\\[\\[${Morebits.namespaceRegex(6)}:\\s*${image_re_string}\\s*[\\|(?:\\]\\])]`
@@ -4914,7 +4915,7 @@ Morebits.wikitext.page.prototype = {
 	 * include namespace prefix only if not in template namespace.
 	 * @returns {Morebits.wikitext.page}
 	 */
-	removeTemplate: function (template) {
+	removeTemplate (template) {
 		const template_re_string = Morebits.pageNameRegex(template);
 		const links_re = new RegExp(
 			`\\{\\{(?:${Morebits.namespaceRegex(
@@ -4946,7 +4947,7 @@ Morebits.wikitext.page.prototype = {
 	 * before any template matches (i.e. before `{{`), such as html comments.
 	 * @returns {Morebits.wikitext.page}
 	 */
-	insertAfterTemplates: function (tag, regex, flags, preRegex) {
+	insertAfterTemplates (tag, regex, flags, preRegex) {
 		if (typeof tag === 'undefined') {
 			throw new TypeError('No tag provided');
 		}
@@ -5004,7 +5005,7 @@ Morebits.wikitext.page.prototype = {
 	 *
 	 * @returns {string}
 	 */
-	getText: function () {
+	getText () {
 		return this.text;
 	}
 };
@@ -5136,14 +5137,14 @@ Morebits.status.prototype = {
 	node: null,
 	linked: false,
 	/** Add the status element node to the DOM. */
-	link: function () {
+	link () {
 		if (!this.linked && Morebits.status.root) {
 			Morebits.status.root.appendChild(this.node);
 			this.linked = true;
 		}
 	},
 	/** Remove the status element node from the DOM. */
-	unlink: function () {
+	unlink () {
 		if (this.linked) {
 			this.node.remove();
 			this.linked = false;
@@ -5156,7 +5157,7 @@ Morebits.status.prototype = {
 	 * @param {string} type - 'status' (blue), 'info' (green), 'warn'
 	 * (red), or 'error' (bold red).
 	 */
-	update: function (status, type) {
+	update (status, type) {
 		this.statRaw = status;
 		this.stat = Morebits.createHtml(status);
 		if (type) {
@@ -5178,7 +5179,7 @@ Morebits.status.prototype = {
 		this.render();
 	},
 	/** Produce the html for first part of the status message. */
-	generate: function () {
+	generate () {
 		this.node = document.createElement('div');
 		this.node.appendChild(document.createElement('span')).appendChild(this.text);
 		this.node
@@ -5189,7 +5190,7 @@ Morebits.status.prototype = {
 	},
 
 	/** Complete the html, for the second part of the status message. */
-	render: function () {
+	render () {
 		this.node.className = `morebits_status_${this.type}`;
 		while (this.target.hasChildNodes()) {
 			this.target.firstChild.remove();
@@ -5197,16 +5198,16 @@ Morebits.status.prototype = {
 		this.target.appendChild(this.stat);
 		this.link();
 	},
-	status: function (status) {
+	status (status) {
 		this.update(status, 'status');
 	},
-	info: function (status) {
+	info (status) {
 		this.update(status, 'info');
 	},
-	warn: function (status) {
+	warn (status) {
 		this.update(status, 'warn');
 	},
-	error: function (status) {
+	error (status) {
 		this.update(status, 'error');
 	}
 };
@@ -5616,28 +5617,28 @@ Morebits.taskManager = function (context) {
 		this.taskDependencyMap.forEach((deps, task) => {
 			const dependencyPromisesArray = deps.map((dep) => self.deferreds.get(dep));
 			$.when.apply(self.context, dependencyPromisesArray).then(
-				function () {
-					const result = task.apply(self.context, arguments);
+				(...args) => {
+					const result = task.apply(self.context, args);
 					if (result === undefined) {
 						// maybe the function threw, or it didn't return anything
 						mw.log.error('Morebits.taskManager: task returned undefined');
-						self.deferreds.get(task).reject.apply(self.context, arguments);
+						self.deferreds.get(task).reject.apply(self.context, args);
 						self.failureCallbackMap.get(task).apply(self.context, []);
 					}
 					result.then(
-						function () {
-							self.deferreds.get(task).resolve.apply(self.context, arguments);
+						(...args) => {
+							self.deferreds.get(task).resolve.apply(self.context, args);
 						},
-						function () {
+						(...args) => {
 							// task failed
-							self.deferreds.get(task).reject.apply(self.context, arguments);
-							self.failureCallbackMap.get(task).apply(self.context, arguments);
+							self.deferreds.get(task).reject.apply(self.context, args);
+							self.failureCallbackMap.get(task).apply(self.context, args);
 						}
 					);
 				},
-				function () {
+				(...args) => {
 					// one or more of the dependencies failed
-					self.failureCallbackMap.get(task).apply(self.context, arguments);
+					self.failureCallbackMap.get(task).apply(self.context, args);
 				}
 			);
 		});
@@ -5679,16 +5680,16 @@ Morebits.simpleWindow = function SimpleWindow (width, height) {
 			// dialogs and their content can be destroyed once closed
 			$(event.target).dialog('destroy').remove();
 		},
-		resizeStart: function () {
+		resizeStart () {
 			this.scrollbox = $(this).find('.morebits-scrollbox')[0];
 			if (this.scrollbox) {
 				this.scrollbox.style.maxHeight = 'none';
 			}
 		},
-		resizeStop: function () {
+		resizeStop () {
 			this.scrollbox = null;
 		},
-		resize: function () {
+		resize () {
 			this.style.maxHeight = '';
 			if (this.scrollbox) {
 				this.scrollbox.style.width = '';
@@ -5726,7 +5727,7 @@ Morebits.simpleWindow.prototype = {
 	 *
 	 * @returns {Morebits.simpleWindow}
 	 */
-	focus: function () {
+	focus () {
 		$(this.content).dialog('moveToTop');
 		return this;
 	},
@@ -5737,7 +5738,7 @@ Morebits.simpleWindow.prototype = {
 	 * @param {event} [event]
 	 * @returns {Morebits.simpleWindow}
 	 */
-	close: function (event) {
+	close (event) {
 		if (event) {
 			event.preventDefault();
 		}
@@ -5750,7 +5751,7 @@ Morebits.simpleWindow.prototype = {
 	 *
 	 * @returns {Morebits.simpleWindow}
 	 */
-	display: function () {
+	display () {
 		if (this.scriptName) {
 			const $widget = $(this.content).dialog('widget');
 			$widget.find('.morebits-dialog-scriptname').remove();
@@ -5774,7 +5775,7 @@ Morebits.simpleWindow.prototype = {
 	 * @param {string} title
 	 * @returns {Morebits.simpleWindow}
 	 */
-	setTitle: function (title) {
+	setTitle (title) {
 		$(this.content).dialog('option', 'title', title);
 		return this;
 	},
@@ -5785,7 +5786,7 @@ Morebits.simpleWindow.prototype = {
 	 * @param {string} name
 	 * @returns {Morebits.simpleWindow}
 	 */
-	setScriptName: function (name) {
+	setScriptName (name) {
 		this.scriptName = name;
 		return this;
 	},
@@ -5795,7 +5796,7 @@ Morebits.simpleWindow.prototype = {
 	 * @param {number} width
 	 * @returns {Morebits.simpleWindow}
 	 */
-	setWidth: function (width) {
+	setWidth (width) {
 		$(this.content).dialog('option', 'width', width);
 		return this;
 	},
@@ -5806,7 +5807,7 @@ Morebits.simpleWindow.prototype = {
 	 * @param {number} height
 	 * @returns {Morebits.simpleWindow}
 	 */
-	setHeight: function (height) {
+	setHeight (height) {
 		this.height = height;
 
 		// from display time onwards, let the browser determine the optimum height,
@@ -5843,7 +5844,7 @@ Morebits.simpleWindow.prototype = {
 	 * @param {HTMLElement} content
 	 * @returns {Morebits.simpleWindow}
 	 */
-	setContent: function (content) {
+	setContent (content) {
 		this.purgeContent();
 		this.addContent(content);
 		return this;
@@ -5854,7 +5855,7 @@ Morebits.simpleWindow.prototype = {
 	 * @param {HTMLElement} content
 	 * @returns {Morebits.simpleWindow}
 	 */
-	addContent: function (content) {
+	addContent (content) {
 		this.content.appendChild(content);
 
 		// look for submit buttons in the content, hide them, and add a proxy button to the button pane
@@ -5897,7 +5898,7 @@ Morebits.simpleWindow.prototype = {
 	 *
 	 * @returns {Morebits.simpleWindow}
 	 */
-	purgeContent: function () {
+	purgeContent () {
 		this.buttons = [];
 		// delete all buttons in the buttonpane
 		$(this.content).dialog('widget').find('.morebits-dialog-buttons').empty();
@@ -5917,7 +5918,7 @@ Morebits.simpleWindow.prototype = {
 	 * @param {boolean} [prep=false] - Set true to prepend rather than append.
 	 * @returns {Morebits.simpleWindow}
 	 */
-	addFooterLink: function (text, wikiPage, prep) {
+	addFooterLink (text, wikiPage, prep) {
 		const $footerlinks = $(this.content)
 			.dialog('widget')
 			.find('.morebits-dialog-footerlinks');
@@ -5952,7 +5953,7 @@ Morebits.simpleWindow.prototype = {
 	 * page will be disabled, i.e., cannot be interacted with.
 	 * @returns {Morebits.simpleWindow}
 	 */
-	setModality: function (modal) {
+	setModality (modal) {
 		$(this.content).dialog('option', 'modal', modal);
 		return this;
 	}

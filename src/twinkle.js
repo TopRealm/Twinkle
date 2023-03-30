@@ -60,8 +60,8 @@ Twinkle.initCallbacks = [];
  */
 Twinkle.addInitCallback = (func, name) => {
 	Twinkle.initCallbacks.push({
-		func: func,
-		name: name
+		func,
+		name
 	});
 };
 Twinkle.defaultConfig = {};
