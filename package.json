@@ -15,6 +15,7 @@
 		"lint:fix": "eslint . --fix && stylelint src/*.css --fix",
 		"babel": "babel -d dist src",
 		"prettier": "npx prettier --write .",
+		"updatebrowserslist": "npx update-browserslist-db@latest",
 		"deploy": "node scripts/deploy.js",
 		"deploy:userpage": "node scripts/deploy_up.js"
 	},
