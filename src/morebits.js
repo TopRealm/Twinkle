@@ -135,7 +135,7 @@ Morebits.pageNameNorm = mw.config.get('wgPageName').replace(/_/g, ' ');
  */
 Morebits.pageNameRegex = (pageName) => {
 	if (pageName === '') {
-		return '';
+		return;
 	}
 	const firstChar = pageName[0],
 		remainder = Morebits.string.escapeRegExp(pageName.slice(1));
