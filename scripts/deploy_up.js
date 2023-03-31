@@ -90,6 +90,12 @@ const deployTargets = [{
 	file: 'src/morebits.css',
 	target: 'User:WaitSpring/TW-ES6/morebits.css'
 }, {
+	file: 'src/lib/select2.min.css',
+	target: 'User:WaitSpring/TW-ES6/select2.min.css'
+}, {
+	file: 'src/lib/select2.min.js',
+	target: 'User:WaitSpring/TW-ES6/select2.min.js'
+}, {
 	file: 'src/twinkle-pagestyles.css',
 	target: 'User:WaitSpring/TW-ES6/Twinkle-pagestyles.css'
 }, {

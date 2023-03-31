@@ -87,6 +87,12 @@ const deployTargets = [{
 	file: 'dist/morebits.js',
 	target: 'MediaWiki:Gadget-morebits.js'
 }, {
+	file: 'src/lib/select2.min.css',
+	target: 'MediaWiki:Gadget-select2.min.css'
+}, {
+	file: 'src/lib/select2.min.js',
+	target: 'MediaWiki:Gadget-select2.min.js'
+}, {
 	file: 'src/morebits.css',
 	target: 'MediaWiki:Gadget-morebits.css'
 }, {
