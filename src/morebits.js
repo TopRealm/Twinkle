@@ -3696,9 +3696,7 @@ Morebits.wiki.page = function (pageName, status) {
 	 * "edit" or "delete". In practice, only "edit" or "notedit" matters.
 	 * @returns {boolean}
 	 */
-	const fnCanUseMwUserToken = (action) => {
-		action = typeof action !== 'undefined' ? action : 'edit'; // IE doesn't support default parameters
-
+	const fnCanUseMwUserToken = (action = 'edit') => {
 		// If a watchlist expiry is set, we must always load the page
 		// to avoid overwriting indefinite protection.  Of course, not
 		// needed if setting indefinite watching!
