@@ -2535,8 +2535,7 @@ Morebits.wiki.getCachedJson = (title) => {
 		rvslots: '*',
 		rvprop: 'content',
 		format: 'json',
-		smaxage: '86400',
-		// cache for 1 day
+		smaxage: '86400', // cache for 1 day
 		maxage: '86400' // cache for 1 day
 	};
 
