@@ -56,7 +56,7 @@ Twinkle.diff = () => {
 		Twinkle.addPortletLink(
 			mw.util.getUrl(mw.config.get('wgPageName'), {
 				diff: 'cur',
-				oldid: oldid
+				oldid
 			}),
 			'当前',
 			'tw-curdiff',
@@ -94,7 +94,7 @@ Twinkle.diff.evaluate = (me) => {
 		Twinkle.diff.callbacks.main
 	);
 	qiuwen_api.params = {
-		user: user
+		user
 	};
 	qiuwen_api.post();
 };

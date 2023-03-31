@@ -14,8 +14,8 @@
 (($) => {
 /**
  * twinklexfd.js: XFD module
- * Mode of invocation:  Tab ("XFD")
- * Active on:           Existing, non-special pages, except for file pages with no local (non-Commons) file which are not redirects
+ * Mode of invocation: Tab ("XFD")
+ * Active on: Existing, non-special pages, except for file pages with no local (non-Commons) file which are not redirects
  */
 
 Twinkle.xfd = () => {
@@ -339,7 +339,7 @@ Twinkle.xfd.callbacks = {
 					);
 
 					const notifytext =
-							`\n{{subst:AFDNote|${Morebits.pageNameNorm}}}--~~` + '~~';
+							`${`\n{{subst:AFDNote|${Morebits.pageNameNorm}}}--~~`}~~`;
 					usertalkpage.setAppendText(notifytext);
 					usertalkpage.setEditSummary(
 						`通知：页面[[${Morebits.pageNameNorm}]]存废讨论提名`
@@ -448,11 +448,11 @@ Twinkle.xfd.callbacks = {
 						append = false;
 					} else {
 						const appendText =
-								`\n{{safesubst:SafeAfdHead}}\n${
+								`${`\n{{safesubst:SafeAfdHead}}\n${
 									{
 										fame: '== 30天后仍挂有{{tl|notability}}模板的条目 ==\n<span style="font-size:smaller;">（已挂[[Template:notability|不符收录标准模板]]30天）</span>',
 										substub:
-											'== 30天后仍挂有{{tl|substub}}模板的条目 ==\n<span style="font-size:smaller;">（已挂[[Template:substub|小小条目模板]]30天）</span>',
+            '== 30天后仍挂有{{tl|substub}}模板的条目 ==\n<span style="font-size:smaller;">（已挂[[Template:substub|小小条目模板]]30天）</span>',
 										batch: '== 批量提删 =='
 									}[type]
 								}\n${newText}\n\n${commentText}\n----\n:建议：删除前述页面；理由：${Morebits.string.formatReasonText(
@@ -463,20 +463,20 @@ Twinkle.xfd.callbacks = {
 										substub: '<u>长度过短</u>条目',
 										batch: '页面'
 									}[type]
-								}的用户及时间：<br id="no-new-title" />~~` + '~~';
+								}的用户及时间：<br id="no-new-title" />~~`}~~`;
 						pageobj.setAppendText(appendText);
 					}
 					break;
 				}
 				default: {
 					pageobj.setAppendText(
-						`\n{{subst:DRItem|Type=${type}|DRarticles=${
+						`${`\n{{subst:DRItem|Type=${type}|DRarticles=${
 							Morebits.pageNameNorm
 						}|Reason=${Morebits.string.formatReasonText(params.reason)}${
 							params.fwdcsdreason.trim() !== ''
 								? `<br>\n转交理由：${params.fwdcsdreason}`
 								: ''
-						}|To=${to}}}~~` + '~~'
+						}|To=${to}}}~~`}~~`
 					);
 					break;
 				}
@@ -555,7 +555,7 @@ Twinkle.xfd.callbacks = {
 				);
 
 				const notifytext =
-						`\n{{subst:idw|File:${mw.config.get('wgTitle')}}}--~~` + '~~';
+						`${`\n{{subst:idw|File:${mw.config.get('wgTitle')}}}--~~`}~~`;
 				usertalkpage.setAppendText(notifytext);
 				usertalkpage.setEditSummary(
 					`通知：文件[[${Morebits.pageNameNorm}]]存废讨论提名`
@@ -596,9 +596,9 @@ Twinkle.xfd.callbacks = {
 			const params = pageobj.getCallbackParameters();
 
 			pageobj.setAppendText(
-				`\n{{subst:IfdItem|Filename=${mw.config.get('wgTitle')}|Uploader=${
+				`${`\n{{subst:IfdItem|Filename=${mw.config.get('wgTitle')}|Uploader=${
 					params.uploader
-				}|Reason=${Morebits.string.formatReasonText(params.reason)}}}--~~` + '~~'
+				}|Reason=${Morebits.string.formatReasonText(params.reason)}}}--~~`}~~`
 			);
 			pageobj.setEditSummary(`加入[[${Morebits.pageNameNorm}]]`);
 			pageobj.setChangeTags(Twinkle.changeTags);
@@ -708,7 +708,10 @@ Twinkle.xfd.callback.evaluate = (e) => {
 	const type = e.target.category.value;
 	const usertalk = e.target.notify.checked;
 	const reason = e.target.xfdreason.value;
-	let fwdcsdreason, xfdcat, mergeinto, noinclude;
+	let fwdcsdreason;
+	let xfdcat;
+	let mergeinto;
+	let noinclude;
 	if (type === 'afd') {
 		fwdcsdreason = e.target.fwdcsdreason.value;
 		noinclude = e.target.noinclude.checked;
@@ -727,7 +730,10 @@ Twinkle.xfd.callback.evaluate = (e) => {
 		Morebits.status.error('错误', '未定义的动作');
 		return;
 	}
-	let qiuwen_page, logpage, lognomination, params;
+	let qiuwen_page;
+	let logpage;
+	let lognomination;
+	let params;
 	const date = new Morebits.date(); // XXX: avoid use of client clock, still used by TfD, FfD and CfD
 	switch (type) {
 		case 'afd': {
@@ -737,14 +743,14 @@ Twinkle.xfd.callback.evaluate = (e) => {
 					Twinkle.getPref('logXfdNominations') &&
 					!Twinkle.getPref('noLogOnXfdNomination').includes(xfdcat);
 			params = {
-				usertalk: usertalk,
-				xfdcat: xfdcat,
-				mergeinto: mergeinto,
-				noinclude: noinclude,
-				reason: reason,
-				fwdcsdreason: fwdcsdreason,
-				logpage: logpage,
-				lognomination: lognomination
+				usertalk,
+				xfdcat,
+				mergeinto,
+				noinclude,
+				reason,
+				fwdcsdreason,
+				logpage,
+				lognomination
 			};
 			Morebits.wiki.addCheckpoint();
 			// Updating data for the action completed event
@@ -772,10 +778,10 @@ Twinkle.xfd.callback.evaluate = (e) => {
 					Twinkle.getPref('logXfdNominations') &&
 					!Twinkle.getPref('noLogOnXfdNomination').includes('ffd');
 			params = {
-				usertalk: usertalk,
-				reason: reason,
-				logpage: logpage,
-				lognomination: lognomination
+				usertalk,
+				reason,
+				logpage,
+				lognomination
 			};
 			Morebits.wiki.addCheckpoint();
 			// Updating data for the action completed event

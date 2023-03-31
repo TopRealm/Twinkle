@@ -15,9 +15,9 @@
 (($) => {
 /**
  * twinklewarn.js: Warn module
- * Mode of invocation:  Tab ("Warn")
- * Active on:           Any page with relevant user name (userspace, contribs,
- *                      etc.), as well as the rollback success page
+ * Mode of invocation: Tab ("Warn")
+ * Active on: Any page with relevant user name (userspace, contribs,
+ * etc.), as well as the rollback success page
  */
 
 const relevantUserName = mw.config.get('wgRelevantUserName');
@@ -1138,9 +1138,7 @@ Twinkle.warn.callback.change_category = (e) => {
 	}
 	let selected = false;
 	// worker function to create the combo box entries
-	const createEntries = (contents, container, wrapInOptgroup, val) => {
-		val = typeof val !== 'undefined' ? val : value; // IE doesn't support default parameters
-
+	const createEntries = (contents, container, wrapInOptgroup, val = value) => {
 		// level2->2, singlewarn->''; also used to distinguish the
 		// scaled levels from singlenotice, singlewarn, and custom
 		const level = val.replace(/^\D+/g, '');
@@ -1738,9 +1736,11 @@ Twinkle.warn.callbacks = {
 			params.reason,
 			params.main_group === 'custom'
 		);
-		let sectionExists = false,
-			sectionNumber = 0;
-			// Only check sections if there are sections or there's a chance we won't create our own
+
+		let sectionExists = false;
+		// Only check sections if there are sections or there's a chance we won't create our own
+
+		let sectionNumber = 0;
 		if (!messageData.heading && text.length) {
 			// Get all sections
 			const sections = text.match(/^(=+).+\1/gm);

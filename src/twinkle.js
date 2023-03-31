@@ -12,11 +12,11 @@
  */
 /* Twinkle.js - twinkle.js */
 /**
- * +-------------------------------------------------------+
- * |         === WARNING: GLOBAL GADGET FILE ===           |
- * |        Changes to this page affect many users.        |
- * |  Please discuss changes at Talk page before editing.  |
- * +-------------------------------------------------------+
+ * +--------------------------------------------------------+
+ * |		 === WARNING: GLOBAL GADGET FILE ===			|
+ * |		Changes to this page affect many users.			|
+ * |  Please discuss changes at Talk page before editing.	|
+ * +--------------------------------------------------------+
  *
  * Scripts imported from Qiuwen Development Centre
  * [https://git.qiuwen.wiki/InterfaceAdmin/Twinkle].
@@ -324,20 +324,21 @@ Twinkle.addPortlet = (navigation, id, text, type, nextnodeid) => {
 	const skin = mw.config.get('skin');
 	if (
 		skin !== 'vector' && skin !== 'vector-2022' ||
-			navigation !== 'left-navigation' && navigation !== 'right-navigation'
+				navigation !== 'left-navigation' && navigation !== 'right-navigation'
 	) {
 		type = null; // menu supported only in vector's #left-navigation & #right-navigation
 	}
 
-	let outerNavClass, innerDivClass;
+	let outerNavClass;
+	let innerDivClass;
 	switch (skin) {
 		case 'vector':
 		case 'vector-2022': {
 			// XXX: portal doesn't work
 			if (
 				navigation !== 'portal' &&
-					navigation !== 'left-navigation' &&
-					navigation !== 'right-navigation'
+						navigation !== 'left-navigation' &&
+						navigation !== 'right-navigation'
 			) {
 				navigation = 'mw-panel';
 			}
@@ -369,7 +370,8 @@ Twinkle.addPortlet = (navigation, id, text, type, nextnodeid) => {
 	}
 
 	// Build the DOM elements.
-	let outerNav, heading;
+	let outerNav;
+	let heading;
 	if (skin === 'vector-2022') {
 		outerNav = document.createElement('div');
 		heading = document.createElement('label');
@@ -470,8 +472,8 @@ Twinkle.addPortletLink = (task, text, id, tooltip) => {
 /**
  * **************** General initialization code ****************
  */
-const scriptpathbefore = `${mw.util.wikiScript('index')}?title=`,
-	scriptpathafter = '&action=raw&ctype=text/javascript&happy=yes';
+const scriptpathbefore = `${mw.util.wikiScript('index')}?title=`;
+const scriptpathafter = '&action=raw&ctype=text/javascript&happy=yes';
 
 // Retrieve the user's Twinkle preferences
 $.ajax({

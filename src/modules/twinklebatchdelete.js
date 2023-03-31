@@ -14,8 +14,8 @@
 (($) => {
 /**
  * twinklebatchdelete.js: Batch delete module (sysops only)
- * Mode of invocation:     Tab ("D-batch")
- * Active on:              Existing non-articles, and Special:PrefixIndex
+ * Mode of invocation: Tab ("D-batch")
+ * Active on: Existing non-articles, and Special:PrefixIndex
  */
 Twinkle.batchdelete = () => {
 	if (
@@ -266,8 +266,8 @@ Twinkle.batchdelete.callback = () => {
 		statelem
 	);
 	qiuwen_api.params = {
-		form: form,
-		Window: Window
+		form,
+		Window
 	};
 	qiuwen_api.post();
 };
@@ -555,7 +555,7 @@ Twinkle.batchdelete.callback.evaluate = (event) => {
 						input.unlink_file &&
 						new RegExp(`^${Morebits.namespaceRegex(6)}:`, 'i').test(pageName),
 				reason: input.reason,
-				pageDeleter: pageDeleter
+				pageDeleter
 			};
 			const qiuwen_page = new Morebits.wiki.page(pageName, `正在删除页面${pageName}`);
 			qiuwen_page.setCallbackParameters(params);
@@ -612,10 +612,11 @@ Twinkle.batchdelete.callbacks = {
 		const params = thingWithParameters.parent
 			? thingWithParameters.parent.getCallbackParameters()
 			: thingWithParameters.getCallbackParameters();
-			// the initial batch operation's job is to delete the page, and that has
-			// succeeded by now
+		// the initial batch operation's job is to delete the page, and that has
+		// succeeded by now
 		params.pageDeleter.workerSuccess(thingWithParameters);
-		let query, qiuwen_api;
+		let query;
+		let qiuwen_api;
 		if (params.unlink_page) {
 			Twinkle.batchdelete.unlinkCache = {};
 			query = {

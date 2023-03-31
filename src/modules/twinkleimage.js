@@ -15,8 +15,8 @@
 (($) => {
 /**
  * twinkleimage.js: Image CSD module
- * Mode of invocation:  Tab ("DI")
- * Active on:           Local nonredirect file pages (not on Commons)
+ * Mode of invocation: Tab ("DI")
+ * Active on: Local nonredirect file pages (not on Commons)
  */
 
 Twinkle.image = () => {
@@ -162,10 +162,10 @@ Twinkle.image.callback.evaluate = (event) => {
 	const templatename = type;
 
 	const params = {
-		type: type,
-		templatename: templatename,
+		type,
+		templatename,
 		normalized: csdcrit,
-		lognomination: lognomination
+		lognomination
 	};
 	if (csdcrit === 'f1') {
 		params.f1_source = event.target['type.f1_source'].value;
@@ -195,7 +195,7 @@ Twinkle.image.callback.evaluate = (event) => {
 			const noteData = document.createElement('pre');
 			noteData.appendChild(
 				document.createTextNode(
-					`{{subst:Uploadvionotice|${Morebits.pageNameNorm}}}--~~~~`
+					`{{subst:Uploadvionotice|${Morebits.pageNameNorm}}}--~~` + `~~`
 				)
 			);
 			Morebits.status.info('提示', [
@@ -289,7 +289,7 @@ Twinkle.image.callbacks = {
 				`User talk:${initialContrib}`,
 				`通知原始上传者 (${initialContrib})`
 			);
-			const notifytext = `\n{{subst:Di-${params.templatename}-notice|1=${Morebits.pageNameNorm}}}--~~~~`;
+			const notifytext = `\n{{subst:Di-${params.templatename}-notice|1=${Morebits.pageNameNorm}}}--~~` + `~~`;
 			usertalkpage.setAppendText(notifytext);
 			usertalkpage.setEditSummary(`通知：文件[[${Morebits.pageNameNorm}]]快速删除提名`);
 			usertalkpage.setChangeTags(Twinkle.changeTags);
@@ -308,7 +308,7 @@ Twinkle.image.callbacks = {
 	imageList: (pageobj) => {
 		const text = pageobj.getPageText();
 		// const params = pageobj.getCallbackParameters();
-		pageobj.setPageText(`${text}\n* [[:${Morebits.pageNameNorm}]]--~~~~`);
+		pageobj.setPageText(`${text}\n* [[:${Morebits.pageNameNorm}]]--~~` + `~~`);
 		pageobj.setEditSummary(`加入[[${Morebits.pageNameNorm}]]`);
 		pageobj.setChangeTags(Twinkle.changeTags);
 		pageobj.setCreateOption('recreate');

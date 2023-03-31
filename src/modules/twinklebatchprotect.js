@@ -275,7 +275,7 @@ Twinkle.batchprotect.callback = () => {
 				type: 'checkbox',
 				name: 'pages',
 				shiftClickSupport: true,
-				list: list
+				list
 			});
 			form.append({
 				type: 'submit'
@@ -342,7 +342,7 @@ Twinkle.batchprotect.callback.evaluate = (event) => {
 		qiuwen_api.params = $.extend(
 			{
 				page: pageName,
-				batchOperation: batchOperation
+				batchOperation
 			},
 			input
 		);

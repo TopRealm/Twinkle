@@ -176,9 +176,9 @@ Twinkle.copyvio.callback.evaluate = (e) => {
 	}
 	const logpage = 'Qiuwen:侵权提报';
 	const params = {
-		source: source,
-		logpage: logpage,
-		usertalk: usertalk
+		source,
+		logpage,
+		usertalk
 	};
 	Morebits.wiki.addCheckpoint();
 	// Updating data for the action completed event

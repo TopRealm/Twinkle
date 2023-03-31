@@ -14,8 +14,8 @@
 (($) => {
 /**
  * twinkleunlink.js: Unlink module
- * Mode of invocation:  Tab ("Unlink")
- * Active on:           Non-special pages, except Qiuwen:Sandbox
+ * Mode of invocation: Tab ("Unlink")
+ * Active on: Non-special pages, except Qiuwen:Sandbox
  */
 
 Twinkle.unlink = () => {
@@ -99,8 +99,8 @@ Twinkle.unlink.callback = (presetReason) => {
 		Twinkle.unlink.callbacks.display.backlinks
 	);
 	qiuwen_api.params = {
-		form: form,
-		Window: Window,
+		form,
+		Window,
 		image: fileSpace
 	};
 	qiuwen_api.post();
@@ -138,7 +138,7 @@ Twinkle.unlink.callback.evaluate = (event) => {
 	unlinker.setPageList(pages);
 	const params = {
 		reason: input.reason,
-		unlinker: unlinker
+		unlinker
 	};
 	unlinker.run((pageName) => {
 		const qiuwen_page = new Morebits.wiki.page(pageName, `在页面“${pageName}”中取消链入`);
@@ -160,7 +160,9 @@ Twinkle.unlink.callbacks = {
 		backlinks: (apiobj) => {
 			const response = apiobj.getResponse();
 			let havecontent = false;
-			let list, namespaces, i;
+			let list;
+			let namespaces;
+			let i;
 			if (apiobj.params.image) {
 				const imageusage = response.query.imageusage.sort(Twinkle.sortByNamespace);
 				list = [];
@@ -223,7 +225,7 @@ Twinkle.unlink.callbacks = {
 						type: 'checkbox',
 						name: 'imageusage',
 						shiftClickSupport: true,
-						list: list
+						list
 					});
 					havecontent = true;
 				}
@@ -284,7 +286,7 @@ Twinkle.unlink.callbacks = {
 					type: 'checkbox',
 					name: 'backlinks',
 					shiftClickSupport: true,
-					list: list
+					list
 				});
 				havecontent = true;
 			} else {
@@ -312,8 +314,8 @@ Twinkle.unlink.callbacks = {
 		let oldtext = pageobj.getPageText();
 		const params = pageobj.getCallbackParameters();
 		const wikiPage = new Morebits.wikitext.page(oldtext);
-		let summaryText = '',
-			warningString = false;
+		let summaryText = '';
+		let warningString = false;
 		let text;
 
 		// remove image usages

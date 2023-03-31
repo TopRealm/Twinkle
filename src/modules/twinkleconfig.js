@@ -1125,7 +1125,8 @@ Twinkle.config.init = () => {
 					row.style.backgroundColor = 'rgba(128, 128, 128, 0.1)';
 				}
 				cell = document.createElement('td');
-				let label, input;
+				let label;
+				let input;
 				const gotPref = Twinkle.getPref(pref.name);
 				switch (pref.type) {
 					case 'boolean': {
@@ -1290,7 +1291,7 @@ Twinkle.config.init = () => {
 						// use jQuery data on the button to store the current config value
 						$(button).data({
 							value: gotPref,
-							pref: pref
+							pref
 						});
 						button.appendChild(document.createTextNode('编辑项目'));
 						cell.appendChild(button);
@@ -1784,18 +1785,7 @@ Twinkle.config.writePrefs = (pageobj) => {
 		});
 	});
 	let text =
-			'// <nowiki>\n' +
-			'// twinkleoptions.js：用户Twinkle参数设置文件\n' +
-			'//\n' +
-			'// 注：修改您的参数设置最简单的办法是使用\n' +
-			`// Twinkle参数设置面板，在[[${Morebits.pageNameNorm}]]。\n` +
-			'//\n' +
-			'// 这个文件是自动生成的，您所做的任何修改（除了\n' +
-			'// 以一种合法的JavaScript的方式来修改这些属性值）会\n' +
-			'// 在下一次您点击“保存”时被覆盖。\n' +
-			'// 修改此文件时，请记得使用合法的JavaScript。\n' +
-			'\n' +
-			'window.Twinkle.prefs = ';
+			`// <nowiki>\n// twinkleoptions.js：用户Twinkle参数设置文件\n//\n// 注：修改您的参数设置最简单的办法是使用\n${`// Twinkle参数设置面板，在[[${Morebits.pageNameNorm}]]。\n`}//\n// 这个文件是自动生成的，您所做的任何修改（除了\n// 以一种合法的JavaScript的方式来修改这些属性值）会\n// 在下一次您点击“保存”时被覆盖。\n// 修改此文件时，请记得使用合法的JavaScript。\n\nwindow.Twinkle.prefs = `;
 	text += JSON.stringify(newConfig, null, 2);
 	text += ';\n' + '\n' + '// twinkleoptions.js到此为止\n' + '// </nowiki>';
 	pageobj.setPageText(text);
@@ -1811,13 +1801,7 @@ Twinkle.config.saveSuccess = (pageobj) => {
 	noticebox.style.fontSize = '100%';
 	noticebox.style.marginTop = '2em';
 	noticebox.innerHTML =
-			'<p><b>' +
-			'您的Twinkle参数设置已被保存。' +
-			'</b></p><p>' +
-			'要看到这些更改，您可能需要' +
-			`<a href="${mw.util.getUrl('QW:BYPASS')}" title="QW:BYPASS"><b>` +
-			'绕过浏览器缓存' +
-			'</b></a>。</p>';
+			`<p><b>您的Twinkle参数设置已被保存。</b></p><p>要看到这些更改，您可能需要${`<a href="${mw.util.getUrl('QW:BYPASS')}" title="QW:BYPASS"><b>`}绕过浏览器缓存</b></a>。</p>`;
 	Morebits.status.root.appendChild(noticebox);
 	const noticeclear = document.createElement('br');
 	noticeclear.style.clear = 'both';

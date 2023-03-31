@@ -14,16 +14,14 @@
 (($) => {
 /**
  * twinklespeedy.js: CSD module
- * Mode of invocation:  Tab ("CSD")
- * Active on:           Non-special, existing pages
- * Mode of invocation:  Tab ("CSD")
- * Active on:           Non-special, existing pages
+ * Mode of invocation: Tab ("CSD")
+ * Active on: Non-special, existing pages
  *
  * NOTE FOR DEVELOPERS:
- *   If adding a new criterion, add it to the appropriate places at the top of
- *   twinkleconfig.js.  Also check out the default values of the CSD preferences
- *   in twinkle.js, and add your new criterion to those if you think it would be
- *   good.
+ *  If adding a new criterion, add it to the appropriate places at the top of
+ *  twinkleconfig.js.
+ *  Also, check out the default values of the CSD preferences in twinkle.js,
+ *  and add your new criterion to those if you think it would be good.
  */
 
 Twinkle.speedy = () => {
@@ -945,7 +943,9 @@ Twinkle.speedy.normalizeHash = {
 };
 Twinkle.speedy.callbacks = {
 	getTemplateCodeAndParams: (params) => {
-		let code, parameters, i;
+		let code;
+		let parameters;
+		let i;
 		if (params.normalizeds.length > 1) {
 			code = '{{delete';
 			params.utparams = {};
@@ -991,7 +991,7 @@ Twinkle.speedy.callbacks = {
 			pst: 'true',
 			text: wikitext,
 			contentmodel: 'wikitext',
-			title: title
+			title
 		};
 		const statusIndicator = new Morebits.status('构造删除理由');
 		const api = new Morebits.wiki.api(
@@ -1118,7 +1118,9 @@ Twinkle.speedy.callbacks = {
 			}
 
 			// prompt for protect on G7
-			let $link, $bigtext;
+			let $link;
+
+			let $bigtext;
 			if (params.normalized === 'g7') {
 				$link = $('<a>', {
 					href: '#',
@@ -1668,7 +1670,9 @@ Twinkle.speedy.callback.evaluateSysop = (e) => {
 	const normalizeds = values.map((value) => Twinkle.speedy.normalizeHash[value]);
 
 	// analyse each criterion to determine whether to watch the page, prompt for summary, or notify the creator
-	let watchPage, promptForSummary;
+	let watchPage;
+
+	let promptForSummary;
 	normalizeds.forEach((norm) => {
 		if (Twinkle.getPref('watchSpeedyPages').includes(norm)) {
 			watchPage = Twinkle.getPref('watchSpeedyExpiry');
@@ -1678,13 +1682,13 @@ Twinkle.speedy.callback.evaluateSysop = (e) => {
 		}
 	});
 	const params = {
-		values: values,
-		normalizeds: normalizeds,
+		values,
+		normalizeds,
 		watch: watchPage,
 		deleteTalkPage: form.talkpage && form.talkpage.checked,
 		deleteRedirects: form.redirects.checked,
 		openUserTalk: form.openusertalk.checked,
-		promptForSummary: promptForSummary,
+		promptForSummary,
 		templateParams: Twinkle.speedy.getParameters(form, values)
 	};
 	if (!params.templateParams) {
@@ -1749,13 +1753,13 @@ Twinkle.speedy.callback.evaluateUser = (e) => {
 
 	const blank = form.blank.checked;
 	const params = {
-		values: values,
-		normalizeds: normalizeds,
+		values,
+		normalizeds,
 		watch: watchPage,
 		usertalk: notifyuser,
 		lognomination: csdlog,
 		templateParams: Twinkle.speedy.getParameters(form, values),
-		blank: blank
+		blank
 	};
 	if (!params.templateParams) {
 		return;

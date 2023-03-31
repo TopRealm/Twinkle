@@ -14,8 +14,8 @@
 (($) => {
 /**
  * twinklearv.js: ARV module
- * Mode of invocation:  Tab ("ARV")
- * Active on:           Any page with relevant user name (userspace, contribs, etc.)
+ * Mode of invocation: Tab ("ARV")
+ * Active on: Any page with relevant user name (userspace, contribs, etc.)
  */
 
 Twinkle.arv = () => {
@@ -577,13 +577,13 @@ Twinkle.arv.callback.evaluate = (e) => {
 					return;
 				}
 				const an3Parameters = {
-					uid: uid,
+					uid,
 					page: form.page.value.trim(),
 					comment: form.comment.value.trim(),
-					diffs: diffs,
-					warnings: warnings,
-					resolves: resolves,
-					free_resolves: free_resolves
+					diffs,
+					warnings,
+					resolves,
+					free_resolves
 				};
 				Morebits.simpleWindow.setButtonsEnabled(false);
 				Morebits.status.init(form);
@@ -591,7 +591,8 @@ Twinkle.arv.callback.evaluate = (e) => {
 			};
 			if (free_resolves) {
 				let query;
-				let diff, oldid;
+				let diff;
+				let oldid;
 				const specialDiff = /special:diff\/(\d+)(?:\/(\S+))?/i.exec(free_resolves);
 				if (specialDiff) {
 					if (specialDiff[2]) {
@@ -759,9 +760,10 @@ Twinkle.arv.processAN3 = (params) => {
 				)}`;
 			}
 			const grouped_diffs = {};
-			let parentid, lastid;
-			for (let j = 0; j < params.diffs.length; ++j) {
-				const cur = params.diffs[j];
+			let parentid;
+			let lastid;
+
+			for (const cur of params.diffs) {
 				if (cur.revid && cur.revid !== parentid || lastid === null) {
 					lastid = cur.revid;
 					grouped_diffs[lastid] = [];
@@ -769,6 +771,7 @@ Twinkle.arv.processAN3 = (params) => {
 				parentid = cur.parentid;
 				grouped_diffs[lastid].push(cur);
 			}
+
 			const difftext = $.map(grouped_diffs, (sub) => {
 				let ret = '';
 				if (sub.length >= 2) {
@@ -864,8 +867,7 @@ Twinkle.arv.processAN3 = (params) => {
 
 			// notify user
 			const notifyText =
-					`\n\n{{subst:an3-notice|1=${mw.util.wikiUrlencode(params.uid)}|auto=1}} ~~` +
-					'~~';
+                `${`\n\n{{subst:an3-notice|1=${mw.util.wikiUrlencode(params.uid)}|auto=1}} ~~`}~~`;
 			const talkPage = new Morebits.wiki.page(
 				`User talk:${params.uid}`,
 				'Notifying edit warrior'

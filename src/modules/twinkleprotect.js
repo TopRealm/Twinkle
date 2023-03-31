@@ -14,8 +14,8 @@
 (($) => {
 /**
  * twinkleprotect.js: Protect/RPP module
- * Mode of invocation:  Tab ("PP"/"RPP")
- * Active on:           Non-special, non-MediaWiki pages
+ * Mode of invocation: Tab ("PP"/"RPP")
+ * Active on: Non-special, non-MediaWiki pages
  */
 
 // Note: a lot of code in this module is re-used/called by batchprotect.
@@ -245,8 +245,8 @@ Twinkle.protect.callback.showLogAndCurrentProtectInfo = () => {
 	}
 
 	Morebits.status.init($('div[name="currentprot"] span')[0]);
-	let protectionNode = [],
-		statusLevel = 'info';
+	let protectionNode = [];
+	let statusLevel = 'info';
 
 	protectionNode = Twinkle.protect.formatProtectionDescription(
 		Twinkle.protect.currentProtectionLevels
@@ -1148,7 +1148,9 @@ Twinkle.protect.callback.evaluate = (e) => {
 
 		case 'request': {
 			// file request at RFPP
-			let typename, typereason;
+			let typename;
+
+			let typereason;
 			switch (input.category) {
 				case 'pp-dispute':
 				case 'pp-vandalism':
@@ -1264,8 +1266,8 @@ Twinkle.protect.callback.evaluate = (e) => {
 			}
 
 			const rppparams = {
-				reason: reason,
-				typename: typename,
+				reason,
+				typename,
 				category: input.category,
 				expiry: input.expiry
 			};
@@ -1305,7 +1307,8 @@ Twinkle.protect.callbacks = {
 		protectedPage.load(Twinkle.protect.callbacks.taggingPage);
 	},
 	getTaggedPage: (params, text) => {
-		let tag, summary;
+		let tag;
+		let summary;
 
 		const oldtag_re =
 				/(?:<noinclude>)?[\t ]*{{\s*(pp-[^{}]*?|protected|(?:t|v|s|p-|usertalk-v|usertalk-s|sb|move)protected2?|protected template|privacy protection)\s*?}}\s*(?:<\/noinclude>)?\s*/gi;
@@ -1374,8 +1377,8 @@ Twinkle.protect.callbacks = {
 		}
 
 		return {
-			text: text,
-			summary: summary
+			text,
+			summary
 		};
 	},
 	taggingPage: (protectedPage) => {
@@ -1450,11 +1453,11 @@ Twinkle.protect.callbacks = {
 			/=/.test(Morebits.pageNameNorm) ? '1=' : ''
 		}${Morebits.pageNameNorm}}}</small>\n`;
 		newtag +=
-				`请求${Morebits.string.toUpperCaseFirstChar(words)}${
+				`${`请求${Morebits.string.toUpperCaseFirstChar(words)}${
 					params.reason !== ''
 						? `：${Morebits.string.formatReasonText(params.reason)}`
 						: '。'
-				}--~~` + '~~';
+				}--~~`}~~`;
 
 		const reg =
 				params.category === 'unprotect'
@@ -1515,8 +1518,8 @@ Twinkle.protect.callbacks = {
 			return;
 		}
 
-		let sectionText,
-			expiryText = '';
+		let sectionText;
+		let expiryText = '';
 		if (params.type === 'unprotect') {
 			sectionText = sections[1];
 		} else {
@@ -1540,9 +1543,9 @@ Twinkle.protect.callbacks = {
 					requestList[i] += '\n: {{RFPP|isun}}。--~~' + '~~\n';
 				} else {
 					requestList[i] +=
-							`\n: {{RFPP|${params.type}|${
+							`${`\n: {{RFPP|${params.type}|${
 								Morebits.string.isInfinity(params.expiry) ? 'infinity' : expiryText
-							}}}。--~~` + '~~\n';
+							}}}。--~~`}~~\n`;
 				}
 				found = true;
 				break;

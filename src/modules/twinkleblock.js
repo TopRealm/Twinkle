@@ -14,8 +14,8 @@
 (($) => {
 /**
  * twinkleblock.js: Block module
- * Mode of invocation:     Tab ("Block")
- * Active on:              Any page with relevant user name (userspace, contribs, etc.)
+ * Mode of invocation: Tab ("Block")
+ * Active on: Any page with relevant user name (userspace, contribs, etc.)
  */
 const api = new mw.Api();
 let relevantUserName = mw.config.get('wgRelevantUserName');
@@ -181,8 +181,8 @@ Twinkle.block.fetchUserInfo = (fn) => {
 	}
 	api.get(query).then(
 		(data) => {
-			const blockinfo = data.query.blocks[0],
-				userinfo = data.query.users[0];
+			const blockinfo = data.query.blocks[0];
+			const userinfo = data.query.users[0];
 			Twinkle.block.isRegistered = !!userinfo.userid;
 			if (Twinkle.block.isRegistered) {
 				relevantUserName = `User:${userName}`;
@@ -235,11 +235,11 @@ Twinkle.block.callback.saveFieldset = (fieldset) => {
 		});
 };
 Twinkle.block.callback.change_action = (e) => {
-	let field_preset,
-		field_template_options,
-		field_block_options,
-		field_tag_options,
-		field_unblock_options;
+	let field_preset;
+	let field_template_options;
+	let field_block_options;
+	let field_tag_options;
+	let field_unblock_options;
 	const $form = $(e.target.form);
 	// Make ifs shorter
 	const block = $form.find('[name=actiontype][value=block]');
@@ -1086,9 +1086,9 @@ Twinkle.block.transformBlockPresets = () => {
 					blockGroup.list = Twinkle.getPref('customBlockReasonList');
 				}
 				$.each(blockGroup.list, (_, blockPreset) => {
-					const value = blockPreset.value,
-						reason = blockPreset.label,
-						newPreset = `${value}:${reason}`;
+					const value = blockPreset.value;
+					const reason = blockPreset.label;
+					const newPreset = `${value}:${reason}`;
 					Twinkle.block.blockPresetsInfo[newPreset] = jQuery.extend(
 						true,
 						{},
@@ -1422,7 +1422,7 @@ Twinkle.block.callback.filtered_block_groups = (group, show_template) =>
 		if (list.length) {
 			return {
 				label: blockGroup.label,
-				list: list
+				list
 			};
 		}
 	});
@@ -1508,9 +1508,9 @@ Twinkle.block.callback.update_form = (e, data) => {
 				: data.reason || '';
 };
 Twinkle.block.callback.change_template = (e) => {
-	const form = e.target.form,
-		value = form.template.value,
-		settings = Twinkle.block.blockPresetsInfo[value];
+	const form = e.target.form;
+	const value = form.template.value;
+	const settings = Twinkle.block.blockPresetsInfo[value];
 	const blockBox = $(form).find('[name=actiontype][value=block]').is(':checked');
 	const partialBox = $(form).find('[name=actiontype][value=partial]').is(':checked');
 	const templateBox = $(form).find('[name=actiontype][value=template]').is(':checked');
@@ -1588,16 +1588,16 @@ Twinkle.block.callback.preview = (form) => {
 };
 Twinkle.block.callback.evaluate = (e) => {
 	const params = Morebits.quickForm.getInputData(e.target);
-	const $form = $(e.target),
-		toBlock = $form.find('[name=actiontype][value=block]').is(':checked'),
-		toWarn = $form.find('[name=actiontype][value=template]').is(':checked'),
-		toPartial = $form.find('[name=actiontype][value=partial]').is(':checked'),
-		toTag = $form.find('[name=actiontype][value=tag]').is(':checked'),
-		toProtect = $form.find('[name=actiontype][value=protect]').is(':checked'),
-		toUnblock = $form.find('[name=actiontype][value=unblock]').is(':checked');
-	let blockoptions = {},
-		templateoptions = {},
-		unblockoptions = {};
+	const $form = $(e.target);
+	const toBlock = $form.find('[name=actiontype][value=block]').is(':checked');
+	const toWarn = $form.find('[name=actiontype][value=template]').is(':checked');
+	const toPartial = $form.find('[name=actiontype][value=partial]').is(':checked');
+	const toTag = $form.find('[name=actiontype][value=tag]').is(':checked');
+	const toProtect = $form.find('[name=actiontype][value=protect]').is(':checked');
+	const toUnblock = $form.find('[name=actiontype][value=unblock]').is(':checked');
+	let blockoptions = {};
+	let templateoptions = {};
+	let unblockoptions = {};
 	Twinkle.block.callback.saveFieldset($form.find('[name=field_block_options]'));
 	Twinkle.block.callback.saveFieldset($form.find('[name=field_template_options]'));
 	Twinkle.block.callback.saveFieldset($form.find('[name=field_tag_options]'));
@@ -1977,10 +1977,10 @@ Twinkle.block.callback.closeRequest = (vipPage) => {
 
 			let newText = requestList[i].replace(
 				/^(\*\s*处理：)[\t ]*(<!-- 非管理員僅可標記已執行的封禁，針對提報的意見請放在下一行 -->)?[\t ]*$/m,
-				`$1${comment}--~~` + '~~'
+				`${`$1${comment}--~~`}~~`
 			);
 			if (requestList[i] === newText) {
-				newText = `${requestList[i]}\n* 处理：${comment}--~~` + '~~';
+				newText = `${`${requestList[i]}\n* 处理：${comment}--~~`}~~`;
 			}
 			requestList[i] = `${newText}\n`;
 			found = true;
@@ -2083,9 +2083,9 @@ Twinkle.block.callback.getBlockNoticeWikitext = (params, nosign) => {
 	return text;
 };
 Twinkle.block.callback.main = (pageobj) => {
-	const params = pageobj.getCallbackParameters(),
-		date = new Morebits.date(pageobj.getLoadTime()),
-		messageData = params.messageData;
+	const params = pageobj.getCallbackParameters();
+	const date = new Morebits.date(pageobj.getLoadTime());
+	const messageData = params.messageData;
 	let text;
 	params.indefinite = Morebits.string.isInfinity(params.expiry);
 	if (
@@ -2098,7 +2098,8 @@ Twinkle.block.callback.main = (pageobj) => {
 	} else {
 		text = pageobj.getPageText();
 		const dateHeaderRegex = date.monthHeaderRegex();
-		let dateHeaderRegexLast, dateHeaderRegexResult;
+		let dateHeaderRegexLast;
+		let dateHeaderRegexResult;
 		while ((dateHeaderRegexLast = dateHeaderRegex.exec(text)) !== null) {
 			dateHeaderRegexResult = dateHeaderRegexLast;
 		}

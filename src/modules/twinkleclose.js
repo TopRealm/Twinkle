@@ -15,9 +15,9 @@
 (($) => {
 /**
  * twinkleclose.js: XFD closing module
- * Mode of invocation:    Links after section heading
- * Active on:             AfD dated archive pages
- * Config directives in:  TwinkleConfig
+ * Mode of invocation: Links after section heading
+ * Active on: AfD dated archive pages
+ * Config directives in: TwinkleConfig
  */
 
 Twinkle.close = () => {
@@ -292,9 +292,9 @@ Twinkle.close.callback = (title, section, noop) => {
 	const sub_group = result.querySelectorAll('select')[0]; // hack
 
 	const resultData = {
-		title: title,
+		title,
 		section: Number.parseInt(section),
-		noop: noop
+		noop
 	};
 	$(result).data('resultData', resultData);
 	// worker function to create the combo box entries
@@ -403,13 +403,13 @@ Twinkle.close.callback.evaluate = (e) => {
 	const redirects = e.target.redirects.checked;
 	const params = {
 		title: resultData.title,
-		code: code,
+		code,
 		remark: e.target.remark.value,
 		sdreason: e.target.sdreason.value,
 		section: resultData.section,
-		messageData: messageData,
-		talkpage: talkpage,
-		redirects: redirects
+		messageData,
+		talkpage,
+		redirects
 	};
 	Morebits.simpleWindow.setButtonsEnabled(false);
 	Morebits.status.init(e.target);
@@ -436,7 +436,8 @@ Twinkle.close.callback.evaluate = (e) => {
 };
 Twinkle.close.callbacks = {
 	del: (params) => {
-		let query, qiuwen_api;
+		let query;
+		let qiuwen_api;
 		Morebits.wiki.addCheckpoint();
 		const page = new Morebits.wiki.page(params.title, '删除页面');
 		if (params.code === 'sd') {

@@ -14,8 +14,8 @@
 (($) => {
 /**
  * twinklefluff.js: Revert/rollback module
- * Mode of invocation:  Links on contributions, recent changes, history, and diff pages
- * Active on:           Diff pages, history pages, Special:RecentChanges(Linked), and Special:Contributions
+ * Mode of invocation: Links on contributions, recent changes, history, and diff pages
+ * Active on: Diff pages, history pages, Special:RecentChanges(Linked), and Special:Contributions
  */
 
 /**
@@ -412,12 +412,12 @@ Twinkle.fluff.revert = (type, vandal, rev, page) => {
 		$('#catlinks').remove();
 	}
 	const params = {
-		type: type,
+		type,
 		user: vandal,
 		userHidden: !vandal,
 		// Keep track of whether the username was hidden
-		pagename: pagename,
-		revid: revid
+		pagename,
+		revid
 	};
 	const query = {
 		action: 'query',
@@ -494,7 +494,7 @@ Twinkle.fluff.callbacks = {
 		const query = {
 			action: 'edit',
 			title: mw.config.get('wgPageName'),
-			summary: summary,
+			summary,
 			tags: Twinkle.changeTags,
 			token: csrftoken,
 			undo: lastrevid,
@@ -732,7 +732,8 @@ Twinkle.fluff.callbacks = {
 			' 做出的修订版本 ',
 			Morebits.htmlNode('strong', params.goodid)
 		]);
-		let summary, extra_summary;
+		let summary;
+		let extra_summary;
 		switch (params.type) {
 			case 'agf': {
 				extra_summary = prompt('可选的编辑摘要：', params.summary); // padded out to widen prompt in Firefox
@@ -814,7 +815,7 @@ Twinkle.fluff.callbacks = {
 		const query = {
 			action: 'edit',
 			title: params.pagename,
-			summary: summary,
+			summary,
 			tags: Twinkle.changeTags,
 			token: csrftoken,
 			undo: lastrevid,
@@ -826,7 +827,7 @@ Twinkle.fluff.callbacks = {
 				: undefined,
 			format: 'json'
 		};
-			// Handle watching, possible expiry
+		// Handle watching, possible expiry
 		if (Twinkle.getPref('watchRevertedPages').includes(params.type)) {
 			const watchOrExpiry = Twinkle.getPref('watchRevertedExpiry');
 			if (!watchOrExpiry || watchOrExpiry === 'no') {

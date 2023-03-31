@@ -14,8 +14,8 @@
 (($) => {
 /**
  * twinklebatchundelete.js: Batch undelete module
- * Mode of invocation:     Tab ("Und-batch")
- * Active on:              Existing user and project pages
+ * Mode of invocation: Tab ("Und-batch")
+ * Active on: Existing user and project pages
  */
 
 Twinkle.batchundelete = () => {
@@ -92,14 +92,13 @@ Twinkle.batchundelete.callback = () => {
 					label:
 							title +
 							(isProtected
-								? '（' +
-								`全保护，${
+								? `（${`全保护，${
 									$editprot.attr('expiry') === 'infinity'
 										? '无限期'
-										: `${new Morebits.date(
+										: `${`${new Morebits.date(
 											$editprot.attr('expiry')
-										).calendar('utc')} (UTC)` + '过期'
-								}）`
+										).calendar('utc')} (UTC)`}过期`
+								}）`}`
 								: ''),
 					value: title,
 					checked: true,
@@ -131,7 +130,7 @@ Twinkle.batchundelete.callback = () => {
 				type: 'checkbox',
 				name: 'pages',
 				shiftClickSupport: true,
-				list: list
+				list
 			});
 			apiobj.params.form.append({ type: 'submit' });
 
@@ -140,7 +139,7 @@ Twinkle.batchundelete.callback = () => {
 		},
 		statelem
 	);
-	qiuwen_api.params = { form: form, Window: Window };
+	qiuwen_api.params = { form, Window };
 	qiuwen_api.post();
 };
 
@@ -176,9 +175,9 @@ Twinkle.batchundelete.callback.evaluate = (event) => {
 	pageUndeleter.run((pageName) => {
 		const params = {
 			page: pageName,
-			undel_talk: undel_talk,
-			reason: reason,
-			pageUndeleter: pageUndeleter
+			undel_talk,
+			reason,
+			pageUndeleter
 		};
 
 		const qiuwen_page = new Morebits.wiki.page(pageName, `反删除页面${pageName}`);
@@ -201,11 +200,12 @@ Twinkle.batchundelete.callbacks = {
 		const params = thingWithParameters.parent
 			? thingWithParameters.parent.getCallbackParameters()
 			: thingWithParameters.getCallbackParameters();
-			// the initial batch operation's job is to delete the page, and that has
-			// succeeded by now
+		// the initial batch operation's job is to delete the page, and that has
+		// succeeded by now
 		params.pageUndeleter.workerSuccess(thingWithParameters);
 
-		let query, qiuwen_api;
+		let query;
+		let qiuwen_api;
 
 		if (params.undel_talk) {
 			const talkpagename = new mw.Title(params.page).getTalkPage().getPrefixedText();

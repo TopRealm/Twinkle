@@ -137,8 +137,8 @@ Morebits.pageNameRegex = (pageName) => {
 	if (pageName === '') {
 		return;
 	}
-	const firstChar = pageName[0],
-		remainder = Morebits.string.escapeRegExp(pageName.slice(1));
+	const firstChar = pageName[0];
+	const remainder = Morebits.string.escapeRegExp(pageName.slice(1));
 	if (mw.Title.phpCharToUpper(firstChar) !== firstChar.toLowerCase()) {
 		return `[${mw.Title.phpCharToUpper(firstChar)}${firstChar.toLowerCase()}]${remainder}`;
 	}
@@ -405,7 +405,9 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute 
 		// hell hack alpha
 		data.type = 'hidden';
 	}
-	let i, current, subnode;
+	let i;
+	let current;
+	let subnode;
 	switch (data.type) {
 		case 'form': {
 			node = document.createElement('form');
@@ -1279,8 +1281,12 @@ Morebits.ip = {
 			// address before any CIDR number (e.g. "a:b:c::/24").
 			const CIDRStart = address.indexOf('/');
 			const addressEnd = CIDRStart !== -1 ? CIDRStart - 1 : address.length - 1;
+
 			// If the '::' is at the beginning...
-			let repeat, extra, pad;
+			let repeat;
+
+			let extra;
+			let pad;
 			if (abbrevPos === 0) {
 				repeat = '0:';
 				extra = address === '::' ? '0' : ''; // for the address '::'
@@ -1463,8 +1469,8 @@ Morebits.string = {
 		unbinder.content = unbinder.content.replace(/\|/g, '{{subst:!}}');
 		reason = unbinder.rebind();
 		if (addSig) {
-			const sig = '~~' + '~~',
-				sigIndex = reason.lastIndexOf(sig);
+			const sig = '~~' + '~~';
+			const sigIndex = reason.lastIndexOf(sig);
 			if (sigIndex === -1 || sigIndex !== reason.length - sig.length) {
 				reason += ` ${sig}`;
 			}
@@ -2077,15 +2083,15 @@ Morebits.date.prototype = {
 			len ||= 2; // Up to length of 00 + 1
 			return `00${num}`.toString().slice(0 - len);
 		};
-		const h24 = udate.getHours(),
-			m = udate.getMinutes(),
-			s = udate.getSeconds(),
-			ms = udate.getMilliseconds();
-		const D = udate.getDate(),
-			M = udate.getMonth() + 1,
-			Y = udate.getFullYear();
-		const h12 = h24 % 12 || 12,
-			amOrPm = h24 >= 12 ? '下午' : '上午';
+		const h24 = udate.getHours();
+		const m = udate.getMinutes();
+		const s = udate.getSeconds();
+		const ms = udate.getMilliseconds();
+		const D = udate.getDate();
+		const M = udate.getMonth() + 1;
+		const Y = udate.getFullYear();
+		const h12 = h24 % 12 || 12;
+		const amOrPm = h24 >= 12 ? '下午' : '上午';
 		const replacementMap = {
 			HH: pad(h24),
 			H: h24,
@@ -4212,13 +4218,13 @@ Morebits.wiki.page = function (pageName, status) {
 			editprot &&
 				!ctx.suppressProtectWarning &&
 				!confirm(
-					`您即将对全保护页面“${ctx.pageName}${
+					`${`您即将对全保护页面“${ctx.pageName}${
 						editprot.expiry === 'infinity'
 							? '”（永久）'
 							: `”（到期：${new Morebits.date(editprot.expiry).calendar(
 								'utc'
 							)} (UTC)）`
-					}”进行“${action}”操作` + '。\n\n单击确定以继续操作，或单击取消以取消操作。'
+					}”进行“${action}”操作`}。\n\n单击确定以继续操作，或单击取消以取消操作。`
 				)
 		) {
 			ctx.statusElement.error('已取消对全保护页面的操作。');
@@ -4234,7 +4240,8 @@ Morebits.wiki.page = function (pageName, status) {
 	};
 
 	const fnProcessMove = function () {
-		let pageTitle, token;
+		let pageTitle;
+		let token;
 		if (fnCanUseMwUserToken('move')) {
 			token = mw.user.tokens.get('csrfToken');
 			pageTitle = ctx.pageName;
@@ -4320,7 +4327,8 @@ Morebits.wiki.page = function (pageName, status) {
 		ctx.patrolProcessApi.post();
 	};
 	const fnProcessDelete = function () {
-		let pageTitle, token;
+		let pageTitle;
+		let token;
 		if (fnCanUseMwUserToken('delete')) {
 			token = mw.user.tokens.get('csrfToken');
 			pageTitle = ctx.pageName;
@@ -4384,7 +4392,8 @@ Morebits.wiki.page = function (pageName, status) {
 	};
 
 	const fnProcessUndelete = function () {
-		let pageTitle, token;
+		let pageTitle;
+		let token;
 		if (fnCanUseMwUserToken('undelete')) {
 			token = mw.user.tokens.get('csrfToken');
 			pageTitle = ctx.pageName;
@@ -4467,7 +4476,9 @@ Morebits.wiki.page = function (pageName, status) {
 
 		// Fetch existing protection levels
 		const prs = response.pages[0].protection;
-		let editprot, moveprot, createprot;
+		let editprot;
+		let moveprot;
+		let createprot;
 		prs.forEach((pr) => {
 			// Filter out protection from cascading
 			if (pr.type === 'edit' && !pr.source) {
@@ -4517,9 +4528,7 @@ Morebits.wiki.page = function (pageName, status) {
 						!ctx.protectMove ||
 						ctx.protectMove.level !== 'sysop') &&
 					!confirm(
-						`您已对“${ctx.pageName}”启用了连锁保护` +
-							'，但没有设置仅管理员的保护级别。\n\n' +
-							'单击确认以自动调整并继续连锁全保护，单击取消以跳过此操作'
+						`${`您已对“${ctx.pageName}”启用了连锁保护`}，但没有设置仅管理员的保护级别。\n\n单击确认以自动调整并继续连锁全保护，单击取消以跳过此操作`
 					)
 			) {
 				ctx.statusElement.error('连锁保护已取消。');
@@ -4531,8 +4540,9 @@ Morebits.wiki.page = function (pageName, status) {
 		}
 
 		// Build protection levels and expirys (expiries?) for query
-		const protections = [],
-			expirys = [];
+		const protections = [];
+
+		const expirys = [];
 		if (ctx.protectEdit) {
 			protections.push(`edit=${ctx.protectEdit.level}`);
 			expirys.push(ctx.protectEdit.expiry);
@@ -4555,7 +4565,7 @@ Morebits.wiki.page = function (pageName, status) {
 			watchlist: ctx.watchlistOption,
 			format: 'json'
 		};
-			// Only shows up in logs, not page history [[phab:T259983]]
+		// Only shows up in logs, not page history [[phab:T259983]]
 		if (ctx.changeTags) {
 			query.tags = ctx.changeTags;
 		}
@@ -4697,7 +4707,8 @@ Morebits.wikitext.parseTemplate = (text, start) => {
 		name: '',
 		parameters: {}
 	};
-	let key, value;
+	let key;
+	let value;
 
 	/**
 	 * Function to handle finding parameter values.
@@ -4973,27 +4984,23 @@ Morebits.wikitext.page.prototype = {
 		this.text = this.text.replace(
 			new RegExp(
 				// leading whitespace
-				'^\\s*' +
-						// capture template(s)
-						`(?:((?:\\s*${
-							// Pre-template regex, such as leading html comments
-							preRegex
-						}|` +
-						// begin template format
-						`\\{\\{\\s*(?:${
-							// Template regex
-							regex
-							// end main template name, optionally with a number
-							// Probably remove the (?:) though
-						})\\d*\\s*` +
-						// template parameters
-						'(\\|(?:\\{\\{[^{}]*\\}\\}|[^{}])*)?' +
-						// end template format
-						'\\}\\})+' +
-						// end capture
-						'(?:\\s*\\n)?)' +
-						// trailing whitespace
-						'\\s*)?',
+				// capture template(s)
+				// begin template format
+				// template parameters
+				// end template format
+				// end capture
+				// trailing whitespace
+				`^\\s*${// capture template(s)
+					`(?:((?:\\s*${
+						// Pre-template regex, such as leading html comments
+						preRegex
+					}|`}${// begin template format
+					`\\{\\{\\s*(?:${
+						// Template regex
+						regex
+						// end main template name, optionally with a number
+						// Probably remove the (?:) though
+					})\\d*\\s*`}(\\|(?:\\{\\{[^{}]*\\}\\}|[^{}])*)?\\}\\})+(?:\\s*\\n)?)\\s*)?`,
 				flags
 			),
 			`$1${tag}`
@@ -5307,9 +5314,9 @@ Morebits.checkboxShiftClickSupport = (jQuerySelector, jQueryContext) => {
 		const thisCb = this;
 		if (event.shiftKey && lastCheckbox !== null) {
 			const cbs = $(jQuerySelector, jQueryContext); // can't cache them, obviously, if we want to support resorting
-			let index = -1,
-				lastIndex = -1,
-				i;
+			let index = -1;
+			let lastIndex = -1;
+			let i;
 			for (i = 0; i < cbs.length; i++) {
 				if (cbs[i] === thisCb) {
 					index = i;
@@ -5327,7 +5334,8 @@ Morebits.checkboxShiftClickSupport = (jQuerySelector, jQueryContext) => {
 			if (index > -1 && lastIndex > -1) {
 				// inspired by wikibits
 				const endState = thisCb.checked;
-				let start, finish;
+				let start;
+				let finish;
 				if (index < lastIndex) {
 					start = index + 1;
 					finish = lastIndex;

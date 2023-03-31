@@ -14,9 +14,9 @@
 (($) => {
 /**
  * friendlytalkback.js: Talkback module
- * Mode of invocation:     Tab ("TB")
- * Active on:              Any page with relevant user name (userspace, contribs, etc.) except IP ranges
- * Config directives in:   FriendlyConfig
+ * Mode of invocation: Tab ("TB")
+ * Active on: Any page with relevant user name (userspace, contribs, etc.) except IP ranges
+ * Config directives in: FriendlyConfig
  */
 Twinkle.talkback = () => {
 	if (!mw.config.exists('wgRelevantUserName')) {
@@ -205,7 +205,7 @@ Twinkle.talkback.changeTarget = (e) => {
 				noticeboard.append({
 					type: 'option',
 					label: data.label,
-					value: value,
+					value,
 					selected: !!data.defaultSelected
 				});
 			});
@@ -388,13 +388,11 @@ Twinkle.talkback.callbacks = {
 			}
 			case 'mail': {
 				text =
-						`==${Twinkle.getPref('mailHeading')}==\n{{YGM|subject=${
+						`${`==${Twinkle.getPref('mailHeading')}==\n{{YGM|subject=${
 							input.section
-						}|ts=~~` +
-						'~' +
-						'~~}}';
+						}|ts=~~`}~` + `~~}}`;
 				if (input.message) {
-					text += `\n${input.message}  ~~` + '~~';
+					text += `${`\n${input.message}  ~~`}~~`;
 				} else if (Twinkle.getPref('insertTalkbackSignature')) {
 					text += '\n~~' + '~~';
 				}
@@ -410,13 +408,11 @@ Twinkle.talkback.callbacks = {
 			default: {
 				// talkback
 				text =
-						`==${Twinkle.getPref('talkbackHeading')}==\n{{talkback|${input.page}${
+						`${`==${Twinkle.getPref('talkbackHeading')}==\n{{talkback|${input.page}${
 							input.section ? `|${input.section}` : ''
-						}|ts=~~` +
-						'~' +
-						'~~}}';
+						}|ts=~~`}~` + `~~}}`;
 				if (input.message) {
-					text += `\n${input.message} ~~` + '~~';
+					text += `${`\n${input.message} ~~`}~~`;
 				} else if (Twinkle.getPref('insertTalkbackSignature')) {
 					text += '\n~~' + '~~';
 				}

@@ -15,10 +15,10 @@
 (($) => {
 /**
  * twinklestub.js: Tag module
- * Mode of invocation:   Tab ("Stub")
- * Active on:            Existing articles
+ * Mode of invocation: Tab ("Stub")
+ * Active on: Existing articles
  * Config directives in: FriendlyConfig
- * Note:                 customised friendlytag module
+ * Note: customised friendlytag module
  */
 
 Twinkle.stub = () => {
@@ -283,9 +283,9 @@ Twinkle.stub.article.tagCategories = {
 Twinkle.stub.callbacks = {
 	main: (pageobj) => {
 		const params = pageobj.getCallbackParameters();
-		let tagRe,
-			summaryText = '加入',
-			tags = [];
+		let tagRe;
+		let summaryText = '加入';
+		let tags = [];
 		const groupableTags = [];
 		let i;
 		// Remove tags that become superfluous with this action

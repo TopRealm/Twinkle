@@ -14,9 +14,9 @@
 (($) => {
 /**
  * friendlytag.js: Tag module
- * Mode of invocation:     Tab ("Tag")
- * Active on:              Existing articles and drafts; file pages with a corresponding file
- *                         which is local (not on Share); all redirects
+ * Mode of invocation: Tab ("Tag")
+ * Active on: Existing articles and drafts; file pages with a corresponding file
+ * which is local (not on Share); all redirects
  */
 Twinkle.tag = () => {
 	// redirect tagging
@@ -179,7 +179,7 @@ Twinkle.tag.callback = () => {
 						value: 'group',
 						name: 'group',
 						tooltip:
-								'若加入{{multiple issues}}支持的三个以上的模板，所有支持的模板都会被合并入{{multiple issues}}模板中。',
+									'若加入{{multiple issues}}支持的三个以上的模板，所有支持的模板都会被合并入{{multiple issues}}模板中。',
 						checked: Twinkle.getPref('groupByDefault')
 					}
 				]
@@ -190,7 +190,7 @@ Twinkle.tag.callback = () => {
 				label: '理由：',
 				name: 'reason',
 				tooltip:
-						'附加于编辑摘要的可选理由，例如指出条目内容的哪些部分有问题或移除模板的理由，但若理由很长则应该发表在讨论页。',
+							'附加于编辑摘要的可选理由，例如指出条目内容的哪些部分有问题或移除模板的理由，但若理由很长则应该发表在讨论页。',
 				size: '80'
 			});
 
@@ -362,7 +362,9 @@ Twinkle.tag.callback = () => {
 
 // $allCheckboxDivs and $allHeaders are defined globally, rather than in the
 // quickfilter event function, to avoid having to recompute them on every keydown
-let $allCheckboxDivs, $allHeaders;
+let $allCheckboxDivs;
+
+let $allHeaders;
 
 Twinkle.tag.updateSortOrder = (e) => {
 	const form = e.target.form;
@@ -379,52 +381,52 @@ Twinkle.tag.updateSortOrder = (e) => {
 		}
 		switch (tag) {
 			/* case 'Expand language': {
-				checkbox.subgroup = [
-					{
-						name: 'expandLanguage',
-						type: 'input',
-						label: '外语版本语言代码（必填）：'
-					},
-					{
-						type: 'checkbox',
-						list: [
-							{
-								name: 'highQualityArticle',
-								label: '高品质条目'
-							}
-						]
-					},
-					{
-						name: 'expandLanguage2',
-						type: 'input',
-						label: '外语版本语言代码：'
-					},
-					{
-						type: 'checkbox',
-						list: [
-							{
-								name: 'highQualityArticle2',
-								label: '高品质条目'
-							}
-						]
-					},
-					{
-						name: 'expandLanguage3',
-						type: 'input',
-						label: '外语版本语言代码：'
-					},
-					{
-						type: 'checkbox',
-						list: [
-							{
-								name: 'highQualityArticle3',
-								label: '高品质条目'
-							}
-						]
-					}
-				];
-				break;
-			} */
+					checkbox.subgroup = [
+						{
+							name: 'expandLanguage',
+							type: 'input',
+							label: '外语版本语言代码（必填）：'
+						},
+						{
+							type: 'checkbox',
+							list: [
+								{
+									name: 'highQualityArticle',
+									label: '高品质条目'
+								}
+							]
+						},
+						{
+							name: 'expandLanguage2',
+							type: 'input',
+							label: '外语版本语言代码：'
+						},
+						{
+							type: 'checkbox',
+							list: [
+								{
+									name: 'highQualityArticle2',
+									label: '高品质条目'
+								}
+							]
+						},
+						{
+							name: 'expandLanguage3',
+							type: 'input',
+							label: '外语版本语言代码：'
+						},
+						{
+							type: 'checkbox',
+							list: [
+								{
+									name: 'highQualityArticle3',
+									label: '高品质条目'
+								}
+							]
+						}
+					];
+					break;
+				} */
 			case 'Expert needed': {
 				checkbox.subgroup = [
 					{
@@ -461,7 +463,7 @@ Twinkle.tag.updateSortOrder = (e) => {
 						otherTagName = 'Merge from';
 						break;
 					}
-						// no default
+							// no default
 				}
 				checkbox.subgroup = [
 					{
@@ -490,7 +492,7 @@ Twinkle.tag.updateSortOrder = (e) => {
 							tag === 'Merge to' ? '其他' : '这'
 						}条目的讨论页）：`,
 						tooltip:
-								'可选，但强烈推荐。如不需要请留空。仅在只输入了一个条目名时可用。'
+									'可选，但强烈推荐。如不需要请留空。仅在只输入了一个条目名时可用。'
 					});
 				}
 				break;
@@ -734,10 +736,10 @@ Twinkle.tag.updateSortOrder = (e) => {
 		const firstPart = `加入${Twinkle.tag.status.numAdded}个标记`;
 		const secondPart = `移除${Twinkle.tag.status.numRemoved}个标记`;
 		statusNode.textContent =
-				(Twinkle.tag.status.numAdded ? `  ${firstPart}` : '') +
-				(Twinkle.tag.status.numRemoved
-					? (Twinkle.tag.status.numAdded ? '；' : '  ') + secondPart
-					: '');
+					(Twinkle.tag.status.numAdded ? `  ${firstPart}` : '') +
+					(Twinkle.tag.status.numRemoved
+						? (Twinkle.tag.status.numAdded ? '；' : '  ') + secondPart
+						: '');
 	});
 };
 
@@ -754,7 +756,7 @@ const generateLinks = (checkbox) => {
 		'href',
 		mw.util.getUrl(
 			(!tagname.includes(':') ? 'Template:' : '') +
-					(!tagname.includes('|') ? tagname : tagname.slice(0, tagname.indexOf('|')))
+						(!tagname.includes('|') ? tagname : tagname.slice(0, tagname.indexOf('|')))
 		)
 	);
 	link.setAttribute('target', '_blank');
@@ -804,7 +806,7 @@ Twinkle.tag.article.tagList = [
 					{
 						tag: 'Non-free',
 						description:
-								'可能过多或不当地使用了受著作权保护的文字、图像或多媒体文件'
+									'可能过多或不当地使用了受著作权保护的文字、图像或多媒体文件'
 					}
 				]
 			},
@@ -897,7 +899,7 @@ Twinkle.tag.article.tagList = [
 					{
 						tag: 'Autobiography',
 						description:
-								'类似一篇自传，或内容主要由条目描述的当事人或组织撰写、编辑'
+									'类似一篇自传，或内容主要由条目描述的当事人或组织撰写、编辑'
 					},
 					{
 						tag: 'COI',
@@ -923,7 +925,7 @@ Twinkle.tag.article.tagList = [
 					{
 						tag: 'Citecheck',
 						description:
-								'可能包含不适用或被曲解的引用资料，部分内容的准确性无法被证实'
+									'可能包含不适用或被曲解的引用资料，部分内容的准确性无法被证实'
 					},
 					{
 						tag: 'More footnotes needed',
@@ -1037,7 +1039,7 @@ Twinkle.tag.redirectList = [
 						type: 'input',
 						label: '本重新導向的語言（可選）',
 						tooltip:
-								'輸入重新導向名稱所使用語言的ISO 639代碼，例如en代表英語，代碼可參見 Template:ISO_639_name'
+									'輸入重新導向名稱所使用語言的ISO 639代碼，例如en代表英語，代碼可參見 Template:ISO_639_name'
 					}
 				]
 			},
@@ -1095,61 +1097,61 @@ Twinkle.tag.fileList = [
 		value: [
 			{
 				label:
-						'{{Non-free reduce}}：' + '非低分辨率的合理使用图像（或过长的音频剪辑等）',
+							'{{Non-free reduce}}：' + '非低分辨率的合理使用图像（或过长的音频剪辑等）',
 				value: 'Non-free reduce'
 			}
 		]
 	},
 	/* {
-		key: '求闻共享资源相关标签',
-		value: [
-			{
-				label:
-						'{{Copy to Qiuwen Share}}：' +
-						'自由著作权文件应该被移动至求闻共享资源',
-				value: 'Copy to Qiuwen Share'
-			},
-			{
-				label: '{{Do not move to Share}}：' + '不要移动至求闻共享资源',
-				value: 'Do not move to Share',
-				subgroup: {
-					type: 'input',
-					name: 'DoNotMoveToShare_reason',
-					label: '原因：',
-					tooltip: '输入不应该将该图像移动到求闻共享资源的原因（必填）。'
-				}
-			},
-			{
-				label: '{{Keep local}}：' + '请求在本地保留求闻共享资源的文件副本',
-				value: 'Keep local',
-				subgroup: [
-					{
+			key: '求闻共享资源相关标签',
+			value: [
+				{
+					label:
+							'{{Copy to Qiuwen Share}}：' +
+							'自由著作权文件应该被移动至求闻共享资源',
+					value: 'Copy to Qiuwen Share'
+				},
+				{
+					label: '{{Do not move to Share}}：' + '不要移动至求闻共享资源',
+					value: 'Do not move to Share',
+					subgroup: {
 						type: 'input',
-						name: 'keeplocalName',
-						label: '共享资源的不同图像名称：',
-						tooltip:
-								'输入在共享资源的图像名称（若不同于本地名称），不包括 File: 前缀'
-					},
-					{
-						type: 'input',
-						name: 'keeplocalReason',
+						name: 'DoNotMoveToShare_reason',
 						label: '原因：',
-						tooltip: '输入请求在本地保留文件副本的原因（可选）：'
+						tooltip: '输入不应该将该图像移动到求闻共享资源的原因（必填）。'
 					}
-				]
-			},
-			{
-				label: '{{Now Share}}：' + '文件已被复制到求闻共享资源',
-				value: 'Now Share',
-				subgroup: {
-					type: 'input',
-					name: 'nowshareName',
-					label: '共享资源的不同图像名称：',
-					tooltip: '输入在共享资源的图像名称（若不同于本地名称），不包括 File: 前缀'
+				},
+				{
+					label: '{{Keep local}}：' + '请求在本地保留求闻共享资源的文件副本',
+					value: 'Keep local',
+					subgroup: [
+						{
+							type: 'input',
+							name: 'keeplocalName',
+							label: '共享资源的不同图像名称：',
+							tooltip:
+									'输入在共享资源的图像名称（若不同于本地名称），不包括 File: 前缀'
+						},
+						{
+							type: 'input',
+							name: 'keeplocalReason',
+							label: '原因：',
+							tooltip: '输入请求在本地保留文件副本的原因（可选）：'
+						}
+					]
+				},
+				{
+					label: '{{Now Share}}：' + '文件已被复制到求闻共享资源',
+					value: 'Now Share',
+					subgroup: {
+						type: 'input',
+						name: 'nowshareName',
+						label: '共享资源的不同图像名称：',
+						tooltip: '输入在共享资源的图像名称（若不同于本地名称），不包括 File: 前缀'
+					}
 				}
-			}
-		]
-	}, */
+			]
+		}, */
 	{
 		key: '清理标签',
 		value: [
@@ -1271,7 +1273,7 @@ Twinkle.tag.callbacks = {
 						`Talk:${params.discussArticle}`,
 						'将理由贴进讨论页'
 					);
-					talkpage.setNewSectionText(`${params.mergeReason.trim()} ~~~~`);
+					talkpage.setNewSectionText(`${params.mergeReason.trim()} ~~` + `~~`);
 					talkpage.setNewSectionTitle(`请求与[[${params.nonDiscussArticle}]]合并`);
 					talkpage.setChangeTags(Twinkle.changeTags);
 					talkpage.setWatchlist(Twinkle.getPref('watchMergeDiscussions'));
@@ -1415,13 +1417,15 @@ Twinkle.tag.callbacks = {
 			return;
 		}
 
-		let tagRe,
-			tagText = '',
-			tags = [];
-		const groupableTags = [],
-			groupableExistingTags = [];
-			// Executes first: addition of selected tags
-			/**
+		let tagRe;
+		let tagText = '';
+		let tags = [];
+
+		const groupableTags = [];
+		// Executes first: addition of selected tags
+
+		const groupableExistingTags = [];
+		/**
 		 * Updates `tagText` with the syntax of `tagName` template with its parameters
 		 *
 		 * @param {number} _tagIndex
@@ -1436,24 +1440,24 @@ Twinkle.tag.callbacks = {
 				// fill in other parameters, based on the tag
 				switch (tagName) {
 					/* case 'Expand language': {
-						currentTag += `|1=${params.expandLanguage}`;
-						if (params.highQualityArticle) {
-							currentTag += '|status=yes';
-						}
-						if (params.expandLanguage2) {
-							currentTag += `|2=${params.expandLanguage2}`;
-							if (params.highQualityArticle2) {
-								currentTag += '|status2=yes';
+							currentTag += `|1=${params.expandLanguage}`;
+							if (params.highQualityArticle) {
+								currentTag += '|status=yes';
 							}
-						}
-						if (params.expandLanguage3) {
-							currentTag += `|3=${params.expandLanguage3}`;
-							if (params.highQualityArticle3) {
-								currentTag += '|status3=yes';
+							if (params.expandLanguage2) {
+								currentTag += `|2=${params.expandLanguage2}`;
+								if (params.highQualityArticle2) {
+									currentTag += '|status2=yes';
+								}
 							}
-						}
-						break;
-					} */
+							if (params.expandLanguage3) {
+								currentTag += `|3=${params.expandLanguage3}`;
+								if (params.highQualityArticle3) {
+									currentTag += '|status3=yes';
+								}
+							}
+							break;
+						} */
 					case 'Expert needed': {
 						currentTag += `|subject=${params.expert}`;
 						if (params.expert2) {
@@ -1478,19 +1482,19 @@ Twinkle.tag.callbacks = {
 							// link to the correct section on the talk page, for article space only
 							if (
 								mw.config.get('wgNamespaceNumber') === 0 &&
-									(params.mergeReason || params.discussArticle)
+										(params.mergeReason || params.discussArticle)
 							) {
 								if (!params.discussArticle) {
 									// discussArticle is the article whose talk page will contain the discussion
 									params.discussArticle =
-											tagName === 'Merge to'
-												? params.mergeTarget
-												: mw.config.get('wgTitle');
+												tagName === 'Merge to'
+													? params.mergeTarget
+													: mw.config.get('wgTitle');
 									// nonDiscussArticle is the article which won't have the discussion
 									params.nonDiscussArticle =
-											tagName === 'Merge to'
-												? mw.config.get('wgTitle')
-												: params.mergeTarget;
+												tagName === 'Merge to'
+													? mw.config.get('wgTitle')
+													: params.mergeTarget;
 									params.talkDiscussionTitle = `请求与${params.nonDiscussArticle}合并`;
 								}
 								currentTag += `|discuss=Talk:${params.discussArticle}#${params.talkDiscussionTitle}`;
@@ -1559,14 +1563,12 @@ Twinkle.tag.callbacks = {
 			// as well as deletion/protection-related templates
 			const wikipage = new Morebits.wikitext.page(pageText);
 			const templatesAfter =
-					`${
-						Twinkle.hatnoteRegex
-						// Protection templates
-					}pp|pp-.*?|` +
-					// CSD
-					'(?:Delete|Db-reason|D|Deletebecause|Db|速删|速刪|Speedy|SD|快删|快刪|CSD)|' +
-					// AfD
-					'[rsaiftcmv]fd';
+						// CSD
+						// AfD
+						`${`${
+							Twinkle.hatnoteRegex
+							// Protection templates
+						}pp|pp-.*?|`}(?:Delete|Db-reason|D|Deletebecause|Db|速删|速刪|Speedy|SD|快删|快刪|CSD)|[rsaiftcmv]fd`;
 			pageText = wikipage.insertAfterTemplates(tagText, templatesAfter).getText();
 
 			removeTags();
@@ -1579,8 +1581,8 @@ Twinkle.tag.callbacks = {
 			if (Twinkle.tag.canRemove || !tagRe.test(pageText)) {
 				if (
 					tag === 'Notability' &&
-						(mw.config.get('wgNamespaceNumber') === 0 ||
-							confirm('该页面不是条目，您仍要提报到关注度提报吗？'))
+							(mw.config.get('wgNamespaceNumber') === 0 ||
+								confirm('该页面不是条目，您仍要提报到关注度提报吗？'))
 				) {
 					const qiuwen_page = new Morebits.wiki.page(
 						'qiuwen:关注度/提报',
@@ -1594,7 +1596,7 @@ Twinkle.tag.callbacks = {
 				// Custom tags are assumed non-groupable, since we don't know whether MI template supports them
 				if (
 					Twinkle.tag.article.flatObject[tag] &&
-						!Twinkle.tag.article.flatObject[tag].excludeMI
+							!Twinkle.tag.article.flatObject[tag].excludeMI
 				) {
 					groupableTags.push(tag);
 				} else {
@@ -1618,16 +1620,16 @@ Twinkle.tag.callbacks = {
 			// If the tag is unknown to us, we consider it non-groupable
 			if (
 				Twinkle.tag.article.flatObject[tag] &&
-					!Twinkle.tag.article.flatObject[tag].excludeMI
+						!Twinkle.tag.article.flatObject[tag].excludeMI
 			) {
 				groupableExistingTags.push(tag);
 			}
 		});
 
 		const miTest =
-				/{{(multiple ?issues|article ?issues|mi|ai|issues|多個問題|多个问题|問題條目|问题条目|數個問題|数个问题)\s*\|[^}]+{/im.exec(
-					pageText
-				);
+					/{{(multiple ?issues|article ?issues|mi|ai|issues|多個問題|多个问题|問題條目|问题条目|數個問題|数个问题)\s*\|[^}]+{/im.exec(
+						pageText
+					);
 
 		if (miTest && groupableTags.length > 0) {
 			Morebits.status.info('信息', '加入支持的标记入已存在的{{multiple issues}}');
@@ -1645,8 +1647,8 @@ Twinkle.tag.callbacks = {
 			addUngroupedTags();
 		} else if (
 			params.group &&
-				!miTest &&
-				groupableExistingTags.length + groupableTags.length >= 2
+					!miTest &&
+					groupableExistingTags.length + groupableTags.length >= 2
 		) {
 			Morebits.status.info('信息', '加入支持的标记入{{multiple issues}}');
 
@@ -1736,7 +1738,7 @@ Twinkle.tag.callbacks = {
 		// var text = pageobj.getPageText();
 		// var params = pageobj.getCallbackParameters();
 		pageobj.setAppendText(`\n{{subst:Fameitem|title=${Morebits.pageNameNorm}}}`);
-		pageobj.setEditSummary('加入' + `[[${Morebits.pageNameNorm}]]`);
+		pageobj.setEditSummary(`加入${`[[${Morebits.pageNameNorm}]]`}`);
 		pageobj.setChangeTags(Twinkle.changeTags);
 		pageobj.setCreateOption('recreate');
 		pageobj.append();
@@ -1744,10 +1746,10 @@ Twinkle.tag.callbacks = {
 
 	redirect: (pageobj) => {
 		const params = pageobj.getCallbackParameters();
-		let pageText = pageobj.getPageText(),
-			tagRe,
-			tagText = '',
-			summaryText = '加入';
+		let pageText = pageobj.getPageText();
+		let tagRe;
+		let tagText = '';
+		let summaryText = '加入';
 		const tags = [];
 		let i;
 
@@ -1768,8 +1770,8 @@ Twinkle.tag.callbacks = {
 				}
 			} else if (
 				(tagName === '条目请求重定向' || tagName === '條目請求重定向') &&
-					params.reqArticleLang &&
-					params.reqArticleTitle
+						params.reqArticleLang &&
+						params.reqArticleTitle
 			) {
 				tagText += `|1=${params.reqArticleLang}`;
 				tagText += `|2=${params.reqArticleTitle}`;
@@ -1848,8 +1850,8 @@ Twinkle.tag.callbacks = {
 
 		// Add maintenance tags
 		if (params.tags.length) {
-			let tagtext = '',
-				currentTag;
+			let tagtext = '';
+			let currentTag;
 			$.each(params.tags, (_k, tag) => {
 				// when other Qiuwen Share-related tags are placed, remove "move to Share" tag
 				if (['Keep local', 'Now Share', 'Do not move to Share'].includes(tag)) {
@@ -1952,18 +1954,18 @@ Twinkle.tag.callback.evaluate = (e) => {
 			return sum;
 		}, 0);
 		if (count > 1) {
-			let message = '请在以下标签中择一使用' + `：{{${conflicts.join('}}、{{')}}}。`;
+			let message = `请在以下标签中择一使用${`：{{${conflicts.join('}}、{{')}}}。`}`;
 			message += extra || '';
 			alert(message);
 			return true;
 		}
 	};
-		// Given a tag, ensure an associate parameter is present
-		// Maybe just sock this away in each function?
+	// Given a tag, ensure an associate parameter is present
+	// Maybe just sock this away in each function?
 	const checkParameter = (tag, parameter, description) => {
 		description ||= '理由';
 		if (params.tags.includes(tag) && params[parameter].trim() === '') {
-			alert('您必须指定' + `{{${tag}}}的${description}。`);
+			alert(`您必须指定${`{{${tag}}}的${description}。`}`);
 			return true;
 		}
 	};
@@ -1979,8 +1981,8 @@ Twinkle.tag.callback.evaluate = (e) => {
 
 			if (
 				params.tags.includes('Merge') ||
-					params.tags.includes('Merge from') ||
-					params.tags.includes('Merge to')
+						params.tags.includes('Merge from') ||
+						params.tags.includes('Merge to')
 			) {
 				if (
 					checkIncompatible(
@@ -1996,7 +1998,7 @@ Twinkle.tag.callback.evaluate = (e) => {
 				}
 				if (
 					(params.mergeTagOther || params.mergeReason) &&
-						params.mergeTarget.includes('|')
+							params.mergeTarget.includes('|')
 				) {
 					alert(
 						'当前还不支持在一次合并中标记多个条目，与开启关于多个条目的讨论。请不要勾选“标记其他条目”并清空“理由”框后再提交。'
@@ -2006,8 +2008,8 @@ Twinkle.tag.callback.evaluate = (e) => {
 			}
 
 			/* if (checkParameter('Expand language', 'expandLanguage', '语言代码')) {
-				return;
-			} */
+					return;
+				} */
 			if (checkParameter('Missing information', 'missingInformation', '缺少的内容')) {
 				return;
 			}
@@ -2021,11 +2023,11 @@ Twinkle.tag.callback.evaluate = (e) => {
 			// Silly to provide the same string to each of these
 			if (
 				checkParameter('Obsolete', 'ObsoleteFile', '替换的文件名称') ||
-					checkParameter(
-						'Vector version available',
-						'Vector_version_availableFile',
-						'替换的文件名称'
-					)
+						checkParameter(
+							'Vector version available',
+							'Vector_version_availableFile',
+							'替换的文件名称'
+						)
 			) {
 				return;
 			}
@@ -2049,7 +2051,7 @@ Twinkle.tag.callback.evaluate = (e) => {
 	// Article: return if no tag is selected and no already present tag is deselected
 	if (
 		params.tags.length === 0 &&
-			(Twinkle.tag.mode !== '条目' || params.tagsToRemove.length === 0)
+				(Twinkle.tag.mode !== '条目' || params.tagsToRemove.length === 0)
 	) {
 		alert('必须选择至少一个标记！');
 		return;
