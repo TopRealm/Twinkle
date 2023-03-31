@@ -14,7 +14,7 @@
 		"ecmaVersion": "latest",
 		"sourceType": "module"
 	},
-	"ignorePatterns": ["src/lib/", "scripts/", "dist/", "*.json"],
+	"ignorePatterns": ["scripts/", "dist/", "*.json"],
 	"rules": {
 		"camelcase": "off",
 		"logical-assignment-operators": "error",
