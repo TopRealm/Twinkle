@@ -777,7 +777,7 @@ Twinkle.fluff.callbacks = {
 		}
 		if (
 			(Twinkle.getPref('confirmOnFluff') ||
-					// Mobile user agent taken from [[en:MediaWiki:Gadget-confirmationRollback-mobile.js]]
+					// Mobile user agent taken from [[:enwiki:MediaWiki:Gadget-confirmationRollback-mobile.js]]
 					Twinkle.getPref('confirmOnMobileFluff') &&
 						/android|webos|iphone|ipad|ipod|blackberry|mobile|opera mini/i.test(
 							navigator.userAgent
