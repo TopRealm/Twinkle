@@ -52,7 +52,7 @@ Twinkle.speedy.callback = () => {
 // Used by unlink feature
 Twinkle.speedy.dialog = null;
 // Used throughout
-Twinkle.speedy.hasCSD = !!$('#delete-reason').length;
+Twinkle.speedy.hasCSD = $('#delete-reason').length > 0;
 
 // The speedy criteria list can be in one of several modes
 Twinkle.speedy.mode = {
@@ -1018,7 +1018,7 @@ Twinkle.speedy.callbacks = {
 	sysop: {
 		main: (params) => {
 			let reason;
-			if (!params.normalizeds.length && params.normalizeds[0] === 'db') {
+			if (params.normalizeds.length === 0 && params.normalizeds[0] === 'db') {
 				reason = prompt('输入删除理由：', '');
 				Twinkle.speedy.callbacks.sysop.deletePage(reason, params);
 			} else {

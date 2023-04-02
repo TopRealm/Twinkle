@@ -215,7 +215,7 @@ Twinkle.tag.callback = () => {
 				form.append({ type: 'checkbox', name: 'tags', list: group.value });
 			});
 
-			if (Twinkle.getPref('customFileTagList').length) {
+			if (Twinkle.getPref('customFileTagList').length > 0) {
 				form.append({ type: 'header', label: '自定义模板' });
 				form.append({
 					type: 'checkbox',
@@ -242,7 +242,7 @@ Twinkle.tag.callback = () => {
 				});
 			});
 
-			if (Twinkle.getPref('customRedirectTagList').length) {
+			if (Twinkle.getPref('customRedirectTagList').length > 0) {
 				form.append({ type: 'header', label: '自定义模板' });
 				form.append({
 					type: 'checkbox',
@@ -258,7 +258,7 @@ Twinkle.tag.callback = () => {
 		}
 	}
 
-	if (document.querySelectorAll('.patrollink').length) {
+	if (document.querySelectorAll('.patrollink').length > 0) {
 		form.append({
 			type: 'checkbox',
 			list: [
@@ -331,10 +331,10 @@ Twinkle.tag.callback = () => {
 				});
 
 			// {{Uncategorized}} and {{Improve categories}} are usually placed at the end
-			if ($('.box-Uncategorized').length) {
+			if ($('.box-Uncategorized').length > 0) {
 				Twinkle.tag.alreadyPresentTags.push('Uncategorized');
 			}
-			if ($('.box-Improve_categories').length) {
+			if ($('.box-Improve_categories').length > 0) {
 				Twinkle.tag.alreadyPresentTags.push('Improve categories');
 			}
 		}
@@ -691,7 +691,7 @@ Twinkle.tag.updateSortOrder = (e) => {
 	}
 
 	// append any custom tags
-	if (Twinkle.getPref('customTagList').length) {
+	if (Twinkle.getPref('customTagList').length > 0) {
 		container.append({ type: 'header', label: '自定义模板' });
 		container.append({
 			type: 'checkbox',
@@ -1061,13 +1061,13 @@ Twinkle.tag.redirectList = [
 					{
 						name: 'reqArticleLang',
 						type: 'input',
-						label: '外語語言代碼：',
-						tooltip: '使用ISO 639代碼，可參見 Template:ISO_639_name'
+						label: '外语语言代码：',
+						tooltip: '使用ISO 639代码，可参见 Template:ISO_639_name'
 					},
 					{
 						name: 'reqArticleTitle',
 						type: 'input',
-						label: '外語頁面名稱：',
+						label: '外语页面名称：',
 						size: 60
 					}
 				]
@@ -1209,7 +1209,7 @@ Twinkle.tag.callbacks = {
 		 * Called from removeTags()
 		 */
 		const postRemoval = () => {
-			if (params.tagsToRemove.length) {
+			if (params.tagsToRemove.length > 0) {
 				// Remove empty {{multiple issues}} if found
 				pageText = pageText.replace(
 					/{{(multiple ?issues|article ?issues|mi|ai|issues|多個問題|多个问题|問題條目|问题条目|數個問題|数个问题)\s*\|\s*}}\n?/im,
@@ -1243,9 +1243,9 @@ Twinkle.tag.callbacks = {
 			let summaryText;
 			const addedTags = params.tags.map(makeTemplateLink);
 			const removedTags = params.tagsToRemove.map(makeTemplateLink);
-			if (addedTags.length) {
+			if (addedTags.length > 0) {
 				summaryText = `加入${makeSentence(addedTags)}`;
-				summaryText += removedTags.length ? `並移除${makeSentence(removedTags)}` : '';
+				summaryText += removedTags.length > 0 ? `並移除${makeSentence(removedTags)}` : '';
 			} else {
 				summaryText = `移除${makeSentence(removedTags)}`;
 			}
@@ -1361,7 +1361,7 @@ Twinkle.tag.callbacks = {
 				}
 			});
 
-			if (!getRedirectsFor.length) {
+			if (getRedirectsFor.length === 0) {
 				postRemoval();
 				return;
 			}
@@ -1412,7 +1412,7 @@ Twinkle.tag.callbacks = {
 			api.post();
 		};
 
-		if (!params.tags.length) {
+		if (params.tags.length === 0) {
 			removeTags();
 			return;
 		}
@@ -1680,7 +1680,7 @@ Twinkle.tag.callbacks = {
 				}
 			});
 
-			if (!getRedirectsFor.length) {
+			if (getRedirectsFor.length === 0) {
 				addNewTagsToMI();
 				return;
 			}
@@ -1791,7 +1791,7 @@ Twinkle.tag.callbacks = {
 			}]]}}`;
 		};
 
-		if (!tags.length) {
+		if (tags.length === 0) {
 			Morebits.status.warn('信息', '没有标签可供标记');
 		}
 
@@ -1849,7 +1849,7 @@ Twinkle.tag.callbacks = {
 		let summary = '加入';
 
 		// Add maintenance tags
-		if (params.tags.length) {
+		if (params.tags.length > 0) {
 			let tagtext = '';
 			let currentTag;
 			$.each(params.tags, (_k, tag) => {

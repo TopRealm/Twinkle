@@ -121,7 +121,7 @@ Twinkle.unlink.callback.evaluate = (event) => {
 	input.backlinks ||= [];
 	input.imageusage ||= [];
 	const pages = Morebits.array.uniq(input.backlinks.concat(input.imageusage));
-	if (!pages.length) {
+	if (pages.length === 0) {
 		alert('您必须至少选择一个要取消链入的页面。');
 		return;
 	}
@@ -129,8 +129,8 @@ Twinkle.unlink.callback.evaluate = (event) => {
 	Morebits.status.init(form);
 	const unlinker = new Morebits.batchOperation(
 		`取消${
-			input.backlinks.length
-				? `链入${input.imageusage.length ? '与文件使用' : ''}`
+			input.backlinks.length > 0
+				? `链入${input.imageusage.length > 0 ? '与文件使用' : ''}`
 				: '文件使用'
 		}`
 	);
@@ -174,7 +174,7 @@ Twinkle.unlink.callbacks = {
 						checked: true
 					});
 				}
-				if (!list.length) {
+				if (list.length === 0) {
 					apiobj.params.form.append({
 						type: 'div',
 						label: '未找到文件使用。'

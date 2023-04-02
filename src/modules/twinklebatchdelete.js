@@ -212,7 +212,7 @@ Twinkle.batchdelete.callback = () => {
 				}
 				const title = page.title;
 				Twinkle.batchdelete.pages[title] = {
-					label: title + (metadata.length ? `（${metadata.join('、')}）` : ''),
+					label: title + (metadata.length > 0 ? `（${metadata.join('、')}）` : ''),
 					value: title,
 					checked: true,
 					style: editProt ? 'color:red' : ''
@@ -452,13 +452,13 @@ Twinkle.batchdelete.callback.toggleSubpages = (e) => {
 							subpageList.push({
 								label:
 										title +
-										(metadata.length ? ` (${metadata.join('; ')})` : ''),
+										(metadata.length > 0 ? ` (${metadata.join('; ')})` : ''),
 								value: title,
 								checked: true,
 								style: editProt ? 'color:red' : ''
 							});
 						});
-						if (subpageList.length) {
+						if (subpageList.length > 0) {
 							const pageName = apiobj.params.pageNameFull;
 							Twinkle.batchdelete.pages[pageName].subgroup = {
 								type: 'checkbox',
@@ -698,7 +698,7 @@ Twinkle.batchdelete.callbacks = {
 		const response = apiobj.getResponse();
 		let pages = response.query.pages[0].redirects || [];
 		pages = pages.map((redirect) => redirect.title);
-		if (!pages.length) {
+		if (pages.length === 0) {
 			return;
 		}
 		const redirectDeleter = new Morebits.batchOperation(
@@ -739,7 +739,7 @@ Twinkle.batchdelete.callbacks = {
 		const response = apiobj.getResponse();
 		let pages = response.query.backlinks || [];
 		pages = pages.map((page) => page.title);
-		if (!pages.length) {
+		if (pages.length === 0) {
 			return;
 		}
 		const unlinker = new Morebits.batchOperation(`正在取消到${apiobj.params.page}的链入`);
@@ -786,7 +786,7 @@ Twinkle.batchdelete.callbacks = {
 		const response = apiobj.getResponse();
 		let pages = response.query.imageusage || [];
 		pages = pages.map((page) => page.title);
-		if (!pages.length) {
+		if (pages.length === 0) {
 			return;
 		}
 		const unlinker = new Morebits.batchOperation(`正在取消到${apiobj.params.page}的链入`);

@@ -174,7 +174,7 @@ Twinkle.protect.fetchProtectionLevel = () => {
 
 		// Only use the log except unprotect
 		Twinkle.protect.previousProtectionLog =
-				protectData.query.logevents.length >= 1 &&
+				protectData.query.logevents.length > 0 &&
 				protectData.query.logevents[0].action !== 'unprotect'
 					? protectData.query.logevents[0]
 					: protectData.query.logevents.length >= 2
@@ -197,7 +197,7 @@ Twinkle.protect.fetchProtectionLevel = () => {
 		}
 
 		// show the protection level and log info
-		Twinkle.protect.hasProtectLog = !!protectData.query.logevents.length;
+		Twinkle.protect.hasProtectLog = protectData.query.logevents.length > 0;
 		Twinkle.protect.currentProtectionLevels = current;
 		Twinkle.protect.previousProtectionLevels = previous;
 		Twinkle.protect.callback.showLogAndCurrentProtectInfo();
@@ -1195,7 +1195,7 @@ Twinkle.protect.callback.evaluate = (e) => {
 						return `User:${pl.admin}`;
 					});
 					if (
-						admins.length &&
+						admins.length > 0 &&
 							!confirm(
 								`是否已与管理员 (${Morebits.array.uniq(admins).join(', ')})沟通？`
 							)

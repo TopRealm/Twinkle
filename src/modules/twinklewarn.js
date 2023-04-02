@@ -39,7 +39,7 @@ Twinkle.warn = () => {
 	// custom message box in [[MediaWiki:Rollback-success]]
 	if (mw.config.get('wgAction') === 'rollback') {
 		const $vandalTalkLink = $('#mw-rollback-success').find('.mw-usertoollinks a').first();
-		if ($vandalTalkLink.length) {
+		if ($vandalTalkLink.length > 0) {
 			Twinkle.warn.makeVandalTalkLink($vandalTalkLink, Morebits.pageNameNorm);
 			$vandalTalkLink.css('font-weight', 'bold');
 		}
@@ -49,7 +49,7 @@ Twinkle.warn = () => {
 			mw.config.get('wgAbuseFilterVariables') !== null
 	) {
 		const afTalkLink = $('.mw-usertoollinks-talk').first();
-		if (afTalkLink.length) {
+		if (afTalkLink.length > 0) {
 			Twinkle.warn.makeVandalTalkLink(
 				afTalkLink,
 				mw.config.get('wgAbuseFilterVariables').page_prefixedtitle
@@ -155,7 +155,7 @@ Twinkle.warn.callback = () => {
 			selected: defaultGroup === 7
 		});
 	}
-	if (Twinkle.getPref('customWarningList').length) {
+	if (Twinkle.getPref('customWarningList').length > 0) {
 		main_group.append({
 			type: 'option',
 			label: '自定义警告',
@@ -1741,10 +1741,10 @@ Twinkle.warn.callbacks = {
 		// Only check sections if there are sections or there's a chance we won't create our own
 
 		let sectionNumber = 0;
-		if (!messageData.heading && text.length) {
+		if (!messageData.heading && text.length > 0) {
 			// Get all sections
 			const sections = text.match(/^(=+).+\1/gm);
-			if (sections && sections.length !== 0) {
+			if (sections && sections.length > 0) {
 				// Find the index of the section header in question
 				const dateHeaderRegex = now.monthHeaderRegex();
 				sectionNumber = 0;

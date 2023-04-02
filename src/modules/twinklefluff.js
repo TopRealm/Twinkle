@@ -243,7 +243,7 @@ Twinkle.fluff.addLinks = {
 
 			// On first page of results, so add revert/rollback
 			// links to the top revision
-			if (!$('.mw-firstlink').length) {
+			if ($('.mw-firstlink').length === 0) {
 				const first = histList.shift();
 				const vandal = $(first).find('.mw-userlink:not(.history-deleted)').text();
 
@@ -279,7 +279,7 @@ Twinkle.fluff.addLinks = {
 		// Autofill user talk links on diffs with vanarticle for easy warning, but don't autowarn
 		const warnFromTalk = (xtitle) => {
 			const talkLink = $(`#mw-diff-${xtitle}2 .mw-usertoollinks a`).first();
-			if (talkLink.length) {
+			if (talkLink.length > 0) {
 				let extraParams = `vanarticle=${mw.util.rawurlencode(
 					Morebits.pageNameNorm
 				)}&noautowarn=true`;
@@ -550,7 +550,7 @@ Twinkle.fluff.callbacks = {
 		const revs = page.revisions;
 		const statelem = apiobj.statelem;
 		const params = apiobj.params;
-		if (revs.length < 1) {
+		if (revs.length === 0) {
 			statelem.error('没有其它修订版本，无法回退');
 			return;
 		}

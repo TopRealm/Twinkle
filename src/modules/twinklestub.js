@@ -41,7 +41,7 @@ Twinkle.stub.callback = () => {
 	Window.addFooterLink('帮助文档', 'H:TW/DOC#小作品');
 	Window.addFooterLink('问题反馈', 'HT:TW');
 	const form = new Morebits.quickForm(Twinkle.stub.callback.evaluate);
-	if (document.querySelectorAll('.patrollink').length) {
+	if (document.querySelectorAll('.patrollink').length > 0) {
 		form.append({
 			type: 'checkbox',
 			list: [
@@ -127,7 +127,7 @@ Twinkle.stub.updateSortOrder = (e) => {
 	};
 
 	// append any custom tags
-	if (Twinkle.getPref('customStubList').length) {
+	if (Twinkle.getPref('customStubList').length > 0) {
 		container.append({
 			type: 'header',
 			label: '自定义模板'
@@ -347,7 +347,7 @@ Twinkle.stub.callback.evaluate = (e) => {
 			break;
 		}
 	}
-	if (!params.tags.length) {
+	if (params.tags.length === 0) {
 		alert('必须选择至少一个标记！');
 		return;
 	}

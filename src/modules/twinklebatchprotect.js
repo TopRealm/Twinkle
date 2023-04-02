@@ -241,7 +241,7 @@ Twinkle.batchprotect.callback = () => {
 				}
 				const title = page.title;
 				list.push({
-					label: title + (metadata.length ? ` (${metadata.join('; ')})` : ''),
+					label: title + (metadata.length > 0 ? ` (${metadata.join('; ')})` : ''),
 					value: title,
 					checked: true,
 					style: editProt ? 'color:red' : ''

@@ -105,7 +105,7 @@ Twinkle.arv.callback = (uid) => {
 	query.bkusers = uid;
 	new Morebits.wiki.api('检查用户的封禁状态', query, (apiobj) => {
 		const blocklist = apiobj.getResponse().query.blocks;
-		if (blocklist.length) {
+		if (blocklist.length > 0) {
 			// If an IP is blocked *and* rangeblocked, only use whichever is more recent
 			const block = blocklist[0];
 			let message = `此账户已经被${block.partial ? '部分' : ''}`;
@@ -352,7 +352,7 @@ Twinkle.arv.callback.evaluate = (e) => {
 			/* falls through */
 		default: {
 			types = form.getChecked('arvtype');
-			if (!types.length && comment === '') {
+			if (types.length === 0 && comment === '') {
 				alert('必须指定一个理由！');
 				return;
 			}
@@ -458,7 +458,7 @@ Twinkle.arv.callback.evaluate = (e) => {
 				article = 'an';
 			}
 			reason = `*{{user-uaa|1=${uid}}} &ndash; `;
-			if (types.length || hasShared) {
+			if (types.length > 0 || hasShared) {
 				reason += `Violation of the username policy as ${article} ${types} username${
 					hasShared ? ' that implies shared use. ' : '. '
 				}`;
@@ -555,7 +555,7 @@ Twinkle.arv.callback.evaluate = (e) => {
 				$(o).data('revinfo')
 			);
 			if (
-				!warnings.length &&
+				warnings.length === 0 &&
 					!confirm(
 						'You have not selected any edits where you warned the offender. Do you wish to make the report anyway?'
 					)
@@ -568,7 +568,7 @@ Twinkle.arv.callback.evaluate = (e) => {
 			const free_resolves = $('input[name=s_resolves_free]').val();
 			const an3_next = (free_resolves) => {
 				if (
-					!resolves.length &&
+					resolves.length === 0 &&
 						!free_resolves &&
 						!confirm(
 							'You have not selected any edits where you tried to resolve the issue. Do you wish to make the report anyway?'
@@ -741,7 +741,7 @@ Twinkle.arv.processAN3 = (params) => {
 				return `"${rev.comment}"`;
 			};
 			let orig;
-			if (data.length) {
+			if (data.length > 0) {
 				const sha1 = data[0].sha1;
 				for (let i = 1; i < data.length; ++i) {
 					if (data[i].sha1 === sha1) {

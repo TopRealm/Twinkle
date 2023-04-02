@@ -113,8 +113,8 @@ Morebits.isPageRedirect = () =>
 	!!(
 		mw.config.get('wgIsRedirect') ||
 			document.querySelector('#softredirect') ||
-			$('.box-RfD').length ||
-			$('.box-Redirect_category_shell').length
+			$('.box-RfD').length > 0 ||
+			$('.box-Redirect_category_shell').length > 0
 	);
 
 /**
@@ -438,7 +438,7 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute 
 			if (data.multiple) {
 				select.setAttribute('multiple', 'multiple');
 			}
-			if (data.size) {
+			if (data.size > 0) {
 				select.setAttribute('size', data.size);
 			}
 			if (data.disabled) {
@@ -723,7 +723,7 @@ Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute 
 			}
 			subnode.setAttribute('name', data.name);
 			subnode.setAttribute('type', 'text');
-			if (data.size) {
+			if (data.size > 0) {
 				subnode.setAttribute('size', data.size);
 			}
 			if (data.maxlength) {
@@ -1712,7 +1712,7 @@ Morebits.select2 = {
 			return;
 		}
 		let target = $(ev.target).closest('.select2-container');
-		if (!target.length) {
+		if (target.length === 0) {
 			return;
 		}
 		target = target.prev();
@@ -2187,7 +2187,7 @@ Morebits.date.prototype = {
 		level = Number.isNaN(level) ? 2 : level;
 		const header = Array.from({ length: level + 1 }).join('='); // String.prototype.repeat not supported in IE 11
 		const text = `${this.getUTCFullYear()}年${this.getUTCMonthName()}`;
-		if (header.length) {
+		if (header.length > 0) {
 			// wikitext-formatted header
 			return `${header} ${text} ${header}`;
 		}
@@ -3562,7 +3562,7 @@ Morebits.wiki.page = function (pageName, status) {
 		}
 
 		// If a link is present, don't need to check if it's patrolled
-		if ($('.patrollink').length) {
+		if ($('.patrollink').length > 0) {
 			const patrolhref = $('.patrollink a').attr('href');
 			ctx.rcid = mw.util.getParamValue('rcid', patrolhref);
 			fnProcessPatrol(this, this);
@@ -4509,12 +4509,12 @@ Morebits.wiki.page = function (pageName, status) {
 
 		// Default to pre-existing cascading protection if unchanged (similar to above)
 		if (ctx.protectCascade === null) {
-			ctx.protectCascade = !!prs.filter((pr) => pr.cascade).length;
+			ctx.protectCascade = prs.some((pr) => pr.cascade);
 		}
 		// Warn if cascading protection being applied with an invalid protection level,
 		// which for edit protection will cause cascading to be silently stripped
 		if (ctx.protectCascade === null) {
-			ctx.protectCascade = !!prs.filter((pr) => pr.cascade).length;
+			ctx.protectCascade = prs.some((pr) => pr.cascade);
 		}
 		if (ctx.protectCascade) {
 			// On move protection, this is technically stricter than the MW API,
@@ -4962,7 +4962,7 @@ Morebits.wikitext.page.prototype = {
 
 		// .length is only a property of strings and arrays so we
 		// shouldn't need to check type
-		if (typeof regex === 'undefined' || !regex.length) {
+		if (typeof regex === 'undefined' || regex.length === 0) {
 			throw new Error('No regex provided');
 		} else if (Array.isArray(regex)) {
 			regex = regex.join('|');
@@ -4970,7 +4970,7 @@ Morebits.wikitext.page.prototype = {
 		if (typeof flags !== 'string') {
 			flags = 'i';
 		}
-		if (!preRegex || !preRegex.length) {
+		if (!preRegex || preRegex.length === 0) {
 			preRegex = '';
 		} else if (Array.isArray(preRegex)) {
 			preRegex = preRegex.join('|');

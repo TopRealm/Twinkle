@@ -499,7 +499,7 @@ Twinkle.close.callbacks = {
 				return $(this).attr('title');
 			})
 			.get();
-		if (!pages.length) {
+		if (pages.length === 0) {
 			return;
 		}
 		const redirectDeleter = new Morebits.batchOperation(`正在删除到 ${ apiobj.params.title } 的重定向`);

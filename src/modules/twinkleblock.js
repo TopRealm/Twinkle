@@ -199,14 +199,14 @@ Twinkle.block.fetchUserInfo = (fn) => {
 				blockinfo.hardblock = blockinfo.anononly === undefined;
 				Twinkle.block.currentBlockInfo = blockinfo;
 			}
-			Twinkle.block.hasBlockLog = !!data.query.logevents.length;
+			Twinkle.block.hasBlockLog = data.query.logevents.length > 0;
 			// Used later to check if block status changed while filling out the form and display block info in window
 			Twinkle.block.blockLogId = Twinkle.block.hasBlockLog
 				? data.query.logevents[0].logid
 				: false;
 			// Only use block or reblock log
 			Twinkle.block.recentBlockLog =
-					data.query.logevents.length >= 1 && data.query.logevents[0].action !== 'unblock'
+					data.query.logevents.length > 0 && data.query.logevents[0].action !== 'unblock'
 						? data.query.logevents[0]
 						: data.query.logevents.length >= 2
 							? data.query.logevents[1]
@@ -1419,7 +1419,7 @@ Twinkle.block.callback.filtered_block_groups = (group, show_template) =>
 				};
 			}
 		});
-		if (list.length) {
+		if (list.length > 0) {
 			return {
 				label: blockGroup.label,
 				list
@@ -1456,7 +1456,7 @@ Twinkle.block.callback.toggle_see_alsos = function () {
 		Twinkle.block.seeAlsos.push(this.value);
 	}
 	const seeAlsoMessage = Twinkle.block.seeAlsos.join('、');
-	this.form.reason.value = !Twinkle.block.seeAlsos.length
+	this.form.reason.value = Twinkle.block.seeAlsos.length === 0
 		? reason
 		: `${reason}<!-- 参见${seeAlsoMessage} -->`;
 };
@@ -1768,7 +1768,7 @@ Twinkle.block.callback.evaluate = (e) => {
 		api.get(query).then((data) => {
 			const block = data.query.blocks[0];
 			const logevents = data.query.logevents[0];
-			const logid = data.query.logevents.length ? logevents.logid : false;
+			const logid = data.query.logevents.length > 0 ? logevents.logid : false;
 			if (
 				logid !== Twinkle.block.blockLogId ||
 					!!block !== !!Twinkle.block.currentBlockInfo
@@ -2035,7 +2035,7 @@ Twinkle.block.callback.getBlockNoticeWikitext = (params, nosign) => {
 		// Currently, all partial block templates are "standard"
 		// Building the template, however, takes a fair bit of logic
 		if (params.partial) {
-			if (params.pagerestrictions.length || params.namespacerestrictions.length) {
+			if (params.pagerestrictions.length > 0 || params.namespacerestrictions.length > 0) {
 				const makeSentence = (array) => {
 					if (array.length < 3) {
 						return array.join('和');
@@ -2044,18 +2044,18 @@ Twinkle.block.callback.getBlockNoticeWikitext = (params, nosign) => {
 					return `${array.join('、')}和${last}`;
 				};
 				text += '|area=某些';
-				if (params.pagerestrictions.length) {
-					text += `頁面（${makeSentence(
+				if (params.pagerestrictions.length > 0) {
+					text += `页面（${makeSentence(
 						params.pagerestrictions.map((p) => `[[:${p}]]`)
 					)}`;
-					text += params.namespacerestrictions.length ? '）和某些' : '）';
+					text += params.namespacerestrictions.length > 0 ? '）和某些' : '）';
 				}
-				if (params.namespacerestrictions.length) {
+				if (params.namespacerestrictions.length > 0) {
 					// 1 => Talk, 2 => User, etc.
 					const namespaceNames = params.namespacerestrictions.map(
 						(id) => menuFormattedNamespaces[id]
 					);
-					text += `[[Qiuwen:命名空间|命名空间]]（${makeSentence(namespaceNames)}）`;
+					text += `[[Help:命名空间|命名空间]]（${makeSentence(namespaceNames)}）`;
 				}
 			} else if (params.area) {
 				text += `|area=${params.area}`;

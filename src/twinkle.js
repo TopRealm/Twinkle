@@ -594,7 +594,7 @@ Twinkle.load = () => {
 };
 // Used in XFD
 Twinkle.makeFindSourcesDiv = (divID) => {
-	if (!$(divID).length) {
+	if ($(divID).length === 0) {
 		return;
 	}
 	if (!Twinkle.findSources) {

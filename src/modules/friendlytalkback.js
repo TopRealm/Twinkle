@@ -126,7 +126,7 @@ Twinkle.talkback.callback = () => {
 Twinkle.talkback.optout = '';
 Twinkle.talkback.callback.optoutStatus = (apiobj) => {
 	const el = apiobj.getResponse().query.pages[0].extlinks;
-	if (el && el.length) {
+	if (el && el.length > 0) {
 		Twinkle.talkback.optout = `${mw.config.get('wgRelevantUserName')}不希望收到回复通告`;
 		const url = el[0].url;
 		const reason = mw.util.getParamValue('reason', url);

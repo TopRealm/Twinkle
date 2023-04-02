@@ -1073,7 +1073,7 @@ Twinkle.config.init = () => {
 			() => {
 				const $tocul = $(tocul);
 				$tocul.toggle();
-				toctogglelink.textContent = $tocul.find(':visible').length ? '隐藏' : '显示';
+				toctogglelink.textContent = $tocul.find(':visible').length > 0 ? '隐藏' : '显示';
 			},
 			false
 		);
