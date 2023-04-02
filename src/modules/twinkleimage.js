@@ -289,7 +289,9 @@ Twinkle.image.callbacks = {
 				`User talk:${initialContrib}`,
 				`通知原始上传者 (${initialContrib})`
 			);
-			const notifytext = `\n{{subst:Di-${params.templatename}-notice|1=${Morebits.pageNameNorm}}}--~~` + `~~`;
+			const notifytext =
+					`\n{{subst:Di-${params.templatename}-notice|1=${Morebits.pageNameNorm}}}--~~` +
+					`~~`;
 			usertalkpage.setAppendText(notifytext);
 			usertalkpage.setEditSummary(`通知：文件[[${Morebits.pageNameNorm}]]快速删除提名`);
 			usertalkpage.setChangeTags(Twinkle.changeTags);

@@ -1452,12 +1452,9 @@ Twinkle.protect.callbacks = {
 		newtag += `* <small>当前保护状态：{{protection status|${
 			/=/.test(Morebits.pageNameNorm) ? '1=' : ''
 		}${Morebits.pageNameNorm}}}</small>\n`;
-		newtag +=
-				`${`请求${Morebits.string.toUpperCaseFirstChar(words)}${
-					params.reason !== ''
-						? `：${Morebits.string.formatReasonText(params.reason)}`
-						: '。'
-				}--~~`}~~`;
+		newtag += `${`请求${Morebits.string.toUpperCaseFirstChar(words)}${
+			params.reason !== '' ? `：${Morebits.string.formatReasonText(params.reason)}` : '。'
+		}--~~`}~~`;
 
 		const reg =
 				params.category === 'unprotect'
@@ -1542,10 +1539,9 @@ Twinkle.protect.callbacks = {
 				if (params.type === 'unprotect') {
 					requestList[i] += '\n: {{RFPP|isun}}。--~~' + '~~\n';
 				} else {
-					requestList[i] +=
-							`${`\n: {{RFPP|${params.type}|${
-								Morebits.string.isInfinity(params.expiry) ? 'infinity' : expiryText
-							}}}。--~~`}~~\n`;
+					requestList[i] += `${`\n: {{RFPP|${params.type}|${
+						Morebits.string.isInfinity(params.expiry) ? 'infinity' : expiryText
+					}}}。--~~`}~~\n`;
 				}
 				found = true;
 				break;

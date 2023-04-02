@@ -612,8 +612,8 @@ Twinkle.batchdelete.callbacks = {
 		const params = thingWithParameters.parent
 			? thingWithParameters.parent.getCallbackParameters()
 			: thingWithParameters.getCallbackParameters();
-		// the initial batch operation's job is to delete the page, and that has
-		// succeeded by now
+			// the initial batch operation's job is to delete the page, and that has
+			// succeeded by now
 		params.pageDeleter.workerSuccess(thingWithParameters);
 		let query;
 		let qiuwen_api;

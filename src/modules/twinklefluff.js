@@ -827,7 +827,7 @@ Twinkle.fluff.callbacks = {
 				: undefined,
 			format: 'json'
 		};
-		// Handle watching, possible expiry
+			// Handle watching, possible expiry
 		if (Twinkle.getPref('watchRevertedPages').includes(params.type)) {
 			const watchOrExpiry = Twinkle.getPref('watchRevertedExpiry');
 			if (!watchOrExpiry || watchOrExpiry === 'no') {

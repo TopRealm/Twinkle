@@ -866,8 +866,9 @@ Twinkle.arv.processAN3 = (params) => {
 			an3Page.append();
 
 			// notify user
-			const notifyText =
-                `${`\n\n{{subst:an3-notice|1=${mw.util.wikiUrlencode(params.uid)}|auto=1}} ~~`}~~`;
+			const notifyText = `${`\n\n{{subst:an3-notice|1=${mw.util.wikiUrlencode(
+				params.uid
+			)}|auto=1}} ~~`}~~`;
 			const talkPage = new Morebits.wiki.page(
 				`User talk:${params.uid}`,
 				'Notifying edit warrior'

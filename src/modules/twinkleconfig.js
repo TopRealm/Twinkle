@@ -14,12 +14,12 @@
 
 (($) => {
 /**
- * twinkleconfig.js: Preferences module
- * Mode of invocation:  Adds configuration form to Help:Twinkle/参数设置,
- *                      and adds an ad box to the top of user subpages belonging to the
- *                      currently logged-in user which end in '.js'
- * Active on:           What I just said. Yeah.
- */
+	 * twinkleconfig.js: Preferences module
+	 * Mode of invocation:  Adds configuration form to Help:Twinkle/参数设置,
+	 *                      and adds an ad box to the top of user subpages belonging to the
+	 *                      currently logged-in user which end in '.js'
+	 * Active on:           What I just said. Yeah.
+	 */
 
 Twinkle.config = {};
 Twinkle.config.watchlistEnums = {
@@ -189,32 +189,32 @@ Twinkle.config.commonSets = {
 };
 
 /**
- * Section entry format:
- *
- * {
- *   title: <human-readable section title>,
- *   module: <name of the associated module, used to link to sections>,
- *   adminOnly: <true for admin-only sections>,
- *   hidden: <true for advanced preferences that rarely need to be changed - they can still be modified by manually editing twinkleoptions.js>,
- *   preferences: [
- *     {
- *       name: <TwinkleConfig property name>,
- *       label: <human-readable short description - used as a form label>,
- *       helptip: <(optional) human-readable text (using valid HTML) that complements the description, like limits, warnings, etc.>
- *       adminOnly: <true for admin-only preferences>,
- *       type: <string|boolean|integer|enum|set|customList> (customList stores an array of JSON objects { value, label }),
- *       enumValues: <for type = "enum": a JSON object where the keys are the internal names and the values are human-readable strings>,
- *       setValues: <for type = "set": a JSON object where the keys are the internal names and the values are human-readable strings>,
- *       setDisplayOrder: <(optional) for type = "set": an array containing the keys of setValues (as strings) in the order that they are displayed>,
- *       customListValueTitle: <for type = "customList": the heading for the left "value" column in the custom list editor>,
- *       customListLabelTitle: <for type = "customList": the heading for the right "label" column in the custom list editor>
- *     },
- *     . . .
- *   ]
- * },
- * . . .
- *
- */
+	 * Section entry format:
+	 *
+	 * {
+	 *   title: <human-readable section title>,
+	 *   module: <name of the associated module, used to link to sections>,
+	 *   adminOnly: <true for admin-only sections>,
+	 *   hidden: <true for advanced preferences that rarely need to be changed - they can still be modified by manually editing twinkleoptions.js>,
+	 *   preferences: [
+	 *     {
+	 *       name: <TwinkleConfig property name>,
+	 *       label: <human-readable short description - used as a form label>,
+	 *       helptip: <(optional) human-readable text (using valid HTML) that complements the description, like limits, warnings, etc.>
+	 *       adminOnly: <true for admin-only preferences>,
+	 *       type: <string|boolean|integer|enum|set|customList> (customList stores an array of JSON objects { value, label }),
+	 *       enumValues: <for type = "enum": a JSON object where the keys are the internal names and the values are human-readable strings>,
+	 *       setValues: <for type = "set": a JSON object where the keys are the internal names and the values are human-readable strings>,
+	 *       setDisplayOrder: <(optional) for type = "set": an array containing the keys of setValues (as strings) in the order that they are displayed>,
+	 *       customListValueTitle: <for type = "customList": the heading for the left "value" column in the custom list editor>,
+	 *       customListLabelTitle: <for type = "customList": the heading for the right "label" column in the custom list editor>
+	 *     },
+	 *     . . .
+	 *   ]
+	 * },
+	 * . . .
+	 *
+	 */
 
 Twinkle.config.sections = [
 	{
@@ -1784,8 +1784,7 @@ Twinkle.config.writePrefs = (pageobj) => {
 			}
 		});
 	});
-	let text =
-			`// <nowiki>\n// twinkleoptions.js：用户Twinkle参数设置文件\n//\n// 注：修改您的参数设置最简单的办法是使用\n${`// Twinkle参数设置面板，在[[${Morebits.pageNameNorm}]]。\n`}//\n// 这个文件是自动生成的，您所做的任何修改（除了\n// 以一种合法的JavaScript的方式来修改这些属性值）会\n// 在下一次您点击“保存”时被覆盖。\n// 修改此文件时，请记得使用合法的JavaScript。\n\nwindow.Twinkle.prefs = `;
+	let text = `// <nowiki>\n// twinkleoptions.js：用户Twinkle参数设置文件\n//\n// 注：修改您的参数设置最简单的办法是使用\n${`// Twinkle参数设置面板，在[[${Morebits.pageNameNorm}]]。\n`}//\n// 这个文件是自动生成的，您所做的任何修改（除了\n// 以一种合法的JavaScript的方式来修改这些属性值）会\n// 在下一次您点击“保存”时被覆盖。\n// 修改此文件时，请记得使用合法的JavaScript。\n\nwindow.Twinkle.prefs = `;
 	text += JSON.stringify(newConfig, null, 2);
 	text += ';\n' + '\n' + '// twinkleoptions.js到此为止\n' + '// </nowiki>';
 	pageobj.setPageText(text);
@@ -1800,8 +1799,9 @@ Twinkle.config.saveSuccess = (pageobj) => {
 	noticebox.className = 'mw-message-box mw-message-box-success';
 	noticebox.style.fontSize = '100%';
 	noticebox.style.marginTop = '2em';
-	noticebox.innerHTML =
-			`<p><b>您的Twinkle参数设置已被保存。</b></p><p>要看到这些更改，您可能需要${`<a href="${mw.util.getUrl('QW:BYPASS')}" title="QW:BYPASS"><b>`}绕过浏览器缓存</b></a>。</p>`;
+	noticebox.innerHTML = `<p><b>您的Twinkle参数设置已被保存。</b></p><p>要看到这些更改，您可能需要${`<a href="${mw.util.getUrl(
+		'QW:BYPASS'
+	)}" title="QW:BYPASS"><b>`}绕过浏览器缓存</b></a>。</p>`;
 	Morebits.status.root.appendChild(noticebox);
 	const noticeclear = document.createElement('br');
 	noticeclear.style.clear = 'both';

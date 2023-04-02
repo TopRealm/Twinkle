@@ -324,7 +324,7 @@ Twinkle.addPortlet = (navigation, id, text, type, nextnodeid) => {
 	const skin = mw.config.get('skin');
 	if (
 		skin !== 'vector' && skin !== 'vector-2022' ||
-				navigation !== 'left-navigation' && navigation !== 'right-navigation'
+			navigation !== 'left-navigation' && navigation !== 'right-navigation'
 	) {
 		type = null; // menu supported only in vector's #left-navigation & #right-navigation
 	}
@@ -337,8 +337,8 @@ Twinkle.addPortlet = (navigation, id, text, type, nextnodeid) => {
 			// XXX: portal doesn't work
 			if (
 				navigation !== 'portal' &&
-						navigation !== 'left-navigation' &&
-						navigation !== 'right-navigation'
+					navigation !== 'left-navigation' &&
+					navigation !== 'right-navigation'
 			) {
 				navigation = 'mw-panel';
 			}

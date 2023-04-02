@@ -338,8 +338,7 @@ Twinkle.xfd.callbacks = {
 						`通知页面创建者（${initialContrib}）`
 					);
 
-					const notifytext =
-							`${`\n{{subst:AFDNote|${Morebits.pageNameNorm}}}--~~`}~~`;
+					const notifytext = `${`\n{{subst:AFDNote|${Morebits.pageNameNorm}}}--~~`}~~`;
 					usertalkpage.setAppendText(notifytext);
 					usertalkpage.setEditSummary(
 						`通知：页面[[${Morebits.pageNameNorm}]]存废讨论提名`
@@ -447,23 +446,22 @@ Twinkle.xfd.callbacks = {
 						pageobj.setPageText(text);
 						append = false;
 					} else {
-						const appendText =
-								`${`\n{{safesubst:SafeAfdHead}}\n${
-									{
-										fame: '== 30天后仍挂有{{tl|notability}}模板的条目 ==\n<span style="font-size:smaller;">（已挂[[Template:notability|不符收录标准模板]]30天）</span>',
-										substub:
-            '== 30天后仍挂有{{tl|substub}}模板的条目 ==\n<span style="font-size:smaller;">（已挂[[Template:substub|小小条目模板]]30天）</span>',
-										batch: '== 批量提删 =='
-									}[type]
-								}\n${newText}\n\n${commentText}\n----\n:建议：删除前述页面；理由：${Morebits.string.formatReasonText(
-									params.reason
-								)}\n提报以上${
-									{
-										fame: '<u>不符合收录标准</u>条目',
-										substub: '<u>长度过短</u>条目',
-										batch: '页面'
-									}[type]
-								}的用户及时间：<br id="no-new-title" />~~`}~~`;
+						const appendText = `${`\n{{safesubst:SafeAfdHead}}\n${
+							{
+								fame: '== 30天后仍挂有{{tl|notability}}模板的条目 ==\n<span style="font-size:smaller;">（已挂[[Template:notability|不符收录标准模板]]30天）</span>',
+								substub:
+										'== 30天后仍挂有{{tl|substub}}模板的条目 ==\n<span style="font-size:smaller;">（已挂[[Template:substub|小小条目模板]]30天）</span>',
+								batch: '== 批量提删 =='
+							}[type]
+						}\n${newText}\n\n${commentText}\n----\n:建议：删除前述页面；理由：${Morebits.string.formatReasonText(
+							params.reason
+						)}\n提报以上${
+							{
+								fame: '<u>不符合收录标准</u>条目',
+								substub: '<u>长度过短</u>条目',
+								batch: '页面'
+							}[type]
+						}的用户及时间：<br id="no-new-title" />~~`}~~`;
 						pageobj.setAppendText(appendText);
 					}
 					break;
@@ -554,8 +552,9 @@ Twinkle.xfd.callbacks = {
 					`通知页面创建者（${initialContrib}）`
 				);
 
-				const notifytext =
-						`${`\n{{subst:idw|File:${mw.config.get('wgTitle')}}}--~~`}~~`;
+				const notifytext = `${`\n{{subst:idw|File:${mw.config.get(
+					'wgTitle'
+				)}}}--~~`}~~`;
 				usertalkpage.setAppendText(notifytext);
 				usertalkpage.setEditSummary(
 					`通知：文件[[${Morebits.pageNameNorm}]]存废讨论提名`

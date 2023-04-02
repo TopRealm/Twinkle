@@ -4987,17 +4987,21 @@ Morebits.wikitext.page.prototype = {
 				// end template format
 				// end capture
 				// trailing whitespace
-				`^\\s*${// capture template(s)
+				`^\\s*${
+					// capture template(s)
 					`(?:((?:\\s*${
 						// Pre-template regex, such as leading html comments
 						preRegex
-					}|`}${// begin template format
+					}|`
+				}${
+					// begin template format
 					`\\{\\{\\s*(?:${
 						// Template regex
 						regex
 						// end main template name, optionally with a number
 						// Probably remove the (?:) though
-					})\\d*\\s*`}(\\|(?:\\{\\{[^{}]*\\}\\}|[^{}])*)?\\}\\})+(?:\\s*\\n)?)\\s*)?`,
+					})\\d*\\s*`
+				}(\\|(?:\\{\\{[^{}]*\\}\\}|[^{}])*)?\\}\\})+(?:\\s*\\n)?)\\s*)?`,
 				flags
 			),
 			`$1${tag}`

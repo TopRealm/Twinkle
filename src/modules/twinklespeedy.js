@@ -1427,12 +1427,6 @@ Twinkle.speedy.callbacks = {
 						initialContrib = null;
 
 						// quick hack to prevent excessive unwanted notifications. Should actually be configurable on recipient page...
-					} else if (
-						initialContrib === 'A2093064-bot' &&
-							params.normalizeds[0] === 'G9'
-					) {
-						Morebits.status.warn('通知页面创建者：由机器人创建，跳过通知');
-						initialContrib = null;
 					} else {
 						const talkPageName = `User talk:${initialContrib}`;
 						Morebits.wiki.flow.check(
@@ -1460,8 +1454,8 @@ Twinkle.speedy.callbacks = {
 
 								notifytext += '}}--~~' + '~~';
 								let editsummary = '通知：';
-								editsummary += !params.normalizeds.includes('g12')
-									? // no article name in summary for G10 deletions
+								editsummary += !params.normalizeds.includes('g8')
+									? // no article name in summary for G6 deletions
 									`页面[[${Morebits.pageNameNorm}]]`
 									: '攻击性页面';
 								editsummary += '快速删除提名';
@@ -1500,12 +1494,9 @@ Twinkle.speedy.callbacks = {
 			}`;
 			let appendText = `# [[:${Morebits.pageNameNorm}]]：`;
 			if (params.fromDI) {
-				appendText +=
-						params.normalized === 'f3 f4'
-							? '图版[[QW:F1|CSD F1]]（{{tl|no source no license/auto}}）'
-							: `图版[[QW:CSD#${params.normalized.toUpperCase()}|CSD ${params.normalized.toUpperCase()}]]（{{tl|${
-								params.templatename
-							}}}）`;
+				appendText += `图版[[QW:CSD#${params.normalized.toUpperCase()}|CSD ${params.normalized.toUpperCase()}]]（{{tl|${
+					params.templatename
+				}}}）`;
 			} else {
 				if (params.normalizeds.length > 1) {
 					appendText += '多个理由（';
