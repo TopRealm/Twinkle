@@ -96,7 +96,7 @@
 			}
 		],
 		"prefer-arrow-callback": "error",
-		"prefer-spread": "off",
+		"prefer-spread": "error",
 		"prefer-template": "error",
 		"prefer-rest-params": "off",
 		"prefer-exponentiation-operator": "error",
