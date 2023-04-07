@@ -7,12 +7,12 @@
 		"url": "https://git.qiuwen.wiki/InterfaceAdmin/Twinkle"
 	},
 	"scripts": {
-		"eslint": "eslint .",
-		"eslint:fix": "eslint . --fix",
+		"eslint": "eslint src",
+		"eslint:fix": "eslint src --fix",
 		"stylelint": "stylelint src/*.css",
 		"stylelint:fix": "stylelint src/*.css --fix",
-		"lint": "eslint . && stylelint src/*.css",
-		"lint:fix": "eslint . --fix && stylelint src/*.css --fix",
+		"lint": "eslint src && stylelint src/*.css",
+		"lint:fix": "eslint src --fix && stylelint src/*.css --fix",
 		"babel": "babel -d dist src",
 		"prettier": "npx prettier --write .",
 		"updatebrowserslist": "npx update-browserslist-db@latest",
