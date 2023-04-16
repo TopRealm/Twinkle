@@ -242,7 +242,7 @@ Twinkle.batchundelete.callbacks = {
 			apiobj.params.talkPage,
 			`正在反删除${apiobj.params.page}的讨论页`
 		);
-		page.setEditSummary(`反删除“${apiobj.params.page}”的[[Wikipedia:讨论页|讨论页]]`);
+		page.setEditSummary(`反删除“${apiobj.params.page}”的[[Qiuwen:讨论页|讨论页]]`);
 		page.setChangeTags(Twinkle.changeTags);
 		page.undeletePage();
 	}

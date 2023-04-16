@@ -1757,7 +1757,7 @@ Morebits.unbinder.prototype = {
 	 * @param {string} postfix
 	 * @throws If either `prefix` or `postfix` is missing.
 	 */
-	unbind: function UnbinderUnbind (prefix, postfix) {
+	unbind (prefix, postfix) {
 		if (!prefix || !postfix) {
 			throw new Error('Both prefix and postfix must be provided');
 		}
@@ -1769,7 +1769,7 @@ Morebits.unbinder.prototype = {
 	 *
 	 * @returns {string} The processed output.
 	 */
-	rebind: function UnbinderRebind () {
+	rebind () {
 		let content = this.content;
 		content.self = this;
 		for (const current in this.history) {
