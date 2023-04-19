@@ -1,10 +1,12 @@
 {
-	"tabWidth": 4,
-	"useTabs": true,
+	"arrowParens": "always",
+	"bracketSpacing": false,
+	"endOfLine": "auto",
+	"printWidth": 120,
+	"quoteProps": "as-needed",
 	"semi": true,
 	"singleQuote": true,
-	"trailingComma": "none",
-	"printWidth": 100,
-	"quoteProps": "preserve",
-	"endOfLine": "auto"
+	"tabWidth": 4,
+	"trailingComma": "es5",
+	"useTabs": true
 }
