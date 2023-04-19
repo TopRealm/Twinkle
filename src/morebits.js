@@ -1695,6 +1695,7 @@
 		 */
 		rebind() {
 			let content = this.content;
+			// eslint-disable-next-line @typescript-eslint/no-this-alias
 			content.self = this;
 			for (const current in this.history) {
 				if (Object.prototype.hasOwnProperty.call(this.history, current)) {
