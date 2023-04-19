@@ -220,7 +220,7 @@ class Deploy {
 	}
 
 	async readFile(filepath) {
-		return (await _readFile(__dirname + '/../' + filepath)).toString();
+		return (await _readFile(__dirname + '/' + filepath)).toString();
 	}
 
 	async savePages() {
