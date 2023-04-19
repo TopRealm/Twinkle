@@ -1,5 +1,4 @@
 'use strict';
-/* eslint-disable quote-props */
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
  * _addText: '{{Twinkle Header}}'
@@ -82,7 +81,7 @@
     };
     // Keep this synchronized with {{delh}}
     Twinkle.close.codes = {
-        '请求无效': {
+        Invalid: {
             ir: {
                 label: '请求无效',
                 action: 'keep'
@@ -100,7 +99,7 @@
                 action: 'keep'
             }
         },
-        '保留': {
+        Keep: {
             k: {
                 label: '保留',
                 action: 'keep',
@@ -125,7 +124,7 @@
                 adminonly: true
             }
         },
-        '删除': {
+        Delete: {
             d: {
                 label: '删除',
                 action: 'del',
@@ -138,7 +137,7 @@
                 adminonly: true
             }
         },
-        '快速删除': {
+        Speedy: {
             sd: {
                 label: '快速删除',
                 action: 'del'
@@ -157,7 +156,7 @@
                 adminonly: true
             }
         },
-        /* '转移至其他计划': {
+        /* Transfer: {
             twc: {
                 label: '转移至求闻共享资源',
                 action: 'noop',
@@ -169,7 +168,7 @@
                 adminonly: true
             }
         }, */
-        '其他处理方法': {
+        OtherMethod: {
             c: {
                 label: '转交侵权',
                 action: 'noop'
