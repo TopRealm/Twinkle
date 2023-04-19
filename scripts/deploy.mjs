@@ -1,5 +1,5 @@
 /**
- * @source https://github.com/wikimedia-gadgets/xfdcloser/blob/master/bin/deploy.js
+ * @source <github.com/wikimedia-gadgets/xfdcloser/blob/master/bin/deploy.js>
  * @license MIT + CC-BY-SA-3.0 + CC-BY-4.0
  */
 // This software is published under the following licenses. You may select the license of your choice.
@@ -46,13 +46,13 @@
  * 1) Changes committed and merged to master branch on GitHub repo
  * 2) Currently on master branch, and synced with GitHub repo
  * 3) Run a full build using "grunt build"
- * When all of the above are done → you are ready to proceed with deployment
+ * When all of the above are done ==> you are ready to proceed with deployment
  *
  * --------------------------------------------------------------------------
  *  Usage:
  * --------------------------------------------------------------------------
  * Ensure the pre-deployment steps above are completed, unless you are only
- * deploying to the testwiki (test.qiuwen.org). Then, run this script:
+ * deploying to the testwiki (www.qiuwen.wiki). Then, run this script:
  * In the terminal, enter
  *   node deploy.js
  * and supply the requested details.
@@ -61,22 +61,19 @@
  * - Edit summaries will be prepended with the version number from
  *   the package.json file
  * - Changes to gadget definitions need to be done manually
- *
  */
-const fs = require('fs/promises');
-const {
-	mwn
-} = require('mwn');
-const {
-	execSync
-} = require('child_process');
-const prompts = require('prompts');
-const chalk = require('chalk');
-const minimist = require('minimist');
+import { readFile as _readFile } from 'fs/promises';
+import { mwn } from 'mwn';
+import { execSync } from 'child_process';
+import prompts from 'prompts';
+import chalk from 'chalk';
+import minimist from 'minimist';
+import Credentials from './credentials.json' assert {type: 'json'};
+import path from 'path';
+const __dirname = path.resolve();
 
 // Adjust target file names if necessary
 // All file paths are with respect to repository root
-// Remove twinkle-pagestyles.css if deploying as user script
 const deployTargets = [{
 	file: 'dist/twinkle.js',
 	target: 'MediaWiki:Gadget-Twinkle.js'
@@ -156,6 +153,7 @@ const deployTargets = [{
 	file: 'dist/modules/twinklexfd.js',
 	target: 'MediaWiki:Gadget-twinklexfd.js'
 }];
+
 class Deploy {
 	async deploy() {
 		if (!isGitWorkDirClean()) {
@@ -167,14 +165,16 @@ class Deploy {
 		await this.makeEditSummary();
 		await this.savePages();
 	}
+
 	loadConfig() {
 		try {
-			return require(__dirname + '/credentials.json');
+			return Credentials;
 		} catch (e) {
 			log('red', 'No credentials.json file found.');
 			return {};
 		}
 	}
+
 	async getApi(config) {
 		this.api = new mwn(config);
 		try {
@@ -189,18 +189,19 @@ class Deploy {
 			}
 		}
 		if (args.testwiki) {
-			config.apiUrl = `https://test2.qiuwenbaike.cn/api.php`;
+			config.apiUrl = `https://www.qiuwen.wiki/api.php`;
 		} else {
 			if (!config.apiUrl) {
 				if (Object.keys(config).length) {
 					log('yellow', 'Tip: you can avoid this prompt by setting the apiUrl as well in credentials.json');
 				}
-				const site = await input('> Enter sitename (eg. test.qiuwen.org)');
+				const site = await input('> Enter sitename (eg. www.qiuwen.wiki)');
 				config.apiUrl = `https://${site}/api.php`;
 			}
 		}
 		this.api.setOptions(config);
 	}
+
 	async login() {
 		this.siteName = this.api.options.apiUrl.replace(/^https:\/\//, '').replace(/\/.*/, '');
 		log('yellow', '--- Logging in ...');
@@ -210,25 +211,27 @@ class Deploy {
 			await this.api.login();
 		}
 	}
+
 	async makeEditSummary() {
-		const sha = execSync('git rev-parse --short HEAD').toString('utf8').trim();
+		this.sha = execSync('git rev-parse --short HEAD').toString('utf8').trim();
 		const message = await input('> Edit summary message (optional): ');
-		this.editSummary = `版本 ${sha}: ${message || '代码仓库同步更新'}`;
+		this.editSummary = `Git 版本 ${this.sha}: ${message || '代码仓库同步更新'}`;
 		console.log(`Edit summary is: "${this.editSummary}"`);
 	}
+
 	async readFile(filepath) {
-		return (await fs.readFile(__dirname + '/../' + filepath)).toString();
+		return (await _readFile(__dirname + '/../' + filepath)).toString();
 	}
+
 	async savePages() {
 		await input(`> Press [Enter] to start deploying to ${this.siteName} or [ctrl + C] to cancel`);
+
 		log('yellow', '--- starting deployment ---');
-		for await (let {
-			file,
-			target
-		} of deployTargets) {
+
+		for await (let { file, target } of deployTargets) {
 			let fileText = await this.readFile(file);
-			let fileHeader = '/* <nowiki> */\n'
-			let fileFooter = '/* </nowiki> */\n'
+			let fileHeader = '/* <nowiki> */\n';
+			let fileFooter = '\n/* </nowiki> */';
 			fileText = fileHeader + fileText + fileFooter;
 			try {
 				const response = await this.api.save(target, fileText, this.editSummary);
@@ -245,6 +248,7 @@ class Deploy {
 		log('yellow', '--- end of deployment ---');
 	}
 }
+
 const isGitWorkDirClean = () => {
 	try {
 		execSync('git diff-index --quiet HEAD --');
@@ -252,22 +256,28 @@ const isGitWorkDirClean = () => {
 	} catch (e) {
 		return false;
 	}
-}
+};
+
 const input = async (message, type = 'text', initial = '') => {
 	let name = String(Math.random());
-	return (await prompts({
-		type,
-		name,
-		message,
-		initial
-	}))[name];
-}
+	return (
+		await prompts({
+			type,
+			name,
+			message,
+			initial,
+		})
+	)[name];
+};
+
 const logError = (error) => {
 	error = error || {};
 	console.log((error.info || 'Unknown error') + '\n', error.response || error);
-}
+};
+
 const log = (color, ...args) => {
 	console.log(chalk[color](...args));
-}
+};
+
 const args = minimist(process.argv.slice(2));
 new Deploy().deploy();
