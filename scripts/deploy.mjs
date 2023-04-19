@@ -74,85 +74,141 @@ const __dirname = path.resolve();
 
 // Adjust target file names if necessary
 // All file paths are with respect to repository root
-const deployTargets = [{
-	file: 'dist/twinkle.js',
-	target: 'MediaWiki:Gadget-Twinkle.js'
-}, {
-	file: 'src/twinkle.css',
-	target: 'MediaWiki:Gadget-Twinkle.css'
-}, {
-	file: 'dist/morebits.js',
-	target: 'MediaWiki:Gadget-morebits.js'
-}, {
-	file: 'src/lib/select2.min.css',
-	target: 'MediaWiki:Gadget-select2.min.css'
-}, {
-	file: 'dist/lib/select2.min.js',
-	target: 'MediaWiki:Gadget-select2.min.js'
-}, {
-	file: 'src/morebits.css',
-	target: 'MediaWiki:Gadget-morebits.css'
-}, {
-	file: 'src/twinkle-pagestyles.css',
-	target: 'MediaWiki:Gadget-Twinkle-pagestyles.css'
-}, {
-	file: 'dist/modules/friendlytag.js',
-	target: 'MediaWiki:Gadget-friendlytag.js'
-}, {
-	file: 'dist/modules/friendlytalkback.js',
-	target: 'MediaWiki:Gadget-friendlytalkback.js'
-}, {
-	file: 'dist/modules/twinklearv.js',
-	target: 'MediaWiki:Gadget-twinklearv.js'
-}, {
-	file: 'dist/modules/twinklebatchprotect.js',
-	target: 'MediaWiki:Gadget-twinklebatchprotect.js'
-}, {
-	file: 'dist/modules/twinklebatchdelete.js',
-	target: 'MediaWiki:Gadget-twinklebatchdelete.js'
-}, {
-	file: 'dist/modules/twinklebatchundelete.js',
-	target: 'MediaWiki:Gadget-twinklebatchundelete.js'
-}, {
-	file: 'dist/modules/twinkleblock.js',
-	target: 'MediaWiki:Gadget-twinkleblock.js'
-}, {
-	file: 'dist/modules/twinkleclose.js',
-	target: 'MediaWiki:Gadget-twinkleclose.js'
-}, {
-	file: 'dist/modules/twinkleconfig.js',
-	target: 'MediaWiki:Gadget-twinkleconfig.js'
-}, {
-	file: 'dist/modules/twinklecopyvio.js',
-	target: 'MediaWiki:Gadget-twinklecopyvio.js'
-}, {
-	file: 'dist/modules/twinklediff.js',
-	target: 'MediaWiki:Gadget-twinklediff.js'
-}, {
-	file: 'dist/modules/twinklefluff.js',
-	target: 'MediaWiki:Gadget-twinklefluff.js'
-}, {
-	file: 'dist/modules/twinkleimage.js',
-	target: 'MediaWiki:Gadget-twinkleimage.js'
-}, {
-	file: 'dist/modules/twinkleprotect.js',
-	target: 'MediaWiki:Gadget-twinkleprotect.js'
-}, {
-	file: 'dist/modules/twinklespeedy.js',
-	target: 'MediaWiki:Gadget-twinklespeedy.js'
-}, {
-	file: 'dist/modules/twinklestub.js',
-	target: 'MediaWiki:Gadget-twinklestub.js'
-}, {
-	file: 'dist/modules/twinkleunlink.js',
-	target: 'MediaWiki:Gadget-twinkleunlink.js'
-}, {
-	file: 'dist/modules/twinklewarn.js',
-	target: 'MediaWiki:Gadget-twinklewarn.js'
-}, {
-	file: 'dist/modules/twinklexfd.js',
-	target: 'MediaWiki:Gadget-twinklexfd.js'
-}];
+const deployTargets = [
+	/* Twinkle */
+	{
+		file: 'dist/twinkle.js',
+		target: 'MediaWiki:Gadget-Twinkle.js',
+		license: 'src/licenseHeader'
+	},
+	{
+		file: 'src/twinkle.css',
+		target: 'MediaWiki:Gadget-Twinkle.css',
+		license: 'src/licenseHeader'
+	},
+	{
+		file: 'src/twinkle-pagestyles.css',
+		target: 'MediaWiki:Gadget-Twinkle-pagestyles.css',
+		license: 'src/licenseHeader'
+	},
+	{
+		file: 'dist/modules/friendlytag.js',
+		target: 'MediaWiki:Gadget-friendlytag.js',
+		license: 'src/licenseHeader'
+	},
+	{
+		file: 'dist/modules/friendlytalkback.js',
+		target: 'MediaWiki:Gadget-friendlytalkback.js',
+		license: 'src/licenseHeader'
+	},
+	{
+		file: 'dist/modules/twinklearv.js',
+		target: 'MediaWiki:Gadget-twinklearv.js',
+		license: 'src/licenseHeader'
+	},
+	{
+		file: 'dist/modules/twinklebatchprotect.js',
+		target: 'MediaWiki:Gadget-twinklebatchprotect.js',
+		license: 'src/licenseHeader'
+	},
+	{
+		file: 'dist/modules/twinklebatchdelete.js',
+		target: 'MediaWiki:Gadget-twinklebatchdelete.js',
+		license: 'src/licenseHeader'
+	},
+	{
+		file: 'dist/modules/twinklebatchundelete.js',
+		target: 'MediaWiki:Gadget-twinklebatchundelete.js',
+		license: 'src/licenseHeader'
+	},
+	{
+		file: 'dist/modules/twinkleblock.js',
+		target: 'MediaWiki:Gadget-twinkleblock.js',
+		license: 'src/licenseHeader'
+	},
+	{
+		file: 'dist/modules/twinkleclose.js',
+		target: 'MediaWiki:Gadget-twinkleclose.js',
+		license: 'src/licenseHeader'
+	},
+	{
+		file: 'dist/modules/twinkleconfig.js',
+		target: 'MediaWiki:Gadget-twinkleconfig.js',
+		license: 'src/licenseHeader'
+	},
+	{
+		file: 'dist/modules/twinklecopyvio.js',
+		target: 'MediaWiki:Gadget-twinklecopyvio.js',
+		license: 'src/licenseHeader'
+	},
+	{
+		file: 'dist/modules/twinklediff.js',
+		target: 'MediaWiki:Gadget-twinklediff.js',
+		license: 'src/licenseHeader'
+	},
+	{
+		file: 'dist/modules/twinklefluff.js',
+		target: 'MediaWiki:Gadget-twinklefluff.js',
+		license: 'src/licenseHeader'
+	},
+	{
+		file: 'dist/modules/twinkleimage.js',
+		target: 'MediaWiki:Gadget-twinkleimage.js',
+		license: 'src/licenseHeader'
+	},
+	{
+		file: 'dist/modules/twinkleprotect.js',
+		target: 'MediaWiki:Gadget-twinkleprotect.js',
+		license: 'src/licenseHeader'
+	},
+	{
+		file: 'dist/modules/twinklespeedy.js',
+		target: 'MediaWiki:Gadget-twinklespeedy.js',
+		license: 'src/licenseHeader'
+	},
+	{
+		file: 'dist/modules/twinklestub.js',
+		target: 'MediaWiki:Gadget-twinklestub.js',
+		license: 'src/licenseHeader'
+	},
+	{
+		file: 'dist/modules/twinkleunlink.js',
+		target: 'MediaWiki:Gadget-twinkleunlink.js',
+		license: 'src/licenseHeader'
+	},
+	{
+		file: 'dist/modules/twinklewarn.js',
+		target: 'MediaWiki:Gadget-twinklewarn.js',
+		license: 'src/licenseHeader'
+	},
+	{
+		file: 'dist/modules/twinklexfd.js',
+		target: 'MediaWiki:Gadget-twinklexfd.js',
+		license: 'src/licenseHeader'
+	},
+	/* Morebits */
+	{
+		file: 'dist/morebits.js',
+		target: 'MediaWiki:Gadget-morebits.js',
+		license: 'src/licenseHeader'
+	},
+	{
+		file: 'src/morebits.css',
+		target: 'MediaWiki:Gadget-morebits.css',
+		license: 'src/licenseHeader'
+	},
+	/* Select2 */
+	{
+		file: 'src/lib/select2.min.css',
+		target: 'MediaWiki:Gadget-select2.min.css',
+		license: 'src/lib/select2-licenseHeader'
+	},
+	{
+		file: 'dist/lib/select2.min.js',
+		target: 'MediaWiki:Gadget-select2.min.js',
+		license: 'src/lib/select2-licenseHeader'
+	}
+];
 
 class Deploy {
 	async deploy() {
@@ -228,11 +284,12 @@ class Deploy {
 
 		log('yellow', '--- starting deployment ---');
 
-		for await (let { file, target } of deployTargets) {
+		for await (let { file, license = null, target } of deployTargets) {
 			let fileText = await this.readFile(file);
+			let licenseText = await this.readFile(license);
 			let fileHeader = '/* <nowiki> */\n';
 			let fileFooter = '\n/* </nowiki> */';
-			fileText = fileHeader + fileText + fileFooter;
+			fileText = licenseText + fileHeader + fileText + fileFooter;
 			try {
 				const response = await this.api.save(target, fileText, this.editSummary);
 				if (response && response.nochange) {
