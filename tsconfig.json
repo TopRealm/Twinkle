@@ -3,11 +3,7 @@
 		"module": "ESNext",
 		"moduleResolution": "Node",
 		"target": "ES2020",
-		"lib": [
-			"dom",
-			"dom.iterable",
-			"es2020"
-		],
+		"lib": ["dom", "dom.iterable", "es2020"],
 		"strict": true,
 		"allowJs": true,
 		"allowUnusedLabels": false,
@@ -27,12 +23,6 @@
 		"removeComments": false,
 		"outDir": "./dist"
 	},
-	"include": [
-		"./node_modules/types-mediawiki",
-		"./node_modules/@types/oojs-ui",
-		"./src/"
-	],
-	"exclude": [
-		"./src/lib/"
-	]
+	"include": ["./node_modules/types-mediawiki", "./node_modules/@types/oojs-ui", "./src/"],
+	"exclude": ["./src/lib/"]
 }

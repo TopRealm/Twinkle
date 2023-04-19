@@ -1,17 +1,7 @@
 {
 	"root": true,
-	"plugins": [
-		"es6",
-		"compat",
-		"unicorn",
-		"@typescript-eslint"
-	],
-	"extends": [
-		"eslint:recommended",
-		"plugin:compat/recommended",
-		"plugin:@typescript-eslint/recommended",
-		"prettier"
-	],
+	"plugins": ["es6", "compat", "unicorn", "@typescript-eslint"],
+	"extends": ["eslint:recommended", "plugin:compat/recommended", "plugin:@typescript-eslint/recommended", "prettier"],
 	"env": {
 		"browser": true,
 		"jquery": true,
@@ -21,12 +11,7 @@
 		"ecmaVersion": "latest",
 		"parser": "@typescript-eslint/parser"
 	},
-	"ignorePatterns": [
-		"scripts/",
-		"src/lib/",
-		"dist/",
-		"*.json"
-	],
+	"ignorePatterns": ["scripts/", "src/lib/", "dist/", "*.json"],
 	"reportUnusedDisableDirectives": true,
 	"globals": {
 		"$": "readonly",
@@ -40,23 +25,17 @@
 		"@typescript-eslint/no-empty-function": [
 			"error",
 			{
-				"allow": [
-					"arrowFunctions"
-				]
+				"allow": ["arrowFunctions"]
 			}
 		],
 		"@typescript-eslint/no-this-alias": [
 			"error",
 			{
 				"allowDestructuring": false,
-				"allowedNames": [
-					"self"
-				]
+				"allowedNames": ["self"]
 			}
 		],
-		"@typescript-eslint/no-unused-vars": [
-			"off"
-		],
+		"@typescript-eslint/no-unused-vars": ["off"],
 		"quotes": [
 			2,
 			"single",
