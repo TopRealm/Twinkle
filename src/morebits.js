@@ -30,10 +30,10 @@
  * - {@link Morebits.quickForm}, {@link Morebits.simpleWindow}, and {@link Morebits.status} rely on the "morebits.css" file for their styling.
  * - {@link Morebits.simpleWindow} and {@link Morebits.quickForm} tooltips rely on jQuery UI Dialog (from ResourceLoader module name 'jquery.ui').
  * - To create a gadget based on morebits.js, use this syntax in MediaWiki:Gadgets-definition:
- *     - `*GadgetName[ResourceLoader|dependencies=mediawiki.user,mediawiki.util,mediawiki.Title,jquery.ui]|morebits.js|morebits.css|GadgetName.js`
+ *	 - `*GadgetName[ResourceLoader|dependencies=mediawiki.user,mediawiki.util,mediawiki.Title,jquery.ui]|morebits.js|morebits.css|GadgetName.js`
  * - Alternatively, you can configure morebits.js as a hidden gadget in MediaWiki:Gadgets-definition:
- *     - `*morebits[ResourceLoader|dependencies=mediawiki.user,mediawiki.util,mediawiki.Title,jquery.ui|hidden]|morebits.js|morebits.css`
- *     and then load ext.gadget.morebits as one of the dependencies for the new gadget.
+ *	 - `*morebits[ResourceLoader|dependencies=mediawiki.user,mediawiki.util,mediawiki.Title,jquery.ui|hidden]|morebits.js|morebits.css`
+ *	 and then load ext.gadget.morebits as one of the dependencies for the new gadget.
  *
  * All the stuff here works on all browsers for which MediaWiki provides JavaScript support.
  *
@@ -281,39 +281,39 @@
 	 * Index to Morebits.quickForm.element types:
 	 * - Global attributes: id, className, style, tooltip, extra, $data, adminonly
 	 * - `select`: A combo box (aka drop-down).
-	 *     - Attributes: name, label, multiple, size, list, event, disabled
+	 *	 - Attributes: name, label, multiple, size, list, event, disabled
 	 *  - `option`: An element for a combo box.
-	 *      - Attributes: value, label, selected, disabled
+	 *	  - Attributes: value, label, selected, disabled
 	 *  - `optgroup`: A group of "option"s.
-	 *      - Attributes: label, list
+	 *	  - Attributes: label, list
 	 *  - `field`: A fieldset (aka group box).
-	 *      - Attributes: name, label, disabled
+	 *	  - Attributes: name, label, disabled
 	 *  - `checkbox`: A checkbox. Must use "list" parameter.
-	 *      - Attributes: name, list, event
-	 *      - Attributes (within list): name, label, value, checked, disabled, event, subgroup
+	 *	  - Attributes: name, list, event
+	 *	  - Attributes (within list): name, label, value, checked, disabled, event, subgroup
 	 *  - `radio`: A radio button. Must use "list" parameter.
-	 *      - Attributes: name, list, event
-	 *      - Attributes (within list): name, label, value, checked, disabled, event, subgroup
+	 *	  - Attributes: name, list, event
+	 *	  - Attributes (within list): name, label, value, checked, disabled, event, subgroup
 	 *  - `input`: A text input box.
-	 *      - Attributes: name, label, value, size, placeholder, maxlength, disabled, required, readonly, event
+	 *	  - Attributes: name, label, value, size, placeholder, maxlength, disabled, required, readonly, event
 	 *  - `number`: A number input box.
-	 *      - Attributes: Everything the text `input` has, as well as: min, max, step, list
+	 *	  - Attributes: Everything the text `input` has, as well as: min, max, step, list
 	 *  - `dyninput`: A set of text boxes with "Remove" buttons and an "Add" button.
-	 *      - Attributes: name, label, min, max, sublabel, value, size, maxlength, event
+	 *	  - Attributes: name, label, min, max, sublabel, value, size, maxlength, event
 	 *  - `hidden`: An invisible form field.
-	 *      - Attributes: name, value
+	 *	  - Attributes: name, value
 	 *  - `header`: A level 5 header.
-	 *      - Attributes: label
+	 *	  - Attributes: label
 	 *  - `div`: A generic placeholder element or label.
-	 *      - Attributes: name, label
+	 *	  - Attributes: name, label
 	 *  - `submit`: A submit button. Morebits.simpleWindow moves these to the footer of the dialog.
-	 *      - Attributes: name, label, disabled
+	 *	  - Attributes: name, label, disabled
 	 *  - `button`: A generic button.
-	 *      - Attributes: name, label, disabled, event
+	 *	  - Attributes: name, label, disabled, event
 	 *  - `textarea`: A big, multi-line text box.
-	 *      - Attributes: name, label, value, cols, rows, disabled, required, readonly
+	 *	  - Attributes: name, label, value, cols, rows, disabled, required, readonly
 	 *  - `fragment`: A DocumentFragment object.
-	 *      - No attributes, and no global attributes except adminonly.
+	 *	  - No attributes, and no global attributes except adminonly.
 	 * There is some difference on how types handle the `label` attribute:
 	 * - `div`, `select`, `field`, `checkbox`/`radio`, `input`, `textarea`, `header`, and `dyninput` can accept an array of items,
 	 * and the label item(s) can be `Element`s.
@@ -325,11 +325,11 @@
 	 * specify one of the available types from the index above, as well as any
 	 * relevant and available attributes.
 	 * @example new Morebits.quickForm.element({
-	 *     name: 'target',
-	 *     type: 'input',
-	 *     label: 'Your target:',
-	 *     tooltip: 'Enter your target. Required.',
-	 *     required: true
+	 *	 name: 'target',
+	 *	 type: 'input',
+	 *	 label: 'Your target:',
+	 *	 tooltip: 'Enter your target. Required.',
+	 *	 required: true
 	 * });
 	 */
 	Morebits.quickForm.element = function QuickFormElement(data) {
@@ -1953,29 +1953,30 @@
 			if (!this.isValid()) {
 				return 'Invalid date'; // Put the truth out, preferable to "NaNNaNNan NaN:NaN" or whatever
 			}
-			let udate = this;
+			// self refers to udate
+			let self = this;
 			// create a new date object that will contain the date to display as system time
 			if (zone === 'utc') {
-				udate = new Morebits.date(this.getTime()).add(this.getTimezoneOffset(), 'minutes');
+				self = new Morebits.date(this.getTime()).add(this.getTimezoneOffset(), 'minutes');
 			} else if (typeof zone === 'number') {
 				// convert to utc, then add the utc offset given
-				udate = new Morebits.date(this.getTime()).add(this.getTimezoneOffset() + zone, 'minutes');
+				self = new Morebits.date(this.getTime()).add(this.getTimezoneOffset() + zone, 'minutes');
 			}
 			// default to ISOString
 			if (!formatstr) {
-				return udate.toISOString();
+				return self.toISOString();
 			}
 			const pad = (num, len) => {
 				len || (len = 2); // Up to length of 00 + 1
 				return `00${num}`.toString().slice(0 - len);
 			};
-			const h24 = udate.getHours();
-			const m = udate.getMinutes();
-			const s = udate.getSeconds();
-			const ms = udate.getMilliseconds();
-			const D = udate.getDate();
-			const M = udate.getMonth() + 1;
-			const Y = udate.getFullYear();
+			const h24 = self.getHours();
+			const m = self.getMinutes();
+			const s = self.getSeconds();
+			const ms = self.getMilliseconds();
+			const D = self.getDate();
+			const M = self.getMonth() + 1;
+			const Y = self.getFullYear();
 			const h12 = h24 % 12 || 12;
 			const amOrPm = h24 >= 12 ? '下午' : '上午';
 			const replacementMap = {
@@ -1989,13 +1990,13 @@
 				ss: pad(s),
 				s,
 				SSS: pad(ms, 3),
-				dddd: udate.getDayName(),
-				ddd: udate.getDayNameAbbrev(),
-				d: udate.getDay(),
+				dddd: self.getDayName(),
+				ddd: self.getDayNameAbbrev(),
+				d: self.getDay(),
 				DD: pad(D),
 				D,
-				MMMM: udate.getMonthName(),
-				MMM: udate.getMonthNameAbbrev(),
+				MMMM: self.getMonthName(),
+				MMM: self.getMonthNameAbbrev(),
 				MM: pad(M),
 				M,
 				YYYY: Y,
@@ -4957,14 +4958,15 @@
 	Morebits.checkboxShiftClickSupport = (jQuerySelector, jQueryContext) => {
 		let lastCheckbox = null;
 		const clickHandler = function (event) {
-			const thisCb = this;
+			// self refers to thisCb
+			const self = this;
 			if (event.shiftKey && lastCheckbox !== null) {
 				const cbs = $(jQuerySelector, jQueryContext); // can't cache them, obviously, if we want to support resorting
 				let index = -1;
 				let lastIndex = -1;
 				let i;
 				for (i = 0; i < cbs.length; i++) {
-					if (cbs[i] === thisCb) {
+					if (cbs[i] === self) {
 						index = i;
 						if (lastIndex > -1) {
 							break;
@@ -4979,7 +4981,7 @@
 				}
 				if (index > -1 && lastIndex > -1) {
 					// inspired by wikibits
-					const endState = thisCb.checked;
+					const endState = self.checked;
 					let start;
 					let finish;
 					if (index < lastIndex) {
@@ -4996,7 +4998,7 @@
 					}
 				}
 			}
-			lastCheckbox = thisCb;
+			lastCheckbox = self;
 			return true;
 		};
 		$(jQuerySelector, jQueryContext).on('click', clickHandler);
@@ -5160,7 +5162,7 @@
 			fnDoneOne();
 		};
 		// private functions
-		const thisProxy = this;
+		const self = this;
 		const fnStartNewChunk = () => {
 			const chunk = ctx.pageChunks[++ctx.currentChunkIndex];
 			if (!chunk) {
@@ -5169,7 +5171,7 @@
 			// start workers for the current chunk
 			ctx.countStarted += chunk.length;
 			chunk.forEach((page) => {
-				ctx.worker(page, thisProxy);
+				ctx.worker(page, self);
 			});
 		};
 		const fnDoneOne = () => {
@@ -5478,7 +5480,7 @@
 		addContent(content) {
 			this.content.appendChild(content);
 			// look for submit buttons in the content, hide them, and add a proxy button to the button pane
-			const thisproxy = this;
+			const self = this;
 			$(this.content)
 				.find('input[type="submit"], button[type="submit"]')
 				.each((_key, value) => {
@@ -5496,7 +5498,7 @@
 						},
 						false
 					);
-					thisproxy.buttons.push(button);
+					self.buttons.push(button);
 				});
 			// remove all buttons from the button pane and re-add them
 			if (this.buttons.length > 0) {

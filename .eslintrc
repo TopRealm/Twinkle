@@ -32,7 +32,7 @@
 			"error",
 			{
 				"allowDestructuring": false,
-				"allowedNames": ["self"]
+				"allowedNames": ["self", "content"]
 			}
 		],
 		"@typescript-eslint/no-unused-vars": ["off"],
