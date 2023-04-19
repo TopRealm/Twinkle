@@ -16,7 +16,7 @@
 		"lint": "eslint src && stylelint src/*.css",
 		"lint:fix": "eslint src --fix && stylelint src/*.css --fix",
 		"deploy": "node scripts/deploy.mjs",
-		"updatebrowserslist": "npx update-browserslist-db@latest"
+		"updatebrowserslist": "pnpx update-browserslist-db@latest"
 	},
 	"keywords": [
 		"Qiuwen",
