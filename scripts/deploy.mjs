@@ -204,7 +204,7 @@ const deployTargets = [
 		license: 'src/lib/select2-licenseHeader'
 	},
 	{
-		file: 'dist/lib/select2.min.js',
+		file: 'src/lib/select2.min.js',
 		target: 'MediaWiki:Gadget-select2.min.js',
 		license: 'src/lib/select2-licenseHeader'
 	}
