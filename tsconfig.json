@@ -20,7 +20,9 @@
 		"esModuleInterop": true,
 		"skipLibCheck": true,
 		"forceConsistentCasingInFileNames": true,
-		"removeComments": false
+		"removeComments": false,
+		"outDir": "./dist"
 	},
-	"include": ["./node_modules/types-mediawiki", "./node_modules/@types/oojs-ui", "./src/"]
+	"include": ["./node_modules/types-mediawiki", "./node_modules/@types/oojs-ui", "./src/"],
+	"exclude": ["./src/lib/"]
 }
