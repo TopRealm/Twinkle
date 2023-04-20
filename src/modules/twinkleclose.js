@@ -1,4 +1,3 @@
-'use strict';
 /* Twinkle.js - twinkleclose.js */
 (($) => {
     /**

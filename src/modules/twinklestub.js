@@ -1,4 +1,3 @@
-'use strict';
 /* eslint-disable quote-props */
 /* Twinkle.js - twinklestub.js */
 (($) => {
