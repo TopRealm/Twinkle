@@ -1,4 +1,3 @@
-
 /* Twinkle.js - twinklewarn.js */
 (($) => {
 	/**
