@@ -1,11 +1,16 @@
 {
 	"root": true,
-	"plugins": ["es6", "compat", "unicorn", "@typescript-eslint"],
+	"plugins": [
+		"es6",
+		"compat",
+		/* "unicorn", */
+		"@typescript-eslint"
+	],
 	"extends": [
 		"eslint:recommended",
 		"plugin:compat/recommended",
 		"plugin:@typescript-eslint/recommended",
-		"plugin:unicorn/recommended",
+		/* "plugin:unicorn/recommended", */
 		"prettier"
 	],
 	"env": {
@@ -42,15 +47,21 @@
 				"allowedNames": ["self", "content"]
 			}
 		],
-		"@typescript-eslint/no-unused-vars": ["off"],
-		"unicorn/filename-case": "off",
+		"@typescript-eslint/no-unused-vars": [
+			"warn",
+			{
+				"varsIgnorePattern": "^_"
+			}
+		],
+		/* "unicorn/filename-case": "off",
 		"unicorn/no-array-for-each": "warn",
 		"unicorn/no-this-assignment": "off",
 		"unicorn/numeric-separators-style": "off",
 		"unicorn/prefer-code-point": "off",
 		"unicorn/prefer-dom-node-append": "off",
 		"unicorn/prefer-module": "off",
-		"unicorn/prevent-abbreviations": "warn",
+		"unicorn/prefer-query-selector": "off",
+		"unicorn/prevent-abbreviations": "warn", */
 		"quotes": [
 			2,
 			"single",
