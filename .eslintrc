@@ -1,11 +1,18 @@
 {
 	"root": true,
 	"plugins": ["es6", "compat", "unicorn", "@typescript-eslint"],
-	"extends": ["eslint:recommended", "plugin:compat/recommended", "plugin:@typescript-eslint/recommended", "prettier"],
+	"extends": [
+		"eslint:recommended",
+		"plugin:compat/recommended",
+		"plugin:@typescript-eslint/recommended",
+		"plugin:unicorn/recommended",
+		"prettier"
+	],
 	"env": {
 		"browser": true,
 		"jquery": true,
-		"es6": true
+		"es6": true,
+		"es2021": true
 	},
 	"parserOptions": {
 		"ecmaVersion": "latest",
@@ -36,6 +43,9 @@
 			}
 		],
 		"@typescript-eslint/no-unused-vars": ["off"],
+		"unicorn/filename-case": "off",
+		"unicorn/prefer-code-point": "warn",
+		"unicorn/prefer-module": "off",
 		"quotes": [
 			2,
 			"single",
