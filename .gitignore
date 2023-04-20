@@ -1,25 +1,6 @@
-.vscode/
+.vscode
+node_modules
+
+dist
 scripts/credentials.json
-dist/
-
-# Windows
-Thumbs.db
-ehthumbs.db
-Desktop.ini
-$RECYCLE.BIN/
-
-# OS X
-.DS_Store
-.AppleDouble
-.LSOverride
-Icon
-._*
-.Spotlight-V100
-.Trashes
-
-# Node
-node_modules/
-npm-debug.log*
-
-# TypeScript
-.cache/.tsbuildinfo
+src/**/.module-cache
