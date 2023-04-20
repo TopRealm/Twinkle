@@ -1,6 +1,6 @@
 /* Twinkle.js - twinkleimage.js */
 
-(($) => {
+(() => {
 	/**
 	 * twinkleimage.js: Image CSD module
 	 * Mode of invocation: Tab ("DI")
@@ -273,4 +273,4 @@
 		},
 	};
 	Twinkle.addInitCallback(Twinkle.image, 'image');
-})(jQuery);
+})();
