@@ -11,10 +11,5 @@
 	],
 	"plugins": [],
 	"targets": "> 0.01%, last 5 versions, Firefox ESR, not dead, ie 11, Edge 18",
-	"ignore": [
-		"scripts/",
-		"dist/",
-		"src/lib/",
-		"*.json"
-	]
+	"ignore": ["scripts/", "dist/", "src/lib/", "*.json"]
 }
