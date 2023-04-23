@@ -352,7 +352,7 @@
 					.join('; ');
 				if (form.page.value !== '') {
 					// Allow links to redirects, files, and categories
-					reason = `在 {{No redirect|:${form.page.value}}}`;
+					reason = `\n** 页面名称：{{No redirect|:${form.page.value}}}`;
 					if (form.badid.value !== '') {
 						reason += ` ({{diff|${form.page.value}|${form.badid.value}|${form.goodid.value}|diff}})`;
 					}
@@ -362,7 +362,7 @@
 					reason += ` ${types}`;
 				}
 				if (comment !== '') {
-					reason += (reason === '' ? '' : '. ') + comment;
+					reason += (reason === '' ? '' : '\n** 理由：') + comment;
 				}
 				reason = reason.trim();
 				if (!/[!.;?]$/.test(reason)) {
@@ -372,9 +372,9 @@
 				reason = reason.replace(/\r?\n/g, '\n*:'); // indent newlines
 				Morebits.simpleWindow.setButtonsEnabled(false);
 				Morebits.status.init(form);
-				Morebits.wiki.actionCompleted.redirect = 'Qiuwen:报告当前破坏';
+				Morebits.wiki.actionCompleted.redirect = 'Qiuwen:当前的破坏';
 				Morebits.wiki.actionCompleted.notice = '提报完成';
-				const aivPage = new Morebits.wiki.page('Qiuwen:报告当前破坏', '处理VIP请求');
+				const aivPage = new Morebits.wiki.page('Qiuwen:当前的破坏', '处理VIP请求');
 				aivPage.setPageSection(0);
 				aivPage.setFollowRedirect(true);
 				aivPage.load(() => {
