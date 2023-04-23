@@ -132,7 +132,7 @@
 				}
 				const titleSplit = pathSplit[3].split(':');
 				query.gapnamespace = mw.config.get('wgNamespaceIds')[titleSplit[0].toLowerCase()];
-				if (titleSplit.length < 2 || typeof query.gapnamespace === 'undefined') {
+				if (titleSplit.length < 2 || query.gapnamespace === undefined) {
 					query.gapnamespace = 0; // article namespace
 					query.gapprefix = pathSplit.splice(3).join('/');
 				} else {
@@ -162,7 +162,7 @@
 				let pages = (response.query && response.query.pages) || [];
 				pages = pages.filter((page) => !page.missing && page.imagerepository !== 'shared');
 				pages.sort(Twinkle.sortByNamespace);
-				pages.forEach((page) => {
+				for (const page of pages) {
 					const metadata = [];
 					if (page.redirect) {
 						metadata.push('重定向');
@@ -189,7 +189,7 @@
 						checked: true,
 						style: editProt ? 'color:red' : '',
 					};
-				});
+				}
 				const form = apiobj.params.form;
 				form.append({
 					type: 'header',
@@ -231,7 +231,9 @@
 				});
 				const result = form.render();
 				apiobj.params.Window.setContent(result);
-				Morebits.quickForm.getElements(result, 'pages').forEach(Twinkle.generateArrowLinks);
+				Morebits.quickForm.getElements(result, 'pages').forEach((link) => {
+					Twinkle.generateArrowLinks(link);
+				});
 			},
 			statelem
 		);
@@ -340,8 +342,12 @@
 				});
 				newPageList = Twinkle.batchdelete.generateNewPageList(form);
 				$('#tw-dbatch-pages').replaceWith(newPageList);
-				Morebits.quickForm.getElements(newPageList, 'pages').forEach(Twinkle.generateArrowLinks);
-				Morebits.quickForm.getElements(newPageList, 'pages.subpages').forEach(Twinkle.generateArrowLinks);
+				Morebits.quickForm.getElements(newPageList, 'pages').forEach((link) => {
+					Twinkle.generateArrowLinks(link);
+				});
+				Morebits.quickForm.getElements(newPageList, 'pages.subpages').forEach((link) => {
+					Twinkle.generateArrowLinks(link);
+				});
 				return;
 			}
 			// Proceed with API calls to get list of subpages
@@ -380,7 +386,7 @@
 							const pages = (response.query && response.query.pages) || [];
 							const subpageList = [];
 							pages.sort(Twinkle.sortByNamespace);
-							pages.forEach((page) => {
+							for (const page of pages) {
 								const metadata = [];
 								if (page.redirect) {
 									metadata.push('重定向');
@@ -412,7 +418,7 @@
 									checked: true,
 									style: editProt ? 'color:red' : '',
 								});
-							});
+							}
 							if (subpageList.length > 0) {
 								const pageName = apiobj.params.pageNameFull;
 								Twinkle.batchdelete.pages[pageName].subgroup = {
@@ -439,8 +445,12 @@
 					// List 'em on the interface
 					newPageList = Twinkle.batchdelete.generateNewPageList(form);
 					$('#tw-dbatch-pages').replaceWith(newPageList);
-					Morebits.quickForm.getElements(newPageList, 'pages').forEach(Twinkle.generateArrowLinks);
-					Morebits.quickForm.getElements(newPageList, 'pages.subpages').forEach(Twinkle.generateArrowLinks);
+					Morebits.quickForm.getElements(newPageList, 'pages').forEach((link) => {
+						Twinkle.generateArrowLinks(link);
+					});
+					Morebits.quickForm.getElements(newPageList, 'pages.subpages').forEach((link) => {
+						Twinkle.generateArrowLinks(link);
+					});
 					subpagesLoaded = true;
 					// Remove "Loading... " text
 					$('#dbatch-subpage-loading').remove();
@@ -458,7 +468,9 @@
 			});
 			newPageList = Twinkle.batchdelete.generateNewPageList(form);
 			$('#tw-dbatch-pages').replaceWith(newPageList);
-			Morebits.quickForm.getElements(newPageList, 'pages').forEach(Twinkle.generateArrowLinks);
+			Morebits.quickForm.getElements(newPageList, 'pages').forEach((link) => {
+				Twinkle.generateArrowLinks(link);
+			});
 		}
 	};
 	Twinkle.batchdelete.callback.evaluate = (event) => {

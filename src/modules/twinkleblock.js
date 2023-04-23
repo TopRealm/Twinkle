@@ -202,13 +202,11 @@
 	};
 	Twinkle.block.callback.saveFieldset = (fieldset) => {
 		Twinkle.block[$(fieldset).prop('name')] = {};
-		$(fieldset)
-			.serializeArray()
-			.forEach((el) => {
-				// namespaces and pages for partial blocks are overwritten
-				// here, but we're handling them elsewhere so that's fine
-				Twinkle.block[$(fieldset).prop('name')][el.name] = el.value;
-			});
+		for (const el of $(fieldset).serializeArray()) {
+			// namespaces and pages for partial blocks are overwritten
+			// here, but we're handling them elsewhere so that's fine
+			Twinkle.block[$(fieldset).prop('name')][el.name] = el.value;
+		}
 	};
 	Twinkle.block.callback.change_action = (e) => {
 		let field_preset;
@@ -1019,7 +1017,7 @@
 		// supply sensible defaults
 		$.each(Twinkle.block.blockPresetsInfo, (preset, settings) => {
 			settings.summary || (settings.summary = settings.reason);
-			settings.sig = settings.sig !== undefined ? settings.sig : 'yes';
+			settings.sig = settings.sig === undefined ? 'yes' : settings.sig;
 			settings.indefinite || (settings.indefinite = Morebits.string.isInfinity(settings.expiry));
 			if (!Twinkle.block.isRegistered && settings.indefinite) {
 				settings.expiry = '1 day';
@@ -1029,7 +1027,7 @@
 			Twinkle.block.blockPresetsInfo[preset] = settings;
 		});
 		if (!Twinkle.block.blockGroupsUpdated) {
-			$.each(Twinkle.block.blockGroups.concat(Twinkle.block.blockGroupsPartial), (_, blockGroup) => {
+			$.each([...Twinkle.block.blockGroups, ...Twinkle.block.blockGroupsPartial], (_, blockGroup) => {
 				if (blockGroup.custom) {
 					blockGroup.list = Twinkle.getPref('customBlockReasonList');
 				}
@@ -1416,8 +1414,8 @@
 			}
 		}
 		// boolean-flipped options, more at [[mw:API:Block]]
-		data.disabletalk = data.disabletalk !== undefined ? data.disabletalk : false;
-		data.hardblock = data.hardblock !== undefined ? data.hardblock : false;
+		data.disabletalk = data.disabletalk === undefined ? false : data.disabletalk;
+		data.hardblock = data.hardblock === undefined ? false : data.hardblock;
 		// disable autoblock if blocking a bot
 		if (Twinkle.block.userIsBot || relevantUserName.search(/bot\b/i) > 0) {
 			data.autoblock = false;
@@ -1749,20 +1747,18 @@
 		const statelem = pageobj.getStatusElement();
 		if (params.actiontype.includes('tag')) {
 			const tags = [];
-			params.tag.forEach((tag) => {
+			for (const tag of params.tag) {
 				let tagtext = `{{${tag}`;
 				switch (tag) {
-					case 'Blocked user': {
+					case 'Blocked user':
 						break;
-					}
-					case 'Blocked sockpuppet': {
+					case 'Blocked sockpuppet':
 						tagtext += `|1=${params.sppUsername.trim()}`;
 						if (params.sppEvidence.trim()) {
 							tagtext += `|evidence=${params.sppEvidence.trim()}`;
 						}
 						break;
-					}
-					case 'Sockpuppeteer': {
+					case 'Sockpuppeteer':
 						tagtext += '|blocked';
 						if (params.spmChecked) {
 							tagtext += '|check=yes';
@@ -1771,20 +1767,18 @@
 							tagtext += `|evidence=${params.spmEvidence.trim()}`;
 						}
 						break;
-					}
-					case 'Locked global account': {
+					case 'Locked global account':
 						if (params.lockBlocked) {
 							tagtext += '|blocked=yes';
 						}
 						break;
-					}
-					default: {
-						return alert('未知的用户页模板！');
-					}
+					default:
+						alert('未知的用户页模板！');
+						continue;
 				}
 				tagtext += '}}';
 				tags.push(tagtext);
-			});
+			}
 			let text = tags.join('\n');
 			if (params.category) {
 				text += `\n[[Category:${params.category.trim()}的用户分身]]`;
@@ -1895,7 +1889,9 @@
 	Twinkle.block.callback.getBlockNoticeWikitext = (params, nosign) => {
 		let text = '{{';
 		const settings = Twinkle.block.blockPresetsInfo[params.template];
-		if (!settings.nonstandard) {
+		if (settings.nonstandard) {
+			text += params.template;
+		} else {
 			text += `subst:${params.template}`;
 			if (params.article && settings.pageParam) {
 				text += `|page=${params.article}`;
@@ -1949,8 +1945,6 @@
 					}
 				}
 			}
-		} else {
-			text += params.template;
 		}
 		if ((settings.sig === '~~' + '~~' || settings.sig === undefined) && !nosign) {
 			text += '}}--~~' + '~~';
@@ -1991,7 +1985,7 @@
 				text += `${date.monthHeader()}\n`;
 			}
 		}
-		params.expiry = typeof params.template_expiry !== 'undefined' ? params.template_expiry : params.expiry;
+		params.expiry = params.template_expiry === undefined ? params.expiry : params.template_expiry;
 		text += Twinkle.block.callback.getBlockNoticeWikitext(params);
 		// build the edit summary
 		let summary = '封禁通知：';
@@ -2008,7 +2002,7 @@
 	Twinkle.block.callback.main_flow = (flowobj) => {
 		const params = flowobj.getCallbackParameters();
 		params.indefinite = /indef|infinity|never|\*|max/.test(params.expiry);
-		params.expiry = typeof params.template_expiry !== 'undefined' ? params.template_expiry : params.expiry;
+		params.expiry = params.template_expiry === undefined ? params.expiry : params.template_expiry;
 		const title = '封禁通知';
 		const content = Twinkle.block.callback.getBlockNoticeWikitext(params, true);
 		flowobj.setTopic(title);

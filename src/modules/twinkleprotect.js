@@ -191,7 +191,8 @@
 								)}</b>`
 							)[0],
 							`被${Twinkle.protect.previousProtectionLog.user}保护：`,
-					  ].concat(Twinkle.protect.formatProtectionDescription(Twinkle.protect.previousProtectionLevels)),
+							...Twinkle.protect.formatProtectionDescription(Twinkle.protect.previousProtectionLevels),
+					  ],
 				$linkMarkup[0]
 			);
 		}
@@ -209,7 +210,7 @@
 		let field1;
 		let field2;
 		switch (e.target.values) {
-			case 'protect': {
+			case 'protect':
 				field_preset = new Morebits.quickForm.element({
 					type: 'field',
 					label: '默认',
@@ -350,9 +351,9 @@
 					// tagging isn't relevant for non-existing or module pages
 					break;
 				}
-			}
+
 			/* falls through */
-			case 'tag': {
+			case 'tag':
 				field1 = new Morebits.quickForm.element({
 					type: 'field',
 					label: '标记选项',
@@ -391,8 +392,7 @@
 					],
 				});
 				break;
-			}
-			case 'request': {
+			case 'request':
 				field_preset = new Morebits.quickForm.element({
 					type: 'field',
 					label: '保护类型',
@@ -430,11 +430,9 @@
 					label: '理由：',
 				});
 				break;
-			}
-			default: {
+			default:
 				alert('这玩意儿被逆袭的天邪鬼吃掉了！');
 				break;
-			}
 		}
 		let oldfield;
 		if (field_preset) {
@@ -615,12 +613,14 @@
 			],
 		},
 	];
-	Twinkle.protect.protectionTypes = Twinkle.protect.protectionTypesAdmin.concat(
-		Twinkle.protect.protectionTypesCreateOnly
-	);
-	Twinkle.protect.protectionTypesCreate = [{label: '解除保护', value: 'unprotect'}].concat(
-		Twinkle.protect.protectionTypesCreateOnly
-	);
+	Twinkle.protect.protectionTypes = [
+		...Twinkle.protect.protectionTypesAdmin,
+		...Twinkle.protect.protectionTypesCreateOnly,
+	];
+	Twinkle.protect.protectionTypesCreate = [
+		{label: '解除保护', value: 'unprotect'},
+		...Twinkle.protect.protectionTypesCreateOnly,
+	];
 	// NOTICE: keep this synched with [[MediaWiki:Protect-dropdown]]
 	// expiry will override any defaults
 	Twinkle.protect.protectionPresetsInfo = {
@@ -913,31 +913,26 @@
 			} else if (mw.config.get('wgArticleId')) {
 				if (input.editmodify) {
 					switch (input.editlevel) {
-						case 'officialprotected': {
+						case 'officialprotected':
 							closeparams.type = 'officialprotected';
 							closeparams.expiry = input.editexpiry;
 							break;
-						}
-						case 'revisionprotected': {
+						case 'revisionprotected':
 							closeparams.type = 'revisionprotected';
 							closeparams.expiry = input.editexpiry;
 							break;
-						}
-						case 'sysop': {
+						case 'sysop':
 							closeparams.type = 'full';
 							closeparams.expiry = input.editexpiry;
 							break;
-						}
-						case 'templateeditor': {
+						case 'templateeditor':
 							closeparams.type = 'temp';
 							closeparams.expiry = input.editexpiry;
 							break;
-						}
-						case 'autoconfirmed': {
+						case 'autoconfirmed':
 							closeparams.type = 'semi';
 							closeparams.expiry = input.editexpiry;
 							break;
-						}
 						// No default
 					}
 				} else if (
@@ -1017,7 +1012,7 @@
 				}
 				break;
 			}
-			case 'tag': {
+			case 'tag':
 				// apply a protection template
 				Morebits.simpleWindow.setButtonsEnabled(false);
 				Morebits.status.init(form);
@@ -1026,7 +1021,6 @@
 				Morebits.wiki.actionCompleted.notice = '标记完成';
 				Twinkle.protect.callbacks.taggingPageInitial(tagparams);
 				break;
-			}
 			case 'request': {
 				// file request at RFPP
 				let typename;
@@ -1035,38 +1029,33 @@
 					case 'pp-dispute':
 					case 'pp-vandalism':
 					case 'pp-usertalk':
-					case 'pp-protected': {
+					case 'pp-protected':
 						typename = '全保护';
 						break;
-					}
-					case 'pp-template': {
+					case 'pp-template':
 						typename = '模板保护';
 						break;
-					}
 					case 'pp-semi-vandalism':
 					case 'pp-semi-disruptive':
 					case 'pp-semi-unsourced':
 					case 'pp-semi-usertalk':
 					case 'pp-semi-sock':
 					case 'pp-semi-blp':
-					case 'pp-semi-protected': {
+					case 'pp-semi-protected':
 						typename = '半保护';
 						break;
-					}
 					case 'pp-move':
 					case 'pp-move-dispute':
 					case 'pp-move-indef':
-					case 'pp-move-vandalism': {
+					case 'pp-move-vandalism':
 						typename = '移动保护';
 						break;
-					}
 					case 'pp-create':
 					case 'pp-create-offensive':
 					case 'pp-create-blp':
-					case 'pp-create-salt': {
+					case 'pp-create-salt':
 						typename = '白纸保护';
 						break;
-					}
 					case 'unprotect': {
 						const admins = $.map(Twinkle.protect.currentProtectionLevels, (pl) => {
 							if (!pl.admin || Twinkle.protect.trustedBots.includes(pl.admin)) {
@@ -1082,54 +1071,43 @@
 						}
 						// otherwise falls through
 					}
-					default: {
+					default:
 						alert('未知保护类型！');
 						break;
-					}
 				}
 				switch (input.category) {
-					case 'pp-dispute': {
+					case 'pp-dispute':
 						typereason = '争议或编辑战';
 						break;
-					}
 					case 'pp-vandalism':
-					case 'pp-semi-vandalism': {
+					case 'pp-semi-vandalism':
 						typereason = '持续[[QW:VAND|破坏]]';
 						break;
-					}
-					case 'pp-template': {
+					case 'pp-template':
 						typereason = '高风险模板';
 						break;
-					}
 					case 'pp-usertalk':
-					case 'pp-semi-usertalk': {
+					case 'pp-semi-usertalk':
 						typereason = '被封禁用户滥用其讨论页';
 						break;
-					}
-					case 'pp-semi-sock': {
+					case 'pp-semi-sock':
 						typereason = '持续滥用[[QW:SOCK|多重账号]]';
 						break;
-					}
-					case 'pp-semi-blp': {
+					case 'pp-semi-blp':
 						typereason = '违反[[QW:BLP|生者传记方针]]';
 						break;
-					}
-					case 'pp-move-dispute': {
+					case 'pp-move-dispute':
 						typereason = '页面标题争议、编辑战';
 						break;
-					}
-					case 'pp-move-vandalism': {
+					case 'pp-move-vandalism':
 						typereason = '移动破坏';
 						break;
-					}
-					case 'pp-move-indef': {
+					case 'pp-move-indef':
 						typereason = '高风险页面';
 						break;
-					}
-					default: {
+					default:
 						typereason = '';
 						break;
-					}
 				}
 				let reason = typereason;
 				if (input.reason !== '') {
@@ -1159,10 +1137,9 @@
 				rppPage.load(Twinkle.protect.callbacks.fileRequest);
 				break;
 			}
-			default: {
+			default:
 				alert('twinkleprotect: 未知操作类型');
 				break;
-			}
 		}
 	};
 	Twinkle.protect.callbacks = {
@@ -1206,17 +1183,17 @@
 					// redirect page
 					// Only tag if no {{rcat shell}} is found
 					if (
-						!/{{(?:redirect[ _]category shell|rcat[ _]shell|this[ _]is a redirect|多种类型重定向|多種類型重定向|多種類型重新導向|多种类型重新导向|r0|其他重定向|rcs|redirect[ _]shell)/i.test(
+						/{{(?:redirect[ _]category shell|rcat[ _]shell|this[ _]is a redirect|多种类型重定向|多種類型重定向|多種類型重新導向|多种类型重新导向|r0|其他重定向|rcs|redirect[ _]shell)/i.test(
 							text
 						)
 					) {
+						Morebits.status.info('已存在Redirect category shell', '没什么可做的');
+						return;
+					} else {
 						text = text.replace(
 							/#(?:redirect|重定向|重新導向) ?(\[\[.*?]])(.*)/i,
 							`#REDIRECT $1$2\n\n{{${tag}}}`
 						);
-					} else {
-						Morebits.status.info('已存在Redirect category shell', '没什么可做的');
-						return;
 					}
 				} else {
 					if (params.noinclude) {
@@ -1243,7 +1220,7 @@
 			const params = protectedPage.getCallbackParameters();
 			const text = protectedPage.getPageText();
 			const newVersion = Twinkle.protect.callbacks.getTaggedPage(params, text);
-			if (typeof newVersion === 'undefined') {
+			if (newVersion === undefined) {
 				protectedPage.getStatusElement().info('完成');
 				return;
 			}
@@ -1278,25 +1255,22 @@
 			}
 			let words;
 			switch (params.expiry) {
-				case 'temporary': {
+				case 'temporary':
 					words = '临时';
 					break;
-				}
-				case 'infinity': {
+				case 'infinity':
 					words = '永久';
 					break;
-				}
-				default: {
+				default:
 					words = '';
 					break;
-				}
 			}
 			words += params.typename;
 			newtag += `* <small>当前保护状态：{{protection status|${/=/.test(Morebits.pageNameNorm) ? '1=' : ''}${
 				Morebits.pageNameNorm
 			}}}</small>\n`;
 			newtag += `${`请求${Morebits.string.toUpperCaseFirstChar(words)}${
-				params.reason !== '' ? `：${Morebits.string.formatReasonText(params.reason)}` : '。'
+				params.reason === '' ? '。' : `：${Morebits.string.formatReasonText(params.reason)}`
 			}--~~`}~~`;
 			const reg = params.category === 'unprotect' ? /(==\s*请求解除保护\s*==)/ : /({{\s*\/header\s*}})/;
 			const originalTextLength = text.length;
@@ -1361,13 +1335,12 @@
 			for (let i = 1; i < requestList.length; i++) {
 				if (rppRe.test(requestList[i])) {
 					requestList[i] = requestList[i].trimEnd();
-					if (params.type === 'unprotect') {
-						requestList[i] += '\n: {{RFPP|isun}}。--~~' + '~~\n';
-					} else {
-						requestList[i] += `${`\n: {{RFPP|${params.type}|${
-							Morebits.string.isInfinity(params.expiry) ? 'infinity' : expiryText
-						}}}。--~~`}~~\n`;
-					}
+					requestList[i] +=
+						params.type === 'unprotect'
+							? '\n: {{RFPP|isun}}。--~~' + '~~\n'
+							: `${`\n: {{RFPP|${params.type}|${
+									Morebits.string.isInfinity(params.expiry) ? 'infinity' : expiryText
+							  }}}。--~~`}~~\n`;
 					found = true;
 					break;
 				}
@@ -1381,42 +1354,33 @@
 			let summary = '';
 			sectionText = params.type === 'unprotect' ? sections[1] : sections[0];
 			switch (params.type) {
-				case 'semi': {
+				case 'semi':
 					summary = '半保护';
 					break;
-				}
-				case 'temp': {
+				case 'temp':
 					summary = '模板保护';
 					break;
-				}
-				case 'full': {
+				case 'full':
 					summary = '全保护';
 					break;
-				}
-				case 'revisionprotected': {
+				case 'revisionprotected':
 					summary = '版本保护';
 					break;
-				}
-				case 'officialprotected': {
+				case 'officialprotected':
 					summary = '裁委会保护';
 					break;
-				}
-				case 'move': {
+				case 'move':
 					summary = '移动保护';
 					break;
-				}
-				case 'salt': {
+				case 'salt':
 					summary = '白纸保护';
 					break;
-				}
-				case 'unprotect': {
+				case 'unprotect':
 					summary = '解除保护';
 					break;
-				}
-				default: {
+				default:
 					statusElement.warn('未知保护类型');
 					return;
-				}
 			}
 			if (Morebits.string.isInfinity(params.expiry)) {
 				summary = expiryText + summary;
@@ -1431,53 +1395,45 @@
 	};
 	Twinkle.protect.formatProtectionDescription = (protectionLevels) => {
 		const protectionNode = [];
-		if (!$.isEmptyObject(protectionLevels)) {
+		if ($.isEmptyObject(protectionLevels)) {
+			protectionNode.push($('<b>无保护</b>')[0]);
+		} else {
 			$.each(protectionLevels, (type, settings) => {
 				let label;
 				switch (type) {
-					case 'edit': {
+					case 'edit':
 						label = '编辑';
 						break;
-					}
-					case 'move': {
+					case 'move':
 						label = '移动';
 						break;
-					}
-					case 'create': {
+					case 'create':
 						label = '创建';
 						break;
-					}
-					default: {
+					default:
 						label = type;
 						break;
-					}
 				}
 				let level;
 				switch (settings.level) {
-					case 'officialprotected': {
+					case 'officialprotected':
 						level = '仅允许裁决委员';
 						break;
-					}
-					case 'revisionprotected': {
+					case 'revisionprotected':
 						level = '仅允许资深用户';
 						break;
-					}
-					case 'sysop': {
+					case 'sysop':
 						level = '仅管理员';
 						break;
-					}
-					case 'templateeditor': {
+					case 'templateeditor':
 						level = '仅模板编辑员和管理员';
 						break;
-					}
-					case 'autoconfirmed': {
+					case 'autoconfirmed':
 						level = '仅允许自动确认用户';
 						break;
-					}
-					default: {
+					default:
 						level = settings.level;
 						break;
-					}
 				}
 				protectionNode.push($(`<b>${label}：${level}</b>`)[0]);
 				if (Morebits.string.isInfinity(settings.expiry)) {
@@ -1489,8 +1445,6 @@
 					protectionNode.push('（连锁）');
 				}
 			});
-		} else {
-			protectionNode.push($('<b>无保护</b>')[0]);
 		}
 		return protectionNode;
 	};

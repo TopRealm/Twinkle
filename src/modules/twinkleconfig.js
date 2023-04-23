@@ -1100,7 +1100,7 @@
 					let input;
 					const gotPref = Twinkle.getPref(pref.name);
 					switch (pref.type) {
-						case 'boolean': {
+						case 'boolean':
 							// create a checkbox
 							cell.setAttribute('colspan', '2');
 							label = document.createElement('label');
@@ -1115,9 +1115,8 @@
 							label.appendChild(document.createTextNode(pref.label));
 							cell.appendChild(label);
 							break;
-						}
 						case 'string': // create an input box
-						case 'integer': {
+						case 'integer':
 							// add label to first column
 							cell.style.textAlign = 'right';
 							cell.style.paddingRight = '0.5em';
@@ -1143,7 +1142,6 @@
 							}
 							cell.appendChild(input);
 							break;
-						}
 						case 'enum': {
 							// create a combo box
 							// add label to first column
@@ -1259,10 +1257,9 @@
 							cell.appendChild(button);
 							break;
 						}
-						default: {
+						default:
 							alert(`twinkleconfig: 未知类型的属性 ${pref.name}`);
 							break;
-						}
 					}
 					row.appendChild(cell);
 					// add help tip
@@ -1549,7 +1546,7 @@
 	};
 	// reset/restore defaults
 	Twinkle.config.resetPrefLink = (e) => {
-		const wantedpref = e.target.id.substring(21); // "twinkle-config-reset-" prefix is stripped
+		const wantedpref = e.target.id.slice(21); // "twinkle-config-reset-" prefix is stripped
 		// search tactics
 		$(Twinkle.config.sections).each((_sectionkey, section) => {
 			if (section.hidden || (section.adminOnly && !Morebits.userIsSysop)) {
@@ -1572,17 +1569,15 @@
 	};
 	Twinkle.config.resetPref = (pref) => {
 		switch (pref.type) {
-			case 'boolean': {
+			case 'boolean':
 				document.querySelector(`#${pref.name}`).checked = Twinkle.defaultConfig[pref.name];
 				break;
-			}
 			case 'string':
 			case 'integer':
-			case 'enum': {
+			case 'enum':
 				document.querySelector(`#${pref.name}`).value = Twinkle.defaultConfig[pref.name];
 				break;
-			}
-			case 'set': {
+			case 'set':
 				$.each(pref.setValues, (itemkey) => {
 					if (document.querySelector(`#${pref.name}_${itemkey}`)) {
 						document.querySelector(`#${pref.name}_${itemkey}`).checked =
@@ -1590,15 +1585,12 @@
 					}
 				});
 				break;
-			}
-			case 'customList': {
+			case 'customList':
 				$(document.querySelector(`#${pref.name}`)).data('value', Twinkle.defaultConfig[pref.name]);
 				break;
-			}
-			default: {
+			default:
 				alert(`twinkleconfig: unknown data type for preference ${pref.name}`);
 				break;
-			}
 		}
 	};
 	Twinkle.config.resetAllPrefs = () => {
@@ -1644,17 +1636,15 @@
 				if (!pref.adminOnly || Morebits.userIsSysop) {
 					if (!section.hidden) {
 						switch (pref.type) {
-							case 'boolean': {
+							case 'boolean':
 								// read from the checkbox
 								userValue = form[pref.name].checked;
 								break;
-							}
 							case 'string': // read from the input box or combo box
-							case 'enum': {
+							case 'enum':
 								userValue = form[pref.name].value;
 								break;
-							}
-							case 'integer': {
+							case 'integer':
 								// read from the input box
 								userValue = Number.parseInt(form[pref.name].value, 10);
 								if (Number.isNaN(userValue)) {
@@ -1665,8 +1655,7 @@
 									userValue = null;
 								}
 								break;
-							}
-							case 'set': {
+							case 'set':
 								// read from the set of check boxes
 								userValue = [];
 								if (pref.setDisplayOrder) {
@@ -1685,16 +1674,13 @@
 									});
 								}
 								break;
-							}
-							case 'customList': {
+							case 'customList':
 								// read from the jQuery data stored on the button object
 								userValue = $(form[pref.name]).data('value');
 								break;
-							}
-							default: {
+							default:
 								alert(`twinkleconfig: 未知数据类型，属性 ${pref.name}`);
 								break;
-							}
 						}
 					} else if (Twinkle.prefs) {
 						// Retain the hidden preferences that may have customised by the user from twinkleoptions.js

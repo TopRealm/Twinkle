@@ -405,19 +405,17 @@
         }
         else {
             switch (messageData.action) {
-                case 'del': {
+                case 'del':
                     Twinkle.close.callbacks.del(params);
                     break;
-                }
                 case 'keep': {
                     const qiuwen_page = new Morebits.wiki.page(params.title, '移除存废讨论模板');
                     qiuwen_page.setCallbackParameters(params);
                     qiuwen_page.load(Twinkle.close.callbacks.keep);
                     break;
                 }
-                default: {
+                default:
                     alert(`关闭存废讨论：未定义 ${code}`);
-                }
             }
         }
     };

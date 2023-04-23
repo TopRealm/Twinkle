@@ -42,7 +42,7 @@
         }
         switch (Twinkle.stub.mode) {
             case '條目':
-            case '条目': {
+            case '条目':
                 Window.setTitle('条目小作品标记');
                 form.append({
                     type: 'select',
@@ -70,11 +70,11 @@
                     id: 'tagWorkArea'
                 });
                 break;
-            }
-            default: {
+
+            default:
                 alert(`Twinkle.stub：未知模式 ${Twinkle.stub.mode}`);
                 break;
-            }
+
         }
         form.append({
             type: 'submit'
@@ -268,14 +268,14 @@
             // Check for preexisting tags and separate tags into groupable and non-groupable arrays
             for (i = 0; i < params.tags.length; i++) {
                 tagRe = new RegExp(`(\\{\\{${params.tags[i]}(\\||\\}\\}))`, 'im');
-                if (!tagRe.test(pageText)) {
-                    tags = tags.concat(params.tags[i]);
-                }
-                else {
+                if (tagRe.test(pageText)) {
                     Morebits.status.info('信息', `在页面上找到{{${params.tags[i]}}}……跳过`);
                 }
+                else {
+                    tags = [...tags, ...params.tags[i]];
+                }
             }
-            tags = tags.concat(groupableTags);
+            tags = [...tags, ...groupableTags];
             tags.sort();
             const totalTags = tags.length;
             const addTag = (tagIndex, tagName) => {
@@ -314,15 +314,15 @@
         }
         switch (Twinkle.stub.mode) {
             case '條目':
-            case '条目': {
+            case '条目':
                 params.tags = form.getChecked('articleTags');
                 params.group = false;
                 break;
-            }
-            default: {
+
+            default:
                 alert(`Twinkle.stub：未知模式 ${Twinkle.stub.mode}`);
                 break;
-            }
+
         }
         if (params.tags.length === 0) {
             alert('必须选择至少一个标记！');
@@ -341,19 +341,19 @@
             case '条目':
             case '條目':
             /* falls through */
-            case '重定向': {
+            case '重定向':
                 qiuwen_page.load(Twinkle.stub.callbacks.main);
                 return;
-            }
+
             case '文件':
-            case '檔案': {
+            case '檔案':
                 qiuwen_page.load(Twinkle.stub.callbacks.file);
                 break;
-            }
-            default: {
+
+            default:
                 alert(`Twinkle.stub：未知模式 ${Twinkle.stub.mode}`);
                 break;
-            }
+
         }
     };
     Twinkle.addInitCallback(Twinkle.stub, 'stub');

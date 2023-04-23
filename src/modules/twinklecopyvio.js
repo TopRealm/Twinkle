@@ -60,14 +60,14 @@
 		tryTagging: (pageobj) => {
 			// 先尝试标记页面，若发现已经标记则停止提报
 			const text = pageobj.getPageText();
-			if (!text.includes('{{Copyvio|')) {
+			if (text.includes('{{Copyvio|')) {
+				Morebits.status.error('错误', '页面已经标记侵权，请人工确认是否已经提报。');
+			} else {
 				Twinkle.copyvio.callbacks.taggingArticle(pageobj);
 				// Contributor specific edits
 				const qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'));
 				qiuwen_page.setCallbackParameters(pageobj.getCallbackParameters());
 				qiuwen_page.lookupCreation(Twinkle.copyvio.callbacks.main);
-			} else {
-				Morebits.status.error('错误', '页面已经标记侵权，请人工确认是否已经提报。');
 			}
 		},
 		main: (pageobj) => {

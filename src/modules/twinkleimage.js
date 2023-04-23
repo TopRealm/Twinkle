@@ -125,17 +125,14 @@
 			case 'no source no license':
 			case 'no source':
 			case 'no license':
-			case 'no fair use rationale': {
+			case 'no fair use rationale':
 				csdcrit = 'f1';
 				break;
-			}
-			case 'no permission': {
+			case 'no permission':
 				csdcrit = 'f2';
 				break;
-			}
-			default: {
+			default:
 				throw new Error('Twinkle.image.callback.evaluate：未知条款');
-			}
 		}
 		const lognomination =
 			Twinkle.getPref('logSpeedyNominations') &&
@@ -195,26 +192,22 @@
 			}
 			let tag = '';
 			switch (params.type) {
-				case 'orphaned fair use': {
+				case 'orphaned fair use':
 					tag = '{{subst:orphaned fair use}}\n';
 					break;
-				}
-				case 'no permission': {
+				case 'no permission':
 					tag = `{{subst:${params.templatename}/auto|1=${params.f1_source
 						.replace(/http/g, '&#104;ttp')
 						.replace(/\n+/g, '\n')
 						.replace(/^\s*([^*])/gm, '* $1')
 						.replace(/^\* $/m, '')}}}\n`;
 					break;
-				}
-				case 'replaceable fair use': {
+				case 'replaceable fair use':
 					tag = `{{subst:${params.templatename}/auto|1=${params.f10_type}}}\n`;
 					break;
-				}
-				default: {
+				default:
 					tag = `{{subst:${params.templatename}/auto}}\n`;
 					break;
-				}
 			}
 			const textNoSd = text.replace(
 				/{{\s*(db(-\w*)?|d|delete|(?:hang|hold)[ -]?on)\s*(\|(?:{{[^{}]*}}|[^{}])*)?}}\s*/gi,

@@ -175,7 +175,7 @@
 				const pages = (response.query && response.query.pages) || [];
 				const list = [];
 				pages.sort(Twinkle.sortByNamespace);
-				pages.forEach((page) => {
+				for (const page of pages) {
 					const metadata = [];
 					const missing = !!page.missing;
 					let editProt;
@@ -209,7 +209,7 @@
 						checked: true,
 						style: editProt ? 'color:red' : '',
 					});
-				});
+				}
 				form.append({
 					type: 'header',
 					label: '待保护页面',
@@ -243,7 +243,9 @@
 				result.editexpiry.value = '2 days';
 				result.moveexpiry.value = '2 days';
 				result.createexpiry.value = 'infinity';
-				Morebits.quickForm.getElements(result, '个页面').forEach(Twinkle.generateArrowLinks);
+				Morebits.quickForm.getElements(result, '个页面').forEach((links) => {
+					Twinkle.generateArrowLinks(links);
+				});
 			},
 			statelem
 		);

@@ -341,7 +341,7 @@
 			});
 		}
 		switch (namespace) {
-			case 0: {
+			case 0:
 				// article and pseudo namespace
 				work_area.append({
 					type: 'header',
@@ -353,8 +353,7 @@
 					list: Twinkle.speedy.generateCsdList(Twinkle.speedy.articleList, mode),
 				});
 				break;
-			}
-			case 2: {
+			case 2:
 				// user
 				work_area.append({
 					type: 'header',
@@ -366,8 +365,7 @@
 					list: Twinkle.speedy.generateCsdList(Twinkle.speedy.userList, mode),
 				});
 				break;
-			}
-			case 3: {
+			case 3:
 				// user talk
 				if (mw.util.isIPAddress(mw.config.get('wgRelevantUserName'))) {
 					work_area.append({
@@ -381,8 +379,7 @@
 					});
 				}
 				break;
-			}
-			case 6: {
+			case 6:
 				// file
 				work_area.append({
 					type: 'header',
@@ -400,8 +397,7 @@
 					});
 				}
 				break;
-			}
-			case 14: {
+			case 14:
 				// category
 				work_area.append({
 					type: 'header',
@@ -413,8 +409,7 @@
 					list: Twinkle.speedy.generateCsdList(Twinkle.speedy.categoryList, mode),
 				});
 				break;
-			}
-			case 118: {
+			case 118:
 				// draft
 				work_area.append({
 					type: 'header',
@@ -426,8 +421,7 @@
 					list: Twinkle.speedy.generateCsdList(Twinkle.speedy.draftList, mode),
 				});
 				break;
-			}
-			case namespace % 2 === 1 && namespace !== 3: {
+			case namespace % 2 === 1 && namespace !== 3:
 				// show db-talk on talk pages, but not user talk pages
 				work_area.append({
 					type: 'header',
@@ -439,15 +433,13 @@
 					list: Twinkle.speedy.generateCsdList(Twinkle.speedy.talkList, mode),
 				});
 				break;
-			}
-			default: {
+			default:
 				break;
-			}
 		}
 		// custom rationale lives under general criteria when tagging
 		let generalCriteria = Twinkle.speedy.generalList;
 		if (!Twinkle.speedy.mode.isSysop(mode)) {
-			generalCriteria = Twinkle.speedy.customRationale.concat(generalCriteria);
+			generalCriteria = [...Twinkle.speedy.customRationale, ...generalCriteria];
 		}
 		work_area.append({
 			type: 'header',
@@ -956,10 +948,10 @@
 							.text()
 							.replace(/\+/g, ' ')
 					);
-					if (!reason) {
-						statusIndicator.warn('未能从删除模板生成删除理由');
-					} else {
+					if (reason) {
 						statusIndicator.info('完成');
+					} else {
+						statusIndicator.warn('未能从删除模板生成删除理由');
 					}
 					callback(reason);
 				},
@@ -1166,26 +1158,23 @@
 					// open the initial contributor's talk page
 					const statusIndicator = new Morebits.status(`打开用户${user}的讨论页编辑窗口`, '打开中……');
 					switch (Twinkle.getPref('userTalkPageMode')) {
-						case 'tab': {
+						case 'tab':
 							window.open(`${mw.util.wikiScript('index')}?${$.param(query)}`, '_blank');
 							break;
-						}
-						case 'blank': {
+						case 'blank':
 							window.open(
 								`${mw.util.wikiScript('index')}?${$.param(query)}`,
 								'_blank',
 								'location=no,toolbar=no,status=no,directories=no,scrollbars=yes,width=1200,height=800'
 							);
 							break;
-						}
-						default: {
+						default:
 							window.open(
 								`${mw.util.wikiScript('index')}?${$.param(query)}`,
 								window.name === 'twinklewarnwindow' ? '_blank' : 'twinklewarnwindow',
 								'location=no,toolbar=no,status=no,directories=no,scrollbars=yes,width=1200,height=800'
 							);
 							break;
-						}
 					}
 					statusIndicator.info('完成');
 				}
@@ -1348,10 +1337,10 @@
 									notifytext = `\n{{subst:db-notice|target=${Morebits.pageNameNorm}`;
 									notifytext += '}}--~~' + '~~';
 									let editsummary = '通知：';
-									editsummary += !params.normalizeds.includes('g8')
+									editsummary += params.normalizeds.includes('g8')
 										? // no article name in summary for G6 deletions
-										  `页面[[${Morebits.pageNameNorm}]]`
-										: '攻击性页面';
+										  '攻击性页面'
+										: `页面[[${Morebits.pageNameNorm}]]`;
 									editsummary += '快速删除提名';
 									usertalkpage.setAppendText(notifytext);
 									usertalkpage.setEditSummary(editsummary);
@@ -1420,7 +1409,7 @@
 			const currentParams = [];
 			let redimage;
 			switch (value) {
-				case 'reason': {
+				case 'reason':
 					if (form['csd.reason_1']) {
 						const dbrationale = form['csd.reason_1'].value;
 						if (!dbrationale || !dbrationale.trim()) {
@@ -1431,8 +1420,7 @@
 						currentParams['1'] = dbrationale;
 					}
 					break;
-				}
-				case 'a2': {
+				case 'a2':
 					if (form['csd.a2_pagename']) {
 						const a2_otherpage = form['csd.a2_pagename'].value;
 						if (!a2_otherpage || !a2_otherpage.trim()) {
@@ -1443,8 +1431,7 @@
 						currentParams.pagename = a2_otherpage;
 					}
 					break;
-				}
-				case 'g4': {
+				case 'g4':
 					if (form['csd.g4_pagename']) {
 						const g4_otherpage = form['csd.g4_pagename'].value;
 						if (!g4_otherpage || !g4_otherpage.trim()) {
@@ -1455,8 +1442,7 @@
 						currentParams.pagename = g4_otherpage;
 					}
 					break;
-				}
-				case 'f2': {
+				case 'f2':
 					if (form['csd.f2_filename']) {
 						redimage = form['csd.f2_filename'].value;
 						if (!redimage || !redimage.trim()) {
@@ -1470,8 +1456,7 @@
 						);
 					}
 					break;
-				}
-				case 'r1': {
+				case 'r1':
 					if (form['csd.r1_type']) {
 						const r1_redirtype = form['csd.r1_type'].value;
 						if (!r1_redirtype) {
@@ -1482,8 +1467,7 @@
 						currentParams['1'] = r1_redirtype;
 					}
 					break;
-				}
-				case 'r2': {
+				case 'r2':
 					if (form['csd.r2_type']) {
 						const r2_redirtype = form['csd.r2_type'].value;
 						if (!r2_redirtype) {
@@ -1494,10 +1478,8 @@
 						currentParams['1'] = r2_redirtype;
 					}
 					break;
-				}
-				default: {
+				default:
 					break;
-				}
 			}
 			parameters.push(currentParams);
 		});
@@ -1507,9 +1489,8 @@
 	Twinkle.speedy.getUserTalkParameters = (normalized) => {
 		const utparams = [];
 		switch (normalized) {
-			default: {
+			default:
 				break;
-			}
 		}
 		return utparams;
 	};
@@ -1547,14 +1528,14 @@
 		// analyse each criterion to determine whether to watch the page, prompt for summary, or notify the creator
 		let watchPage;
 		let promptForSummary;
-		normalizeds.forEach((norm) => {
+		for (const norm of normalizeds) {
 			if (Twinkle.getPref('watchSpeedyPages').includes(norm)) {
 				watchPage = Twinkle.getPref('watchSpeedyExpiry');
 			}
 			if (Twinkle.getPref('promptForSpeedyDeletionSummary').includes(norm)) {
 				promptForSummary = true;
 			}
-		});
+		}
 		const params = {
 			values,
 			normalizeds,

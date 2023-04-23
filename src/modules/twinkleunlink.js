@@ -101,7 +101,7 @@
 		}
 		input.backlinks || (input.backlinks = []);
 		input.imageusage || (input.imageusage = []);
-		const pages = Morebits.array.uniq(input.backlinks.concat(input.imageusage));
+		const pages = Morebits.array.uniq([...input.backlinks, ...input.imageusage]);
 		if (pages.length === 0) {
 			alert('您必须至少选择一个要取消链入的页面。');
 			return;
@@ -263,8 +263,12 @@
 				}
 				const result = apiobj.params.form.render();
 				apiobj.params.Window.setContent(result);
-				Morebits.quickForm.getElements(result, 'backlinks').forEach(Twinkle.generateBatchPageLinks);
-				Morebits.quickForm.getElements(result, 'imageusage').forEach(Twinkle.generateBatchPageLinks);
+				Morebits.quickForm.getElements(result, 'backlinks').forEach((link) => {
+					Twinkle.generateBatchPageLinks(link);
+				});
+				Morebits.quickForm.getElements(result, 'imageusage').forEach((link) => {
+					Twinkle.generateBatchPageLinks(link);
+				});
 			},
 		},
 		unlinkBacklinks: (pageobj) => {

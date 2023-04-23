@@ -138,7 +138,7 @@
 		switch (value) {
 			case 'talkback':
 			/* falls through */
-			default: {
+			default:
 				work_area.append({
 					type: 'div',
 					label: '',
@@ -161,7 +161,6 @@
 					value: prev_section,
 				});
 				break;
-			}
 			case 'notice': {
 				const noticeboard = work_area.append({
 					type: 'select',
@@ -194,7 +193,7 @@
 				});
 				break;
 			}
-			case 'other': {
+			case 'other':
 				work_area.append({
 					type: 'div',
 					label: '',
@@ -217,8 +216,7 @@
 					value: prev_section,
 				});
 				break;
-			}
-			case 'mail': {
+			case 'mail':
 				work_area.append({
 					type: 'input',
 					name: 'section',
@@ -226,8 +224,7 @@
 					tooltip: '您发出的电子邮件的主题。',
 				});
 				break;
-			}
-			case 'see': {
+			case 'see':
 				work_area.append({
 					type: 'input',
 					name: 'page',
@@ -244,7 +241,6 @@
 					value: prev_section,
 				});
 				break;
-			}
 		}
 		if (value !== 'notice') {
 			work_area.append({
@@ -285,25 +281,21 @@
 		Morebits.wiki.actionCompleted.redirect = fullUserTalkPageName;
 		Morebits.wiki.actionCompleted.notice = '回复通告完成，将在几秒内刷新页面';
 		switch (input.tbtarget) {
-			case 'notice': {
+			case 'notice':
 				talkpage.setEditSummary(Twinkle.talkback.noticeboards[input.noticeboard].editSummary);
 				break;
-			}
-			case 'mail': {
+			case 'mail':
 				talkpage.setEditSummary('通知：有新邮件');
 				break;
-			}
-			case 'see': {
+			case 'see':
 				input.page = Twinkle.talkback.callbacks.normalizeTalkbackPage(input.page);
 				talkpage.setEditSummary(`请看看[[:${input.page}${input.section ? `#${input.section}` : ''}]]上的讨论`);
 				break;
-			}
-			default: {
+			default:
 				// talkback
 				input.page = Twinkle.talkback.callbacks.normalizeTalkbackPage(input.page);
 				talkpage.setEditSummary(`回复通告：[[:${input.page}${input.section ? `#${input.section}` : ''}]])`);
 				break;
-			}
 		}
 		talkpage.setAppendText(`\n\n${Twinkle.talkback.callbacks.getNoticeWikitext(input)}`);
 		talkpage.setChangeTags(Twinkle.changeTags);
@@ -339,15 +331,14 @@
 		getNoticeWikitext: (input) => {
 			let text;
 			switch (input.tbtarget) {
-				case 'notice': {
+				case 'notice':
 					text = Morebits.string.safeReplace(
 						Twinkle.talkback.noticeboards[input.noticeboard].text,
 						'$SECTION',
 						input.section
 					);
 					break;
-				}
-				case 'mail': {
+				case 'mail':
 					text = `${`==${Twinkle.getPref('mailHeading')}==\n{{YGM|subject=${input.section}|ts=~~`}~` + `~~}}`;
 					if (input.message) {
 						text += `${`\n${input.message}  ~~`}~~`;
@@ -355,7 +346,6 @@
 						text += '\n~~' + '~~';
 					}
 					break;
-				}
 				case 'see': {
 					const heading = Twinkle.getPref('talkbackHeading');
 					text = `{{subst:Please see|location=${input.page}${input.section ? `#${input.section}` : ''}|more=${
@@ -363,7 +353,7 @@
 					}|heading=${heading}}}`;
 					break;
 				}
-				default: {
+				default:
 					// talkback
 					text =
 						`${`==${Twinkle.getPref('talkbackHeading')}==\n{{talkback|${input.page}${
@@ -374,7 +364,6 @@
 					} else if (Twinkle.getPref('insertTalkbackSignature')) {
 						text += '\n~~' + '~~';
 					}
-				}
 			}
 			return text;
 		},

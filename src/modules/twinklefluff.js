@@ -221,7 +221,7 @@
 					}
 				}
 				// oldid
-				histList.forEach((rev) => {
+				for (const rev of histList) {
 					// From restoreThisRevision, non-transferable
 					// If the text has been revdel'd, it gets wrapped in a span with .history-deleted,
 					// and href will be undefined (and thus oldid is NaN)
@@ -230,7 +230,7 @@
 					if (!Number.isNaN(oldid)) {
 						rev.appendChild(Twinkle.fluff.linkBuilder.restoreThisRevisionLink(oldid, true));
 					}
-				});
+				}
 			}
 		},
 		diff: () => {
@@ -243,10 +243,10 @@
 					extraParams += '&vanarticlerevid=';
 					extraParams += xtitle === 'otitle' ? mw.config.get('wgDiffOldId') : mw.config.get('wgDiffNewId');
 					const href = talkLink.attr('href');
-					if (!href.includes('?')) {
-						talkLink.attr('href', `${href}?${extraParams}`);
-					} else {
+					if (href.includes('?')) {
 						talkLink.attr('href', `${href}&${extraParams}`);
+					} else {
+						talkLink.attr('href', `${href}?${extraParams}`);
 					}
 				}
 			};
@@ -495,7 +495,12 @@
 			// Used for user-facing alerts, messages, etc., not edits or summaries
 			let userNorm = params.user || Twinkle.fluff.hiddenName;
 			let index = 1;
-			if (params.revid !== lastrevid) {
+			if (params.revid === lastrevid) {
+				// Expected revision is the same, so the users must match;
+				// this allows sysops to know whether the users are the same
+				params.user = lastuser;
+				userNorm = params.user || Twinkle.fluff.hiddenName;
+			} else {
 				Morebits.status.warn('Warning', [
 					'最新修订版本 ',
 					Morebits.htmlNode('strong', lastrevid),
@@ -505,30 +510,28 @@
 				]);
 				if (lastuser === params.user) {
 					switch (params.type) {
-						case 'vand': {
+						case 'vand':
 							Morebits.status.info('信息', [
 								'最新修订版本由 ',
 								Morebits.htmlNode('strong', userNorm),
 								' 做出，因我们假定破坏，继续回退操作。',
 							]);
 							break;
-						}
-						case 'agf': {
+						case 'agf':
 							Morebits.status.warn('警告', [
 								'最新修订版本由 ',
 								Morebits.htmlNode('strong', userNorm),
 								' 做出，因我们假定善意，取消回退操作，因为问题可能已被修复。',
 							]);
 							return;
-						}
-						default: {
+
+						default:
 							Morebits.status.warn('提示', [
 								'最新修订版本由 ',
 								Morebits.htmlNode('strong', userNorm),
 								' 做出，但我们还是不回退了。',
 							]);
 							return;
-						}
 					}
 				} else if (
 					params.type === 'vand' &&
@@ -552,15 +555,10 @@
 					]);
 					return;
 				}
-			} else {
-				// Expected revision is the same, so the users must match;
-				// this allows sysops to know whether the users are the same
-				params.user = lastuser;
-				userNorm = params.user || Twinkle.fluff.hiddenName;
 			}
 			if (Twinkle.fluff.trustedBots.includes(params.user)) {
 				switch (params.type) {
-					case 'vand': {
+					case 'vand':
 						Morebits.status.info('信息', [
 							'将对 ',
 							Morebits.htmlNode('strong', userNorm),
@@ -570,15 +568,14 @@
 						params.user = revs[1].user;
 						params.userHidden = !!revs[1].userhidden;
 						break;
-					}
-					case 'agf': {
+					case 'agf':
 						Morebits.status.warn('提示', [
 							'将对 ',
 							Morebits.htmlNode('strong', userNorm),
 							' 执行善意回退，但这是一个可信的机器人，取消回退操作。',
 						]);
 						return;
-					}
+
 					default: {
 						const cont = confirm(
 							`选择了常规回退，但最新修改是由一个可信的机器人（${userNorm}）做出的。确定以回退前一个修订版本，取消以回退机器人的修改`
@@ -653,7 +650,7 @@
 			let summary;
 			let extra_summary;
 			switch (params.type) {
-				case 'agf': {
+				case 'agf':
 					extra_summary = prompt('可选的编辑摘要：', params.summary); // padded out to widen prompt in Firefox
 					if (extra_summary === null) {
 						statelem.error('Aborted by user.');
@@ -666,8 +663,7 @@
 						extra_summary
 					);
 					break;
-				}
-				case 'vand': {
+				case 'vand':
 					summary = Twinkle.fluff.formatSummary(
 						`回退$USER做出的${params.count}次编辑，到由${
 							params.gooduserHidden ? Twinkle.fluff.hiddenName : params.gooduser
@@ -675,8 +671,7 @@
 						params.userHidden ? null : params.user
 					);
 					break;
-				}
-				default: {
+				default:
 					if (Twinkle.getPref('offerReasonOnNormalRevert')) {
 						extra_summary = prompt('可选的编辑摘要：', params.summary); // padded out to widen prompt in Firefox
 						if (extra_summary === null) {
@@ -691,7 +686,6 @@
 						extra_summary
 					);
 					break;
-				}
 			}
 			if (
 				(Twinkle.getPref('confirmOnFluff') ||
@@ -792,26 +786,23 @@
 						count: params.count,
 					};
 					switch (Twinkle.getPref('userTalkPageMode')) {
-						case 'tab': {
+						case 'tab':
 							window.open(mw.util.getUrl('', windowQuery), '_blank');
 							break;
-						}
-						case 'blank': {
+						case 'blank':
 							window.open(
 								mw.util.getUrl('', windowQuery),
 								'_blank',
 								'location=no,toolbar=no,status=no,directories=no,scrollbars=yes,width=1200,height=800'
 							);
 							break;
-						}
-						default: {
+						default:
 							window.open(
 								mw.util.getUrl('', windowQuery),
 								window.name === 'twinklewarnwindow' ? '_blank' : 'twinklewarnwindow',
 								'location=no,toolbar=no,status=no,directories=no,scrollbars=yes,width=1200,height=800'
 							);
 							break;
-						}
 					}
 				}
 			}

@@ -44,10 +44,10 @@
 		$vandalTalkLink.wrapInner($('<span>').attr('title', '若合适，您可以用Twinkle在该用户讨论页上做出警告。'));
 		const extraParam = `vanarticle=${mw.util.rawurlencode(pagename)}`;
 		const href = $vandalTalkLink.attr('href');
-		if (!href.includes('?')) {
-			$vandalTalkLink.attr('href', `${href}?${extraParam}`);
-		} else {
+		if (href.includes('?')) {
 			$vandalTalkLink.attr('href', `${href}&${extraParam}`);
+		} else {
+			$vandalTalkLink.attr('href', `${href}?${extraParam}`);
 		}
 	};
 	// Used to close window when switching to ARV in autolevel
@@ -1135,10 +1135,9 @@
 		};
 		switch (value) {
 			case 'singlenotice':
-			case 'singlewarn': {
+			case 'singlewarn':
 				createEntries(Twinkle.warn.messages[value], sub_group, true);
 				break;
-			}
 			case 'singlecombined': {
 				const unSortedSinglets = $.extend(
 					{},
@@ -1146,34 +1145,30 @@
 					Twinkle.warn.messages.singlewarn
 				);
 				const sortedSingletMessages = {};
-				Object.keys(unSortedSinglets)
-					.sort()
-					.forEach((key) => {
-						sortedSingletMessages[key] = unSortedSinglets[key];
-					});
+				for (const key of Object.keys(unSortedSinglets).sort()) {
+					sortedSingletMessages[key] = unSortedSinglets[key];
+				}
 				createEntries(sortedSingletMessages, sub_group, true);
 				break;
 			}
-			case 'custom': {
+			case 'custom':
 				createEntries(Twinkle.getPref('customWarningList'), sub_group, true);
 				break;
-			}
-			case 'kitchensink': {
-				['level1', 'level2', 'level3', 'level4', 'level4im'].forEach((lvl) => {
+			case 'kitchensink':
+				for (const lvl of ['level1', 'level2', 'level3', 'level4', 'level4im']) {
 					$.each(Twinkle.warn.messages.levels, (_, levelGroup) => {
 						createEntries(levelGroup, sub_group, true, lvl);
 					});
-				});
+				}
 				createEntries(Twinkle.warn.messages.singlenotice, sub_group, true);
 				createEntries(Twinkle.warn.messages.singlewarn, sub_group, true);
 				createEntries(Twinkle.getPref('customWarningList'), sub_group, true);
 				break;
-			}
 			case 'level1':
 			case 'level2':
 			case 'level3':
 			case 'level4':
-			case 'level4im': {
+			case 'level4im':
 				// Creates subgroup regardless of whether there is anything to place in it;
 				// leaves "Removal of deletion tags" empty for 4im
 				$.each(Twinkle.warn.messages.levels, (groupLabel, groupContents) => {
@@ -1187,7 +1182,6 @@
 					createEntries(groupContents, optgroup, false);
 				});
 				break;
-			}
 			case 'autolevel': {
 				// Check user page to determine appropriate level
 				const autolevelProc = () => {
@@ -1244,10 +1238,9 @@
 				}
 				break;
 			}
-			default: {
+			default:
 				alert('twinklewarn：未知的警告组');
 				break;
-			}
 		}
 		// Trigger subcategory change, add select menu, etc.
 		// Here because of the async load for autolevel
@@ -1579,33 +1572,28 @@
 				template = template.split('|')[0];
 				let prefix;
 				switch (template.slice(-1)) {
-					case '1': {
+					case '1':
 						prefix = '提醒';
 						break;
-					}
-					case '2': {
+					case '2':
 						prefix = '注意';
 						break;
-					}
-					case '3': {
+					case '3':
 						prefix = '警告';
 						break;
-					}
-					case '4': {
+					case '4':
 						prefix = '最后警告';
 						break;
-					}
-					case 'm': {
+					case 'm':
 						if (template.slice(-3) === '4im') {
 							prefix = '唯一警告';
 							break;
 						}
-					}
+
 					// falls through
-					default: {
+					default:
 						prefix = '提醒';
 						break;
-					}
 				}
 				return `${prefix}：${Morebits.string.toUpperCaseFirstChar(messageData.label)}`;
 			};
@@ -1700,33 +1688,28 @@
 				template = template.split('|')[0];
 				let prefix;
 				switch (template.slice(-1)) {
-					case '1': {
+					case '1':
 						prefix = '提醒';
 						break;
-					}
-					case '2': {
+					case '2':
 						prefix = '注意';
 						break;
-					}
-					case '3': {
+					case '3':
 						prefix = '警告';
 						break;
-					}
-					case '4': {
+					case '4':
 						prefix = '最后警告';
 						break;
-					}
-					case 'm': {
+					case 'm':
 						if (template.slice(-3) === '4im') {
 							prefix = '唯一警告';
 							break;
 						}
-					}
+
 					// falls through
-					default: {
+					default:
 						prefix = '提醒';
 						break;
-					}
 				}
 				return `${prefix}：${Morebits.string.toUpperCaseFirstChar(messageData.label)}`;
 			};
@@ -1799,7 +1782,7 @@
 		// Find the selected <option> element so we can fetch the data structure
 		const $selectedEl = $(e.target.sub_group).find(`option[value="${$(e.target.sub_group).val()}"]`);
 		params.messageData = $selectedEl.data('messageData');
-		if (typeof params.messageData === 'undefined') {
+		if (params.messageData === undefined) {
 			alert('请选择警告模板。');
 			return;
 		}

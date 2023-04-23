@@ -99,21 +99,17 @@
 		let oldreason = oldreasontextbox ? oldreasontextbox.value : '';
 		const appendReasonBox = (xfd_cat) => {
 			switch (xfd_cat) {
-				case 'fwdcsd': {
+				case 'fwdcsd':
 					oldreason = decodeURIComponent($('#delete-reason').text()).replace(/\+/g, ' ');
 					break;
-				}
-				case 'fame': {
+				case 'fame':
 					oldreason = Twinkle.getPref('afdFameDefaultReason');
 					break;
-				}
-				case 'substub': {
+				case 'substub':
 					oldreason = Twinkle.getPref('afdSubstubDefaultReason');
 					break;
-				}
-				default: {
+				default:
 					break;
-				}
 			}
 			work_area.append({
 				type: 'textarea',
@@ -222,7 +218,7 @@
 				form.xfdcat.dispatchEvent(evt);
 				break;
 			}
-			case 'ffd': {
+			case 'ffd':
 				work_area = new Morebits.quickForm.element({
 					type: 'field',
 					label: '文件存废讨论',
@@ -232,8 +228,7 @@
 				work_area = work_area.render();
 				old_area.parentNode.replaceChild(work_area, old_area);
 				break;
-			}
-			default: {
+			default:
 				work_area = new Morebits.quickForm.element({
 					type: 'field',
 					label: '未定义',
@@ -242,7 +237,6 @@
 				work_area = work_area.render();
 				old_area.parentNode.replaceChild(work_area, old_area);
 				break;
-			}
 		}
 		// Return to checked state when switching
 		form.notify.checked = true;
@@ -250,35 +244,30 @@
 	};
 	Twinkle.xfd.callback.change_afd_category = (e) => {
 		switch (e.target.value) {
-			case 'merge': {
+			case 'merge':
 				e.target.form.mergeinto.parentNode.removeAttribute('hidden');
 				e.target.form.fwdcsdreason.parentNode.setAttribute('hidden', '');
 				e.target.form.mergeinto.previousElementSibling.innerHTML = '合并到：';
 				break;
-			}
-			case 'fwdcsd': {
+			case 'fwdcsd':
 				e.target.form.mergeinto.parentNode.removeAttribute('hidden');
 				e.target.form.fwdcsdreason.parentNode.removeAttribute('hidden');
 				e.target.form.mergeinto.previousElementSibling.innerHTML = '提交人：';
 				e.target.form.xfdreason.value = decodeURIComponent($('#delete-reason').text()).replace(/\+/g, ' ');
 				break;
-			}
-			case 'fame': {
+			case 'fame':
 				e.target.form.mergeinto.parentNode.setAttribute('hidden', '');
 				e.target.form.fwdcsdreason.parentNode.setAttribute('hidden', '');
 				e.target.form.xfdreason.value = Twinkle.getPref('afdFameDefaultReason');
 				break;
-			}
-			case 'substub': {
+			case 'substub':
 				e.target.form.mergeinto.parentNode.setAttribute('hidden', '');
 				e.target.form.fwdcsdreason.parentNode.setAttribute('hidden', '');
 				e.target.form.xfdreason.value = Twinkle.getPref('afdSubstubDefaultReason');
 				break;
-			}
-			default: {
+			default:
 				e.target.form.mergeinto.parentNode.setAttribute('hidden', '');
 				e.target.form.fwdcsdreason.parentNode.setAttribute('hidden', '');
-			}
 		}
 		if (Twinkle.getPref('afdDefaultCategory') === 'same') {
 			localStorage.Twinkle_afdCategory = e.target.value;
@@ -377,14 +366,13 @@
 				let to = '';
 				switch (params.xfdcat) {
 					case 'fwdcsd':
-					case 'merge': {
+					case 'merge':
 						to = params.mergeinto;
-					}
+
 					/* Fall through */
-					default: {
+					default:
 						type = params.xfdcat;
 						break;
-					}
 				}
 				let append = true;
 				switch (type) {
@@ -423,16 +411,15 @@
 						}
 						break;
 					}
-					default: {
+					default:
 						pageobj.setAppendText(
 							`${`\n{{subst:DRItem|Type=${type}|DRarticles=${
 								Morebits.pageNameNorm
 							}|Reason=${Morebits.string.formatReasonText(params.reason)}${
-								params.fwdcsdreason.trim() !== '' ? `<br>\n转交理由：${params.fwdcsdreason}` : ''
+								params.fwdcsdreason.trim() === '' ? '' : `<br>\n转交理由：${params.fwdcsdreason}`
 							}|To=${to}}}~~`}~~`
 						);
 						break;
-					}
 				}
 				pageobj.setEditSummary(`加入[[${Morebits.pageNameNorm}]]`);
 				pageobj.setChangeTags(Twinkle.changeTags);
@@ -566,34 +553,27 @@
 			)}|参数设置]]中关掉，并使用[[QW:CSD#O1|CSD O1]]提交快速删除。`;
 			let xfdCatName;
 			switch (params.xfdcat) {
-				case 'delete': {
+				case 'delete':
 					xfdCatName = '删除';
 					break;
-				}
-				case 'merge': {
+				case 'merge':
 					xfdCatName = '合并到';
 					break;
-				}
-				case 'fwdcsd': {
+				case 'fwdcsd':
 					xfdCatName = '转交自快速删除候选';
 					break;
-				}
-				case 'fame': {
+				case 'fame':
 					xfdCatName = '批量关注度提删';
 					break;
-				}
-				case 'substub': {
+				case 'substub':
 					xfdCatName = '批量小小作品提删';
 					break;
-				}
-				case 'batch': {
+				case 'batch':
 					xfdCatName = '批量其他提删';
 					break;
-				}
-				default: {
+				default:
 					xfdCatName = '文件存废讨论';
 					break;
-				}
 			}
 			// If a logged file is deleted but exists on Qiuwen Share, the wikilink will be blue, so provide a link to the log
 			let appendText = `# [[:${Morebits.pageNameNorm}]]`;
@@ -689,7 +669,7 @@
 				Morebits.wiki.removeCheckpoint();
 				break;
 			}
-			case 'ffd': {
+			case 'ffd':
 				// FFD
 				logpage = `Qiuwen:存废讨论/记录/${date.format('YYYY/MM/DD', 'utc')}`;
 				lognomination =
@@ -711,11 +691,9 @@
 				qiuwen_page.load(Twinkle.xfd.callbacks.ffd.tryTagging);
 				Morebits.wiki.removeCheckpoint();
 				break;
-			}
-			default: {
+			default:
 				alert('twinklexfd：未定义的类别');
 				break;
-			}
 		}
 	};
 	Twinkle.addInitCallback(Twinkle.xfd, 'xfd');

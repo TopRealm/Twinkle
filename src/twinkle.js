@@ -219,37 +219,33 @@
 	// now some skin dependent config.
 	switch (mw.config.get('skin')) {
 		case 'vector':
-		case 'vector-2022': {
+		case 'vector-2022':
 			Twinkle.defaultConfig.portletArea = 'right-navigation';
 			Twinkle.defaultConfig.portletId = 'p-twinkle';
 			Twinkle.defaultConfig.portletName = 'TW';
 			Twinkle.defaultConfig.portletType = 'menu';
 			Twinkle.defaultConfig.portletNext = 'p-search';
 			break;
-		}
-		case 'gongbi': {
+		case 'gongbi':
 			Twinkle.defaultConfig.portletArea = '#page-tools .sidebar-inner';
 			Twinkle.defaultConfig.portletId = 'p-twinkle';
 			Twinkle.defaultConfig.portletName = 'Twinkle';
 			Twinkle.defaultConfig.portletType = null;
 			Twinkle.defaultConfig.portletNext = 'p-userpagetools';
 			break;
-		}
-		case 'citizen': {
+		case 'citizen':
 			Twinkle.defaultConfig.portletArea = '#page-actions-more__card';
 			Twinkle.defaultConfig.portletId = 'p-twinkle';
 			Twinkle.defaultConfig.portletName = 'Twinkle';
 			Twinkle.defaultConfig.portletType = 'nav';
 			Twinkle.defaultConfig.portletNext = 'p-tb';
 			break;
-		}
-		default: {
+		default:
 			Twinkle.defaultConfig.portletArea = null;
 			Twinkle.defaultConfig.portletId = 'p-cactions';
 			Twinkle.defaultConfig.portletName = null;
 			Twinkle.defaultConfig.portletType = null;
 			Twinkle.defaultConfig.portletNext = null;
-		}
 	}
 	Twinkle.getPref = (name) => {
 		if (typeof Twinkle.prefs === 'object' && Twinkle.prefs[name] !== undefined) {
@@ -313,7 +309,7 @@
 		let innerDivClass;
 		switch (skin) {
 			case 'vector':
-			case 'vector-2022': {
+			case 'vector-2022':
 				// XXX: portal doesn't work
 				if (navigation !== 'portal' && navigation !== 'left-navigation' && navigation !== 'right-navigation') {
 					navigation = 'mw-panel';
@@ -327,22 +323,18 @@
 				}`;
 				innerDivClass = 'vector-menu-content';
 				break;
-			}
-			case 'gongbi': {
+			case 'gongbi':
 				outerNavClass = 'mw-portlet';
 				innerDivClass = 'mw-portlet-body';
 				break;
-			}
-			case 'citizen': {
+			case 'citizen':
 				outerNavClass = 'mw-portlet';
 				innerDivClass = 'mw-portlet-twinkle';
 				break;
-			}
-			default: {
+			default:
 				navigation = 'column-one';
 				outerNavClass = 'portlet';
 				break;
-			}
 		}
 		// Build the DOM elements.
 		let outerNav;
@@ -498,11 +490,12 @@
 		// that others load faster, especially the watchlist.
 		let activeSpecialPageList = ['Block', 'Contributions', 'AbuseLog', 'Recentchanges', 'Recentchangeslinked']; // wgRelevantUserName defined for non-sysops on Special:Block
 		if (Morebits.userIsSysop) {
-			activeSpecialPageList = activeSpecialPageList.concat([
+			activeSpecialPageList = [
+				...activeSpecialPageList,
 				'DeletedContributions',
 				'Prefixindex',
 				'BrokenRedirects',
-			]);
+			];
 		}
 		if (
 			mw.config.get('wgNamespaceNumber') === -1 &&
@@ -516,7 +509,7 @@
 		}
 		// Set custom Api-User-Agent header, for server-side logging purposes
 		Morebits.wiki.api.setApiUserAgent(`Twinkle/1.1; ${mw.config.get('wgWikiID')}`);
-		Twinkle.disabledModules = Twinkle.getPref('disabledModules').concat(Twinkle.getPref('disabledSysopModules'));
+		Twinkle.disabledModules = [...Twinkle.getPref('disabledModules'), ...Twinkle.getPref('disabledSysopModules')];
 		// Redefine addInitCallback so that any modules being loaded now on are directly
 		// initialised rather than added to initCallbacks array
 		Twinkle.addInitCallback = (func, name) => {
@@ -525,9 +518,9 @@
 			}
 		};
 		// Initialise modules that were saved in initCallbacks array
-		Twinkle.initCallbacks.forEach((module) => {
+		for (const module of Twinkle.initCallbacks) {
 			Twinkle.addInitCallback(module.func, module.name);
-		});
+		}
 		// Increases text size in Twinkle dialogs, if so configured
 		if (Twinkle.getPref('dialogLargeFont')) {
 			mw.util.addCSS(
@@ -545,15 +538,15 @@
 		if ($(divID).length === 0) {
 			return;
 		}
-		if (!Twinkle.findSources) {
+		if (Twinkle.findSources) {
+			$(divID).html(Twinkle.findSources);
+		} else {
 			const parser = new Morebits.wiki.preview($(divID)[0]);
 			parser.beginRender(`({{Find sources|${Morebits.pageNameNorm}}})`, 'QW:AFD').then(() => {
 				// Save for second-time around
 				Twinkle.findSources = parser.previewbox.innerHTML;
 				$(divID).removeClass('morebits-previewbox');
 			});
-		} else {
-			$(divID).html(Twinkle.findSources);
 		}
 	};
 	/** Twinkle-specific utility functions shared by multiple modules */

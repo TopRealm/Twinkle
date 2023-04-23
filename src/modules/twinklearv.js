@@ -94,7 +94,7 @@
 				const block = blocklist[0];
 				let message = `此账户已经被${block.partial ? '部分' : ''}`;
 				// Start and end differ, range blocked
-				message += block.rangestart !== block.rangeend ? '段封禁。' : '封禁。';
+				message += block.rangestart === block.rangeend ? '封禁。' : '段封禁。';
 				if (block.partial) {
 					$('#twinkle-arv-blockwarning').css('color', 'black'); // Less severe
 				}
@@ -114,7 +114,7 @@
 		switch (value) {
 			case 'aiv':
 			/* falls through */
-			default: {
+			default:
 				work_area = new Morebits.quickForm.element({
 					type: 'field',
 					label: '报告用户破坏',
@@ -192,9 +192,8 @@
 				work_area = work_area.render();
 				old_area.parentNode.replaceChild(work_area, old_area);
 				break;
-			}
 			// not using, but keeping it for reference
-			case 'username': {
+			case 'username':
 				work_area = new Morebits.quickForm.element({
 					type: 'field',
 					label: '报告不当用户名',
@@ -243,8 +242,7 @@
 				work_area = work_area.render();
 				old_area.parentNode.replaceChild(work_area, old_area);
 				break;
-			}
-			case 'puppet': {
+			case 'puppet':
 				work_area = new Morebits.quickForm.element({
 					type: 'field',
 					label: '提报傀儡账号',
@@ -277,8 +275,7 @@
 				work_area = work_area.render();
 				old_area.parentNode.replaceChild(work_area, old_area);
 				break;
-			}
-			case 'sock': {
+			case 'sock':
 				work_area = new Morebits.quickForm.element({
 					type: 'field',
 					label: '提报傀儡主账号',
@@ -313,7 +310,6 @@
 				work_area = work_area.render();
 				old_area.parentNode.replaceChild(work_area, old_area);
 				break;
-			}
 		}
 	};
 	Twinkle.arv.callback.evaluate = (e) => {
@@ -338,24 +334,19 @@
 				types = types
 					.map((v) => {
 						switch (v) {
-							case 'final': {
+							case 'final':
 								return '已发出最后警告';
-							}
-							case 'postblock': {
+							case 'postblock':
 								return '封禁过期后随即破坏';
-							}
-							case 'spambot': {
+							case 'spambot':
 								return '显而易见的spambot或失窃账户';
-							}
-							case 'vandalonly': {
+							case 'vandalonly':
 								return '显而易见的纯破坏用户';
-							}
-							case 'promoonly': {
+							case 'promoonly':
 								return '仅用来散发广告宣传的用户';
-							}
-							default: {
+
+							default:
 								return '未知理由';
-							}
 						}
 					})
 					.join('; ');
@@ -413,7 +404,7 @@
 				// **not** i18n to Chinese as we pre-verify usernames
 			}
 			case 'username': {
-				types = form.getChecked('arvtype').map(Morebits.string.toLowerCaseFirstChar);
+				types = form.getChecked('arvtype').map((string) => Morebits.string.toLowerCaseFirstChar(string));
 				const hasShared = types.includes('shared');
 				if (hasShared) {
 					types.splice(types.indexOf('shared'), 1);
