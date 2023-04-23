@@ -375,7 +375,7 @@
 				Morebits.wiki.actionCompleted.redirect = 'Qiuwen:当前的破坏';
 				Morebits.wiki.actionCompleted.notice = '提报完成';
 				const aivPage = new Morebits.wiki.page('Qiuwen:当前的破坏', '处理VIP请求');
-				aivPage.setPageSection(1);
+				aivPage.setPageSection(0);
 				aivPage.setFollowRedirect(true);
 				aivPage.load(() => {
 					const text = aivPage.getPageText();
