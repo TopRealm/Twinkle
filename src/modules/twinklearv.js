@@ -372,9 +372,9 @@
 				reason = reason.replace(/\r?\n/g, '\n*:'); // indent newlines
 				Morebits.simpleWindow.setButtonsEnabled(false);
 				Morebits.status.init(form);
-				Morebits.wiki.actionCompleted.redirect = 'Qiuwen:当前的破坏';
+				Morebits.wiki.actionCompleted.redirect = 'Qiuwen:报告当前破坏';
 				Morebits.wiki.actionCompleted.notice = '提报完成';
-				const aivPage = new Morebits.wiki.page('Qiuwen:当前的破坏', '处理VIP请求');
+				const aivPage = new Morebits.wiki.page('Qiuwen:报告当前破坏', '处理VIP请求');
 				aivPage.setPageSection(0);
 				aivPage.setFollowRedirect(true);
 				aivPage.load(() => {

@@ -429,7 +429,7 @@
 				},
 				{
 					checked: true,
-					label: '标记当前的破坏中的请求',
+					label: '标记报告当前破坏中的请求',
 					name: 'closevip',
 					value: '1',
 				}
@@ -1700,7 +1700,7 @@
 						Twinkle.block.callback.issue_template(templateoptions);
 					}
 					if (toClosevip) {
-						const vipPage = new Morebits.wiki.page('Qiuwen:当前的破坏', '关闭请求');
+						const vipPage = new Morebits.wiki.page('Qiuwen:报告当前破坏', '关闭请求');
 						vipPage.setFollowRedirect(true);
 						vipPage.setCallbackParameters(blockoptions);
 						vipPage.load(Twinkle.block.callback.closeRequest);
