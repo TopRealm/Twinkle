@@ -52,8 +52,8 @@
 		],
 		"unicorn/consistent-function-scoping": "off",
 		"unicorn/filename-case": "off",
-		/* "unicorn/no-array-callback-reference": "warn",
-		"unicorn/no-array-for-each": "warn", */
+		"unicorn/no-array-callback-reference": "warn",
+		"unicorn/no-array-for-each": "off",
 		"unicorn/no-array-reduce": "off",
 		"unicorn/no-document-cookie": "warn",
 		"unicorn/no-null": "off",
