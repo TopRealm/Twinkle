@@ -64,7 +64,7 @@
 		"unicorn/no-document-cookie": "warn",
 		"unicorn/no-null": "off",
 		"unicorn/no-this-assignment": "off",
-		"unicorn/prefer-dom-node-append": "warn",
+		"unicorn/prefer-dom-node-append": "off",
 		"unicorn/prefer-module": "off",
 		"unicorn/prefer-top-level-await": "off",
 		"unicorn/prevent-abbreviations": "off",
