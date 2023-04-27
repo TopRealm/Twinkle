@@ -3,11 +3,7 @@
 		"target": "ESNext",
 		"module": "ESNext",
 		"moduleResolution": "Node",
-		"lib": [
-			"dom",
-			"dom.iterable",
-			"ESNext"
-		],
+		"lib": ["dom", "dom.iterable", "ESNext"],
 		"strict": true,
 		"allowJs": true,
 		"allowUnusedLabels": false,
@@ -25,12 +21,6 @@
 		"forceConsistentCasingInFileNames": true,
 		"removeComments": false
 	},
-	"include": [
-		"./node_modules/types-mediawiki",
-		"./node_modules/@types/oojs-ui",
-		"./src/"
-	],
-	"exclude": [
-		"./src/lib/"
-	]
+	"include": ["./node_modules/types-mediawiki", "./node_modules/@types/oojs-ui", "./src/"],
+	"exclude": ["./src/lib/"]
 }
