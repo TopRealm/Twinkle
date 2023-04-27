@@ -1589,8 +1589,7 @@
 							prefix = '唯一警告';
 							break;
 						}
-
-					// falls through
+					/* falls through */
 					default:
 						prefix = '提醒';
 						break;
@@ -1705,8 +1704,7 @@
 							prefix = '唯一警告';
 							break;
 						}
-
-					// falls through
+					/* falls through */
 					default:
 						prefix = '提醒';
 						break;

@@ -351,7 +351,6 @@
 					// tagging isn't relevant for non-existing or module pages
 					break;
 				}
-
 			/* falls through */
 			case 'tag':
 				field1 = new Morebits.quickForm.element({

@@ -368,7 +368,6 @@
 					case 'fwdcsd':
 					case 'merge':
 						to = params.mergeinto;
-
 					/* Fall through */
 					default:
 						type = params.xfdcat;

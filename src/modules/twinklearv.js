@@ -344,7 +344,6 @@
 								return '显而易见的纯破坏用户';
 							case 'promoonly':
 								return '仅用来散发广告宣传的用户';
-
 							default:
 								return '未知理由';
 						}

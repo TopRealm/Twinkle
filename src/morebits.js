@@ -506,7 +506,6 @@
 								type: 'div',
 								id: `${id}_${i}_subgroup`,
 							});
-
 							$.each(tmpgroup, (_idx, el) => {
 								const newEl = $.extend({}, el);
 								if (!newEl.type) {
@@ -874,7 +873,7 @@
 				case 'select-multiple':
 					result[fieldNameNorm] = $(field).val(); // field.value doesn't work
 					break;
-				case 'text': // falls through
+				case 'text': /* falls through */
 				case 'textarea':
 					result[fieldNameNorm] = field.value.trim();
 					break;
@@ -2001,7 +2000,6 @@
 					return this.format(Morebits.date.localeData.relativeTimes.nextDay, zone);
 				case dateDiff < 0 && dateDiff > -7:
 					return this.format(Morebits.date.localeData.relativeTimes.thisWeek, zone);
-
 				default:
 					return this.format(Morebits.date.localeData.relativeTimes.other, zone);
 			}

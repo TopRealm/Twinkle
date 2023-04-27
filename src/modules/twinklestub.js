@@ -70,11 +70,9 @@
                     id: 'tagWorkArea'
                 });
                 break;
-
             default:
                 alert(`Twinkle.stub：未知模式 ${Twinkle.stub.mode}`);
                 break;
-
         }
         form.append({
             type: 'submit'
@@ -318,11 +316,9 @@
                 params.tags = form.getChecked('articleTags');
                 params.group = false;
                 break;
-
             default:
                 alert(`Twinkle.stub：未知模式 ${Twinkle.stub.mode}`);
                 break;
-
         }
         if (params.tags.length === 0) {
             alert('必须选择至少一个标记！');
@@ -344,16 +340,13 @@
             case '重定向':
                 qiuwen_page.load(Twinkle.stub.callbacks.main);
                 return;
-
             case '文件':
             case '檔案':
                 qiuwen_page.load(Twinkle.stub.callbacks.file);
                 break;
-
             default:
                 alert(`Twinkle.stub：未知模式 ${Twinkle.stub.mode}`);
                 break;
-
         }
     };
     Twinkle.addInitCallback(Twinkle.stub, 'stub');

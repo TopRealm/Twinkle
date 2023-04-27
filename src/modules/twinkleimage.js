@@ -1,5 +1,4 @@
 /* Twinkle.js - twinkleimage.js */
-
 (() => {
 	/**
 	 * twinkleimage.js: Image CSD module
