@@ -148,9 +148,9 @@
 			if (element instanceof Node) {
 				fragment.appendChild(element);
 			} else {
-				$.parseHTML(Morebits.createHtml.renderWikilinks(element)).forEach((node) => {
+				for (const node of $.parseHTML(Morebits.createHtml.renderWikilinks(element))) {
 					fragment.appendChild(node);
-				});
+				}
 			}
 		}
 		return fragment;

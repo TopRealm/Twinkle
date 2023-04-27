@@ -263,12 +263,12 @@
 				}
 				const result = apiobj.params.form.render();
 				apiobj.params.Window.setContent(result);
-				Morebits.quickForm.getElements(result, 'backlinks').forEach((link) => {
+				for (const link of Morebits.quickForm.getElements(result, 'backlinks')) {
 					Twinkle.generateBatchPageLinks(link);
-				});
-				Morebits.quickForm.getElements(result, 'imageusage').forEach((link) => {
+				}
+				for (const link of Morebits.quickForm.getElements(result, 'imageusage')) {
 					Twinkle.generateBatchPageLinks(link);
-				});
+				}
 			},
 		},
 		unlinkBacklinks: (pageobj) => {

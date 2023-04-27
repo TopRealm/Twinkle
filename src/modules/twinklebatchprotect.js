@@ -243,9 +243,9 @@
 				result.editexpiry.value = '2 days';
 				result.moveexpiry.value = '2 days';
 				result.createexpiry.value = 'infinity';
-				Morebits.quickForm.getElements(result, '个页面').forEach((links) => {
+				for (const links of Morebits.quickForm.getElements(result, '个页面')) {
 					Twinkle.generateArrowLinks(links);
-				});
+				}
 			},
 			statelem
 		);

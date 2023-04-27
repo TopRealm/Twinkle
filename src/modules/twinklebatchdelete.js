@@ -231,9 +231,9 @@
 				});
 				const result = form.render();
 				apiobj.params.Window.setContent(result);
-				Morebits.quickForm.getElements(result, 'pages').forEach((link) => {
+				for (const link of Morebits.quickForm.getElements(result, 'pages')) {
 					Twinkle.generateArrowLinks(link);
-				});
+				}
 			},
 			statelem
 		);
@@ -342,12 +342,12 @@
 				});
 				newPageList = Twinkle.batchdelete.generateNewPageList(form);
 				$('#tw-dbatch-pages').replaceWith(newPageList);
-				Morebits.quickForm.getElements(newPageList, 'pages').forEach((link) => {
+				for (const link of Morebits.quickForm.getElements(newPageList, 'pages')) {
 					Twinkle.generateArrowLinks(link);
-				});
-				Morebits.quickForm.getElements(newPageList, 'pages.subpages').forEach((link) => {
+				}
+				for (const link of Morebits.quickForm.getElements(newPageList, 'pages.subpages')) {
 					Twinkle.generateArrowLinks(link);
-				});
+				}
 				return;
 			}
 			// Proceed with API calls to get list of subpages
@@ -445,12 +445,12 @@
 					// List 'em on the interface
 					newPageList = Twinkle.batchdelete.generateNewPageList(form);
 					$('#tw-dbatch-pages').replaceWith(newPageList);
-					Morebits.quickForm.getElements(newPageList, 'pages').forEach((link) => {
+					for (const link of Morebits.quickForm.getElements(newPageList, 'pages')) {
 						Twinkle.generateArrowLinks(link);
-					});
-					Morebits.quickForm.getElements(newPageList, 'pages.subpages').forEach((link) => {
+					}
+					for (const link of Morebits.quickForm.getElements(newPageList, 'pages.subpages')) {
 						Twinkle.generateArrowLinks(link);
-					});
+					}
 					subpagesLoaded = true;
 					// Remove "Loading... " text
 					$('#dbatch-subpage-loading').remove();
@@ -468,9 +468,9 @@
 			});
 			newPageList = Twinkle.batchdelete.generateNewPageList(form);
 			$('#tw-dbatch-pages').replaceWith(newPageList);
-			Morebits.quickForm.getElements(newPageList, 'pages').forEach((link) => {
+			for (const link of Morebits.quickForm.getElements(newPageList, 'pages')) {
 				Twinkle.generateArrowLinks(link);
-			});
+			}
 		}
 	};
 	Twinkle.batchdelete.callback.evaluate = (event) => {
