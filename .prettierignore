@@ -4,3 +4,4 @@ src/modules/twinklestub.js
 scripts/
 dist/
 *.md
+pnpm-lock.yaml
