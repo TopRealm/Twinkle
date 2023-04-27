@@ -4,12 +4,12 @@
 			"@babel/preset-env",
 			{
 				"corejs": "3",
-				"useBuiltIns": "entry",
-				"modules": false
+				"modules": false,
+				"useBuiltIns": "entry"
 			}
 		]
 	],
-	"plugins": [],
-	"targets": "> 0.01%, last 5 versions, Firefox ESR, not dead, ie 11, Edge 18",
+	"plugins": ["array-includes"],
+	"targets": "chrome > 31 and Edge > 12 and Firefox > 39 and Safari > 9 and ie 11",
 	"ignore": ["scripts/", "dist/", "src/lib/", "*.json"]
 }

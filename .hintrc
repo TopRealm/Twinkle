@@ -1,11 +1,13 @@
 {
 	"extends": [
-		"development"
+	  "development"
 	],
 	"browserslist": [
-		"> 0.1%",
-		"last 5 versions",
-		"Firefox ESR",
-		"not dead"
-	]
-}
+	  "defaults",
+	  "not ie < 11",
+	  "not op_mini all"
+	],
+	"hints": {
+	  "detect-css-reflows/layout": "off"
+	}
+  }

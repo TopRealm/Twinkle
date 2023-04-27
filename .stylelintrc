@@ -1,20 +1,17 @@
 {
+	"extends": "stylelint-config-standard",
 	"rules": {
+		"declaration-block-no-duplicate-properties": [
+			true,
+			{
+				"ignore": ["consecutive-duplicates"]
+			}
+		],
+		"media-feature-range-notation": "prefix",
+		"no-descending-specificity": null,
+		"property-no-vendor-prefix": null,
 		"selector-id-pattern": null,
 		"selector-class-pattern": null,
-		"selector-pseudo-class-no-unknown": true,
-		"selector-not-notation": "simple",
-		"selector-attribute-quotes": null,
-		"selector-type-no-unknown": true,
-		"selector-no-vendor-prefix": null,
-		"no-descending-specificity": null,
-		"number-max-precision": null,
-		"value-no-vendor-prefix": null,
-		"at-rule-no-vendor-prefix": null,
-		"media-feature-name-no-vendor-prefix": null,
-		"property-no-vendor-prefix": null,
-		"function-no-unknown": true,
-		"comment-empty-line-before": null,
-		"no-duplicate-selectors": null
+		"value-no-vendor-prefix": null
 	}
 }
