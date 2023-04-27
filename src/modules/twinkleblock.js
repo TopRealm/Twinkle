@@ -1547,10 +1547,7 @@
 		// Check tags
 		// Given an array of incompatible tags, check if we have two or more selected
 		const checkIncompatible = (conflicts, extra) => {
-			const count = conflicts.reduce((sum, tag) => {
-				sum += params.tag.includes(tag);
-				return sum;
-			}, 0);
+			const count = conflicts.reduce((sum, tag) => sum + params.tag.includes(tag), 0);
 			if (count > 1) {
 				let message = `请在以下标签中择一使用：{{${conflicts.join('}}、{{')}}}。`;
 				message += extra || '';
