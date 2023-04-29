@@ -368,6 +368,7 @@
 			case 'form':
 				node = document.createElement('form');
 				node.className = 'quickform';
+				// eslint-disable-next-line no-script-url
 				node.setAttribute('action', 'javascript:void(0);');
 				if (data.event) {
 					node.addEventListener(data.eventType || 'submit', data.event, false);
@@ -506,6 +507,7 @@
 								type: 'div',
 								id: `${id}_${i}_subgroup`,
 							});
+							// eslint-disable-next-line no-loop-func
 							$.each(tmpgroup, (_idx, el) => {
 								const newEl = $.extend({}, el);
 								if (!newEl.type) {
@@ -915,6 +917,7 @@
 	 * @returns {HTMLInputElement}
 	 */
 	Morebits.quickForm.getCheckboxOrRadio = (elementArray, value) => {
+		// eslint-disable-next-line no-jquery/no-grep
 		const found = $.grep(elementArray, (el) => el.value === value);
 		if (found.length > 0) {
 			return found[0];
