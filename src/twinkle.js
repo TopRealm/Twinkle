@@ -272,13 +272,13 @@
 	 *  "right-navigation", outer nav class contains "vector-menu-tabs" or "vector-menu-dropdown". Existing portlets: "p-views", "p-cactions" (menu), "p-search"
 	 *  Special layout of p-personal portlet (part of "head") through specialized styles.
 	 *
-	 * @param String navigation -- id of the target navigation area (skin dependant, on vector either of "left-navigation", "right-navigation", or "mw-panel")
-	 * @param String id -- id of the portlet menu to create, preferably start with "p-".
-	 * @param String text -- name of the portlet menu to create. Visibility depends on the class used.
-	 * @param String type -- type of portlet. Currently only used for the vector non-sidebar portlets, pass "menu" to make this portlet a drop down menu.
-	 * @param Node nextnodeid -- the id of the node before which the new item should be added, should be another item in the same list, or undefined to place it at the end.
+	 * @param {string} navigation -- id of the target navigation area (skin dependant, on vector either of "left-navigation", "right-navigation", or "mw-panel")
+	 * @param {string} id -- id of the portlet menu to create, preferably start with "p-".
+	 * @param {string} text -- name of the portlet menu to create. Visibility depends on the class used.
+	 * @param {string} type -- type of portlet. Currently only used for the vector non-sidebar portlets, pass "menu" to make this portlet a drop down menu.
+	 * @param {Node} nextnodeid -- the id of the node before which the new item should be added, should be another item in the same list, or undefined to place it at the end.
 	 *
-	 * @return Node -- the DOM node of the new item (a DIV element) or null
+	 * @return {Node} -- the DOM node of the new item (a DIV element) or null
 	 */
 	Twinkle.addPortlet = (navigation, id, text, type, nextnodeid) => {
 		// sanity checks, and get required DOM nodes
@@ -399,7 +399,11 @@
 	 * **************** Twinkle.addPortletLink() ****************
 	 * Builds a portlet menu if it doesn't exist yet, and add the portlet link.
 	 *
-	 * @param task: Either a URL for the portlet link or a function to execute.
+	 * @param task {string|function} -- Either a URL for the portlet link or a function to execute.
+	 * @param text {string}
+	 * @param id {string}
+	 * @param tooltip {string}
+	 * @return link {object}
 	 */
 	Twinkle.addPortletLink = (task, text, id, tooltip) => {
 		if (Twinkle.getPref('portletArea') !== null) {
@@ -450,7 +454,7 @@
 			});
 		})
 		.done((optionsText) => {
-			var _a;
+			let _a;
 			// Quick pass if user has no options
 			if (optionsText === '' || optionsText === ' ') {
 				return;

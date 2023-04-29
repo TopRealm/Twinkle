@@ -1243,18 +1243,18 @@
 							// add button to second column
 							cell = document.createElement('td');
 							cell.style.paddingRight = '1em';
-							const button = document.createElement('button');
-							button.setAttribute('id', pref.name);
-							button.setAttribute('name', pref.name);
-							button.setAttribute('type', 'button');
-							button.addEventListener('click', Twinkle.config.listDialog.display, false);
+							const button_ = document.createElement('button');
+							button_.setAttribute('id', pref.name);
+							button_.setAttribute('name', pref.name);
+							button_.setAttribute('type', 'button');
+							button_.addEventListener('click', Twinkle.config.listDialog.display, false);
 							// use jQuery data on the button to store the current config value
-							$(button).data({
+							$(button_).data({
 								value: gotPref,
 								pref,
 							});
-							button.appendChild(document.createTextNode('编辑项目'));
-							cell.appendChild(button);
+							button_.appendChild(document.createTextNode('编辑项目'));
+							cell.appendChild(button_);
 							break;
 						}
 						default:
@@ -1695,7 +1695,7 @@
 		});
 		let text = `// <nowiki>\n// twinkleoptions.js：用户Twinkle参数设置文件\n//\n// 注：修改您的参数设置最简单的办法是使用\n${`// Twinkle参数设置面板，在[[${Morebits.pageNameNorm}]]。\n`}//\n// 这个文件是自动生成的，您所做的任何修改（除了\n// 以一种合法的JavaScript的方式来修改这些属性值）会\n// 在下一次您点击“保存”时被覆盖。\n// 修改此文件时，请记得使用合法的JavaScript。\n\nwindow.Twinkle.prefs = `;
 		text += JSON.stringify(newConfig, null, 2);
-		text += ';\n' + '\n' + '// twinkleoptions.js到此为止\n' + '// </nowiki>';
+		text += ';\n\n// twinkleoptions.js到此为止\n// </nowiki>';
 		pageobj.setPageText(text);
 		pageobj.setEditSummary(`保存Twinkle参数设置：来自[[:${Morebits.pageNameNorm}]]的自动编辑`);
 		pageobj.setChangeTags(Twinkle.changeTags);

@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 /* Twinkle.js - friendlytag.js */
 (($) => {
 	/**
@@ -270,10 +271,10 @@
 							if (e.classList[0] === 'box-问题条目') {
 								$(e)
 									.find('.ambox')
-									.each((_idx, e) => {
-										if (e.classList[0].indexOf('box-') === 0) {
-											const tag = e.classList[0].slice('box-'.length).replace(/_/g, ' ');
-											Twinkle.tag.alreadyPresentTags.push(tag);
+									.each((_idx, _e) => {
+										if (_e.classList[0].indexOf('box-') === 0) {
+											const tag_ = _e.classList[0].slice('box-'.length).replace(/_/g, ' ');
+											Twinkle.tag.alreadyPresentTags.push(tag_);
 										}
 									});
 								return true; // continue
@@ -316,7 +317,7 @@
 	let $allCheckboxDivs;
 	let $allHeaders;
 	Twinkle.tag.updateSortOrder = (e) => {
-		var _a;
+		let _a;
 		const form = e.target.form;
 		const sortorder = e.target.value;
 		Twinkle.tag.checkedTags = form.getChecked('tags');
@@ -452,34 +453,34 @@
 						name: 'notability',
 						type: 'select',
 						list: [
-							{label: '{{Notability}}：' + '通用的关注度指引', value: 'none'},
-							{label: '{{Notability|Astro}}：' + '天体', value: 'Astro'},
+							{label: '{{Notability}}：通用的关注度指引', value: 'none'},
+							{label: '{{Notability|Astro}}：天体', value: 'Astro'},
 							{
-								label: '{{Notability|Biographies}}：' + '人物传记',
+								label: '{{Notability|Biographies}}：人物传记',
 								value: 'Biographies',
 							},
-							{label: '{{Notability|Book}}：' + '书籍', value: 'Book'},
+							{label: '{{Notability|Book}}：书籍', value: 'Book'},
 							{
-								label: '{{Notability|Companies}}：' + '组织与公司',
+								label: '{{Notability|Companies}}：组织与公司',
 								value: 'Companies',
 							},
-							{label: '{{Notability|Cyclone}}：' + '气旋', value: 'Cyclone'},
-							{label: '{{Notability|Fiction}}：' + '虚构事物', value: 'Fiction'},
+							{label: '{{Notability|Cyclone}}：气旋', value: 'Cyclone'},
+							{label: '{{Notability|Fiction}}：虚构事物', value: 'Fiction'},
 							{
-								label: '{{Notability|Geographic}}：' + '地理特征',
+								label: '{{Notability|Geographic}}：地理特征',
 								value: 'Geographic',
 							},
-							{label: '{{Notability|Geometry}}：' + '几何图形', value: 'Geometry'},
+							{label: '{{Notability|Geometry}}：几何图形', value: 'Geometry'},
 							{
-								label: '{{Notability|Invention}}：' + '发明、研究',
+								label: '{{Notability|Invention}}：发明、研究',
 								value: 'Invention',
 							},
-							{label: '{{Notability|Music}}：' + '音乐', value: 'Music'},
-							{label: '{{Notability|Numbers}}：' + '数字', value: 'Numbers'},
-							{label: '{{Notability|Property}}：' + '性质表', value: 'Property'},
-							{label: '{{Notability|Traffic}}：' + '交通', value: 'Traffic'},
+							{label: '{{Notability|Music}}：音乐', value: 'Music'},
+							{label: '{{Notability|Numbers}}：数字', value: 'Numbers'},
+							{label: '{{Notability|Property}}：性质表', value: 'Property'},
+							{label: '{{Notability|Traffic}}：交通', value: 'Traffic'},
 							{
-								label: '{{Notability|Web}}：' + '网站、网络内容' + '（非正式指引）',
+								label: '{{Notability|Web}}：网站、网络内容（非正式指引）',
 								value: 'Web',
 							},
 						],
@@ -1007,7 +1008,7 @@
 			key: '著作权和来源问题标签',
 			value: [
 				{
-					label: '{{Non-free reduce}}：' + '非低分辨率的合理使用图像（或过长的音频剪辑等）',
+					label: '{{Non-free reduce}}：非低分辨率的合理使用图像（或过长的音频剪辑等）',
 					value: 'Non-free reduce',
 				},
 			],
@@ -1022,7 +1023,7 @@
                         value: 'Copy to Qiuwen Share'
                     },
                     {
-                        label: '{{Do not move to Share}}：' + '不要移动至求闻共享资源',
+                        label: '{{Do not move to Share}}：不要移动至求闻共享资源',
                         value: 'Do not move to Share',
                         subgroup: {
                             type: 'input',
@@ -1032,7 +1033,7 @@
                         }
                     },
                     {
-                        label: '{{Keep local}}：' + '请求在本地保留求闻共享资源的文件副本',
+                        label: '{{Keep local}}：请求在本地保留求闻共享资源的文件副本',
                         value: 'Keep local',
                         subgroup: [
                             {
@@ -1051,7 +1052,7 @@
                         ]
                     },
                     {
-                        label: '{{Now Share}}：' + '文件已被复制到求闻共享资源',
+                        label: '{{Now Share}}：文件已被复制到求闻共享资源',
                         value: 'Now Share',
                         subgroup: {
                             type: 'input',
@@ -1065,9 +1066,9 @@
 		{
 			key: '清理标签',
 			value: [
-				{label: '{{Watermark}}：' + '图像包含了水印', value: 'Watermark'},
+				{label: '{{Watermark}}：图像包含了水印', value: 'Watermark'},
 				{
-					label: '{{Rename media}}：' + '文件应该根据文件名称指引被重命名',
+					label: '{{Rename media}}：文件应该根据文件名称指引被重命名',
 					value: 'Rename media',
 					subgroup: [
 						{
@@ -1085,7 +1086,7 @@
 					],
 				},
 				{
-					label: '{{Should be SVG}}：' + 'PNG、GIF、JPEG文件应该重制成矢量图形',
+					label: '{{Should be SVG}}：PNG、GIF、JPEG文件应该重制成矢量图形',
 					value: 'Should be SVG',
 				},
 			],
@@ -1093,9 +1094,9 @@
 		{
 			key: '文件取代标签',
 			value: [
-				{label: '{{Obsolete}}：' + '有新版本可用的过时文件', value: 'Obsolete'},
+				{label: '{{Obsolete}}：有新版本可用的过时文件', value: 'Obsolete'},
 				{
-					label: '{{Vector version available}}：' + '有矢量图形可用的非矢量图形文件',
+					label: '{{Vector version available}}：有矢量图形可用的非矢量图形文件',
 					value: 'Vector version available',
 				},
 			],
@@ -1273,7 +1274,7 @@
 								let removed = false;
 								$(page)
 									.find('lh')
-									.each((_idx, el) => {
+									.each((_idx_, el) => {
 										const tag = $(el).attr('title').slice(9);
 										const tag_re = new RegExp(
 											`\\{\\{${Morebits.pageNameRegex(
@@ -1539,7 +1540,7 @@
 								let found = false;
 								$(page)
 									.find('lh')
-									.each((_idx, el) => {
+									.each((_idx__, el) => {
 										const tag = $(el).attr('title').slice(9);
 										const tag_re = new RegExp(
 											`(\\{\\{${Morebits.pageNameRegex(tag)}\\s*(\\|[^}]*)?\\}\\}\\n?)`

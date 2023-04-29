@@ -2166,7 +2166,7 @@
 	 * @param {Function} [onError] - The function to call if an error occurs.
 	 */
 	Morebits.wiki.api = function (currentAction, query, onSuccess, statusElement, onError) {
-		var _a;
+		let _a;
 		this.currentAction = currentAction;
 		this.query = query;
 		this.query.assert = 'user';
