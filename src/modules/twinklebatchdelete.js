@@ -190,12 +190,12 @@
 						style: editProt ? 'color:red' : '',
 					};
 				}
-				const form = apiobj.params.form;
-				form.append({
+				const form_ = apiobj.params.form;
+				form_.append({
 					type: 'header',
 					label: '待删除页面',
 				});
-				form.append({
+				form_.append({
 					type: 'button',
 					label: '全选',
 					event: () => {
@@ -208,7 +208,7 @@
 						$('input[name="pages.subpages"]').prop('checked', true);
 					},
 				});
-				form.append({
+				form_.append({
 					type: 'button',
 					label: '全不选',
 					event: () => {
@@ -219,17 +219,17 @@
 							});
 					},
 				});
-				form.append({
+				form_.append({
 					type: 'checkbox',
 					name: 'pages',
 					id: 'tw-dbatch-pages',
 					shiftClickSupport: true,
 					list: $.map(Twinkle.batchdelete.pages, (e) => e),
 				});
-				form.append({
+				form_.append({
 					type: 'submit',
 				});
-				const result = form.render();
+				const result = form_.render();
 				apiobj.params.Window.setContent(result);
 				for (const link of Morebits.quickForm.getElements(result, 'pages')) {
 					Twinkle.generateArrowLinks(link);
@@ -383,10 +383,10 @@
 						},
 						(apiobj) => {
 							const response = apiobj.getResponse();
-							const pages = (response.query && response.query.pages) || [];
+							const pages_ = (response.query && response.query.pages) || [];
 							const subpageList = [];
-							pages.sort(Twinkle.sortByNamespace);
-							for (const page of pages) {
+							pages_.sort(Twinkle.sortByNamespace);
+							for (const page of pages_) {
 								const metadata = [];
 								if (page.redirect) {
 									metadata.push('重定向');
@@ -420,8 +420,8 @@
 								});
 							}
 							if (subpageList.length > 0) {
-								const pageName = apiobj.params.pageNameFull;
-								Twinkle.batchdelete.pages[pageName].subgroup = {
+								const pageName_ = apiobj.params.pageNameFull;
+								Twinkle.batchdelete.pages[pageName_].subgroup = {
 									type: 'checkbox',
 									name: 'subpages',
 									className: 'dbatch-subpages',

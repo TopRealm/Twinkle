@@ -227,9 +227,9 @@
 				}).post();
 			}
 			// Confirm edit wasn't too old for a warning
-			const checkStale = (vantimestamp) => {
-				const revDate = new Morebits.date(vantimestamp);
-				if (vantimestamp && revDate.isValid() && revDate.add(24, 'hours').isBefore(new Date())) {
+			const checkStale = (vantimestamp_) => {
+				const revDate = new Morebits.date(vantimestamp_);
+				if (vantimestamp_ && revDate.isValid() && revDate.add(24, 'hours').isBefore(new Date())) {
 					message += '这笔编辑是在24小时前做出的，现在警告可能已过时。';
 					$('#twinkle-warn-warning-messages').text(`注意：${message}`);
 				}
@@ -1222,17 +1222,16 @@
 							// Catch and warn if the talkpage can't load,
 							// most likely because it's a cross-namespace redirect
 							// Supersedes the typical $autolevelMessage added in autolevelParseWikitext
-							const $noTalkPageNode = $('<strong>', {
-								text: '无法加载用户讨论页，这可能是因为它是跨命名空间重定向，自动选择警告级别将不会运作。',
-								id: 'twinkle-warn-autolevel-message',
-								css: {
-									color: 'red',
-								},
-							});
+							const $noTalkPageNode = $('<strong>')
+								.attr('id', 'twinkle-warn-autolevel-message')
+								.css('color', 'red')
+								.text(
+									'无法加载用户讨论页，这可能是因为它是跨命名空间重定向，自动选择警告级别将不会运作。'
+								);
 							$noTalkPageNode.insertBefore($('#twinkle-warn-warning-messages'));
 							// If a preview was opened while in a different mode, close it
 							// Should nullify the need to catch the error in preview callback
-							e.target.root.previewer.closePreview();
+							e.target.root.previxewer.closePreview();
 						}
 					);
 				}
@@ -1313,9 +1312,12 @@
 		$('#tw-warn-red-notice').remove();
 		let $redWarning;
 		if (value === 'uw-username') {
-			$redWarning = $(
-				"<div style='color: red;' id='tw-warn-red-notice'>{{uw-username}}<b>不应</b>被用于<b>明显</b>违反用户名方针的用户。明显的违反方针应被报告给UAA。{{uw-username}}应只被用在边界情况下需要与用户讨论时。</div>"
-			);
+			$redWarning = $('<div>')
+				.attr('id', 'tw-warn-red-notice')
+				.css('color', 'red')
+				.text(
+					'{{uw-username}}<b>不应</b>被用于<b>明显</b>违反用户名方针的用户。明显的违反方针应被报告给UAA。{{uw-username}}应只被用在边界情况下需要与用户讨论时。'
+				);
 			$redWarning.insertAfter(Morebits.quickForm.getElementLabelObject(e.target.form.reasonGroup));
 		}
 	};
@@ -1388,7 +1390,7 @@
 		 * about excessively recent, stale, or identical warnings.
 		 *
 		 * @param {string} wikitext  The text of a user's talk page, from getPageText()
-		 * @returns {Object[]} - Array of objects: latest contains most recent
+		 * @return {Object[]} - Array of objects: latest contains most recent
 		 * warning and date; history lists all prior warnings
 		 */
 		dateProcessing: (wikitext) => {
@@ -1431,7 +1433,7 @@
 		 * @param {(Date|Morebits.date)} date  Date from which staleness is determined
 		 * @param {Morebits.status} statelem  Status element, only used for handling error in final execution
 		 *
-		 * @returns {Array} - Array that contains the full template and just the warning level
+		 * @return {Array} - Array that contains the full template and just the warning level
 		 */
 		autolevelParseWikitext: (_wikitext, params, latest, date, statelem) => {
 			let level; // undefined rather than '' means the Number.isNaN below will return true
@@ -1447,9 +1449,7 @@
 				// cases the hidden message is terminal, not the sig
 				level = Twinkle.warn.messages.singlewarn[loweredType] ? 3 : 1; // singlenotice or not found
 			}
-			const $autolevelMessage = $('<div>', {
-				id: 'twinkle-warn-autolevel-message',
-			});
+			const $autolevelMessage = $('<div>').attr('id', 'twinkle-warn-autolevel-message');
 			if (Number.isNaN(level)) {
 				// No prior warnings found, this is the first
 				level = 1;
@@ -1474,26 +1474,22 @@
 						// Basically indicates whether we're in the final Main evaluation or not,
 						// and thus whether we can continue or need to display the warning and link
 						if (!statelem) {
-							const $link = $('<a>', {
-								href: '#',
-								text: '单击此处打开告状工具',
-								css: {
-									fontWeight: 'bold',
-								},
-								click: () => {
+							const $link = $('<a>')
+								.attr('href', '#')
+								.text('单击此处打开告状工具')
+								.css('font-weight', 'bold')
+								.on('click', () => {
 									Morebits.wiki.actionCompleted.redirect = null;
 									Twinkle.warn.dialog.close();
 									Twinkle.arv.callback(relevantUserName);
 									$('input[name=page]').val(params.article); // Target page
 									$('input[value=final]').prop('checked', true); // Vandalism after final
-								},
-							});
-							const statusNode = $('<div>', {
-								text: `${relevantUserName}最后收到了一个层级4警告（${latest.type}），所以将其报告给管理人员会比较好；`,
-								css: {
-									color: 'red',
-								},
-							});
+								});
+							const statusNode = $('<div>')
+								.css('color', 'red')
+								.text(
+									`${relevantUserName}最后收到了一个层级4警告（${latest.type}），所以将其报告给管理人员会比较好；`
+								);
 							statusNode.append($link[0]);
 							$autolevelMessage.append(statusNode);
 						}

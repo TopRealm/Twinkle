@@ -82,6 +82,7 @@
 		 * to create three links in a div (optional)
 		 * @param {number|string} [rev=wgCurRevisionId] - Revision ID being reverted (optional)
 		 * @param {string} [page=wgPageName] - Page being reverted (optional)
+		 * @return {HTMLElement} revNode
 		 */
 		rollbackLinks: (vandal, inline, rev, page) => {
 			vandal || (vandal = null);

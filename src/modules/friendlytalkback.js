@@ -166,8 +166,8 @@
 					type: 'select',
 					name: 'noticeboard',
 					label: '通告板：',
-					event: (e) => {
-						if (e.target.value === 'afchd') {
+					event: (event) => {
+						if (event.target.value === 'afchd') {
 							Morebits.quickForm.overrideElementLabel(root.section, '标题或草稿名称（去除Draft前缀）：');
 							Morebits.quickForm.setElementTooltipVisibility(root.section, false);
 						} else {
@@ -176,11 +176,11 @@
 						}
 					},
 				});
-				$.each(Twinkle.talkback.noticeboards, (value, data) => {
+				$.each(Twinkle.talkback.noticeboards, (value_, data) => {
 					noticeboard.append({
 						type: 'option',
 						label: data.label,
-						value,
+						value: value_,
 						selected: !!data.defaultSelected,
 					});
 				});

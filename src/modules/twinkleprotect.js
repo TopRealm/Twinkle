@@ -117,6 +117,7 @@
 			inprop: 'protection|watched',
 			titles: mw.config.get('wgPageName'),
 		});
+		// eslint-disable-next-line no-useless-call
 		$.when.apply($, [protectDeferred]).done((protectData) => {
 			// $.when.apply is supposed to take an unknown number of promises
 			// via an array, which it does, but the type of data returned varies.
@@ -176,7 +177,7 @@
 							type: 'protect',
 						})}">保护日志</a>`
 					),
-					Twinkle.protect.hasStableLog ? $('<span> &bull; </span>') : null
+					Twinkle.protect.hasStableLog ? $('<span>').text(' &bull; ') : null
 				);
 			}
 			Morebits.status.init($('div[name="hasprotectlog"] span')[0]);
@@ -261,12 +262,12 @@
 						type: 'select',
 						name: 'editexpiry',
 						label: '终止时间：',
-						event: (e) => {
-							if (e.target.value === 'custom') {
-								Twinkle.protect.doCustomExpiry(e.target);
+						event: (event) => {
+							if (event.target.value === 'custom') {
+								Twinkle.protect.doCustomExpiry(event.target);
 							}
-							$('input[name=small]', $(e.target).closest('form'))[0].checked =
-								e.target.selectedIndex >= 4; // 1 month
+							$('input[name=small]', $(event.target).closest('form'))[0].checked =
+								event.target.selectedIndex >= 4; // 1 month
 						},
 						// default expiry selection (2 days) is conditionally set in Twinkle.protect.callback.changePreset
 						list: Twinkle.protect.protectionLengths,
@@ -298,9 +299,9 @@
 						type: 'select',
 						name: 'moveexpiry',
 						label: '终止时间：',
-						event: (e) => {
-							if (e.target.value === 'custom') {
-								Twinkle.protect.doCustomExpiry(e.target);
+						event: (event_) => {
+							if (event_.target.value === 'custom') {
+								Twinkle.protect.doCustomExpiry(event_.target);
 							}
 						},
 						// default expiry selection (2 days) is conditionally set in Twinkle.protect.callback.changePreset
@@ -323,9 +324,9 @@
 						type: 'select',
 						name: 'createexpiry',
 						label: '终止时间：',
-						event: (e) => {
-							if (e.target.value === 'custom') {
-								Twinkle.protect.doCustomExpiry(e.target);
+						event: (event__) => {
+							if (event__.target.value === 'custom') {
+								Twinkle.protect.doCustomExpiry(event__.target);
 							}
 						},
 						// default expiry selection (indefinite) is conditionally set in Twinkle.protect.callback.changePreset
@@ -1395,7 +1396,8 @@
 	Twinkle.protect.formatProtectionDescription = (protectionLevels) => {
 		const protectionNode = [];
 		if ($.isEmptyObject(protectionLevels)) {
-			protectionNode.push($('<b>无保护</b>')[0]);
+			const $nodeContent = $('<b>').text('无保护');
+			protectionNode.push($nodeContent[0]);
 		} else {
 			$.each(protectionLevels, (type, settings) => {
 				let label;

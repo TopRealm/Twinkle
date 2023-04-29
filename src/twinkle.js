@@ -347,6 +347,10 @@
 			heading = document.createElement('h3');
 		}
 		outerNav.setAttribute('aria-labelledby', `${id}-label`);
+		// The following classes are used here (outerNavClass):
+		// * mw-portlet vector-menu vector-menu-*
+		// * mw-portlet
+		// * column-one
 		// Vector getting vector-menu-empty FIXME TODO
 		outerNav.className = `${outerNavClass} emptyPortlet`;
 		outerNav.id = id;
@@ -387,6 +391,11 @@
 		outerNav.appendChild(heading);
 		if (innerDivClass) {
 			const innerDiv = document.createElement('div');
+			// The following classes are used here (innerDivClass):
+			// * vector-menu-content
+			// * mw-portlet-body
+			// * mw-portlet-twinkle
+			// * portlet
 			innerDiv.className = innerDivClass;
 			innerDiv.appendChild(ul);
 			outerNav.appendChild(innerDiv);
@@ -399,11 +408,11 @@
 	 * **************** Twinkle.addPortletLink() ****************
 	 * Builds a portlet menu if it doesn't exist yet, and add the portlet link.
 	 *
-	 * @param task {string|function} -- Either a URL for the portlet link or a function to execute.
-	 * @param text {string}
-	 * @param id {string}
-	 * @param tooltip {string}
-	 * @return link {object}
+	 * @param {string|Function} task  -- Either a URL for the portlet link or a function to execute.
+	 * @param {string} text
+	 * @param {string} id
+	 * @param {string} tooltip
+	 * @return {Object} link
 	 */
 	Twinkle.addPortletLink = (task, text, id, tooltip) => {
 		if (Twinkle.getPref('portletArea') !== null) {
@@ -553,7 +562,11 @@
 			});
 		}
 	};
-	/** Twinkle-specific utility functions shared by multiple modules */
+	/**
+	 * Twinkle-specific utility functions shared by multiple modules
+	 *
+	 * @return {boolean}
+	 */
 	// Used in batch, unlink, and deprod to sort pages by namespace, as
 	// json formatversion=2 sorts by pageid instead
 	Twinkle.sortByNamespace = (first, second) => first.ns - second.ns || (first.title > second.title ? 1 : -1);

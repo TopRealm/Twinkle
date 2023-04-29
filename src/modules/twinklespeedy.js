@@ -904,9 +904,9 @@
 						code += `|${norm.toUpperCase()}`;
 					}
 					parameters = params.templateParams[index] || [];
-					for (const i in parameters) {
-						if (typeof parameters[i] === 'string') {
-							code += `|${parameters[i]}`;
+					for (const parameter in parameters) {
+						if (typeof parameters[parameter] === 'string') {
+							code += `|${parameters[parameter]}`;
 						}
 					}
 					$.extend(params.utparams, Twinkle.speedy.getUserTalkParameters(norm, parameters));
@@ -967,11 +967,11 @@
 					Twinkle.speedy.callbacks.sysop.deletePage(reason, params);
 				} else {
 					const code = Twinkle.speedy.callbacks.getTemplateCodeAndParams(params)[0];
-					Twinkle.speedy.callbacks.parseWikitext(mw.config.get('wgPageName'), code, (reason) => {
+					Twinkle.speedy.callbacks.parseWikitext(mw.config.get('wgPageName'), code, (reason_) => {
 						if (params.promptForSummary) {
-							reason = prompt('输入删除理由，或单击确定以接受自动生成的：', reason);
+							reason_ = prompt('输入删除理由，或单击确定以接受自动生成的：', reason_);
 						}
-						Twinkle.speedy.callbacks.sysop.deletePage(reason, params);
+						Twinkle.speedy.callbacks.sysop.deletePage(reason_, params);
 					});
 				}
 			},
@@ -1051,75 +1051,66 @@
 				let $link;
 				let $bigtext;
 				if (params.normalized === 'g7') {
-					$link = $('<a>', {
-						href: '#',
-						text: '单击这里施行保护',
-						css: {
-							fontSize: '130%',
-							fontWeight: 'bold',
-						},
-						click: () => {
+					$link = $('<a>')
+						.attr('href', '#')
+						.text('单击这里施行保护')
+						.css({
+							'font-size': '130%',
+							'font-weight': 'bold',
+						})
+						.on('click', () => {
 							Morebits.wiki.actionCompleted.redirect = null;
 							Twinkle.speedy.dialog.close();
 							mw.config.set('wgArticleId', 0);
 							Twinkle.protect.callback();
-						},
-					});
-					$bigtext = $('<span>', {
-						text: '白纸保护该页',
-						css: {
-							fontSize: '130%',
-							fontWeight: 'bold',
-						},
-					});
+						});
+					$bigtext = $('<span>')
+						.css({
+							'font-size': '130%',
+							'font-weight': 'bold',
+						})
+						.text('白纸保护该页');
 					Morebits.status.info($bigtext[0], $link[0]);
 				}
 				// promote Unlink tool
 				if (mw.config.get('wgNamespaceNumber') === 6 && params.normalized !== 'f7') {
-					$link = $('<a>', {
-						href: '#',
-						text: '单击这里前往取消链入工具',
-						css: {
-							fontWeight: 'bold',
-						},
-						click: () => {
+					$link = $('<a>')
+						.attr('href', '#')
+						.text('单击这里前往取消链入工具')
+						.css({
+							'font-weight': 'bold',
+						})
+						.on('click', () => {
 							Morebits.wiki.actionCompleted.redirect = null;
 							Twinkle.speedy.dialog.close();
 							Twinkle.unlink.callback(`取消对已删除文件 ${Morebits.pageNameNorm} 的使用`);
-						},
-					});
-					$bigtext = $('<span>', {
-						text: '取消对已删除文件的使用',
-						css: {
-							fontWeight: 'bold',
-						},
-					});
+						});
+					$bigtext = $('<span>')
+						.css({
+							'font-weight': 'bold',
+						})
+						.text('取消对已删除文件的使用');
 					Morebits.status.info($bigtext[0], $link[0]);
 				} else if (params.normalized !== 'f7') {
-					$link = $('<a>', {
-						href: '#',
-						text: '单击这里前往取消链入工具',
-						css: {
-							fontWeight: 'bold',
-						},
-						click: () => {
+					$link = $('<a>')
+						.attr('href', '#')
+						.text('单击这里前往取消链入工具')
+						.css({
+							'font-weight': 'bold',
+						})
+						.on('click', () => {
 							Morebits.wiki.actionCompleted.redirect = null;
 							Twinkle.speedy.dialog.close();
 							Twinkle.unlink.callback(`取消对已删除页面 ${Morebits.pageNameNorm} 的链接`);
-						},
-					});
-					$bigtext = $('<span>', {
-						text: '取消对已删除页面的链接',
-						css: {
-							fontWeight: 'bold',
-						},
+						});
+					$bigtext = $('<span>').text('取消对已删除页面的链接').css({
+						'font-weight': 'bold',
 					});
 					Morebits.status.info($bigtext[0], $link[0]);
 				}
-				$link = $('<a>', {
-					href: mw.util.getUrl('Special:RandomInCategory/快速删除候选'),
-					text: '单击前往下一个快速删除候选',
-				});
+				$link = $('<a>')
+					.attr('href', mw.util.getUrl('Special:RandomInCategory/快速删除候选'))
+					.text('单击前往下一个快速删除候选');
 				Morebits.status.info('工具', $link[0]);
 			},
 			openUserTalkPage: (pageobj) => {
@@ -1137,22 +1128,22 @@
 					Twinkle.getPref('promptForSpeedyDeletionSummary').includes(params.normalized)
 				) {
 					// provide a link to the user talk page
-					const $link = $('<a>', {
-						href: `${mw.util.wikiScript('index')}?${$.param(query)}`,
-						text: `点此打开User talk:${user}`,
-						target: '_blank',
-						css: {
-							fontSize: '130%',
-							fontWeight: 'bold',
-						},
-					});
-					const $bigtext = $('<span>', {
-						text: '通知页面创建者',
-						css: {
-							fontSize: '130%',
-							fontWeight: 'bold',
-						},
-					});
+					const $link = $('<a>')
+						.attr({
+							href: `${mw.util.wikiScript('index')}?${$.param(query)}`,
+							target: '_blank',
+						})
+						.css({
+							'font-size': '130%',
+							'font-weight': 'bold',
+						})
+						.text(`点此打开User talk:${user}`);
+					const $bigtext = $('<span>')
+						.css({
+							'font-size': '130%',
+							'font-weight': 'bold',
+						})
+						.text('通知页面创建者');
 					Morebits.status.info($bigtext[0], $link[0]);
 				} else {
 					// open the initial contributor's talk page
@@ -1301,8 +1292,8 @@
 				const params = pageobj.getCallbackParameters();
 				// Notification to first contributor
 				if (params.usertalk) {
-					const callback = (pageobj) => {
-						let initialContrib = pageobj.getCreator();
+					const callback = (pageobj_) => {
+						let initialContrib = pageobj_.getCreator();
 						// disallow warning yourself
 						if (initialContrib === mw.config.get('wgUserName')) {
 							Morebits.status.warn(`您（${initialContrib}）创建了该页，跳过通知`);
@@ -1496,7 +1487,7 @@
 	};
 	/**
 	 * @param {Event} e
-	 * @returns {Array}
+	 * @return {Array}
 	 */
 	Twinkle.speedy.resolveCsdValues = (e) => {
 		const values = (e.target.form || e.target).getChecked('csd');

@@ -1,4 +1,3 @@
-/* eslint-disable no-use-before-define */
 /* Twinkle.js - friendlytag.js */
 (($) => {
 	/**

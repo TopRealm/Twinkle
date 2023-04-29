@@ -126,14 +126,14 @@
 					label: '相关页面',
 					tooltip: '如不希望让报告链接到页面，请留空',
 					value: mw.util.getParamValue('vanarticle') || '',
-					event: (e) => {
-						const value = e.target.value;
-						const root = e.target.form;
-						if (value === '') {
-							root.badid.disabled = root.goodid.disabled = true;
+					event: (event) => {
+						const value_ = event.target.value;
+						const root_ = event.target.form;
+						if (value_ === '') {
+							root_.badid.disabled = root_.goodid.disabled = true;
 						} else {
-							root.badid.disabled = false;
-							root.goodid.disabled = root.badid.value === '';
+							root_.badid.disabled = false;
+							root_.goodid.disabled = root_.badid.value === '';
 						}
 					},
 				});
@@ -144,10 +144,10 @@
 					tooltip: '留空以略过差异',
 					value: mw.util.getParamValue('vanarticlerevid') || '',
 					disabled: !mw.util.getParamValue('vanarticle'),
-					event: (e) => {
-						const value = e.target.value;
-						const root = e.target.form;
-						root.goodid.disabled = value === '';
+					event: (event_) => {
+						const value_ = event_.target.value;
+						const root_ = event_.target.form;
+						root_.goodid.disabled = value_ === '';
 					},
 				});
 				work_area.append({
@@ -511,10 +511,10 @@
 				}
 				const resolves = $.map($('input:checkbox[name=s_resolves]:checked', form), (o) => $(o).data('revinfo'));
 				const free_resolves = $('input[name=s_resolves_free]').val();
-				const an3_next = (free_resolves) => {
+				const an3_next = (freeResolves) => {
 					if (
 						resolves.length === 0 &&
-						!free_resolves &&
+						!freeResolves &&
 						!confirm(
 							'You have not selected any edits where you tried to resolve the issue. Do you wish to make the report anyway?'
 						)
@@ -528,7 +528,7 @@
 						diffs,
 						warnings,
 						resolves,
-						free_resolves,
+						free_resolves: freeResolves,
 					};
 					Morebits.simpleWindow.setButtonsEnabled(false);
 					Morebits.status.init(form);

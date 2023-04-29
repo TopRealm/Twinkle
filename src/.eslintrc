@@ -1,0 +1,11 @@
+{
+	"rules": {
+		"jsdoc": "off",
+		"new-cap": "off",
+		"no-jquery/no-each-util": "off",
+		"no-jquery/no-map-util": "off",
+		"no-jquery/no-sizzle": "off",
+		"no-useless-concat": "off",
+		"no-use-before-define": "off"
+	}
+}
