@@ -9,7 +9,14 @@
 			}
 		]
 	],
-	"plugins": ["array-includes"],
+	"plugins": [
+		"array-includes"
+	],
 	"targets": "chrome > 31 and Edge > 12 and Firefox > 39 and Safari > 9 and ie 11",
-	"ignore": ["scripts/", "dist/", "src/lib/", "*.json"]
+	"ignore": [
+		"scripts/",
+		"dist/",
+		"src/lib/",
+		"*.json"
+	]
 }

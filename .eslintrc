@@ -55,13 +55,9 @@
 		"security/detect-unsafe-regex": "off",
 		"camelcase": "off",
 		"dot-notation": "off",
-		"new-cap": "off",
 		"no-alert": "off",
 		"no-console": "off",
-		"no-jquery/no-each-util": "off",
-		"no-jquery/no-sizzle": "off",
 		"no-new": "off",
-		"no-script-url": "off",
 		"no-underscore-dangle": "off",
 		"no-unused-expressions": "off",
 		"quotes": [
