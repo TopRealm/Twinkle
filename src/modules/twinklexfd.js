@@ -509,7 +509,7 @@
 				pageobj.save();
 			},
 			todaysList: (pageobj) => {
-				// var text = pageobj.getPageText();
+				// let text = pageobj.getPageText();
 				const params = pageobj.getCallbackParameters();
 				pageobj.setAppendText(
 					`${`\n{{subst:IfdItem|Filename=${mw.config.get('wgTitle')}|Uploader=${

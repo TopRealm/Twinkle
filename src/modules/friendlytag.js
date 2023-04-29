@@ -1569,8 +1569,8 @@
 			}
 		},
 		notabilityList: (pageobj) => {
-			// var text = pageobj.getPageText();
-			// var params = pageobj.getCallbackParameters();
+			// let text = pageobj.getPageText();
+			// let params = pageobj.getCallbackParameters();
 			pageobj.setAppendText(`\n{{subst:Fameitem|title=${Morebits.pageNameNorm}}}`);
 			pageobj.setEditSummary(`加入${`[[${Morebits.pageNameNorm}]]`}`);
 			pageobj.setChangeTags(Twinkle.changeTags);

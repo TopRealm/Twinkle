@@ -1616,7 +1616,7 @@
 	 * @memberof Morebits
 	 * @class
 	 * @param {string} string - The initial text to process.
-	 * @example var u = new Morebits.unbinder('Hello world <!-- world --> world');
+	 * @example let u = new Morebits.unbinder('Hello world <!-- world --> world');
 	 * u.unbind('<!--', '-->'); // text inside comment remains intact
 	 * u.content = u.content.replace(/world/g, 'earth');
 	 * u.rebind(); // gives 'Hello earth <!-- world --> earth'

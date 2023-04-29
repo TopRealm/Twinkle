@@ -1566,7 +1566,7 @@
 		if (!templateParams) {
 			return;
 		}
-		// var multiple = form.multiple.checked;
+		// let multiple = form.multiple.checked;
 		const normalizeds = [];
 		$.each(values, (_index, value) => {
 			const norm = Twinkle.speedy.normalizeHash[value];
