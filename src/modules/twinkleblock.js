@@ -598,7 +598,7 @@
 					],
 				});
 			}
-			const $previewlink = $('<a id="twinkleblock-preivew-link">预览</a>');
+			const $previewlink = $('<a>').attr('id', 'twinkleblock-preivew-link').text('预览');
 			$previewlink.off('click').on('click', () => {
 				Twinkle.block.callback.preview($form[0]);
 			});
@@ -1031,7 +1031,7 @@
 				if (blockGroup.custom) {
 					blockGroup.list = Twinkle.getPref('customBlockReasonList');
 				}
-				$.each(blockGroup.list, (_, blockPreset) => {
+				$.each(blockGroup.list, (__, blockPreset) => {
 					const value = blockPreset.value;
 					const reason = blockPreset.label;
 					const newPreset = `${value}:${reason}`;
