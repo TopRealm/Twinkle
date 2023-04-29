@@ -1,31 +1,18 @@
 {
 	"root": true,
-	"plugins": ["es6", "compat", "unicorn", "@typescript-eslint"],
+	"plugins": ["@typescript-eslint"],
 	"extends": [
-		"eslint:recommended",
-		"plugin:compat/recommended",
-		"plugin:unicorn/recommended",
+		"wikimedia/client-common",
+		"wikimedia/language/es2022",
+		"wikimedia/mediawiki",
+		"wikimedia/jquery",
 		"plugin:@typescript-eslint/recommended",
 		"prettier"
 	],
-	"env": {
-		"browser": true,
-		"jquery": true,
-		"es6": true,
-		"es2016": true,
-		"es2017": true,
-		"es2018": true,
-		"es2019": true,
-		"es2020": true,
-		"es2021": true,
-		"es2022": true
-	},
 	"parserOptions": {
-		"ecmaVersion": "latest",
 		"parser": "@typescript-eslint/parser"
 	},
 	"ignorePatterns": ["scripts/", "src/lib/", "dist/", "*.json"],
-	"reportUnusedDisableDirectives": true,
 	"globals": {
 		"$": "readonly",
 		"jQuery": "readonly",
@@ -68,9 +55,13 @@
 		"security/detect-unsafe-regex": "off",
 		"camelcase": "off",
 		"dot-notation": "off",
+		"new-cap": "off",
 		"no-alert": "off",
 		"no-console": "off",
+		"no-jquery/no-each-util": "off",
+		"no-jquery/no-sizzle": "off",
 		"no-new": "off",
+		"no-script-url": "off",
 		"no-underscore-dangle": "off",
 		"no-unused-expressions": "off",
 		"quotes": [
