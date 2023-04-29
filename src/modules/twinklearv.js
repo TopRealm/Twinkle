@@ -809,4 +809,4 @@
 			});
 	};
 	Twinkle.addInitCallback(Twinkle.arv, 'arv');
-})(jQuery);
+})($);

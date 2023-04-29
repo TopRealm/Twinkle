@@ -93,4 +93,4 @@
 		},
 	};
 	Twinkle.addInitCallback(Twinkle.diff, 'diff');
-})(jQuery);
+})($);

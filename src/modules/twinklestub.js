@@ -350,4 +350,4 @@
         }
     };
     Twinkle.addInitCallback(Twinkle.stub, 'stub');
-})(jQuery);
+})($);

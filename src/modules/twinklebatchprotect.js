@@ -338,4 +338,4 @@
 		},
 	};
 	Twinkle.addInitCallback(Twinkle.batchprotect, 'batchprotect');
-})(jQuery);
+})($);

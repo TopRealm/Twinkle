@@ -766,4 +766,4 @@
 		},
 	};
 	Twinkle.addInitCallback(Twinkle.batchdelete, 'batchdelete');
-})(jQuery);
+})($);

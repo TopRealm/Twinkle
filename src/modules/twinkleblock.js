@@ -2007,4 +2007,4 @@
 		flowobj.newTopic();
 	};
 	Twinkle.addInitCallback(Twinkle.block, 'block');
-})(jQuery);
+})($);

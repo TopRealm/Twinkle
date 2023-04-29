@@ -1794,4 +1794,4 @@
 		qiuwen_page.load(Twinkle.warn.callbacks.main);
 	};
 	Twinkle.addInitCallback(Twinkle.warn, 'warn');
-})(jQuery);
+})($);

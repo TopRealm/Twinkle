@@ -1621,4 +1621,4 @@
 		qiuwen_page.load(Twinkle.speedy.callbacks.user.main);
 	};
 	Twinkle.addInitCallback(Twinkle.speedy, 'speedy');
-})(jQuery);
+})($);

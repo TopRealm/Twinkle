@@ -1840,4 +1840,4 @@
 		qiuwen_page.load(Twinkle.tag.callbacks[Twinkle.tag.mode]);
 	};
 	Twinkle.addInitCallback(Twinkle.tag, 'tag');
-})(jQuery);
+})($);

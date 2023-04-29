@@ -369,4 +369,4 @@
 		},
 	};
 	Twinkle.addInitCallback(Twinkle.talkback, 'talkback');
-})(jQuery);
+})($);

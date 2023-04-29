@@ -202,4 +202,4 @@
 		},
 	};
 	Twinkle.addInitCallback(Twinkle.batchundelete, 'batchundelete');
-})(jQuery);
+})($);

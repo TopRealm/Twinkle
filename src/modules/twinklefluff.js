@@ -838,4 +838,4 @@
 		return result;
 	};
 	Twinkle.addInitCallback(Twinkle.fluff, 'fluff');
-})(jQuery);
+})($);

@@ -1717,4 +1717,4 @@
 		Morebits.status.root.appendChild(noticeclear);
 	};
 	Twinkle.addInitCallback(Twinkle.config.init);
-})(jQuery);
+})($);
