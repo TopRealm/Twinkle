@@ -15,7 +15,7 @@
  * Visit [[H:TW]] for more information.
  */
 /* global Morebits */
-((window, document, $) => {
+(function Twinkle(window, document, $) {
 	// Wrap with anonymous function
 	// Check if account is experienced enough to use Twinkle
 	if (!Morebits.userIsInGroup('autoconfirmed') && !Morebits.userIsInGroup('confirmed')) {

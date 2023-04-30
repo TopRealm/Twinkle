@@ -32,7 +32,7 @@
  *
  * @namespace Morebits
  */
-((window, document, $) => {
+(function Morebits(window, document, $) {
 	// Wrap entire file with anonymous function
 	/** @lends Morebits */
 	const Morebits = {};
