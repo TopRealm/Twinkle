@@ -71,7 +71,7 @@
                 });
                 break;
             default:
-                alert(`Twinkle.stub：未知模式 ${Twinkle.stub.mode}`);
+                mw.notify( `Twinkle.stub：未知模式 ${Twinkle.stub.mode}`, { type: 'warn' } );
                 break;
         }
         form.append({
@@ -317,11 +317,11 @@
                 params.group = false;
                 break;
             default:
-                alert(`Twinkle.stub：未知模式 ${Twinkle.stub.mode}`);
+                mw.notify( `Twinkle.stub：未知模式 ${Twinkle.stub.mode}`, { type: 'warn' } );
                 break;
         }
         if (params.tags.length === 0) {
-            alert('必须选择至少一个标记！');
+            mw.notify( '必须选择至少一个标记！', { type: 'warn' } );
             return;
         }
         Morebits.simpleWindow.setButtonsEnabled(false);
@@ -345,7 +345,7 @@
                 qiuwen_page.load(Twinkle.stub.callbacks.file);
                 break;
             default:
-                alert(`Twinkle.stub：未知模式 ${Twinkle.stub.mode}`);
+                mw.notify( `Twinkle.stub：未知模式 ${Twinkle.stub.mode}`, { type: 'warn' } );
                 break;
         }
     };

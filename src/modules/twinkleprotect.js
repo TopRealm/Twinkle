@@ -431,7 +431,7 @@
 				});
 				break;
 			default:
-				alert('这玩意儿被逆袭的天邪鬼吃掉了！');
+				mw.notify('这玩意儿被海豚吃掉了！', {type: 'warn'});
 				break;
 		}
 		let oldfield;
@@ -981,7 +981,7 @@
 							if (input.movelevel) {
 								thispage.setMoveProtection(input.movelevel, input.moveexpiry);
 							} else {
-								alert('您需要选择保护层级！');
+								mw.notify('您需要选择保护层级！', {type: 'warn'});
 								return;
 							}
 						}
@@ -994,7 +994,7 @@
 						thispage.setEditSummary(input.protectReason);
 						thispage.setChangeTags(Twinkle.changeTags);
 					} else {
-						alert('您必须输入保护理由，这将被记录在保护日志中。');
+						mw.notify('您必须输入保护理由，这将被记录在保护日志中。', {type: 'warn'});
 						return;
 					}
 					if (!statusInited) {
@@ -1008,7 +1008,9 @@
 				if (input.editmodify || input.movemodify || !mw.config.get('wgArticleId')) {
 					protectIt(allDone);
 				} else {
-					alert('请告诉Twinkle要做什么！\n若您只是想标记该页，请选择上面的“用保护模板标记此页”选项。');
+					mw.notify('请告诉Twinkle要做什么！\n若您只是想标记该页，请选择上面的“用保护模板标记此页”选项。', {
+						type: 'warn',
+					});
 				}
 				break;
 			}
@@ -1072,7 +1074,7 @@
 						// otherwise falls through
 					}
 					default:
-						alert('未知保护类型！');
+						mw.notify('未知保护类型！', {type: 'warn'});
 						break;
 				}
 				switch (input.category) {
@@ -1138,7 +1140,7 @@
 				break;
 			}
 			default:
-				alert('twinkleprotect: 未知操作类型');
+				mw.notify('twinkleprotect: 未知操作类型', {type: 'warn'});
 				break;
 		}
 	};

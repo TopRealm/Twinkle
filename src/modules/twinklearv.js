@@ -22,7 +22,7 @@
 	};
 	Twinkle.arv.callback = (uid) => {
 		if (uid === mw.config.get('wgUserName')) {
-			alert('不可以告自己的状哦！');
+			mw.notify('不可以告自己的状哦！', {type: 'warn'});
 			return;
 		}
 		const Window = new Morebits.simpleWindow(600, 500);
@@ -328,7 +328,7 @@
 			default: {
 				types = form.getChecked('arvtype');
 				if (types.length === 0 && comment === '') {
-					alert('必须指定一个理由！');
+					mw.notify('必须指定一个理由！', {type: 'warn'});
 					return;
 				}
 				types = types
@@ -474,10 +474,10 @@
 				};
 				const puppetReport = form.category.value === 'puppet';
 				if (puppetReport && !form.sockmaster.value.trim()) {
-					alert('未指定主账户！');
+					mw.notify('未指定主账户！', {type: 'warn'});
 					return;
 				} else if (!puppetReport && !form.sockpuppet[0].value.trim()) {
-					alert('未指定傀儡账户！');
+					mw.notify('未指定傀儡账户！', {type: 'warn'});
 					return;
 				}
 				sockParameters.uid = puppetReport ? form.sockmaster.value.trim() : uid;

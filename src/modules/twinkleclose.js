@@ -415,7 +415,7 @@
                     break;
                 }
                 default:
-                    alert(`关闭存废讨论：未定义 ${code}`);
+                    mw.notify( `关闭存废讨论：未定义 ${code}`, { type: 'warn' } );
             }
         }
     };

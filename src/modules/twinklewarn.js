@@ -1238,7 +1238,7 @@
 				break;
 			}
 			default:
-				alert('twinklewarn：未知的警告组');
+				mw.notify('twinklewarn：未知的警告组', {type: 'warn'});
 				break;
 		}
 		// Trigger subcategory change, add select menu, etc.
@@ -1459,7 +1459,7 @@
 				if (statelem) {
 					statelem.error(message);
 				} else {
-					alert(message);
+					mw.notify(message, {type: 'warn'});
 				}
 				return;
 			} else {
@@ -1748,12 +1748,12 @@
 		const params = Morebits.quickForm.getInputData(e.target);
 		// Check that a reason was filled in if uw-username was selected
 		if (params.sub_group === 'uw-username' && !params.article) {
-			alert('必须给{{uw-username}}提供理由。');
+			mw.notify('必须给{{uw-username}}提供理由。', {type: 'warn'});
 			return;
 		}
 		if (params.article) {
 			if (/https?:\/\//.test(params.article)) {
-				alert('“页面链接”不能使用网址。');
+				mw.notify('“页面链接”不能使用网址。', {type: 'warn'});
 				return;
 			}
 			try {
@@ -1763,7 +1763,9 @@
 					params.article += `#${article.getFragment()}`;
 				}
 			} catch {
-				alert('“页面链接”不合法，仅能输入一个页面名称，勿使用网址、[[ ]]，可使用Special:Diff。');
+				mw.notify('“页面链接”不合法，仅能输入一个页面名称，勿使用网址、[[ ]]，可使用Special:Diff。', {
+					type: 'warn',
+				});
 				return;
 			}
 		}
@@ -1777,7 +1779,7 @@
 		const $selectedEl = $(e.target.sub_group).find(`option[value="${$(e.target.sub_group).val()}"]`);
 		params.messageData = $selectedEl.data('messageData');
 		if (params.messageData === undefined) {
-			alert('请选择警告模板。');
+			mw.notify('请选择警告模板。', {type: 'warn'});
 			return;
 		}
 		Morebits.simpleWindow.setButtonsEnabled(false);

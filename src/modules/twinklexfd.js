@@ -621,7 +621,7 @@
 			mergeinto = e.target.mergeinto.value;
 		}
 		if (xfdcat === 'merge' && mergeinto.trim() === '') {
-			alert('请提供合并目标！');
+			mw.notify('请提供合并目标！', {type: 'warn'});
 			return;
 		}
 		Morebits.simpleWindow.setButtonsEnabled(false);
@@ -691,7 +691,7 @@
 				Morebits.wiki.removeCheckpoint();
 				break;
 			default:
-				alert('twinklexfd：未定义的类别');
+				mw.notify('twinklexfd：未定义的类别', {type: 'warn'});
 				break;
 		}
 	};

@@ -487,7 +487,7 @@
 		}
 		const input = Morebits.quickForm.getInputData(form);
 		if (!input.reason) {
-			alert('您需要给出一个理由');
+			mw.notify('您需要给出一个理由', {type: 'warn'});
 			return;
 		}
 		Morebits.simpleWindow.setButtonsEnabled(false);

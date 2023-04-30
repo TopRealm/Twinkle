@@ -229,7 +229,7 @@
 		if (e.target.value === 'unblock') {
 			if (!Twinkle.block.currentBlockInfo) {
 				unblock.prop('checked', false);
-				return alert('用户没有被封禁');
+				return mw.notify('用户没有被封禁', {type: 'warn'});
 			}
 			block.prop('checked', false);
 			blockBox = false;
@@ -1551,13 +1551,13 @@
 			if (count > 1) {
 				let message = `请在以下标签中择一使用：{{${conflicts.join('}}、{{')}}}。`;
 				message += extra || '';
-				alert(message);
+				mw.notify(message, {type: 'warn'});
 				return true;
 			}
 		};
 		if (toTag) {
 			if (params.tag.length === 0) {
-				return alert('请至少选择一个用户页标记！');
+				return mw.notify('请至少选择一个用户页标记！', {type: 'warn'});
 			}
 			if (
 				checkIncompatible(
@@ -1584,13 +1584,15 @@
 				return;
 			}
 			if (params.tag.includes('Blocked sockpuppet') && params.sppUsername.trim() === '') {
-				return alert('请提供傀儡账户的主账户用户名！');
+				return mw.notify('请提供傀儡账户的主账户用户名！', {type: 'warn'});
 			}
 		}
 		if (toBlock) {
 			if (blockoptions.partial) {
 				if (blockoptions.disabletalk && !blockoptions.namespacerestrictions.includes('3')) {
-					return alert('部分封禁无法阻止编辑自己的讨论页，除非也封禁了User talk命名空间！');
+					return mw.notify('部分封禁无法阻止编辑自己的讨论页，除非也封禁了User talk命名空间！', {
+						type: 'warn',
+					});
 				}
 				if (!blockoptions.namespacerestrictions && !blockoptions.pagerestrictions) {
 					if (!blockoptions.noemail && !blockoptions.nocreate) {
@@ -1604,12 +1606,12 @@
 				}
 			}
 			if (!blockoptions.expiry) {
-				return alert('请提供过期时间！');
+				return mw.notify('请提供过期时间！', {type: 'warn'});
 			} else if (Morebits.string.isInfinity(blockoptions.expiry) && !Twinkle.block.isRegistered) {
-				return alert('禁止无限期封禁IP地址！');
+				return mw.notify('禁止无限期封禁IP地址！', {type: 'warn'});
 			}
 			if (!blockoptions.reason) {
-				return alert('请提供封禁理由！');
+				return mw.notify('请提供封禁理由！', {type: 'warn'});
 			}
 			Morebits.simpleWindow.setButtonsEnabled(false);
 			Morebits.status.init(e.target);
@@ -1720,7 +1722,7 @@
 		}
 		if (toUnblock) {
 			if (!unblockoptions.reason) {
-				return alert('请提供解除封禁理由！');
+				return mw.notify('请提供解除封禁理由！', {type: 'warn'});
 			}
 			Morebits.simpleWindow.setButtonsEnabled(false);
 			Morebits.status.init(e.target);
@@ -1736,7 +1738,7 @@
 			unblockMbApi.post();
 		}
 		if (!toBlock && !toWarn && !toTag && !toProtect && !toUnblock) {
-			return alert('Twinkle没有要执行的任务！');
+			return mw.notify('Twinkle没有要执行的任务！', {type: 'warn'});
 		}
 	};
 	Twinkle.block.callback.taguserpage = (pageobj) => {
@@ -1770,7 +1772,7 @@
 						}
 						break;
 					default:
-						alert('未知的用户页模板！');
+						mw.notify('未知的用户页模板！', {type: 'warn'});
 						continue;
 				}
 				tagtext += '}}';

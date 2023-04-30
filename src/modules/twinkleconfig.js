@@ -1259,7 +1259,7 @@
 							break;
 						}
 						default:
-							alert(`twinkleconfig: 未知类型的属性 ${pref.name}`);
+							mw.notify(`twinkleconfig: 未知类型的属性 ${pref.name}`, {type: 'warn'});
 							break;
 					}
 					row.appendChild(cell);
@@ -1590,7 +1590,7 @@
 				$(document.querySelector(`#${pref.name}`)).data('value', Twinkle.defaultConfig[pref.name]);
 				break;
 			default:
-				alert(`twinkleconfig: unknown data type for preference ${pref.name}`);
+				mw.notify(`twinkleconfig: unknown data type for preference ${pref.name}`, {type: 'warn'});
 				break;
 		}
 	};
@@ -1680,7 +1680,7 @@
 								userValue = $(form[pref.name]).data('value');
 								break;
 							default:
-								alert(`twinkleconfig: 未知数据类型，属性 ${pref.name}`);
+								mw.notify(`twinkleconfig: 未知数据类型，属性 ${pref.name}`, {type: 'warn'});
 								break;
 						}
 					} else if (Twinkle.prefs) {

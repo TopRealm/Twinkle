@@ -125,7 +125,7 @@
 		const reason = event.target.reason.value;
 		const undel_talk = event.target.reason.value;
 		if (!reason) {
-			alert('您需要指定理由。');
+			mw.notify('您需要指定理由。', {type: 'warn'});
 			return;
 		}
 		Morebits.simpleWindow.setButtonsEnabled(false);

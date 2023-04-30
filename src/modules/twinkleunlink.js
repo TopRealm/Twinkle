@@ -96,14 +96,14 @@
 		const form = event.target;
 		const input = Morebits.quickForm.getInputData(form);
 		if (!input.reason) {
-			alert('您必须指定取消链入的理由。');
+			mw.notify('您必须指定取消链入的理由。', {type: 'warn'});
 			return;
 		}
 		input.backlinks || (input.backlinks = []);
 		input.imageusage || (input.imageusage = []);
 		const pages = Morebits.array.uniq([...input.backlinks, ...input.imageusage]);
 		if (pages.length === 0) {
-			alert('您必须至少选择一个要取消链入的页面。');
+			mw.notify('您必须至少选择一个要取消链入的页面。', {type: 'warn'});
 			return;
 		}
 		Morebits.simpleWindow.setButtonsEnabled(false);

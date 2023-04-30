@@ -1404,7 +1404,7 @@
 					if (form['csd.reason_1']) {
 						const dbrationale = form['csd.reason_1'].value;
 						if (!dbrationale || !dbrationale.trim()) {
-							alert('自定义理由：请指定理由。');
+							mw.notify('自定义理由：请指定理由。', {type: 'warn'});
 							parameters = null;
 							return false;
 						}
@@ -1415,7 +1415,7 @@
 					if (form['csd.a2_pagename']) {
 						const a2_otherpage = form['csd.a2_pagename'].value;
 						if (!a2_otherpage || !a2_otherpage.trim()) {
-							alert('CSD A2：请提供现有条目的名称。');
+							mw.notify('CSD A2：请提供现有条目的名称。', {type: 'warn'});
 							parameters = null;
 							return false;
 						}
@@ -1426,7 +1426,7 @@
 					if (form['csd.g4_pagename']) {
 						const g4_otherpage = form['csd.g4_pagename'].value;
 						if (!g4_otherpage || !g4_otherpage.trim()) {
-							alert('CSD G4：请提供已被删除页面的名称。');
+							mw.notify('CSD G4：请提供已被删除页面的名称。', {type: 'warn'});
 							parameters = null;
 							return false;
 						}
@@ -1437,7 +1437,7 @@
 					if (form['csd.f2_filename']) {
 						redimage = form['csd.f2_filename'].value;
 						if (!redimage || !redimage.trim()) {
-							alert('CSD F2：请提供另一文件的名称。');
+							mw.notify('CSD F2：请提供另一文件的名称。', {type: 'warn'});
 							parameters = null;
 							return false;
 						}
@@ -1451,7 +1451,7 @@
 					if (form['csd.r1_type']) {
 						const r1_redirtype = form['csd.r1_type'].value;
 						if (!r1_redirtype) {
-							alert('CSD R1：请选择适用类型。');
+							mw.notify('CSD R1：请选择适用类型。', {type: 'warn'});
 							parameters = null;
 							return false;
 						}
@@ -1462,7 +1462,7 @@
 					if (form['csd.r2_type']) {
 						const r2_redirtype = form['csd.r2_type'].value;
 						if (!r2_redirtype) {
-							alert('CSD R2：请选择适用类型。');
+							mw.notify('CSD R2：请选择适用类型。', {type: 'warn'});
 							parameters = null;
 							return false;
 						}
@@ -1492,7 +1492,7 @@
 	Twinkle.speedy.resolveCsdValues = (e) => {
 		const values = (e.target.form || e.target).getChecked('csd');
 		if (values.length === 0) {
-			alert('请选择一个理据。');
+			mw.notify('请选择一个理据。', {type: 'warn'});
 			return null;
 		}
 		return values;
