@@ -1,5 +1,5 @@
 /* Twinkle.js - twinklefluff.js */
-(($) => {
+$(function TwinkleFluff() {
 	/**
 	 * twinklefluff.js: Revert/rollback module
 	 * Mode of invocation: Links on contributions, recent changes, history, and diff pages
@@ -839,4 +839,4 @@
 		return result;
 	};
 	Twinkle.addInitCallback(Twinkle.fluff, 'fluff');
-})($);
+});

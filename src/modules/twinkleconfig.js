@@ -1,5 +1,5 @@
 /* Twinkle.js - twinkleconfig.js */
-(($) => {
+$(function TwinkleConfig() {
 	/**
 	 * twinkleconfig.js: Preferences module
 	 * Mode of invocation:  Adds configuration form to Help:Twinkle/参数设置,
@@ -1718,4 +1718,4 @@
 		Morebits.status.root.appendChild(noticeclear);
 	};
 	Twinkle.addInitCallback(Twinkle.config.init);
-})($);
+});

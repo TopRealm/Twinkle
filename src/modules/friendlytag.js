@@ -1,5 +1,5 @@
 /* Twinkle.js - friendlytag.js */
-(($) => {
+$(function FriendlyTag() {
 	/**
 	 * friendlytag.js: Tag module
 	 * Mode of invocation: Tab ("Tag")
@@ -1841,4 +1841,4 @@
 		qiuwen_page.load(Twinkle.tag.callbacks[Twinkle.tag.mode]);
 	};
 	Twinkle.addInitCallback(Twinkle.tag, 'tag');
-})($);
+});

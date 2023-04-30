@@ -1,5 +1,5 @@
 /* Twinkle.js - twinkleclose.js */
-(($) => {
+$(function TwinkleClose() {
     /**
      * twinkleclose.js: XFD closing module
      * Mode of invocation: Links after section heading
@@ -606,4 +606,4 @@
         }
     };
     Twinkle.addInitCallback(Twinkle.close, 'close');
-})($);
+});

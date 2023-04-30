@@ -1,5 +1,5 @@
 /* Twinkle.js - twinkleblock.js */
-(($) => {
+$(function TwinkleBlock() {
 	/**
 	 * twinkleblock.js: Block module
 	 * Mode of invocation: Tab ("Block")
@@ -2010,4 +2010,4 @@
 		flowobj.newTopic();
 	};
 	Twinkle.addInitCallback(Twinkle.block, 'block');
-})($);
+});

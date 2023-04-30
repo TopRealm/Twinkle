@@ -1,5 +1,5 @@
 /* Twinkle.js - twinklestub.js */
-(($) => {
+$(function TwinkleStub() {
     /**
      * twinklestub.js: Tag module
      * Mode of invocation: Tab ("Stub")
@@ -360,4 +360,4 @@
         }
     };
     Twinkle.addInitCallback(Twinkle.stub, 'stub');
-})($);
+});
