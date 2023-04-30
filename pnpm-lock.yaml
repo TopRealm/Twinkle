@@ -34,9 +34,6 @@ devDependencies:
   eslint-config-wikimedia:
     specifier: ^0.25.0
     version: 0.25.0
-  eslint-plugin-es6:
-    specifier: ^1.0.0
-    version: 1.0.0
   minimist:
     specifier: ^1.2.8
     version: 1.2.8
@@ -2136,13 +2133,6 @@ packages:
       regexpp: 3.2.0
     dev: true
 
-  /eslint-plugin-es6@1.0.0:
-    resolution: {integrity: sha512-/5yqpwrcImkxXYe0S4UtMlKM1ki3wI2aOPcpcwnafU0k7C1FVvJbOKubejIAfRHv+kc2qYwiQVubUFzFFwTyAQ==}
-    engines: {node: '>=0.10.0'}
-    dependencies:
-      requireindex: 1.1.0
-    dev: true
-
   /eslint-plugin-es@3.0.1(eslint@8.38.0):
     resolution: {integrity: sha512-GUmAsJaN4Fc7Gbtl8uOBlayo2DqhwWvEzykMHSCZHU3XdJ+NSzzZcVhXh3VxX5icqQ+oQdIEawXX8xkR3mIFmQ==}
     engines: {node: '>=8.10.0'}
@@ -3386,11 +3376,6 @@ packages:
   /require-from-string@2.0.2:
     resolution: {integrity: sha512-Xf0nWe6RseziFMu+Ap9biiUbmplq6S9/p+7w7YXP/JBHhrUDDUhwa+vANyubuqfZWTveU//DYVGsDG7RKL/vEw==}
     engines: {node: '>=0.10.0'}
-    dev: true
-
-  /requireindex@1.1.0:
-    resolution: {integrity: sha512-LBnkqsDE7BZKvqylbmn7lTIVdpx4K/QCduRATpO5R+wtPmky/a8pN1bO2D6wXppn1497AJF9mNjqAXr6bdl9jg==}
-    engines: {node: '>=0.10.5'}
     dev: true
 
   /requireindex@1.2.0:
