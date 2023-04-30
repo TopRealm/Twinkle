@@ -1269,12 +1269,12 @@
 					(apiobj) => {
 						$(apiobj.responseXML)
 							.find('page')
-							.each((_idx, page) => {
+							.each((_index, page) => {
 								let removed = false;
 								$(page)
 									.find('lh')
-									.each((_idx_, el) => {
-										const tag = $(el).attr('title').slice(9);
+									.each((_index, element) => {
+										const tag = $(element).attr('title').slice(9);
 										const tag_re = new RegExp(
 											`\\{\\{${Morebits.pageNameRegex(
 												tag
@@ -1535,12 +1535,12 @@
 					(apiobj) => {
 						$(apiobj.responseXML)
 							.find('page')
-							.each((_idx, page) => {
+							.each((_index, page) => {
 								let found = false;
 								$(page)
 									.find('lh')
-									.each((_idx__, el) => {
-										const tag = $(el).attr('title').slice(9);
+									.each((_index, element) => {
+										const tag = $(element).attr('title').slice(9);
 										const tag_re = new RegExp(
 											`(\\{\\{${Morebits.pageNameRegex(tag)}\\s*(\\|[^}]*)?\\}\\}\\n?)`
 										);
@@ -1664,7 +1664,7 @@
 			if (params.tags.length > 0) {
 				let tagtext = '';
 				let currentTag;
-				$.each(params.tags, (_k, tag) => {
+				$.each(params.tags, (_index, tag) => {
 					// when other Qiuwen Share-related tags are placed, remove "move to Share" tag
 					if (['Keep local', 'Now Share', 'Do not move to Share'].includes(tag)) {
 						text = text.replace(

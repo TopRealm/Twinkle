@@ -1423,16 +1423,16 @@
 		$(form)
 			.find('[name=field_block_options]')
 			.find(':checkbox')
-			.each((_i, el) => {
+			.each((_index, element) => {
 				// don't override original options if useInitialOptions is set
-				if (data.useInitialOptions && data[el.name] === undefined) {
+				if (data.useInitialOptions && data[element.name] === undefined) {
 					return;
 				}
-				if (el.name === 'closevip') {
+				if (element.name === 'closevip') {
 					return;
 				}
-				const check = data[el.name] === '' || !!data[el.name];
-				$(el).prop('checked', check);
+				const check = data[element.name] === '' || !!data[element.name];
+				$(element).prop('checked', check);
 			});
 		form.reason.value =
 			data.prependReason && data.reason ? `${data.reason}; ${form.reason.value}` : data.reason || '';

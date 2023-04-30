@@ -330,7 +330,7 @@
 		// Array.from not available in IE11 :(
 		$(parentNode)
 			.children()
-			.each((_ix, node) => {
+			.each((_index, node) => {
 				node.innerHTML = node.textContent; // Feels like cheating
 				$(node).css('font-weight', 'normal').css('color', 'darkgray');
 			});

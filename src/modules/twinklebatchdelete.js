@@ -354,7 +354,7 @@
 			const loadingText = '<strong id="dbatch-subpage-loading">加载中...</strong>';
 			$(e.target).after(loadingText);
 			const pages = $(form.pages)
-				.map((_i, el) => el.value)
+				.map((_index, element) => element.value)
 				.get();
 			const subpageLister = new Morebits.batchOperation();
 			subpageLister.setOption('chunkSize', Twinkle.getPref('batchChunks'));
@@ -457,13 +457,13 @@
 				}
 			);
 		} else if (!e.target.checked) {
-			$.each(Twinkle.batchdelete.pages, (_i, el) => {
-				if (el.subgroup) {
+			$.each(Twinkle.batchdelete.pages, (_index, element) => {
+				if (element.subgroup) {
 					// Remove subgroup after saving its contents in subgroup_
 					// so that it can be retrieved easily if user decides to
 					// delete the subpages again
-					el.subgroup_ = el.subgroup;
-					el.subgroup = null;
+					element.subgroup_ = element.subgroup;
+					element.subgroup = null;
 				}
 			});
 			newPageList = Twinkle.batchdelete.generateNewPageList(form);
