@@ -1,4 +1,3 @@
-/* eslint-disable quote-props */
 /* Twinkle.js - twinklestub.js */
 (($) => {
     /**
@@ -142,10 +141,11 @@
             let i = 0;
             // go through each category and sub-category and append lists of checkboxes
             $.each(Twinkle.stub.article.tagCategories, (title, content) => {
+				const titleName = Twinkle.stub.article.tagCategoriesHeader[title];
                 container.append({
                     type: 'header',
                     id: `tagHeader${i}`,
-                    label: title
+                    label: titleName
                 });
                 const subdiv = container.append({
                     type: 'div',
@@ -228,7 +228,7 @@
         'religion-stub': '宗教',
         'science-stub': '科学',
         'sport-stub': '体育',
-        'stub': '通用小作品',
+        stub: '通用小作品',
         'switzerland-stub': '瑞士',
         'tech-stub': '科技',
         'transp-stub': '交通',
@@ -242,15 +242,25 @@
     // A list of tags in order of category
     // Tags should be in alphabetical order within the categories
     // Add new categories with discretion - the list is long enough as is!
+	Twinkle.stub.article.tagCategoriesHeader = {
+		general: '通用模板',
+		geo: '国家和地理',
+		others: '杂项',
+		bio: '人物',
+		science: '科学',
+		sport: '体育',
+		tech: '技术',
+		art: '艺术'
+	}
     Twinkle.stub.article.tagCategories = {
-        '通用模板': ['stub', 'expand list'],
-        '国家和地理': ['asia-stub', 'europe-stub', 'france-geo-stub', 'geo-stub', 'JP-stub', 'switzerland-stub', 'UK-stub', 'US-bio-stub', 'US-geo-stub', 'US-stub'],
-        '杂项': ['food-stub', 'hist-stub', 'mil-stub', 'politic-stub', 'religion-stub', 'transp-stub'],
-        '人物': ['actor-stub', 'bio-stub', 'US-bio-stub'],
-        '科学': ['biology-stub', 'chem-stub', 'math-stub', 'med-stub', 'physics-stub', 'science-stub', 'weather-stub'],
-        '体育': ['sport-stub'],
-        '技术': ['tech-stub'],
-        '艺术': ['actor-stub', 'lit-stub', 'movie-stub', 'music-stub', 'TV-stub']
+        general: ['stub', 'expand list'],
+        geo: ['asia-stub', 'europe-stub', 'france-geo-stub', 'geo-stub', 'JP-stub', 'switzerland-stub', 'UK-stub', 'US-bio-stub', 'US-geo-stub', 'US-stub'],
+        others: ['food-stub', 'hist-stub', 'mil-stub', 'politic-stub', 'religion-stub', 'transp-stub'],
+        bio: ['actor-stub', 'bio-stub', 'US-bio-stub'],
+        science: ['biology-stub', 'chem-stub', 'math-stub', 'med-stub', 'physics-stub', 'science-stub', 'weather-stub'],
+        sport: ['sport-stub'],
+        tech: ['tech-stub'],
+        art: ['actor-stub', 'lit-stub', 'movie-stub', 'music-stub', 'TV-stub']
     };
     // Tags for REDIRECTS start here
     Twinkle.stub.callbacks = {
