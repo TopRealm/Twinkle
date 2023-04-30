@@ -167,7 +167,8 @@
 				if (Twinkle.block.isRegistered) {
 					relevantUserName = `User:${userName}`;
 					Twinkle.block.userIsBot =
-						!!userinfo.groupmemberships && userinfo.groupmemberships.map((element) => element.group).includes('bot');
+						!!userinfo.groupmemberships &&
+						userinfo.groupmemberships.map((element) => element.group).includes('bot');
 				} else {
 					relevantUserName = userName;
 					Twinkle.block.userIsBot = false;

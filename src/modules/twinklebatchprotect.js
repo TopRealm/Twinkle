@@ -96,8 +96,10 @@
 			type: 'checkbox',
 			event: (event) => {
 				event.target.form.createlevel.disabled = !event.target.checked;
-				event.target.form.createexpiry.disabled = !event.target.checked || event.target.form.createlevel.value === 'all';
-				event.target.form.createlevel.style.color = event.target.form.createexpiry.style.color = event.target.checked
+				event.target.form.createexpiry.disabled =
+					!event.target.checked || event.target.form.createlevel.value === 'all';
+				event.target.form.createlevel.style.color = event.target.form.createexpiry.style.color = event.target
+					.checked
 					? ''
 					: 'transparent';
 			},

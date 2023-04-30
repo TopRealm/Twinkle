@@ -471,7 +471,8 @@
 	Twinkle.protect.formevents = {
 		editmodify: (event) => {
 			event.target.form.editlevel.disabled = !event.target.checked;
-			event.target.form.editexpiry.disabled = !event.target.checked || event.target.form.editlevel.value === 'all';
+			event.target.form.editexpiry.disabled =
+				!event.target.checked || event.target.form.editlevel.value === 'all';
 			event.target.form.editlevel.style.color = event.target.form.editexpiry.style.color = event.target.checked
 				? ''
 				: 'transparent';
@@ -489,7 +490,8 @@
 				event.target.form.moveexpiry.value = 'infinity';
 			}
 			event.target.form.movelevel.disabled = !event.target.checked;
-			event.target.form.moveexpiry.disabled = !event.target.checked || event.target.form.movelevel.value === 'all';
+			event.target.form.moveexpiry.disabled =
+				!event.target.checked || event.target.form.movelevel.value === 'all';
 			event.target.form.movelevel.style.color = event.target.form.moveexpiry.style.color = event.target.checked
 				? ''
 				: 'transparent';

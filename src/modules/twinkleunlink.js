@@ -180,14 +180,20 @@
 							type: 'button',
 							label: '全选',
 							event: (event) => {
-								$(Morebits.quickForm.getElements(event.target.form, 'imageusage')).prop('checked', true);
+								$(Morebits.quickForm.getElements(event.target.form, 'imageusage')).prop(
+									'checked',
+									true
+								);
 							},
 						});
 						apiobj.params.form.append({
 							type: 'button',
 							label: '全不选',
 							event: (event) => {
-								$(Morebits.quickForm.getElements(event.target.form, 'imageusage')).prop('checked', false);
+								$(Morebits.quickForm.getElements(event.target.form, 'imageusage')).prop(
+									'checked',
+									false
+								);
 							},
 						});
 						apiobj.params.form.append({
