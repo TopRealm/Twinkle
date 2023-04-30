@@ -324,9 +324,9 @@ $(function TwinkleProtect() {
 						type: 'select',
 						name: 'createexpiry',
 						label: '终止时间：',
-						event: (event__) => {
-							if (event__.target.value === 'custom') {
-								Twinkle.protect.doCustomExpiry(event__.target);
+						event: (event_) => {
+							if (event_.target.value === 'custom') {
+								Twinkle.protect.doCustomExpiry(event_.target);
 							}
 						},
 						// default expiry selection (indefinite) is conditionally set in Twinkle.protect.callback.changePreset
