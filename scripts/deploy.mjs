@@ -225,7 +225,7 @@ class Deploy {
 	loadConfig() {
 		try {
 			return Credentials;
-		} catch (e) {
+		} catch {
 			log('red', 'No credentials.json file found.');
 			return {};
 		}
@@ -236,7 +236,7 @@ class Deploy {
 		try {
 			this.api.initOAuth();
 			this.usingOAuth = true;
-		} catch (e) {
+		} catch {
 			if (!config.username) {
 				config.username = await input('> Enter username');
 			}
@@ -310,7 +310,7 @@ const isGitWorkDirClean = () => {
 	try {
 		execSync('git diff-index --quiet HEAD --');
 		return true;
-	} catch (e) {
+	} catch {
 		return false;
 	}
 };
