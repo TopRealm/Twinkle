@@ -304,9 +304,9 @@
             // create the options
             createEntries(groupContents, optgroup);
         });
-        const evt = document.createEvent('Event');
-        evt.initEvent('change', true, true);
-        result.sub_group.dispatchEvent(evt);
+        const event = document.createEvent('Event');
+        event.initEvent('change', true, true);
+        result.sub_group.dispatchEvent(event);
     };
     Twinkle.close.callback.change_operation = (event) => {
         const noop = event.target.checked;

@@ -86,9 +86,9 @@
 		Window.setContent(result);
 		Window.display();
 		// We must init the controls
-		const evt = document.createEvent('Event');
-		evt.initEvent('change', true, true);
-		result.category.dispatchEvent(evt);
+		const event = document.createEvent('Event');
+		event.initEvent('change', true, true);
+		result.category.dispatchEvent(event);
 	};
 	Twinkle.xfd.callback.change_category = (event) => {
 		const value = event.target.value;
@@ -213,9 +213,9 @@
 				});
 				work_area = work_area.render();
 				old_area.parentNode.replaceChild(work_area, old_area);
-				const evt = document.createEvent('Event');
-				evt.initEvent('change', true, true);
-				form.xfdcat.dispatchEvent(evt);
+				const event = document.createEvent('Event');
+				event.initEvent('change', true, true);
+				form.xfdcat.dispatchEvent(event);
 				break;
 			}
 			case 'ffd':

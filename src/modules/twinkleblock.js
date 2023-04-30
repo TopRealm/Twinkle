@@ -137,9 +137,9 @@
 			// clean up preset data (defaults, etc.), done exactly once, must be before Twinkle.block.callback.change_action is called
 			Twinkle.block.transformBlockPresets();
 			// init the controls after user and block info have been fetched
-			const evt = document.createEvent('Event');
-			evt.initEvent('change', true, true);
-			result.actiontype[0].dispatchEvent(evt);
+			const event = document.createEvent('Event');
+			event.initEvent('change', true, true);
+			result.actiontype[0].dispatchEvent(event);
 		});
 	};
 	Twinkle.block.fetchUserInfo = (fn) => {

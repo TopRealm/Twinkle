@@ -105,9 +105,9 @@
 		Window.setContent(result);
 		Window.display();
 		// We must init the parameters
-		const evt = document.createEvent('Event');
-		evt.initEvent('change', true, true);
-		result.type[0].dispatchEvent(evt);
+		const event = document.createEvent('Event');
+		event.initEvent('change', true, true);
+		result.type[0].dispatchEvent(event);
 	};
 	Twinkle.image.callback.evaluate = (event) => {
 		let type;

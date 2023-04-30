@@ -102,9 +102,9 @@
 			}
 		}).post();
 		// We must init the
-		const evt = document.createEvent('Event');
-		evt.initEvent('change', true, true);
-		result.category.dispatchEvent(evt);
+		const event = document.createEvent('Event');
+		event.initEvent('change', true, true);
+		result.category.dispatchEvent(event);
 	};
 	Twinkle.arv.callback.changeCategory = (event) => {
 		const value = event.target.value;

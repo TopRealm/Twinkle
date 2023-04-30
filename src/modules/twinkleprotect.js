@@ -87,9 +87,9 @@
 		Window.setContent(result);
 		Window.display();
 		// We must init the controls
-		const evt = document.createEvent('Event');
-		evt.initEvent('change', true, true);
-		result.actiontype[0].dispatchEvent(evt);
+		const event = document.createEvent('Event');
+		event.initEvent('change', true, true);
+		result.actiontype[0].dispatchEvent(event);
 		// get current protection level asynchronously
 		Twinkle.protect.fetchProtectionLevel();
 	};
@@ -455,9 +455,9 @@
 		}
 		if (event.target.values === 'protect') {
 			// fake a change event on the preset dropdown
-			const evt = document.createEvent('Event');
-			evt.initEvent('change', true, true);
-			event.target.form.category.dispatchEvent(evt);
+			const event = document.createEvent('Event');
+			event.initEvent('change', true, true);
+			event.target.form.category.dispatchEvent(event);
 			// reduce vertical height of dialog
 			$(event.target.form)
 				.find('fieldset[name="field2"] select')

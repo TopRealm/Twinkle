@@ -301,9 +301,9 @@
 			};
 			$('button.tw-tag-submit').after(statusNode);
 			// fake a change event on the sort dropdown, to initialize the tag list
-			const evt = document.createEvent('Event');
-			evt.initEvent('change', true, true);
-			result.sortorder.dispatchEvent(evt);
+			const event = document.createEvent('Event');
+			event.initEvent('change', true, true);
+			result.sortorder.dispatchEvent(event);
 		} else {
 			// Redirects and files: Add a link to each template's description page
 			for (const checkbox of Morebits.quickForm.getElements(result, 'tags')) {

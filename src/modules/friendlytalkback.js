@@ -87,9 +87,9 @@
 		Window.display();
 		result.previewer = new Morebits.wiki.preview($(result).find('div#friendlytalkback-previewbox').last()[0]);
 		// We must init the
-		const evt = document.createEvent('Event');
-		evt.initEvent('change', true, true);
-		result.tbtarget[0].dispatchEvent(evt);
+		const event = document.createEvent('Event');
+		event.initEvent('change', true, true);
+		result.tbtarget[0].dispatchEvent(event);
 		// Check whether the user has opted out from talkback
 		const query = {
 			action: 'query',

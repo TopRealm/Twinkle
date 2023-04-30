@@ -269,9 +269,9 @@
 		}
 		const init = () => {
 			// We must init the first choice (General Note);
-			const evt = document.createEvent('Event');
-			evt.initEvent('change', true, true);
-			result.main_group.dispatchEvent(evt);
+			const event = document.createEvent('Event');
+			event.initEvent('change', true, true);
+			result.main_group.dispatchEvent(event);
 		};
 		init();
 	};
@@ -1376,9 +1376,9 @@
 					// If the templates have diverged, fake a change event
 					// to reload the menu with the updated pageobj
 					if (form.sub_group.value !== template) {
-						const evt = document.createEvent('Event');
-						evt.initEvent('change', true, true);
-						form.main_group.dispatchEvent(evt);
+						const event = document.createEvent('Event');
+						event.initEvent('change', true, true);
+						form.main_group.dispatchEvent(event);
 					}
 				});
 			} else {
