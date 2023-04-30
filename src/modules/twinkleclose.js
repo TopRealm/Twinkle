@@ -308,14 +308,14 @@
         evt.initEvent('change', true, true);
         result.sub_group.dispatchEvent(evt);
     };
-    Twinkle.close.callback.change_operation = (e) => {
-        const noop = e.target.checked;
-        const code = e.target.form.sub_group.value;
-        const messageData = $(e.target.form.sub_group)
+    Twinkle.close.callback.change_operation = (event) => {
+        const noop = event.target.checked;
+        const code = event.target.form.sub_group.value;
+        const messageData = $(event.target.form.sub_group)
             .find(`option[value="${code}"]`)
             .data('messageData');
-        const talkpage = e.target.form.talkpage;
-        const redirects = e.target.form.redirects;
+        const talkpage = event.target.form.talkpage;
+        const redirects = event.target.form.redirects;
         if (noop || messageData.action === 'keep') {
             if (talkpage) {
                 talkpage.checked = false;
@@ -333,14 +333,14 @@
             redirects.disabled = false;
         }
     };
-    Twinkle.close.callback.change_code = (e) => {
-        const resultData = $(e.target.form).data('resultData');
-        const messageData = $(e.target)
-            .find(`option[value="${e.target.value}"]`)
+    Twinkle.close.callback.change_code = (event) => {
+        const resultData = $(event.target.form).data('resultData');
+        const messageData = $(event.target)
+            .find(`option[value="${event.target.value}"]`)
             .data('messageData');
-        const noop = e.target.form.noop;
-        const talkpage = e.target.form.talkpage;
-        const redirects = e.target.form.redirects;
+        const noop = event.target.form.noop;
+        const talkpage = event.target.form.talkpage;
+        const redirects = event.target.form.redirects;
         if (resultData.noop || messageData.action === 'noop') {
             noop.checked = true;
             noop.disabled = true;
@@ -370,35 +370,35 @@
                 redirects.checked = true;
                 redirects.disabled = false;
             }
-            if (e.target.value === 'sd') {
-                e.target.form.sdreason.parentNode.removeAttribute('hidden');
+            if (event.target.value === 'sd') {
+                event.target.form.sdreason.parentNode.removeAttribute('hidden');
             }
             else {
-                e.target.form.sdreason.parentNode.setAttribute('hidden', '');
+                event.target.form.sdreason.parentNode.setAttribute('hidden', '');
             }
         }
     };
-    Twinkle.close.callback.evaluate = (e) => {
-        const code = e.target.sub_group.value;
-        const resultData = $(e.target).data('resultData');
-        const messageData = $(e.target.sub_group)
+    Twinkle.close.callback.evaluate = (event) => {
+        const code = event.target.sub_group.value;
+        const resultData = $(event.target).data('resultData');
+        const messageData = $(event.target.sub_group)
             .find(`option[value="${code}"]`)
             .data('messageData');
-        const noop = e.target.noop.checked;
-        const talkpage = e.target.talkpage && e.target.talkpage.checked;
-        const redirects = e.target.redirects.checked;
+        const noop = event.target.noop.checked;
+        const talkpage = event.target.talkpage && event.target.talkpage.checked;
+        const redirects = event.target.redirects.checked;
         const params = {
             title: resultData.title,
             code,
-            remark: e.target.remark.value,
-            sdreason: e.target.sdreason.value,
+            remark: event.target.remark.value,
+            sdreason: event.target.sdreason.value,
             section: resultData.section,
             messageData,
             talkpage,
             redirects
         };
         Morebits.simpleWindow.setButtonsEnabled(false);
-        Morebits.status.init(e.target);
+        Morebits.status.init(event.target);
         Morebits.wiki.actionCompleted.notice = '操作完成';
         if (noop || messageData.action === 'noop') {
             Twinkle.close.callbacks.talkend(params);

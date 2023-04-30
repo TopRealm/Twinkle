@@ -106,9 +106,9 @@
 		evt.initEvent('change', true, true);
 		result.category.dispatchEvent(evt);
 	};
-	Twinkle.arv.callback.changeCategory = (e) => {
-		const value = e.target.value;
-		const root = e.target.form;
+	Twinkle.arv.callback.changeCategory = (event) => {
+		const value = event.target.value;
+		const root = event.target.form;
 		const old_area = Morebits.quickForm.getElements(root, 'work_area')[0];
 		let work_area = null;
 		switch (value) {
@@ -312,8 +312,8 @@
 				break;
 		}
 	};
-	Twinkle.arv.callback.evaluate = (e) => {
-		const form = e.target;
+	Twinkle.arv.callback.evaluate = (event) => {
+		const form = event.target;
 		let reason = '';
 		let comment = '';
 		if (form.reason) {

@@ -143,12 +143,12 @@
 			pageobj.append();
 		},
 	};
-	Twinkle.copyvio.callback.evaluate = (e) => {
+	Twinkle.copyvio.callback.evaluate = (event) => {
 		mw.config.set('wgPageName', mw.config.get('wgPageName').replace(/_/g, ' '));
-		const source = e.target.source.value;
-		const usertalk = e.target.notify.checked;
+		const source = event.target.source.value;
+		const usertalk = event.target.notify.checked;
 		Morebits.simpleWindow.setButtonsEnabled(false);
-		Morebits.status.init(e.target);
+		Morebits.status.init(event.target);
 		if (!source.trim()) {
 			Morebits.status.error('错误', '未指定侵权来源');
 			return;

@@ -224,7 +224,7 @@
 					name: 'pages',
 					id: 'tw-dbatch-pages',
 					shiftClickSupport: true,
-					list: $.map(Twinkle.batchdelete.pages, (e) => e),
+					list: $.map(Twinkle.batchdelete.pages, (element) => element),
 				});
 				form_.append({
 					type: 'submit',
@@ -260,7 +260,7 @@
 			name: 'pages',
 			id: 'tw-dbatch-pages',
 			shiftClickSupport: true,
-			list: $.map(Twinkle.batchdelete.pages, (e) => e),
+			list: $.map(Twinkle.batchdelete.pages, (element) => element),
 		}).render();
 	};
 	Twinkle.batchdelete.deletereasonlist = [
@@ -317,17 +317,17 @@
 			value: '[[QW:O3|O3]]：废弃草稿',
 		},
 	];
-	Twinkle.batchdelete.callback.change_common_reason = (e) => {
-		if (e.target.form.reason.value !== '') {
-			e.target.form.reason.value = Morebits.string.appendPunctuation(e.target.form.reason.value);
+	Twinkle.batchdelete.callback.change_common_reason = (event) => {
+		if (event.target.form.reason.value !== '') {
+			event.target.form.reason.value = Morebits.string.appendPunctuation(event.target.form.reason.value);
 		}
-		e.target.form.reason.value += e.target.value;
-		e.target.value = '';
+		event.target.form.reason.value += event.target.value;
+		event.target.value = '';
 	};
-	Twinkle.batchdelete.callback.toggleSubpages = (e) => {
-		const form = e.target.form;
+	Twinkle.batchdelete.callback.toggleSubpages = (event) => {
+		const form = event.target.form;
 		let newPageList;
-		if (e.target.checked) {
+		if (event.target.checked) {
 			form.delete_subpage_redirects.checked = form.delete_redirects.checked;
 			form.delete_subpage_talks.checked = form.delete_talk.checked;
 			form.unlink_subpages.checked = form.unlink_page.checked;
@@ -352,7 +352,7 @@
 			}
 			// Proceed with API calls to get list of subpages
 			const loadingText = '<strong id="dbatch-subpage-loading">加载中...</strong>';
-			$(e.target).after(loadingText);
+			$(event.target).after(loadingText);
 			const pages = $(form.pages)
 				.map((_index, element) => element.value)
 				.get();
@@ -456,7 +456,7 @@
 					$('#dbatch-subpage-loading').remove();
 				}
 			);
-		} else if (!e.target.checked) {
+		} else if (!event.target.checked) {
 			$.each(Twinkle.batchdelete.pages, (_index, element) => {
 				if (element.subgroup) {
 					// Remove subgroup after saving its contents in subgroup_

@@ -1078,9 +1078,9 @@
 	Twinkle.warn.prev_article = null;
 	Twinkle.warn.prev_reason = null;
 	Twinkle.warn.talkpageObj = null;
-	Twinkle.warn.callback.change_category = (e) => {
-		const value = e.target.value;
-		const sub_group = e.target.root.sub_group;
+	Twinkle.warn.callback.change_category = (event) => {
+		const value = event.target.value;
+		const sub_group = event.target.root.sub_group;
 		sub_group.main_group = value;
 		let old_subvalue = sub_group.value;
 		let old_subvalue_re;
@@ -1191,7 +1191,7 @@
 					// Pseudo-params with only what's needed to parse the level i.e. no messageData
 					const params = {
 						sub_group: old_subvalue,
-						article: e.target.root.article.value,
+						article: event.target.root.article.value,
 					};
 					const lvl = `level${Twinkle.warn.callbacks.autolevelParseWikitext(wikitext, params, latest)[1]}`;
 					// Identical to level1, etc. above but explicitly provides the level
@@ -1206,7 +1206,7 @@
 						createEntries(groupContents, optgroup, false, lvl);
 					});
 					// Trigger subcategory change, add select menu, etc.
-					Twinkle.warn.callback.postCategoryCleanup(e);
+					Twinkle.warn.callback.postCategoryCleanup(event);
 				};
 				if (Twinkle.warn.talkpageObj) {
 					autolevelProc();
@@ -1231,7 +1231,7 @@
 							$noTalkPageNode.insertBefore($('#twinkle-warn-warning-messages'));
 							// If a preview was opened while in a different mode, close it
 							// Should nullify the need to catch the error in preview callback
-							e.target.root.previxewer.closePreview();
+							event.target.root.previxewer.closePreview();
 						}
 					);
 				}
@@ -1246,15 +1246,15 @@
 		if (value !== 'autolevel') {
 			// reset any autolevel-specific messages while we're here
 			$('#twinkle-warn-autolevel-message').remove();
-			Twinkle.warn.callback.postCategoryCleanup(e);
+			Twinkle.warn.callback.postCategoryCleanup(event);
 		}
 	};
-	Twinkle.warn.callback.postCategoryCleanup = (e) => {
+	Twinkle.warn.callback.postCategoryCleanup = (event) => {
 		// clear overridden label on article textbox
-		Morebits.quickForm.setElementTooltipVisibility(e.target.root.article, true);
-		Morebits.quickForm.resetElementLabel(e.target.root.article);
+		Morebits.quickForm.setElementTooltipVisibility(event.target.root.article, true);
+		Morebits.quickForm.resetElementLabel(event.target.root.article);
 		// Trigger custom label/change on main category change
-		Twinkle.warn.callback.change_subcategory(e);
+		Twinkle.warn.callback.change_subcategory(event);
 		// Use select2 to make the select menu searchable
 		if (!Twinkle.getPref('oldSelect')) {
 			$('select[name=sub_group]')
@@ -1278,9 +1278,9 @@
 			);
 		}
 	};
-	Twinkle.warn.callback.change_subcategory = (e) => {
-		const main_group = e.target.form.main_group.value;
-		const value = e.target.form.sub_group.value;
+	Twinkle.warn.callback.change_subcategory = (event) => {
+		const main_group = event.target.form.main_group.value;
+		const value = event.target.form.sub_group.value;
 		// Tags that don't take a linked article, but something else (often a username).
 		// The value of each tag is the label next to the input field
 		const notLinkedArticle = {
@@ -1291,21 +1291,21 @@
 		if (['singlenotice', 'singlewarn', 'singlecombined', 'kitchensink'].includes(main_group)) {
 			if (notLinkedArticle[value]) {
 				if (Twinkle.warn.prev_article === null) {
-					Twinkle.warn.prev_article = e.target.form.article.value;
+					Twinkle.warn.prev_article = event.target.form.article.value;
 				}
-				e.target.form.article.notArticle = true;
-				e.target.form.article.value = '';
+				event.target.form.article.notArticle = true;
+				event.target.form.article.value = '';
 				// change form labels according to the warning selected
-				Morebits.quickForm.setElementTooltipVisibility(e.target.form.article, false);
-				Morebits.quickForm.overrideElementLabel(e.target.form.article, notLinkedArticle[value]);
-			} else if (e.target.form.article.notArticle) {
+				Morebits.quickForm.setElementTooltipVisibility(event.target.form.article, false);
+				Morebits.quickForm.overrideElementLabel(event.target.form.article, notLinkedArticle[value]);
+			} else if (event.target.form.article.notArticle) {
 				if (Twinkle.warn.prev_article !== null) {
-					e.target.form.article.value = Twinkle.warn.prev_article;
+					event.target.form.article.value = Twinkle.warn.prev_article;
 					Twinkle.warn.prev_article = null;
 				}
-				e.target.form.article.notArticle = false;
-				Morebits.quickForm.setElementTooltipVisibility(e.target.form.article, true);
-				Morebits.quickForm.resetElementLabel(e.target.form.article);
+				event.target.form.article.notArticle = false;
+				Morebits.quickForm.setElementTooltipVisibility(event.target.form.article, true);
+				Morebits.quickForm.resetElementLabel(event.target.form.article);
 			}
 		}
 		// add big red notice, warning users about how to use {{uw-[coi-]username}} appropriately
@@ -1318,7 +1318,7 @@
 				.text(
 					'{{uw-username}}<b>不应</b>被用于<b>明显</b>违反用户名方针的用户。明显的违反方针应被报告给UAA。{{uw-username}}应只被用在边界情况下需要与用户讨论时。'
 				);
-			$redWarning.insertAfter(Morebits.quickForm.getElementLabelObject(e.target.form.reasonGroup));
+			$redWarning.insertAfter(Morebits.quickForm.getElementLabelObject(event.target.form.reasonGroup));
 		}
 	};
 	Twinkle.warn.callbacks = {
@@ -1742,10 +1742,10 @@
 			flowobj.newTopic();
 		},
 	};
-	Twinkle.warn.callback.evaluate = (e) => {
+	Twinkle.warn.callback.evaluate = (event) => {
 		const userTalkPage = `User_talk:${relevantUserName}`;
 		// reason, main_group, sub_group, article
-		const params = Morebits.quickForm.getInputData(e.target);
+		const params = Morebits.quickForm.getInputData(event.target);
 		// Check that a reason was filled in if uw-username was selected
 		if (params.sub_group === 'uw-username' && !params.article) {
 			mw.notify('必须给{{uw-username}}提供理由。', {type: 'warn'});
@@ -1776,14 +1776,14 @@
 		// *don't* want to actually issue a warning, so the error handling
 		// after the form is submitted is probably preferable
 		// Find the selected <option> element so we can fetch the data structure
-		const $selectedEl = $(e.target.sub_group).find(`option[value="${$(e.target.sub_group).val()}"]`);
+		const $selectedEl = $(event.target.sub_group).find(`option[value="${$(event.target.sub_group).val()}"]`);
 		params.messageData = $selectedEl.data('messageData');
 		if (params.messageData === undefined) {
 			mw.notify('请选择警告模板。', {type: 'warn'});
 			return;
 		}
 		Morebits.simpleWindow.setButtonsEnabled(false);
-		Morebits.status.init(e.target);
+		Morebits.status.init(event.target);
 		Morebits.wiki.actionCompleted.redirect = userTalkPage;
 		Morebits.wiki.actionCompleted.notice = '警告完成，将在几秒后刷新';
 		const qiuwen_page = new Morebits.wiki.page(userTalkPage, '用户讨论页修改');

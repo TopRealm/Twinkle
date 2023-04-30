@@ -87,15 +87,15 @@
 				apiobj.params.form.append({
 					type: 'button',
 					label: '全选',
-					event: (e) => {
-						$(Morebits.quickForm.getElements(e.target.form, 'pages')).prop('checked', true);
+					event: (event) => {
+						$(Morebits.quickForm.getElements(event.target.form, 'pages')).prop('checked', true);
 					},
 				});
 				apiobj.params.form.append({
 					type: 'button',
 					label: '全不选',
-					event: (e) => {
-						$(Morebits.quickForm.getElements(e.target.form, 'pages')).prop('checked', false);
+					event: (event) => {
+						$(Morebits.quickForm.getElements(event.target.form, 'pages')).prop('checked', false);
 					},
 				});
 				apiobj.params.form.append({

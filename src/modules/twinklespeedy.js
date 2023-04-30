@@ -555,17 +555,17 @@
 		const isSysopMode = Twinkle.speedy.mode.isSysop(mode);
 		const multiple = Twinkle.speedy.mode.isMultiple(mode);
 		const hasSubmitButton = Twinkle.speedy.mode.hasSubmitButton(mode);
-		const openSubgroupHandler = (e) => {
-			$(e.target.form).find('input').prop('disabled', true);
-			$(e.target.form).children().css('color', 'gray');
-			$(e.target).parent().css('color', 'black').find('input').prop('disabled', false);
-			$(e.target).parent().find('input:text')[0].focus();
-			e.stopPropagation();
+		const openSubgroupHandler = (event) => {
+			$(event.target.form).find('input').prop('disabled', true);
+			$(event.target.form).children().css('color', 'gray');
+			$(event.target).parent().css('color', 'black').find('input').prop('disabled', false);
+			$(event.target).parent().find('input:text')[0].focus();
+			event.stopPropagation();
 		};
-		const submitSubgroupHandler = (e) => {
+		const submitSubgroupHandler = (event) => {
 			const evaluateType = Twinkle.speedy.mode.isSysop(mode) ? 'evaluateSysop' : 'evaluateUser';
-			Twinkle.speedy.callback[evaluateType](e);
-			e.stopPropagation();
+			Twinkle.speedy.callback[evaluateType](event);
+			event.stopPropagation();
 		};
 		return $.map(list, (critElement) => {
 			const criterion = $.extend({}, critElement);
@@ -1486,28 +1486,28 @@
 		return utparams;
 	};
 	/**
-	 * @param {Event} e
+	 * @param {Event} event
 	 * @return {Array}
 	 */
-	Twinkle.speedy.resolveCsdValues = (e) => {
-		const values = (e.target.form || e.target).getChecked('csd');
+	Twinkle.speedy.resolveCsdValues = (event) => {
+		const values = (event.target.form || event.target).getChecked('csd');
 		if (values.length === 0) {
 			mw.notify('请选择一个理据。', {type: 'warn'});
 			return null;
 		}
 		return values;
 	};
-	Twinkle.speedy.callback.evaluateSysop = (e) => {
-		const form = e.target.form || e.target;
-		if (e.target.type === 'checkbox' || e.target.type === 'text' || e.target.type === 'select') {
+	Twinkle.speedy.callback.evaluateSysop = (event) => {
+		const form = event.target.form || event.target;
+		if (event.target.type === 'checkbox' || event.target.type === 'text' || event.target.type === 'select') {
 			return;
 		}
 		const tag_only = form.tag_only;
 		if (tag_only && tag_only.checked) {
-			Twinkle.speedy.callback.evaluateUser(e);
+			Twinkle.speedy.callback.evaluateUser(event);
 			return;
 		}
-		const values = Twinkle.speedy.resolveCsdValues(e);
+		const values = Twinkle.speedy.resolveCsdValues(event);
 		if (!values) {
 			return;
 		}
@@ -1544,12 +1544,12 @@
 		Morebits.status.init(form);
 		Twinkle.speedy.callbacks.sysop.main(params);
 	};
-	Twinkle.speedy.callback.evaluateUser = (e) => {
-		const form = e.target.form || e.target;
-		if (e.target.type === 'checkbox' || e.target.type === 'text' || e.target.type === 'select') {
+	Twinkle.speedy.callback.evaluateUser = (event) => {
+		const form = event.target.form || event.target;
+		if (event.target.type === 'checkbox' || event.target.type === 'text' || event.target.type === 'select') {
 			return;
 		}
-		const values = Twinkle.speedy.resolveCsdValues(e);
+		const values = Twinkle.speedy.resolveCsdValues(event);
 		if (!values) {
 			return;
 		}

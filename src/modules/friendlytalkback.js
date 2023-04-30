@@ -116,9 +116,9 @@
 	let prev_page = '';
 	let prev_section = '';
 	let prev_message = '';
-	Twinkle.talkback.changeTarget = (e) => {
-		const value = e.target.values;
-		const root = e.target.form;
+	Twinkle.talkback.changeTarget = (event) => {
+		const value = event.target.values;
+		const root = event.target.form;
 		const old_area = Morebits.quickForm.getElements(root, 'work_area')[0];
 		if (root.section) {
 			prev_section = root.section.value;
@@ -272,12 +272,12 @@
 			editSummary: '您在[[Qiuwen:AFCHD|条目创建帮助]]页面的提问已有回复，请前往查看。',
 		},
 	};
-	Twinkle.talkback.evaluate = (e) => {
-		const input = Morebits.quickForm.getInputData(e.target);
+	Twinkle.talkback.evaluate = (event) => {
+		const input = Morebits.quickForm.getInputData(event.target);
 		const fullUserTalkPageName = new mw.Title(mw.config.get('wgRelevantUserName'), 3).toText();
 		const talkpage = new Morebits.wiki.page(fullUserTalkPageName, '加入回复通告');
 		Morebits.simpleWindow.setButtonsEnabled(false);
-		Morebits.status.init(e.target);
+		Morebits.status.init(event.target);
 		Morebits.wiki.actionCompleted.redirect = fullUserTalkPageName;
 		Morebits.wiki.actionCompleted.notice = '回复通告完成，将在几秒内刷新页面';
 		switch (input.tbtarget) {

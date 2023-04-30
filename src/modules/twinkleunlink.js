@@ -179,15 +179,15 @@
 						apiobj.params.form.append({
 							type: 'button',
 							label: '全选',
-							event: (e) => {
-								$(Morebits.quickForm.getElements(e.target.form, 'imageusage')).prop('checked', true);
+							event: (event) => {
+								$(Morebits.quickForm.getElements(event.target.form, 'imageusage')).prop('checked', true);
 							},
 						});
 						apiobj.params.form.append({
 							type: 'button',
 							label: '全不选',
-							event: (e) => {
-								$(Morebits.quickForm.getElements(e.target.form, 'imageusage')).prop('checked', false);
+							event: (event) => {
+								$(Morebits.quickForm.getElements(event.target.form, 'imageusage')).prop('checked', false);
 							},
 						});
 						apiobj.params.form.append({
@@ -232,15 +232,15 @@
 					apiobj.params.form.append({
 						type: 'button',
 						label: '全选',
-						event: (e) => {
-							$(Morebits.quickForm.getElements(e.target.form, 'backlinks')).prop('checked', true);
+						event: (event) => {
+							$(Morebits.quickForm.getElements(event.target.form, 'backlinks')).prop('checked', true);
 						},
 					});
 					apiobj.params.form.append({
 						type: 'button',
 						label: '全不选',
-						event: (e) => {
-							$(Morebits.quickForm.getElements(e.target.form, 'backlinks')).prop('checked', false);
+						event: (event) => {
+							$(Morebits.quickForm.getElements(event.target.form, 'backlinks')).prop('checked', false);
 						},
 					});
 					apiobj.params.form.append({

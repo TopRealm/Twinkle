@@ -167,7 +167,7 @@
 				if (Twinkle.block.isRegistered) {
 					relevantUserName = `User:${userName}`;
 					Twinkle.block.userIsBot =
-						!!userinfo.groupmemberships && userinfo.groupmemberships.map((e) => e.group).includes('bot');
+						!!userinfo.groupmemberships && userinfo.groupmemberships.map((element) => element.group).includes('bot');
 				} else {
 					relevantUserName = userName;
 					Twinkle.block.userIsBot = false;
@@ -208,13 +208,13 @@
 			Twinkle.block[$(fieldset).prop('name')][el.name] = el.value;
 		}
 	};
-	Twinkle.block.callback.change_action = (e) => {
+	Twinkle.block.callback.change_action = (event) => {
 		let field_preset;
 		let field_template_options;
 		let field_block_options;
 		let field_tag_options;
 		let field_unblock_options;
-		const $form = $(e.target.form);
+		const $form = $(event.target.form);
 		// Make ifs shorter
 		const block = $form.find('[name=actiontype][value=block]');
 		let blockBox = block.is(':checked');
@@ -226,7 +226,7 @@
 		const partialBox = partial.is(':checked');
 		const unblock = $form.find('[name=actiontype][value=unblock]');
 		const blockGroup = partialBox ? Twinkle.block.blockGroupsPartial : Twinkle.block.blockGroups;
-		if (e.target.value === 'unblock') {
+		if (event.target.value === 'unblock') {
 			if (!Twinkle.block.currentBlockInfo) {
 				unblock.prop('checked', false);
 				return mw.notify('用户没有被封禁', {type: 'warn'});
@@ -804,8 +804,8 @@
 		if (field_template_options) {
 			oldfield = $form.find('fieldset[name="field_template_options"]')[0];
 			oldfield.parentNode.replaceChild(field_template_options.render(), oldfield);
-			e.target.form.root.previewer = new Morebits.wiki.preview(
-				$(e.target.form.root).find('#twinkleblock-previewbox').last()[0]
+			event.target.form.root.previewer = new Morebits.wiki.preview(
+				$(event.target.form.root).find('#twinkleblock-previewbox').last()[0]
 			);
 		} else {
 			$form.find('fieldset[name="field_template_options"]').hide();
@@ -850,14 +850,14 @@
 				infoStr += '为全站封禁';
 			}
 			Morebits.status.warn(statusStr, infoStr);
-			Twinkle.block.callback.update_form(e, Twinkle.block.currentBlockInfo);
+			Twinkle.block.callback.update_form(event, Twinkle.block.currentBlockInfo);
 		}
 		if (templateBox) {
 			// make sure all the fields are correct based on defaults
 			if (blockBox) {
-				Twinkle.block.callback.change_preset(e);
+				Twinkle.block.callback.change_preset(event);
 			} else {
-				Twinkle.block.callback.change_template(e);
+				Twinkle.block.callback.change_template(event);
 			}
 		}
 	};
@@ -1362,23 +1362,23 @@
 				};
 			}
 		});
-	Twinkle.block.callback.change_preset = (e) => {
-		const key = e.target.form.preset.value;
+	Twinkle.block.callback.change_preset = (event) => {
+		const key = event.target.form.preset.value;
 		if (!key) {
 			return;
 		}
-		e.target.form.template.value = Twinkle.block.blockPresetsInfo[key].templateName || key;
-		e.target.form.template.value = key;
-		Twinkle.block.callback.update_form(e, Twinkle.block.blockPresetsInfo[key]);
-		Twinkle.block.callback.change_template(e);
+		event.target.form.template.value = Twinkle.block.blockPresetsInfo[key].templateName || key;
+		event.target.form.template.value = key;
+		Twinkle.block.callback.update_form(event, Twinkle.block.blockPresetsInfo[key]);
+		Twinkle.block.callback.change_template(event);
 	};
-	Twinkle.block.callback.change_expiry = (e) => {
-		const expiry = e.target.form.expiry;
-		if (e.target.value === 'custom') {
+	Twinkle.block.callback.change_expiry = (event) => {
+		const expiry = event.target.form.expiry;
+		if (event.target.value === 'custom') {
 			Morebits.quickForm.setElementVisibility(expiry.parentNode, true);
 		} else {
 			Morebits.quickForm.setElementVisibility(expiry.parentNode, false);
-			expiry.value = e.target.value;
+			expiry.value = event.target.value;
 		}
 	};
 	Twinkle.block.seeAlsos = [];
@@ -1437,8 +1437,8 @@
 		form.reason.value =
 			data.prependReason && data.reason ? `${data.reason}; ${form.reason.value}` : data.reason || '';
 	};
-	Twinkle.block.callback.change_template = (e) => {
-		const form = e.target.form;
+	Twinkle.block.callback.change_template = (event) => {
+		const form = event.target.form;
 		const value = form.template.value;
 		const settings = Twinkle.block.blockPresetsInfo[value];
 		const blockBox = $(form).find('[name=actiontype][value=block]').is(':checked');
@@ -1507,9 +1507,9 @@
 		const templateText = Twinkle.block.callback.getBlockNoticeWikitext(params);
 		form.previewer.beginRender(templateText);
 	};
-	Twinkle.block.callback.evaluate = (e) => {
-		const params = Morebits.quickForm.getInputData(e.target);
-		const $form = $(e.target);
+	Twinkle.block.callback.evaluate = (event) => {
+		const params = Morebits.quickForm.getInputData(event.target);
+		const $form = $(event.target);
 		const toBlock = $form.find('[name=actiontype][value=block]').is(':checked');
 		const toWarn = $form.find('[name=actiontype][value=template]').is(':checked');
 		const toPartial = $form.find('[name=actiontype][value=partial]').is(':checked');
@@ -1614,7 +1614,7 @@
 				return mw.notify('请提供封禁理由！', {type: 'warn'});
 			}
 			Morebits.simpleWindow.setButtonsEnabled(false);
-			Morebits.status.init(e.target);
+			Morebits.status.init(event.target);
 			const statusElement = new Morebits.status('执行封禁');
 			blockoptions.action = 'block';
 			blockoptions.user = relevantUserName;
@@ -1709,12 +1709,12 @@
 			});
 		} else if (toWarn) {
 			Morebits.simpleWindow.setButtonsEnabled(false);
-			Morebits.status.init(e.target);
+			Morebits.status.init(event.target);
 			Twinkle.block.callback.issue_template(templateoptions);
 		}
 		if (toTag || toProtect) {
 			Morebits.simpleWindow.setButtonsEnabled(false);
-			Morebits.status.init(e.target);
+			Morebits.status.init(event.target);
 			const userPage = `User:${relevantUserName}`;
 			const qiuwen_page = new Morebits.wiki.page(userPage, '标记或保护用户页');
 			qiuwen_page.setCallbackParameters(params);
@@ -1725,7 +1725,7 @@
 				return mw.notify('请提供解除封禁理由！', {type: 'warn'});
 			}
 			Morebits.simpleWindow.setButtonsEnabled(false);
-			Morebits.status.init(e.target);
+			Morebits.status.init(event.target);
 			const unblockStatusElement = new Morebits.status('执行解除封禁');
 			unblockoptions.action = 'unblock';
 			unblockoptions.user = relevantUserName;

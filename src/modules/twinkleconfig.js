@@ -1406,8 +1406,8 @@
 		contenttr.appendChild(contenttd);
 		dlgtable.appendChild(contenttr);
 	};
-	Twinkle.config.listDialog.display = (e) => {
-		const $prefbutton = $(e.target);
+	Twinkle.config.listDialog.display = (event) => {
+		const $prefbutton = $(event.target);
 		const curvalue = $prefbutton.data('value');
 		const curpref = $prefbutton.data('pref');
 		const dialog = new Morebits.simpleWindow(720, 400);
@@ -1546,8 +1546,8 @@
 		$(button).data('value', result);
 	};
 	// reset/restore defaults
-	Twinkle.config.resetPrefLink = (e) => {
-		const wantedpref = e.target.id.slice(21); // "twinkle-config-reset-" prefix is stripped
+	Twinkle.config.resetPrefLink = (event) => {
+		const wantedpref = event.target.id.slice(21); // "twinkle-config-reset-" prefix is stripped
 		// search tactics
 		$(Twinkle.config.sections).each((_sectionkey, section) => {
 			if (section.hidden || (section.adminOnly && !Morebits.userIsSysop)) {
@@ -1609,13 +1609,13 @@
 		});
 		return false; // stop link from scrolling page
 	};
-	Twinkle.config.save = (e) => {
+	Twinkle.config.save = (event) => {
 		Morebits.status.init(document.querySelector('#twinkle-config-content'));
 		const userjs = `${mw.config.get('wgFormattedNamespaces')[mw.config.get('wgNamespaceIds').user]}:${mw.config.get(
 			'wgUserName'
 		)}/twinkleoptions.js`;
 		const qiuwen_page = new Morebits.wiki.page(userjs, `保存参数设置到 ${userjs}`);
-		qiuwen_page.setCallbackParameters(e.target);
+		qiuwen_page.setCallbackParameters(event.target);
 		qiuwen_page.load(Twinkle.config.writePrefs);
 		return false;
 	};

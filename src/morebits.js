@@ -519,18 +519,18 @@
 							subgroup.className = 'quickformSubgroup';
 							subnode.subgroup = subgroup;
 							subnode.shown = false;
-							event = (e) => {
-								if (e.target.checked) {
-									e.target.parentNode.append(e.target.subgroup);
-									if (e.target.type === 'radio') {
-										const name = e.target.name;
-										if (e.target.form.names[name] !== undefined) {
-											e.target.form.names[name].subgroup.remove();
+							event = (event) => {
+								if (event.target.checked) {
+									event.target.parentNode.append(event.target.subgroup);
+									if (event.target.type === 'radio') {
+										const name = event.target.name;
+										if (event.target.form.names[name] !== undefined) {
+											event.target.form.names[name].subgroup.remove();
 										}
-										e.target.form.names[name] = e.target;
+										event.target.form.names[name] = event.target;
 									}
 								} else {
-									e.target.subgroup.remove();
+									event.target.subgroup.remove();
 								}
 							};
 							subnode.addEventListener('change', event, true);
@@ -538,13 +538,13 @@
 								subnode.parentNode.append(subgroup);
 							}
 						} else if (data.type === 'radio') {
-							event = (e) => {
-								if (e.target.checked) {
-									const name = e.target.name;
-									if (e.target.form.names[name] !== undefined) {
-										e.target.form.names[name].subgroup.remove();
+							event = (event) => {
+								if (event.target.checked) {
+									const name = event.target.name;
+									if (event.target.form.names[name] !== undefined) {
+										event.target.form.names[name].subgroup.remove();
 									}
-									delete e.target.form.names[name];
+									delete event.target.form.names[name];
 								}
 							};
 							subnode.addEventListener('change', event, true);
@@ -594,14 +594,14 @@
 						}
 					}
 				}
-				for (const att of ['value', 'size', 'placeholder', 'maxlength']) {
-					if (data[att]) {
-						subnode.setAttribute(att, data[att]);
+				for (const attr of ['value', 'size', 'placeholder', 'maxlength']) {
+					if (data[attr]) {
+						subnode.setAttribute(attr, data[attr]);
 					}
 				}
-				for (const att of ['disabled', 'required', 'readonly']) {
-					if (data[att]) {
-						subnode.setAttribute(att, att);
+				for (const attr of ['disabled', 'required', 'readonly']) {
+					if (data[attr]) {
+						subnode.setAttribute(attr, attr);
 					}
 				}
 				if (data.event) {
@@ -620,13 +620,13 @@
 					type: 'button',
 					label: '更多',
 					disabled: min >= max,
-					event: (e) => {
-						const new_node = new Morebits.quickForm.element(e.target.sublist);
-						e.target.area.append(new_node.render());
-						if (++e.target.counter >= e.target.max) {
-							e.target.setAttribute('disabled', 'disabled');
+					event: (event) => {
+						const new_node = new Morebits.quickForm.element(event.target.sublist);
+						event.target.area.append(new_node.render());
+						if (++event.target.counter >= event.target.max) {
+							event.target.setAttribute('disabled', 'disabled');
 						}
-						e.stopPropagation();
+						event.stopPropagation();
 					},
 				});
 				node.append(more[0]);
@@ -642,8 +642,8 @@
 					event: data.event,
 				};
 				for (i = 0; i < min; ++i) {
-					const elem = new Morebits.quickForm.element(sublist);
-					listNode.append(elem.render());
+					const element = new Morebits.quickForm.element(sublist);
+					listNode.append(element.render());
 				}
 				sublist.remove = true;
 				sublist.morebutton = moreButton;
@@ -681,13 +681,13 @@
 					const remove = this.compute({
 						type: 'button',
 						label: '移除',
-						event: (e) => {
-							const node = e.target.inputnode;
-							const more = e.target.morebutton;
+						event: (event) => {
+							const node = event.target.inputnode;
+							const more = event.target.morebutton;
 							node.remove();
 							--more.counter;
 							more.removeAttribute('disabled');
-							e.stopPropagation();
+							event.stopPropagation();
 						},
 					});
 					node.append(remove[0]);

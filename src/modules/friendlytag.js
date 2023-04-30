@@ -241,10 +241,10 @@
 		$allHeaders = $(result).find('h5');
 		result.quickfilter.focus(); // place cursor in the quick filter field as soon as window is opened
 		result.quickfilter.autocomplete = 'off'; // disable browser suggestions
-		result.quickfilter.addEventListener('keypress', (e) => {
-			if (e.key === 'Enter') {
+		result.quickfilter.addEventListener('keypress', (event) => {
+			if (event.key === 'Enter') {
 				// prevent enter key from accidentally submitting the form
-				e.preventDefault();
+				event.preventDefault();
 				return false;
 			}
 		});
@@ -315,10 +315,10 @@
 	// quickfilter event function, to avoid having to recompute them on every keydown
 	let $allCheckboxDivs;
 	let $allHeaders;
-	Twinkle.tag.updateSortOrder = (e) => {
+	Twinkle.tag.updateSortOrder = (event) => {
 		let _a;
-		const form = e.target.form;
-		const sortorder = e.target.value;
+		const form = event.target.form;
+		const sortorder = event.target.value;
 		Twinkle.tag.checkedTags = form.getChecked('tags');
 		const container = new Morebits.quickForm.element({type: 'fragment'});
 		// function to generate a checkbox, with appropriate subgroup if needed
@@ -541,7 +541,7 @@
 			container.append({type: 'header', id: 'tagHeader0', label: '已放置的维护标记'});
 			const subdiv = container.append({type: 'div', id: 'tagSubdiv0'});
 			const checkboxes = [];
-			const unCheckedTags = e.target.form.getUnchecked('existingTags');
+			const unCheckedTags = event.target.form.getUnchecked('existingTags');
 			for (const tag of Twinkle.tag.alreadyPresentTags) {
 				const checkbox = {
 					value: tag,
@@ -1739,8 +1739,8 @@
 			}
 		},
 	};
-	Twinkle.tag.callback.evaluate = (e) => {
-		const form = e.target;
+	Twinkle.tag.callback.evaluate = (event) => {
+		const form = event.target;
 		const params = Morebits.quickForm.getInputData(form);
 		// Validation
 		// Given an array of incompatible tags, check if we have two or more selected

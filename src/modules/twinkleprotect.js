@@ -206,11 +206,11 @@
 		}
 		Morebits.status[statusLevel]('当前保护等级', protectionNode);
 	};
-	Twinkle.protect.callback.changeAction = (e) => {
+	Twinkle.protect.callback.changeAction = (event) => {
 		let field_preset;
 		let field1;
 		let field2;
-		switch (e.target.values) {
+		switch (event.target.values) {
 			case 'protect':
 				field_preset = new Morebits.quickForm.element({
 					type: 'field',
@@ -387,7 +387,7 @@
 							label: '在模板显示到期时间',
 							tooltip: '将给模板加上|expiry参数',
 							checked: true,
-							hidden: e.target.values === 'tag',
+							hidden: event.target.values === 'tag',
 						},
 					],
 				});
@@ -436,30 +436,30 @@
 		}
 		let oldfield;
 		if (field_preset) {
-			oldfield = $(e.target.form).find('fieldset[name="field_preset"]')[0];
+			oldfield = $(event.target.form).find('fieldset[name="field_preset"]')[0];
 			oldfield.parentNode.replaceChild(field_preset.render(), oldfield);
 		} else {
-			$(e.target.form).find('fieldset[name="field_preset"]').css('display', 'none');
+			$(event.target.form).find('fieldset[name="field_preset"]').css('display', 'none');
 		}
 		if (field1) {
-			oldfield = $(e.target.form).find('fieldset[name="field1"]')[0];
+			oldfield = $(event.target.form).find('fieldset[name="field1"]')[0];
 			oldfield.parentNode.replaceChild(field1.render(), oldfield);
 		} else {
-			$(e.target.form).find('fieldset[name="field1"]').css('display', 'none');
+			$(event.target.form).find('fieldset[name="field1"]').css('display', 'none');
 		}
 		if (field2) {
-			oldfield = $(e.target.form).find('fieldset[name="field2"]')[0];
+			oldfield = $(event.target.form).find('fieldset[name="field2"]')[0];
 			oldfield.parentNode.replaceChild(field2.render(), oldfield);
 		} else {
-			$(e.target.form).find('fieldset[name="field2"]').css('display', 'none');
+			$(event.target.form).find('fieldset[name="field2"]').css('display', 'none');
 		}
-		if (e.target.values === 'protect') {
+		if (event.target.values === 'protect') {
 			// fake a change event on the preset dropdown
 			const evt = document.createEvent('Event');
 			evt.initEvent('change', true, true);
-			e.target.form.category.dispatchEvent(evt);
+			event.target.form.category.dispatchEvent(evt);
 			// reduce vertical height of dialog
-			$(e.target.form)
+			$(event.target.form)
 				.find('fieldset[name="field2"] select')
 				.parent()
 				.css({display: 'inline-block', marginRight: '0.5em'});
@@ -469,42 +469,42 @@
 	};
 	// NOTE: This function is used by batchprotect as well
 	Twinkle.protect.formevents = {
-		editmodify: (e) => {
-			e.target.form.editlevel.disabled = !e.target.checked;
-			e.target.form.editexpiry.disabled = !e.target.checked || e.target.form.editlevel.value === 'all';
-			e.target.form.editlevel.style.color = e.target.form.editexpiry.style.color = e.target.checked
+		editmodify: (event) => {
+			event.target.form.editlevel.disabled = !event.target.checked;
+			event.target.form.editexpiry.disabled = !event.target.checked || event.target.form.editlevel.value === 'all';
+			event.target.form.editlevel.style.color = event.target.form.editexpiry.style.color = event.target.checked
 				? ''
 				: 'transparent';
 		},
-		editlevel: (e) => {
-			e.target.form.editexpiry.disabled = e.target.value === 'all';
+		editlevel: (event) => {
+			event.target.form.editexpiry.disabled = event.target.value === 'all';
 		},
-		movemodify: (e) => {
+		movemodify: (event) => {
 			// sync move settings with edit settings if applicable
-			if (e.target.form.movelevel.disabled && !e.target.form.editlevel.disabled) {
-				e.target.form.movelevel.value = e.target.form.editlevel.value;
-				e.target.form.moveexpiry.value = e.target.form.editexpiry.value;
-			} else if (e.target.form.editlevel.disabled) {
-				e.target.form.movelevel.value = 'sysop';
-				e.target.form.moveexpiry.value = 'infinity';
+			if (event.target.form.movelevel.disabled && !event.target.form.editlevel.disabled) {
+				event.target.form.movelevel.value = event.target.form.editlevel.value;
+				event.target.form.moveexpiry.value = event.target.form.editexpiry.value;
+			} else if (event.target.form.editlevel.disabled) {
+				event.target.form.movelevel.value = 'sysop';
+				event.target.form.moveexpiry.value = 'infinity';
 			}
-			e.target.form.movelevel.disabled = !e.target.checked;
-			e.target.form.moveexpiry.disabled = !e.target.checked || e.target.form.movelevel.value === 'all';
-			e.target.form.movelevel.style.color = e.target.form.moveexpiry.style.color = e.target.checked
+			event.target.form.movelevel.disabled = !event.target.checked;
+			event.target.form.moveexpiry.disabled = !event.target.checked || event.target.form.movelevel.value === 'all';
+			event.target.form.movelevel.style.color = event.target.form.moveexpiry.style.color = event.target.checked
 				? ''
 				: 'transparent';
 		},
-		movelevel: (e) => {
-			e.target.form.moveexpiry.disabled = e.target.value === 'all';
+		movelevel: (event) => {
+			event.target.form.moveexpiry.disabled = event.target.value === 'all';
 		},
-		createlevel: (e) => {
-			e.target.form.createexpiry.disabled = e.target.value === 'all';
+		createlevel: (event) => {
+			event.target.form.createexpiry.disabled = event.target.value === 'all';
 		},
-		tagtype: (e) => {
-			e.target.form.small.disabled =
-				e.target.form.noinclude.disabled =
-				e.target.form.showexpiry.disabled =
-					e.target.value === 'none' || e.target.value === 'noop';
+		tagtype: (event) => {
+			event.target.form.small.disabled =
+				event.target.form.noinclude.disabled =
+				event.target.form.showexpiry.disabled =
+					event.target.value === 'none' || event.target.value === 'noop';
 		},
 	};
 	Twinkle.protect.doCustomExpiry = (target) => {
@@ -808,8 +808,8 @@
 			],
 		},
 	];
-	Twinkle.protect.callback.changePreset = (e) => {
-		const form = e.target.form;
+	Twinkle.protect.callback.changePreset = (event) => {
+		const form = event.target.form;
 		const actiontypes = form.actiontype;
 		let actiontype;
 		for (const actiontype_ of actiontypes) {
@@ -874,8 +874,8 @@
 			}
 		}
 	};
-	Twinkle.protect.callback.evaluate = (e) => {
-		const form = e.target;
+	Twinkle.protect.callback.evaluate = (event) => {
+		const form = event.target;
 		const input = Morebits.quickForm.getInputData(form);
 		let tagparams;
 		if (

@@ -50,9 +50,9 @@
 			type: 'select',
 			name: 'editexpiry',
 			label: '终止时间：',
-			event: (e) => {
-				if (e.target.value === 'custom') {
-					Twinkle.protect.doCustomExpiry(e.target);
+			event: (event) => {
+				if (event.target.value === 'custom') {
+					Twinkle.protect.doCustomExpiry(event.target);
 				}
 			},
 			list: Twinkle.protect.protectionLengths, // Default (2 days) set after render
@@ -85,19 +85,19 @@
 			type: 'select',
 			name: 'moveexpiry',
 			label: '终止时间：',
-			event: (e) => {
-				if (e.target.value === 'custom') {
-					Twinkle.protect.doCustomExpiry(e.target);
+			event: (event) => {
+				if (event.target.value === 'custom') {
+					Twinkle.protect.doCustomExpiry(event.target);
 				}
 			},
 			list: Twinkle.protect.protectionLengths, // Default (2 days) set after render
 		});
 		form.append({
 			type: 'checkbox',
-			event: (e) => {
-				e.target.form.createlevel.disabled = !e.target.checked;
-				e.target.form.createexpiry.disabled = !e.target.checked || e.target.form.createlevel.value === 'all';
-				e.target.form.createlevel.style.color = e.target.form.createexpiry.style.color = e.target.checked
+			event: (event) => {
+				event.target.form.createlevel.disabled = !event.target.checked;
+				event.target.form.createexpiry.disabled = !event.target.checked || event.target.form.createlevel.value === 'all';
+				event.target.form.createlevel.style.color = event.target.form.createexpiry.style.color = event.target.checked
 					? ''
 					: 'transparent';
 			},
@@ -122,9 +122,9 @@
 			type: 'select',
 			name: 'createexpiry',
 			label: '终止时间：',
-			event: (e) => {
-				if (e.target.value === 'custom') {
-					Twinkle.protect.doCustomExpiry(e.target);
+			event: (event) => {
+				if (event.target.value === 'custom') {
+					Twinkle.protect.doCustomExpiry(event.target);
 				}
 			},
 			list: Twinkle.protect.protectionLengths, // Default (indefinite) set after render
@@ -217,15 +217,15 @@
 				form.append({
 					type: 'button',
 					label: '全选',
-					event: (e) => {
-						$(Morebits.quickForm.getElements(e.target.form, 'pages')).prop('checked', true);
+					event: (event) => {
+						$(Morebits.quickForm.getElements(event.target.form, 'pages')).prop('checked', true);
 					},
 				});
 				form.append({
 					type: 'button',
 					label: '全不选',
-					event: (e) => {
-						$(Morebits.quickForm.getElements(e.target.form, 'pages')).prop('checked', false);
+					event: (event) => {
+						$(Morebits.quickForm.getElements(event.target.form, 'pages')).prop('checked', false);
 					},
 				});
 				form.append({

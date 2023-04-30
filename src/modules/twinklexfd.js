@@ -90,10 +90,10 @@
 		evt.initEvent('change', true, true);
 		result.category.dispatchEvent(evt);
 	};
-	Twinkle.xfd.callback.change_category = (e) => {
-		const value = e.target.value;
-		const form = e.target.form;
-		const old_area = Morebits.quickForm.getElements(e.target.form, 'work_area')[0];
+	Twinkle.xfd.callback.change_category = (event) => {
+		const value = event.target.value;
+		const form = event.target.form;
+		const old_area = Morebits.quickForm.getElements(event.target.form, 'work_area')[0];
 		let work_area = null;
 		const oldreasontextbox = form.querySelectorAll('textarea')[0];
 		let oldreason = oldreasontextbox ? oldreasontextbox.value : '';
@@ -242,35 +242,35 @@
 		form.notify.checked = true;
 		form.notify.disabled = false;
 	};
-	Twinkle.xfd.callback.change_afd_category = (e) => {
-		switch (e.target.value) {
+	Twinkle.xfd.callback.change_afd_category = (event) => {
+		switch (event.target.value) {
 			case 'merge':
-				e.target.form.mergeinto.parentNode.removeAttribute('hidden');
-				e.target.form.fwdcsdreason.parentNode.setAttribute('hidden', '');
-				e.target.form.mergeinto.previousElementSibling.innerHTML = '合并到：';
+				event.target.form.mergeinto.parentNode.removeAttribute('hidden');
+				event.target.form.fwdcsdreason.parentNode.setAttribute('hidden', '');
+				event.target.form.mergeinto.previousElementSibling.innerHTML = '合并到：';
 				break;
 			case 'fwdcsd':
-				e.target.form.mergeinto.parentNode.removeAttribute('hidden');
-				e.target.form.fwdcsdreason.parentNode.removeAttribute('hidden');
-				e.target.form.mergeinto.previousElementSibling.innerHTML = '提交人：';
-				e.target.form.xfdreason.value = decodeURIComponent($('#delete-reason').text()).replace(/\+/g, ' ');
+				event.target.form.mergeinto.parentNode.removeAttribute('hidden');
+				event.target.form.fwdcsdreason.parentNode.removeAttribute('hidden');
+				event.target.form.mergeinto.previousElementSibling.innerHTML = '提交人：';
+				event.target.form.xfdreason.value = decodeURIComponent($('#delete-reason').text()).replace(/\+/g, ' ');
 				break;
 			case 'fame':
-				e.target.form.mergeinto.parentNode.setAttribute('hidden', '');
-				e.target.form.fwdcsdreason.parentNode.setAttribute('hidden', '');
-				e.target.form.xfdreason.value = Twinkle.getPref('afdFameDefaultReason');
+				event.target.form.mergeinto.parentNode.setAttribute('hidden', '');
+				event.target.form.fwdcsdreason.parentNode.setAttribute('hidden', '');
+				event.target.form.xfdreason.value = Twinkle.getPref('afdFameDefaultReason');
 				break;
 			case 'substub':
-				e.target.form.mergeinto.parentNode.setAttribute('hidden', '');
-				e.target.form.fwdcsdreason.parentNode.setAttribute('hidden', '');
-				e.target.form.xfdreason.value = Twinkle.getPref('afdSubstubDefaultReason');
+				event.target.form.mergeinto.parentNode.setAttribute('hidden', '');
+				event.target.form.fwdcsdreason.parentNode.setAttribute('hidden', '');
+				event.target.form.xfdreason.value = Twinkle.getPref('afdSubstubDefaultReason');
 				break;
 			default:
-				e.target.form.mergeinto.parentNode.setAttribute('hidden', '');
-				e.target.form.fwdcsdreason.parentNode.setAttribute('hidden', '');
+				event.target.form.mergeinto.parentNode.setAttribute('hidden', '');
+				event.target.form.fwdcsdreason.parentNode.setAttribute('hidden', '');
 		}
 		if (Twinkle.getPref('afdDefaultCategory') === 'same') {
-			localStorage.Twinkle_afdCategory = e.target.value;
+			localStorage.Twinkle_afdCategory = event.target.value;
 		}
 	};
 	Twinkle.xfd.callbacks = {
@@ -606,26 +606,26 @@
 			usl.log(appendText, editsummary);
 		},
 	};
-	Twinkle.xfd.callback.evaluate = (e) => {
-		const type = e.target.category.value;
-		const usertalk = e.target.notify.checked;
-		const reason = e.target.xfdreason.value;
+	Twinkle.xfd.callback.evaluate = (event) => {
+		const type = event.target.category.value;
+		const usertalk = event.target.notify.checked;
+		const reason = event.target.xfdreason.value;
 		let fwdcsdreason;
 		let xfdcat;
 		let mergeinto;
 		let noinclude;
 		if (type === 'afd') {
-			fwdcsdreason = e.target.fwdcsdreason.value;
-			noinclude = e.target.noinclude.checked;
-			xfdcat = e.target.xfdcat.value;
-			mergeinto = e.target.mergeinto.value;
+			fwdcsdreason = event.target.fwdcsdreason.value;
+			noinclude = event.target.noinclude.checked;
+			xfdcat = event.target.xfdcat.value;
+			mergeinto = event.target.mergeinto.value;
 		}
 		if (xfdcat === 'merge' && mergeinto.trim() === '') {
 			mw.notify('请提供合并目标！', {type: 'warn'});
 			return;
 		}
 		Morebits.simpleWindow.setButtonsEnabled(false);
-		Morebits.status.init(e.target);
+		Morebits.status.init(event.target);
 		Twinkle.xfd.currentRationale = reason;
 		Morebits.status.onError(Twinkle.xfd.printRationale);
 		if (!type) {

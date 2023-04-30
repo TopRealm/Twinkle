@@ -379,8 +379,8 @@
 				heading.appendChild(span);
 				const a = document.createElement('a');
 				a.href = '#';
-				$(a).on('click', (e) => {
-					e.preventDefault();
+				$(a).on('click', (event) => {
+					event.preventDefault();
 				});
 				heading.appendChild(a);
 			}

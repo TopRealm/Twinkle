@@ -87,9 +87,9 @@
         }
     };
     Twinkle.stub.checkedTags = [];
-    Twinkle.stub.updateSortOrder = (e) => {
-        const sortorder = e.target.value;
-        Twinkle.stub.checkedTags = e.target.form.getChecked('articleTags');
+    Twinkle.stub.updateSortOrder = (event) => {
+        const sortorder = event.target.value;
+        Twinkle.stub.checkedTags = event.target.form.getChecked('articleTags');
         if (!Twinkle.stub.checkedTags) {
             Twinkle.stub.checkedTags = [];
         }
@@ -177,7 +177,7 @@
                 list: checkboxes
             });
         }
-        const $workarea = $(e.target.form).find('div#tagWorkArea');
+        const $workarea = $(event.target.form).find('div#tagWorkArea');
         const rendered = container.render();
         $workarea.empty().append(rendered);
         // style adjustments
@@ -191,7 +191,7 @@
             'margin-top': '0.4em'
         });
         // add a link to each template's description page
-        $.each(Morebits.quickForm.getElements(e.target.form, 'articleTags'), (_index, checkbox) => {
+        $.each(Morebits.quickForm.getElements(event.target.form, 'articleTags'), (_index, checkbox) => {
             const $checkbox = $(checkbox);
             const link = Morebits.htmlNode('a', '>');
             link.setAttribute('class', 'tag-template-link');
@@ -314,8 +314,8 @@
             }
         }
     };
-    Twinkle.stub.callback.evaluate = (e) => {
-        const form = e.target;
+    Twinkle.stub.callback.evaluate = (event) => {
+        const form = event.target;
         const params = {};
         if (form.patrolPage) {
             params.patrol = form.patrolPage.checked;
