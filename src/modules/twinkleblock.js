@@ -203,10 +203,10 @@
 	};
 	Twinkle.block.callback.saveFieldset = (fieldset) => {
 		Twinkle.block[$(fieldset).prop('name')] = {};
-		for (const el of $(fieldset).serializeArray()) {
+		for (const element of $(fieldset).serializeArray()) {
 			// namespaces and pages for partial blocks are overwritten
 			// here, but we're handling them elsewhere so that's fine
-			Twinkle.block[$(fieldset).prop('name')][el.name] = el.value;
+			Twinkle.block[$(fieldset).prop('name')][element.name] = element.value;
 		}
 	};
 	Twinkle.block.callback.change_action = (event) => {

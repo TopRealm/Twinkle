@@ -917,7 +917,7 @@
 	 */
 	Morebits.quickForm.getCheckboxOrRadio = (elementArray, value) => {
 		// eslint-disable-next-line no-jquery/no-grep
-		const found = $.grep(elementArray, (el) => el.value === value);
+		const found = $.grep(elementArray, (element) => element.value === value);
 		if (found.length > 0) {
 			return found[0];
 		}
