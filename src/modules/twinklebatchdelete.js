@@ -334,10 +334,10 @@
 			// If lists of subpages were already loaded once, they are
 			// available without use of any API calls
 			if (subpagesLoaded) {
-				$.each(Twinkle.batchdelete.pages, (_i, el) => {
+				$.each(Twinkle.batchdelete.pages, (_index, element) => {
 					// Get back the subgroup from subgroup_, where we saved it
-					if (el.subgroup === null && el.subgroup_) {
-						el.subgroup = el.subgroup_;
+					if (element.subgroup === null && element.subgroup_) {
+						element.subgroup = element.subgroup_;
 					}
 				});
 				newPageList = Twinkle.batchdelete.generateNewPageList(form);

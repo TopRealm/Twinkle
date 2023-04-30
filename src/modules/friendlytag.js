@@ -50,8 +50,8 @@
 			size: '30',
 			event() {
 				// flush the DOM of all existing underline spans
-				$allCheckboxDivs.find('.search-hit').each((_i, e) => {
-					const label_element = e.parentElement;
+				$allCheckboxDivs.find('.search-hit').each((_index, element) => {
+					const label_element = element.parentElement;
 					// This would convert <label>Hello <span class=search-hit>wo</span>rld</label>
 					// to <label>Hello world</label>
 					label_element.innerHTML = label_element.textContent;
@@ -256,29 +256,29 @@
 				// except when they are within {{multiple issues}}
 				$('.mw-parser-output')
 					.children()
-					.each((_i, e) => {
+					.each((_index, element) => {
 						// break out on encountering the first heading, which means we are no
 						// longer in the lead section
-						if (e.tagName === 'H2') {
+						if (element.tagName === 'H2') {
 							return false;
 						}
 						// The ability to remove tags depends on the template's {{ambox}} |name=
 						// parameter bearing the template's correct name (preferably) or a name that at
 						// least redirects to the actual name
 						// All tags have their first class name as "box-" + template name
-						if (e.className.indexOf('box-') === 0) {
-							if (e.classList[0] === 'box-问题条目') {
-								$(e)
+						if (element.className.indexOf('box-') === 0) {
+							if (element.classList[0] === 'box-问题条目') {
+								$(element)
 									.find('.ambox')
-									.each((_idx, _e) => {
-										if (_e.classList[0].indexOf('box-') === 0) {
-											const tag_ = _e.classList[0].slice('box-'.length).replace(/_/g, ' ');
+									.each((_index, element) => {
+										if (element.classList[0].indexOf('box-') === 0) {
+											const tag_ = element.classList[0].slice('box-'.length).replace(/_/g, ' ');
 											Twinkle.tag.alreadyPresentTags.push(tag_);
 										}
 									});
 								return true; // continue
 							}
-							const tag = e.classList[0].slice('box-'.length).replace(/_/g, ' ');
+							const tag = element.classList[0].slice('box-'.length).replace(/_/g, ' ');
 							Twinkle.tag.alreadyPresentTags.push(tag);
 						}
 					});
@@ -565,7 +565,7 @@
 			// function to iterate through the tags and create a checkbox for each one
 			const doCategoryCheckboxes = (subdiv, subgroup) => {
 				const checkboxes = [];
-				$.each(subgroup, (_k, item) => {
+				$.each(subgroup, (_index, item) => {
 					if (!Twinkle.tag.alreadyPresentTags.includes(item.tag)) {
 						checkboxes.push(makeCheckbox(item.tag, item.description));
 					}

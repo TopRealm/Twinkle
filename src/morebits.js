@@ -507,13 +507,13 @@
 								id: `${id}_${i}_subgroup`,
 							});
 							// eslint-disable-next-line no-loop-func
-							$.each(tmpgroup, (_idx, el) => {
-								const newEl = $.extend({}, el);
-								if (!newEl.type) {
-									newEl.type = data.type;
+							$.each(tmpgroup, (_index, element) => {
+								const newElement = $.extend({}, element);
+								if (!newElement.type) {
+									newElement.type = data.type;
 								}
-								newEl.name = `${current.name || data.name}.${newEl.name}`;
-								subgroupRaw.append(newEl);
+								newElement.name = `${current.name || data.name}.${newElement.name}`;
+								subgroupRaw.append(newElement);
 							});
 							const subgroup = subgroupRaw.render(cur_id);
 							subgroup.className = 'quickformSubgroup';
