@@ -351,7 +351,7 @@ $(function TwinkleBatchDelete() {
 				return;
 			}
 			// Proceed with API calls to get list of subpages
-			const loadingText = '<strong id="dbatch-subpage-loading">加载中...</strong>';
+			const loadingText = $('<strong>').attr('id', 'dbatch-subpage-loading').text('加载中...');
 			$(event.target).after(loadingText);
 			const pages = $(form.pages)
 				.map((_index, element) => element.value)
