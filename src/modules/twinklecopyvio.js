@@ -1,5 +1,5 @@
 /* Twinkle.js - twinklecopyvio.js */
-(() => {
+$(function TwinkleCopyvio() {
 	/**
 	 * twinklecopyvio.js: Copyvio module
 	 * Mode of invocation:    Tab ("Copyvio")
@@ -170,4 +170,4 @@
 		Morebits.wiki.removeCheckpoint();
 	};
 	Twinkle.addInitCallback(Twinkle.copyvio, 'copyvio');
-})();
+});

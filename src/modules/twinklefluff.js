@@ -270,11 +270,11 @@ $(function TwinkleFluff() {
 						label: '选择回退理由',
 						value: '',
 					});
-					$(Twinkle.getPref('customRevertSummary')).each((_, e) => {
+					$(Twinkle.getPref('customRevertSummary')).each((index, element) => {
 						revertsummary.append({
 							type: 'option',
-							label: e.label,
-							value: e.value,
+							label: element.label,
+							value: element.value,
 						});
 					});
 					revertToRevision.appendChild(revertsummary.render().childNodes[0]);

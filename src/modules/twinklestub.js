@@ -114,7 +114,7 @@ $(function TwinkleStub() {
 				label: '自定义模板'
 			});
 			const customcheckboxes = [];
-			$.each(Twinkle.getPref('customStubList'), (_, item) => {
+			$.each(Twinkle.getPref('customStubList'), (index, item) => {
 				customcheckboxes.push(makeCheckbox(item.value, item.label));
 			});
 			container.append({

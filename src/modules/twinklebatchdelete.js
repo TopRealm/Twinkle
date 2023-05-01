@@ -201,8 +201,8 @@ $(function TwinkleBatchDelete() {
 					event: () => {
 						$(result)
 							.find('input[name=pages]:not(:checked)')
-							.each((_, e) => {
-								e.click(); // check it, and invoke click event so that subgroup can be shown
+							.each((index, element) => {
+								element.click(); // check it, and invoke click event so that subgroup can be shown
 							});
 						// Check any unchecked subpages too
 						$('input[name="pages.subpages"]').prop('checked', true);
@@ -214,8 +214,8 @@ $(function TwinkleBatchDelete() {
 					event: () => {
 						$(result)
 							.find('input[name=pages]:checked')
-							.each((_, e) => {
-								e.click(); // uncheck it, and invoke click event so that subgroup can be hidden
+							.each((index, element) => {
+								element.click(); // uncheck it, and invoke click event so that subgroup can be hidden
 							});
 					},
 				});

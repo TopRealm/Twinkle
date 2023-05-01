@@ -1156,7 +1156,7 @@ $(function TwinkleWarn() {
 				break;
 			case 'kitchensink':
 				for (const lvl of ['level1', 'level2', 'level3', 'level4', 'level4im']) {
-					$.each(Twinkle.warn.messages.levels, (_, levelGroup) => {
+					$.each(Twinkle.warn.messages.levels, (index, levelGroup) => {
 						createEntries(levelGroup, sub_group, true, lvl);
 					});
 				}

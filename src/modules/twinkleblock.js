@@ -1028,11 +1028,11 @@ $(function TwinkleBlock() {
 			Twinkle.block.blockPresetsInfo[preset] = settings;
 		});
 		if (!Twinkle.block.blockGroupsUpdated) {
-			$.each([...Twinkle.block.blockGroups, ...Twinkle.block.blockGroupsPartial], (_, blockGroup) => {
+			$.each([...Twinkle.block.blockGroups, ...Twinkle.block.blockGroupsPartial], (index, blockGroup) => {
 				if (blockGroup.custom) {
 					blockGroup.list = Twinkle.getPref('customBlockReasonList');
 				}
-				$.each(blockGroup.list, (__, blockPreset) => {
+				$.each(blockGroup.list, (index, blockPreset) => {
 					const value = blockPreset.value;
 					const reason = blockPreset.label;
 					const newPreset = `${value}:${reason}`;

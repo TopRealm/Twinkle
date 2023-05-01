@@ -164,7 +164,7 @@
 		const ub = new Morebits.unbinder(text);
 		// Don't convert wikilinks within code tags as they're used for displaying wiki-code
 		ub.unbind('<code>', '</code>');
-		ub.content = ub.content.replace(/\[\[:?(?:([^\]|]+?)\|)?([^\]|]+?)]]/g, (_, target, text) => {
+		ub.content = ub.content.replace(/\[\[:?(?:([^\]|]+?)\|)?([^\]|]+?)]]/g, (index, target, text) => {
 			if (!target) {
 				target = text;
 			}
