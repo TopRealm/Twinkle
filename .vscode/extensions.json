@@ -1,0 +1,9 @@
+{
+	"recommendations": [
+		"dbaeumer.vscode-eslint",
+		"EditorConfig.EditorConfig",
+		"esbenp.prettier-vscode",
+		"usernamehw.errorlens",
+		"yoavbls.pretty-ts-errors"
+	]
+}
