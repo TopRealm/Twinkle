@@ -209,7 +209,7 @@ $(function TwinkleBatchProtect() {
 						label: title + (metadata.length > 0 ? ` (${metadata.join('; ')})` : ''),
 						value: title,
 						checked: true,
-						style: editProt ? 'color:red' : '',
+						style: editProt ? 'color: red' : '',
 					});
 				}
 				form.append({

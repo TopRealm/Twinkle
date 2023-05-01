@@ -187,7 +187,7 @@ $(function TwinkleBatchDelete() {
 						label: title + (metadata.length > 0 ? `（${metadata.join('、')}）` : ''),
 						value: title,
 						checked: true,
-						style: editProt ? 'color:red' : '',
+						style: editProt ? 'color: red' : '',
 					};
 				}
 				const form_ = apiobj.params.form;
@@ -416,7 +416,7 @@ $(function TwinkleBatchDelete() {
 									label: title + (metadata.length > 0 ? ` (${metadata.join('; ')})` : ''),
 									value: title,
 									checked: true,
-									style: editProt ? 'color:red' : '',
+									style: editProt ? 'color: red' : '',
 								});
 							}
 							if (subpageList.length > 0) {

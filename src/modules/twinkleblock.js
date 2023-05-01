@@ -450,14 +450,14 @@ $(function TwinkleBlock() {
 				type: 'div',
 				name: 'filerlog_label',
 				label: '“参见”：',
-				style: 'display:inline-block;font-style:normal !important',
+				style: 'display: inline-block; font-style: normal !important',
 				tooltip: '在封禁理由中标清特殊情况以供其他管理员参考',
 			});
 			field_block_options.append({
 				type: 'checkbox',
 				name: 'filter_see_also',
 				event: Twinkle.block.callback.toggle_see_alsos,
-				style: 'display:inline-block; margin-right:5px',
+				style: 'display: inline-block; margin-right: 5px',
 				list: [
 					{
 						label: '过滤器日志',
@@ -470,7 +470,7 @@ $(function TwinkleBlock() {
 				type: 'checkbox',
 				name: 'deleted_see_also',
 				event: Twinkle.block.callback.toggle_see_alsos,
-				style: 'display:inline-block',
+				style: 'display: inline-block',
 				list: [
 					{
 						label: '已删除的编辑',
@@ -483,7 +483,7 @@ $(function TwinkleBlock() {
 				type: 'checkbox',
 				name: 'filter_see_also',
 				event: Twinkle.block.callback.toggle_see_alsos,
-				style: 'display:inline-block; margin-right:5px',
+				style: 'display: inline-block; margin-right: 5px',
 				list: [
 					{
 						label: '用户讨论页',
@@ -496,7 +496,7 @@ $(function TwinkleBlock() {
 				type: 'checkbox',
 				name: 'filter_see_also',
 				event: Twinkle.block.callback.toggle_see_alsos,
-				style: 'display:inline-block; margin-right:5px',
+				style: 'display: inline-block; margin-right: 5px',
 				list: [
 					{
 						label: '过去的封禁记录',
