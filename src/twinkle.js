@@ -14,7 +14,6 @@
  * All changes should be made in the repository, otherwise they will be lost.
  * Visit [[H:TW]] for more information.
  */
-/* global Morebits */
 (function Twinkle(window, document, $) {
 	// Wrap with anonymous function
 	// Check if account is experienced enough to use Twinkle

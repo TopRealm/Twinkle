@@ -13,5 +13,9 @@
 		"no-useless-concat": "off",
 		"no-use-before-define": "off",
 		"unicorn/prefer-string-slice": "off"
+	},
+	"globals": {
+		"Morebits": "readonly",
+		"Twinkle": "writable"
 	}
 }
