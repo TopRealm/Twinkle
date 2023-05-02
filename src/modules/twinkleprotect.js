@@ -1,4 +1,3 @@
-/* eslint-disable no-useless-call */
 /* Twinkle.js - twinkleprotect.js */
 $(function TwinkleProtect() {
 	/**
