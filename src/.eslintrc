@@ -1,5 +1,12 @@
 {
 	"rules": {
+		"@typescript-eslint/no-this-alias": [
+			"error",
+			{
+				"allowDestructuring": true,
+				"allowedNames": ["self"]
+			}
+		],
 		"jsdoc/require-returns": "off",
 		"jsdoc/valid-types": "off",
 		"jsdoc/require-param-type": "off",
@@ -8,6 +15,7 @@
 		"no-jquery/no-each-util": "off",
 		"no-jquery/no-map-util": "off",
 		"no-jquery/no-sizzle": "off",
+		"no-script-url": "off",
 		"no-shadow": "off",
 		"no-useless-call": "off",
 		"no-useless-concat": "off",

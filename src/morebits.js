@@ -367,7 +367,6 @@
 			case 'form':
 				node = document.createElement('form');
 				node.className = 'quickform';
-				// eslint-disable-next-line no-script-url
 				node.setAttribute('action', 'javascript:void(0);');
 				if (data.event) {
 					node.addEventListener(data.eventType || 'submit', data.event, false);
@@ -916,8 +915,7 @@
 	 * @returns {HTMLInputElement}
 	 */
 	Morebits.quickForm.getCheckboxOrRadio = (elementArray, value) => {
-		// eslint-disable-next-line no-jquery/no-grep
-		const found = $.grep(elementArray, (element) => element.value === value);
+		const found = elementArray.filter((element) => element.value === value);
 		if (found.length > 0) {
 			return found[0];
 		}
@@ -1658,7 +1656,6 @@
 		 */
 		rebind() {
 			let content = this.content;
-			// eslint-disable-next-line @typescript-eslint/no-this-alias
 			content.self = this;
 			for (const current in this.history) {
 				if (Object.prototype.hasOwnProperty.call(this.history, current)) {
