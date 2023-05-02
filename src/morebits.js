@@ -168,7 +168,7 @@
 			if (!target) {
 				target = text;
 			}
-			return `<a target="_blank" href="${mw.util.getUrl(target)}" title="${target.replace(
+			return `<a rel="noopener" target="_blank" href="${mw.util.getUrl(target)}" title="${target.replace(
 				/"/g,
 				'&#34;'
 			)}">${text}</a>`;

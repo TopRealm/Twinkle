@@ -814,7 +814,7 @@ $(function TwinkleBlock() {
 		}
 		if (blockBox && Twinkle.block.hasBlockLog) {
 			const $blockloglink = $(
-				`<a target="_blank" href="${mw.util.getUrl('Special:Log', {
+				`<a rel="noopener" target="_blank" href="${mw.util.getUrl('Special:Log', {
 					action: 'view',
 					page: relevantUserName,
 					type: 'block',

@@ -170,7 +170,7 @@ $(function TwinkleProtect() {
 			if (Twinkle.protect.hasProtectLog) {
 				$linkMarkup.append(
 					$(
-						`<a target="_blank" href="${mw.util.getUrl('Special:Log', {
+						`<a rel="noopener" target="_blank" href="${mw.util.getUrl('Special:Log', {
 							action: 'view',
 							page: mw.config.get('wgPageName'),
 							type: 'protect',

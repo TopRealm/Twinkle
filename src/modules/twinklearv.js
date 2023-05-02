@@ -378,7 +378,7 @@ $(function TwinkleARV() {
 				aivPage.setFollowRedirect(true);
 				aivPage.load(() => {
 					const text = aivPage.getPageText();
-					const $aivLink = '<a target="_blank" href="/wiki/QW:AIV">QW:AIV</a>';
+					const $aivLink = '<a rel="noopener" target="_blank" href="/wiki/QW:AIV">QW:AIV</a>';
 					// check if user has already been reported
 					if (
 						new RegExp(
@@ -448,7 +448,7 @@ $(function TwinkleARV() {
 						).test(text)
 					) {
 						uaaPage.getStatusElement().error('User is already listed.');
-						const $uaaLink = '<a target="_blank" href="/wiki/QW:UAA">QW:UAA</a>';
+						const $uaaLink = '<a rel="noopener" target="_blank" href="/wiki/QW:UAA">QW:UAA</a>';
 						Morebits.status.printUserText(
 							reason,
 							`The comments you typed are provided below, in case you wish to manually post them under the existing report for this user at ${$uaaLink}:`
