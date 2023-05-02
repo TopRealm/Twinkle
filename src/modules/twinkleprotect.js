@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-call */
 /* Twinkle.js - twinkleprotect.js */
 $(function TwinkleProtect() {
 	/**
@@ -117,7 +118,7 @@ $(function TwinkleProtect() {
 			inprop: 'protection|watched',
 			titles: mw.config.get('wgPageName'),
 		});
-		$.when(...[protectDeferred]).done((protectData) => {
+		$.when.apply($, [protectDeferred]).done((protectData) => {
 			// $.when.apply is supposed to take an unknown number of promises
 			// via an array, which it does, but the type of data returned varies.
 			// If there are two or more deferreds, it returns an array (of objects),

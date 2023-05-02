@@ -9,6 +9,7 @@
 		"no-jquery/no-map-util": "off",
 		"no-jquery/no-sizzle": "off",
 		"no-shadow": "off",
+		"no-useless-call": "off",
 		"no-useless-concat": "off",
 		"no-use-before-define": "off",
 		"unicorn/prefer-string-slice": "off"
