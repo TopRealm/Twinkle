@@ -24,6 +24,11 @@
 	},
 	"css.format.spaceAroundSelectorSeparator": true,
 	"css.lint.unknownAtRules": "ignore",
+	"errorLens.editorHoverPartsEnabled": {
+		"buttonsEnabled": false
+	},
+	"errorLens.enableOnDiffView": true,
+	"stylelint.packageManager": "pnpm",
 	"explorer.fileNesting.enabled": true,
 	"explorer.fileNesting.expand": false,
 	"explorer.fileNesting.patterns": {
