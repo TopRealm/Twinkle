@@ -415,7 +415,7 @@ $(function TwinkleClose() {
 					break;
 				}
 				default:
-					mw.notify( `关闭存废讨论：未定义 ${code}`, { type: 'warn' } );
+					mw.notify(`关闭存废讨论：未定义 ${code}`, { type: 'warn' });
 			}
 		}
 	};
@@ -482,8 +482,8 @@ $(function TwinkleClose() {
 			const pages = $(xml)
 				.find('rd')
 				.map(function () {
-					return $(this).attr('title');
-				})
+				return $(this).attr('title');
+			})
 				.get();
 			if (pages.length === 0) {
 				return;

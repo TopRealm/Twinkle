@@ -2,9 +2,9 @@
 $(function TwinkleBatchProtect() {
 	/**
 	 * twinklebatchprotect.js: Batch protect module (sysops only)
-	 * Mode of invocation:     Tab ("P-batch")
-	 * Active on:              Existing project pages and user pages; existing and
-	 *                         non-existing categories; Special:PrefixIndex
+	 * Mode of invocation: Tab ("P-batch")
+	 * Active on: Existing project pages and user pages;
+	 * existing and non-existing categories; Special:PrefixIndex
 	 */
 	Twinkle.batchprotect = () => {
 		if (

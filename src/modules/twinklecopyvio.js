@@ -2,8 +2,9 @@
 $(function TwinkleCopyvio() {
 	/**
 	 * twinklecopyvio.js: Copyvio module
-	 * Mode of invocation:    Tab ("Copyvio")
-	 * Active on:             Existing, non-special pages, except for file pages with no local (non-Commons) file which are not redirects
+	 * Mode of invocation:	Tab ("Copyvio")
+	 * Active on: Existing, non-special pages, except for file pages
+	 * with no local (non-Commons) file which are not redirects
 	 * Config directives in:  TwinkleConfig
 	 */
 	Twinkle.copyvio = () => {

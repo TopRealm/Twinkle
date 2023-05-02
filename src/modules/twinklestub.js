@@ -70,7 +70,7 @@ $(function TwinkleStub() {
 				});
 				break;
 			default:
-				mw.notify( `Twinkle.stub：未知模式 ${Twinkle.stub.mode}`, { type: 'warn' } );
+				mw.notify(`Twinkle.stub：未知模式 ${Twinkle.stub.mode}`, { type: 'warn' });
 				break;
 		}
 		form.append({
@@ -251,7 +251,7 @@ $(function TwinkleStub() {
 		sport: '体育',
 		tech: '技术',
 		art: '艺术'
-	}
+	};
 	Twinkle.stub.article.tagCategories = {
 		general: ['stub', 'expand list'],
 		geo: ['asia-stub', 'europe-stub', 'france-geo-stub', 'geo-stub', 'JP-stub', 'switzerland-stub', 'UK-stub', 'US-bio-stub', 'US-geo-stub', 'US-stub'],
@@ -327,11 +327,11 @@ $(function TwinkleStub() {
 				params.group = false;
 				break;
 			default:
-				mw.notify( `Twinkle.stub：未知模式 ${Twinkle.stub.mode}`, { type: 'warn' } );
+				mw.notify(`Twinkle.stub：未知模式 ${Twinkle.stub.mode}`, { type: 'warn' });
 				break;
 		}
 		if (params.tags.length === 0) {
-			mw.notify( '必须选择至少一个标记！', { type: 'warn' } );
+			mw.notify('必须选择至少一个标记！', { type: 'warn' });
 			return;
 		}
 		Morebits.simpleWindow.setButtonsEnabled(false);
@@ -355,7 +355,7 @@ $(function TwinkleStub() {
 				qiuwen_page.load(Twinkle.stub.callbacks.file);
 				break;
 			default:
-				mw.notify( `Twinkle.stub：未知模式 ${Twinkle.stub.mode}`, { type: 'warn' } );
+				mw.notify(`Twinkle.stub：未知模式 ${Twinkle.stub.mode}`, { type: 'warn' });
 				break;
 		}
 	};

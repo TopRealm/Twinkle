@@ -1628,7 +1628,8 @@ $(function TwinkleBlock() {
 			}
 			/*
 			 * Check if block status changed while processing the form.
-			 *   There's a lot to consider here. list=blocks provides the
+			 *
+			 * There's a lot to consider here. list=blocks provides the
 			 * current block status, but there are at least two issues with
 			 * relying on it. First, the id doesn't update on a reblock,
 			 * meaning the individual parameters need to be compared. This
@@ -1641,7 +1642,8 @@ $(function TwinkleBlock() {
 			 * list=logevents, which has a nicely updating logid
 			 * parameter. We can't rely just on that, though, since it
 			 * doesn't account for blocks that have expired on their own.
-			 *    As such, we use both. Using some ternaries, the logid
+			 *
+			 * As such, we use both. Using some ternaries, the logid
 			 * variables are false if there's no logevents, so if they
 			 * aren't equal we defintely have a changed entry (send
 			 * confirmation). If they are equal, then either the user was

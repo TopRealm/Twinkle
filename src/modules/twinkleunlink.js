@@ -3,7 +3,7 @@ $(function TwinkleUnlink() {
 	/**
 	 * twinkleunlink.js: Unlink module
 	 * Mode of invocation: Tab ("Unlink")
-	 * Active on: Non-special pages, except Qiuwen:Sandbox
+	 * Active on: Non-special pages, except Qiuwen:沙盒
 	 */
 	Twinkle.unlink = () => {
 		if (

@@ -2,8 +2,10 @@
 $(function TwinkleFluff() {
 	/**
 	 * twinklefluff.js: Revert/rollback module
-	 * Mode of invocation: Links on contributions, recent changes, history, and diff pages
-	 * Active on: Diff pages, history pages, Special:RecentChanges(Linked), and Special:Contributions
+	 * Mode of invocation: Links on contributions,
+	 * recent changes, history, and diff pages
+	 * Active on: Diff pages, history pages,
+	 * Special:RecentChanges(Linked), and Special:Contributions
 	 */
 	/**
 	 * Twinklefluff revert and antivandalism utility
