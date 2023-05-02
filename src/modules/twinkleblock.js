@@ -230,7 +230,8 @@ $(function TwinkleBlock() {
 		if (event.target.value === 'unblock') {
 			if (!Twinkle.block.currentBlockInfo) {
 				unblock.prop('checked', false);
-				return mw.notify('用户没有被封禁', {type: 'warn'});
+				mw.notify('用户没有被封禁', {type: 'warn'});
+				return;
 			}
 			block.prop('checked', false);
 			blockBox = false;
@@ -1558,7 +1559,8 @@ $(function TwinkleBlock() {
 		};
 		if (toTag) {
 			if (params.tag.length === 0) {
-				return mw.notify('请至少选择一个用户页标记！', {type: 'warn'});
+				mw.notify('请至少选择一个用户页标记！', {type: 'warn'});
+				return;
 			}
 			if (
 				checkIncompatible(
@@ -1585,34 +1587,43 @@ $(function TwinkleBlock() {
 				return;
 			}
 			if (params.tag.includes('Blocked sockpuppet') && params.sppUsername.trim() === '') {
-				return mw.notify('请提供傀儡账户的主账户用户名！', {type: 'warn'});
+				mw.notify('请提供傀儡账户的主账户用户名！', {type: 'warn'});
+				return;
 			}
 		}
 		if (toBlock) {
 			if (blockoptions.partial) {
 				if (blockoptions.disabletalk && !blockoptions.namespacerestrictions.includes('3')) {
-					return mw.notify('部分封禁无法阻止编辑自己的讨论页，除非也封禁了User talk命名空间！', {
+					mw.notify('部分封禁无法阻止编辑自己的讨论页，除非也封禁了User talk命名空间！', {
 						type: 'warn',
 					});
+					return;
 				}
 				if (!blockoptions.namespacerestrictions && !blockoptions.pagerestrictions) {
 					if (!blockoptions.noemail && !blockoptions.nocreate) {
 						// Blank entries technically allowed
-						return alert(
-							'没有选择页面或命名空间，也没有停用电子邮件或禁止创建账户；请选择至少一个选项以应用部分封禁！'
+						mw.notify(
+							'没有选择页面或命名空间，也没有停用电子邮件或禁止创建账户；请选择至少一个选项以应用部分封禁！',
+							{
+								type: 'warn',
+							}
 						);
+						return;
 					} else if (!confirm('您将要进行封禁，但没有阻止任何页面或命名空间的编辑，确定要继续？')) {
 						return;
 					}
 				}
 			}
 			if (!blockoptions.expiry) {
-				return mw.notify('请提供过期时间！', {type: 'warn'});
+				mw.notify('请提供过期时间！', {type: 'warn'});
+				return;
 			} else if (Morebits.string.isInfinity(blockoptions.expiry) && !Twinkle.block.isRegistered) {
-				return mw.notify('禁止无限期封禁IP地址！', {type: 'warn'});
+				mw.notify('禁止无限期封禁IP地址！', {type: 'warn'});
+				return;
 			}
 			if (!blockoptions.reason) {
-				return mw.notify('请提供封禁理由！', {type: 'warn'});
+				mw.notify('请提供封禁理由！', {type: 'warn'});
+				return;
 			}
 			Morebits.simpleWindow.setButtonsEnabled(false);
 			Morebits.status.init(event.target);
@@ -1725,7 +1736,8 @@ $(function TwinkleBlock() {
 		}
 		if (toUnblock) {
 			if (!unblockoptions.reason) {
-				return mw.notify('请提供解除封禁理由！', {type: 'warn'});
+				mw.notify('请提供解除封禁理由！', {type: 'warn'});
+				return;
 			}
 			Morebits.simpleWindow.setButtonsEnabled(false);
 			Morebits.status.init(event.target);
@@ -1741,7 +1753,8 @@ $(function TwinkleBlock() {
 			unblockMbApi.post();
 		}
 		if (!toBlock && !toWarn && !toTag && !toProtect && !toUnblock) {
-			return mw.notify('Twinkle没有要执行的任务！', {type: 'warn'});
+			mw.notify('Twinkle没有要执行的任务！', {type: 'warn'});
+			return;
 		}
 	};
 	Twinkle.block.callback.taguserpage = (pageobj) => {
