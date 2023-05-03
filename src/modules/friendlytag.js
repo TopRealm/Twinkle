@@ -1151,7 +1151,7 @@ $(function FriendlyTag() {
 				const removedTags = params.tagsToRemove.map((tag) => makeTemplateLink(tag));
 				if (addedTags.length > 0) {
 					summaryText = `加入${makeSentence(addedTags)}`;
-					summaryText += removedTags.length > 0 ? `並移除${makeSentence(removedTags)}` : '';
+					summaryText += removedTags.length > 0 ? `并移除${makeSentence(removedTags)}` : '';
 				} else {
 					summaryText = `移除${makeSentence(removedTags)}`;
 				}
