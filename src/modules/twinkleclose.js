@@ -481,9 +481,7 @@ $(function TwinkleClose() {
 			const xml = apiobj.responseXML;
 			const pages = $(xml)
 				.find('rd')
-				.map(function () {
-				return $(this).attr('title');
-			})
+				.map((_index, element) => $(element).attr('title'))
 				.get();
 			if (pages.length === 0) {
 				return;
