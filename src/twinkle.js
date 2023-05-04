@@ -14,7 +14,7 @@
  * All changes should be made in the repository, otherwise they will be lost.
  * Visit [[H:TW]] for more information.
  */
-(function Twinkle(window, document, $) {
+(function twinkle(window, document, $) {
 	// Wrap with anonymous function
 	// Check if account is experienced enough to use Twinkle
 	if (!Morebits.userIsInGroup('autoconfirmed') && !Morebits.userIsInGroup('confirmed')) {
