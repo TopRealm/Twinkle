@@ -61,12 +61,13 @@ $(function FriendlyTag() {
 					$allHeaders.hide();
 					const searchString = this.value;
 					const searchRegex = new RegExp(mw.util.escapeRegExp(searchString), 'i');
-					$allCheckboxDivs.find('label').each(function () {
-						const label_text = this.textContent;
+					$allCheckboxDivs.find('label').each((_index, element) => {
+						const self = element;
+						const label_text = self.textContent;
 						const searchHit = searchRegex.exec(label_text);
 						if (searchHit) {
 							const range = document.createRange();
-							const textnode = this.childNodes[0];
+							const textnode = self.childNodes[0];
 							range.selectNodeContents(textnode);
 							range.setStart(textnode, searchHit.index);
 							range.setEnd(textnode, searchHit.index + searchString.length);
@@ -74,7 +75,7 @@ $(function FriendlyTag() {
 								.addClass('search-hit')
 								.css('text-decoration', 'underline')[0];
 							range.surroundContents(underline_span);
-							this.parentElement.style.display = 'block'; // show
+							self.parentElement.style.display = 'block'; // show
 						}
 					});
 				} else {
