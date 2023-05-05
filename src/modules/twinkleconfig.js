@@ -1273,7 +1273,10 @@ $(function TwinkleConfig() {
 								/{{(.+?)}}/g,
 								`{{<a href="${mw.util.getUrl('Template:')}$1" rel="noopener" target="_blank">$1</a>}}`
 							)
-							.replace(/\[\[(.+?)]]/g, `<a href="${mw.util.getUrl('')}$1" rel="noopener" target="_blank">$1</a>`);
+							.replace(
+								/\[\[(.+?)]]/g,
+								`<a href="${mw.util.getUrl('')}$1" rel="noopener" target="_blank">$1</a>`
+							);
 					}
 					// add reset link (custom lists don't need this, as their config value isn't displayed on the form)
 					if (pref.type !== 'customList') {
