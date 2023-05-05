@@ -76,7 +76,7 @@
 	/**
 	 * Simple helper function to see what groups a user might belong.
 	 *
-	 * @param {string} group - e.g. `sysop`, `extendedconfirmed`, etc.
+	 * @param {string} group - e.g. `sysop`, `autoconfirmed`, etc.
 	 * @returns {boolean}
 	 */
 	Morebits.userIsInGroup = (group) => mw.config.get('wgUserGroups').includes(group);
@@ -3071,7 +3071,7 @@
 		// Protect-related setter functions
 		/**
 		 * @param {string} level - The right required for the specific action
-		 * e.g. autoconfirmed, sysop, templateeditor, extendedconfirmed
+		 * e.g. autoconfirmed, sysop, templateeditor
 		 * (enWiki-only).
 		 * @param {string} [expiry=infinity]
 		 */
