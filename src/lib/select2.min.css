@@ -311,7 +311,7 @@
 }
 
 .select2-container--default.select2-container--focus .select2-selection--multiple {
-	border: solid black 1px;
+	border: 1px solid #000;
 	outline: 0;
 }
 
