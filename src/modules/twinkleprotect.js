@@ -98,7 +98,7 @@ $(function TwinkleProtect() {
 	// but those are only available via a siteinfo query
 	// Customizable namespace settings
 	// Limit template editor; a Twinkle restriction, not a site setting
-	const isTemplate = mw.config.get('wgNamespaceNumber') === 10 || mw.config.get('wgNamespaceNumber') === 828;
+	const isTemplate = [10, 828].includes(mw.config.get('wgNamespaceNumber'));
 	// Contains the current protection level in an object
 	// Once filled, it will look something like:
 	// { edit: { level: "sysop", expiry: <some date>, cascade: true }, ... }
