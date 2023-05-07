@@ -1073,6 +1073,7 @@ $(function TwinkleSpeedy() {
 					Morebits.status.info($bigtext[0], $link[0]);
 				}
 				// promote Unlink tool
+				// f7: {{NowCommons}}
 				if (mw.config.get('wgNamespaceNumber') === 6 && params.normalized !== 'f7') {
 					$link = $('<a>')
 						.attr('href', '#')
