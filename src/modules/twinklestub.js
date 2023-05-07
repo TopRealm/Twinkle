@@ -12,7 +12,7 @@ $(function TwinkleStub() {
 			// Skip
 			// article/draft article tagging
 		}
-		else if ((mw.config.get('wgNamespaceNumber') === 0 || mw.config.get('wgNamespaceNumber') === 118) && mw.config.get('wgCurRevisionId') ||
+		else if (([0, 118].includes(mw.config.get('wgNamespaceNumber'))) && mw.config.get('wgCurRevisionId') ||
 			Morebits.pageNameNorm === Twinkle.getPref('sandboxPage')) {
 			Twinkle.stub.mode = '条目';
 			Twinkle.addPortletLink(Twinkle.stub.callback, '小作品', 'friendly-tag', '标记小作品');

@@ -9,8 +9,7 @@ $(function TwinkleBatchProtect() {
 	Twinkle.batchprotect = () => {
 		if (
 			Morebits.userIsSysop &&
-			((mw.config.get('wgArticleId') > 0 &&
-				(mw.config.get('wgNamespaceNumber') === 2 || mw.config.get('wgNamespaceNumber') === 4)) ||
+			((mw.config.get('wgArticleId') > 0 && [2, 4].includes(mw.config.get('wgNamespaceNumber'))) ||
 				mw.config.get('wgNamespaceNumber') === 14 ||
 				mw.config.get('wgCanonicalSpecialPageName') === 'Prefixindex')
 		) {
