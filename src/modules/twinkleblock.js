@@ -1037,7 +1037,7 @@ $(function TwinkleBlock() {
 					const value = blockPreset.value;
 					const reason = blockPreset.label;
 					const newPreset = `${value}:${reason}`;
-					Twinkle.block.blockPresetsInfo[newPreset] = jQuery.extend(
+					Twinkle.block.blockPresetsInfo[newPreset] = $.extend(
 						true,
 						{},
 						Twinkle.block.blockPresetsInfo[value]
