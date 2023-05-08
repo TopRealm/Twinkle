@@ -270,8 +270,9 @@ class Deploy {
 
 	async makeEditSummary() {
 		this.sha = execSync('git rev-parse --short HEAD').toString('utf8').trim();
+		this.summary = execSync('git log --pretty=format:"%s" HEAD -1').toString('utf8').trim();
 		const message = await input('> Edit summary message (optional): ');
-		this.editSummary = `Git 版本 ${this.sha}: ${message || '代码仓库同步更新'}`;
+		this.editSummary = `Git 版本 ${this.sha}: ${message || this.summary || '代码仓库同步更新'}`;
 		console.log(`Edit summary is: "${this.editSummary}"`);
 	}
 
