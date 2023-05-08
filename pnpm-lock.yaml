@@ -38,8 +38,8 @@ devDependencies:
     specifier: ^0.25.0
     version: 0.25.0
   git-commit-msg-linter:
-    specifier: ^4.11.1
-    version: 4.11.1
+    specifier: ^5.0.4
+    version: 5.0.4
   minimist:
     specifier: ^1.2.8
     version: 1.2.8
@@ -1945,6 +1945,14 @@ packages:
     engines: {node: '>= 12.0.0'}
     dev: true
 
+  /commit-msg-linter@1.0.0:
+    resolution: {integrity: sha512-Di9oAjfjIwAcASQ8abW1936twemUdDQq4D1dBL42Y+S6rNXykauIBPztj8Ej4/MjI6zIziLVzfhmdkg0z4I4rg==}
+    engines: {node: '>= 8.0.0'}
+    dependencies:
+      did-you-mean: 0.0.1
+      supports-color: 8.1.1
+    dev: true
+
   /concat-map@0.0.1:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
     dev: true
@@ -2567,15 +2575,14 @@ packages:
     engines: {node: '>=6.9.0'}
     dev: true
 
-  /git-commit-msg-linter@4.11.1:
-    resolution: {integrity: sha512-MKkHt9v8FjEDxPMmelgG/EJm4V5mf0mL+u+yokDxPWtc0LW7W/+sG0gEG3H/zhE8JMOjYScCgrEwsyEyNeKpXw==}
-    engines: {node: '>= 8.0.0'}
+  /git-commit-msg-linter@5.0.4:
+    resolution: {integrity: sha512-XxdvLbgQDbPlZwru9Tns2zgFvk4UhcWT+LVVNP2tSiAjkY0RJws9zqhUgolXJvpiPDvSbbDMpGu3EtXiKN/IeA==}
+    engines: {node: '>= 14.0.0'}
     hasBin: true
     requiresBuild: true
     dependencies:
       chalk: 2.4.2
-      did-you-mean: 0.0.1
-      supports-color: 8.1.1
+      commit-msg-linter: 1.0.0
     dev: true
 
   /glob-parent@5.1.2:
