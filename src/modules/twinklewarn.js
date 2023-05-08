@@ -928,6 +928,10 @@ $(function TwinkleWarn() {
 				label: '没有使用编辑摘要',
 				summary: '提醒：没有使用编辑摘要',
 			},
+			'uw-draft': {
+				label: '最近创建的页面被移动到草稿',
+				summary: '提醒：最近创建的页面被移动到草稿'
+			},
 			'uw-hangon': {
 				label: '没有在讨论页说明暂缓快速删除理由',
 				summary: '提醒：没有在讨论页说明暂缓快速删除理由',
