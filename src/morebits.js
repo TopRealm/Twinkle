@@ -1481,50 +1481,50 @@
 		/**
 		 * Remove duplicated items from an array.
 		 *
-		 * @param {Array} arr
+		 * @param {Array} array
 		 * @returns {Array} A copy of the array with duplicates removed.
 		 * @throws When provided a non-array.
 		 */
-		uniq: (arr) => {
-			if (!Array.isArray(arr)) {
+		uniq: (array) => {
+			if (!Array.isArray(array)) {
 				throw new TypeError('A non-array object passed to Morebits.array.uniq');
 			}
-			return arr.filter((item, idx) => arr.indexOf(item) === idx);
+			return array.filter((item, index) => array.indexOf(item) === index);
 		},
 		/**
 		 * Remove non-duplicated items from an array.
 		 *
-		 * @param {Array} arr
+		 * @param {Array} array
 		 * @returns {Array} A copy of the array with the first instance of each value
 		 * removed; subsequent instances of those values (duplicates) remain.
 		 * @throws When provided a non-array.
 		 */
-		dups: (arr) => {
-			if (!Array.isArray(arr)) {
+		dups: (array) => {
+			if (!Array.isArray(array)) {
 				throw new TypeError('A non-array object passed to Morebits.array.dups');
 			}
-			return arr.filter((item, idx) => arr.indexOf(item) !== idx);
+			return array.filter((item, index) => array.indexOf(item) !== index);
 		},
 		/**
 		 * Break up an array into smaller arrays.
 		 *
-		 * @param {Array} arr
+		 * @param {Array} array
 		 * @param {number} size - Size of each chunk (except the last, which could be different).
 		 * @returns {Array[]} An array containing the smaller, chunked arrays.
 		 * @throws When provided a non-array.
 		 */
-		chunk: (arr, size) => {
-			if (!Array.isArray(arr)) {
+		chunk: (array, size) => {
+			if (!Array.isArray(array)) {
 				throw new TypeError('A non-array object passed to Morebits.array.chunk');
 			}
 			if (typeof size !== 'number' || size <= 0) {
 				// pretty impossible to do anything :)
-				return [arr]; // we return an array consisting of this array.
+				return [array]; // we return an array consisting of this array.
 			}
-			const numChunks = Math.ceil(arr.length / size);
+			const numChunks = Math.ceil(array.length / size);
 			const result = Array.from({length: numChunks});
 			for (let i = 0; i < numChunks; i++) {
-				result[i] = arr.slice(i * size, (i + 1) * size);
+				result[i] = array.slice(i * size, (i + 1) * size);
 			}
 			return result;
 		},
@@ -1572,16 +1572,16 @@
 			if (!searchTerm || data.loading) {
 				return data.text;
 			}
-			const idx = data.text.toUpperCase().indexOf(searchTerm.toUpperCase());
-			if (idx < 0) {
+			const index = data.text.toUpperCase().indexOf(searchTerm.toUpperCase());
+			if (index < 0) {
 				return data.text;
 			}
 			return $('<span>').append(
-				data.text.slice(0, idx),
+				data.text.slice(0, index),
 				$('<span>')
 					.css('text-decoration', 'underline')
-					.text(data.text.slice(idx, idx + searchTerm.length)),
-				data.text.slice(idx + searchTerm.length)
+					.text(data.text.slice(index, index + searchTerm.length)),
+				data.text.slice(index + searchTerm.length)
 			);
 		},
 		/** Intercept query as it is happening, for use in highlightSearchMatches. */

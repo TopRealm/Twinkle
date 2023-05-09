@@ -1654,10 +1654,10 @@ $(function TwinkleWarn() {
 					sectionExists = sections
 						.reverse()
 						.some(
-							(sec, idx) =>
-								/^(==)[^=].+\1/m.test(sec) &&
-								dateHeaderRegex.test(sec) &&
-								typeof (sectionNumber = sections.length - 1 - idx) === 'number'
+							(section, index) =>
+								/^(==)[^=].+\1/m.test(section) &&
+								dateHeaderRegex.test(section) &&
+								typeof (sectionNumber = sections.length - 1 - index) === 'number'
 						);
 				}
 			}
