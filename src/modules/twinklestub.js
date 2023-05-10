@@ -11,9 +11,10 @@ $(function TwinkleStub() {
 		if (Morebits.isPageRedirect()) {
 			// Skip
 			// article/draft article tagging
-		}
-		else if (([0, 118].includes(mw.config.get('wgNamespaceNumber'))) && mw.config.get('wgCurRevisionId') ||
-			Morebits.pageNameNorm === Twinkle.getPref('sandboxPage')) {
+		} else if (
+			([0, 118].includes(mw.config.get('wgNamespaceNumber')) && mw.config.get('wgCurRevisionId')) ||
+			Morebits.pageNameNorm === Twinkle.getPref('sandboxPage')
+		) {
 			Twinkle.stub.mode = '条目';
 			Twinkle.addPortletLink(Twinkle.stub.callback, '小作品', 'friendly-tag', '标记小作品');
 		}
@@ -34,9 +35,9 @@ $(function TwinkleStub() {
 						label: '标记页面为已巡查',
 						value: 'patrolPage',
 						name: 'patrolPage',
-						checked: Twinkle.getPref('markStubbedPagesAsPatrolled')
-					}
-				]
+						checked: Twinkle.getPref('markStubbedPagesAsPatrolled'),
+					},
+				],
 			});
 		}
 		switch (Twinkle.stub.mode) {
@@ -54,27 +55,27 @@ $(function TwinkleStub() {
 							type: 'option',
 							value: 'cat',
 							label: '按类型',
-							selected: Twinkle.getPref('stubArticleSortOrder') === 'cat'
+							selected: Twinkle.getPref('stubArticleSortOrder') === 'cat',
 						},
 						{
 							type: 'option',
 							value: 'alpha',
 							label: '按字母',
-							selected: Twinkle.getPref('stubArticleSortOrder') === 'alpha'
-						}
-					]
+							selected: Twinkle.getPref('stubArticleSortOrder') === 'alpha',
+						},
+					],
 				});
 				form.append({
 					type: 'div',
-					id: 'tagWorkArea'
+					id: 'tagWorkArea',
 				});
 				break;
 			default:
-				mw.notify(`Twinkle.stub：未知模式 ${Twinkle.stub.mode}`, { type: 'warn' });
+				mw.notify(`Twinkle.stub：未知模式 ${Twinkle.stub.mode}`, {type: 'warn'});
 				break;
 		}
 		form.append({
-			type: 'submit'
+			type: 'submit',
 		});
 		const result = form.render();
 		Window.setContent(result);
@@ -94,13 +95,13 @@ $(function TwinkleStub() {
 			Twinkle.stub.checkedTags = [];
 		}
 		const container = new Morebits.quickForm.element({
-			type: 'fragment'
+			type: 'fragment',
 		});
 		// function to generate a checkbox, with appropriate subgroup if needed
 		const makeCheckbox = (tag, description) => {
 			const checkbox = {
 				value: tag,
-				label: `{{${tag}}}: ${description}`
+				label: `{{${tag}}}: ${description}`,
 			};
 			if (Twinkle.stub.checkedTags.includes(tag)) {
 				checkbox.checked = true;
@@ -111,7 +112,7 @@ $(function TwinkleStub() {
 		if (Twinkle.getPref('customStubList').length > 0) {
 			container.append({
 				type: 'header',
-				label: '自定义模板'
+				label: '自定义模板',
 			});
 			const customcheckboxes = [];
 			$.each(Twinkle.getPref('customStubList'), (index, item) => {
@@ -120,7 +121,7 @@ $(function TwinkleStub() {
 			container.append({
 				type: 'checkbox',
 				name: 'articleTags',
-				list: customcheckboxes
+				list: customcheckboxes,
 			});
 		}
 		// categorical sort order
@@ -135,7 +136,7 @@ $(function TwinkleStub() {
 				subdiv.append({
 					type: 'checkbox',
 					name: 'articleTags',
-					list: checkboxes
+					list: checkboxes,
 				});
 			};
 			let i = 0;
@@ -145,28 +146,26 @@ $(function TwinkleStub() {
 				container.append({
 					type: 'header',
 					id: `tagHeader${i}`,
-					label: titleName
+					label: titleName,
 				});
 				const subdiv = container.append({
 					type: 'div',
-					id: `tagSubdiv${i++}`
+					id: `tagSubdiv${i++}`,
 				});
 				if (Array.isArray(content)) {
 					doCategoryCheckboxes(subdiv, content);
-				}
-				else {
+				} else {
 					$.each(content, (subtitle, subcontent) => {
 						subdiv.append({
 							type: 'div',
-							label: [Morebits.htmlNode('b', subtitle)]
+							label: [Morebits.htmlNode('b', subtitle)],
 						});
 						doCategoryCheckboxes(subdiv, subcontent);
 					});
 				}
 			});
 			// alphabetical sort order
-		}
-		else {
+		} else {
 			const checkboxes = [];
 			$.each(Twinkle.stub.article.tags, (tag, description) => {
 				checkboxes.push(makeCheckbox(tag, description));
@@ -174,7 +173,7 @@ $(function TwinkleStub() {
 			container.append({
 				type: 'checkbox',
 				name: 'articleTags',
-				list: checkboxes
+				list: checkboxes,
 			});
 		}
 		const $workarea = $(event.target.form).find('div#tagWorkArea');
@@ -182,20 +181,23 @@ $(function TwinkleStub() {
 		$workarea.empty().append(rendered);
 		// style adjustments
 		$workarea.find('h5').css({
-			'font-size': '110%'
+			'font-size': '110%',
 		});
 		$workarea.find('h5:not(:first-child)').css({
-			'margin-top': '1em'
+			'margin-top': '1em',
 		});
 		$workarea.find('div').filter(':has(span.quickformDescription)').css({
-			'margin-top': '0.4em'
+			'margin-top': '0.4em',
 		});
 		// add a link to each template's description page
 		$.each(Morebits.quickForm.getElements(event.target.form, 'articleTags'), (_index, checkbox) => {
 			const $checkbox = $(checkbox);
 			const link = Morebits.htmlNode('a', '>');
 			link.setAttribute('class', 'tag-template-link');
-			link.setAttribute('href', mw.util.getUrl(`Template:${Morebits.string.toUpperCaseFirstChar(checkbox.values)}`));
+			link.setAttribute(
+				'href',
+				mw.util.getUrl(`Template:${Morebits.string.toUpperCaseFirstChar(checkbox.values)}`)
+			);
 			link.setAttribute('target', '_blank');
 			$checkbox.parent().append(['\u00A0', link]);
 		});
@@ -237,7 +239,7 @@ $(function TwinkleStub() {
 		'US-bio-stub': '美国人物',
 		'US-geo-stub': '美国地理',
 		'US-stub': '美国',
-		'weather-stub': '天气和特别的天气事件'
+		'weather-stub': '天气和特别的天气事件',
 	};
 	// A list of tags in order of category
 	// Tags should be in alphabetical order within the categories
@@ -250,17 +252,28 @@ $(function TwinkleStub() {
 		science: '科学',
 		sport: '体育',
 		tech: '技术',
-		art: '艺术'
+		art: '艺术',
 	};
 	Twinkle.stub.article.tagCategories = {
 		general: ['stub', 'expand list'],
-		geo: ['asia-stub', 'europe-stub', 'france-geo-stub', 'geo-stub', 'JP-stub', 'switzerland-stub', 'UK-stub', 'US-bio-stub', 'US-geo-stub', 'US-stub'],
+		geo: [
+			'asia-stub',
+			'europe-stub',
+			'france-geo-stub',
+			'geo-stub',
+			'JP-stub',
+			'switzerland-stub',
+			'UK-stub',
+			'US-bio-stub',
+			'US-geo-stub',
+			'US-stub',
+		],
 		others: ['food-stub', 'hist-stub', 'mil-stub', 'politic-stub', 'religion-stub', 'transp-stub'],
 		bio: ['actor-stub', 'bio-stub', 'US-bio-stub'],
 		science: ['biology-stub', 'chem-stub', 'math-stub', 'med-stub', 'physics-stub', 'science-stub', 'weather-stub'],
 		sport: ['sport-stub'],
 		tech: ['tech-stub'],
-		art: ['actor-stub', 'lit-stub', 'movie-stub', 'music-stub', 'TV-stub']
+		art: ['actor-stub', 'lit-stub', 'movie-stub', 'music-stub', 'TV-stub'],
 	};
 	// Tags for REDIRECTS start here
 	Twinkle.stub.callbacks = {
@@ -278,8 +291,7 @@ $(function TwinkleStub() {
 				tagRe = new RegExp(`(\\{\\{${params.tags[i]}(\\||\\}\\}))`, 'im');
 				if (tagRe.test(pageText)) {
 					Morebits.status.info('信息', `在页面上找到{{${params.tags[i]}}}……跳过`);
-				}
-				else {
+				} else {
 					tags = [...tags, ...params.tags[i]];
 				}
 			}
@@ -291,8 +303,7 @@ $(function TwinkleStub() {
 				if (tagIndex > 0) {
 					if (tagIndex === totalTags - 1) {
 						summaryText += '和';
-					}
-					else if (tagIndex < totalTags - 1) {
+					} else if (tagIndex < totalTags - 1) {
 						summaryText += '、';
 					}
 				}
@@ -312,7 +323,7 @@ $(function TwinkleStub() {
 			if (params.patrol) {
 				pageobj.patrol();
 			}
-		}
+		},
 	};
 	Twinkle.stub.callback.evaluate = (event) => {
 		const form = event.target;
@@ -327,11 +338,11 @@ $(function TwinkleStub() {
 				params.group = false;
 				break;
 			default:
-				mw.notify(`Twinkle.stub：未知模式 ${Twinkle.stub.mode}`, { type: 'warn' });
+				mw.notify(`Twinkle.stub：未知模式 ${Twinkle.stub.mode}`, {type: 'warn'});
 				break;
 		}
 		if (params.tags.length === 0) {
-			mw.notify('必须选择至少一个标记！', { type: 'warn' });
+			mw.notify('必须选择至少一个标记！', {type: 'warn'});
 			return;
 		}
 		Morebits.simpleWindow.setButtonsEnabled(false);
@@ -355,7 +366,7 @@ $(function TwinkleStub() {
 				qiuwen_page.load(Twinkle.stub.callbacks.file);
 				break;
 			default:
-				mw.notify(`Twinkle.stub：未知模式 ${Twinkle.stub.mode}`, { type: 'warn' });
+				mw.notify(`Twinkle.stub：未知模式 ${Twinkle.stub.mode}`, {type: 'warn'});
 				break;
 		}
 	};

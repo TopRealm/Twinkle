@@ -330,52 +330,52 @@ $(function FriendlyTag() {
 			}
 			switch (tag) {
 				/* case 'Expand language': {
-						checkbox.subgroup = [
-							{
-								name: 'expandLanguage',
-								type: 'input',
-								label: '外语版本语言代码（必填）：'
-							},
-							{
-								type: 'checkbox',
-								list: [
-									{
-										name: 'highQualityArticle',
-										label: '高品质条目'
-									}
-								]
-							},
-							{
-								name: 'expandLanguage2',
-								type: 'input',
-								label: '外语版本语言代码：'
-							},
-							{
-								type: 'checkbox',
-								list: [
-									{
-										name: 'highQualityArticle2',
-										label: '高品质条目'
-									}
-								]
-							},
-							{
-								name: 'expandLanguage3',
-								type: 'input',
-								label: '外语版本语言代码：'
-							},
-							{
-								type: 'checkbox',
-								list: [
-									{
-										name: 'highQualityArticle3',
-										label: '高品质条目'
-									}
-								]
-							}
-						];
-						break;
-					} */
+                        checkbox.subgroup = [
+                            {
+                                name: 'expandLanguage',
+                                type: 'input',
+                                label: '外语版本语言代码（必填）：'
+                            },
+                            {
+                                type: 'checkbox',
+                                list: [
+                                    {
+                                        name: 'highQualityArticle',
+                                        label: '高品质条目'
+                                    }
+                                ]
+                            },
+                            {
+                                name: 'expandLanguage2',
+                                type: 'input',
+                                label: '外语版本语言代码：'
+                            },
+                            {
+                                type: 'checkbox',
+                                list: [
+                                    {
+                                        name: 'highQualityArticle2',
+                                        label: '高品质条目'
+                                    }
+                                ]
+                            },
+                            {
+                                name: 'expandLanguage3',
+                                type: 'input',
+                                label: '外语版本语言代码：'
+                            },
+                            {
+                                type: 'checkbox',
+                                list: [
+                                    {
+                                        name: 'highQualityArticle3',
+                                        label: '高品质条目'
+                                    }
+                                ]
+                            }
+                        ];
+                        break;
+                    } */
 				case 'Expert needed':
 					checkbox.subgroup = [
 						{
@@ -1014,55 +1014,55 @@ $(function FriendlyTag() {
 			],
 		},
 		/* {
-				key: '求闻共享资源相关标签',
-				value: [
-					{
-						label:
-								'{{Copy to Qiuwen Share}}：' +
-								'自由著作权文件应该被移动至求闻共享资源',
-						value: 'Copy to Qiuwen Share'
-					},
-					{
-						label: '{{Do not move to Share}}：不要移动至求闻共享资源',
-						value: 'Do not move to Share',
-						subgroup: {
-							type: 'input',
-							name: 'DoNotMoveToShare_reason',
-							label: '原因：',
-							tooltip: '输入不应该将该图像移动到求闻共享资源的原因（必填）。'
-						}
-					},
-					{
-						label: '{{Keep local}}：请求在本地保留求闻共享资源的文件副本',
-						value: 'Keep local',
-						subgroup: [
-							{
-								type: 'input',
-								name: 'keeplocalName',
-								label: '共享资源的不同图像名称：',
-								tooltip:
-										'输入在共享资源的图像名称（若不同于本地名称），不包括 File: 前缀'
-							},
-							{
-								type: 'input',
-								name: 'keeplocalReason',
-								label: '原因：',
-								tooltip: '输入请求在本地保留文件副本的原因（可选）：'
-							}
-						]
-					},
-					{
-						label: '{{Now Share}}：文件已被复制到求闻共享资源',
-						value: 'Now Share',
-						subgroup: {
-							type: 'input',
-							name: 'nowshareName',
-							label: '共享资源的不同图像名称：',
-							tooltip: '输入在共享资源的图像名称（若不同于本地名称），不包括 File: 前缀'
-						}
-					}
-				]
-			}, */
+                key: '求闻共享资源相关标签',
+                value: [
+                    {
+                        label:
+                                '{{Copy to Qiuwen Share}}：' +
+                                '自由著作权文件应该被移动至求闻共享资源',
+                        value: 'Copy to Qiuwen Share'
+                    },
+                    {
+                        label: '{{Do not move to Share}}：不要移动至求闻共享资源',
+                        value: 'Do not move to Share',
+                        subgroup: {
+                            type: 'input',
+                            name: 'DoNotMoveToShare_reason',
+                            label: '原因：',
+                            tooltip: '输入不应该将该图像移动到求闻共享资源的原因（必填）。'
+                        }
+                    },
+                    {
+                        label: '{{Keep local}}：请求在本地保留求闻共享资源的文件副本',
+                        value: 'Keep local',
+                        subgroup: [
+                            {
+                                type: 'input',
+                                name: 'keeplocalName',
+                                label: '共享资源的不同图像名称：',
+                                tooltip:
+                                        '输入在共享资源的图像名称（若不同于本地名称），不包括 File: 前缀'
+                            },
+                            {
+                                type: 'input',
+                                name: 'keeplocalReason',
+                                label: '原因：',
+                                tooltip: '输入请求在本地保留文件副本的原因（可选）：'
+                            }
+                        ]
+                    },
+                    {
+                        label: '{{Now Share}}：文件已被复制到求闻共享资源',
+                        value: 'Now Share',
+                        subgroup: {
+                            type: 'input',
+                            name: 'nowshareName',
+                            label: '共享资源的不同图像名称：',
+                            tooltip: '输入在共享资源的图像名称（若不同于本地名称），不包括 File: 前缀'
+                        }
+                    }
+                ]
+            }, */
 		{
 			key: '清理标签',
 			value: [
@@ -1324,24 +1324,24 @@ $(function FriendlyTag() {
 					// fill in other parameters, based on the tag
 					switch (tagName) {
 						/* case 'Expand language': {
-								currentTag += `|1=${params.expandLanguage}`;
-								if (params.highQualityArticle) {
-									currentTag += '|status=yes';
-								}
-								if (params.expandLanguage2) {
-									currentTag += `|2=${params.expandLanguage2}`;
-									if (params.highQualityArticle2) {
-										currentTag += '|status2=yes';
-									}
-								}
-								if (params.expandLanguage3) {
-									currentTag += `|3=${params.expandLanguage3}`;
-									if (params.highQualityArticle3) {
-										currentTag += '|status3=yes';
-									}
-								}
-								break;
-							} */
+                                currentTag += `|1=${params.expandLanguage}`;
+                                if (params.highQualityArticle) {
+                                    currentTag += '|status=yes';
+                                }
+                                if (params.expandLanguage2) {
+                                    currentTag += `|2=${params.expandLanguage2}`;
+                                    if (params.highQualityArticle2) {
+                                        currentTag += '|status2=yes';
+                                    }
+                                }
+                                if (params.expandLanguage3) {
+                                    currentTag += `|3=${params.expandLanguage3}`;
+                                    if (params.highQualityArticle3) {
+                                        currentTag += '|status3=yes';
+                                    }
+                                }
+                                break;
+                            } */
 						case 'Expert needed':
 							currentTag += `|subject=${params.expert}`;
 							if (params.expert2) {
@@ -1797,8 +1797,8 @@ $(function FriendlyTag() {
 					}
 				}
 				/* if (checkParameter('Expand language', 'expandLanguage', '语言代码')) {
-						return;
-					} */
+                        return;
+                    } */
 				if (checkParameter('Missing information', 'missingInformation', '缺少的内容')) {
 					return;
 				}

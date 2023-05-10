@@ -7,7 +7,10 @@ $(function TwinkleClose() {
 	 * Config directives in: TwinkleConfig
 	 */
 	Twinkle.close = () => {
-		if (Twinkle.getPref('XfdClose') === 'hide' || !/^Qiuwen:存废讨论\/记录(?:\/\d+){3}$/.test(mw.config.get('wgPageName'))) {
+		if (
+			Twinkle.getPref('XfdClose') === 'hide' ||
+			!/^Qiuwen:存废讨论\/记录(?:\/\d+){3}$/.test(mw.config.get('wgPageName'))
+		) {
 			return;
 		}
 		mw.hook('wikipage.content').add((item) => {
@@ -23,7 +26,10 @@ $(function TwinkleClose() {
 			span.appendChild(document.createTextNode(content));
 			return span;
 		};
-		$('h1:has(.mw-headline),h2:has(.mw-headline),h3:has(.mw-headline),h4:has(.mw-headline),h5:has(.mw-headline),h6:has(.mw-headline)', '#bodyContent').each((index, current) => {
+		$(
+			'h1:has(.mw-headline),h2:has(.mw-headline),h3:has(.mw-headline),h4:has(.mw-headline),h5:has(.mw-headline),h6:has(.mw-headline)',
+			'#bodyContent'
+		).each((index, current) => {
 			current.dataset.section = index + 1;
 		});
 		const selector = ':has(.mw-headline a:only-of-type):not(:has(+ div.NavFrame))';
@@ -42,8 +48,7 @@ $(function TwinkleClose() {
 			let title = null;
 			if (headlinehref.includes('redlink=1')) {
 				title = headlinehref.slice(19, -22);
-			}
-			else {
+			} else {
 				const m = headlinehref.match(/\/wiki\/([^?]+)/, '$1');
 				if (m !== null) {
 					title = m[1];
@@ -72,129 +77,129 @@ $(function TwinkleClose() {
 		Invalid: {
 			ir: {
 				label: '请求无效',
-				action: 'keep'
+				action: 'keep',
 			},
 			rep: {
 				label: '重复提出，无效',
-				action: 'keep'
+				action: 'keep',
 			},
 			ne: {
 				label: '目标页面或档案不存在，无效',
-				action: 'keep'
+				action: 'keep',
 			},
 			nq: {
 				label: '提删者未取得提删资格，无效',
-				action: 'keep'
-			}
+				action: 'keep',
+			},
 		},
 		Keep: {
 			k: {
 				label: '保留',
 				action: 'keep',
-				adminonly: true
+				adminonly: true,
 			},
 			sk: {
 				label: '快速保留',
-				action: 'keep'
+				action: 'keep',
 			},
 			tk: {
 				label: '暂时保留',
-				action: 'keep'
+				action: 'keep',
 			},
 			rr: {
 				label: '请求理由消失',
 				action: 'keep',
-				selected: Twinkle.getPref('XfdClose') === 'nonadminonly'
+				selected: Twinkle.getPref('XfdClose') === 'nonadminonly',
 			},
 			dan: {
 				label: '删后重建',
 				action: 'keep',
-				adminonly: true
-			}
+				adminonly: true,
+			},
 		},
 		Delete: {
 			d: {
 				label: '删除',
 				action: 'del',
 				adminonly: true,
-				selected: Twinkle.getPref('XfdClose') === 'all'
+				selected: Twinkle.getPref('XfdClose') === 'all',
 			},
 			ic: {
 				label: '图像因侵权被删',
 				action: 'del',
-				adminonly: true
-			}
+				adminonly: true,
+			},
 		},
 		Speedy: {
 			sd: {
 				label: '快速删除',
-				action: 'del'
+				action: 'del',
 			},
 			lssd: {
 				label: '无来源或版权资讯，快速删除',
-				action: 'del'
+				action: 'del',
 			},
 			svg: {
 				label: '已改用SVG图形，快速删除',
-				action: 'del'
+				action: 'del',
 			},
 			drep: {
 				label: '多次被删除，条目锁定',
 				action: 'del',
-				adminonly: true
-			}
+				adminonly: true,
+			},
 		},
 		/* Transfer: {
-			twc: {
-				label: '转移至求闻共享资源',
-				action: 'noop',
-				adminonly: true
-			},
-			two: {
-				label: '转移至其他计划',
-				action: 'noop',
-				adminonly: true
-			}
-		}, */
+            twc: {
+                label: '转移至求闻共享资源',
+                action: 'noop',
+                adminonly: true
+            },
+            two: {
+                label: '转移至其他计划',
+                action: 'noop',
+                adminonly: true
+            }
+        }, */
 		OtherMethod: {
 			c: {
 				label: '转交侵权',
-				action: 'noop'
+				action: 'noop',
 			},
 			m2pfd: {
 				label: '转送存废讨论',
-				action: 'noop'
+				action: 'noop',
 			},
 			r: {
 				label: '重定向',
 				action: 'keep',
-				adminonly: true
+				adminonly: true,
 			},
 			cr: {
 				label: '分类重定向',
 				action: 'keep',
-				adminonly: true
+				adminonly: true,
 			},
 			m: {
 				label: '移动',
 				action: 'keep',
-				adminonly: true
+				adminonly: true,
 			},
 			merge: {
 				label: '并入',
 				action: 'keep',
-				adminonly: true
+				adminonly: true,
 			},
 			mergeapproved: {
 				label: '允许并入',
 				action: 'keep',
-				adminonly: true
+				adminonly: true,
 			},
 			nc: {
 				label: '无共识',
-				action: 'keep'
-			}
-		}
+				action: 'keep',
+			},
+		},
 	};
 	Twinkle.close.callback = (title, section, noop) => {
 		const Window = new Morebits.simpleWindow(410, 200);
@@ -207,19 +212,19 @@ $(function TwinkleClose() {
 			type: 'select',
 			label: '处理结果：',
 			name: 'sub_group',
-			event: Twinkle.close.callback.change_code
+			event: Twinkle.close.callback.change_code,
 		});
 		form.append({
 			type: 'input',
 			name: 'sdreason',
 			label: '速删理由：',
 			tooltip: '用于删除日志，使用{{delete}}的参数格式，例如 A1 或 A1|G1',
-			hidden: true
+			hidden: true,
 		});
 		form.append({
 			type: 'input',
 			name: 'remark',
-			label: '补充说明：'
+			label: '补充说明：',
 		});
 		form.append({
 			type: 'checkbox',
@@ -229,9 +234,9 @@ $(function TwinkleClose() {
 					value: 'noop',
 					name: 'noop',
 					event: Twinkle.close.callback.change_operation,
-					checked: noop
-				}
-			]
+					checked: noop,
+				},
+			],
 		});
 		if (new mw.Title(title).namespace % 2 === 0 && new mw.Title(title).namespace !== 2) {
 			// hide option for user pages, to avoid accidentally deleting user talk page
@@ -246,9 +251,9 @@ $(function TwinkleClose() {
 						checked: true,
 						event: (event) => {
 							event.stopPropagation();
-						}
-					}
-				]
+						},
+					},
+				],
 			});
 		}
 		form.append({
@@ -262,12 +267,12 @@ $(function TwinkleClose() {
 					checked: true,
 					event: (event) => {
 						event.stopPropagation();
-					}
-				}
-			]
+					},
+				},
+			],
 		});
 		form.append({
-			type: 'submit'
+			type: 'submit',
 		});
 		const result = form.render();
 		Window.setContent(result);
@@ -276,7 +281,7 @@ $(function TwinkleClose() {
 		const resultData = {
 			title,
 			section: Number.parseInt(section),
-			noop
+			noop,
 		};
 		$(result).data('resultData', resultData);
 		// worker function to create the combo box entries
@@ -288,7 +293,7 @@ $(function TwinkleClose() {
 					label: `${key}：${itemProperties.label}`,
 					value: key,
 					selected: itemProperties.selected,
-					disabled: Twinkle.getPref('XfdClose') !== 'all' && itemProperties.adminonly
+					disabled: Twinkle.getPref('XfdClose') !== 'all' && itemProperties.adminonly,
 				});
 				const elemRendered = container.appendChild(elem.render());
 				$(elemRendered).data('messageData', itemProperties);
@@ -297,7 +302,7 @@ $(function TwinkleClose() {
 		$.each(Twinkle.close.codes, (groupLabel, groupContents) => {
 			let optgroup = new Morebits.quickForm.element({
 				type: 'optgroup',
-				label: groupLabel
+				label: groupLabel,
 			});
 			optgroup = optgroup.render();
 			sub_group.appendChild(optgroup);
@@ -311,9 +316,7 @@ $(function TwinkleClose() {
 	Twinkle.close.callback.change_operation = (event) => {
 		const noop = event.target.checked;
 		const code = event.target.form.sub_group.value;
-		const messageData = $(event.target.form.sub_group)
-			.find(`option[value="${code}"]`)
-			.data('messageData');
+		const messageData = $(event.target.form.sub_group).find(`option[value="${code}"]`).data('messageData');
 		const talkpage = event.target.form.talkpage;
 		const redirects = event.target.form.redirects;
 		if (noop || messageData.action === 'keep') {
@@ -323,8 +326,7 @@ $(function TwinkleClose() {
 			}
 			redirects.checked = false;
 			redirects.disabled = true;
-		}
-		else {
+		} else {
 			if (talkpage) {
 				talkpage.checked = true;
 				talkpage.disabled = false;
@@ -335,9 +337,7 @@ $(function TwinkleClose() {
 	};
 	Twinkle.close.callback.change_code = (event) => {
 		const resultData = $(event.target.form).data('resultData');
-		const messageData = $(event.target)
-			.find(`option[value="${event.target.value}"]`)
-			.data('messageData');
+		const messageData = $(event.target).find(`option[value="${event.target.value}"]`).data('messageData');
 		const noop = event.target.form.noop;
 		const talkpage = event.target.form.talkpage;
 		const redirects = event.target.form.redirects;
@@ -350,8 +350,7 @@ $(function TwinkleClose() {
 			}
 			redirects.checked = false;
 			redirects.disabled = true;
-		}
-		else {
+		} else {
 			noop.checked = false;
 			noop.disabled = false;
 			if (messageData.action === 'keep') {
@@ -361,8 +360,7 @@ $(function TwinkleClose() {
 				}
 				redirects.checked = false;
 				redirects.disabled = true;
-			}
-			else {
+			} else {
 				if (talkpage) {
 					talkpage.checked = true;
 					talkpage.disabled = false;
@@ -372,8 +370,7 @@ $(function TwinkleClose() {
 			}
 			if (event.target.value === 'sd') {
 				event.target.form.sdreason.parentNode.removeAttribute('hidden');
-			}
-			else {
+			} else {
 				event.target.form.sdreason.parentNode.setAttribute('hidden', '');
 			}
 		}
@@ -381,9 +378,7 @@ $(function TwinkleClose() {
 	Twinkle.close.callback.evaluate = (event) => {
 		const code = event.target.sub_group.value;
 		const resultData = $(event.target).data('resultData');
-		const messageData = $(event.target.sub_group)
-			.find(`option[value="${code}"]`)
-			.data('messageData');
+		const messageData = $(event.target.sub_group).find(`option[value="${code}"]`).data('messageData');
 		const noop = event.target.noop.checked;
 		const talkpage = event.target.talkpage && event.target.talkpage.checked;
 		const redirects = event.target.redirects.checked;
@@ -395,15 +390,14 @@ $(function TwinkleClose() {
 			section: resultData.section,
 			messageData,
 			talkpage,
-			redirects
+			redirects,
 		};
 		Morebits.simpleWindow.setButtonsEnabled(false);
 		Morebits.status.init(event.target);
 		Morebits.wiki.actionCompleted.notice = '操作完成';
 		if (noop || messageData.action === 'noop') {
 			Twinkle.close.callbacks.talkend(params);
-		}
-		else {
+		} else {
 			switch (messageData.action) {
 				case 'del':
 					Twinkle.close.callbacks.del(params);
@@ -415,7 +409,7 @@ $(function TwinkleClose() {
 					break;
 				}
 				default:
-					mw.notify(`关闭存废讨论：未定义 ${code}`, { type: 'warn' });
+					mw.notify(`关闭存废讨论：未定义 ${code}`, {type: 'warn'});
 			}
 		}
 	};
@@ -431,8 +425,7 @@ $(function TwinkleClose() {
 					if (reason === null) {
 						page.getStatusElement().warn('没有执行删除');
 						Twinkle.close.callbacks.talkend(params);
-					}
-					else {
+					} else {
 						page.setEditSummary(reason);
 						page.setChangeTags(Twinkle.changeTags);
 						page.deletePage(() => {
@@ -441,8 +434,7 @@ $(function TwinkleClose() {
 						});
 					}
 				});
-			}
-			else {
+			} else {
 				page.setEditSummary(`存废讨论通过：[[${mw.config.get('wgPageName')}#${params.title}]]`);
 				page.setChangeTags(Twinkle.changeTags);
 				page.deletePage(() => {
@@ -455,9 +447,13 @@ $(function TwinkleClose() {
 					action: 'query',
 					titles: params.title,
 					prop: 'redirects',
-					rdlimit: 'max' // 500 is max for normal users, 5000 for bots and sysops
+					rdlimit: 'max', // 500 is max for normal users, 5000 for bots and sysops
 				};
-				qiuwen_api = new Morebits.wiki.api('正在获取重定向', query, Twinkle.close.callbacks.deleteRedirectsMain);
+				qiuwen_api = new Morebits.wiki.api(
+					'正在获取重定向',
+					query,
+					Twinkle.close.callbacks.deleteRedirectsMain
+				);
 				qiuwen_api.params = params;
 				qiuwen_api.post();
 			}
@@ -467,9 +463,13 @@ $(function TwinkleClose() {
 					pageTitle.namespace++; // now pageTitle is the talk page title!
 					query = {
 						action: 'query',
-						titles: pageTitle.toText()
+						titles: pageTitle.toText(),
 					};
-					qiuwen_api = new Morebits.wiki.api('正在检查讨论页面是否存在', query, Twinkle.close.callbacks.deleteTalk);
+					qiuwen_api = new Morebits.wiki.api(
+						'正在检查讨论页面是否存在',
+						query,
+						Twinkle.close.callbacks.deleteTalk
+					);
 					qiuwen_api.params = params;
 					qiuwen_api.params.talkPage = pageTitle.toText();
 					qiuwen_api.post();
@@ -520,18 +520,31 @@ $(function TwinkleClose() {
 			if (pagetitle.getNamespaceId() % 2 === 0) {
 				const talkpagetitle = new mw.Title(pagetitle.getMainText(), pagetitle.getNamespaceId() + 1);
 				const talkpage = new Morebits.wiki.page(talkpagetitle.toString(), '标记讨论页');
-				const vfdkept = `{{Old vfd multi|${mw.config.get('wgPageName').split('/').slice(2).join('/')}|${params.messageData.label}}}\n`;
+				const vfdkept = `{{Old vfd multi|${mw.config.get('wgPageName').split('/').slice(2).join('/')}|${
+					params.messageData.label
+				}}}\n`;
 				talkpage.setPrependText(vfdkept);
-				talkpage.setEditSummary(`[[${mw.config.get('wgPageName')}#${params.title}]]：${params.messageData.label}`);
+				talkpage.setEditSummary(
+					`[[${mw.config.get('wgPageName')}#${params.title}]]：${params.messageData.label}`
+				);
 				talkpage.setChangeTags(Twinkle.changeTags);
 				talkpage.setCreateOption('recreate');
 				talkpage.prepend();
 			}
-			let newtext = text.replace(/<noinclude>\s*{{([acfimr-tv]fd)(\|(?:{{[^{}]*}}|[^{}])*)?}}\s*<\/noinclude>\s*/gi, '');
+			let newtext = text.replace(
+				/<noinclude>\s*{{([acfimr-tv]fd)(\|(?:{{[^{}]*}}|[^{}])*)?}}\s*<\/noinclude>\s*/gi,
+				''
+			);
 			newtext = newtext.replace(/{{([acfimr-tv]fd)(\|(?:{{[^{}]*}}|[^{}])*)?}}\s*/gi, '');
 			if (params.code !== 'tk') {
-				newtext = newtext.replace(/{{(notability|fame|mair|知名度|重要性|显著性|顯著性|知名度不足|人物重要性|重要性不足|notable|关注度|关注度不足|關注度|關注度不足|重要|重要度)(\|(?:{{[^{}]*}}|[^{}])*)?}}\n*/gi, '');
-				newtext = newtext.replace(/{{(substub|小小作品|cod|小小條目|小小条目)(\|(?:{{[^{}]*}}|[^{}])*)?}}\n*/gi, '');
+				newtext = newtext.replace(
+					/{{(notability|fame|mair|知名度|重要性|显著性|顯著性|知名度不足|人物重要性|重要性不足|notable|关注度|关注度不足|關注度|關注度不足|重要|重要度)(\|(?:{{[^{}]*}}|[^{}])*)?}}\n*/gi,
+					''
+				);
+				newtext = newtext.replace(
+					/{{(substub|小小作品|cod|小小條目|小小条目)(\|(?:{{[^{}]*}}|[^{}])*)?}}\n*/gi,
+					''
+				);
 			}
 			if (params.code === 'mergeapproved') {
 				const tag = `{{subst:Merge approved/auto|discuss=${mw.config.get('wgPageName')}#${params.title}}}\n`;
@@ -601,7 +614,7 @@ $(function TwinkleClose() {
 		disableLink: (pageobj) => {
 			const params = pageobj.getCallbackParameters();
 			$(`strong a[href=#${params.section}] span`).css('color', 'grey');
-		}
+		},
 	};
 	Twinkle.addInitCallback(Twinkle.close, 'close');
 });
