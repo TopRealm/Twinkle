@@ -8,7 +8,7 @@
 	},
 	"scripts": {
 		"deploy": "pnpm babel && node scripts/deploy.mjs",
-		"babel": "pnpm tsc && pnpm format && babel -d dist src",
+		"babel": "pnpm format && babel -d dist src",
 		"tsc": "tsc",
 		"format": "prettier --write . && pnpm run lint:fix",
 		"eslint": "eslint src",
