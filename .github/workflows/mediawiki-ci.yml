@@ -1,0 +1,88 @@
+name: MediaWiki CI
+
+on:
+    push:
+        branches:
+            - '**'
+    pull_request:
+        branches:
+            - '**'
+
+jobs:
+    test:
+        name: Lint
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                php-versions: ['7.4']
+        steps:
+            - name: Cancel Previous Runs
+              uses: styfle/cancel-workflow-action@0.11.0
+              with:
+                  access_token: ${{ github.token }}
+
+            - uses: actions/checkout@v3
+              with:
+                  fetch-depth: 0 # OR "2" -> To retrieve the preceding commit.
+
+            - name: Cache dependencies
+              uses: actions/cache@v3
+              with:
+                  path: /home/runner/cache
+                  key: ${{ runner.os }}-${{ hashFiles('**/*.lock') }}
+
+            - name: Install dependencies
+              run: |
+                  npm install -g pnpm
+                  pnpm install --save-dev
+
+            - name: Check for script changes
+              id: changed-script
+              uses: tj-actions/changed-files@v35
+              with:
+                  since_last_remote_commit: 'true'
+                  files: |
+                      src/modules/*.js
+                      src/morebits.js
+                      src/twinkle.js
+
+            - name: Check for stylesheet changes
+              id: changed-stylesheet
+              uses: tj-actions/changed-files@v35
+              with:
+                  since_last_remote_commit: 'true'
+                  files: |
+                      src/*.css
+                      src/**/*.css
+
+            - name: Lint script
+              if: steps.changed-script.outputs.any_changed == 'true'
+              continue-on-error: true
+              run: |
+                  pnpm run eslint:fix
+                  pnpm run eslint
+
+            - name: Lint stylesheet
+              if: steps.changed-stylesheet.outputs.any_changed == 'true'
+              continue-on-error: true
+              run: |
+                  pnpm run stylelint:fix
+                  pnpm run stylelint
+
+            # Only patch code when it is a push event
+            - name: Push the changes
+              if: github.event_name == 'push'
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: |
+                  if ! git diff --exit-code --quiet; then
+                    git config --global user.name "github-actions"
+                    git config --global user.email "github-actions@users.noreply.github.com"
+                    git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+                    git add .
+                    git commit -am "ci: 👷 lint code to MediaWiki standards" -m "Check commit and GitHub actions for more details"
+                    git pull --rebase
+                    git push
+                  else
+                    echo "No changes to commit"
+                  fi
