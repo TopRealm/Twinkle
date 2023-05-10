@@ -11,7 +11,7 @@ $(function TwinkleConfig() {
 	Twinkle.config.watchlistEnums = {
 		yes: '加入监视列表，长期监视',
 		no: '不加入监视列表',
-		default: '遵守站点设置',
+		'default': '遵守站点设置',
 		'1 week': '加入监视列表，监视7日',
 		'1 month': '加入监视列表，监视1个月',
 		'3 months': '加入监视列表，监视3个月',
@@ -891,7 +891,7 @@ $(function TwinkleConfig() {
 					helptip: '若选择“相同于上次选择”将使用localStorage来记忆。',
 					type: 'enum',
 					enumValues: {
-						delete: '删除',
+						'delete': '删除',
 						same: '相同于上次选择',
 					},
 				},
