@@ -34,7 +34,7 @@ jobs:
             - name: Install dependencies
               run: |
                   npm install -g pnpm
-                  pnpm install --save-dev
+                  pnpm install
 
             - name: Check for script changes
               id: changed-script
