@@ -7,9 +7,9 @@
 		"url": "https://git.qiuwen.wiki/InterfaceAdmin/Twinkle"
 	},
 	"scripts": {
-		"babel": "babel -d dist src",
-		"cleancss": "cleancss --batch --batch-suffix .min src/**/*.css",
-		"uglify": "babel -d dist src && uglifyjs-folder dist -o dist --config-file 'terser.config.json' -e  -p '**/*.js,!**/*min.js' -x .js",
+		"deploy": "pnpm babel && node scripts/deploy.mjs",
+		"babel": "pnpm tsc && pnpm format && babel -d dist src",
+		"tsc": "tsc",
 		"format": "prettier --write . && pnpm run lint:fix",
 		"eslint": "eslint src",
 		"eslint:fix": "eslint src --fix",
@@ -17,9 +17,7 @@
 		"stylelint:fix": "stylelint src/*.css --fix",
 		"lint": "eslint src && stylelint src/*.css",
 		"lint:fix": "pnpm run eslint:fix && pnpm run stylelint:fix",
-		"deploy": "node scripts/deploy.mjs",
-		"updatebrowserslist": "pnpx update-browserslist-db@latest",
-		"tsc": "tsc"
+		"updatebrowserslist": "pnpx update-browserslist-db@latest"
 	},
 	"keywords": [
 		"Qiuwen",
