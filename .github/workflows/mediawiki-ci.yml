@@ -37,7 +37,7 @@ jobs:
                   pnpm install
 
             - name: Check for script changes
-              id: changed-script
+              id: changed-javascript
               uses: tj-actions/changed-files@v35
               with:
                   since_last_remote_commit: 'true'
@@ -56,7 +56,7 @@ jobs:
                       src/**/*.css
 
             - name: Lint script
-              if: steps.changed-script.outputs.any_changed == 'true'
+              if: steps.changed-javascript.outputs.any_changed == 'true'
               continue-on-error: true
               run: |
                   pnpm run eslint:fix
@@ -68,6 +68,12 @@ jobs:
               run: |
                   pnpm run stylelint:fix
                   pnpm run stylelint
+
+            - name: Lint all codes
+              if: steps.changed-javascript.outputs.any_changed == 'true' || steps.changed-stylesheet.outputs.any_changed == 'true'
+              continue-on-error: true
+              run: |
+                  pnpm run format
 
             # Only patch code when it is a push event
             - name: Push the changes
