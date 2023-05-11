@@ -75,8 +75,9 @@ $(function TwinkleBatchProtect() {
 			label: '移动权限：',
 			event: Twinkle.protect.formevents.movelevel,
 			list: Twinkle.protect.protectionLevels.filter(
-				({value}) => // Autoconfirmed is required for a move, redundant
-                value !== 'autoconfirmed'
+				(
+					{value} // Autoconfirmed is required for a move, redundant
+				) => value !== 'autoconfirmed'
 			),
 		});
 		form.append({
@@ -94,10 +95,8 @@ $(function TwinkleBatchProtect() {
 			type: 'checkbox',
 			event: ({target}) => {
 				target.form.createlevel.disabled = !target.checked;
-				target.form.createexpiry.disabled =
-					!target.checked || target.form.createlevel.value === 'all';
-				target.form.createlevel.style.color = target.form.createexpiry.style.color = target
-					.checked
+				target.form.createexpiry.disabled = !target.checked || target.form.createlevel.value === 'all';
+				target.form.createlevel.style.color = target.form.createexpiry.style.color = target.checked
 					? ''
 					: 'transparent';
 			},
@@ -181,7 +180,9 @@ $(function TwinkleBatchProtect() {
 					let editProt;
 					if (missing) {
 						metadata.push('页面不存在');
-						editProt = page.protection.filter(({type, level}) => type === 'create' && level === 'sysop').pop();
+						editProt = page.protection
+							.filter(({type, level}) => type === 'create' && level === 'sysop')
+							.pop();
 					} else {
 						if (page.redirect) {
 							metadata.push('重定向');
@@ -191,7 +192,9 @@ $(function TwinkleBatchProtect() {
 						} else {
 							metadata.push(`${mw.language.convertNumber(page.revisions[0].size)}字节`);
 						}
-						editProt = page.protection.filter(({type, level}) => type === 'edit' && level === 'sysop').pop();
+						editProt = page.protection
+							.filter(({type, level}) => type === 'edit' && level === 'sysop')
+							.pop();
 					}
 					if (editProt) {
 						metadata.push(

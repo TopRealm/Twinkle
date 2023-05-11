@@ -595,9 +595,9 @@ $(function TwinkleXFD() {
 				appendText = Morebits.string.appendPunctuation(appendText);
 			}
 			if (fwdcsdreason) {
-				appendText += `'''${
-					xfdcat === 'fwdcsd' ? '转交理据' : '理据'
-				}'''：${Morebits.string.formatReasonForLog(fwdcsdreason)}`;
+				appendText += `'''${xfdcat === 'fwdcsd' ? '转交理据' : '理据'}'''：${Morebits.string.formatReasonForLog(
+					fwdcsdreason
+				)}`;
 				appendText = Morebits.string.appendPunctuation(appendText);
 			}
 			if (initialContrib) {

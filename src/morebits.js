@@ -819,6 +819,7 @@
 	 * @requires jquery.ui
 	 * @param {HTMLElement} node - The HTML element beside which a tooltip is to be generated.
 	 * @param {Object} data - Tooltip-related configuration data.
+	 * @param data.tooltip
 	 */
 	Morebits.quickForm.element.generateTooltip = (node, {tooltip}) => {
 		const tooltipButton = node.appendChild(document.createElement('span'));
@@ -3559,7 +3560,7 @@
 			ctx.onLoadSuccess(this); // invoke callback
 		};
 		// helper function to parse the page name returned from the API
-		const fnCheckPageName = function({pages, redirects}, onFailure) {
+		const fnCheckPageName = function ({pages, redirects}, onFailure) {
 			if (!onFailure) {
 				onFailure = emptyFunction;
 			}
@@ -3846,7 +3847,7 @@
 		 * @param {string} response - The response document from the API call.
 		 * @returns {boolean}
 		 */
-		const fnProcessChecks = function(action, onFailure, {pages, tokens}) {
+		const fnProcessChecks = function (action, onFailure, {pages, tokens}) {
 			const missing = pages[0].missing;
 			// No undelete as an existing page could have deleted revisions
 			const actionMissing = missing && ['delete', 'move'].includes(action);
@@ -3861,13 +3862,9 @@
 			// extract protection info
 			let editprot;
 			if (action === 'undelete') {
-				editprot = pages[0].protection
-					.filter(({type, level}) => type === 'create' && level === 'sysop')
-					.pop();
+				editprot = pages[0].protection.filter(({type, level}) => type === 'create' && level === 'sysop').pop();
 			} else if (action === 'delete' || action === 'move') {
-				editprot = pages[0].protection
-					.filter(({type, level}) => type === 'edit' && level === 'sysop')
-					.pop();
+				editprot = pages[0].protection.filter(({type, level}) => type === 'edit' && level === 'sysop').pop();
 			}
 			if (
 				editprot &&
@@ -4898,7 +4895,7 @@
 	 */
 	Morebits.checkboxShiftClickSupport = (jQuerySelector, jQueryContext) => {
 		let lastCheckbox = null;
-		const clickHandler = function({shiftKey}) {
+		const clickHandler = function ({shiftKey}) {
 			// self refers to thisCb
 			const self = this;
 			if (shiftKey && lastCheckbox !== null) {

@@ -1427,10 +1427,10 @@ $(function TwinkleWarn() {
 		 * May produce up to two notices in a twinkle-warn-autolevel-messages div
 		 *
 		 * @param {string} _wikitext  The text of a user's talk page, from getPageText() (required)
-		 * @param {Object} params  Params object: sub_group is the template (required);
-		 * article is the user-provided article (form.article) used to link ARV on recent level4 warnings;
-		 * messageData is only necessary if getting the full template, as it's
-		 * used to ensure a valid template of that level exists
+		 * @param {Object} params  Params object:
+		 * @param params.sub_group is the template (required);
+		 * @param params.article is the user-provided article (form.article) used to link ARV on recent level4 warnings;
+		 * @param params.messageData is only necessary if getting the full template, as it's used to ensure a valid template of that level exists
 		 * @param {Object} latest  First element of the array returned from
 		 * dateProcessing. Provided here rather than processed within to avoid
 		 * repeated call to dateProcessing
