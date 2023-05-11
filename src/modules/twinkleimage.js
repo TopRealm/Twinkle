@@ -109,10 +109,10 @@ $(function TwinkleImage() {
 		event.initEvent('change', true, true);
 		result.type[0].dispatchEvent(event);
 	};
-	Twinkle.image.callback.evaluate = (event) => {
+	Twinkle.image.callback.evaluate = ({target}) => {
 		let type;
-		const notify = event.target.notify.checked;
-		const types = event.target.type;
+		const notify = target.notify.checked;
+		const types = target.type;
 		for (const type_ of types) {
 			if (type_.checked) {
 				type = type_.values;
@@ -144,10 +144,10 @@ $(function TwinkleImage() {
 			lognomination,
 		};
 		if (csdcrit === 'f1') {
-			params.f1_source = event.target['type.f1_source'].value;
+			params.f1_source = target['type.f1_source'].value;
 		}
 		Morebits.simpleWindow.setButtonsEnabled(false);
-		Morebits.status.init(event.target);
+		Morebits.status.init(target);
 		Morebits.wiki.actionCompleted.redirect = mw.config.get('wgPageName');
 		Morebits.wiki.actionCompleted.notice = '标记完成';
 		// Tagging image

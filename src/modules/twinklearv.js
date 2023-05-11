@@ -106,9 +106,9 @@ $(function TwinkleARV() {
 		event.initEvent('change', true, true);
 		result.category.dispatchEvent(event);
 	};
-	Twinkle.arv.callback.changeCategory = (event) => {
-		const value = event.target.value;
-		const root = event.target.form;
+	Twinkle.arv.callback.changeCategory = ({target}) => {
+		const value = target.value;
+		const root = target.form;
 		const old_area = Morebits.quickForm.getElements(root, 'work_area')[0];
 		let work_area = null;
 		switch (value) {
@@ -126,9 +126,9 @@ $(function TwinkleARV() {
 					label: '相关页面',
 					tooltip: '如不希望让报告链接到页面，请留空',
 					value: mw.util.getParamValue('vanarticle') || '',
-					event: (event) => {
-						const value_ = event.target.value;
-						const root_ = event.target.form;
+					event: ({target}) => {
+						const value_ = target.value;
+						const root_ = target.form;
 						if (value_ === '') {
 							root_.badid.disabled = root_.goodid.disabled = true;
 						} else {
@@ -144,9 +144,9 @@ $(function TwinkleARV() {
 					tooltip: '留空以略过差异',
 					value: mw.util.getParamValue('vanarticlerevid') || '',
 					disabled: !mw.util.getParamValue('vanarticle'),
-					event: (event_) => {
-						const value_ = event_.target.value;
-						const root_ = event_.target.form;
+					event: ({target}) => {
+						const value_ = target.value;
+						const root_ = target.form;
 						root_.goodid.disabled = value_ === '';
 					},
 				});
@@ -312,8 +312,8 @@ $(function TwinkleARV() {
 				break;
 		}
 	};
-	Twinkle.arv.callback.evaluate = (event) => {
-		const form = event.target;
+	Twinkle.arv.callback.evaluate = ({target}) => {
+		const form = target;
 		let reason = '';
 		let comment = '';
 		if (form.reason) {
@@ -626,22 +626,22 @@ $(function TwinkleARV() {
 			}
 		}
 	};
-	Twinkle.arv.processSock = (params) => {
+	Twinkle.arv.processSock = ({sockpuppets, evidence, checkuser, uid}) => {
 		Morebits.wiki.addCheckpoint(); // prevent notification events from causing an erronous "action completed"
 		// prepare the SPI report
-		let text = `\n{{subst:SPI report|${params.sockpuppets
+		let text = `\n{{subst:SPI report|${sockpuppets
 			.map((sock, index) => `${index + 1}=${sock}`)
-			.join('|')}\n|evidence=${params.evidence} \n`;
-		if (params.checkuser) {
+			.join('|')}\n|evidence=${evidence} \n`;
+		if (checkuser) {
 			text += '|checkuser=yes';
 		}
 		text += '}}';
-		const reportpage = `Qiuwen:傀儡调查/${params.uid}`;
+		const reportpage = `Qiuwen:傀儡调查/${uid}`;
 		Morebits.wiki.actionCompleted.redirect = reportpage;
 		Morebits.wiki.actionCompleted.notice = '提报完成';
 		const spiPage = new Morebits.wiki.page(reportpage, '拉取讨论页面');
 		spiPage.setFollowRedirect(true);
-		spiPage.setEditSummary(`加入对[[Special:Contributions/${params.uid}|${params.uid}]]的新提报`);
+		spiPage.setEditSummary(`加入对[[Special:Contributions/${uid}|${uid}]]的新提报`);
 		spiPage.setChangeTags(Twinkle.changeTags);
 		spiPage.setAppendText(text);
 		spiPage.setWatchlist(Twinkle.getPref('spiWatchReport'));

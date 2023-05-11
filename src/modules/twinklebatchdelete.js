@@ -160,14 +160,16 @@ $(function TwinkleBatchDelete() {
 			(apiobj) => {
 				const response = apiobj.getResponse();
 				let pages = (response.query && response.query.pages) || [];
-				pages = pages.filter((page) => !page.missing && page.imagerepository !== 'shared');
+				pages = pages.filter(({missing, imagerepository}) => !missing && imagerepository !== 'shared');
 				pages.sort(Twinkle.sortByNamespace);
 				for (const page of pages) {
 					const metadata = [];
 					if (page.redirect) {
 						metadata.push('重定向');
 					}
-					const editProt = page.protection.filter((pr) => pr.type === 'edit' && pr.level === 'sysop').pop();
+					const editProt = page.protection
+						.filter(({type, level}) => type === 'edit' && level === 'sysop')
+						.pop();
 					if (editProt) {
 						metadata.push(
 							`全保护${
@@ -317,17 +319,17 @@ $(function TwinkleBatchDelete() {
 			value: '[[QW:O3|O3]]：废弃草稿',
 		},
 	];
-	Twinkle.batchdelete.callback.change_common_reason = (event) => {
-		if (event.target.form.reason.value !== '') {
-			event.target.form.reason.value = Morebits.string.appendPunctuation(event.target.form.reason.value);
+	Twinkle.batchdelete.callback.change_common_reason = ({target}) => {
+		if (target.form.reason.value !== '') {
+			target.form.reason.value = Morebits.string.appendPunctuation(target.form.reason.value);
 		}
-		event.target.form.reason.value += event.target.value;
-		event.target.value = '';
+		target.form.reason.value += target.value;
+		target.value = '';
 	};
-	Twinkle.batchdelete.callback.toggleSubpages = (event) => {
-		const form = event.target.form;
+	Twinkle.batchdelete.callback.toggleSubpages = ({target}) => {
+		const form = target.form;
 		let newPageList;
-		if (event.target.checked) {
+		if (target.checked) {
 			form.delete_subpage_redirects.checked = form.delete_redirects.checked;
 			form.delete_subpage_talks.checked = form.delete_talk.checked;
 			form.unlink_subpages.checked = form.unlink_page.checked;
@@ -352,9 +354,9 @@ $(function TwinkleBatchDelete() {
 			}
 			// Proceed with API calls to get list of subpages
 			const loadingText = $('<strong>').attr('id', 'dbatch-subpage-loading').text('加载中...');
-			$(event.target).after(loadingText);
+			$(target).after(loadingText);
 			const pages = $(form.pages)
-				.map((_index, element) => element.value)
+				.map((_index, {value}) => value)
 				.get();
 			const subpageLister = new Morebits.batchOperation();
 			subpageLister.setOption('chunkSize', Twinkle.getPref('batchChunks'));
@@ -392,7 +394,7 @@ $(function TwinkleBatchDelete() {
 									metadata.push('重定向');
 								}
 								const editProt = page.protection
-									.filter((pr) => pr.type === 'edit' && pr.level === 'sysop')
+									.filter(({type, level}) => type === 'edit' && level === 'sysop')
 									.pop();
 								if (editProt) {
 									metadata.push(
@@ -456,7 +458,7 @@ $(function TwinkleBatchDelete() {
 					$('#dbatch-subpage-loading').remove();
 				}
 			);
-		} else if (!event.target.checked) {
+		} else if (!target.checked) {
 			$.each(Twinkle.batchdelete.pages, (_index, element) => {
 				if (element.subgroup) {
 					// Remove subgroup after saving its contents in subgroup_
@@ -473,11 +475,11 @@ $(function TwinkleBatchDelete() {
 			}
 		}
 	};
-	Twinkle.batchdelete.callback.evaluate = (event) => {
+	Twinkle.batchdelete.callback.evaluate = ({target}) => {
 		Morebits.wiki.actionCompleted.notice = '批量删除已完成';
-		const form = event.target;
+		const form = target;
 		const numProtected = $(Morebits.quickForm.getElements(form, 'pages')).filter(
-			(_index, element) => element.checked && element.nextElementSibling.style.color === 'red'
+			(_index, {checked, nextElementSibling}) => checked && nextElementSibling.style.color === 'red'
 		).length;
 		if (
 			numProtected > 0 &&
@@ -644,7 +646,7 @@ $(function TwinkleBatchDelete() {
 		deleteRedirectsMain: (apiobj) => {
 			const response = apiobj.getResponse();
 			let pages = response.query.pages[0].redirects || [];
-			pages = pages.map((redirect) => redirect.title);
+			pages = pages.map(({title}) => title);
 			if (pages.length === 0) {
 				return;
 			}
@@ -672,7 +674,7 @@ $(function TwinkleBatchDelete() {
 		unlinkBacklinksMain: (apiobj) => {
 			const response = apiobj.getResponse();
 			let pages = response.query.backlinks || [];
-			pages = pages.map((page) => page.title);
+			pages = pages.map(({title}) => title);
 			if (pages.length === 0) {
 				return;
 			}
@@ -719,7 +721,7 @@ $(function TwinkleBatchDelete() {
 		unlinkImageInstancesMain: (apiobj) => {
 			const response = apiobj.getResponse();
 			let pages = response.query.imageusage || [];
-			pages = pages.map((page) => page.title);
+			pages = pages.map(({title}) => title);
 			if (pages.length === 0) {
 				return;
 			}

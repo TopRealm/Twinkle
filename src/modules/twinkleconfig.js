@@ -1408,8 +1408,8 @@ $(function TwinkleConfig() {
 		contenttr.appendChild(contenttd);
 		dlgtable.appendChild(contenttr);
 	};
-	Twinkle.config.listDialog.display = (event) => {
-		const $prefbutton = $(event.target);
+	Twinkle.config.listDialog.display = ({target}) => {
+		const $prefbutton = $(target);
 		const curvalue = $prefbutton.data('value');
 		const curpref = $prefbutton.data('pref');
 		const dialog = new Morebits.simpleWindow(720, 400);
@@ -1440,9 +1440,9 @@ $(function TwinkleConfig() {
 		dlgtbody.appendChild(dlgtr);
 		// content rows
 		let gotRow = false;
-		$.each(curvalue, (_k, v) => {
+		$.each(curvalue, (_k, {value, label}) => {
 			gotRow = true;
-			Twinkle.config.listDialog.addRow(dlgtbody, v.value, v.label);
+			Twinkle.config.listDialog.addRow(dlgtbody, value, label);
 		});
 		// if there are no values present, add a blank row to start the user off
 		if (!gotRow) {
@@ -1521,8 +1521,8 @@ $(function TwinkleConfig() {
 		$tbody.find('tr').slice(1).remove(); // all rows except the first (header) row
 		// add the new values
 		const curvalue = $button.data('value');
-		$.each(curvalue, (_k, v) => {
-			Twinkle.config.listDialog.addRow(tbody, v.value, v.label);
+		$.each(curvalue, (_k, {value, label}) => {
+			Twinkle.config.listDialog.addRow(tbody, value, label);
 		});
 		// save the old value
 		$button.data('value', oldvalue);
@@ -1548,15 +1548,15 @@ $(function TwinkleConfig() {
 		$(button).data('value', result);
 	};
 	// reset/restore defaults
-	Twinkle.config.resetPrefLink = (event) => {
-		const wantedpref = event.target.id.slice(21); // "twinkle-config-reset-" prefix is stripped
+	Twinkle.config.resetPrefLink = ({target}) => {
+		const wantedpref = target.id.slice(21); // "twinkle-config-reset-" prefix is stripped
 		// search tactics
-		$(Twinkle.config.sections).each((_sectionkey, section) => {
-			if (section.hidden || (section.adminOnly && !Morebits.userIsSysop)) {
+		$(Twinkle.config.sections).each((_sectionkey, {hidden, adminOnly, preferences}) => {
+			if (hidden || (adminOnly && !Morebits.userIsSysop)) {
 				return true; // continue: skip impossibilities
 			}
 			let foundit = false;
-			$(section.preferences).each((_prefkey, pref) => {
+			$(preferences).each((_prefkey, pref) => {
 				if (pref.name !== wantedpref) {
 					return true; // continue
 				}
@@ -1570,39 +1570,39 @@ $(function TwinkleConfig() {
 		});
 		return false; // stop link from scrolling page
 	};
-	Twinkle.config.resetPref = (pref) => {
-		switch (pref.type) {
+	Twinkle.config.resetPref = ({type, name, setValues}) => {
+		switch (type) {
 			case 'boolean':
-				document.querySelector(`#${pref.name}`).checked = Twinkle.defaultConfig[pref.name];
+				document.querySelector(`#${name}`).checked = Twinkle.defaultConfig[name];
 				break;
 			case 'string':
 			case 'integer':
 			case 'enum':
-				document.querySelector(`#${pref.name}`).value = Twinkle.defaultConfig[pref.name];
+				document.querySelector(`#${name}`).value = Twinkle.defaultConfig[name];
 				break;
 			case 'set':
-				$.each(pref.setValues, (itemkey) => {
-					if (document.querySelector(`#${pref.name}_${itemkey}`)) {
-						document.querySelector(`#${pref.name}_${itemkey}`).checked =
-							Twinkle.defaultConfig[pref.name].includes(itemkey);
+				$.each(setValues, (itemkey) => {
+					if (document.querySelector(`#${name}_${itemkey}`)) {
+						document.querySelector(`#${name}_${itemkey}`).checked =
+							Twinkle.defaultConfig[name].includes(itemkey);
 					}
 				});
 				break;
 			case 'customList':
-				$(document.querySelector(`#${pref.name}`)).data('value', Twinkle.defaultConfig[pref.name]);
+				$(document.querySelector(`#${name}`)).data('value', Twinkle.defaultConfig[name]);
 				break;
 			default:
-				mw.notify(`twinkleconfig: unknown data type for preference ${pref.name}`, {type: 'warn'});
+				mw.notify(`twinkleconfig: unknown data type for preference ${name}`, {type: 'warn'});
 				break;
 		}
 	};
 	Twinkle.config.resetAllPrefs = () => {
 		// no confirmation message - the user can just refresh/close the page to abort
-		$(Twinkle.config.sections).each((_sectionkey, section) => {
-			if (section.hidden || (section.adminOnly && !Morebits.userIsSysop)) {
+		$(Twinkle.config.sections).each((_sectionkey, {hidden, adminOnly, preferences}) => {
+			if (hidden || (adminOnly && !Morebits.userIsSysop)) {
 				return true; // continue: skip impossibilities
 			}
-			$(section.preferences).each((_prefkey, pref) => {
+			$(preferences).each((_prefkey, pref) => {
 				if (!pref.adminOnly || Morebits.userIsSysop) {
 					Twinkle.config.resetPref(pref);
 				}
@@ -1611,13 +1611,13 @@ $(function TwinkleConfig() {
 		});
 		return false; // stop link from scrolling page
 	};
-	Twinkle.config.save = (event) => {
+	Twinkle.config.save = ({target}) => {
 		Morebits.status.init(document.querySelector('#twinkle-config-content'));
 		const userjs = `${mw.config.get('wgFormattedNamespaces')[mw.config.get('wgNamespaceIds').user]}:${mw.config.get(
 			'wgUserName'
 		)}/twinkleoptions.js`;
 		const qiuwen_page = new Morebits.wiki.page(userjs, `保存参数设置到 ${userjs}`);
-		qiuwen_page.setCallbackParameters(event.target);
+		qiuwen_page.setCallbackParameters(target);
 		qiuwen_page.load(Twinkle.config.writePrefs);
 		return false;
 	};
@@ -1628,16 +1628,16 @@ $(function TwinkleConfig() {
 		const newConfig = {
 			optionsVersion: 2.1,
 		};
-		$(Twinkle.config.sections).each((_sectionkey, section) => {
-			if (section.adminOnly && !Morebits.userIsSysop) {
+		$(Twinkle.config.sections).each((_sectionkey, {adminOnly, preferences, hidden}) => {
+			if (adminOnly && !Morebits.userIsSysop) {
 				return; // i.e. "continue" in this context
 			}
 			// reach each of the preferences from the form
-			$(section.preferences).each((_prefkey, pref) => {
+			$(preferences).each((_prefkey, pref) => {
 				let userValue; // = undefined
 				// only read form values for those prefs that have them
 				if (!pref.adminOnly || Morebits.userIsSysop) {
-					if (!section.hidden) {
+					if (!hidden) {
 						switch (pref.type) {
 							case 'boolean':
 								// read from the checkbox

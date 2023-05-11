@@ -117,47 +117,47 @@ $(function TwinkleProtect() {
 			inprop: 'protection|watched',
 			titles: mw.config.get('wgPageName'),
 		});
-		$.when(...[protectDeferred]).done((protectData) => {
+		$.when(...[protectDeferred]).done(({query}) => {
 			// $.when.apply is supposed to take an unknown number of promises
 			// via an array, which it does, but the type of data returned varies.
 			// If there are two or more deferreds, it returns an array (of objects),
 			// but if there's just one deferred, it retuns a simple object.
 			// This is annoying.
-			const pageid = protectData.query.pageids[0];
-			const page = protectData.query.pages[pageid];
+			const pageid = query.pageids[0];
+			const page = query.pages[pageid];
 			const current = {};
 			const previous = {};
 			// Save requested page's watched status for later in case needed when filing request
 			Twinkle.protect.watched = page.watchlistexpiry || page.watched === '';
-			$.each(page.protection, (_index, protection) => {
-				if (protection.type !== 'aft') {
-					current[protection.type] = {
-						level: protection.level,
-						expiry: protection.expiry,
-						cascade: protection.cascade === '',
+			$.each(page.protection, (_index, {type, level, expiry, cascade}) => {
+				if (type !== 'aft') {
+					current[type] = {
+						level: level,
+						expiry: expiry,
+						cascade: cascade === '',
 					};
 				}
 			});
 			// Only use the log except unprotect
 			Twinkle.protect.previousProtectionLog =
-				protectData.query.logevents.length > 0 && protectData.query.logevents[0].action !== 'unprotect'
-					? protectData.query.logevents[0]
-					: protectData.query.logevents.length >= 2
-					? protectData.query.logevents[1]
+				query.logevents.length > 0 && query.logevents[0].action !== 'unprotect'
+					? query.logevents[0]
+					: query.logevents.length >= 2
+					? query.logevents[1]
 					: null;
 			if (Twinkle.protect.previousProtectionLog) {
-				$.each(Twinkle.protect.previousProtectionLog.params.details, (_index, protection) => {
-					if (protection.type !== 'aft') {
-						previous[protection.type] = {
-							level: protection.level,
-							expiry: protection.expiry,
-							cascade: protection.cascade === '',
+				$.each(Twinkle.protect.previousProtectionLog.params.details, (_index, {type, level, expiry, cascade}) => {
+					if (type !== 'aft') {
+						previous[type] = {
+							level: level,
+							expiry: expiry,
+							cascade: cascade === '',
 						};
 					}
 				});
 			}
 			// show the protection level and log info
-			Twinkle.protect.hasProtectLog = protectData.query.logevents.length > 0;
+			Twinkle.protect.hasProtectLog = query.logevents.length > 0;
 			Twinkle.protect.currentProtectionLevels = current;
 			Twinkle.protect.previousProtectionLevels = previous;
 			Twinkle.protect.callback.showLogAndCurrentProtectInfo();
@@ -205,11 +205,11 @@ $(function TwinkleProtect() {
 		}
 		Morebits.status[statusLevel]('当前保护等级', protectionNode);
 	};
-	Twinkle.protect.callback.changeAction = (event) => {
+	Twinkle.protect.callback.changeAction = ({target}) => {
 		let field_preset;
 		let field1;
 		let field2;
-		switch (event.target.values) {
+		switch (target.values) {
 			case 'protect':
 				field_preset = new Morebits.quickForm.element({
 					type: 'field',
@@ -252,21 +252,20 @@ $(function TwinkleProtect() {
 						label: '编辑权限：',
 						event: Twinkle.protect.formevents.editlevel,
 						list: Twinkle.protect.protectionLevels.filter(
-							(level) =>
-								// Filter TE outside of templates and modules
-								isTemplate || level.value !== 'templateeditor'
+							({value}) => // Filter TE outside of templates and modules
+                            isTemplate || value !== 'templateeditor'
 						),
 					});
 					field2.append({
 						type: 'select',
 						name: 'editexpiry',
 						label: '终止时间：',
-						event: (event) => {
-							if (event.target.value === 'custom') {
-								Twinkle.protect.doCustomExpiry(event.target);
+						event: ({target}) => {
+							if (target.value === 'custom') {
+								Twinkle.protect.doCustomExpiry(target);
 							}
-							$('input[name=small]', $(event.target).closest('form'))[0].checked =
-								event.target.selectedIndex >= 4; // 1 month
+							$('input[name=small]', $(target).closest('form'))[0].checked =
+								target.selectedIndex >= 4; // 1 month
 						},
 						// default expiry selection (2 days) is conditionally set in Twinkle.protect.callback.changePreset
 						list: Twinkle.protect.protectionLengths,
@@ -289,18 +288,17 @@ $(function TwinkleProtect() {
 						label: '移动权限：',
 						event: Twinkle.protect.formevents.movelevel,
 						list: Twinkle.protect.protectionLevels.filter(
-							(level) =>
-								// Autoconfirmed is required for a move, redundant
-								level.value !== 'autoconfirmed' && (isTemplate || level.value !== 'templateeditor')
+							({value}) => // Autoconfirmed is required for a move, redundant
+                            value !== 'autoconfirmed' && (isTemplate || value !== 'templateeditor')
 						),
 					});
 					field2.append({
 						type: 'select',
 						name: 'moveexpiry',
 						label: '终止时间：',
-						event: (event_) => {
-							if (event_.target.value === 'custom') {
-								Twinkle.protect.doCustomExpiry(event_.target);
+						event: ({target}) => {
+							if (target.value === 'custom') {
+								Twinkle.protect.doCustomExpiry(target);
 							}
 						},
 						// default expiry selection (2 days) is conditionally set in Twinkle.protect.callback.changePreset
@@ -314,18 +312,17 @@ $(function TwinkleProtect() {
 						label: '创建权限：',
 						event: Twinkle.protect.formevents.createlevel,
 						list: Twinkle.protect.protectionLevels.filter(
-							(level) =>
-								// Filter TE always, and autoconfirmed in mainspace
-								level.value !== 'templateeditor'
+							({value}) => // Filter TE always, and autoconfirmed in mainspace
+                            value !== 'templateeditor'
 						),
 					});
 					field2.append({
 						type: 'select',
 						name: 'createexpiry',
 						label: '终止时间：',
-						event: (event_) => {
-							if (event_.target.value === 'custom') {
-								Twinkle.protect.doCustomExpiry(event_.target);
+						event: ({target}) => {
+							if (target.value === 'custom') {
+								Twinkle.protect.doCustomExpiry(target);
 							}
 						},
 						// default expiry selection (indefinite) is conditionally set in Twinkle.protect.callback.changePreset
@@ -386,7 +383,7 @@ $(function TwinkleProtect() {
 							label: '在模板显示到期时间',
 							tooltip: '将给模板加上|expiry参数',
 							checked: true,
-							hidden: event.target.values === 'tag',
+							hidden: target.values === 'tag',
 						},
 					],
 				});
@@ -435,24 +432,24 @@ $(function TwinkleProtect() {
 		}
 		let oldfield;
 		if (field_preset) {
-			oldfield = $(event.target.form).find('fieldset[name="field_preset"]')[0];
+			oldfield = $(target.form).find('fieldset[name="field_preset"]')[0];
 			oldfield.parentNode.replaceChild(field_preset.render(), oldfield);
 		} else {
-			$(event.target.form).find('fieldset[name="field_preset"]').css('display', 'none');
+			$(target.form).find('fieldset[name="field_preset"]').css('display', 'none');
 		}
 		if (field1) {
-			oldfield = $(event.target.form).find('fieldset[name="field1"]')[0];
+			oldfield = $(target.form).find('fieldset[name="field1"]')[0];
 			oldfield.parentNode.replaceChild(field1.render(), oldfield);
 		} else {
-			$(event.target.form).find('fieldset[name="field1"]').css('display', 'none');
+			$(target.form).find('fieldset[name="field1"]').css('display', 'none');
 		}
 		if (field2) {
-			oldfield = $(event.target.form).find('fieldset[name="field2"]')[0];
+			oldfield = $(target.form).find('fieldset[name="field2"]')[0];
 			oldfield.parentNode.replaceChild(field2.render(), oldfield);
 		} else {
-			$(event.target.form).find('fieldset[name="field2"]').css('display', 'none');
+			$(target.form).find('fieldset[name="field2"]').css('display', 'none');
 		}
-		if (event.target.values === 'protect') {
+		if (target.values === 'protect') {
 			// fake a change event on the preset dropdown
 			const event = document.createEvent('Event');
 			event.initEvent('change', true, true);
@@ -468,44 +465,44 @@ $(function TwinkleProtect() {
 	};
 	// NOTE: This function is used by batchprotect as well
 	Twinkle.protect.formevents = {
-		editmodify: (event) => {
-			event.target.form.editlevel.disabled = !event.target.checked;
-			event.target.form.editexpiry.disabled =
-				!event.target.checked || event.target.form.editlevel.value === 'all';
-			event.target.form.editlevel.style.color = event.target.form.editexpiry.style.color = event.target.checked
+		editmodify: ({target}) => {
+			target.form.editlevel.disabled = !target.checked;
+			target.form.editexpiry.disabled =
+				!target.checked || target.form.editlevel.value === 'all';
+			target.form.editlevel.style.color = target.form.editexpiry.style.color = target.checked
 				? ''
 				: 'transparent';
 		},
-		editlevel: (event) => {
-			event.target.form.editexpiry.disabled = event.target.value === 'all';
+		editlevel: ({target}) => {
+			target.form.editexpiry.disabled = target.value === 'all';
 		},
-		movemodify: (event) => {
+		movemodify: ({target}) => {
 			// sync move settings with edit settings if applicable
-			if (event.target.form.movelevel.disabled && !event.target.form.editlevel.disabled) {
-				event.target.form.movelevel.value = event.target.form.editlevel.value;
-				event.target.form.moveexpiry.value = event.target.form.editexpiry.value;
-			} else if (event.target.form.editlevel.disabled) {
-				event.target.form.movelevel.value = 'sysop';
-				event.target.form.moveexpiry.value = 'infinity';
+			if (target.form.movelevel.disabled && !target.form.editlevel.disabled) {
+				target.form.movelevel.value = target.form.editlevel.value;
+				target.form.moveexpiry.value = target.form.editexpiry.value;
+			} else if (target.form.editlevel.disabled) {
+				target.form.movelevel.value = 'sysop';
+				target.form.moveexpiry.value = 'infinity';
 			}
-			event.target.form.movelevel.disabled = !event.target.checked;
-			event.target.form.moveexpiry.disabled =
-				!event.target.checked || event.target.form.movelevel.value === 'all';
-			event.target.form.movelevel.style.color = event.target.form.moveexpiry.style.color = event.target.checked
+			target.form.movelevel.disabled = !target.checked;
+			target.form.moveexpiry.disabled =
+				!target.checked || target.form.movelevel.value === 'all';
+			target.form.movelevel.style.color = target.form.moveexpiry.style.color = target.checked
 				? ''
 				: 'transparent';
 		},
-		movelevel: (event) => {
-			event.target.form.moveexpiry.disabled = event.target.value === 'all';
+		movelevel: ({target}) => {
+			target.form.moveexpiry.disabled = target.value === 'all';
 		},
-		createlevel: (event) => {
-			event.target.form.createexpiry.disabled = event.target.value === 'all';
+		createlevel: ({target}) => {
+			target.form.createexpiry.disabled = target.value === 'all';
 		},
-		tagtype: (event) => {
-			event.target.form.small.disabled =
-				event.target.form.noinclude.disabled =
-				event.target.form.showexpiry.disabled =
-					event.target.value === 'none' || event.target.value === 'noop';
+		tagtype: ({target}) => {
+			target.form.small.disabled =
+				target.form.noinclude.disabled =
+				target.form.showexpiry.disabled =
+					target.value === 'none' || target.value === 'noop';
 		},
 	};
 	Twinkle.protect.doCustomExpiry = (target) => {
@@ -599,9 +596,8 @@ $(function TwinkleProtect() {
 			],
 		},
 	].filter(
-		(type) =>
-			// Filter for templates
-			isTemplate || (type.label !== '模板保护' && type.label !== '模板保護')
+		({label}) => // Filter for templates
+        isTemplate || (label !== '模板保护' && label !== '模板保護')
 	);
 	Twinkle.protect.protectionTypesCreateOnly = [
 		{
@@ -809,8 +805,8 @@ $(function TwinkleProtect() {
 			],
 		},
 	];
-	Twinkle.protect.callback.changePreset = (event) => {
-		const form = event.target.form;
+	Twinkle.protect.callback.changePreset = ({target}) => {
+		const form = target.form;
 		const actiontypes = form.actiontype;
 		let actiontype;
 		for (const actiontype_ of actiontypes) {
@@ -875,8 +871,8 @@ $(function TwinkleProtect() {
 			}
 		}
 	};
-	Twinkle.protect.callback.evaluate = (event) => {
-		const form = event.target;
+	Twinkle.protect.callback.evaluate = ({target}) => {
+		const form = target;
 		const input = Morebits.quickForm.getInputData(form);
 		let tagparams;
 		if (
@@ -1060,11 +1056,11 @@ $(function TwinkleProtect() {
 						typename = '白纸保护';
 						break;
 					case 'unprotect': {
-						const admins = $.map(Twinkle.protect.currentProtectionLevels, (pl) => {
-							if (!pl.admin || Twinkle.protect.trustedBots.includes(pl.admin)) {
+						const admins = $.map(Twinkle.protect.currentProtectionLevels, ({admin}) => {
+							if (!admin || Twinkle.protect.trustedBots.includes(admin)) {
 								return null;
 							}
-							return `User:${pl.admin}`;
+							return `User:${admin}`;
 						});
 						if (
 							admins.length > 0 &&

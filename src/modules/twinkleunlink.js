@@ -92,8 +92,8 @@ $(function TwinkleUnlink() {
 		Window.setContent(root);
 		Window.display();
 	};
-	Twinkle.unlink.callback.evaluate = (event) => {
-		const form = event.target;
+	Twinkle.unlink.callback.evaluate = ({target}) => {
+		const form = target;
 		const input = Morebits.quickForm.getInputData(form);
 		if (!input.reason) {
 			mw.notify('您必须指定取消链入的理由。', {type: 'warn'});
@@ -179,8 +179,8 @@ $(function TwinkleUnlink() {
 						apiobj.params.form.append({
 							type: 'button',
 							label: '全选',
-							event: (event) => {
-								$(Morebits.quickForm.getElements(event.target.form, 'imageusage')).prop(
+							event: ({target}) => {
+								$(Morebits.quickForm.getElements(target.form, 'imageusage')).prop(
 									'checked',
 									true
 								);
@@ -189,8 +189,8 @@ $(function TwinkleUnlink() {
 						apiobj.params.form.append({
 							type: 'button',
 							label: '全不选',
-							event: (event) => {
-								$(Morebits.quickForm.getElements(event.target.form, 'imageusage')).prop(
+							event: ({target}) => {
+								$(Morebits.quickForm.getElements(target.form, 'imageusage')).prop(
 									'checked',
 									false
 								);
@@ -238,15 +238,15 @@ $(function TwinkleUnlink() {
 					apiobj.params.form.append({
 						type: 'button',
 						label: '全选',
-						event: (event) => {
-							$(Morebits.quickForm.getElements(event.target.form, 'backlinks')).prop('checked', true);
+						event: ({target}) => {
+							$(Morebits.quickForm.getElements(target.form, 'backlinks')).prop('checked', true);
 						},
 					});
 					apiobj.params.form.append({
 						type: 'button',
 						label: '全不选',
-						event: (event) => {
-							$(Morebits.quickForm.getElements(event.target.form, 'backlinks')).prop('checked', false);
+						event: ({target}) => {
+							$(Morebits.quickForm.getElements(target.form, 'backlinks')).prop('checked', false);
 						},
 					});
 					apiobj.params.form.append({

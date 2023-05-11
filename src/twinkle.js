@@ -564,12 +564,12 @@
 	// json formatversion=2 sorts by pageid instead
 	Twinkle.sortByNamespace = (first, second) => first.ns - second.ns || (first.title > second.title ? 1 : -1);
 	// Used in batch listings to link to the page in question with >
-	Twinkle.generateArrowLinks = (checkbox) => {
+	Twinkle.generateArrowLinks = ({value, nextElementSibling}) => {
 		const link = Morebits.htmlNode('a', ' >');
 		link.setAttribute('class', 'tw-arrowpage-link');
-		link.setAttribute('href', mw.util.getUrl(checkbox.value));
+		link.setAttribute('href', mw.util.getUrl(value));
 		link.setAttribute('target', '_blank');
-		checkbox.nextElementSibling.append(link);
+		nextElementSibling.append(link);
 	};
 	// Used in unlink listings to link the page title
 	Twinkle.generateBatchPageLinks = (checkbox) => {

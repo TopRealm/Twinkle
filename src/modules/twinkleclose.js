@@ -29,8 +29,8 @@ $(function TwinkleClose() {
 		$(
 			'h1:has(.mw-headline),h2:has(.mw-headline),h3:has(.mw-headline),h4:has(.mw-headline),h5:has(.mw-headline),h6:has(.mw-headline)',
 			'#bodyContent'
-		).each((index, current) => {
-			current.dataset.section = index + 1;
+		).each((index, {dataset}) => {
+			dataset.section = index + 1;
 		});
 		const selector = ':has(.mw-headline a:only-of-type):not(:has(+ div.NavFrame))';
 		const titles = $('#bodyContent').find(`h2${selector}:not(:has(+ p + h3)), h3${selector}`); // really needs to work on
@@ -313,12 +313,12 @@ $(function TwinkleClose() {
 		event.initEvent('change', true, true);
 		result.sub_group.dispatchEvent(event);
 	};
-	Twinkle.close.callback.change_operation = (event) => {
-		const noop = event.target.checked;
-		const code = event.target.form.sub_group.value;
-		const messageData = $(event.target.form.sub_group).find(`option[value="${code}"]`).data('messageData');
-		const talkpage = event.target.form.talkpage;
-		const redirects = event.target.form.redirects;
+	Twinkle.close.callback.change_operation = ({target}) => {
+		const noop = target.checked;
+		const code = target.form.sub_group.value;
+		const messageData = $(target.form.sub_group).find(`option[value="${code}"]`).data('messageData');
+		const talkpage = target.form.talkpage;
+		const redirects = target.form.redirects;
 		if (noop || messageData.action === 'keep') {
 			if (talkpage) {
 				talkpage.checked = false;
@@ -335,12 +335,12 @@ $(function TwinkleClose() {
 			redirects.disabled = false;
 		}
 	};
-	Twinkle.close.callback.change_code = (event) => {
-		const resultData = $(event.target.form).data('resultData');
-		const messageData = $(event.target).find(`option[value="${event.target.value}"]`).data('messageData');
-		const noop = event.target.form.noop;
-		const talkpage = event.target.form.talkpage;
-		const redirects = event.target.form.redirects;
+	Twinkle.close.callback.change_code = ({target}) => {
+		const resultData = $(target.form).data('resultData');
+		const messageData = $(target).find(`option[value="${target.value}"]`).data('messageData');
+		const noop = target.form.noop;
+		const talkpage = target.form.talkpage;
+		const redirects = target.form.redirects;
 		if (resultData.noop || messageData.action === 'noop') {
 			noop.checked = true;
 			noop.disabled = true;
@@ -368,32 +368,32 @@ $(function TwinkleClose() {
 				redirects.checked = true;
 				redirects.disabled = false;
 			}
-			if (event.target.value === 'sd') {
-				event.target.form.sdreason.parentNode.removeAttribute('hidden');
+			if (target.value === 'sd') {
+				target.form.sdreason.parentNode.removeAttribute('hidden');
 			} else {
-				event.target.form.sdreason.parentNode.setAttribute('hidden', '');
+				target.form.sdreason.parentNode.setAttribute('hidden', '');
 			}
 		}
 	};
-	Twinkle.close.callback.evaluate = (event) => {
-		const code = event.target.sub_group.value;
-		const resultData = $(event.target).data('resultData');
-		const messageData = $(event.target.sub_group).find(`option[value="${code}"]`).data('messageData');
-		const noop = event.target.noop.checked;
-		const talkpage = event.target.talkpage && event.target.talkpage.checked;
-		const redirects = event.target.redirects.checked;
+	Twinkle.close.callback.evaluate = ({target}) => {
+		const code = target.sub_group.value;
+		const resultData = $(target).data('resultData');
+		const messageData = $(target.sub_group).find(`option[value="${code}"]`).data('messageData');
+		const noop = target.noop.checked;
+		const talkpage = target.talkpage && target.talkpage.checked;
+		const redirects = target.redirects.checked;
 		const params = {
 			title: resultData.title,
 			code,
-			remark: event.target.remark.value,
-			sdreason: event.target.sdreason.value,
+			remark: target.remark.value,
+			sdreason: target.sdreason.value,
 			section: resultData.section,
 			messageData,
 			talkpage,
 			redirects,
 		};
 		Morebits.simpleWindow.setButtonsEnabled(false);
-		Morebits.status.init(event.target);
+		Morebits.status.init(target);
 		Morebits.wiki.actionCompleted.notice = '操作完成';
 		if (noop || messageData.action === 'noop') {
 			Twinkle.close.callbacks.talkend(params);
@@ -477,8 +477,8 @@ $(function TwinkleClose() {
 			}
 			Morebits.wiki.removeCheckpoint();
 		},
-		deleteRedirectsMain: (apiobj) => {
-			const xml = apiobj.responseXML;
+		deleteRedirectsMain: ({responseXML, params}) => {
+			const xml = responseXML;
 			const pages = $(xml)
 				.find('rd')
 				.map((_index, element) => $(element).attr('title'))
@@ -486,25 +486,25 @@ $(function TwinkleClose() {
 			if (pages.length === 0) {
 				return;
 			}
-			const redirectDeleter = new Morebits.batchOperation(`正在删除到 ${apiobj.params.title} 的重定向`);
+			const redirectDeleter = new Morebits.batchOperation(`正在删除到 ${params.title} 的重定向`);
 			redirectDeleter.setOption('chunkSize', Twinkle.getPref('batchdeleteChunks'));
 			redirectDeleter.setPageList(pages);
 			redirectDeleter.run((pageName) => {
 				const qiuwen_page = new Morebits.wiki.page(pageName, `正在删除 ${pageName}`);
-				qiuwen_page.setEditSummary(`[[QW:CSD#G5|G5]]: 指向已删页面“${apiobj.params.title}”的重定向`);
+				qiuwen_page.setEditSummary(`[[QW:CSD#G5|G5]]: 指向已删页面“${params.title}”的重定向`);
 				qiuwen_page.setChangeTags(Twinkle.changeTags);
 				qiuwen_page.deletePage(redirectDeleter.workerSuccess, redirectDeleter.workerFailure);
 			});
 		},
-		deleteTalk: (apiobj) => {
-			const xml = apiobj.responseXML;
+		deleteTalk: ({responseXML, params}) => {
+			const xml = responseXML;
 			const exists = $(xml).find('page:not([missing])').length > 0;
 			if (!exists) {
 				// no talk page; forget about it
 				return;
 			}
-			const page = new Morebits.wiki.page(apiobj.params.talkPage, `正在删除页面 ${apiobj.params.title} 的讨论页`);
-			page.setEditSummary(`[[QW:CSD#G5|G5]]: 已删页面“${apiobj.params.title}”的[[Qiuwen:讨论页|讨论页]]`);
+			const page = new Morebits.wiki.page(params.talkPage, `正在删除页面 ${params.title} 的讨论页`);
+			page.setEditSummary(`[[QW:CSD#G5|G5]]: 已删页面“${params.title}”的[[Qiuwen:讨论页|讨论页]]`);
 			page.setChangeTags(Twinkle.changeTags);
 			page.deletePage();
 		},

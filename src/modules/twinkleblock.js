@@ -168,7 +168,7 @@ $(function TwinkleBlock() {
 					relevantUserName = `User:${userName}`;
 					Twinkle.block.userIsBot =
 						!!userinfo.groupmemberships &&
-						userinfo.groupmemberships.map((element) => element.group).includes('bot');
+						userinfo.groupmemberships.map(({group}) => group).includes('bot');
 				} else {
 					relevantUserName = userName;
 					Twinkle.block.userIsBot = false;
@@ -734,8 +734,8 @@ $(function TwinkleBlock() {
 					url: mw.util.wikiScript('api'),
 					dataType: 'json',
 					delay: 100,
-					data: (params) => {
-						const title = mw.Title.newFromText(params.term);
+					data: ({term}) => {
+						const title = mw.Title.newFromText(term);
 						if (!title) {
 							return;
 						}
@@ -748,23 +748,22 @@ $(function TwinkleBlock() {
 							aplimit: '10',
 						};
 					},
-					processResults: (data) => ({
-						results: data.query.allpages.map((page) => {
+					processResults: ({query}) => ({
+                        results: query.allpages.map((page) => {
 							const title = mw.Title.newFromText(page.title, page.ns).toText();
 							return {
 								id: title,
 								text: title,
 							};
-						}),
-					}),
+						})
+                    }),
 				},
-				templateSelection: (choice) =>
-					$('<a>')
-						.text(choice.text)
-						.attr({
-							href: mw.util.getUrl(choice.text),
-							target: '_blank',
-						}),
+				templateSelection: ({text}) => $('<a>')
+                    .text(text)
+                    .attr({
+                        href: mw.util.getUrl(text),
+                        target: '_blank',
+                    }),
 			});
 			$form.find('[name=namespacerestrictions]').select2({
 				width: '100%',
@@ -1374,13 +1373,13 @@ $(function TwinkleBlock() {
 		Twinkle.block.callback.update_form(event, Twinkle.block.blockPresetsInfo[key]);
 		Twinkle.block.callback.change_template(event);
 	};
-	Twinkle.block.callback.change_expiry = (event) => {
-		const expiry = event.target.form.expiry;
-		if (event.target.value === 'custom') {
+	Twinkle.block.callback.change_expiry = ({target}) => {
+		const expiry = target.form.expiry;
+		if (target.value === 'custom') {
 			Morebits.quickForm.setElementVisibility(expiry.parentNode, true);
 		} else {
 			Morebits.quickForm.setElementVisibility(expiry.parentNode, false);
-			expiry.value = event.target.value;
+			expiry.value = target.value;
 		}
 	};
 	Twinkle.block.seeAlsos = [];
@@ -1397,8 +1396,8 @@ $(function TwinkleBlock() {
 		this.form.reason.value =
 			Twinkle.block.seeAlsos.length === 0 ? reason : `${reason}<!-- 参见${seeAlsoMessage} -->`;
 	};
-	Twinkle.block.callback.update_form = (e, data) => {
-		const form = e.target.form;
+	Twinkle.block.callback.update_form = ({target}, data) => {
+		const form = target.form;
 		let expiry = data.expiry;
 		// don't override original expiry if useInitialOptions is set
 		if (!data.useInitialOptions) {
@@ -1439,8 +1438,8 @@ $(function TwinkleBlock() {
 		form.reason.value =
 			data.prependReason && data.reason ? `${data.reason}; ${form.reason.value}` : data.reason || '';
 	};
-	Twinkle.block.callback.change_template = (event) => {
-		const form = event.target.form;
+	Twinkle.block.callback.change_template = ({target}) => {
+		const form = target.form;
 		const value = form.template.value;
 		const settings = Twinkle.block.blockPresetsInfo[value];
 		const blockBox = $(form).find('[name=actiontype][value=block]').is(':checked');
@@ -1509,9 +1508,9 @@ $(function TwinkleBlock() {
 		const templateText = Twinkle.block.callback.getBlockNoticeWikitext(params);
 		form.previewer.beginRender(templateText);
 	};
-	Twinkle.block.callback.evaluate = (event) => {
-		const params = Morebits.quickForm.getInputData(event.target);
-		const $form = $(event.target);
+	Twinkle.block.callback.evaluate = ({target}) => {
+		const params = Morebits.quickForm.getInputData(target);
+		const $form = $(target);
 		const toBlock = $form.find('[name=actiontype][value=block]').is(':checked');
 		const toWarn = $form.find('[name=actiontype][value=template]').is(':checked');
 		const toPartial = $form.find('[name=actiontype][value=partial]').is(':checked');
@@ -1626,7 +1625,7 @@ $(function TwinkleBlock() {
 				return;
 			}
 			Morebits.simpleWindow.setButtonsEnabled(false);
-			Morebits.status.init(event.target);
+			Morebits.status.init(target);
 			const statusElement = new Morebits.status('执行封禁');
 			blockoptions.action = 'block';
 			blockoptions.user = relevantUserName;
@@ -1723,12 +1722,12 @@ $(function TwinkleBlock() {
 			});
 		} else if (toWarn) {
 			Morebits.simpleWindow.setButtonsEnabled(false);
-			Morebits.status.init(event.target);
+			Morebits.status.init(target);
 			Twinkle.block.callback.issue_template(templateoptions);
 		}
 		if (toTag || toProtect) {
 			Morebits.simpleWindow.setButtonsEnabled(false);
-			Morebits.status.init(event.target);
+			Morebits.status.init(target);
 			const userPage = `User:${relevantUserName}`;
 			const qiuwen_page = new Morebits.wiki.page(userPage, '标记或保护用户页');
 			qiuwen_page.setCallbackParameters(params);
@@ -1740,7 +1739,7 @@ $(function TwinkleBlock() {
 				return;
 			}
 			Morebits.simpleWindow.setButtonsEnabled(false);
-			Morebits.status.init(event.target);
+			Morebits.status.init(target);
 			const unblockStatusElement = new Morebits.status('执行解除封禁');
 			unblockoptions.action = 'unblock';
 			unblockoptions.user = relevantUserName;

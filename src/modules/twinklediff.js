@@ -80,11 +80,11 @@ $(function TwinkleDiff() {
 		qiuwen_api.post();
 	};
 	Twinkle.diff.callbacks = {
-		main: (self) => {
-			const rev = self.response.query.pages[0].revisions;
+		main: ({response, statelem, params}) => {
+			const rev = response.query.pages[0].revisions;
 			const revid = rev && rev[0].revid;
 			if (!revid) {
-				self.statelem.error(`未找到合适的早期版本，或 ${self.params.user} 是唯一贡献者。取消。`);
+				statelem.error(`未找到合适的早期版本，或 ${params.user} 是唯一贡献者。取消。`);
 				return;
 			}
 			window.location = mw.util.getUrl(mw.config.get('wgPageName'), {

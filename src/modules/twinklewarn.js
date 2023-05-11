@@ -1282,9 +1282,9 @@ $(function TwinkleWarn() {
 			);
 		}
 	};
-	Twinkle.warn.callback.change_subcategory = (event) => {
-		const main_group = event.target.form.main_group.value;
-		const value = event.target.form.sub_group.value;
+	Twinkle.warn.callback.change_subcategory = ({target}) => {
+		const main_group = target.form.main_group.value;
+		const value = target.form.sub_group.value;
 		// Tags that don't take a linked article, but something else (often a username).
 		// The value of each tag is the label next to the input field
 		const notLinkedArticle = {
@@ -1295,21 +1295,21 @@ $(function TwinkleWarn() {
 		if (['singlenotice', 'singlewarn', 'singlecombined', 'kitchensink'].includes(main_group)) {
 			if (notLinkedArticle[value]) {
 				if (Twinkle.warn.prev_article === null) {
-					Twinkle.warn.prev_article = event.target.form.article.value;
+					Twinkle.warn.prev_article = target.form.article.value;
 				}
-				event.target.form.article.notArticle = true;
-				event.target.form.article.value = '';
+				target.form.article.notArticle = true;
+				target.form.article.value = '';
 				// change form labels according to the warning selected
-				Morebits.quickForm.setElementTooltipVisibility(event.target.form.article, false);
-				Morebits.quickForm.overrideElementLabel(event.target.form.article, notLinkedArticle[value]);
-			} else if (event.target.form.article.notArticle) {
+				Morebits.quickForm.setElementTooltipVisibility(target.form.article, false);
+				Morebits.quickForm.overrideElementLabel(target.form.article, notLinkedArticle[value]);
+			} else if (target.form.article.notArticle) {
 				if (Twinkle.warn.prev_article !== null) {
-					event.target.form.article.value = Twinkle.warn.prev_article;
+					target.form.article.value = Twinkle.warn.prev_article;
 					Twinkle.warn.prev_article = null;
 				}
-				event.target.form.article.notArticle = false;
-				Morebits.quickForm.setElementTooltipVisibility(event.target.form.article, true);
-				Morebits.quickForm.resetElementLabel(event.target.form.article);
+				target.form.article.notArticle = false;
+				Morebits.quickForm.setElementTooltipVisibility(target.form.article, true);
+				Morebits.quickForm.resetElementLabel(target.form.article);
 			}
 		}
 		// add big red notice, warning users about how to use {{uw-[coi-]username}} appropriately
@@ -1322,7 +1322,7 @@ $(function TwinkleWarn() {
 				.text(
 					'{{uw-username}}<b>不应</b>被用于<b>明显</b>违反用户名方针的用户。明显的违反方针应被报告给UAA。{{uw-username}}应只被用在边界情况下需要与用户讨论时。'
 				);
-			$redWarning.insertAfter(Morebits.quickForm.getElementLabelObject(event.target.form.reasonGroup));
+			$redWarning.insertAfter(Morebits.quickForm.getElementLabelObject(target.form.reasonGroup));
 		}
 	};
 	Twinkle.warn.callbacks = {
@@ -1439,7 +1439,7 @@ $(function TwinkleWarn() {
 		 *
 		 * @return {Array} - Array that contains the full template and just the warning level
 		 */
-		autolevelParseWikitext: (_wikitext, params, latest, date, statelem) => {
+		autolevelParseWikitext: (_wikitext, {article, sub_group, messageData}, latest, date, statelem) => {
 			let level; // undefined rather than '' means the Number.isNaN below will return true
 			if (/\d(?:im)?$/.test(latest.type)) {
 				// level1-4im
@@ -1486,7 +1486,7 @@ $(function TwinkleWarn() {
 									Morebits.wiki.actionCompleted.redirect = null;
 									Twinkle.warn.dialog.close();
 									Twinkle.arv.callback(relevantUserName);
-									$('input[name=page]').val(params.article); // Target page
+									$('input[name=page]').val(article); // Target page
 									$('input[value=final]').prop('checked', true); // Vandalism after final
 								});
 							const statusNode = $('<div>')
@@ -1512,11 +1512,11 @@ $(function TwinkleWarn() {
 			// Place after the stale and other-user-reverted (text-only) messages
 			$('#twinkle-warn-autolevel-message').remove(); // clean slate
 			$autolevelMessage.insertAfter($('#twinkle-warn-warning-messages'));
-			let template = params.sub_group.replace(/(.*)\d$/, '$1');
+			let template = sub_group.replace(/(.*)\d$/, '$1');
 			// Validate warning level, falling back to the uw-generic series.
 			// Only a few items are missing a level, and in all but a handful
 			// of cases, the uw-generic series is explicitly used elsewhere.
-			if (params.messageData && !params.messageData[`level${level}`]) {
+			if (messageData && !messageData[`level${level}`]) {
 				template = 'uw-generic';
 			}
 			template += level;
@@ -1746,10 +1746,10 @@ $(function TwinkleWarn() {
 			flowobj.newTopic();
 		},
 	};
-	Twinkle.warn.callback.evaluate = (event) => {
+	Twinkle.warn.callback.evaluate = ({target}) => {
 		const userTalkPage = `User_talk:${relevantUserName}`;
 		// reason, main_group, sub_group, article
-		const params = Morebits.quickForm.getInputData(event.target);
+		const params = Morebits.quickForm.getInputData(target);
 		// Check that a reason was filled in if uw-username was selected
 		if (params.sub_group === 'uw-username' && !params.article) {
 			mw.notify('必须给{{uw-username}}提供理由。', {type: 'warn'});
@@ -1780,14 +1780,14 @@ $(function TwinkleWarn() {
 		// *don't* want to actually issue a warning, so the error handling
 		// after the form is submitted is probably preferable
 		// Find the selected <option> element so we can fetch the data structure
-		const $selectedEl = $(event.target.sub_group).find(`option[value="${$(event.target.sub_group).val()}"]`);
+		const $selectedEl = $(target.sub_group).find(`option[value="${$(target.sub_group).val()}"]`);
 		params.messageData = $selectedEl.data('messageData');
 		if (params.messageData === undefined) {
 			mw.notify('请选择警告模板。', {type: 'warn'});
 			return;
 		}
 		Morebits.simpleWindow.setButtonsEnabled(false);
-		Morebits.status.init(event.target);
+		Morebits.status.init(target);
 		Morebits.wiki.actionCompleted.redirect = userTalkPage;
 		Morebits.wiki.actionCompleted.notice = '警告完成，将在几秒后刷新';
 		const qiuwen_page = new Morebits.wiki.page(userTalkPage, '用户讨论页修改');

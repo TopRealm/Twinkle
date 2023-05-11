@@ -275,14 +275,14 @@ $(function TwinkleSpeedy() {
 		// Check for prior deletions.  Just once, upon init
 		Twinkle.speedy.callback.priorDeletionCount();
 	};
-	Twinkle.speedy.callback.getMode = (form) => {
+	Twinkle.speedy.callback.getMode = ({tag_only, delmultiple, multiple}) => {
 		let mode = Twinkle.speedy.mode.userSingleSubmit;
-		if (form.tag_only && !form.tag_only.checked) {
-			mode = form.delmultiple.checked
+		if (tag_only && !tag_only.checked) {
+			mode = delmultiple.checked
 				? Twinkle.speedy.mode.sysopMultipleSubmit
 				: Twinkle.speedy.mode.sysopSingleSubmit;
 		} else {
-			mode = form.multiple.checked
+			mode = multiple.checked
 				? Twinkle.speedy.mode.userMultipleSubmit
 				: Twinkle.speedy.mode.userSingleSubmit;
 		}
@@ -1182,10 +1182,10 @@ $(function TwinkleSpeedy() {
 				}
 				statusIndicator.status('0%');
 				let current = 0;
-				const onsuccess = (apiobjInner) => {
+				const onsuccess = ({statelem}) => {
 					const now = `${Number.parseInt((100 * ++current) / total, 10)}%`;
 					statusIndicator.update(now);
-					apiobjInner.statelem.unlink();
+					statelem.unlink();
 					if (current >= total) {
 						statusIndicator.info(`${now}（完成）`);
 						Morebits.wiki.removeCheckpoint();
@@ -1359,7 +1359,7 @@ $(function TwinkleSpeedy() {
 			// the params used are:
 			//   for CSD: params.values, params.normalizeds  (note: normalizeds is an array)
 			//   for DI: params.fromDI = true, params.templatename, params.normalized  (note: normalized is a string)
-			addToLog: (params, initialContrib) => {
+			addToLog: ({fromDI, normalized, templatename, normalizeds}, initialContrib) => {
 				const usl = new Morebits.userspaceLogger(Twinkle.getPref('speedyLogPageName'));
 				usl.initialText = `这是该用户使用[[H:TW|Twinkle]]的速删模块做出的[[QW:CSD|快速删除]]提名列表。\n\n若您不再想保留此日志，请在[[${Twinkle.getPref(
 					'configPage'
@@ -1367,22 +1367,22 @@ $(function TwinkleSpeedy() {
 					Morebits.userIsSysop ? '\n\n此日志并不记录用Twinkle直接执行的删除。' : ''
 				}`;
 				let appendText = `# [[:${Morebits.pageNameNorm}]]：`;
-				if (params.fromDI) {
-					appendText += `图版[[QW:CSD#${params.normalized.toUpperCase()}|CSD ${params.normalized.toUpperCase()}]]（{{tl|${
-						params.templatename
+				if (fromDI) {
+					appendText += `图版[[QW:CSD#${normalized.toUpperCase()}|CSD ${normalized.toUpperCase()}]]（{{tl|${
+						templatename
 					}}}）`;
 				} else {
-					if (params.normalizeds.length > 1) {
+					if (normalizeds.length > 1) {
 						appendText += '多个理由（';
-						$.each(params.normalizeds, (_index, norm) => {
+						$.each(normalizeds, (_index, norm) => {
 							appendText += `[[QW:CSD#${norm.toUpperCase()}|${norm.toUpperCase()}]]、`;
 						});
 						appendText = appendText.slice(0, Math.max(0, appendText.length - 1)); // remove trailing comma
 						appendText += '）';
-					} else if (params.normalizeds[0] === 'db') {
+					} else if (normalizeds[0] === 'db') {
 						appendText += '自定义理由';
 					} else {
-						appendText += `[[QW:CSD#${params.normalizeds[0].toUpperCase()}|CSD ${params.normalizeds[0].toUpperCase()}]]`;
+						appendText += `[[QW:CSD#${normalizeds[0].toUpperCase()}|CSD ${normalizeds[0].toUpperCase()}]]`;
 					}
 				}
 				if (initialContrib) {
@@ -1490,8 +1490,8 @@ $(function TwinkleSpeedy() {
 	 * @param {Event} event
 	 * @return {Array}
 	 */
-	Twinkle.speedy.resolveCsdValues = (event) => {
-		const values = (event.target.form || event.target).getChecked('csd');
+	Twinkle.speedy.resolveCsdValues = ({target}) => {
+		const values = (target.form || target).getChecked('csd');
 		if (values.length === 0) {
 			mw.notify('请选择一个理据。', {type: 'warn'});
 			return null;

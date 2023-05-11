@@ -116,9 +116,9 @@ $(function FriendlyTalkback() {
 	let prev_page = '';
 	let prev_section = '';
 	let prev_message = '';
-	Twinkle.talkback.changeTarget = (event) => {
-		const value = event.target.values;
-		const root = event.target.form;
+	Twinkle.talkback.changeTarget = ({target}) => {
+		const value = target.values;
+		const root = target.form;
 		const old_area = Morebits.quickForm.getElements(root, 'work_area')[0];
 		if (root.section) {
 			prev_section = root.section.value;
@@ -166,8 +166,8 @@ $(function FriendlyTalkback() {
 					type: 'select',
 					name: 'noticeboard',
 					label: '通告板：',
-					event: (event) => {
-						if (event.target.value === 'afchd') {
+					event: ({target}) => {
+						if (target.value === 'afchd') {
 							Morebits.quickForm.overrideElementLabel(root.section, '标题或草稿名称（去除Draft前缀）：');
 							Morebits.quickForm.setElementTooltipVisibility(root.section, false);
 						} else {
@@ -176,12 +176,12 @@ $(function FriendlyTalkback() {
 						}
 					},
 				});
-				$.each(Twinkle.talkback.noticeboards, (value_, data) => {
+				$.each(Twinkle.talkback.noticeboards, (value_, {label, defaultSelected}) => {
 					noticeboard.append({
 						type: 'option',
-						label: data.label,
+						label: label,
 						value: value_,
-						selected: !!data.defaultSelected,
+						selected: !!defaultSelected,
 					});
 				});
 				work_area.append({
@@ -272,12 +272,12 @@ $(function FriendlyTalkback() {
 			editSummary: '您在[[Qiuwen:AFCHD|条目创建帮助]]页面的提问已有回复，请前往查看。',
 		},
 	};
-	Twinkle.talkback.evaluate = (event) => {
-		const input = Morebits.quickForm.getInputData(event.target);
+	Twinkle.talkback.evaluate = ({target}) => {
+		const input = Morebits.quickForm.getInputData(target);
 		const fullUserTalkPageName = new mw.Title(mw.config.get('wgRelevantUserName'), 3).toText();
 		const talkpage = new Morebits.wiki.page(fullUserTalkPageName, '加入回复通告');
 		Morebits.simpleWindow.setButtonsEnabled(false);
-		Morebits.status.init(event.target);
+		Morebits.status.init(target);
 		Morebits.wiki.actionCompleted.redirect = fullUserTalkPageName;
 		Morebits.wiki.actionCompleted.notice = '回复通告完成，将在几秒内刷新页面';
 		switch (input.tbtarget) {

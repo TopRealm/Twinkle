@@ -50,8 +50,8 @@ $(function FriendlyTag() {
 			size: '30',
 			event() {
 				// flush the DOM of all existing underline spans
-				$allCheckboxDivs.find('.search-hit').each((_index, element) => {
-					const label_element = element.parentElement;
+				$allCheckboxDivs.find('.search-hit').each((_index, {parentElement}) => {
+					const label_element = parentElement;
 					// This would convert <label>Hello <span class=search-hit>wo</span>rld</label>
 					// to <label>Hello world</label>
 					label_element.innerHTML = label_element.textContent;
@@ -199,11 +199,11 @@ $(function FriendlyTag() {
 					form.append({
 						type: 'checkbox',
 						name: 'tags',
-						list: group.value.map((item) => ({
-							value: item.tag,
-							label: `{{${item.tag}}}：${item.description}`,
-							subgroup: item.subgroup,
-						})),
+						list: group.value.map(({tag, description, subgroup}) => ({
+                            value: tag,
+                            label: `{{${tag}}}：${description}`,
+                            subgroup: subgroup
+                        })),
 					});
 				}
 				if (Twinkle.getPref('customRedirectTagList').length > 0) {
@@ -271,9 +271,9 @@ $(function FriendlyTag() {
 							if (element.classList[0] === 'box-问题条目') {
 								$(element)
 									.find('.ambox')
-									.each((_index, element) => {
-										if (element.classList[0].indexOf('box-') === 0) {
-											const tag_ = element.classList[0].slice('box-'.length).replace(/_/g, ' ');
+									.each((_index, {classList}) => {
+										if (classList[0].indexOf('box-') === 0) {
+											const tag_ = classList[0].slice('box-'.length).replace(/_/g, ' ');
 											Twinkle.tag.alreadyPresentTags.push(tag_);
 										}
 									});
@@ -316,10 +316,10 @@ $(function FriendlyTag() {
 	// quickfilter event function, to avoid having to recompute them on every keydown
 	let $allCheckboxDivs;
 	let $allHeaders;
-	Twinkle.tag.updateSortOrder = (event) => {
+	Twinkle.tag.updateSortOrder = ({target}) => {
 		let _a;
-		const form = event.target.form;
-		const sortorder = event.target.value;
+		const form = target.form;
+		const sortorder = target.value;
 		Twinkle.tag.checkedTags = form.getChecked('tags');
 		const container = new Morebits.quickForm.element({type: 'fragment'});
 		// function to generate a checkbox, with appropriate subgroup if needed
@@ -542,7 +542,7 @@ $(function FriendlyTag() {
 			container.append({type: 'header', id: 'tagHeader0', label: '已放置的维护标记'});
 			const subdiv = container.append({type: 'div', id: 'tagSubdiv0'});
 			const checkboxes = [];
-			const unCheckedTags = event.target.form.getUnchecked('existingTags');
+			const unCheckedTags = target.form.getUnchecked('existingTags');
 			for (const tag of Twinkle.tag.alreadyPresentTags) {
 				const checkbox = {
 					value: tag,
@@ -566,9 +566,9 @@ $(function FriendlyTag() {
 			// function to iterate through the tags and create a checkbox for each one
 			const doCategoryCheckboxes = (subdiv, subgroup) => {
 				const checkboxes = [];
-				$.each(subgroup, (_index, item) => {
-					if (!Twinkle.tag.alreadyPresentTags.includes(item.tag)) {
-						checkboxes.push(makeCheckbox(item.tag, item.description));
+				$.each(subgroup, (_index, {tag, description}) => {
+					if (!Twinkle.tag.alreadyPresentTags.includes(tag)) {
+						checkboxes.push(makeCheckbox(tag, description));
 					}
 				});
 				subdiv.append({
@@ -1267,8 +1267,8 @@ $(function FriendlyTag() {
 						lhshow: 'redirect',
 						lhlimit: 'max', // 500 is max for normal users, 5000 for bots and sysops
 					},
-					(apiobj) => {
-						$(apiobj.responseXML)
+					({responseXML}) => {
+						$(responseXML)
 							.find('page')
 							.each((_index, page) => {
 								let removed = false;
@@ -1533,8 +1533,8 @@ $(function FriendlyTag() {
 						lhshow: 'redirect',
 						lhlimit: 'max', // 500 is max for normal users, 5000 for bots and sysops
 					},
-					(apiobj) => {
-						$(apiobj.responseXML)
+					({responseXML}) => {
+						$(responseXML)
 							.find('page')
 							.each((_index, page) => {
 								let found = false;
@@ -1740,8 +1740,8 @@ $(function FriendlyTag() {
 			}
 		},
 	};
-	Twinkle.tag.callback.evaluate = (event) => {
-		const form = event.target;
+	Twinkle.tag.callback.evaluate = ({target}) => {
+		const form = target;
 		const params = Morebits.quickForm.getInputData(form);
 		// Validation
 		// Given an array of incompatible tags, check if we have two or more selected

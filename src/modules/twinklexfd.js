@@ -92,10 +92,10 @@ $(function TwinkleXFD() {
 		event.initEvent('change', true, true);
 		result.category.dispatchEvent(event);
 	};
-	Twinkle.xfd.callback.change_category = (event) => {
-		const value = event.target.value;
-		const form = event.target.form;
-		const old_area = Morebits.quickForm.getElements(event.target.form, 'work_area')[0];
+	Twinkle.xfd.callback.change_category = ({target}) => {
+		const value = target.value;
+		const form = target.form;
+		const old_area = Morebits.quickForm.getElements(target.form, 'work_area')[0];
 		let work_area = null;
 		const oldreasontextbox = form.querySelectorAll('textarea')[0];
 		let oldreason = oldreasontextbox ? oldreasontextbox.value : '';
@@ -244,35 +244,35 @@ $(function TwinkleXFD() {
 		form.notify.checked = true;
 		form.notify.disabled = false;
 	};
-	Twinkle.xfd.callback.change_afd_category = (event) => {
-		switch (event.target.value) {
+	Twinkle.xfd.callback.change_afd_category = ({target}) => {
+		switch (target.value) {
 			case 'merge':
-				event.target.form.mergeinto.parentNode.removeAttribute('hidden');
-				event.target.form.fwdcsdreason.parentNode.setAttribute('hidden', '');
-				event.target.form.mergeinto.previousElementSibling.innerHTML = '合并到：';
+				target.form.mergeinto.parentNode.removeAttribute('hidden');
+				target.form.fwdcsdreason.parentNode.setAttribute('hidden', '');
+				target.form.mergeinto.previousElementSibling.innerHTML = '合并到：';
 				break;
 			case 'fwdcsd':
-				event.target.form.mergeinto.parentNode.removeAttribute('hidden');
-				event.target.form.fwdcsdreason.parentNode.removeAttribute('hidden');
-				event.target.form.mergeinto.previousElementSibling.innerHTML = '提交人：';
-				event.target.form.xfdreason.value = decodeURIComponent($('#delete-reason').text()).replace(/\+/g, ' ');
+				target.form.mergeinto.parentNode.removeAttribute('hidden');
+				target.form.fwdcsdreason.parentNode.removeAttribute('hidden');
+				target.form.mergeinto.previousElementSibling.innerHTML = '提交人：';
+				target.form.xfdreason.value = decodeURIComponent($('#delete-reason').text()).replace(/\+/g, ' ');
 				break;
 			case 'fame':
-				event.target.form.mergeinto.parentNode.setAttribute('hidden', '');
-				event.target.form.fwdcsdreason.parentNode.setAttribute('hidden', '');
-				event.target.form.xfdreason.value = Twinkle.getPref('afdFameDefaultReason');
+				target.form.mergeinto.parentNode.setAttribute('hidden', '');
+				target.form.fwdcsdreason.parentNode.setAttribute('hidden', '');
+				target.form.xfdreason.value = Twinkle.getPref('afdFameDefaultReason');
 				break;
 			case 'substub':
-				event.target.form.mergeinto.parentNode.setAttribute('hidden', '');
-				event.target.form.fwdcsdreason.parentNode.setAttribute('hidden', '');
-				event.target.form.xfdreason.value = Twinkle.getPref('afdSubstubDefaultReason');
+				target.form.mergeinto.parentNode.setAttribute('hidden', '');
+				target.form.fwdcsdreason.parentNode.setAttribute('hidden', '');
+				target.form.xfdreason.value = Twinkle.getPref('afdSubstubDefaultReason');
 				break;
 			default:
-				event.target.form.mergeinto.parentNode.setAttribute('hidden', '');
-				event.target.form.fwdcsdreason.parentNode.setAttribute('hidden', '');
+				target.form.mergeinto.parentNode.setAttribute('hidden', '');
+				target.form.fwdcsdreason.parentNode.setAttribute('hidden', '');
 		}
 		if (Twinkle.getPref('afdDefaultCategory') === 'same') {
-			localStorage.Twinkle_afdCategory = event.target.value;
+			localStorage.Twinkle_afdCategory = target.value;
 		}
 	};
 	Twinkle.xfd.callbacks = {
@@ -546,14 +546,14 @@ $(function TwinkleXFD() {
 				qiuwen_page.lookupCreation(Twinkle.xfd.callbacks.ffd.main);
 			},
 		},
-		addToLog: (params, initialContrib) => {
+		addToLog: ({xfdcat, mergeinto, reason, fwdcsdreason}, initialContrib) => {
 			const editsummary = `记录对[[${Morebits.pageNameNorm}]]的存废讨论提名`;
 			const usl = new Morebits.userspaceLogger(Twinkle.getPref('xfdLogPageName'));
 			usl.initialText = `这是该用户使用[[H:TW|Twinkle]]的提删模块做出的[[QW:XFD|存废讨论]]提名列表。\n\n若您不再想保留此日志，请在[[${Twinkle.getPref(
 				'configPage'
 			)}|参数设置]]中关掉，并使用[[QW:CSD#O1|CSD O1]]提交快速删除。`;
 			let xfdCatName;
-			switch (params.xfdcat) {
+			switch (xfdcat) {
 				case 'delete':
 					xfdCatName = '删除';
 					break;
@@ -584,20 +584,20 @@ $(function TwinkleXFD() {
 				)}}} 日志]）`;
 			}
 			appendText += `：${xfdCatName}`;
-			if (params.xfdcat === 'merge') {
-				appendText += `[[:${params.mergeinto}]]`;
+			if (xfdcat === 'merge') {
+				appendText += `[[:${mergeinto}]]`;
 			}
 			appendText += '。';
-			if (params.reason) {
+			if (reason) {
 				appendText += `'''${
-					params.xfdcat === 'fwdcsd' ? '原删除理据' : '理据'
-				}'''：${Morebits.string.formatReasonForLog(params.reason)}`;
+					xfdcat === 'fwdcsd' ? '原删除理据' : '理据'
+				}'''：${Morebits.string.formatReasonForLog(reason)}`;
 				appendText = Morebits.string.appendPunctuation(appendText);
 			}
-			if (params.fwdcsdreason) {
+			if (fwdcsdreason) {
 				appendText += `'''${
-					params.xfdcat === 'fwdcsd' ? '转交理据' : '理据'
-				}'''：${Morebits.string.formatReasonForLog(params.fwdcsdreason)}`;
+					xfdcat === 'fwdcsd' ? '转交理据' : '理据'
+				}'''：${Morebits.string.formatReasonForLog(fwdcsdreason)}`;
 				appendText = Morebits.string.appendPunctuation(appendText);
 			}
 			if (initialContrib) {
@@ -608,26 +608,26 @@ $(function TwinkleXFD() {
 			usl.log(appendText, editsummary);
 		},
 	};
-	Twinkle.xfd.callback.evaluate = (event) => {
-		const type = event.target.category.value;
-		const usertalk = event.target.notify.checked;
-		const reason = event.target.xfdreason.value;
+	Twinkle.xfd.callback.evaluate = ({target}) => {
+		const type = target.category.value;
+		const usertalk = target.notify.checked;
+		const reason = target.xfdreason.value;
 		let fwdcsdreason;
 		let xfdcat;
 		let mergeinto;
 		let noinclude;
 		if (type === 'afd') {
-			fwdcsdreason = event.target.fwdcsdreason.value;
-			noinclude = event.target.noinclude.checked;
-			xfdcat = event.target.xfdcat.value;
-			mergeinto = event.target.mergeinto.value;
+			fwdcsdreason = target.fwdcsdreason.value;
+			noinclude = target.noinclude.checked;
+			xfdcat = target.xfdcat.value;
+			mergeinto = target.mergeinto.value;
 		}
 		if (xfdcat === 'merge' && mergeinto.trim() === '') {
 			mw.notify('请提供合并目标！', {type: 'warn'});
 			return;
 		}
 		Morebits.simpleWindow.setButtonsEnabled(false);
-		Morebits.status.init(event.target);
+		Morebits.status.init(target);
 		Twinkle.xfd.currentRationale = reason;
 		Morebits.status.onError(Twinkle.xfd.printRationale);
 		if (!type) {
