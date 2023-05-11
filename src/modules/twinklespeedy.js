@@ -282,9 +282,7 @@ $(function TwinkleSpeedy() {
 				? Twinkle.speedy.mode.sysopMultipleSubmit
 				: Twinkle.speedy.mode.sysopSingleSubmit;
 		} else {
-			mode = multiple.checked
-				? Twinkle.speedy.mode.userMultipleSubmit
-				: Twinkle.speedy.mode.userSingleSubmit;
+			mode = multiple.checked ? Twinkle.speedy.mode.userMultipleSubmit : Twinkle.speedy.mode.userSingleSubmit;
 		}
 		if (Twinkle.getPref('speedySelectionStyle') === 'radioClick') {
 			mode++;
@@ -1368,9 +1366,7 @@ $(function TwinkleSpeedy() {
 				}`;
 				let appendText = `# [[:${Morebits.pageNameNorm}]]：`;
 				if (fromDI) {
-					appendText += `图版[[QW:CSD#${normalized.toUpperCase()}|CSD ${normalized.toUpperCase()}]]（{{tl|${
-						templatename
-					}}}）`;
+					appendText += `图版[[QW:CSD#${normalized.toUpperCase()}|CSD ${normalized.toUpperCase()}]]（{{tl|${templatename}}}）`;
 				} else {
 					if (normalizeds.length > 1) {
 						appendText += '多个理由（';

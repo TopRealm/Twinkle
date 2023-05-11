@@ -749,21 +749,22 @@ $(function TwinkleBlock() {
 						};
 					},
 					processResults: ({query}) => ({
-                        results: query.allpages.map((page) => {
+						results: query.allpages.map((page) => {
 							const title = mw.Title.newFromText(page.title, page.ns).toText();
 							return {
 								id: title,
 								text: title,
 							};
-						})
-                    }),
+						}),
+					}),
 				},
-				templateSelection: ({text}) => $('<a>')
-                    .text(text)
-                    .attr({
-                        href: mw.util.getUrl(text),
-                        target: '_blank',
-                    }),
+				templateSelection: ({text}) =>
+					$('<a>')
+						.text(text)
+						.attr({
+							href: mw.util.getUrl(text),
+							target: '_blank',
+						}),
 			});
 			$form.find('[name=namespacerestrictions]').select2({
 				width: '100%',

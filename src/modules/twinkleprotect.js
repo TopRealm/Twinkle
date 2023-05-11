@@ -146,15 +146,18 @@ $(function TwinkleProtect() {
 					? query.logevents[1]
 					: null;
 			if (Twinkle.protect.previousProtectionLog) {
-				$.each(Twinkle.protect.previousProtectionLog.params.details, (_index, {type, level, expiry, cascade}) => {
-					if (type !== 'aft') {
-						previous[type] = {
-							level: level,
-							expiry: expiry,
-							cascade: cascade === '',
-						};
+				$.each(
+					Twinkle.protect.previousProtectionLog.params.details,
+					(_index, {type, level, expiry, cascade}) => {
+						if (type !== 'aft') {
+							previous[type] = {
+								level: level,
+								expiry: expiry,
+								cascade: cascade === '',
+							};
+						}
 					}
-				});
+				);
 			}
 			// show the protection level and log info
 			Twinkle.protect.hasProtectLog = query.logevents.length > 0;
@@ -252,8 +255,9 @@ $(function TwinkleProtect() {
 						label: '编辑权限：',
 						event: Twinkle.protect.formevents.editlevel,
 						list: Twinkle.protect.protectionLevels.filter(
-							({value}) => // Filter TE outside of templates and modules
-                            isTemplate || value !== 'templateeditor'
+							(
+								{value} // Filter TE outside of templates and modules
+							) => isTemplate || value !== 'templateeditor'
 						),
 					});
 					field2.append({
@@ -264,8 +268,7 @@ $(function TwinkleProtect() {
 							if (target.value === 'custom') {
 								Twinkle.protect.doCustomExpiry(target);
 							}
-							$('input[name=small]', $(target).closest('form'))[0].checked =
-								target.selectedIndex >= 4; // 1 month
+							$('input[name=small]', $(target).closest('form'))[0].checked = target.selectedIndex >= 4; // 1 month
 						},
 						// default expiry selection (2 days) is conditionally set in Twinkle.protect.callback.changePreset
 						list: Twinkle.protect.protectionLengths,
@@ -288,8 +291,9 @@ $(function TwinkleProtect() {
 						label: '移动权限：',
 						event: Twinkle.protect.formevents.movelevel,
 						list: Twinkle.protect.protectionLevels.filter(
-							({value}) => // Autoconfirmed is required for a move, redundant
-                            value !== 'autoconfirmed' && (isTemplate || value !== 'templateeditor')
+							(
+								{value} // Autoconfirmed is required for a move, redundant
+							) => value !== 'autoconfirmed' && (isTemplate || value !== 'templateeditor')
 						),
 					});
 					field2.append({
@@ -312,8 +316,9 @@ $(function TwinkleProtect() {
 						label: '创建权限：',
 						event: Twinkle.protect.formevents.createlevel,
 						list: Twinkle.protect.protectionLevels.filter(
-							({value}) => // Filter TE always, and autoconfirmed in mainspace
-                            value !== 'templateeditor'
+							(
+								{value} // Filter TE always, and autoconfirmed in mainspace
+							) => value !== 'templateeditor'
 						),
 					});
 					field2.append({
@@ -467,8 +472,7 @@ $(function TwinkleProtect() {
 	Twinkle.protect.formevents = {
 		editmodify: ({target}) => {
 			target.form.editlevel.disabled = !target.checked;
-			target.form.editexpiry.disabled =
-				!target.checked || target.form.editlevel.value === 'all';
+			target.form.editexpiry.disabled = !target.checked || target.form.editlevel.value === 'all';
 			target.form.editlevel.style.color = target.form.editexpiry.style.color = target.checked
 				? ''
 				: 'transparent';
@@ -486,8 +490,7 @@ $(function TwinkleProtect() {
 				target.form.moveexpiry.value = 'infinity';
 			}
 			target.form.movelevel.disabled = !target.checked;
-			target.form.moveexpiry.disabled =
-				!target.checked || target.form.movelevel.value === 'all';
+			target.form.moveexpiry.disabled = !target.checked || target.form.movelevel.value === 'all';
 			target.form.movelevel.style.color = target.form.moveexpiry.style.color = target.checked
 				? ''
 				: 'transparent';
@@ -596,8 +599,9 @@ $(function TwinkleProtect() {
 			],
 		},
 	].filter(
-		({label}) => // Filter for templates
-        isTemplate || (label !== '模板保护' && label !== '模板保護')
+		(
+			{label} // Filter for templates
+		) => isTemplate || (label !== '模板保护' && label !== '模板保護')
 	);
 	Twinkle.protect.protectionTypesCreateOnly = [
 		{

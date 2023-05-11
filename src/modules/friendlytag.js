@@ -200,10 +200,10 @@ $(function FriendlyTag() {
 						type: 'checkbox',
 						name: 'tags',
 						list: group.value.map(({tag, description, subgroup}) => ({
-                            value: tag,
-                            label: `{{${tag}}}：${description}`,
-                            subgroup: subgroup
-                        })),
+							value: tag,
+							label: `{{${tag}}}：${description}`,
+							subgroup: subgroup,
+						})),
 					});
 				}
 				if (Twinkle.getPref('customRedirectTagList').length > 0) {
