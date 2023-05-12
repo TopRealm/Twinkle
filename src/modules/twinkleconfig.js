@@ -11,7 +11,7 @@ $(function TwinkleConfig() {
 	Twinkle.config.watchlistEnums = {
 		yes: '加入监视列表，长期监视',
 		no: '不加入监视列表',
-		'default': '遵守站点设置',
+		default: '遵守站点设置',
 		'1 week': '加入监视列表，监视7日',
 		'1 month': '加入监视列表，监视1个月',
 		'3 months': '加入监视列表，监视3个月',
@@ -891,7 +891,7 @@ $(function TwinkleConfig() {
 					helptip: '若选择“相同于上次选择”将使用localStorage来记忆。',
 					type: 'enum',
 					enumValues: {
-						'delete': '删除',
+						delete: '删除',
 						same: '相同于上次选择',
 					},
 				},
@@ -1015,7 +1015,7 @@ $(function TwinkleConfig() {
 			}
 			// set style (the url() CSS function doesn't seem to work from wikicode - ?!)
 			document.querySelector('#twinkle-config-titlebar').style.backgroundImage =
-				'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAkBAMAAAC6Wk0/AAAAKlBMVEXV3+upu9XN1ufD0OG+zN+xwtmvvtiitdDQ2OnJ1eS7yN2lt9LG0OS3ydtM59+7AAAAKklEQVQI12OAgQYgVADDCUB4gMEADB3AcAEQXmAIAMMEMBSAwg1AWACCAHCXC6FA1k76AAAAAElFTkSuQmCC)';
+				'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAkCAIAAADHFsdbAAAAO0lEQVR4AWK6ev81E6BqaSAAAIiB61/4jdk8AID3Gpf3udex/Y7s9Yp27B2+c/zuI+67wzNF472W+qM/RP8gdFf6CWQAAAAASUVORK5CYII=)';
 			const contentdiv = document.querySelector('#twinkle-config-content');
 			contentdiv.textContent = ''; // clear children
 			// start a table of contents
