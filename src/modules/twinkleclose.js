@@ -7,10 +7,8 @@ $(function TwinkleClose() {
 	 * Config directives in: TwinkleConfig
 	 */
 	Twinkle.close = () => {
-		if (
-			Twinkle.getPref('XfdClose') === 'hide' ||
-			!/^Qiuwen:存废讨论\/记录(?:\/\d+){3}$/.test(mw.config.get('wgPageName'))
-		) {
+		if (Twinkle.getPref('XfdClose') === 'hide' ||
+			!/^Qiuwen:存废讨论\/记录(?:\/\d+){3}$/.test(mw.config.get('wgPageName'))) {
 			return;
 		}
 		mw.hook('wikipage.content').add((item) => {
@@ -26,10 +24,7 @@ $(function TwinkleClose() {
 			span.appendChild(document.createTextNode(content));
 			return span;
 		};
-		$(
-			'h1:has(.mw-headline),h2:has(.mw-headline),h3:has(.mw-headline),h4:has(.mw-headline),h5:has(.mw-headline),h6:has(.mw-headline)',
-			'#bodyContent'
-		).each((index, {dataset}) => {
+		$('h1:has(.mw-headline),h2:has(.mw-headline),h3:has(.mw-headline),h4:has(.mw-headline),h5:has(.mw-headline),h6:has(.mw-headline)', '#bodyContent').each((index, { dataset }) => {
 			dataset.section = index + 1;
 		});
 		const selector = ':has(.mw-headline a:only-of-type):not(:has(+ div.NavFrame))';
@@ -150,17 +145,17 @@ $(function TwinkleClose() {
 			},
 		},
 		/* Transfer: {
-            twc: {
-                label: '转移至求闻共享资源',
-                action: 'noop',
-                adminonly: true
-            },
-            two: {
-                label: '转移至其他计划',
-                action: 'noop',
-                adminonly: true
-            }
-        }, */
+			twc: {
+				label: '转移至求闻共享资源',
+				action: 'noop',
+				adminonly: true
+			},
+			two: {
+				label: '转移至其他计划',
+				action: 'noop',
+				adminonly: true
+			}
+		}, */
 		OtherMethod: {
 			c: {
 				label: '转交侵权',
@@ -313,7 +308,7 @@ $(function TwinkleClose() {
 		event.initEvent('change', true, true);
 		result.sub_group.dispatchEvent(event);
 	};
-	Twinkle.close.callback.change_operation = ({target}) => {
+	Twinkle.close.callback.change_operation = ({ target }) => {
 		const noop = target.checked;
 		const code = target.form.sub_group.value;
 		const messageData = $(target.form.sub_group).find(`option[value="${code}"]`).data('messageData');
@@ -335,7 +330,7 @@ $(function TwinkleClose() {
 			redirects.disabled = false;
 		}
 	};
-	Twinkle.close.callback.change_code = ({target}) => {
+	Twinkle.close.callback.change_code = ({ target }) => {
 		const resultData = $(target.form).data('resultData');
 		const messageData = $(target).find(`option[value="${target.value}"]`).data('messageData');
 		const noop = target.form.noop;
@@ -375,7 +370,7 @@ $(function TwinkleClose() {
 			}
 		}
 	};
-	Twinkle.close.callback.evaluate = ({target}) => {
+	Twinkle.close.callback.evaluate = ({ target }) => {
 		const code = target.sub_group.value;
 		const resultData = $(target).data('resultData');
 		const messageData = $(target.sub_group).find(`option[value="${code}"]`).data('messageData');
@@ -409,7 +404,7 @@ $(function TwinkleClose() {
 					break;
 				}
 				default:
-					mw.notify(`关闭存废讨论：未定义 ${code}`, {type: 'warn'});
+					mw.notify(`关闭存废讨论：未定义 ${code}`, { type: 'warn' });
 			}
 		}
 	};
@@ -449,11 +444,7 @@ $(function TwinkleClose() {
 					prop: 'redirects',
 					rdlimit: 'max', // 500 is max for normal users, 5000 for bots and sysops
 				};
-				qiuwen_api = new Morebits.wiki.api(
-					'正在获取重定向',
-					query,
-					Twinkle.close.callbacks.deleteRedirectsMain
-				);
+				qiuwen_api = new Morebits.wiki.api('正在获取重定向', query, Twinkle.close.callbacks.deleteRedirectsMain);
 				qiuwen_api.params = params;
 				qiuwen_api.post();
 			}
@@ -465,11 +456,7 @@ $(function TwinkleClose() {
 						action: 'query',
 						titles: pageTitle.toText(),
 					};
-					qiuwen_api = new Morebits.wiki.api(
-						'正在检查讨论页面是否存在',
-						query,
-						Twinkle.close.callbacks.deleteTalk
-					);
+					qiuwen_api = new Morebits.wiki.api('正在检查讨论页面是否存在', query, Twinkle.close.callbacks.deleteTalk);
 					qiuwen_api.params = params;
 					qiuwen_api.params.talkPage = pageTitle.toText();
 					qiuwen_api.post();
@@ -477,7 +464,7 @@ $(function TwinkleClose() {
 			}
 			Morebits.wiki.removeCheckpoint();
 		},
-		deleteRedirectsMain: ({responseXML, params}) => {
+		deleteRedirectsMain: ({ responseXML, params }) => {
 			const xml = responseXML;
 			const pages = $(xml)
 				.find('rd')
@@ -496,7 +483,7 @@ $(function TwinkleClose() {
 				qiuwen_page.deletePage(redirectDeleter.workerSuccess, redirectDeleter.workerFailure);
 			});
 		},
-		deleteTalk: ({responseXML, params}) => {
+		deleteTalk: ({ responseXML, params }) => {
 			const xml = responseXML;
 			const exists = $(xml).find('page:not([missing])').length > 0;
 			if (!exists) {
@@ -520,31 +507,18 @@ $(function TwinkleClose() {
 			if (pagetitle.getNamespaceId() % 2 === 0) {
 				const talkpagetitle = new mw.Title(pagetitle.getMainText(), pagetitle.getNamespaceId() + 1);
 				const talkpage = new Morebits.wiki.page(talkpagetitle.toString(), '标记讨论页');
-				const vfdkept = `{{Old vfd multi|${mw.config.get('wgPageName').split('/').slice(2).join('/')}|${
-					params.messageData.label
-				}}}\n`;
+				const vfdkept = `{{Old vfd multi|${mw.config.get('wgPageName').split('/').slice(2).join('/')}|${params.messageData.label}}}\n`;
 				talkpage.setPrependText(vfdkept);
-				talkpage.setEditSummary(
-					`[[${mw.config.get('wgPageName')}#${params.title}]]：${params.messageData.label}`
-				);
+				talkpage.setEditSummary(`[[${mw.config.get('wgPageName')}#${params.title}]]：${params.messageData.label}`);
 				talkpage.setChangeTags(Twinkle.changeTags);
 				talkpage.setCreateOption('recreate');
 				talkpage.prepend();
 			}
-			let newtext = text.replace(
-				/<noinclude>\s*{{([acfimr-tv]fd)(\|(?:{{[^{}]*}}|[^{}])*)?}}\s*<\/noinclude>\s*/gi,
-				''
-			);
+			let newtext = text.replace(/<noinclude>\s*{{([acfimr-tv]fd)(\|(?:{{[^{}]*}}|[^{}])*)?}}\s*<\/noinclude>\s*/gi, '');
 			newtext = newtext.replace(/{{([acfimr-tv]fd)(\|(?:{{[^{}]*}}|[^{}])*)?}}\s*/gi, '');
 			if (params.code !== 'tk') {
-				newtext = newtext.replace(
-					/{{(notability|fame|mair|知名度|重要性|显著性|顯著性|知名度不足|人物重要性|重要性不足|notable|关注度|关注度不足|關注度|關注度不足|重要|重要度)(\|(?:{{[^{}]*}}|[^{}])*)?}}\n*/gi,
-					''
-				);
-				newtext = newtext.replace(
-					/{{(substub|小小作品|cod|小小條目|小小条目)(\|(?:{{[^{}]*}}|[^{}])*)?}}\n*/gi,
-					''
-				);
+				newtext = newtext.replace(/{{(notability|fame|mair|知名度|重要性|显著性|顯著性|知名度不足|人物重要性|重要性不足|notable|关注度|关注度不足|關注度|關注度不足|重要|重要度)(\|(?:{{[^{}]*}}|[^{}])*)?}}\n*/gi, '');
+				newtext = newtext.replace(/{{(substub|小小作品|cod|小小條目|小小条目)(\|(?:{{[^{}]*}}|[^{}])*)?}}\n*/gi, '');
 			}
 			if (params.code === 'mergeapproved') {
 				const tag = `{{subst:Merge approved/auto|discuss=${mw.config.get('wgPageName')}#${params.title}}}\n`;

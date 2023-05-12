@@ -11,10 +11,8 @@ $(function TwinkleStub() {
 		if (Morebits.isPageRedirect()) {
 			// Skip
 			// article/draft article tagging
-		} else if (
-			([0, 118].includes(mw.config.get('wgNamespaceNumber')) && mw.config.get('wgCurRevisionId')) ||
-			Morebits.pageNameNorm === Twinkle.getPref('sandboxPage')
-		) {
+		} else if (([0, 118].includes(mw.config.get('wgNamespaceNumber')) && mw.config.get('wgCurRevisionId')) ||
+			Morebits.pageNameNorm === Twinkle.getPref('sandboxPage')) {
 			Twinkle.stub.mode = '条目';
 			Twinkle.addPortletLink(Twinkle.stub.callback, '小作品', 'friendly-tag', '标记小作品');
 		}
@@ -71,7 +69,7 @@ $(function TwinkleStub() {
 				});
 				break;
 			default:
-				mw.notify(`Twinkle.stub：未知模式 ${Twinkle.stub.mode}`, {type: 'warn'});
+				mw.notify(`Twinkle.stub：未知模式 ${Twinkle.stub.mode}`, { type: 'warn' });
 				break;
 		}
 		form.append({
@@ -88,7 +86,7 @@ $(function TwinkleStub() {
 		}
 	};
 	Twinkle.stub.checkedTags = [];
-	Twinkle.stub.updateSortOrder = ({target}) => {
+	Twinkle.stub.updateSortOrder = ({ target }) => {
 		const sortorder = target.value;
 		Twinkle.stub.checkedTags = target.form.getChecked('articleTags');
 		if (!Twinkle.stub.checkedTags) {
@@ -115,7 +113,7 @@ $(function TwinkleStub() {
 				label: '自定义模板',
 			});
 			const customcheckboxes = [];
-			$.each(Twinkle.getPref('customStubList'), (index, {value, label}) => {
+			$.each(Twinkle.getPref('customStubList'), (index, { value, label }) => {
 				customcheckboxes.push(makeCheckbox(value, label));
 			});
 			container.append({
@@ -194,10 +192,7 @@ $(function TwinkleStub() {
 			const $checkbox = $(checkbox);
 			const link = Morebits.htmlNode('a', '>');
 			link.setAttribute('class', 'tag-template-link');
-			link.setAttribute(
-				'href',
-				mw.util.getUrl(`Template:${Morebits.string.toUpperCaseFirstChar(checkbox.values)}`)
-			);
+			link.setAttribute('href', mw.util.getUrl(`Template:${Morebits.string.toUpperCaseFirstChar(checkbox.values)}`));
 			link.setAttribute('target', '_blank');
 			$checkbox.parent().append(['\u00A0', link]);
 		});
@@ -325,7 +320,7 @@ $(function TwinkleStub() {
 			}
 		},
 	};
-	Twinkle.stub.callback.evaluate = ({target}) => {
+	Twinkle.stub.callback.evaluate = ({ target }) => {
 		const form = target;
 		const params = {};
 		if (form.patrolPage) {
@@ -338,11 +333,11 @@ $(function TwinkleStub() {
 				params.group = false;
 				break;
 			default:
-				mw.notify(`Twinkle.stub：未知模式 ${Twinkle.stub.mode}`, {type: 'warn'});
+				mw.notify(`Twinkle.stub：未知模式 ${Twinkle.stub.mode}`, { type: 'warn' });
 				break;
 		}
 		if (params.tags.length === 0) {
-			mw.notify('必须选择至少一个标记！', {type: 'warn'});
+			mw.notify('必须选择至少一个标记！', { type: 'warn' });
 			return;
 		}
 		Morebits.simpleWindow.setButtonsEnabled(false);
@@ -366,7 +361,7 @@ $(function TwinkleStub() {
 				qiuwen_page.load(Twinkle.stub.callbacks.file);
 				break;
 			default:
-				mw.notify(`Twinkle.stub：未知模式 ${Twinkle.stub.mode}`, {type: 'warn'});
+				mw.notify(`Twinkle.stub：未知模式 ${Twinkle.stub.mode}`, { type: 'warn' });
 				break;
 		}
 	};
