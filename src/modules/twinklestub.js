@@ -78,7 +78,7 @@ $(function TwinkleStub() {
 		const result = form.render();
 		Window.setContent(result);
 		Window.display();
-		if (Twinkle.stub.mode === '条目' || Twinkle.stub.mode === '條目') {
+		if (['条目', '條目'].includes(Twinkle.stub.mode)) {
 			// fake a change event on the sort dropdown, to initialize the tag list
 			const event = document.createEvent('Event');
 			event.initEvent('change', true, true);
