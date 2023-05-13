@@ -176,11 +176,11 @@ $(function FriendlyTalkback() {
 						}
 					},
 				});
-				$.each(Twinkle.talkback.noticeboards, (value_, {label, defaultSelected}) => {
+				$.each(Twinkle.talkback.noticeboards, (value, {label, defaultSelected}) => {
 					noticeboard.append({
 						type: 'option',
-						label: label,
-						value: value_,
+						label,
+						value,
 						selected: !!defaultSelected,
 					});
 				});

@@ -275,8 +275,8 @@ $(function TwinkleFluff() {
 					$(Twinkle.getPref('customRevertSummary')).each((index, {label, value}) => {
 						revertsummary.append({
 							type: 'option',
-							label: label,
-							value: value,
+							label,
+							value,
 						});
 					});
 					revertToRevision.appendChild(revertsummary.render().childNodes[0]);

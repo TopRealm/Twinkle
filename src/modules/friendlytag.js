@@ -202,7 +202,7 @@ $(function FriendlyTag() {
 						list: group.value.map(({tag, description, subgroup}) => ({
 							value: tag,
 							label: `{{${tag}}}：${description}`,
-							subgroup: subgroup,
+							subgroup,
 						})),
 					});
 				}

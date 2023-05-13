@@ -132,8 +132,8 @@ $(function TwinkleProtect() {
 			$.each(page.protection, (_index, {type, level, expiry, cascade}) => {
 				if (type !== 'aft') {
 					current[type] = {
-						level: level,
-						expiry: expiry,
+						level,
+						expiry,
 						cascade: cascade === '',
 					};
 				}
@@ -151,8 +151,8 @@ $(function TwinkleProtect() {
 					(_index, {type, level, expiry, cascade}) => {
 						if (type !== 'aft') {
 							previous[type] = {
-								level: level,
-								expiry: expiry,
+								level,
+								expiry,
 								cascade: cascade === '',
 							};
 						}
