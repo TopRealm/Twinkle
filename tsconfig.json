@@ -22,6 +22,6 @@
 		"removeComments": false,
 		"outDir": "./distTS"
 	},
-	"include": ["./node_modules/types-mediawiki", "./node_modules/@types/oojs-ui", "./src/"],
+	"include": ["./node_modules/types-mediawiki", "./node_modules/@types/jqueryui", "./src/"],
 	"exclude": ["./src/lib/"]
 }
