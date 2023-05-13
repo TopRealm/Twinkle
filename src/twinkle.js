@@ -293,8 +293,8 @@
 		// verify/normalize input
 		const skin = mw.config.get('skin');
 		if (
-			(skin !== 'vector' && skin !== 'vector-2022') ||
-			(navigation !== 'left-navigation' && navigation !== 'right-navigation')
+			!['vector', 'vector-2022'].includes(skin) ||
+			!['left-navigation', 'right-navigation'].includes(navigation)
 		) {
 			type = null; // menu supported only in vector's #left-navigation & #right-navigation
 		}
@@ -304,7 +304,7 @@
 			case 'vector':
 			case 'vector-2022':
 				// XXX: portal doesn't work
-				if (navigation !== 'portal' && navigation !== 'left-navigation' && navigation !== 'right-navigation') {
+				if (!['portal', 'left-navigation', 'right-navigation'].includes(navigation)) {
 					navigation = 'mw-panel';
 				}
 				outerNavClass = `mw-portlet vector-menu vector-menu-${
@@ -354,7 +354,7 @@
 		}
 		heading.id = `${id}-label`;
 		const ul = document.createElement('ul');
-		if (skin === 'vector' || skin === 'vector-2022') {
+		if (['vector', 'vector-2022'].includes(mw.config.get('skin'))) {
 			ul.className = 'vector-menu-content-list';
 			heading.className = 'vector-menu-heading';
 			// add invisible checkbox to keep menu open when clicked
