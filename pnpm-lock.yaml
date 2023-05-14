@@ -13,9 +13,6 @@ devDependencies:
   '@types/jqueryui':
     specifier: ^1.12.16
     version: 1.12.16
-  '@types/oojs-ui':
-    specifier: ^0.46.1
-    version: 0.46.1
   '@typescript-eslint/eslint-plugin':
     specifier: ^5.59.2
     version: 5.59.2(@typescript-eslint/parser@5.59.2)(eslint@8.39.0)(typescript@5.0.4)
@@ -1447,17 +1444,6 @@ packages:
 
   /@types/normalize-package-data@2.4.1:
     resolution: {integrity: sha512-Gj7cI7z+98M282Tqmp2K5EIsoouUEzbBJhQQzDE3jSIRk6r9gsz0oUokqIUR4u1R3dMHo0pDHM7sNOHyhulypw==}
-    dev: true
-
-  /@types/oojs-ui@0.46.1:
-    resolution: {integrity: sha512-a29xnybsXM869ksGWaRlWbLgchX4uleewpCG/5IIH0xg7a9IAsc9J0E4r2IcXS9MAyTM2rouYM8Lnr92KicL8A==}
-    dependencies:
-      '@types/jquery': 3.5.16
-      '@types/oojs': 6.0.4
-    dev: true
-
-  /@types/oojs@6.0.4:
-    resolution: {integrity: sha512-qzuW8kWUPSt9+LAOMJXLtA/0iVIIsB5mK17/+KOBW67EtBFRW0bxVGPFC1bRyMN9Wo7zGepXUMtLxUhtZ/joRA==}
     dev: true
 
   /@types/semver@7.3.13:
