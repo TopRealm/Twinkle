@@ -1,13 +1,4 @@
 /* Twinkle.js - twinkle.js */
-/**
- * Scripts imported from Qiuwen Development Centre
- * [https://git.qiuwen.wiki/InterfaceAdmin/Twinkle].
- * Orginally imported from Github
- * [https://github.com/wikimedia-gadgets/twinkle].
- * Translaton imported from Chinese Wikipedia.
- * All changes should be made in the repository, otherwise they will be lost.
- * Visit [[H:TW]] for more information.
- */
 (function twinkle(window, document, $) {
 	// Wrap with anonymous function
 	// Check if account is experienced enough to use Twinkle
