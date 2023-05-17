@@ -1603,8 +1603,8 @@ $(function FriendlyTag() {
 						lhshow: 'redirect',
 						lhlimit: 'max', // 500 is max for normal users, 5000 for bots and sysops
 					},
-					(apiobj) => {
-						$(apiobj.responseXML)
+					({responseXML}) => {
+						$(responseXML)
 							.find('page')
 							.each((idx, page) => {
 								let found = false;
@@ -1807,8 +1807,8 @@ $(function FriendlyTag() {
 			}
 		},
 	};
-	Twinkle.tag.callback.evaluate = (e) => {
-		const form = e.target;
+	Twinkle.tag.callback.evaluate = ({target}) => {
+		const form = target;
 		const params = Morebits.quickForm.getInputData(form);
 		// Validation
 		// Given an array of incompatible tags, check if we have two or more selected
