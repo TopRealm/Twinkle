@@ -94,23 +94,23 @@ $(function FriendlyTag() {
 				// needed but also used to generate the alphabetical list
 				// Would be infinitely better with Object.values, but, alas, IE 11
 				Twinkle.tag.article.flatObject = {};
-				Twinkle.tag.article.tagList.forEach(({value}) => {
-					value.forEach(({value, tag, description, excludeMI}) => {
+				for (const {value} of Twinkle.tag.article.tagList) {
+					for (const {tag, description, excludeMI} of value) {
 						if (value) {
-							value.forEach(({tag, description, excludeMI}) => {
+							for (const {tag, description, excludeMI} of value) {
 								Twinkle.tag.article.flatObject[tag] = {
 									description,
 									excludeMI: !!excludeMI,
 								};
-							});
+							}
 						} else {
 							Twinkle.tag.article.flatObject[tag] = {
 								description,
 								excludeMI: !!excludeMI,
 							};
 						}
-					});
-				});
+					};
+				}
 				form.append({
 					type: 'select',
 					name: 'sortorder',
@@ -171,20 +171,20 @@ $(function FriendlyTag() {
 				break;
 			case 'file':
 				Window.setTitle('文件维护标记');
-				Twinkle.tag.fileList.forEach(({buildFilename, value, key}) => {
+				for (const {buildFilename, value, key} of Twinkle.tag.fileList) {
 					if (buildFilename) {
-						value.forEach((el) => {
+						for (const el of value) {
 							el.subgroup = {
 								type: 'input',
 								label: '替换的文件：',
 								tooltip: '输入替换此文件的文件名称（必填）',
 								name: `${el.value.replace(/ /g, '_')}File`,
 							};
-						});
+						}
 					}
 					form.append({type: 'header', label: key});
 					form.append({type: 'checkbox', name: 'tags', list: value});
-				});
+				}
 				if (Twinkle.getPref('customFileTagList').length) {
 					form.append({type: 'header', label: '自定义模板'});
 					form.append({type: 'checkbox', name: 'tags', list: Twinkle.getPref('customFileTagList')});
@@ -193,7 +193,7 @@ $(function FriendlyTag() {
 			case 'redirect': {
 				Window.setTitle('重定向标记');
 				const i = 1;
-				Twinkle.tag.redirectList.forEach(({key, value}) => {
+				for (const {key, value} of Twinkle.tag.redirectList) {
 					form.append({type: 'header', id: `tagHeader${i}`, label: key});
 					form.append({
 						type: 'checkbox',
@@ -204,7 +204,7 @@ $(function FriendlyTag() {
 							subgroup,
 						})),
 					});
-				});
+				}
 				if (Twinkle.getPref('customRedirectTagList').length) {
 					form.append({type: 'header', label: '自定义模板'});
 					form.append({type: 'checkbox', name: 'tags', list: Twinkle.getPref('customRedirectTagList')});
@@ -302,6 +302,7 @@ $(function FriendlyTag() {
 			result.sortorder.dispatchEvent(evt);
 		} else {
 			// Redirects and files: Add a link to each template's description page
+			// eslint-disable-next-line unicorn/no-array-for-each
 			Morebits.quickForm.getElements(result, 'tags').forEach(generateLinks);
 		}
 	};
@@ -529,7 +530,7 @@ $(function FriendlyTag() {
 			const subdiv = container.append({type: 'div', id: 'tagSubdiv0'});
 			const checkboxes = [];
 			const unCheckedTags = target.form.getUnchecked('existingTags');
-			Twinkle.tag.alreadyPresentTags.forEach((tag) => {
+			for (const tag of Twinkle.tag.alreadyPresentTags) {
 				const checkbox = {
 					value: tag,
 					label: `{{${tag}}}${
@@ -540,7 +541,7 @@ $(function FriendlyTag() {
 					checked: !unCheckedTags.includes(tag),
 				};
 				checkboxes.push(checkbox);
-			});
+			}
 			subdiv.append({
 				type: 'checkbox',
 				name: 'existingTags',
@@ -568,18 +569,18 @@ $(function FriendlyTag() {
 			}
 			let i = 1;
 			// go through each category and sub-category and append lists of checkboxes
-			Twinkle.tag.article.tagList.forEach(({key, value}) => {
+			for (const {key, value} of Twinkle.tag.article.tagList) {
 				container.append({type: 'header', id: `tagHeader${i}`, label: key});
 				const subdiv = container.append({type: 'div', id: `tagSubdiv${i++}`});
 				if (value[0].tag) {
 					doCategoryCheckboxes(subdiv, value);
 				} else {
-					value.forEach(({key, value}) => {
+					for (const {key, value} of value) {
 						subdiv.append({type: 'div', label: [Morebits.htmlNode('b', key)]});
 						doCategoryCheckboxes(subdiv, value);
-					});
+					};
 				}
-			});
+			}
 		} else {
 			// alphabetical sort order
 			if (Twinkle.tag.alreadyPresentTags.length > 0) {
@@ -590,11 +591,11 @@ $(function FriendlyTag() {
 			Twinkle.tag.article.alphabeticalList =
 				Twinkle.tag.article.alphabeticalList || Object.keys(Twinkle.tag.article.flatObject).sort();
 			const checkboxes = [];
-			Twinkle.tag.article.alphabeticalList.forEach((tag) => {
+			for (const tag of Twinkle.tag.article.alphabeticalList) {
 				if (!Twinkle.tag.alreadyPresentTags.includes(tag)) {
 					checkboxes.push(makeCheckbox(tag, Twinkle.tag.article.flatObject[tag].description));
 				}
-			});
+			}
 			container.append({
 				type: 'checkbox',
 				name: 'tags',
@@ -625,7 +626,9 @@ $(function FriendlyTag() {
 		$workarea.find('h5').css({'font-size': '110%'});
 		$workarea.find('h5:not(:first-child)').css({'margin-top': '1em'});
 		$workarea.find('div').filter(':has(span.quickformDescription)').css({'margin-top': '0.4em'});
+		// eslint-disable-next-line unicorn/no-array-for-each
 		Morebits.quickForm.getElements(form, 'existingTags').forEach(generateLinks);
+		// eslint-disable-next-line unicorn/no-array-for-each
 		Morebits.quickForm.getElements(form, 'tags').forEach(generateLinks);
 		// tally tags added/removed, update statusNode text
 		const statusNode = document.getElementById('tw-tag-status');
@@ -1234,7 +1237,7 @@ $(function FriendlyTag() {
 				}
 				// avoid truncated summaries
 				if (summaryText.length > 499) {
-					summaryText = summaryText.replace(/\[\[[^|]+\|([^\]]+)\]\]/g, '$1');
+					summaryText = summaryText.replace(/\[\[[^|]+\|([^\]]+)]]/g, '$1');
 				}
 				pageobj.setPageText(pageText);
 				pageobj.setEditSummary(summaryText);
@@ -1315,14 +1318,14 @@ $(function FriendlyTag() {
 				// Remove the tags from the page text, if found in its proper name,
 				// otherwise moves it to `getRedirectsFor` array earmarking it for
 				// later removal
-				params.tagsToRemove.forEach((tag) => {
+				for (const tag of params.tagsToRemove) {
 					const tag_re = new RegExp(`\\{\\{${Morebits.pageNameRegex(tag)}\\s*(\\|[^}]+)?\\}\\}\\n?`);
 					if (tag_re.test(pageText)) {
 						pageText = pageText.replace(tag_re, '');
 					} else {
 						getRedirectsFor.push(`Template:${tag}`);
 					}
-				});
+				}
 				if (!getRedirectsFor.length) {
 					postRemoval();
 					return;
@@ -1510,7 +1513,7 @@ $(function FriendlyTag() {
 				removeTags();
 			};
 			// Separate tags into groupable ones (`groupableTags`) and non-groupable ones (`tags`)
-			params.tags.forEach((tag) => {
+			for (const tag of params.tags) {
 				tagRe = new RegExp(`\\{\\{${tag}(\\||\\}\\})`, 'im');
 				// regex check for preexistence of tag can be skipped if in canRemove mode
 				if (Twinkle.tag.canRemove || !tagRe.exec(pageText)) {
@@ -1542,16 +1545,16 @@ $(function FriendlyTag() {
 						}
 					}
 				}
-			});
+			}
 			// To-be-retained existing tags that are groupable
-			params.tagsToRemain.forEach((tag) => {
+			for (const tag of params.tagsToRemain) {
 				// If the tag is unknown to us, we consider it non-groupable
 				if (Twinkle.tag.article.flatObject[tag] && !Twinkle.tag.article.flatObject[tag].excludeMI) {
 					groupableExistingTags.push(tag);
 				}
-			});
+			}
 			const miTest =
-				/\{\{(multiple ?issues|article ?issues|mi|ai|issues|多個問題|多个问题|問題條目|问题条目|數個問題|数个问题)\s*\|[^}]+\{/im.exec(
+				/{{(multiple ?issues|article ?issues|mi|ai|issues|多個問題|多个问题|問題條目|问题条目|數個問題|数个问题)\s*\|[^}]+{/im.exec(
 					pageText
 				);
 			if (miTest && groupableTags.length > 0) {
@@ -1579,7 +1582,7 @@ $(function FriendlyTag() {
 				const getRedirectsFor = [];
 				// Reposition the tags on the page into {{multiple issues}}, if found with its
 				// proper name, else moves it to `getRedirectsFor` array to be handled later
-				groupableExistingTags.forEach((tag) => {
+				for (const tag of groupableExistingTags) {
 					const tag_re = new RegExp(`(\\{\\{${Morebits.pageNameRegex(tag)}\\s*(\\|[^}]+)?\\}\\}\\n?)`);
 					if (tag_re.test(pageText)) {
 						tagText += tag_re.exec(pageText)[1];
@@ -1587,7 +1590,7 @@ $(function FriendlyTag() {
 					} else {
 						getRedirectsFor.push(`Template:${tag}`);
 					}
-				});
+				}
 				if (!getRedirectsFor.length) {
 					addNewTagsToMI();
 					return;
@@ -1693,26 +1696,26 @@ $(function FriendlyTag() {
 			// Check for all Rcat shell redirects (from #433)
 			if (pageText.match(/{{(?:redr|this is a redirect|r(?:edirect)?(?:.?cat.*)?[ _]?sh)/i)) {
 				// Regex inspired by [[User:Kephir/gadgets/sagittarius.js]] ([[Special:PermaLink/831402893]])
-				const oldTags = pageText.match(/(\s*{{[A-Za-z\s]+\|(?:\s*1=)?)((?:[^|{}]|{{[^}]+}})+)(}})\s*/i);
+				const oldTags = pageText.match(/(\s*{{[\sa-z]+\|(?:\s*1=)?)((?:[^{|}]|{{[^}]+}})+)(}})\s*/i);
 				pageText = pageText.replace(oldTags[0], oldTags[1] + tagText + oldTags[2] + oldTags[3]);
 			} else {
 				// Fold any pre-existing Rcats into taglist and under Rcatshell
 				const pageTags = pageText.match(/\s*{{.+?重定向.*?}}/gim);
 				let oldPageTags = '';
 				if (pageTags) {
-					pageTags.forEach((pageTag) => {
+					for (let pageTag of pageTags) {
 						const pageRe = new RegExp(Morebits.string.escapeRegExp(pageTag), 'img');
 						pageText = pageText.replace(pageRe, '');
 						pageTag = pageTag.trim();
 						oldPageTags += `\n${pageTag}`;
-					});
+					}
 				}
 				pageText += `\n{{Redirect category shell|${tagText}${oldPageTags}\n}}`;
 			}
 			summaryText += `${tags.length > 0 ? '标记' : '{{Redirect category shell}}'}到重定向`;
 			// avoid truncated summaries
 			if (summaryText.length > 499) {
-				summaryText = summaryText.replace(/\[\[[^|]+\|([^\]]+)\]\]/g, '$1');
+				summaryText = summaryText.replace(/\[\[[^|]+\|([^\]]+)]]/g, '$1');
 			}
 			pageobj.setPageText(pageText);
 			pageobj.setEditSummary(summaryText);
@@ -1737,13 +1740,13 @@ $(function FriendlyTag() {
 					// when other commons-related tags are placed, remove "move to Commons" tag
 					if (['Keep local', 'Now Commons', 'Do not move to Commons'].includes(tag)) {
 						text = text.replace(
-							/\{\{(mtc|(copy |move )?to ?commons|move to wikimedia commons|copy to wikimedia commons)[^}]*\}\}/gi,
+							/{{(mtc|(copy |move )?to ?commons|move to wikimedia commons|copy to wikimedia commons)[^}]*}}/gi,
 							''
 						);
 					}
 					if (tag === 'Vector version available') {
 						text = text.replace(
-							/\{\{((convert to |convertto|should be |shouldbe|to)?svg|badpng|vectorize)[^}]*\}\}/gi,
+							/{{((convert to |convertto|should be |shouldbe|to)?svg|badpng|vectorize)[^}]*}}/gi,
 							''
 						);
 					}

@@ -33,7 +33,6 @@
 		"babel-plugin-array-includes": "^2.0.3",
 		"chalk": "^5.2.0",
 		"core-js": "^3.30.2",
-		"eslint-plugin-unicorn": "^47.0.0",
 		"eslint-config-prettier": "^8.8.0",
 		"eslint-config-wikimedia": "^0.25.0",
 		"git-commit-msg-linter": "^5.0.4",

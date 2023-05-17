@@ -7,7 +7,6 @@
 		"wikimedia/mediawiki",
 		"wikimedia/jquery",
 		"plugin:@typescript-eslint/recommended",
-		"plugin:unicorn/recommended",
 		"prettier"
 	],
 	"parserOptions": {
