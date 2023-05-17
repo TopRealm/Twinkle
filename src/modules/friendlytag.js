@@ -302,7 +302,7 @@ $(function FriendlyTag() {
 			result.sortorder.dispatchEvent(evt);
 		} else {
 			// Redirects and files: Add a link to each template's description page
-			 
+
 			Morebits.quickForm.getElements(result, 'tags').forEach(generateLinks);
 		}
 	};
@@ -626,9 +626,9 @@ $(function FriendlyTag() {
 		$workarea.find('h5').css({'font-size': '110%'});
 		$workarea.find('h5:not(:first-child)').css({'margin-top': '1em'});
 		$workarea.find('div').filter(':has(span.quickformDescription)').css({'margin-top': '0.4em'});
-		 
+
 		Morebits.quickForm.getElements(form, 'existingTags').forEach(generateLinks);
-		 
+
 		Morebits.quickForm.getElements(form, 'tags').forEach(generateLinks);
 		// tally tags added/removed, update statusNode text
 		const statusNode = document.getElementById('tw-tag-status');
