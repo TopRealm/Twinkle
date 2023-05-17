@@ -245,7 +245,7 @@ class Deploy {
 			}
 		}
 		if (args.testwiki) {
-			config.apiUrl = `https://www.qiuwen.wiki/api.php`;
+			config.apiUrl = `https://www.qiuwenbaike.cn/api.php`;
 		} else {
 			if (!config.apiUrl) {
 				if (Object.keys(config).length) {
