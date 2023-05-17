@@ -145,7 +145,6 @@ $(function FriendlyTag() {
 					type: 'div',
 					id: 'tagWorkArea',
 					className: 'morebits-scrollbox',
-					style: 'max-height: 28em',
 				});
 				form.append({
 					type: 'checkbox',
