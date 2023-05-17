@@ -288,8 +288,18 @@ class Deploy {
 		for await (let { file, license = null, target } of deployTargets) {
 			let fileText = await this.readFile(file);
 			let licenseText = await this.readFile(license);
-			// let fileWarning = '/**\n* +--------------------------------------------------------+\n* |		 === WARNING: GLOBAL GADGET FILE ===			|\n* |		Changes to this page affect many users.			|\n* |  Please discuss changes at Talk page before editing.	|\n* +--------------------------------------------------------+\n*/'
-			let fileWarning = '';
+			let fileWarning =
+			`/**
+			* +--------------------------------------------------------+
+			* |         === WARNING: GLOBAL GADGET FILE ===            |
+			* +--------------------------------------------------------+
+			* |      All changes should be made in the repository,     |
+			* |              otherwise they will be lost.              |
+			* +--------------------------------------------------------+
+			* |        Changes to this page affect many users.         |
+			* |  Please discuss changes at Talk page before editing.   |
+			* +--------------------------------------------------------+
+			*/`;
 			let fileHeader = '/* <nowiki> */\n';
 			let fileFooter = '\n/* </nowiki> */';
 			fileText = licenseText + fileWarning + fileHeader + fileText + fileFooter;
