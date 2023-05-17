@@ -212,7 +212,7 @@ $(function FriendlyTag() {
 				break;
 			}
 			default:
-				alert(`Twinkle.tag：未知模式 ${Twinkle.tag.mode}`);
+				mw.notify(`Twinkle.tag：未知模式 ${Twinkle.tag.mode}`, {type: 'warn'});
 				break;
 		}
 		if (document.getElementsByClassName('patrollink').length) {
@@ -1817,7 +1817,7 @@ $(function FriendlyTag() {
 			if (count > 1) {
 				let message = `请在以下标签中择一使用：{{${conflicts.join('}}、{{')}}}。`;
 				message += extra || '';
-				alert(message);
+				mw.notify(message, {type: 'warn'});
 				return true;
 			}
 		};
@@ -1826,7 +1826,7 @@ $(function FriendlyTag() {
 		const checkParameter = (tag, parameter, description) => {
 			description = description || '理由';
 			if (params.tags.includes(tag) && params[parameter].trim() === '') {
-				alert(`您必须指定{{${tag}}}的${description}。`);
+				mw.notify(`您必须指定{{${tag}}}的${description}。`, {type: 'warn'});
 				return true;
 			}
 		};
@@ -1852,7 +1852,7 @@ $(function FriendlyTag() {
 						return;
 					}
 					if (!params.mergeTarget) {
-						alert('请指定使用于merge模板中的另一个页面标题。');
+						mw.notify('请指定使用于merge模板中的另一个页面标题。', {type: 'warn'});
 						return;
 					}
 					if ((params.mergeTagOther || params.mergeReason) && params.mergeTarget.includes('|')) {
@@ -1887,13 +1887,13 @@ $(function FriendlyTag() {
 			case 'redirect':
 				break;
 			default:
-				alert(`Twinkle.tag：未知模式 ${Twinkle.tag.mode}`);
+				mw.notify(`Twinkle.tag：未知模式 ${Twinkle.tag.mode}`, {type: 'warn'});
 				break;
 		}
 		// File/redirect: return if no tags selected
 		// Article: return if no tag is selected and no already present tag is deselected
 		if (params.tags.length === 0 && (Twinkle.tag.modeEn !== 'article' || params.tagsToRemove.length === 0)) {
-			alert('必须选择至少一个标记！');
+			mw.notify('必须选择至少一个标记！', {type: 'warn'});
 			return;
 		}
 		Morebits.simpleWindow.setButtonsEnabled(false);
