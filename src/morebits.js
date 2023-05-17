@@ -32,7 +32,7 @@
  *
  * @namespace Morebits
  */
-((window, document, $) => {
+$(function morebits() {
 	/** @lends Morebits */
 	const Morebits = {};
 	window.Morebits = Morebits; // allow global access
@@ -5515,20 +5515,4 @@
 	Morebits.simpleWindow.setButtonsEnabled = (enabled) => {
 		$('.morebits-dialog-buttons button').prop('disabled', !enabled);
 	};
-})(window, document, jQuery); // End wrap with anonymous function
-
-/**
- * If this script is being executed outside a ResourceLoader context, we add some
- * global assignments for legacy scripts, hopefully these can be removed down the line.
- *
- * IMPORTANT NOTE:
- * PLEASE DO NOT USE THESE ALIASES IN NEW CODE!
- * Thanks.
- */
-
-if (typeof arguments === 'undefined') {
-	// typeof is here for a reason...
-	window.SimpleWindow = Morebits.simpleWindow;
-	window.QuickForm = Morebits.quickForm;
-	window.Status = Morebits.status;
-}
+});
