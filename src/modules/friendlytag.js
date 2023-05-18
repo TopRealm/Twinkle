@@ -51,7 +51,7 @@ $(function FriendlyTag() {
 			label: '筛选标记列表：',
 			name: 'quickfilter',
 			size: '30',
-			event: function twinkletagquickfilter() {
+			event: function () {
 				// flush the DOM of all existing underline spans
 				$allCheckboxDivs.find('.search-hit').each((i, {parentElement}) => {
 					const label_element = parentElement;
