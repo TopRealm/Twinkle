@@ -43,17 +43,17 @@ $(function TwinkleARV() {
 		});
 		categories.append({
 			type: 'option',
-			label: '破坏 (QW:AIV)',
+			label: '破坏（QW:AIV）',
 			value: 'aiv',
 		});
 		categories.append({
 			type: 'option',
-			label: '傀儡 - 主账号(QW:SPI)',
+			label: '傀儡：主账号（QW:SPI）',
 			value: 'sock',
 		});
 		categories.append({
 			type: 'option',
-			label: '傀儡 - 傀儡账号 (QW:SPI)',
+			label: '傀儡：傀儡账号（QW:SPI）',
 			value: 'puppet',
 		});
 		form.append({
