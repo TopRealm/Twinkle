@@ -1273,12 +1273,11 @@ $(function TwinkleWarn() {
 				.change(Twinkle.warn.callback.change_subcategory);
 			$('.select2-selection').on('keydown', Morebits.select2.autoStart).trigger('focus');
 			mw.util.addCSS(
-				// Increase height
-				'.select2-container .select2-dropdown .select2-results>.select2-results__options{max-height:350px}' +
-					// Reduce padding
-					'.select2-results .select2-results__group,.select2-results .select2-results__option{padding-top:1px;padding-bottom:1px}' +
-					// Adjust font size
-					'.select2-container .select2-dropdown .select2-results,.select2-container .selection .select2-selection__rendered{font-size:13px}'
+				/* Increase height;
+				 * Reduce padding;
+				 * Adjust font size.
+				 * */
+				'.select2-container .select2-dropdown .select2-results>.select2-results__options{max-height:350px}.select2-results .select2-results__group,.select2-results .select2-results__option{padding-top:1px;padding-bottom:1px}.select2-container .select2-dropdown .select2-results,.select2-container .selection .select2-selection__rendered{font-size:13px}'
 			);
 		}
 	};
