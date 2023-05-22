@@ -449,7 +449,7 @@
 		.done((optionsText) => {
 			let _a;
 			// Quick pass if user has no options
-			if (optionsText === '' || optionsText === ' ') {
+			if (['', ' '].includes(optionsText)) {
 				return;
 			}
 			// Twinkle options are basically a JSON object with some comments. Strip those:
@@ -464,11 +464,11 @@
 				const options = JSON.parse(optionsText_nowindow);
 				if (options) {
 					Twinkle.prefs =
-						options.twinkle || options.friendly
+						options.twinkle
 							? // Old preferences format
-							  $.extend(options.twinkle, options.friendly)
+							  $.extend(options.twinkle)
 							: options;
-					// v2 established after unification of Twinkle/Friendly objects
+					// v2 established after unification of Twinkle objects
 					(_a = Twinkle.prefs).optionsVersion || (_a.optionsVersion = 1);
 				}
 			} catch {
@@ -525,7 +525,7 @@
 			);
 		}
 		// Hide the lingering space if the TW menu is empty
-		const isVector = mw.config.get('skin') === 'vector' || mw.config.get('skin') === 'vector-2022';
+		const isVector = ['vector', 'vector-2022'].includes(mw.config.get('skin'));
 		if (isVector && Twinkle.getPref('portletType') === 'menu' && $('#p-twinkle').length === 0) {
 			$('#p-cactions').css('margin-right', 'initial');
 		}
