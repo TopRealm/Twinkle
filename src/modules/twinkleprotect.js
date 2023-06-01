@@ -93,7 +93,7 @@ $(function TwinkleProtect() {
 		// get current protection level asynchronously
 		Twinkle.protect.fetchProtectionLevel();
 	};
-	// Customizable namespace and FlaggedRevs settings
+	// Customizable namespace settings
 	// In theory it'd be nice to have restrictionlevels defined here,
 	// but those are only available via a siteinfo query
 	// Customizable namespace settings
