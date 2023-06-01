@@ -299,7 +299,7 @@ $(function TwinkleConfig() {
 					helptip: '您可以加入常用的封禁理由。自定义的封禁理由会出现在一般的封禁理由下方。',
 					type: 'customList',
 					customListValueTitle: '使用封禁模板（默认为 uw-block1）',
-					customListLabelTitle: '“由于…您已被封禁”及封禁日志理由',
+					customListLabelTitle: '“由于……您已被封禁”及封禁日志理由',
 				},
 			],
 		},

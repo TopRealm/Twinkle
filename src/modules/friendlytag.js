@@ -1364,7 +1364,7 @@ $(function FriendlyTag() {
 								if (!removed) {
 									Morebits.status.warn(
 										'信息',
-										`无法在页面上找到{{${$(page).attr('title').slice(9)}}}…跳过`
+										`无法在页面上找到{{${$(page).attr('title').slice(9)}}}……跳过`
 									);
 								}
 							});
@@ -1537,7 +1537,7 @@ $(function FriendlyTag() {
 					if (tag === 'Merge from') {
 						tags.push(tag);
 					} else {
-						Morebits.status.warn('信息', `在页面上找到{{${tag}}}…跳过`);
+						Morebits.status.warn('信息', `在页面上找到{{${tag}}}……跳过`);
 						// don't do anything else with merge tags
 						if (['Merge', 'Merge to'].includes(tag)) {
 							params.mergeTarget = params.mergeReason = params.mergeTagOther = null;
@@ -1627,7 +1627,7 @@ $(function FriendlyTag() {
 								if (!found) {
 									Morebits.status.warn(
 										'信息',
-										`无法在页面上找到{{${$(page).attr('title').slice(9)}}}…跳过`
+										`无法在页面上找到{{${$(page).attr('title').slice(9)}}}……跳过`
 									);
 								}
 							});
@@ -1662,7 +1662,7 @@ $(function FriendlyTag() {
 				if (!tagRe.exec(pageText)) {
 					tags.push(params.tags[i]);
 				} else {
-					Morebits.status.warn('信息', `在重定向上找到{{${params.tags[i]}}}…跳过`);
+					Morebits.status.warn('信息', `在重定向上找到{{${params.tags[i]}}}……跳过`);
 				}
 			}
 			const addTag = (tagIndex, tagName) => {

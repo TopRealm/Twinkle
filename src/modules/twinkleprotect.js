@@ -563,7 +563,7 @@ $(function TwinkleProtect() {
 		{label: '6个月', value: '6 months'},
 		{label: '1年', value: '1 year'},
 		{label: '无限期', value: 'infinity'},
-		{label: '自定义…', value: 'custom'},
+		{label: '自定义……', value: 'custom'},
 	];
 	Twinkle.protect.protectionTypesAdmin = [
 		{label: '解除保护', value: 'unprotect'},
@@ -1282,7 +1282,7 @@ $(function TwinkleProtect() {
 				statusElement.error(['无法在QW:RFPP上找到相关定位点标记。']);
 				return;
 			}
-			statusElement.status('加入新提名…');
+			statusElement.status('加入新提名……');
 			rppPage.setEditSummary(
 				`/* ${Morebits.pageNameNorm} */ 请求对[[${Morebits.pageNameNorm}]]${params.typename}`
 			);

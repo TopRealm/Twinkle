@@ -55,7 +55,7 @@ $(function TwinkleBatchUndelete() {
 		};
 		const statelem = new Morebits.status('抓取页面列表');
 		const qiuwen_api = new Morebits.wiki.api(
-			'加载中…',
+			'加载中……',
 			query,
 			({responseXML, params}) => {
 				const xml = responseXML;
