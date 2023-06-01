@@ -1,5 +1,5 @@
 /* Twinkle.js - twinkle.js */
-(function twinkle(window, document, $) {
+((window, document, $) => {
 	// Wrap with anonymous function
 	// Check if account is experienced enough to use Twinkle
 	if (!Morebits.userIsInGroup('autoconfirmed') && !Morebits.userIsInGroup('confirmed')) {
@@ -27,10 +27,7 @@
 	 * If name is not given, module is loaded unconditionally.
 	 */
 	Twinkle.addInitCallback = (func, name) => {
-		Twinkle.initCallbacks.push({
-			func,
-			name,
-		});
+		Twinkle.initCallbacks.push({func: func, name: name});
 	};
 	Twinkle.defaultConfig = {};
 	/**
@@ -54,6 +51,7 @@
 		defaultToBlock64: false,
 		defaultToPartialBlocks: false,
 		blankTalkpageOnIndefBlock: false,
+		watchBlockNotices: 'yes',
 		customBlockReasonList: [],
 		// Fluff (revert and rollback)
 		openTalkPage: [],
@@ -266,11 +264,11 @@
 	 */
 	Twinkle.addPortlet = (navigation, id, text, type, nextnodeid) => {
 		// sanity checks, and get required DOM nodes
-		const root = document.querySelector(navigation);
+		const root = document.getElementById(navigation) || document.querySelector(navigation);
 		if (!root) {
 			return null;
 		}
-		const item = document.querySelector(id);
+		const item = document.getElementById(id);
 		if (item) {
 			if (item.parentNode && item.parentNode === root) {
 				return item;
@@ -279,13 +277,13 @@
 		}
 		let nextnode;
 		if (nextnodeid) {
-			nextnode = document.querySelector(nextnodeid);
+			nextnode = document.getElementById(nextnodeid);
 		}
 		// verify/normalize input
 		const skin = mw.config.get('skin');
 		if (
-			!['vector', 'vector-2022'].includes(skin) ||
-			!['left-navigation', 'right-navigation'].includes(navigation)
+			(skin !== 'vector' && skin !== 'vector-2022') ||
+			(navigation !== 'left-navigation' && navigation !== 'right-navigation')
 		) {
 			type = null; // menu supported only in vector's #left-navigation & #right-navigation
 		}
@@ -295,16 +293,17 @@
 			case 'vector':
 			case 'vector-2022':
 				// XXX: portal doesn't work
-				if (!['portal', 'left-navigation', 'right-navigation'].includes(navigation)) {
+				if (navigation !== 'portal' && navigation !== 'left-navigation' && navigation !== 'right-navigation') {
 					navigation = 'mw-panel';
 				}
-				outerNavClass = `mw-portlet vector-menu vector-menu-${
-					navigation === 'mw-panel'
-						? 'portal'
-						: type === 'menu'
-						? 'dropdown vector-menu-dropdown-noicon'
-						: 'tabs'
-				}`;
+				outerNavClass = 'mw-portlet vector-menu';
+				if (navigation === 'mw-panel') {
+					outerNavClass += ' vector-menu-portal';
+				} else if (type === 'menu') {
+					outerNavClass += ' vector-menu-dropdown vector-dropdown vector-menu-dropdown-noicon';
+				} else {
+					outerNavClass += ' vector-menu-tabs';
+				}
 				innerDivClass = 'vector-menu-content';
 				break;
 			case 'gongbi':
@@ -339,7 +338,7 @@
 		outerNav.className = `${outerNavClass} emptyPortlet`;
 		outerNav.id = id;
 		if (nextnode && nextnode.parentNode === root) {
-			nextnode.before(outerNav);
+			root.insertBefore(outerNav, nextnode);
 		} else {
 			root.appendChild(outerNav);
 		}
@@ -357,19 +356,19 @@
 				chkbox.setAttribute('aria-labelledby', `${id}-label`);
 				outerNav.appendChild(chkbox);
 				// Vector gets its title in a span; all others except
-				// gongbi have no title, and it has no span
+				// Gongbi have no title, and it has no span
 				const span = document.createElement('span');
 				span.appendChild(document.createTextNode(text));
 				heading.appendChild(span);
 				const a = document.createElement('a');
 				a.href = '#';
-				$(a).on('click', (event) => {
-					event.preventDefault();
+				$(a).on('click', (e) => {
+					e.preventDefault();
 				});
 				heading.appendChild(a);
 			}
 		} else {
-			// Basically just gongbi
+			// Basically just Gongbi
 			heading.appendChild(document.createTextNode(text));
 		}
 		outerNav.appendChild(heading);
@@ -442,38 +441,33 @@
 		dataType: 'text',
 	})
 		.fail(() => {
-			mw.notify('未能加载您的Twinkle参数设置', {
-				type: 'error',
-			});
+			mw.notify('未能加载您的Twinkle参数设置', {type: 'error'});
 		})
 		.done((optionsText) => {
-			let _a;
 			// Quick pass if user has no options
-			if (['', ' '].includes(optionsText)) {
+			if (optionsText === '') {
 				return;
 			}
 			// Twinkle options are basically a JSON object with some comments. Strip those:
-			const optionsText_nowiki = optionsText.replace(/^\s+|^\n$|\/(\*|\/)\s+?<\/?nowiki>\s+?(\*\/)?\n?/g, '');
-			const optionsText_nocomment = optionsText_nowiki.replace(
-				/^(?:\/\/[^\n]*\n)*\n*|(?:\/\/[^\n]*(?:\n|$))*$/g,
-				''
-			);
+			optionsText = optionsText.replace(/(?:^(?:\/\/[^\n]*\n)*\n*|(?:\/\/[^\n]*(?:\n|$))*$)/g, '');
 			// First version of options had some boilerplate code to make it eval-able -- strip that too. This part may become obsolete down the line.
-			const optionsText_nowindow = optionsText_nocomment.replace(/^window.Twinkle.prefs = |;\n*$/g, '');
+			if (optionsText.lastIndexOf('window.Twinkle.prefs = ', 0) === 0) {
+				optionsText = optionsText.replace(/(?:^window.Twinkle.prefs = |;\n*$)/g, '');
+			}
 			try {
-				const options = JSON.parse(optionsText_nowindow);
+				const options = JSON.parse(optionsText);
 				if (options) {
-					Twinkle.prefs = options.twinkle
-						? // Old preferences format
-						  $.extend(options.twinkle)
-						: options;
-					// v2 established after unification of Twinkle objects
-					(_a = Twinkle.prefs).optionsVersion || (_a.optionsVersion = 1);
+					if (options.twinkle || options.friendly) {
+						// Old preferences format
+						Twinkle.prefs = $.extend(options.twinkle, options.friendly);
+					} else {
+						Twinkle.prefs = options;
+					}
+					// v2 established after unification of Twinkle/Friendly objects
+					Twinkle.prefs.optionsVersion = Twinkle.prefs.optionsVersion || 1;
 				}
-			} catch {
-				mw.notify('未能解析您的Twinkle参数设置', {
-					type: 'error',
-				});
+			} catch (e) {
+				mw.notify('未能解析您的Twinkle参数设置', {type: 'error'});
 			}
 		})
 		.always(() => {
@@ -486,12 +480,11 @@
 		// that others load faster, especially the watchlist.
 		let activeSpecialPageList = ['Block', 'Contributions', 'AbuseLog', 'Recentchanges', 'Recentchangeslinked']; // wgRelevantUserName defined for non-sysops on Special:Block
 		if (Morebits.userIsSysop) {
-			activeSpecialPageList = [
-				...activeSpecialPageList,
+			activeSpecialPageList = activeSpecialPageList.concat([
 				'DeletedContributions',
 				'Prefixindex',
 				'BrokenRedirects',
-			];
+			]);
 		}
 		if (
 			mw.config.get('wgNamespaceNumber') === -1 &&
@@ -505,7 +498,7 @@
 		}
 		// Set custom Api-User-Agent header, for server-side logging purposes
 		Morebits.wiki.api.setApiUserAgent(`Twinkle/1.1; ${mw.config.get('wgWikiID')}`);
-		Twinkle.disabledModules = [...Twinkle.getPref('disabledModules'), ...Twinkle.getPref('disabledSysopModules')];
+		Twinkle.disabledModules = Twinkle.getPref('disabledModules').concat(Twinkle.getPref('disabledSysopModules'));
 		// Redefine addInitCallback so that any modules being loaded now on are directly
 		// initialised rather than added to initCallbacks array
 		Twinkle.addInitCallback = (func, name) => {
@@ -514,9 +507,9 @@
 			}
 		};
 		// Initialise modules that were saved in initCallbacks array
-		for (const module of Twinkle.initCallbacks) {
+		Twinkle.initCallbacks.forEach((module) => {
 			Twinkle.addInitCallback(module.func, module.name);
-		}
+		});
 		// Increases text size in Twinkle dialogs, if so configured
 		if (Twinkle.getPref('dialogLargeFont')) {
 			mw.util.addCSS(
@@ -529,38 +522,10 @@
 			$('#p-cactions').css('margin-right', 'initial');
 		}
 	};
-	// Used in XFD
-	Twinkle.makeFindSourcesDiv = (divID) => {
-		if ($(divID).length === 0) {
-			return;
-		}
-		if (Twinkle.findSources) {
-			$(divID).html(Twinkle.findSources);
-		} else {
-			const parser = new Morebits.wiki.preview($(divID)[0]);
-			parser.beginRender(`({{Find sources|${Morebits.pageNameNorm}}})`, 'QW:AFD').then(() => {
-				// Save for second-time around
-				Twinkle.findSources = parser.previewbox.innerHTML;
-				$(divID).removeClass('morebits-previewbox');
-			});
-		}
-	};
-	/**
-	 * Twinkle-specific utility functions shared by multiple modules
-	 *
-	 * @return {boolean}
-	 */
+	/** Twinkle-specific utility functions shared by multiple modules */
 	// Used in batch, unlink, and deprod to sort pages by namespace, as
-	// json formatversion=2 sorts by pageid instead
+	// json formatversion=2 sorts by pageid instead (#1251)
 	Twinkle.sortByNamespace = (first, second) => first.ns - second.ns || (first.title > second.title ? 1 : -1);
-	// Used in batch listings to link to the page in question with >
-	Twinkle.generateArrowLinks = ({value, nextElementSibling}) => {
-		const link = Morebits.htmlNode('a', ' >');
-		link.setAttribute('class', 'tw-arrowpage-link');
-		link.setAttribute('href', mw.util.getUrl(value));
-		link.setAttribute('target', '_blank');
-		nextElementSibling.append(link);
-	};
 	// Used in unlink listings to link the page title
 	Twinkle.generateBatchPageLinks = (checkbox) => {
 		const $checkbox = $(checkbox);
@@ -570,4 +535,4 @@
 		link.setAttribute('target', '_blank');
 		$checkbox.next().prepend([link, ' ']);
 	};
-})(window, document, jQuery); // End wrap with anonymous function
+})(window, document, jQuery);
