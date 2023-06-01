@@ -653,7 +653,7 @@
 					type: 'button',
 					label: '更多',
 					disabled: min >= max,
-					event: function (e) {
+					event: (e) => {
 						const new_node = new Morebits.quickForm.element(e.target.sublist);
 						e.target.area.appendChild(new_node.render());
 						if (++e.target.counter >= e.target.max) {
@@ -714,7 +714,7 @@
 					const remove = this.compute({
 						type: 'button',
 						label: '移除',
-						event: function (e) {
+						event: (e) => {
 							const list = e.target.listnode;
 							const node = e.target.inputnode;
 							const more = e.target.morebutton;
@@ -855,7 +855,7 @@
 	 * @param {HTMLElement} node - The HTML element beside which a tooltip is to be generated.
 	 * @param {Object} data - Tooltip-related configuration data.
 	 */
-	Morebits.quickForm.element.generateTooltip = function QuickFormElementGenerateTooltip(node, data) {
+	Morebits.quickForm.element.generateTooltip = (node, data) => {
 		const tooltipButton = node.appendChild(document.createElement('span'));
 		tooltipButton.className = 'morebits-tooltipButton';
 		tooltipButton.title = data.tooltip; // Provides the content for jQuery UI
@@ -927,7 +927,7 @@
 	 * @param {string} fieldName - The name or id of the fields.
 	 * @returns {HTMLElement[]} - Array of matching form elements.
 	 */
-	Morebits.quickForm.getElements = function QuickFormGetElements(form, fieldName) {
+	Morebits.quickForm.getElements = (form, fieldName) => {
 		const $form = $(form);
 		fieldName = $.escapeSelector(fieldName); // sanitize input
 		let $elements = $form.find(`[name="${fieldName}"]`);
@@ -962,7 +962,7 @@
 	 * @param {HTMLElement} element
 	 * @returns {HTMLElement}
 	 */
-	Morebits.quickForm.getElementContainer = function QuickFormGetElementContainer(element) {
+	Morebits.quickForm.getElementContainer = (element) => {
 		// for divs, headings and fieldsets, the container is the element itself
 		if (
 			element instanceof HTMLFieldSetElement ||
@@ -982,7 +982,7 @@
 	 * @param {(HTMLElement|Morebits.quickForm.element)} element
 	 * @returns {HTMLElement}
 	 */
-	Morebits.quickForm.getElementLabelObject = function QuickFormGetElementLabelObject(element) {
+	Morebits.quickForm.getElementLabelObject = (element) => {
 		// for buttons, divs and headers, the label is on the element itself
 		if (
 			element.type === 'button' ||
@@ -1008,7 +1008,7 @@
 	 * @param {(HTMLElement|Morebits.quickForm.element)} element
 	 * @returns {string}
 	 */
-	Morebits.quickForm.getElementLabel = function QuickFormGetElementLabel(element) {
+	Morebits.quickForm.getElementLabel = (element) => {
 		const labelElement = Morebits.quickForm.getElementLabelObject(element);
 		if (!labelElement) {
 			return null;
@@ -1023,7 +1023,7 @@
 	 * @param {string} labelText
 	 * @returns {boolean} True if succeeded, false if the label element is unavailable.
 	 */
-	Morebits.quickForm.setElementLabel = function QuickFormSetElementLabel(element, labelText) {
+	Morebits.quickForm.setElementLabel = (element, labelText) => {
 		const labelElement = Morebits.quickForm.getElementLabelObject(element);
 		if (!labelElement) {
 			return false;
@@ -1039,7 +1039,7 @@
 	 * @param {string} temporaryLabelText
 	 * @returns {boolean} `true` if succeeded, `false` if the label element is unavailable.
 	 */
-	Morebits.quickForm.overrideElementLabel = function QuickFormOverrideElementLabel(element, temporaryLabelText) {
+	Morebits.quickForm.overrideElementLabel = (element, temporaryLabelText) => {
 		if (!element.hasAttribute('data-oldlabel')) {
 			element.setAttribute('data-oldlabel', Morebits.quickForm.getElementLabel(element));
 		}
@@ -1052,7 +1052,7 @@
 	 * @param {(HTMLElement|Morebits.quickForm.element)} element
 	 * @returns {boolean} True if succeeded, false if the label element is unavailable.
 	 */
-	Morebits.quickForm.resetElementLabel = function QuickFormResetElementLabel(element) {
+	Morebits.quickForm.resetElementLabel = (element) => {
 		if (element.hasAttribute('data-oldlabel')) {
 			return Morebits.quickForm.setElementLabel(element, element.getAttribute('data-oldlabel'));
 		}
@@ -1065,7 +1065,7 @@
 	 * @param {(HTMLElement|jQuery|string)} element - HTML/jQuery element, or jQuery selector string.
 	 * @param {boolean} [visibility] - Skip this to toggle visibility.
 	 */
-	Morebits.quickForm.setElementVisibility = function QuickFormSetElementVisibility(element, visibility) {
+	Morebits.quickForm.setElementVisibility = (element, visibility) => {
 		$(element).toggle(visibility);
 	};
 	/**
@@ -1075,10 +1075,7 @@
 	 * @param {(HTMLElement|jQuery)} element
 	 * @param {boolean} [visibility] - Skip this to toggle visibility.
 	 */
-	Morebits.quickForm.setElementTooltipVisibility = function QuickFormSetElementTooltipVisibility(
-		element,
-		visibility
-	) {
+	Morebits.quickForm.setElementTooltipVisibility = (element, visibility) => {
 		$(Morebits.quickForm.getElementContainer(element)).find('.morebits-tooltipButton').toggle(visibility);
 	};
 	/**
@@ -1258,9 +1255,7 @@
 		 * @param {string} ip
 		 * @returns {boolean} - True if given a valid IP address range, false otherwise.
 		 */
-		isRange: function (ip) {
-			return mw.util.isIPAddress(ip, true) && !mw.util.isIPAddress(ip);
-		},
+		isRange: (ip) => mw.util.isIPAddress(ip, true) && !mw.util.isIPAddress(ip),
 		/**
 		 * Check that an IP range is within the CIDR limits.  Most likely to be useful
 		 * in conjunction with `wgRelevantUserName`.  CIDR limits are hardcoded as /16
@@ -1269,7 +1264,7 @@
 		 * @returns {boolean} - True for valid ranges within the CIDR limits,
 		 * otherwise false (ranges outside the limit, single IPs, non-IPs).
 		 */
-		validCIDR: function (ip) {
+		validCIDR: (ip) => {
 			if (Morebits.ip.isRange(ip)) {
 				const subnet = parseInt(ip.match(/\/(\d{1,3})$/)[1], 10);
 				if (subnet) {
@@ -1294,7 +1289,7 @@
 		 * @returns {boolean|string} - False if not IPv6 or bigger than a 64,
 		 * otherwise the (sanitized) /64 address.
 		 */
-		get64: function (ipv6) {
+		get64: (ipv6) => {
 			if (!ipv6 || !mw.util.isIPv6Address(ipv6, true)) {
 				return false;
 			}
@@ -1318,7 +1313,7 @@
 		 * @param {string} str
 		 * @returns {string}
 		 */
-		toUpperCaseFirstChar: function (str) {
+		toUpperCaseFirstChar: (str) => {
 			str = str.toString();
 			return str.substr(0, 1).toUpperCase() + str.substr(1);
 		},
@@ -1326,7 +1321,7 @@
 		 * @param {string} str
 		 * @returns {string}
 		 */
-		toLowerCaseFirstChar: function (str) {
+		toLowerCaseFirstChar: (str) => {
 			str = str.toString();
 			return str.substr(0, 1).toLowerCase() + str.substr(1);
 		},
@@ -1343,7 +1338,7 @@
 		 * @throws If the `start` and `end` strings aren't of the same length.
 		 * @throws If `skiplist` isn't an array or string
 		 */
-		splitWeightedByKeys: function (str, start, end, skiplist) {
+		splitWeightedByKeys: (str, start, end, skiplist) => {
 			if (start.length !== end.length) {
 				throw new TypeError(new Error('start marker and end marker must be of the same length'));
 			}
@@ -1393,7 +1388,7 @@
 		 * @param {boolean} [addSig]
 		 * @returns {string}
 		 */
-		formatReasonText: function (str, addSig) {
+		formatReasonText: (str, addSig) => {
 			let reason = (str || '').toString().trim();
 			const unbinder = new Morebits.unbinder(reason);
 			unbinder.unbind('<no' + 'wiki>', '</no' + 'wiki>');
@@ -1416,16 +1411,13 @@
 		 * @param {string} str
 		 * @returns {string}
 		 */
-		formatReasonForLog: function (str) {
-			return (
-				str
-					// handle line breaks, which otherwise break numbering
-					.replace(/\n+/g, '{{pb}}')
-					// put an extra # in front before bulleted or numbered list items
-					.replace(/^(#+)/gm, '#$1')
-					.replace(/^(\*+)/gm, '#$1')
-			);
-		},
+		formatReasonForLog: (str) =>
+			str
+				// handle line breaks, which otherwise break numbering
+				.replace(/\n+/g, '{{pb}}')
+				// put an extra # in front before bulleted or numbered list items
+				.replace(/^(#+)/gm, '#$1')
+				.replace(/^(\*+)/gm, '#$1'),
 		/**
 		 * Like `String.prototype.replace()`, but escapes any dollar signs in
 		 * the replacement string.  Useful when the the replacement string is
@@ -1437,9 +1429,7 @@
 		 * @param {string} replacement
 		 * @returns {string}
 		 */
-		safeReplace: function morebitsStringSafeReplace(string, pattern, replacement) {
-			return string.replace(pattern, replacement.replace(/\$/g, '$$$$'));
-		},
+		safeReplace: (string, pattern, replacement) => string.replace(pattern, replacement.replace(/\$/g, '$$$$')),
 		/**
 		 * Determine if the user-provided expiration will be considered an
 		 * infinite-length by MW.
@@ -1449,9 +1439,7 @@
 		 * @param {string} expiry
 		 * @returns {boolean}
 		 */
-		isInfinity: function morebitsStringIsInfinity(expiry) {
-			return ['indefinite', 'infinity', 'infinite', 'never'].includes(expiry);
-		},
+		isInfinity: (expiry) => ['indefinite', 'infinity', 'infinite', 'never'].includes(expiry),
 		/**
 		 * Escapes a string to be used in a RegExp, replacing spaces and
 		 * underscores with `[_ ]` as they are often equivalent.
@@ -1459,16 +1447,14 @@
 		 * @param {string} text - String to be escaped.
 		 * @returns {string} - The escaped text.
 		 */
-		escapeRegExp: function (text) {
-			return mw.util.escapeRegExp(text).replace(/ |_/g, '[_ ]');
-		},
+		escapeRegExp: (text) => mw.util.escapeRegExp(text).replace(/ |_/g, '[_ ]'),
 		/**
 		 * formatTime
 		 *
 		 * @param {*} time The string to foramt
 		 * @returns {string}
 		 */
-		formatTime: function morebitsStringFormatTime(time) {
+		formatTime: (time) => {
 			let m;
 			if ((m = time.match(/^\s*(\d+)\s*sec(ond)?s?\s*$/)) !== null) {
 				return `${m[1]}秒`;
@@ -1503,7 +1489,7 @@
 		 * @param {string} punctuation
 		 * @returns {string}
 		 */
-		appendPunctuation: function (str, punctuation) {
+		appendPunctuation: (str, punctuation) => {
 			if (punctuation === undefined) {
 				punctuation = '。';
 			}
@@ -1527,7 +1513,7 @@
 		 * @returns {Array} A copy of the array with duplicates removed.
 		 * @throws When provided a non-array.
 		 */
-		uniq: function (arr) {
+		uniq: (arr) => {
 			if (!Array.isArray(arr)) {
 				throw new TypeError('A non-array object passed to Morebits.array.uniq');
 			}
@@ -1541,7 +1527,7 @@
 		 * removed; subsequent instances of those values (duplicates) remain.
 		 * @throws When provided a non-array.
 		 */
-		dups: function (arr) {
+		dups: (arr) => {
 			if (!Array.isArray(arr)) {
 				throw new TypeError('A non-array object passed to Morebits.array.dups');
 			}
@@ -1555,7 +1541,7 @@
 		 * @returns {Array[]} An array containing the smaller, chunked arrays.
 		 * @throws When provided a non-array.
 		 */
-		chunk: function (arr, size) {
+		chunk: (arr, size) => {
 			if (!Array.isArray(arr)) {
 				throw new TypeError('A non-array object passed to Morebits.array.chunk');
 			}
@@ -1587,7 +1573,7 @@
 			 * Custom matcher in which if the optgroup name matches, all options in that
 			 * group are shown, like in jquery.chosen.
 			 */
-			optgroupFull: function (params, data) {
+			optgroupFull: (params, data) => {
 				const originalMatcher = $.fn.select2.defaults.defaults.matcher;
 				const result = originalMatcher(params, data);
 				if (result && params.term && data.text.toUpperCase().includes(params.term.toUpperCase())) {
@@ -1596,7 +1582,7 @@
 				return result;
 			},
 			/** Custom matcher that matches from the beginning of words only. */
-			wordBeginning: function (params, data) {
+			wordBeginning: (params, data) => {
 				const originalMatcher = $.fn.select2.defaults.defaults.matcher;
 				const result = originalMatcher(params, data);
 				if (
@@ -1609,7 +1595,7 @@
 			},
 		},
 		/** Underline matched part of options. */
-		highlightSearchMatches: function ({loading, text}) {
+		highlightSearchMatches: ({loading, text}) => {
 			const searchTerm = Morebits.select2SearchQuery;
 			if (!searchTerm || loading) {
 				return text;
@@ -1627,7 +1613,7 @@
 			);
 		},
 		/** Intercept query as it is happening, for use in highlightSearchMatches. */
-		queryInterceptor: function (params) {
+		queryInterceptor: (params) => {
 			Morebits.select2SearchQuery = params && params.term;
 		},
 		/**
@@ -1636,7 +1622,7 @@
 		 *
 		 * @see {@link https://github.com/select2/select2/issues/3279#issuecomment-442524147}
 		 */
-		autoStart: function (ev) {
+		autoStart: (ev) => {
 			if (ev.which < 48) {
 				return;
 			}
@@ -1713,13 +1699,11 @@
 		history: null, // {}
 	};
 	/** @memberof Morebits.unbinder */
-	Morebits.unbinder.getCallback = function UnbinderGetCallback(self) {
-		return function UnbinderCallback(match) {
-			const current = self.prefix + self.counter + self.postfix;
-			self.history[current] = match;
-			++self.counter;
-			return current;
-		};
+	Morebits.unbinder.getCallback = (self) => (match) => {
+		const current = self.prefix + self.counter + self.postfix;
+		self.history[current] = match;
+		++self.counter;
+		return current;
 	};
 	/* **************** Morebits.date **************** */
 	/**
@@ -2679,16 +2663,10 @@
 				!ctx.suppressProtectWarning &&
 				!confirm(
 					ctx.fullyProtected === 'infinity'
-						? `您即将编辑全保护页面“${ctx.pageName}${window.wgULS(
-								'”（无限期）。\n\n单击确定以确定，或单击取消以取消操作。',
-								'」（無限期）。\n\n點擊確定以確定，或點擊取消以取消操作。'
-						  )}`
-						: `${`您即将编辑全保护页面“${ctx.pageName}”（到期：${new Morebits.date(
+						? `${`您即将编辑全保护页面“${ctx.pageName}`}”（无限期）。\n\n单击确定以确定，或单击取消以取消操作。`
+						: `${`${`您即将编辑全保护页面“${ctx.pageName}”（到期：${new Morebits.date(
 								ctx.fullyProtected
-						  ).calendar('utc')}`} (UTC)）。\n\n${window.wgULS(
-								'单击确定以确定，或单击取消以取消操作。',
-								'點擊確定以確定，或點擊取消以取消操作。'
-						  )}`
+						  ).calendar('utc')}`} (UTC)）。\n\n`}单击确定以确定，或单击取消以取消操作。`
 				)
 			) {
 				ctx.statusElement.error('已取消对全保护页面的编辑。');
@@ -3688,12 +3666,7 @@
 			// errors here are only generated by extensions which hook APIEditBeforeSave within MediaWiki,
 			// which as of 1.34.0-wmf.23 (Sept 2019) should only encompass captcha messages
 			if (response.edit.captcha) {
-				ctx.statusElement.error(
-					window.wgULS(
-						'不能保存页面，因维基服务器要求您输入验证码。',
-						'不能儲存頁面，因維基伺服器要求您輸入驗證碼。'
-					)
-				);
+				ctx.statusElement.error('不能保存页面，因服务器要求您输入验证码。');
 			} else {
 				ctx.statusElement.error('保存页面时由API得到未知错误');
 			}
@@ -3755,10 +3728,7 @@
 						ctx.statusElement.error([
 							'编辑被防滥用过滤器规则“',
 							errorData.abusefilter.description,
-							window.wgULS(
-								'”警告，若您仍希望做出该编辑，请尝试重新提交，根据过滤器的设置您可能可以作出此编辑。',
-								'」警告，若您仍希望做出該編輯，請嘗試重新提交，根據過濾器的設定您可能可以作出此編輯。'
-							),
+							'”警告，若您仍希望做出该编辑，请尝试重新提交，根据过滤器的设置您可能可以作出此编辑。',
 						]);
 						// We should provide the user with a way to automatically retry the action if they so choose -
 						// I can't see how to do this without creating a UI dependency on Morebits.wiki.page though -- TTO
@@ -3907,14 +3877,11 @@
 				editprot &&
 				!ctx.suppressProtectWarning &&
 				!confirm(
-					`您即将对全保护页面“${ctx.pageName}${
+					`${`您即将对全保护页面“${ctx.pageName}${
 						editprot.expiry === 'infinity'
 							? '”（永久）'
 							: `${`”（到期：${new Morebits.date(editprot.expiry).calendar('utc')}`} (UTC)）`
-					}”进行“${action}”操作${window.wgULS(
-						'。\n\n单击确定以继续操作，或单击取消以取消操作。',
-						'。\n\n點擊確定以繼續操作，或點擊取消以取消操作。'
-					)}`
+					}”进行“${action}”操作`}。\n\n单击确定以继续操作，或单击取消以取消操作。`
 				)
 			) {
 				ctx.statusElement.error('已取消对全保护页面的操作。');
