@@ -86,7 +86,8 @@
 	 *
 	 * @type {boolean}
 	 */
-	Morebits.userIsSysop = Morebits.userIsInGroup('sysop') || Morebits.userIsInGroup('steward') ||  Morebits.userIsInGroup('qiuwen');
+	Morebits.userIsSysop =
+		Morebits.userIsInGroup('sysop') || Morebits.userIsInGroup('steward') || Morebits.userIsInGroup('qiuwen');
 	/**
 	 * Deprecated as of February 2021, use {@link Morebits.ip.sanitizeIPv6}.
 	 *
