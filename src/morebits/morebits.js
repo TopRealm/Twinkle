@@ -142,7 +142,7 @@
 		const firstChar = pageName[0];
 		const remainder = Morebits.string.escapeRegExp(pageName.slice(1));
 		if (mw.Title.phpCharToUpper(firstChar) !== firstChar.toLowerCase()) {
-			return '[' + mw.Title.phpCharToUpper(firstChar) + firstChar.toLowerCase() + ']' + remainder;
+			return `[${mw.Title.phpCharToUpper(firstChar)}${firstChar.toLowerCase()}]${remainder}`;
 		}
 		return Morebits.string.escapeRegExp(firstChar) + remainder;
 	};
@@ -188,15 +188,10 @@
 			if (!target) {
 				target = text;
 			}
-			return (
-				'<a target="_blank" href="' +
-				mw.util.getUrl(target) +
-				'" title="' +
-				target.replace(/"/g, '&#34;') +
-				'">' +
-				text +
-				'</a>'
-			);
+			return `<a target="_blank" href="${mw.util.getUrl(target)}" title="${target.replace(
+				/"/g,
+				'&#34;'
+			)}">${text}</a>`;
 		});
 		return ub.rebind();
 	};
@@ -242,7 +237,7 @@
 				regex = aliases[0];
 				break;
 			default:
-				regex = '(?:' + aliases.join('|') + ')';
+				regex = `(?:${aliases.join('|')})`;
 				break;
 		}
 		return regex;
@@ -386,7 +381,7 @@
 		let node;
 		let childContainer = null;
 		let label;
-		const id = (in_id ? in_id + '_' : '') + 'node_' + Morebits.quickForm.element.id++;
+		const id = `${in_id ? `${in_id}_` : ''}node_${Morebits.quickForm.element.id++}`;
 		if (data.adminonly && !Morebits.userIsSysop) {
 			// hell hack alpha
 			data.type = 'hidden';
@@ -409,7 +404,7 @@
 				return [node, node];
 			case 'select': {
 				node = document.createElement('div');
-				node.setAttribute('id', 'div_' + id);
+				node.setAttribute('id', `div_${id}`);
 				if (data.label) {
 					label = node.appendChild(document.createElement('label'));
 					label.setAttribute('for', id);
@@ -486,7 +481,7 @@
 				node = document.createElement('div');
 				if (data.list) {
 					for (i = 0; i < data.list.length; ++i) {
-						const cur_id = id + '_' + i;
+						const cur_id = `${id}_${i}`;
 						current = data.list[i];
 						let cur_div;
 						if (current.type === 'header') {
@@ -539,7 +534,7 @@
 							}
 							const subgroupRaw = new Morebits.quickForm.element({
 								type: 'div',
-								id: id + '_' + i + '_subgroup',
+								id: `${id}_${i}_subgroup`,
 							});
 							// eslint-disable-next-line no-loop-func
 							$.each(tmpgroup, (idx, el) => {
@@ -547,7 +542,7 @@
 								if (!newEl.type) {
 									newEl.type = data.type;
 								}
-								newEl.name = (current.name || data.name) + '.' + newEl.name;
+								newEl.name = `${current.name || data.name}.${newEl.name}`;
 								subgroupRaw.append(newEl);
 							});
 							const subgroup = subgroupRaw.render(cur_id);
@@ -604,7 +599,7 @@
 			case 'number':
 			case 'input':
 				node = document.createElement('div');
-				node.setAttribute('id', 'div_' + id);
+				node.setAttribute('id', `div_${id}`);
 				// Add hidden attr
 				if (data.hidden) {
 					node.setAttribute('hidden', '');
@@ -790,7 +785,7 @@
 				break;
 			case 'textarea':
 				node = document.createElement('div');
-				node.setAttribute('id', 'div_' + id);
+				node.setAttribute('id', `div_${id}`);
 				// Add hidden attr
 				if (data.hidden) {
 					node.setAttribute('hidden', '');
@@ -829,7 +824,7 @@
 				childContainer = subnode;
 				break;
 			default:
-				throw new Error('Morebits.quickForm: unknown element type ' + data.type.toString());
+				throw new Error(`Morebits.quickForm: unknown element type ${data.type.toString()}`);
 		}
 		if (!childContainer) {
 			childContainer = node;
@@ -848,7 +843,7 @@
 		}
 		if (data.className) {
 			childContainer.className = childContainer.className
-				? childContainer.className + ' ' + data.className
+				? `${childContainer.className} ${data.className}`
 				: data.className;
 		}
 		childContainer.setAttribute('id', data.id || id);
@@ -936,11 +931,11 @@
 	Morebits.quickForm.getElements = function QuickFormGetElements(form, fieldName) {
 		const $form = $(form);
 		fieldName = $.escapeSelector(fieldName); // sanitize input
-		let $elements = $form.find('[name="' + fieldName + '"]');
+		let $elements = $form.find(`[name="${fieldName}"]`);
 		if ($elements.length > 0) {
 			return $elements.toArray();
 		}
-		$elements = $form.find('#' + fieldName);
+		$elements = $form.find(`#${fieldName}`);
 		return $elements.toArray();
 	};
 	/**
@@ -1409,7 +1404,7 @@
 				const sig = '~~~~';
 				const sigIndex = reason.lastIndexOf(sig);
 				if (sigIndex === -1 || sigIndex !== reason.length - sig.length) {
-					reason += ' ' + sig;
+					reason += ` ${sig}`;
 				}
 			}
 			return reason.trim();
@@ -1477,16 +1472,16 @@
 		formatTime: function morebitsStringFormatTime(time) {
 			let m;
 			if ((m = time.match(/^\s*(\d+)\s*sec(ond)?s?\s*$/)) !== null) {
-				return m[1] + '秒';
+				return `${m[1]}秒`;
 			}
 			if ((m = time.match(/^\s*(\d+)\s*min(ute)?s?\s*$/)) !== null) {
-				return m[1] + '分';
+				return `${m[1]}分`;
 			}
 			if ((m = time.match(/^\s*(\d+)\s*hours?\s*$/)) !== null) {
 				return m[1] + wgULS('小时', '小時');
 			}
 			if ((m = time.match(/^\s*(\d+)\s*days?\s*$/)) !== null) {
-				return m[1] + '天';
+				return `${m[1]}天`;
 			}
 			if ((m = time.match(/^\s*(\d+)\s*weeks?\s*$/)) !== null) {
 				return m[1] + wgULS('周', '週');
@@ -1495,7 +1490,7 @@
 				return m[1] + wgULS('个月', '個月');
 			}
 			if ((m = time.match(/^\s*(\d+)\s*years?\s*$/)) !== null) {
-				return m[1] + '年';
+				return `${m[1]}年`;
 			}
 			if (Morebits.string.isInfinity(time.trim())) {
 				return wgULS('无限期', '無限期');
@@ -1607,7 +1602,7 @@
 				const result = originalMatcher(params, data);
 				if (
 					!params.term ||
-					(result && new RegExp('\\b' + mw.util.escapeRegExp(params.term), 'i').test(result.text))
+					(result && new RegExp(`\\b${mw.util.escapeRegExp(params.term)}`, 'i').test(result.text))
 				) {
 					return result;
 				}
@@ -1677,7 +1672,7 @@
 		this.content = string;
 		this.counter = 0;
 		this.history = {};
-		this.prefix = '%UNIQ::' + Math.random() + '::';
+		this.prefix = `%UNIQ::${Math.random()}::`;
 		this.postfix = '::UNIQ%';
 	};
 	Morebits.unbinder.prototype = {
@@ -1694,7 +1689,7 @@
 			if (!prefix || !postfix) {
 				throw new Error('Both prefix and postfix must be provided');
 			}
-			const re = new RegExp(prefix + '([\\s\\S]*?)' + postfix, 'g');
+			const re = new RegExp(`${prefix}([\\s\\S]*?)${postfix}`, 'g');
 			this.content = this.content.replace(re, Morebits.unbinder.getCallback(this));
 		},
 		/**
@@ -1891,11 +1886,11 @@
 		add: function (number, unit) {
 			let num = parseInt(number, 10); // normalize
 			if (isNaN(num)) {
-				throw new Error('Invalid number "' + number + '" provided.');
+				throw new Error(`Invalid number "${number}" provided.`);
 			}
 			unit = unit.toLowerCase(); // normalize
 			const unitMap = Morebits.date.unitMap;
-			let unitNorm = unitMap[unit] || unitMap[unit + 's']; // so that both singular and  plural forms work
+			let unitNorm = unitMap[unit] || unitMap[`${unit}s`]; // so that both singular and  plural forms work
 			if (unitNorm) {
 				// No built-in week functions, so rather than build out ISO's getWeek/setWeek, just multiply
 				// Probably can't be used for Julian->Gregorian changeovers, etc.
@@ -1903,10 +1898,10 @@
 					// eslint-disable-next-line no-sequences
 					(unitNorm = 'Date'), (num *= 7);
 				}
-				this['set' + unitNorm](this['get' + unitNorm]() + num);
+				this[`set${unitNorm}`](this[`get${unitNorm}`]() + num);
 				return this;
 			}
-			throw new Error('Invalid unit "' + unit + '": Only ' + Object.keys(unitMap).join(', ') + ' are allowed.');
+			throw new Error(`Invalid unit "${unit}": Only ${Object.keys(unitMap).join(', ')} are allowed.`);
 		},
 		/**
 		 * Subtracts a given number of minutes, hours, days, weeks, months, or years to the date.
@@ -1974,7 +1969,7 @@
 			}
 			const pad = (num, len) => {
 				len = len || 2; // Up to length of 00 + 1
-				return ('00' + num).toString().slice(0 - len);
+				return `00${num}`.toString().slice(0 - len);
 			};
 			const h24 = udate.getHours();
 			const m = udate.getMinutes();
@@ -2056,13 +2051,7 @@
 		 */
 		monthHeaderRegex: function () {
 			return new RegExp(
-				'^(==+)\\s*' +
-					this.getUTCFullYear() +
-					'年(?:' +
-					this.getUTCMonthName() +
-					'|' +
-					this.getUTCMonthNameAbbrev() +
-					')\\s*\\1',
+				`^(==+)\\s*${this.getUTCFullYear()}年(?:${this.getUTCMonthName()}|${this.getUTCMonthNameAbbrev()})\\s*\\1`,
 				'mg'
 			);
 		},
@@ -2078,10 +2067,10 @@
 			level = parseInt(level, 10);
 			level = isNaN(level) ? 2 : level;
 			const header = Array(level + 1).join('='); // String.prototype.repeat not supported in IE 11
-			const text = this.getUTCFullYear() + '年' + this.getUTCMonthName();
+			const text = `${this.getUTCFullYear()}年${this.getUTCMonthName()}`;
 			if (header.length) {
 				// wikitext-formatted header
-				return header + ' ' + text + ' ' + header;
+				return `${header} ${text} ${header}`;
 			}
 			return text; // Just the string
 		},
@@ -2287,9 +2276,9 @@
 			++Morebits.wiki.numberOfActionsLeft;
 			const queryString = $.map(this.query, (val, i) => {
 				if (Array.isArray(val)) {
-					return encodeURIComponent(i) + '=' + val.map(encodeURIComponent).join('|');
+					return `${encodeURIComponent(i)}=${val.map(encodeURIComponent).join('|')}`;
 				} else if (val !== undefined) {
-					return encodeURIComponent(i) + '=' + encodeURIComponent(val);
+					return `${encodeURIComponent(i)}=${encodeURIComponent(val)}`;
 				}
 			})
 				.join('&')
@@ -2365,7 +2354,7 @@
 					return this.post(callerAjaxParameters);
 				});
 			}
-			this.statelem.error(this.errorText + '（' + this.errorCode + '）');
+			this.statelem.error(`${this.errorText}（${this.errorCode}）`);
 			// invoke failure callback if one was supplied
 			if (this.onError) {
 				// set the callback context to this.parent for new code and supply the API object
@@ -2704,15 +2693,15 @@
 									'”（无限期）。\n\n单击确定以确定，或单击取消以取消操作。',
 									'」（無限期）。\n\n點擊確定以確定，或點擊取消以取消操作。'
 								)
-						: wgULS('您即将编辑全保护页面“', '您即將編輯全保護頁面「') +
+						: `${
+								wgULS('您即将编辑全保护页面“', '您即將編輯全保護頁面「') +
 								ctx.pageName +
 								wgULS('”（到期：', '」（到期：') +
-								new Morebits.date(ctx.fullyProtected).calendar('utc') +
-								' (UTC)）。\n\n' +
-								wgULS(
-									'单击确定以确定，或单击取消以取消操作。',
-									'點擊確定以確定，或點擊取消以取消操作。'
-								)
+								new Morebits.date(ctx.fullyProtected).calendar('utc')
+						  } (UTC)）。\n\n${wgULS(
+								'单击确定以确定，或单击取消以取消操作。',
+								'點擊確定以確定，或點擊取消以取消操作。'
+						  )}`
 				)
 			) {
 				ctx.statusElement.error(wgULS('已取消对全保护页面的编辑。', '已取消對全保護頁面的編輯。'));
@@ -3611,14 +3600,9 @@
 					}
 				}
 				// set revert edit summary
-				ctx.editSummary =
-					'[[QW:UNDO|取消]]由 ' +
-					ctx.revertUser +
-					' 所做出的' +
-					wgULS('修订 ', '修訂 ') +
-					ctx.revertOldID +
-					'：' +
-					ctx.editSummary;
+				ctx.editSummary = `[[QW:UNDO|取消]]由 ${ctx.revertUser} 所做出的${wgULS('修订 ', '修訂 ')}${
+					ctx.revertOldID
+				}：${ctx.editSummary}`;
 			}
 			ctx.pageLoaded = true;
 			// alert("Generate edit conflict now");  // for testing edit conflict recovery logic
@@ -3633,7 +3617,7 @@
 			if (page) {
 				// check for invalid titles
 				if (page.invalid) {
-					ctx.statusElement.error(wgULS('标题不合法：', '標題不合法：' + ctx.pageName));
+					ctx.statusElement.error(wgULS('标题不合法：', `標題不合法：${ctx.pageName}`));
 					onFailure(this);
 					return false; // abort
 				}
@@ -3834,7 +3818,7 @@
 				// no text - content empty or inaccessible (revdelled or suppressed)
 				return false;
 			}
-			return Morebits.l10n.redirectTagAliases.some((tag) => new RegExp('^\\s*' + tag + '\\W', 'i').test(text));
+			return Morebits.l10n.redirectTagAliases.some((tag) => new RegExp(`^\\s*${tag}\\W`, 'i').test(text));
 		};
 		const fnLookupCreationSuccess = function () {
 			const response = ctx.lookupCreationApi.getResponse().query;
@@ -3926,7 +3910,7 @@
 				return false;
 			}
 			if (!ctx.editSummary) {
-				ctx.statusElement.error('Internal error: ' + action + ' reason not set (use setEditSummary function)!');
+				ctx.statusElement.error(`Internal error: ${action} reason not set (use setEditSummary function)!`);
 				onFailure(this);
 				return false;
 			}
@@ -3949,11 +3933,12 @@
 			const saltMissing = action === 'protect' && !missing && ctx.protectCreate;
 			if (actionMissing || protectMissing || saltMissing) {
 				ctx.statusElement.error(
-					wgULS('无法对页面进行“', '無法對頁面進行「') +
+					`${
+						wgULS('无法对页面进行“', '無法對頁面進行「') +
 						action +
 						wgULS('”操作，因为页面', '」操作，因為頁面') +
-						(missing ? '已不' : wgULS('已经', '已經')) +
-						'存在'
+						(missing ? '已不' : wgULS('已经', '已經'))
+					}存在`
 				);
 				onFailure(this);
 				return false;
@@ -3978,9 +3963,10 @@
 						ctx.pageName +
 						(editprot.expiry === 'infinity'
 							? wgULS('”（永久）', '」（永久）')
-							: wgULS('”（到期：', '」（到期：') +
-							  new Morebits.date(editprot.expiry).calendar('utc') +
-							  ' (UTC)）') +
+							: `${
+									wgULS('”（到期：', '」（到期：') +
+									new Morebits.date(editprot.expiry).calendar('utc')
+							  } (UTC)）`) +
 						wgULS('”进行“', '」進行「') +
 						action +
 						wgULS('”操作', '」操作') +
@@ -4295,15 +4281,15 @@
 			const protections = [];
 			const expirys = [];
 			if (ctx.protectEdit) {
-				protections.push('edit=' + ctx.protectEdit.level);
+				protections.push(`edit=${ctx.protectEdit.level}`);
 				expirys.push(ctx.protectEdit.expiry);
 			}
 			if (ctx.protectMove) {
-				protections.push('move=' + ctx.protectMove.level);
+				protections.push(`move=${ctx.protectMove.level}`);
 				expirys.push(ctx.protectMove.expiry);
 			}
 			if (ctx.protectCreate) {
-				protections.push('create=' + ctx.protectCreate.level);
+				protections.push(`create=${ctx.protectCreate.level}`);
 				expirys.push(ctx.protectCreate.expiry);
 			}
 			const query = {
@@ -4377,7 +4363,7 @@
 			// 如果页面不是wikitext（例如用户js/css、Flow等），那么找一个wikitext页面来预览。
 			let pageName = mw.config.get('wgPageName');
 			if (mw.config.get('wgPageContentModel') !== 'wikitext') {
-				pageName = 'Draft:' + pageName;
+				pageName = `Draft:${pageName}`;
 			}
 			const query = {
 				action: 'parse',
@@ -4559,15 +4545,15 @@
 			const title = mwTitle.getMainText();
 			let link_regex_string = '';
 			if (namespaceID !== 0) {
-				link_regex_string = Morebits.namespaceRegex(namespaceID) + ':';
+				link_regex_string = `${Morebits.namespaceRegex(namespaceID)}:`;
 			}
 			link_regex_string += Morebits.pageNameRegex(title);
 			// For most namespaces, unlink both [[User:Test]] and [[:User:Test]]
 			// For files and categories, only unlink [[:Category:Test]]. Do not unlink [[Category:Test]]
 			const isFileOrCategory = [6, 14].includes(namespaceID);
 			const colon = isFileOrCategory ? ':' : ':?';
-			const simple_link_regex = new RegExp('\\[\\[' + colon + '(' + link_regex_string + ')\\]\\]', 'g');
-			const piped_link_regex = new RegExp('\\[\\[' + colon + link_regex_string + '\\|(.+?)\\]\\]', 'g');
+			const simple_link_regex = new RegExp(`\\[\\[${colon}(${link_regex_string})\\]\\]`, 'g');
+			const piped_link_regex = new RegExp(`\\[\\[${colon}${link_regex_string}\\|(.+?)\\]\\]`, 'g');
 			this.text = this.text.replace(simple_link_regex, '$1').replace(piped_link_regex, '$1');
 			return this;
 		},
@@ -4582,17 +4568,17 @@
 		commentOutImage: function (image, reason) {
 			const unbinder = new Morebits.unbinder(this.text);
 			unbinder.unbind('<!--', '-->');
-			reason = reason ? reason + ': ' : '';
+			reason = reason ? `${reason}: ` : '';
 			const image_re_string = Morebits.pageNameRegex(image);
 			// Check for normal image links, i.e. [[File:Foobar.png|...]]
 			// Will eat the whole link
 			const links_re = new RegExp(
-				'\\[\\[' + Morebits.namespaceRegex(6) + ':\\s*' + image_re_string + '\\s*[\\|(?:\\]\\])]'
+				`\\[\\[${Morebits.namespaceRegex(6)}:\\s*${image_re_string}\\s*[\\|(?:\\]\\])]`
 			);
 			const allLinks = Morebits.string.splitWeightedByKeys(unbinder.content, '[[', ']]');
 			for (let i = 0; i < allLinks.length; ++i) {
 				if (links_re.test(allLinks[i])) {
-					const replacement = '<!-- ' + reason + allLinks[i] + ' -->';
+					const replacement = `<!-- ${reason}${allLinks[i]} -->`;
 					unbinder.content = unbinder.content.replace(allLinks[i], replacement);
 					// unbind the newly created comments
 					unbinder.unbind('<!--', '-->');
@@ -4602,19 +4588,19 @@
 			// eventually preceded with some space, and must include File: prefix
 			// Will eat the whole line.
 			const gallery_image_re = new RegExp(
-				'(^\\s*' + Morebits.namespaceRegex(6) + ':\\s*' + image_re_string + '\\s*(?:\\|.*?$|$))',
+				`(^\\s*${Morebits.namespaceRegex(6)}:\\s*${image_re_string}\\s*(?:\\|.*?$|$))`,
 				'mg'
 			);
-			unbinder.content = unbinder.content.replace(gallery_image_re, '<!-- ' + reason + '$1 -->');
+			unbinder.content = unbinder.content.replace(gallery_image_re, `<!-- ${reason}$1 -->`);
 			// unbind the newly created comments
 			unbinder.unbind('<!--', '-->');
 			// Check free image usages, for example as template arguments, might have the File: prefix excluded, but must be preceded by an |
 			// Will only eat the image name and the preceding bar and an eventual named parameter
 			const free_image_re = new RegExp(
-				'(\\|\\s*(?:[\\w\\s]+\\=)?\\s*(?:' + Morebits.namespaceRegex(6) + ':\\s*)?' + image_re_string + ')',
+				`(\\|\\s*(?:[\\w\\s]+\\=)?\\s*(?:${Morebits.namespaceRegex(6)}:\\s*)?${image_re_string})`,
 				'mg'
 			);
-			unbinder.content = unbinder.content.replace(free_image_re, '<!-- ' + reason + '$1 -->');
+			unbinder.content = unbinder.content.replace(free_image_re, `<!-- ${reason}$1 -->`);
 			// Rebind the content now, we are done!
 			this.text = unbinder.rebind();
 			return this;
@@ -4629,19 +4615,19 @@
 		addToImageComment: function (image, data) {
 			const image_re_string = Morebits.pageNameRegex(image);
 			const links_re = new RegExp(
-				'\\[\\[' + Morebits.namespaceRegex(6) + ':\\s*' + image_re_string + '\\s*[\\|(?:\\]\\])]'
+				`\\[\\[${Morebits.namespaceRegex(6)}:\\s*${image_re_string}\\s*[\\|(?:\\]\\])]`
 			);
 			const allLinks = Morebits.string.splitWeightedByKeys(this.text, '[[', ']]');
 			for (let i = 0; i < allLinks.length; ++i) {
 				if (links_re.test(allLinks[i])) {
 					let replacement = allLinks[i];
 					// just put it at the end?
-					replacement = replacement.replace(/\]\]$/, '|' + data + ']]');
+					replacement = replacement.replace(/\]\]$/, `|${data}]]`);
 					this.text = this.text.replace(allLinks[i], replacement);
 				}
 			}
-			const gallery_re = new RegExp('^(\\s*' + image_re_string + '.*?)\\|?(.*?)$', 'mg');
-			const newtext = '$1|$2 ' + data;
+			const gallery_re = new RegExp(`^(\\s*${image_re_string}.*?)\\|?(.*?)$`, 'mg');
+			const newtext = `$1|$2 ${data}`;
 			this.text = this.text.replace(gallery_re, newtext);
 			return this;
 		},
@@ -4655,7 +4641,7 @@
 		removeTemplate: function (template) {
 			const template_re_string = Morebits.pageNameRegex(template);
 			const links_re = new RegExp(
-				'\\{\\{(?:' + Morebits.namespaceRegex(10) + ':)?\\s*' + template_re_string + '\\s*[\\|(?:\\}\\})]'
+				`\\{\\{(?:${Morebits.namespaceRegex(10)}:)?\\s*${template_re_string}\\s*[\\|(?:\\}\\})]`
 			);
 			const allTemplates = Morebits.string.splitWeightedByKeys(this.text, '{{', '}}', ['{{{', '}}}']);
 			for (let i = 0; i < allTemplates.length; ++i) {
@@ -4703,30 +4689,26 @@
 			this.text = this.text.replace(
 				new RegExp(
 					// leading whitespace
-					'^\\s*' +
-						// capture template(s)
-						'(?:((?:\\s*' +
+					// capture template(s)
+					// Pre-template regex, such as leading html comments
+					// begin template format
+					// Template regex
+					// end main template name, optionally with a number
+					// Probably remove the (?:) though
+					// template parameters
+					// end template format
+					// end capture
+					// trailing whitespace
+					`^\\s*(?:((?:\\s*${
 						// Pre-template regex, such as leading html comments
-						preRegex +
-						'|' +
-						// begin template format
-						'\\{\\{\\s*(?:' +
+						preRegex
+					}|\\{\\{\\s*(?:${
 						// Template regex
-						regex +
-						// end main template name, optionally with a number
-						// Probably remove the (?:) though
-						')\\d*\\s*' +
-						// template parameters
-						'(\\|(?:\\{\\{[^{}]*\\}\\}|[^{}])*)?' +
-						// end template format
-						'\\}\\})+' +
-						// end capture
-						'(?:\\s*\\n)?)' +
-						// trailing whitespace
-						'\\s*)?',
+						regex
+					})\\d*\\s*(\\|(?:\\{\\{[^{}]*\\}\\}|[^{}])*)?\\}\\})+(?:\\s*\\n)?)\\s*)?`,
 					flags
 				),
-				'$1' + tag
+				`$1${tag}`
 			);
 			return this;
 		},
@@ -4778,7 +4760,7 @@
 				return def.reject();
 			}
 			const page = new Morebits.wiki.page(
-				'User:' + mw.config.get('wgUserName') + '/' + logPageName,
+				`User:${mw.config.get('wgUserName')}/${logPageName}`,
 				wgULS('将项目加入到用户空间日志', '將項目加入到使用者空間日誌')
 			); // make this '... to ' + logPageName ?
 			page.load((pageobj) => {
@@ -4787,9 +4769,9 @@
 				// create monthly header if it doesn't exist already
 				const date = new Morebits.date(pageobj.getLoadTime());
 				if (!date.monthHeaderRegex().exec(text)) {
-					text += '\n\n' + date.monthHeader(this.headerLevel);
+					text += `\n\n${date.monthHeader(this.headerLevel)}`;
 				}
-				pageobj.setPageText(text + '\n' + logText);
+				pageobj.setPageText(`${text}\n${logText}`);
 				pageobj.setEditSummary(summaryText);
 				pageobj.setChangeTags(this.changeTags);
 				pageobj.setCreateOption('recreate');
@@ -4894,7 +4876,7 @@
 						Morebits.status.errorEvent();
 					}
 					// also log error messages in the browser console
-					console.error(this.textRaw + ': ' + this.statRaw);
+					console.error(`${this.textRaw}: ${this.statRaw}`);
 				}
 			}
 			this.render();
@@ -4909,7 +4891,7 @@
 		},
 		/** Complete the html, for the second part of the status message. */
 		render: function () {
-			this.node.className = 'morebits_status_' + this.type;
+			this.node.className = `morebits_status_${this.type}`;
 			while (this.target.hasChildNodes()) {
 				this.target.removeChild(this.target.firstChild);
 			}
@@ -5199,7 +5181,7 @@
 					if (arg.getPageName || arg.pageName || (arg.query && arg.query.title)) {
 						// we know the page title - display a relevant message
 						const pageName = arg.getPageName ? arg.getPageName() : arg.pageName || arg.query.title;
-						statelem.info('完成（[[' + pageName + ']]）');
+						statelem.info(`完成（[[${pageName}]]）`);
 					} else {
 						// we don't know the page title - just display a generic message
 						statelem.info('完成');
@@ -5209,7 +5191,7 @@
 					statelem.unlink();
 				}
 			} else if (typeof arg === 'string' && ctx.options.preserveIndividualStatusLines) {
-				new Morebits.status(arg, '完成（[[' + arg + ']]）');
+				new Morebits.status(arg, `完成（[[${arg}]]）`);
 			}
 			ctx.countFinishedSuccess++;
 			fnDoneOne();
@@ -5236,7 +5218,7 @@
 			const total = ctx.pageList.length;
 			if (ctx.countFinished < total) {
 				const progress = Math.round((100 * ctx.countFinished) / total);
-				ctx.statusElement.status(progress + '%');
+				ctx.statusElement.status(`${progress}%`);
 				// start a new chunk if we're close enough to the end of the previous chunk, and
 				// we haven't already started the next one
 				if (
@@ -5246,7 +5228,7 @@
 					fnStartNewChunk();
 				}
 			} else if (ctx.countFinished === total) {
-				const statusString = '完成（' + ctx.countFinishedSuccess + '/' + ctx.countFinished + '操作成功完成）';
+				const statusString = `完成（${ctx.countFinishedSuccess}/${ctx.countFinished}操作成功完成）`;
 				if (ctx.countFinishedSuccess < ctx.countFinished) {
 					ctx.statusElement.warn(statusString);
 				} else {
@@ -5261,7 +5243,7 @@
 				// ctx.countFinished > total
 				// just for giggles! (well, serious debugging, actually)
 				ctx.statusElement.warn(
-					wgULS('完成（多执行了', '完成（多執行了') + (ctx.countFinished - total) + '次）'
+					`${wgULS('完成（多执行了', '完成（多執行了') + (ctx.countFinished - total)}次）`
 				);
 				Morebits.wiki.removeCheckpoint();
 				ctx.running = false;
@@ -5354,7 +5336,7 @@
 		const content = document.createElement('div');
 		this.content = content;
 		content.className = 'morebits-dialog-content';
-		content.id = 'morebits-dialog-content-' + Math.round(Math.random() * 1e15);
+		content.id = `morebits-dialog-content-${Math.round(Math.random() * 1e15)}`;
 		this.height = height;
 		$(this.content).dialog({
 			autoOpen: false,
@@ -5398,7 +5380,7 @@
 		linksspan.className = 'morebits-dialog-footerlinks';
 		$widget.find('.ui-dialog-buttonpane').append(buttonspan, linksspan);
 		// resize the scrollbox with the dialog, if one is present
-		$widget.resizable('option', 'alsoResize', '#' + this.content.id + ' .morebits-scrollbox, #' + this.content.id);
+		$widget.resizable('option', 'alsoResize', `#${this.content.id} .morebits-scrollbox, #${this.content.id}`);
 	};
 	Morebits.simpleWindow.prototype = {
 		buttons: [],
@@ -5440,7 +5422,7 @@
 				$widget.find('.morebits-dialog-scriptname').remove();
 				const scriptnamespan = document.createElement('span');
 				scriptnamespan.className = 'morebits-dialog-scriptname';
-				scriptnamespan.textContent = this.scriptName + ' \u00B7 '; // U+00B7 MIDDLE DOT = &middot;
+				scriptnamespan.textContent = `${this.scriptName} \u00B7 `; // U+00B7 MIDDLE DOT = &middot;
 				$widget.find('.ui-dialog-title').prepend(scriptnamespan);
 			}
 			const dialog = $(this.content).dialog('open');
@@ -5504,8 +5486,10 @@
 			} else {
 				$(this.content).dialog('option', 'height', 'auto');
 			}
-			$(this.content).dialog('widget').find('.morebits-dialog-content')[0].style.maxHeight =
-				parseInt(this.height - 30, 10) + 'px';
+			$(this.content).dialog('widget').find('.morebits-dialog-content')[0].style.maxHeight = `${parseInt(
+				this.height - 30,
+				10
+			)}px`;
 			return this;
 		},
 		/**

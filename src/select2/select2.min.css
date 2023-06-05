@@ -298,8 +298,7 @@
 	margin-left: 5px;
 }
 
-.select2-container--default[dir='rtl']
-	.select2-selection--multiple .select2-selection__choice__remove {
+.select2-container--default[dir='rtl'] .select2-selection--multiple .select2-selection__choice__remove {
 	margin-right: auto;
 	margin-left: 2px;
 }
@@ -373,22 +372,44 @@
 	margin-left: -1em;
 }
 
-.select2-container--default .select2-results__option .select2-results__option .select2-results__option .select2-results__option {
+.select2-container--default
+	.select2-results__option
+	.select2-results__option
+	.select2-results__option
+	.select2-results__option {
 	padding-left: 3em;
 	margin-left: -2em;
 }
 
-.select2-container--default .select2-results__option .select2-results__option .select2-results__option .select2-results__option .select2-results__option {
+.select2-container--default
+	.select2-results__option
+	.select2-results__option
+	.select2-results__option
+	.select2-results__option
+	.select2-results__option {
 	padding-left: 4em;
 	margin-left: -3em;
 }
 
-.select2-container--default .select2-results__option .select2-results__option .select2-results__option .select2-results__option .select2-results__option .select2-results__option {
+.select2-container--default
+	.select2-results__option
+	.select2-results__option
+	.select2-results__option
+	.select2-results__option
+	.select2-results__option
+	.select2-results__option {
 	padding-left: 5em;
 	margin-left: -4em;
 }
 
-.select2-container--default .select2-results__option .select2-results__option .select2-results__option .select2-results__option .select2-results__option .select2-results__option .select2-results__option {
+.select2-container--default
+	.select2-results__option
+	.select2-results__option
+	.select2-results__option
+	.select2-results__option
+	.select2-results__option
+	.select2-results__option
+	.select2-results__option {
 	padding-left: 6em;
 	margin-left: -5em;
 }
@@ -564,8 +585,7 @@
 	float: right;
 }
 
-.select2-container--classic[dir='rtl']
-	.select2-selection--multiple .select2-selection__choice__remove {
+.select2-container--classic[dir='rtl'] .select2-selection--multiple .select2-selection__choice__remove {
 	margin-right: auto;
 	margin-left: 2px;
 }

@@ -13,9 +13,9 @@
 		"format": "prettier --write . && pnpm run lint:fix",
 		"eslint": "eslint src",
 		"eslint:fix": "eslint src --fix",
-		"stylelint": "stylelint src/*.css",
-		"stylelint:fix": "stylelint src/*.css --fix",
-		"lint": "eslint src && stylelint src/*.css",
+		"stylelint": "stylelint src/**/*.css",
+		"stylelint:fix": "stylelint src/**/*.css --fix",
+		"lint": "eslint src && stylelint src/**/*.css",
 		"lint:fix": "pnpm run eslint:fix && pnpm run stylelint:fix",
 		"updatebrowserslist": "pnpx update-browserslist-db@latest"
 	},
