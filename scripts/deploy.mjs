@@ -75,22 +75,23 @@ const __dirname = path.resolve();
 // Adjust target file names if necessary
 // All file paths are with respect to repository root
 const deployTargets = [
-	/* Twinkle */
+	/* twinkle */
 	{
-		file: 'dist/twinkle.js',
+		file: 'dist/twinkle/twinkle.js',
 		target: 'MediaWiki:Gadget-Twinkle.js',
 		license: 'src/licenseHeader'
 	},
 	{
-		file: 'src/twinkle.css',
+		file: 'src/twinkle/twinkle.css',
 		target: 'MediaWiki:Gadget-Twinkle.css',
 		license: 'src/licenseHeader'
 	},
 	{
-		file: 'src/twinkle-pagestyles.css',
+		file: 'src/twinkle/twinkle-pagestyles.css',
 		target: 'MediaWiki:Gadget-Twinkle-pagestyles.css',
 		license: 'src/licenseHeader'
 	},
+	/* modules */
 	{
 		file: 'dist/modules/friendlytag.js',
 		target: 'MediaWiki:Gadget-friendlytag.js',
@@ -188,25 +189,25 @@ const deployTargets = [
 	},
 	/* Morebits */
 	{
-		file: 'dist/morebits.js',
+		file: 'dist/morebits/morebits.js',
 		target: 'MediaWiki:Gadget-morebits.js',
 		license: 'src/licenseHeader'
 	},
 	{
-		file: 'src/morebits.css',
+		file: 'src/morebits/morebits.css',
 		target: 'MediaWiki:Gadget-morebits.css',
 		license: 'src/licenseHeader'
 	},
 	/* Select2 */
 	{
-		file: 'src/lib/select2.min.css',
+		file: 'src/select2/select2.min.css',
 		target: 'MediaWiki:Gadget-select2.min.css',
-		license: 'src/lib/select2-licenseHeader'
+		license: 'src/select2/select2-licenseHeader'
 	},
 	{
-		file: 'src/lib/select2.min.js',
+		file: 'src/select2/select2.min.js',
 		target: 'MediaWiki:Gadget-select2.min.js',
-		license: 'src/lib/select2-licenseHeader'
+		license: 'src/select2/select2-licenseHeader'
 	}
 ];
 

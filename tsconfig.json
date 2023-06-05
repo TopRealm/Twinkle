@@ -23,5 +23,5 @@
 		"outDir": "./distTS"
 	},
 	"include": ["./node_modules/types-mediawiki", "./node_modules/@types/jqueryui", "./src/"],
-	"exclude": ["./src/lib/"]
+	"exclude": ["./src/select2/"]
 }

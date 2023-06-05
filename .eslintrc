@@ -12,7 +12,7 @@
 	"parserOptions": {
 		"parser": "@typescript-eslint/parser"
 	},
-	"ignorePatterns": ["scripts/", "src/lib/", "dist/", "*.json"],
+	"ignorePatterns": ["scripts/", "src/select2/", "dist/", "*.json"],
 	"globals": {
 		"wgULS": "readonly",
 		"$": "readonly",
