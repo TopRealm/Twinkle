@@ -8,10 +8,15 @@ $(function TwinkleImage() {
 	Twinkle.image = () => {
 		if (
 			mw.config.get('wgNamespaceNumber') === 6 &&
-			!document.querySelector('#mw-sharedupload') &&
-			document.querySelector('#mw-imagepage-section-filehistory')
+			!document.getElementById('mw-sharedupload') &&
+			document.getElementById('mw-imagepage-section-filehistory')
 		) {
-			Twinkle.addPortletLink(Twinkle.image.callback, '图权', 'tw-di', '提交文件快速删除');
+			Twinkle.addPortletLink(
+				Twinkle.image.callback,
+				wgULS('图权', '圖權'),
+				'tw-di',
+				wgULS('提交文件快速删除', '提交檔案快速刪除')
+			);
 		}
 	};
 	Twinkle.image.callback = () => {
@@ -27,108 +32,162 @@ $(function TwinkleImage() {
 			type: 'checkbox',
 			list: [
 				{
-					label: '通知上传者',
+					label: wgULS('通知上传者', '通知上傳者'),
 					value: 'notify',
 					name: 'notify',
-					tooltip: '若您在标记同一用户的很多文件，请取消此复选框以避免发送过多消息。',
+					tooltip: wgULS(
+						'若您在标记同一用户的很多文件，请取消此复选框以避免发送过多消息。CSD F5永远不会通知。',
+						'若您在標記同一使用者的很多檔案，請取消此核取方塊以避免發送過多訊息。CSD F5永遠不會通知。'
+					),
 					checked: Twinkle.getPref('notifyUserOnDeli'),
 				},
 			],
 		});
 		const field = form.append({
 			type: 'field',
-			label: '理由',
+			label: wgULS('需要的动作', '需要的動作'),
 		});
 		field.append({
 			type: 'radio',
 			name: 'type',
 			list: [
 				{
-					label: '来源不明（CSD F1）',
+					label: wgULS('来源不明（CSD F3）', '來源不明（CSD F3）'),
 					value: 'no source',
 					checked: true,
-					tooltip: '上传后3天内仍然来源不明、著作权不明',
+					tooltip: wgULS('本文件并未注明原始出处', '本檔案並未註明原始出處'),
 				},
 				{
-					label: '著作权不明（CSD F1）',
+					label: wgULS('未知著作权或著作权无法被查证（CSD F3）', '未知著作權或著作權無法被查證（CSD F3）'),
 					value: 'no license',
-					tooltip: '上传后3天内仍著作权情况不明',
+					tooltip: wgULS(
+						'本文件缺少著作权信息，或声称的著作权信息无法被查证',
+						'本檔案缺少著作權資訊，或聲稱的著作權資訊無法被查證'
+					),
 				},
 				{
-					label: '来源、著作权均不明（CSD F1）',
+					label: wgULS(
+						'来源不明且未知著作权或著作权无法被查证（CSD F3）',
+						'來源不明且未知著作權或著作權無法被查證（CSD F3）'
+					),
 					value: 'no source no license',
-					tooltip: '上传后3天内仍然来源不明、著作权不明',
+					tooltip: wgULS(
+						'本文件并未注明原始出处，且本文件缺少著作权信息或声称的著作权信息无法被查证',
+						'本檔案並未註明原始出處，且本檔案缺少著作權資訊或聲稱的著作權資訊無法被查證'
+					),
 				},
 				{
-					label: '其他来源找到的文件（CSD F1）',
+					label: wgULS(
+						'没有被条目使用的非自由著作权文件（CSD F5）',
+						'沒有被條目使用的非自由著作權檔案（CSD F5）'
+					),
+					value: 'orphaned fair use',
+					tooltip: wgULS('本文件为非自由著作权且没有被条目使用', '本檔案為非自由著作權且沒有被條目使用'),
+				},
+				{
+					label: wgULS('明显侵权之文件（CSD F1）', '明顯侵權之檔案（CSD F1）'),
 					value: 'no permission',
-					tooltip: '上传者宣称拥有，而在其他来源找到的文件',
+					tooltip: wgULS(
+						'上传者宣称拥有，而在其他来源找到的文件；或从侵权的来源获取的文件。',
+						'上傳者宣稱擁有，而在其他來源找到的檔案；或從侵權的來源取得的檔案。'
+					),
 					subgroup: {
 						name: 'f1_source',
 						type: 'textarea',
-						label: '侵权来源：',
+						label: wgULS('侵权来源：', '侵權來源：'),
 					},
 				},
 				{
-					label: '无法找到作者授权的文件（CSD F1）',
-					value: 'no permission',
-					tooltip: '文件宣称由某作者依据某自由著作权协议发布，但找不到该自由协议的声明',
-				},
-				{
-					label: '其他明显侵权的文件（CSD F1）',
-					value: 'no permission',
-					tooltip: '其他明显侵权的文件',
-					subgroup: {
-						name: 'f1_source',
-						type: 'textarea',
-						label: '侵权来源：',
-					},
-				},
-				{
-					label: '没有填写任何合理使用依据的非自由著作权文件（CSD F1）',
+					label: wgULS(
+						'没有填写任何合理使用依据的非自由著作权文件（CSD F5）',
+						'沒有填寫任何合理使用依據的非自由著作權檔案（CSD F5）'
+					),
 					value: 'no fair use rationale',
-					tooltip:
+					tooltip: wgULS(
 						'不适用于有争议但完整的合理使用依据。若非自由著作权文件只有部分条目的使用依据，但同时被使用于未提供合理使用依据的条目，则本方针也不适用。',
+						'不適用於有爭議但完整的合理使用依據。若非自由著作權檔案只有部分條目的使用依據，但同時被使用於未提供合理使用依據的條目，則本方針也不適用。'
+					),
 				},
 				{
-					label: '重复且不再使用的文件（CSD F2）',
-					value: 'duplicate',
-					tooltip:
-						'包括以下情况：与现有文件完全相同（或与现有文件内容一致但尺寸较小），且没有客观需要（如某些场合需使用小尺寸图片）的文件；被更加清晰的文件、SVG格式文件所取代的文件。',
+					label: wgULS('可被替代的非自由著作权文件（CSD F4）', '可被替代的非自由著作權檔案（CSD F4）'),
+					value: 'replaceable fair use',
+					tooltip: wgULS(
+						'文件仅用于描述、识别或评论文件中展示的事物，或仅用作插图，且满足以下四个条件之一。若给出了其他合理使用依据，不适用本条。如对文件的可替代性存在争议，应交文件存废讨论处理。本条也不适用于正在或曾经由文件存废讨论处理过的文件。',
+						'檔案僅用於描述、辨識或評論檔案中展示的事物，或僅用作插圖，且滿足以下四個條件之一。若給出了其他合理使用依據，不適用本條。如對檔案的可替代性存在爭議，應交檔案存廢討論處理。本條也不適用於正在或曾經由檔案存廢討論處理過的檔案。'
+					),
+					subgroup: {
+						name: 'f4_type',
+						type: 'select',
+						label: wgULS('适用类型：', '適用類別：'),
+						style: 'width: 85%;',
+						list: wgULS(
+							[
+								{label: '请选择', value: ''},
+								{label: '有其他自由著作权文件展示相同的事物', value: '1'},
+								{
+									label: '文件描述的是在世或假定在世人物、仍然存在的建筑、室外雕塑或仍然在售的商品，且预计自行拍摄的照片不受他人著作权保护',
+									value: '2',
+								},
+								{label: '文件为可自行绘制的地图或图表', value: '3'},
+								{label: '文件来自商业图片机构（如Getty）', value: '4'},
+							],
+							[
+								{label: '請選擇', value: ''},
+								{label: '有其他自由著作權檔案展示相同的事物', value: '1'},
+								{
+									label: '檔案描述的是在世或假定在世人物、仍然存在的建築、室外雕塑或仍然在售的商品，且預計自行拍攝的相片不受他人著作權保護',
+									value: '2',
+								},
+								{label: '檔案為可自行繪製的地圖或圖表', value: '3'},
+								{label: '檔案來自商業圖片機構（如Getty）', value: '4'},
+							]
+						),
+					},
 				},
 			],
 		});
-		form.append({
-			type: 'submit',
-		});
+		form.append({type: 'submit'});
 		const result = form.render();
 		Window.setContent(result);
 		Window.display();
 		// We must init the parameters
-		const event = document.createEvent('Event');
-		event.initEvent('change', true, true);
-		result.type[0].dispatchEvent(event);
+		const evt = document.createEvent('Event');
+		evt.initEvent('change', true, true);
+		result.type[0].dispatchEvent(evt);
 	};
 	Twinkle.image.callback.evaluate = ({target}) => {
 		let type;
-		const notify = target.notify.checked;
+		let notify = target.notify.checked;
 		const types = target.type;
-		for (const type_ of types) {
-			if (type_.checked) {
-				type = type_.values;
+		for (let i = 0; i < types.length; ++i) {
+			if (types[i].checked) {
+				type = types[i].values;
 				break;
 			}
 		}
 		let csdcrit;
 		switch (type) {
-			case 'no source no license':
 			case 'no source':
+				csdcrit = 'f3';
+				break;
 			case 'no license':
-			case 'no fair use rationale':
-				csdcrit = 'f1';
+				csdcrit = 'f3';
+				break;
+			case 'no source no license':
+				csdcrit = 'f3';
+				break;
+			case 'orphaned fair use':
+				csdcrit = 'f5';
+				notify = false;
 				break;
 			case 'no permission':
-				csdcrit = 'f2';
+				csdcrit = 'f1';
+				break;
+			case 'no fair use rationale':
+				csdcrit = 'f5';
+				break;
+			case 'replaceable fair use':
+				csdcrit = 'f4';
 				break;
 			default:
 				throw new Error('Twinkle.image.callback.evaluate：未知条款');
@@ -138,25 +197,36 @@ $(function TwinkleImage() {
 			!Twinkle.getPref('noLogOnSpeedyNomination').includes(csdcrit.toLowerCase());
 		const templatename = type;
 		const params = {
-			type,
-			templatename,
+			type: type,
+			templatename: templatename,
 			normalized: csdcrit,
-			lognomination,
+			lognomination: lognomination,
 		};
 		if (csdcrit === 'f1') {
 			params.f1_source = target['type.f1_source'].value;
 		}
+		if (csdcrit === 'f4') {
+			const f4_type = target['type.f4_type'].value;
+			if (!f4_type) {
+				alert(wgULS('CSD F4：请选择适用类型。', 'CSD F4：請選擇適用類別。'));
+				return false;
+			}
+			params.f4_type = f4_type;
+		}
 		Morebits.simpleWindow.setButtonsEnabled(false);
 		Morebits.status.init(target);
 		Morebits.wiki.actionCompleted.redirect = mw.config.get('wgPageName');
-		Morebits.wiki.actionCompleted.notice = '标记完成';
+		Morebits.wiki.actionCompleted.notice = wgULS('标记完成', '標記完成');
 		// Tagging image
-		const qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'), '加入删除标记');
-		qiuwen_page.setCallbackParameters(params);
-		qiuwen_page.load(Twinkle.image.callbacks.taggingImage);
+		const wikipedia_page = new Morebits.wiki.page(
+			mw.config.get('wgPageName'),
+			wgULS('加入删除标记', '加入刪除標記')
+		);
+		wikipedia_page.setCallbackParameters(params);
+		wikipedia_page.load(Twinkle.image.callbacks.taggingImage);
 		// Notifying uploader
 		if (notify) {
-			qiuwen_page.lookupCreation(Twinkle.image.callbacks.userNotification);
+			wikipedia_page.lookupCreation(Twinkle.image.callbacks.userNotification);
 		} else {
 			// add to CSD log if desired
 			if (lognomination) {
@@ -167,9 +237,15 @@ $(function TwinkleImage() {
 			if (type !== 'orphaned fair use') {
 				const noteData = document.createElement('pre');
 				noteData.appendChild(
-					document.createTextNode(`{{subst:Uploadvionotice|${Morebits.pageNameNorm}}}--~~` + `~~`)
+					document.createTextNode(`{{subst:Uploadvionotice|${Morebits.pageNameNorm}}}--~~~~`)
 				);
-				Morebits.status.info('提示', ['这些内容应贴进上传者对话页：', document.createElement('br'), noteData]);
+				Morebits.status.info(
+					'提示',
+					wgULS(
+						['这些内容应贴进上传者对话页：', document.createElement('br'), noteData],
+						['這些內容應貼進上傳者討論頁：', document.createElement('br'), noteData]
+					)
+				);
 			}
 		}
 	};
@@ -179,15 +255,18 @@ $(function TwinkleImage() {
 			const params = pageobj.getCallbackParameters();
 			// remove "move to Commons" tag - deletion-tagged files cannot be moved to Commons
 			text = text.replace(
-				/{{(mtc|(copy |move )?to ?commons|move to wikimedia commons|copy to wikimedia commons)[^}]*}}/gi,
+				/\{\{(mtc|(copy |move )?to ?commons|move to wikimedia commons|copy to wikimedia commons)[^}]*\}\}/gi,
 				''
 			);
 			// Adding discussion
 			if (params.type !== 'orphaned fair use') {
-				const qiuwen_page = new Morebits.wiki.page('Qiuwen:存废讨论/文件快速删除提报', '加入快速删除记录项');
-				qiuwen_page.setFollowRedirect(true);
-				qiuwen_page.setCallbackParameters(params);
-				qiuwen_page.load(Twinkle.image.callbacks.imageList);
+				const wikipedia_page = new Morebits.wiki.page(
+					'Qiuwen:存废讨论/文件快速删除提报',
+					wgULS('加入快速删除记录项', '加入快速刪除記錄項')
+				);
+				wikipedia_page.setFollowRedirect(true);
+				wikipedia_page.setCallbackParameters(params);
+				wikipedia_page.load(Twinkle.image.callbacks.imageList);
 			}
 			let tag = '';
 			switch (params.type) {
@@ -202,24 +281,25 @@ $(function TwinkleImage() {
 						.replace(/^\* $/m, '')}}}\n`;
 					break;
 				case 'replaceable fair use':
-					tag = `{{subst:${params.templatename}/auto|1=${params.f10_type}}}\n`;
+					tag = `{{subst:${params.templatename}/auto|1=${params.f4_type}}}\n`;
 					break;
 				default:
 					tag = `{{subst:${params.templatename}/auto}}\n`;
 					break;
 			}
 			const textNoSd = text.replace(
-				/{{\s*(db(-\w*)?|d|delete|(?:hang|hold)[ -]?on)\s*(\|(?:{{[^{}]*}}|[^{}])*)?}}\s*/gi,
+				/\{\{\s*(db(-\w*)?|d|delete|(?:hang|hold)[- ]?on)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/gi,
 				''
 			);
-			if (text !== textNoSd && confirm('在页面上找到快速删除模板，要移除吗？')) {
+			if (
+				text !== textNoSd &&
+				confirm(wgULS('在页面上找到快速删除模板，要移除吗？', '在頁面上找到快速刪除模板，要移除嗎？'))
+			) {
 				text = textNoSd;
 			}
 			pageobj.setPageText(tag + text);
-			let editSummary = '请求快速删除（';
-			editSummary +=
-				params.normalized ===
-				`[[QW:CSD#${params.normalized.toUpperCase()}|CSD ${params.normalized.toUpperCase()}]]`;
+			let editSummary = wgULS('请求快速删除（', '請求快速刪除（');
+			editSummary += `[[QW:CSD#${params.normalized.toUpperCase()}|CSD ${params.normalized.toUpperCase()}]]`;
 			editSummary += '）';
 			pageobj.setEditSummary(editSummary);
 			pageobj.setChangeTags(Twinkle.changeTags);
@@ -232,21 +312,45 @@ $(function TwinkleImage() {
 			const initialContrib = pageobj.getCreator();
 			// disallow warning yourself
 			if (initialContrib === mw.config.get('wgUserName')) {
-				pageobj.getStatusElement().warn(`您（${initialContrib}）创建了该页，跳过通知`);
+				pageobj
+					.getStatusElement()
+					.warn(`您（${initialContrib}${wgULS('）创建了该页，跳过通知', '）建立了該頁，跳過通知')}`);
 			} else {
-				const usertalkpage = new Morebits.wiki.page(
-					`User talk:${initialContrib}`,
-					`通知原始上传者 (${initialContrib})`
+				const talkPageName = `User talk:${initialContrib}`;
+				Morebits.wiki.flow.check(
+					talkPageName,
+					() => {
+						const flowpage = new Morebits.wiki.flow(
+							talkPageName,
+							`${wgULS('通知上传者（', '通知上傳者（') + initialContrib}）`
+						);
+						flowpage.setTopic(
+							wgULS('文件[[', '檔案[[') +
+								Morebits.pageNameNorm +
+								wgULS(']]的快速删除通知', ']]的快速刪除通知')
+						);
+						flowpage.setContent(`{{subst:Di-${params.templatename}-notice|1=${Morebits.pageNameNorm}}}`);
+						flowpage.newTopic();
+					},
+					() => {
+						const usertalkpage = new Morebits.wiki.page(
+							talkPageName,
+							`${wgULS('通知上传者（', '通知上傳者（') + initialContrib}）`
+						);
+						const notifytext = `\n{{subst:Di-${params.templatename}-notice|1=${Morebits.pageNameNorm}}}--~~~~`;
+						usertalkpage.setAppendText(notifytext);
+						usertalkpage.setEditSummary(
+							wgULS('通知：文件[[', '通知：檔案[[') +
+								Morebits.pageNameNorm +
+								wgULS(']]快速删除提名', ']]快速刪除提名')
+						);
+						usertalkpage.setChangeTags(Twinkle.changeTags);
+						usertalkpage.setCreateOption('recreate');
+						usertalkpage.setWatchlist(Twinkle.getPref('deliWatchUser'));
+						usertalkpage.setFollowRedirect(true, false);
+						usertalkpage.append();
+					}
 				);
-				new Morebits.wiki.page(`User talk:${initialContrib}`, `通知原始上传者 (${initialContrib})`);
-				const notifytext = `\n{{subst:Di-${params.templatename}-notice|1=${Morebits.pageNameNorm}}}--~~` + `~~`;
-				usertalkpage.setAppendText(notifytext);
-				usertalkpage.setEditSummary(`通知：文件[[${Morebits.pageNameNorm}]]快速删除提名`);
-				usertalkpage.setChangeTags(Twinkle.changeTags);
-				usertalkpage.setCreateOption('recreate');
-				usertalkpage.setWatchlist(Twinkle.getPref('deliWatchUser'));
-				usertalkpage.setFollowRedirect(true, false);
-				usertalkpage.append();
 			}
 			// add this nomination to the user's userspace log, if the user has enabled it
 			if (params.lognomination) {
@@ -256,8 +360,8 @@ $(function TwinkleImage() {
 		},
 		imageList: (pageobj) => {
 			const text = pageobj.getPageText();
-			// const params = pageobj.getCallbackParameters();
-			pageobj.setPageText(`${text}\n* [[:${Morebits.pageNameNorm}]]--~~` + `~~`);
+			// var params = pageobj.getCallbackParameters();
+			pageobj.setPageText(`${text}\n* [[:${Morebits.pageNameNorm}]]--~~~~`);
 			pageobj.setEditSummary(`加入[[${Morebits.pageNameNorm}]]`);
 			pageobj.setChangeTags(Twinkle.changeTags);
 			pageobj.setCreateOption('recreate');
