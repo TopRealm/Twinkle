@@ -1,6 +1,6 @@
 /**
  * @source <github.com/wikimedia-gadgets/xfdcloser/blob/master/bin/deploy.js>
- * @license MIT + CC-BY-SA-3.0 + CC-BY-4.0
+ * @license MIT + CC-BY-4.0
  */
 // This software is published under the following licenses. You may select the license of your choice.
 // - Note: Files published on Wikipedia, including previous versions of XFDcloser, are also available under
