@@ -218,10 +218,7 @@ $(function TwinkleImage() {
 		Morebits.wiki.actionCompleted.redirect = mw.config.get('wgPageName');
 		Morebits.wiki.actionCompleted.notice = wgULS('标记完成', '標記完成');
 		// Tagging image
-		const qiuwen_page = new Morebits.wiki.page(
-			mw.config.get('wgPageName'),
-			wgULS('加入删除标记', '加入刪除標記')
-		);
+		const qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'), wgULS('加入删除标记', '加入刪除標記'));
 		qiuwen_page.setCallbackParameters(params);
 		qiuwen_page.load(Twinkle.image.callbacks.taggingImage);
 		// Notifying uploader
