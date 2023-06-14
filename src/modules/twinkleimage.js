@@ -218,15 +218,15 @@ $(function TwinkleImage() {
 		Morebits.wiki.actionCompleted.redirect = mw.config.get('wgPageName');
 		Morebits.wiki.actionCompleted.notice = wgULS('标记完成', '標記完成');
 		// Tagging image
-		const wikipedia_page = new Morebits.wiki.page(
+		const qiuwen_page = new Morebits.wiki.page(
 			mw.config.get('wgPageName'),
 			wgULS('加入删除标记', '加入刪除標記')
 		);
-		wikipedia_page.setCallbackParameters(params);
-		wikipedia_page.load(Twinkle.image.callbacks.taggingImage);
+		qiuwen_page.setCallbackParameters(params);
+		qiuwen_page.load(Twinkle.image.callbacks.taggingImage);
 		// Notifying uploader
 		if (notify) {
-			wikipedia_page.lookupCreation(Twinkle.image.callbacks.userNotification);
+			qiuwen_page.lookupCreation(Twinkle.image.callbacks.userNotification);
 		} else {
 			// add to CSD log if desired
 			if (lognomination) {
@@ -260,13 +260,13 @@ $(function TwinkleImage() {
 			);
 			// Adding discussion
 			if (params.type !== 'orphaned fair use') {
-				const wikipedia_page = new Morebits.wiki.page(
+				const qiuwen_page = new Morebits.wiki.page(
 					'Qiuwen:存废讨论/文件快速删除提报',
 					wgULS('加入快速删除记录项', '加入快速刪除記錄項')
 				);
-				wikipedia_page.setFollowRedirect(true);
-				wikipedia_page.setCallbackParameters(params);
-				wikipedia_page.load(Twinkle.image.callbacks.imageList);
+				qiuwen_page.setFollowRedirect(true);
+				qiuwen_page.setCallbackParameters(params);
+				qiuwen_page.load(Twinkle.image.callbacks.imageList);
 			}
 			let tag = '';
 			switch (params.type) {
