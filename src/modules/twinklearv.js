@@ -10,7 +10,7 @@ $(function TwinkleARV() {
 		if (!username || username === mw.config.get('wgUserName')) {
 			return;
 		}
-		const windowTitle = mw.util.isIPAddress(username) ? '报告IP地址给管理员' : '报告用户给管理员';
+		const windowTitle = '报告用户给管理员';
 		Twinkle.addPortletLink(
 			() => {
 				Twinkle.arv.callback(username);
