@@ -2384,15 +2384,5 @@ $(function TwinkleBlock() {
 		pageobj.setWatchlist(Twinkle.getPref('watchBlockNotices'));
 		pageobj.save();
 	};
-	Twinkle.block.callback.main_flow = (flowobj) => {
-		const params = flowobj.getCallbackParameters();
-		params.indefinite = /indef|infinity|never|\*|max/.test(params.expiry);
-		params.expiry = typeof params.template_expiry !== 'undefined' ? params.template_expiry : params.expiry;
-		const title = params.usertalk_summary;
-		const content = Twinkle.block.callback.getBlockNoticeWikitext(params, true);
-		flowobj.setTopic(title);
-		flowobj.setContent(content);
-		flowobj.newTopic();
-	};
 	Twinkle.addInitCallback(Twinkle.block, 'block');
-})(jQuery);
+});
