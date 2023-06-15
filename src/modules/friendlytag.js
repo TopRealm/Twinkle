@@ -678,11 +678,11 @@ $(function FriendlyTag() {
 					value: [
 						{
 							tag: 'Cleanup',
-							description: '可能需要进行清理，以符合维基百科的质量标准',
+							description: '可能需要进行清理，以符合求闻百科的质量标准',
 						},
 						{
 							tag: 'Cleanup rewrite',
-							description: '不符合维基百科的质量标准，需要完全重写',
+							description: '不符合求闻百科的质量标准，需要完全重写',
 						},
 						{
 							tag: 'Cleanup-jargon',
@@ -703,7 +703,7 @@ $(function FriendlyTag() {
 						},
 						{
 							tag: 'External links',
-							description: '使用外部链接的方式可能不符合维基百科的方针或指引',
+							description: '使用外部链接的方式可能不符合求闻百科的方针或指引',
 						},
 						{
 							tag: 'Non-free',
@@ -845,7 +845,7 @@ $(function FriendlyTag() {
 					value: [
 						{
 							tag: 'BLPdispute',
-							description: '可能违反了维基百科关于生者传记的方针',
+							description: '可能违反了求闻百科关于生者传记的方针',
 						},
 						{
 							tag: 'BLPsources',
@@ -1056,7 +1056,7 @@ $(function FriendlyTag() {
 				},
 				{
 					tag: '快捷方式重定向',
-					description: '维基百科快捷方式',
+					description: '求闻百科快捷方式',
 				},
 			],
 		},
