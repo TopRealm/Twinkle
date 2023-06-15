@@ -756,10 +756,7 @@ $(function TwinkleFluff() {
 					}
 					userHasAlreadyConfirmedAction = true;
 					summary = Twinkle.fluff.formatSummary(
-						window.wgULS(
-							'回退$USER做出的出于[[WP:AGF|善意]]的编辑',
-							'回退$USER做出的出於[[WP:AGF|善意]]的編輯'
-						),
+						window.wgULS('回退$USER做出的出于善意的编辑', '回退$USER做出的出於善意的編輯'),
 						params.userHidden ? null : params.user,
 						extra_summary
 					);
@@ -794,10 +791,7 @@ $(function TwinkleFluff() {
 					break;
 			}
 			if (
-				(Twinkle.getPref('confirmOnFluff') ||
-					// Mobile user agent taken from [[en:MediaWiki:Gadget-confirmationRollback-mobile.js]]
-					(Twinkle.getPref('confirmOnMobileFluff') &&
-						/Android|webOS|iPhone|iPad|iPod|BlackBerry|Mobile|Opera Mini/i.test(navigator.userAgent))) &&
+				Twinkle.getPref('confirmOnFluff') &&
 				!userHasAlreadyConfirmedAction &&
 				!confirm(window.wgULS('回退页面：您确定吗？', '回退頁面：您確定嗎？'))
 			) {
