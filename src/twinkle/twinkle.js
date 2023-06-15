@@ -27,7 +27,7 @@
 	 * If name is not given, module is loaded unconditionally.
 	 */
 	Twinkle.addInitCallback = (func, name) => {
-		Twinkle.initCallbacks.push({func: func, name: name});
+		Twinkle.initCallbacks.push({func, name});
 	};
 	Twinkle.defaultConfig = {};
 	/**
@@ -508,8 +508,8 @@
 			}
 		};
 		// Initialise modules that were saved in initCallbacks array
-		Twinkle.initCallbacks.forEach((module) => {
-			Twinkle.addInitCallback(module.func, module.name);
+		Twinkle.initCallbacks.forEach(({func, name}) => {
+			Twinkle.addInitCallback(func, name);
 		});
 		// Increases text size in Twinkle dialogs, if so configured
 		if (Twinkle.getPref('dialogLargeFont')) {
@@ -526,7 +526,7 @@
 	/** Twinkle-specific utility functions shared by multiple modules */
 	// Used in batch, unlink, and deprod to sort pages by namespace, as
 	// json formatversion=2 sorts by pageid instead (#1251)
-	Twinkle.sortByNamespace = (first, second) => first.ns - second.ns || (first.title > second.title ? 1 : -1);
+	Twinkle.sortByNamespace = ({ns1, title1}, {ns2, title2}) => ns1 - ns2 || (title1 > title2 ? 1 : -1);
 	// Used in unlink listings to link the page title
 	Twinkle.generateBatchPageLinks = (checkbox) => {
 		const $checkbox = $(checkbox);

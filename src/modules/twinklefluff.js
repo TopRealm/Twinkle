@@ -273,11 +273,11 @@ $(function TwinkleFluff() {
 						label: window.wgULS('选择回退理由', '選擇回退理由'),
 						value: '',
 					});
-					$(Twinkle.getPref('customRevertSummary')).each((_, e) => {
+					$(Twinkle.getPref('customRevertSummary')).each((_, {label, value}) => {
 						revertsummary.append({
 							type: 'option',
-							label: e.label,
-							value: e.value,
+							label,
+							value,
 						});
 					});
 					revertToRevision.appendChild(revertsummary.render().childNodes[0]);
@@ -356,12 +356,12 @@ $(function TwinkleFluff() {
 			$('#catlinks').remove();
 		}
 		const params = {
-			type: type,
+			type,
 			user: vandal,
 			userHidden: !vandal,
-			pagename: pagename,
-			revid: revid,
-			summary: summary,
+			pagename,
+			revid,
+			summary,
 		};
 		const query = {
 			action: 'query',
@@ -405,12 +405,12 @@ $(function TwinkleFluff() {
 			query,
 			Twinkle.fluff.callbacks.toRevision
 		);
-		qiuwen_api.params = {rev: oldrev, summary: summary};
+		qiuwen_api.params = {rev: oldrev, summary};
 		qiuwen_api.post();
 	};
 	Twinkle.fluff.callbacks = {
-		toRevision: (apiobj) => {
-			const xmlDoc = apiobj.responseXML;
+		toRevision: ({responseXML, params, statelem}) => {
+			const xmlDoc = responseXML;
 			const lastrevid = Number.parseInt($(xmlDoc).find('page').attr('lastrevid'), 10);
 			const touched = $(xmlDoc).find('page').attr('touched');
 			const loadtimestamp = $(xmlDoc).find('api').attr('curtimestamp');
@@ -418,8 +418,8 @@ $(function TwinkleFluff() {
 			const revertToRevID = Number.parseInt($(xmlDoc).find('rev').attr('revid'), 10);
 			const revertToUser = $(xmlDoc).find('rev').attr('user');
 			const revertToUserHidden = typeof $(xmlDoc).find('rev').attr('userhidden') === 'string';
-			if (revertToRevID !== apiobj.params.rev) {
-				apiobj.statelem.error(
+			if (revertToRevID !== params.rev) {
+				statelem.error(
 					window.wgULS(
 						'抓取到的修订版本与请求的修订版本不符，取消。',
 						'抓取到的修訂版本與請求的修訂版本不符，取消。'
@@ -429,10 +429,10 @@ $(function TwinkleFluff() {
 			}
 			const optional_summary = prompt(
 				`${window.wgULS('请输入回退理由：', '請輸入回退理由：')}                                `,
-				apiobj.params.summary
+				params.summary
 			); // padded out to widen prompt in Firefox
 			if (optional_summary === null) {
-				apiobj.statelem.error(window.wgULS('由用户取消。', '由使用者取消。'));
+				statelem.error(window.wgULS('由用户取消。', '由使用者取消。'));
 				return;
 			}
 			const summary = Twinkle.fluff.formatSummary(
@@ -443,7 +443,7 @@ $(function TwinkleFluff() {
 			const query = {
 				action: 'edit',
 				title: mw.config.get('wgPageName'),
-				summary: summary,
+				summary,
 				tags: Twinkle.changeTags,
 				token: csrftoken,
 				undo: lastrevid,
@@ -474,9 +474,9 @@ $(function TwinkleFluff() {
 				window.wgULS('保存回退内容', '儲存回退內容'),
 				query,
 				Twinkle.fluff.callbacks.complete,
-				apiobj.statelem
+				statelem
 			);
-			qiuwen_api.params = apiobj.params;
+			qiuwen_api.params = params;
 			qiuwen_api.post();
 		},
 		main: (apiobj) => {
@@ -812,7 +812,7 @@ $(function TwinkleFluff() {
 			const query = {
 				action: 'edit',
 				title: params.pagename,
-				summary: summary,
+				summary,
 				tags: Twinkle.changeTags,
 				token: csrftoken,
 				undo: lastrevid,

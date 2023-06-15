@@ -197,10 +197,10 @@ $(function TwinkleImage() {
 			!Twinkle.getPref('noLogOnSpeedyNomination').includes(csdcrit.toLowerCase());
 		const templatename = type;
 		const params = {
-			type: type,
-			templatename: templatename,
+			type,
+			templatename,
 			normalized: csdcrit,
-			lognomination: lognomination,
+			lognomination,
 		};
 		if (csdcrit === 'f1') {
 			params.f1_source = target['type.f1_source'].value;
