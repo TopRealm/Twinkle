@@ -1307,39 +1307,25 @@ $(function TwinkleSpeedy() {
 							// quick hack to prevent excessive unwanted notifications. Should actually be configurable on recipient page...
 						} else {
 							const talkPageName = `User talk:${initialContrib}`;
-							Morebits.wiki.flow.check(
+							const usertalkpage = new Morebits.wiki.page(
 								talkPageName,
-								() => {
-									const flowpage = new Morebits.wiki.flow(
-										talkPageName,
-										`通知页面创建者（${initialContrib}）`
-									);
-									flowpage.setTopic(`[[:${Morebits.pageNameNorm}]]的快速删除通知`);
-									flowpage.setContent(`{{subst:db-notice|target=${Morebits.pageNameNorm}|flow=yes}}`);
-									flowpage.newTopic();
-								},
-								() => {
-									const usertalkpage = new Morebits.wiki.page(
-										talkPageName,
-										`通知页面创建者（${initialContrib}）`
-									);
-									let notifytext;
-									notifytext = `\n{{subst:db-notice|target=${Morebits.pageNameNorm}`;
-									notifytext += '}}--~~' + '~~';
-									let editsummary = '通知：';
-									editsummary += params.normalizeds.includes('g8')
-										? // no article name in summary for G6 deletions
-										  '攻击性页面'
-										: `页面[[${Morebits.pageNameNorm}]]`;
-									editsummary += '快速删除提名';
-									usertalkpage.setAppendText(notifytext);
-									usertalkpage.setEditSummary(editsummary);
-									usertalkpage.setChangeTags(Twinkle.changeTags);
-									usertalkpage.setCreateOption('recreate');
-									usertalkpage.setFollowRedirect(true, false);
-									usertalkpage.append();
-								}
+								`通知页面创建者（${initialContrib}）`
 							);
+							let notifytext;
+							notifytext = `\n{{subst:db-notice|target=${Morebits.pageNameNorm}`;
+							notifytext += '}}--~~' + '~~';
+							let editsummary = '通知：';
+							editsummary += params.normalizeds.includes('g8')
+								? // no article name in summary for G6 deletions
+								  '攻击性页面'
+								: `页面[[${Morebits.pageNameNorm}]]`;
+							editsummary += '快速删除提名';
+							usertalkpage.setAppendText(notifytext);
+							usertalkpage.setEditSummary(editsummary);
+							usertalkpage.setChangeTags(Twinkle.changeTags);
+							usertalkpage.setCreateOption('recreate');
+							usertalkpage.setFollowRedirect(true, false);
+							usertalkpage.append();
 						}
 						// add this nomination to the user's userspace log, if the user has enabled it
 						if (params.lognomination) {

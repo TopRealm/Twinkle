@@ -314,40 +314,22 @@ $(function TwinkleImage() {
 					.warn(`您（${initialContrib}${wgULS('）创建了该页，跳过通知', '）建立了該頁，跳過通知')}`);
 			} else {
 				const talkPageName = `User talk:${initialContrib}`;
-				Morebits.wiki.flow.check(
+				const usertalkpage = new Morebits.wiki.page(
 					talkPageName,
-					() => {
-						const flowpage = new Morebits.wiki.flow(
-							talkPageName,
-							`${wgULS('通知上传者（', '通知上傳者（') + initialContrib}）`
-						);
-						flowpage.setTopic(
-							wgULS('文件[[', '檔案[[') +
-								Morebits.pageNameNorm +
-								wgULS(']]的快速删除通知', ']]的快速刪除通知')
-						);
-						flowpage.setContent(`{{subst:Di-${params.templatename}-notice|1=${Morebits.pageNameNorm}}}`);
-						flowpage.newTopic();
-					},
-					() => {
-						const usertalkpage = new Morebits.wiki.page(
-							talkPageName,
-							`${wgULS('通知上传者（', '通知上傳者（') + initialContrib}）`
-						);
-						const notifytext = `\n{{subst:Di-${params.templatename}-notice|1=${Morebits.pageNameNorm}}}--~~~~`;
-						usertalkpage.setAppendText(notifytext);
-						usertalkpage.setEditSummary(
-							wgULS('通知：文件[[', '通知：檔案[[') +
-								Morebits.pageNameNorm +
-								wgULS(']]快速删除提名', ']]快速刪除提名')
-						);
-						usertalkpage.setChangeTags(Twinkle.changeTags);
-						usertalkpage.setCreateOption('recreate');
-						usertalkpage.setWatchlist(Twinkle.getPref('deliWatchUser'));
-						usertalkpage.setFollowRedirect(true, false);
-						usertalkpage.append();
-					}
+					`${wgULS('通知上传者（', '通知上傳者（') + initialContrib}）`
 				);
+				const notifytext = `\n{{subst:Di-${params.templatename}-notice|1=${Morebits.pageNameNorm}}}--~~~~`;
+				usertalkpage.setAppendText(notifytext);
+				usertalkpage.setEditSummary(
+					wgULS('通知：文件[[', '通知：檔案[[') +
+						Morebits.pageNameNorm +
+						wgULS(']]快速删除提名', ']]快速刪除提名')
+				);
+				usertalkpage.setChangeTags(Twinkle.changeTags);
+				usertalkpage.setCreateOption('recreate');
+				usertalkpage.setWatchlist(Twinkle.getPref('deliWatchUser'));
+				usertalkpage.setFollowRedirect(true, false);
+				usertalkpage.append();
 			}
 			// add this nomination to the user's userspace log, if the user has enabled it
 			if (params.lognomination) {
