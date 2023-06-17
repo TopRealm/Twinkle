@@ -642,7 +642,7 @@ $(function TwinkleXFD() {
 		switch (type) {
 			case 'afd': {
 				// AFD
-				logpage = `Qiuwen:存废讨论/记录/${date.format('YYYY/MM/DD', 'utc')}`;
+				logpage = `Qiuwen talk:存废讨论/记录/${date.format('YYYY/MM/DD', 'utc')}`;
 				lognomination =
 					Twinkle.getPref('logXfdNominations') && !Twinkle.getPref('noLogOnXfdNomination').includes(xfdcat);
 				params = {
@@ -672,7 +672,7 @@ $(function TwinkleXFD() {
 			}
 			case 'ffd':
 				// FFD
-				logpage = `Qiuwen:存废讨论/记录/${date.format('YYYY/MM/DD', 'utc')}`;
+				logpage = `Qiuwen talk:存废讨论/记录/${date.format('YYYY/MM/DD', 'utc')}`;
 				lognomination =
 					Twinkle.getPref('logXfdNominations') && !Twinkle.getPref('noLogOnXfdNomination').includes('ffd');
 				params = {

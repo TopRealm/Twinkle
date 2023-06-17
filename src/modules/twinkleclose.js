@@ -8,7 +8,7 @@ $(function TwinkleClose() {
 	 */
 	Twinkle.close = () => {
 		if (Twinkle.getPref('XfdClose') === 'hide' ||
-			!/^Qiuwen:存废讨论\/记录(?:\/\d+){3}$/.test(mw.config.get('wgPageName'))) {
+			!/^Qiuwen([_ ]talk)?:存废讨论\/记录(?:\/\d+){3}$/.test(mw.config.get('wgPageName'))) {
 			return;
 		}
 		mw.hook('wikipage.content').add((item) => {
