@@ -1087,25 +1087,26 @@ $(function FriendlyTag() {
 				},
 			],
 		},
+		/*
 		{
 			key: '维基共享资源相关标签',
 			value: [
 				{
-					label: '{{Copy to Wikimedia Commons}}：' + '自由著作权文件应该被移动至维基共享资源',
-					value: 'Copy to Wikimedia Commons',
+					label: '{{Copy to Qiuwen Share}}：' + '自由著作权文件应该被移动至维基共享资源',
+					value: 'Copy to Qiuwen Share',
 				},
 				{
-					label: '{{Do not move to Commons}}：' + '不要移动至维基共享资源',
-					value: 'Do not move to Commons',
+					label: '{{Do not move to Qiuwen Share}}：' + '不要移动至维基共享资源',
+					value: 'Do not move to Qiuwen Share',
 					subgroup: {
 						type: 'input',
-						name: 'DoNotMoveToCommons_reason',
+						name: 'DoNotMoveToQiuwenShare_reason',
 						label: '原因：',
 						tooltip: '输入不应该将该图像移动到维基共享资源的原因（必填）。',
 					},
 				},
 				{
-					label: '{{Keep local}}：' + '请求在本地保留维基共享资源的文件副本',
+					label: '{{Keep local}}：' + '请求在本地保留求闻共享资源的文件副本',
 					value: 'Keep local',
 					subgroup: [
 						{
@@ -1123,8 +1124,8 @@ $(function FriendlyTag() {
 					],
 				},
 				{
-					label: '{{Now Commons}}：' + '文件已被复制到维基共享资源（CSD F7）',
-					value: 'Now Commons',
+					label: '{{Now Qiuwen Share}}：' + '文件已被复制到求闻共享资源',
+					value: 'Now Qiuwen Share',
 					subgroup: {
 						type: 'input',
 						name: 'nowcommonsName',
@@ -1134,6 +1135,7 @@ $(function FriendlyTag() {
 				},
 			],
 		},
+		*/
 		{
 			key: '清理标签',
 			value: [
@@ -1736,10 +1738,10 @@ $(function FriendlyTag() {
 				let tagtext = '';
 				let currentTag;
 				$.each(params.tags, (k, tag) => {
-					// when other commons-related tags are placed, remove "move to Commons" tag
-					if (['Keep local', 'Now Commons', 'Do not move to Commons'].includes(tag)) {
+					// when other commons-related tags are placed, remove "move to Share" tag
+					if (['Keep local', 'Now Qiuwen Share', 'Do not move to Qiuwen Share'].includes(tag)) {
 						text = text.replace(
-							/{{(mtc|(copy |move )?to ?commons|move to wikimedia commons|copy to wikimedia commons)[^}]*}}/gi,
+							/{{(mtc|(copy |move )?to ?share|move to qiuwen share|copy to qiuwen share)[^}]*}}/gi,
 							''
 						);
 					}
@@ -1751,7 +1753,7 @@ $(function FriendlyTag() {
 					}
 					currentTag = tag;
 					switch (tag) {
-						case 'Now Commons':
+						case 'Now Qiuwen Share':
 							currentTag = `subst:${currentTag}`; // subst
 							if (params.nowcommonsName !== '') {
 								currentTag += `|1=${params.nowcommonsName}`;
@@ -1778,12 +1780,14 @@ $(function FriendlyTag() {
 						case 'Obsolete':
 							currentTag += `|1=${params[`${tag.replace(/ /g, '_')}File`]}`;
 							break;
-						case 'Do not move to Commons':
-							currentTag += `|reason=${params.DoNotMoveToCommons_reason}`;
+						/*
+						case 'Do not move to Qiuwen Share':
+							currentTag += `|reason=${params.DoNotMoveToQiuwenShare_reason}`;
 							break;
-						case 'Copy to Wikimedia Commons':
+						case 'Copy to Qiuwen Share':
 							currentTag += `|human=${mw.config.get('wgUserName')}`;
 							break;
+						*/
 						default:
 							break; // don't care
 					}
@@ -1882,7 +1886,7 @@ $(function FriendlyTag() {
 				) {
 					return;
 				}
-				if (checkParameter('Do not move to Commons', 'DoNotMoveToCommons_reason')) {
+				if (checkParameter('Do not move to Qiuwen Share', 'DoNotMoveToQiuwenShare_reason')) {
 					return;
 				}
 				break;

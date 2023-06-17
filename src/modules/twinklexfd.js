@@ -4,15 +4,15 @@ $(function TwinkleXFD() {
 	 * twinklexfd.js: XFD module
 	 * Mode of invocation: Tab ("XFD")
 	 * Active on: Existing, non-special pages,
-	 * except for file pages with no local (non-Commons) file
+	 * except for file pages with no local file
 	 * which are not redirects
 	 */
 	Twinkle.xfd = () => {
 		// Disable on:
 		// * special pages
 		// * non-existent pages
-		// * files on Commons, whether there is a local page or not (unneeded local pages of files on Commons are eligible for CSD F2)
-		// * file pages without actual files (these are eligible for CSD G8)
+		// * non-local files, whether there is a local page or not (unneeded local pages of files on Share are eligible for CSD F2)
+		// * file pages without actual files
 		if (
 			mw.config.get('wgNamespaceNumber') < 0 ||
 			!mw.config.get('wgArticleId') ||

@@ -4,14 +4,14 @@ $(function TwinkleCopyvio() {
 	 * twinklecopyvio.js: Copyvio module
 	 * Mode of invocation:	Tab ("Copyvio")
 	 * Active on: Existing, non-special pages, except for file pages
-	 * with no local (non-Commons) file which are not redirects
+	 * with no local file which are not redirects
 	 * Config directives in:  TwinkleConfig
 	 */
 	Twinkle.copyvio = () => {
 		// Disable on:
 		// * special pages
 		// * non-existent pages
-		// * files on Commons, whether there is a local page or not (unneeded local pages of files on Commons are eligible for CSD F2)
+		// * non-local files, whether there is a local page or not (unneeded local pages of non-local files are eligible for CSD F2)
 		// * file pages without actual files (these are eligible for CSD G8)
 		if (
 			mw.config.get('wgNamespaceNumber') < 0 ||

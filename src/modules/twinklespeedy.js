@@ -1071,7 +1071,7 @@ $(function TwinkleSpeedy() {
 					Morebits.status.info($bigtext[0], $link[0]);
 				}
 				// promote Unlink tool
-				// f7: {{NowCommons}}
+				// f7: {{NowShare}}
 				if (mw.config.get('wgNamespaceNumber') === 6 && params.normalized !== 'f7') {
 					$link = $('<a>')
 						.attr('href', '#')
@@ -1251,9 +1251,9 @@ $(function TwinkleSpeedy() {
 					''
 				);
 				if (mw.config.get('wgNamespaceNumber') === 6) {
-					// remove "move to Commons" tag - deletion-tagged files cannot be moved to Commons
+					// remove "move to Share" tag - deletion-tagged files cannot be moved to Share
 					text = text.replace(
-						/{{(mtc|(copy |move )?to ?commons|move to qiuwen share|copy to qiuwen share)[^}]*}}/gi,
+						/{{(mtc|(copy |move )?to ?share|move to qiuwen share|copy to qiuwen share)[^}]*}}/gi,
 						''
 					);
 				}

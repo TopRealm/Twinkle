@@ -3,7 +3,7 @@ $(function TwinkleImage() {
 	/**
 	 * twinkleimage.js: Image CSD module
 	 * Mode of invocation: Tab ("DI")
-	 * Active on: Local nonredirect file pages (not on Commons)
+	 * Active on: Local nonredirect file pages (not on Share)
 	 */
 	Twinkle.image = () => {
 		if (
@@ -250,9 +250,9 @@ $(function TwinkleImage() {
 		taggingImage: (pageobj) => {
 			let text = pageobj.getPageText();
 			const params = pageobj.getCallbackParameters();
-			// remove "move to Commons" tag - deletion-tagged files cannot be moved to Commons
+			// remove "move to Share" tag - deletion-tagged files cannot be moved to Share
 			text = text.replace(
-				/\{\{(mtc|(copy |move )?to ?commons|move to wikimedia commons|copy to wikimedia commons)[^}]*\}\}/gi,
+				/\{\{(mtc|(copy |move )?to ?share|move to qiuwen share|copy to qiuwen share)[^}]*\}\}/gi,
 				''
 			);
 			// Adding discussion
