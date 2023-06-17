@@ -253,7 +253,7 @@
 	 * @param {string} [eventType=submit] - Type of the event.
 	 */
 	Morebits.quickForm = function QuickForm(event, eventType) {
-		this.root = new Morebits.quickForm.element({type: 'form', event, eventType});
+		this.root = new Morebits.quickForm.element({type: 'form', event: event, eventType: eventType});
 	};
 	/**
 	 * Renders the HTML output of the quickForm.
@@ -549,20 +549,20 @@
 							subgroup.className = 'quickformSubgroup';
 							subnode.subgroup = subgroup;
 							subnode.shown = false;
-							event = ({target}) => {
-								if (target.checked) {
-									target.parentNode.appendChild(target.subgroup);
-									if (target.type === 'radio') {
-										const name = target.name;
-										if (target.form.names[name] !== undefined) {
-											target.form.names[name].parentNode.removeChild(
-												target.form.names[name].subgroup
+							event = (e) => {
+								if (e.target.checked) {
+									e.target.parentNode.appendChild(e.target.subgroup);
+									if (e.target.type === 'radio') {
+										const name = e.target.name;
+										if (e.target.form.names[name] !== undefined) {
+											e.target.form.names[name].parentNode.removeChild(
+												e.target.form.names[name].subgroup
 											);
 										}
-										target.form.names[name] = target;
+										e.target.form.names[name] = e.target;
 									}
 								} else {
-									target.parentNode.removeChild(target.subgroup);
+									e.target.parentNode.removeChild(e.target.subgroup);
 								}
 							};
 							subnode.addEventListener('change', event, true);
@@ -570,15 +570,15 @@
 								subnode.parentNode.appendChild(subgroup);
 							}
 						} else if (data.type === 'radio') {
-							event = ({target}) => {
-								if (target.checked) {
-									const name = target.name;
-									if (target.form.names[name] !== undefined) {
-										target.form.names[name].parentNode.removeChild(
-											target.form.names[name].subgroup
+							event = (e) => {
+								if (e.target.checked) {
+									const name = e.target.name;
+									if (e.target.form.names[name] !== undefined) {
+										e.target.form.names[name].parentNode.removeChild(
+											e.target.form.names[name].subgroup
 										);
 									}
-									delete target.form.names[name];
+									delete e.target.form.names[name];
 								}
 							};
 							subnode.addEventListener('change', event, true);
@@ -878,10 +878,10 @@
 	 * @param {HTMLFormElement} form
 	 * @returns {Object} With field names as keys, input data as values.
 	 */
-	Morebits.quickForm.getInputData = ({elements}) => {
+	Morebits.quickForm.getInputData = (form) => {
 		const result = {};
-
-		for (const field of elements) {
+		for (let i = 0; i < form.elements.length; i++) {
+			const field = form.elements[i];
 			if (field.disabled || !field.name || !field.type || field.type === 'submit' || field.type === 'button') {
 				continue;
 			}
@@ -918,7 +918,6 @@
 					break;
 			}
 		}
-
 		return result;
 	};
 	/**
@@ -1611,21 +1610,21 @@
 			},
 		},
 		/** Underline matched part of options. */
-		highlightSearchMatches: function ({loading, text}) {
+		highlightSearchMatches: function (data) {
 			const searchTerm = Morebits.select2SearchQuery;
-			if (!searchTerm || loading) {
-				return text;
+			if (!searchTerm || data.loading) {
+				return data.text;
 			}
-			const idx = text.toUpperCase().indexOf(searchTerm.toUpperCase());
+			const idx = data.text.toUpperCase().indexOf(searchTerm.toUpperCase());
 			if (idx < 0) {
-				return text;
+				return data.text;
 			}
 			return $('<span>').append(
-				text.slice(0, idx),
+				data.text.slice(0, idx),
 				$('<span>')
 					.css('text-decoration', 'underline')
-					.text(text.slice(idx, idx + searchTerm.length)),
-				text.slice(idx + searchTerm.length)
+					.text(data.text.slice(idx, idx + searchTerm.length)),
+				data.text.slice(idx + searchTerm.length)
 			);
 		},
 		/** Intercept query as it is happening, for use in highlightSearchMatches. */
@@ -1988,22 +1987,22 @@
 				h: h12,
 				A: amOrPm,
 				mm: pad(m),
-				m,
+				m: m,
 				ss: pad(s),
-				s,
+				s: s,
 				SSS: pad(ms, 3),
 				dddd: udate.getDayName(),
 				ddd: udate.getDayNameAbbrev(),
 				d: udate.getDay(),
 				DD: pad(D),
-				D,
+				D: D,
 				MMMM: udate.getMonthName(),
 				MMM: udate.getMonthNameAbbrev(),
 				MM: pad(M),
-				M,
+				M: M,
 				YYYY: Y,
 				YY: pad(Y % 100),
-				Y,
+				Y: Y,
 			};
 			const unbinder = new Morebits.unbinder(formatstr); // escape stuff between [...]
 			unbinder.unbind('\\[', '\\]');
@@ -2080,8 +2079,8 @@
 	Object.getOwnPropertyNames(Date.prototype).forEach((func) => {
 		// Exclude methods that collide with PageTriage's Date.js external, which clobbers native Date
 		if (!['add', 'getDayName', 'getMonthName'].includes(func)) {
-			Morebits.date.prototype[func] = function (...args) {
-				return this._d[func](...Array.prototype.slice.call(args));
+			Morebits.date.prototype[func] = function () {
+				return this._d[func].apply(this._d, Array.prototype.slice.call(arguments));
 			};
 		}
 	});
@@ -2439,7 +2438,7 @@
 			type: 'csrf',
 			format: 'json',
 		});
-		return tokenApi.post().then(({response}) => response.query.tokens.csrftoken);
+		return tokenApi.post().then((apiobj) => apiobj.response.query.tokens.csrftoken);
 	};
 	/* **************** Morebits.wiki.page **************** */
 	/**
@@ -2503,7 +2502,7 @@
 		 */
 		const ctx = {
 			// backing fields for public properties
-			pageName,
+			pageName: pageName,
 			pageExists: false,
 			editSummary: null,
 			changeTags: null,
@@ -3129,13 +3128,13 @@
 		 * @param {string} [expiry=infinity]
 		 */
 		this.setEditProtection = (level, expiry) => {
-			ctx.protectEdit = {level, expiry: expiry || 'infinity'};
+			ctx.protectEdit = {level: level, expiry: expiry || 'infinity'};
 		};
 		this.setMoveProtection = (level, expiry) => {
-			ctx.protectMove = {level, expiry: expiry || 'infinity'};
+			ctx.protectMove = {level: level, expiry: expiry || 'infinity'};
 		};
 		this.setCreateProtection = (level, expiry) => {
-			ctx.protectCreate = {level, expiry: expiry || 'infinity'};
+			ctx.protectCreate = {level: level, expiry: expiry || 'infinity'};
 		};
 		this.setCascadingProtection = (flag) => {
 			ctx.protectCascade = !!flag;
@@ -3567,7 +3566,7 @@
 			// extract protection info, to alert admins when they are about to edit a protected page
 			// Includes cascading protection
 			if (Morebits.userIsSysop) {
-				const editProt = page.protection.filter(({type, level}) => type === 'edit' && level === 'sysop').pop();
+				const editProt = page.protection.filter((pr) => pr.type === 'edit' && pr.level === 'sysop').pop();
 				if (editProt) {
 					ctx.fullyProtected = editProt.expiry;
 				} else {
@@ -3610,11 +3609,11 @@
 			ctx.onLoadSuccess(this); // invoke callback
 		};
 		// helper function to parse the page name returned from the API
-		const fnCheckPageName = function ({pages, redirects}, onFailure) {
+		const fnCheckPageName = function (response, onFailure) {
 			if (!onFailure) {
 				onFailure = emptyFunction;
 			}
-			const page = pages && pages[0];
+			const page = response.pages && response.pages[0];
 			if (page) {
 				// check for invalid titles
 				if (page.invalid) {
@@ -3624,7 +3623,7 @@
 				}
 				// retrieve actual title of the page after normalization and redirects
 				const resolvedName = page.title;
-				if (redirects) {
+				if (response.redirects) {
 					// check for cross-namespace redirect:
 					const origNs = new mw.Title(ctx.pageName).namespace;
 					const newNs = new mw.Title(resolvedName).namespace;
@@ -3926,8 +3925,8 @@
 		 * @param {string} response - The response document from the API call.
 		 * @returns {boolean}
 		 */
-		const fnProcessChecks = function (action, onFailure, {pages, tokens}) {
-			const missing = pages[0].missing;
+		const fnProcessChecks = function (action, onFailure, response) {
+			const missing = response.pages[0].missing;
 			// No undelete as an existing page could have deleted revisions
 			const actionMissing = missing && ['delete', 'move'].includes(action);
 			const protectMissing = action === 'protect' && missing && (ctx.protectEdit || ctx.protectMove);
@@ -3948,9 +3947,13 @@
 			// extract protection info
 			let editprot;
 			if (action === 'undelete') {
-				editprot = pages[0].protection.filter(({type, level}) => type === 'create' && level === 'sysop').pop();
+				editprot = response.pages[0].protection
+					.filter((pr) => pr.type === 'create' && pr.level === 'sysop')
+					.pop();
 			} else if (action === 'delete' || action === 'move') {
-				editprot = pages[0].protection.filter(({type, level}) => type === 'edit' && level === 'sysop').pop();
+				editprot = response.pages[0].protection
+					.filter((pr) => pr.type === 'edit' && pr.level === 'sysop')
+					.pop();
 			}
 			if (
 				editprot &&
@@ -3977,7 +3980,7 @@
 				onFailure(this);
 				return false;
 			}
-			if (!tokens.csrftoken) {
+			if (!response.tokens.csrftoken) {
 				ctx.statusElement.error(wgULS('无法获取令牌。', '無法取得權杖。'));
 				onFailure(this);
 				return false;
@@ -4004,7 +4007,7 @@
 				action: 'move',
 				from: pageTitle,
 				to: ctx.moveDestination,
-				token,
+				token: token,
 				reason: ctx.editSummary,
 				watchlist: ctx.watchlistOption,
 				format: 'json',
@@ -4087,7 +4090,7 @@
 			const query = {
 				action: 'delete',
 				title: pageTitle,
-				token,
+				token: token,
 				reason: ctx.editSummary,
 				watchlist: ctx.watchlistOption,
 				format: 'json',
@@ -4150,7 +4153,7 @@
 			const query = {
 				action: 'undelete',
 				title: pageTitle,
-				token,
+				token: token,
 				reason: ctx.editSummary,
 				watchlist: ctx.watchlistOption,
 				format: 'json',
@@ -4244,7 +4247,7 @@
 			}
 			// Default to pre-existing cascading protection if unchanged (similar to above)
 			if (ctx.protectCascade === null) {
-				ctx.protectCascade = !!prs.filter(({cascade}) => cascade).length;
+				ctx.protectCascade = !!prs.filter((pr) => pr.cascade).length;
 			}
 			// Warn if cascading protection being applied with an invalid protection level,
 			// which for edit protection will cause cascading to be silently stripped
@@ -4292,7 +4295,7 @@
 			const query = {
 				action: 'protect',
 				title: pageTitle,
-				token,
+				token: token,
 				protections: protections.join('|'),
 				expiry: expirys.join('|'),
 				reason: ctx.editSummary,
@@ -4368,7 +4371,7 @@
 				pst: true, // PST = pre-save transform; this makes substitution work properly
 				preview: true,
 				text: wikitext,
-				title: pageTitle || pageName,
+				title: pageTitle || pageName, // zhwiki
 				disablelimitreport: true,
 				disableeditsection: true,
 				uselang: mw.config.get('wgUserLanguage'), // Use wgUserLanguage for preview
@@ -4996,9 +4999,9 @@
 	 */
 	Morebits.checkboxShiftClickSupport = (jQuerySelector, jQueryContext) => {
 		let lastCheckbox = null;
-		function clickHandler({shiftKey}) {
+		function clickHandler(event) {
 			const thisCb = this;
-			if (shiftKey && lastCheckbox !== null) {
+			if (event.shiftKey && lastCheckbox !== null) {
 				const cbs = $(jQuerySelector, jQueryContext); // can't cache them, obviously, if we want to support resorting
 				let index = -1;
 				let lastIndex = -1;
@@ -5292,28 +5295,28 @@
 			this.taskDependencyMap.forEach((deps, task) => {
 				const dependencyPromisesArray = deps.map((dep) => self.deferreds.get(dep));
 				$.when.apply(self.context, dependencyPromisesArray).then(
-					(...args) => {
-						const result = task.apply(self.context, args);
+					function () {
+						const result = task.apply(self.context, arguments);
 						if (result === undefined) {
 							// maybe the function threw, or it didn't return anything
 							mw.log.error('Morebits.taskManager: task returned undefined');
-							self.deferreds.get(task).reject.apply(self.context, args);
+							self.deferreds.get(task).reject.apply(self.context, arguments);
 							self.failureCallbackMap.get(task).apply(self.context, []);
 						}
 						result.then(
-							(...args) => {
-								self.deferreds.get(task).resolve.apply(self.context, args);
+							function () {
+								self.deferreds.get(task).resolve.apply(self.context, arguments);
 							},
-							(...args) => {
+							function () {
 								// task failed
-								self.deferreds.get(task).reject.apply(self.context, args);
-								self.failureCallbackMap.get(task).apply(self.context, args);
+								self.deferreds.get(task).reject.apply(self.context, arguments);
+								self.failureCallbackMap.get(task).apply(self.context, arguments);
 							}
 						);
 					},
-					(...args) => {
+					function () {
 						// one or more of the dependencies failed
-						self.failureCallbackMap.get(task).apply(self.context, args);
+						self.failureCallbackMap.get(task).apply(self.context, arguments);
 					}
 				);
 			});
@@ -5345,9 +5348,9 @@
 			// the 20 pixels represents adjustment for the extra height of the jQuery dialog "chrome", compared
 			// to that of the old SimpleWindow
 			height: height + 20,
-			close: function ({target}) {
+			close: function (event) {
 				// dialogs and their content can be destroyed once closed
-				$(target).dialog('destroy').remove();
+				$(event.target).dialog('destroy').remove();
 			},
 			resizeStart: function () {
 				this.scrollbox = $(this).find('.morebits-scrollbox')[0];
