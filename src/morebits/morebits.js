@@ -824,7 +824,7 @@
 				childContainer = subnode;
 				break;
 			default:
-				throw new Error(`Morebits.quickForm: unknown element type ${data.type.toString()}`);
+				throw new TypeError('Morebits.quickForm: unknown element type ' + data.type.toString());
 		}
 		if (!childContainer) {
 			childContainer = node;
