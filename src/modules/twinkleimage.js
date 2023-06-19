@@ -52,6 +52,19 @@ $(function TwinkleImage() {
 			name: 'type',
 			list: [
 				{
+					label: wgULS('明显侵权之文件（CSD F1）', '明顯侵權之檔案（CSD F1）'),
+					value: 'no permission',
+					tooltip: wgULS(
+						'上传者宣称拥有，而在其他来源找到的文件，或从侵权的来源获取的文件。',
+						'上傳者宣稱擁有，而在其他來源找到的檔案，或從侵權的來源取得的檔案。'
+					),
+					subgroup: {
+						name: 'f1_source',
+						type: 'textarea',
+						label: wgULS('侵权来源：', '侵權來源：'),
+					},
+				},
+				{
 					label: wgULS('来源不明（CSD F3）', '來源不明（CSD F3）'),
 					value: 'no source',
 					checked: true,
@@ -74,38 +87,6 @@ $(function TwinkleImage() {
 					tooltip: wgULS(
 						'本文件并未注明原始出处，且本文件缺少著作权信息或声称的著作权信息无法被查证',
 						'本檔案並未註明原始出處，且本檔案缺少著作權資訊或聲稱的著作權資訊無法被查證'
-					),
-				},
-				{
-					label: wgULS(
-						'没有被条目使用的非自由著作权文件（CSD F5）',
-						'沒有被條目使用的非自由著作權檔案（CSD F5）'
-					),
-					value: 'orphaned fair use',
-					tooltip: wgULS('本文件为非自由著作权且没有被条目使用', '本檔案為非自由著作權且沒有被條目使用'),
-				},
-				{
-					label: wgULS('明显侵权之文件（CSD F1）', '明顯侵權之檔案（CSD F1）'),
-					value: 'no permission',
-					tooltip: wgULS(
-						'上传者宣称拥有，而在其他来源找到的文件，或从侵权的来源获取的文件。',
-						'上傳者宣稱擁有，而在其他來源找到的檔案，或從侵權的來源取得的檔案。'
-					),
-					subgroup: {
-						name: 'f1_source',
-						type: 'textarea',
-						label: wgULS('侵权来源：', '侵權來源：'),
-					},
-				},
-				{
-					label: wgULS(
-						'没有填写任何合理使用依据的非自由著作权文件（CSD F9）',
-						'沒有填寫任何合理使用依據的非自由著作權檔案（CSD F9）'
-					),
-					value: 'no fair use rationale',
-					tooltip: wgULS(
-						'不适用于有争议但完整的合理使用依据。若非自由著作权文件只有部分条目的使用依据，但同时被使用于未提供合理使用依据的条目，则本方针也不适用。',
-						'不適用於有爭議但完整的合理使用依據。若非自由著作權檔案只有部分條目的使用依據，但同時被使用於未提供合理使用依據的條目，則本方針也不適用。'
 					),
 				},
 				{
@@ -150,6 +131,25 @@ $(function TwinkleImage() {
 							},
 						],
 					},
+				},
+				{
+					label: wgULS(
+						'没有被条目使用的非自由著作权文件（CSD F5）',
+						'沒有被條目使用的非自由著作權檔案（CSD F5）'
+					),
+					value: 'orphaned fair use',
+					tooltip: wgULS('本文件为非自由著作权且没有被条目使用', '本檔案為非自由著作權且沒有被條目使用'),
+				},
+				{
+					label: wgULS(
+						'没有填写任何合理使用依据的非自由著作权文件（CSD F5）',
+						'沒有填寫任何合理使用依據的非自由著作權檔案（CSD F5）'
+					),
+					value: 'no fair use rationale',
+					tooltip: wgULS(
+						'不适用于有争议但完整的合理使用依据。若非自由著作权文件只有部分条目的使用依据，但同时被使用于未提供合理使用依据的条目，则本方针也不适用。',
+						'不適用於有爭議但完整的合理使用依據。若非自由著作權檔案只有部分條目的使用依據，但同時被使用於未提供合理使用依據的條目，則本方針也不適用。'
+					),
 				},
 			],
 		});

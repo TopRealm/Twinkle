@@ -391,7 +391,7 @@ $(function TwinkleSpeedy() {
 				if (!Twinkle.speedy.mode.isSysop(mode)) {
 					work_area.append({
 						type: 'div',
-						label: '标记快速删除F1（明显不符合本站著作权方针的文件）、F2（重复且不再被使用的文件），请使用Twinkle的“图权”功能。',
+						label: '标记符合快速删除准则F1中“明显不符合本站著作权方针的文件”及F3（在提报后超过5天仍来源不明、未知版权所有人或版权状况无法被查证的文件）、F4（可被替代的合理使用文件）、F5（没有被条目使用的非自由著作权文件、没有填写任何合理使用依据的非自由著作权文件）的文件，请使用Twinkle的“图权”功能。',
 					});
 				}
 				break;
