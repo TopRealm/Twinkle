@@ -88,8 +88,8 @@ $(function TwinkleImage() {
 					label: wgULS('明显侵权之文件（CSD F1）', '明顯侵權之檔案（CSD F1）'),
 					value: 'no permission',
 					tooltip: wgULS(
-						'上传者宣称拥有，而在其他来源找到的文件；或从侵权的来源获取的文件。',
-						'上傳者宣稱擁有，而在其他來源找到的檔案；或從侵權的來源取得的檔案。'
+						'上传者宣称拥有，而在其他来源找到的文件，或从侵权的来源获取的文件。',
+						'上傳者宣稱擁有，而在其他來源找到的檔案，或從侵權的來源取得的檔案。'
 					),
 					subgroup: {
 						name: 'f1_source',
@@ -99,8 +99,8 @@ $(function TwinkleImage() {
 				},
 				{
 					label: wgULS(
-						'没有填写任何合理使用依据的非自由著作权文件（CSD F5）',
-						'沒有填寫任何合理使用依據的非自由著作權檔案（CSD F5）'
+						'没有填写任何合理使用依据的非自由著作权文件（CSD F9）',
+						'沒有填寫任何合理使用依據的非自由著作權檔案（CSD F9）'
 					),
 					value: 'no fair use rationale',
 					tooltip: wgULS(
@@ -155,10 +155,10 @@ $(function TwinkleImage() {
 		evt.initEvent('change', true, true);
 		result.type[0].dispatchEvent(evt);
 	};
-	Twinkle.image.callback.evaluate = ({target}) => {
+	Twinkle.image.callback.evaluate = (event) => {
 		let type;
-		let notify = target.notify.checked;
-		const types = target.type;
+		let notify = event.target.notify.checked;
+		const types = event.target.type;
 		for (let i = 0; i < types.length; ++i) {
 			if (types[i].checked) {
 				type = types[i].values;
@@ -203,10 +203,10 @@ $(function TwinkleImage() {
 			lognomination: lognomination,
 		};
 		if (csdcrit === 'f1') {
-			params.f1_source = target['type.f1_source'].value;
+			params.f1_source = event.target['type.f1_source'].value;
 		}
 		if (csdcrit === 'f4') {
-			const f4_type = target['type.f4_type'].value;
+			const f4_type = event.target['type.f4_type'].value;
 			if (!f4_type) {
 				alert(wgULS('CSD F4：请选择适用类型。', 'CSD F4：請選擇適用類別。'));
 				return false;
@@ -214,7 +214,7 @@ $(function TwinkleImage() {
 			params.f4_type = f4_type;
 		}
 		Morebits.simpleWindow.setButtonsEnabled(false);
-		Morebits.status.init(target);
+		Morebits.status.init(event.target);
 		Morebits.wiki.actionCompleted.redirect = mw.config.get('wgPageName');
 		Morebits.wiki.actionCompleted.notice = wgULS('标记完成', '標記完成');
 		// Tagging image
@@ -252,7 +252,7 @@ $(function TwinkleImage() {
 			const params = pageobj.getCallbackParameters();
 			// remove "move to Share" tag - deletion-tagged files cannot be moved to Share
 			text = text.replace(
-				/\{\{(mtc|(copy |move )?to ?share|move to qiuwen share|copy to qiuwen share)[^}]*\}\}/gi,
+				/\{\{(mtc|(copy |move )?to ?(share|commons)|move to (qiuwen share|wikimedia commons)|copy to (qiuwen share|wikimedia commons))[^}]*\}\}/gi,
 				''
 			);
 			// Adding discussion
@@ -339,7 +339,6 @@ $(function TwinkleImage() {
 		},
 		imageList: (pageobj) => {
 			const text = pageobj.getPageText();
-			// var params = pageobj.getCallbackParameters();
 			pageobj.setPageText(`${text}\n* [[:${Morebits.pageNameNorm}]]--~~~~`);
 			pageobj.setEditSummary(`加入[[${Morebits.pageNameNorm}]]`);
 			pageobj.setChangeTags(Twinkle.changeTags);
