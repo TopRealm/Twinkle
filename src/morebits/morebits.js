@@ -947,7 +947,7 @@
 	 * @param {string} value - Value to search for.
 	 * @returns {HTMLInputElement}
 	 */
-	Morebits.quickForm.getCheckboxOrRadio = function QuickFormGetCheckboxOrRadio(elementArray, value) {
+	Morebits.quickForm.getCheckboxOrRadio = (elementArray, value) => {
 		// eslint-disable-next-line no-jquery/no-grep
 		const found = $.grep(elementArray, (el) => el.value === value);
 		if (found.length > 0) {
@@ -2077,7 +2077,6 @@
 	};
 	// Allow native Date.prototype methods to be used on Morebits.date objects
 	Object.getOwnPropertyNames(Date.prototype).forEach((func) => {
-		// Exclude methods that collide with PageTriage's Date.js external, which clobbers native Date
 		if (!['add', 'getDayName', 'getMonthName'].includes(func)) {
 			Morebits.date.prototype[func] = function () {
 				return this._d[func].apply(this._d, Array.prototype.slice.call(arguments));
@@ -2571,8 +2570,6 @@
 			onUndeleteFailure: null,
 			onProtectSuccess: null,
 			onProtectFailure: null,
-			onStabilizeSuccess: null,
-			onStabilizeFailure: null,
 			// internal objects
 			loadQuery: null,
 			loadApi: null,
@@ -2582,9 +2579,6 @@
 			moveProcessApi: null,
 			patrolApi: null,
 			patrolProcessApi: null,
-			triageApi: null,
-			triageProcessListApi: null,
-			triageProcessApi: null,
 			deleteApi: null,
 			deleteProcessApi: null,
 			undeleteApi: null,
@@ -3124,7 +3118,6 @@
 		/**
 		 * @param {string} level - The right required for the specific action
 		 * e.g. autoconfirmed, sysop, templateeditor, autoconfirmed
-		 * (enWiki-only).
 		 * @param {string} [expiry=infinity]
 		 */
 		this.setEditProtection = (level, expiry) => {
@@ -4360,7 +4353,7 @@
 			const statusspan = document.createElement('span');
 			previewbox.appendChild(statusspan);
 			Morebits.status.init(statusspan);
-			// 若页面不是wikitext（例如用户js/css、Flow等），那么找一个wikitext页面来预览。
+			// 若页面不是wikitext（例如用户js/css等），那么找一个wikitext页面来预览。
 			let pageName = mw.config.get('wgPageName');
 			if (mw.config.get('wgPageContentModel') !== 'wikitext') {
 				pageName = `Draft:${pageName}`;
@@ -4371,7 +4364,7 @@
 				pst: true, // PST = pre-save transform; this makes substitution work properly
 				preview: true,
 				text: wikitext,
-				title: pageTitle || pageName, // zhwiki
+				title: pageTitle || pageName,
 				disablelimitreport: true,
 				disableeditsection: true,
 				uselang: mw.config.get('wgUserLanguage'), // Use wgUserLanguage for preview
@@ -5515,7 +5508,7 @@
 		addContent: function (content) {
 			this.content.appendChild(content);
 			// look for submit buttons in the content, hide them, and add a proxy button to the button pane
-			const thisProxy = this;
+			const self = this;
 			$(this.content)
 				.find('input[type="submit"], button[type="submit"]')
 				.each((key, value) => {
@@ -5535,7 +5528,7 @@
 						},
 						false
 					);
-					thisProxy.buttons.push(button);
+					self.buttons.push(button);
 				});
 			// remove all buttons from the button pane and re-add them
 			if (this.buttons.length > 0) {
