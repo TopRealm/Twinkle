@@ -252,7 +252,7 @@
 	 * @param {event} event - Function to execute when form is submitted.
 	 * @param {string} [eventType=submit] - Type of the event.
 	 */
-	Morebits.quickForm = function QuickForm(event, eventType) {
+	Morebits.quickForm = function (event, eventType) {
 		this.root = new Morebits.quickForm.element({type: 'form', event: event, eventType: eventType});
 	};
 	/**
@@ -261,7 +261,7 @@
 	 * @memberof Morebits.quickForm
 	 * @returns {HTMLElement}
 	 */
-	Morebits.quickForm.prototype.render = function QuickFormRender() {
+	Morebits.quickForm.prototype.render = function () {
 		const ret = this.root.render();
 		ret.names = {};
 		return ret;
@@ -274,7 +274,7 @@
 	 * a quickform element is constructed.
 	 * @returns {Morebits.quickForm.element} - Same as what is passed to the function.
 	 */
-	Morebits.quickForm.prototype.append = function QuickFormAppend(data) {
+	Morebits.quickForm.prototype.append = function (data) {
 		return this.root.append(data);
 	};
 	/**
@@ -334,7 +334,7 @@
 	 *     required: true
 	 * });
 	 */
-	Morebits.quickForm.element = function QuickFormElement(data) {
+	Morebits.quickForm.element = function (data) {
 		this.data = data;
 		this.childs = [];
 	};
@@ -351,7 +351,7 @@
 	 * create the quickForm element.
 	 * @returns {Morebits.quickForm.element} The same element passed in.
 	 */
-	Morebits.quickForm.element.prototype.append = function QuickFormElementAppend(data) {
+	Morebits.quickForm.element.prototype.append = function (data) {
 		let child;
 		if (data instanceof Morebits.quickForm.element) {
 			child = data;
@@ -368,7 +368,7 @@
 	 * @memberof Morebits.quickForm.element
 	 * @returns {HTMLElement}
 	 */
-	Morebits.quickForm.element.prototype.render = function QuickFormElementRender(internal_subgroup_id) {
+	Morebits.quickForm.element.prototype.render = function (internal_subgroup_id) {
 		const currentNode = this.compute(this.data, internal_subgroup_id);
 		for (let i = 0; i < this.childs.length; ++i) {
 			// do not pass internal_subgroup_id to recursive calls
@@ -377,7 +377,7 @@
 		return currentNode[0];
 	};
 	/** @memberof Morebits.quickForm.element */
-	Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(data, in_id) {
+	Morebits.quickForm.element.prototype.compute = function (data, in_id) {
 		let node;
 		let childContainer = null;
 		let label;
@@ -857,7 +857,7 @@
 	 * @param {HTMLElement} node - The HTML element beside which a tooltip is to be generated.
 	 * @param {Object} data - Tooltip-related configuration data.
 	 */
-	Morebits.quickForm.element.generateTooltip = function QuickFormElementGenerateTooltip(node, data) {
+	Morebits.quickForm.element.generateTooltip = function (node, data) {
 		const tooltipButton = node.appendChild(document.createElement('span'));
 		tooltipButton.className = 'morebits-tooltipButton';
 		tooltipButton.title = data.tooltip; // Provides the content for jQuery UI
@@ -928,7 +928,7 @@
 	 * @param {string} fieldName - The name or id of the fields.
 	 * @returns {HTMLElement[]} - Array of matching form elements.
 	 */
-	Morebits.quickForm.getElements = function QuickFormGetElements(form, fieldName) {
+	Morebits.quickForm.getElements = function (form, fieldName) {
 		const $form = $(form);
 		fieldName = $.escapeSelector(fieldName); // sanitize input
 		let $elements = $form.find(`[name="${fieldName}"]`);
@@ -1652,7 +1652,7 @@
 	 * u.content = u.content.replace(/world/g, 'earth');
 	 * u.rebind(); // gives 'Hello earth <!-- world --> earth'
 	 */
-	Morebits.unbinder = function Unbinder(string) {
+	Morebits.unbinder = function (string) {
 		if (typeof string !== 'string') {
 			throw new Error('not a string');
 		}
@@ -1673,7 +1673,7 @@
 		 * @param {string} postfix
 		 * @throws If either `prefix` or `postfix` is missing.
 		 */
-		unbind: function UnbinderUnbind(prefix, postfix) {
+		unbind: function (prefix, postfix) {
 			if (!prefix || !postfix) {
 				throw new Error('Both prefix and postfix must be provided');
 			}
@@ -1685,7 +1685,7 @@
 		 *
 		 * @returns {string} The processed output.
 		 */
-		rebind: function UnbinderRebind() {
+		rebind: function () {
 			let content = this.content;
 			content.self = this;
 			for (const current in this.history) {
@@ -2284,7 +2284,7 @@
 				callerAjaxParameters
 			);
 			return $.ajax(ajaxparams).then(
-				function onAPIsuccess(response, statusText) {
+				function (response, statusText) {
 					this.statusText = statusText;
 					this.response = this.responseXML = response;
 					// Limit to first error
@@ -2316,7 +2316,7 @@
 					return $.Deferred().resolveWith(this.parent, [this]);
 				},
 				// only network and server errors reach here - complaints from the API itself are caught in success()
-				function onAPIfailure(jqXHR, statusText, errorThrown) {
+				function (jqXHR, statusText, errorThrown) {
 					this.statusText = statusText;
 					this.errorThrown = errorThrown; // frequently undefined
 					this.errorText =
@@ -4421,7 +4421,7 @@
 		 * @param {boolean} [final=false] - Whether this is the final
 		 * parameter and we need to remove the trailing `}}`.
 		 */
-		function findParam(final) {
+		const findParam = (final) => {
 			// Nothing found yet, this must be the template name
 			if (count === -1) {
 				result.name = current.substring(2).trim();
@@ -4445,7 +4445,7 @@
 					}
 				}
 			}
-		}
+		};
 		for (let i = start; i < text.length; ++i) {
 			const test3 = text.substr(i, 3);
 			if (test3 === '{{{' || (test3 === '}}}' && level[level.length - 1] === 3)) {
@@ -4507,7 +4507,7 @@
 	 * @memberof Morebits.wikitext
 	 * @param {string} text - Wikitext to be manipulated.
 	 */
-	Morebits.wikitext.page = function mediawikiPage(text) {
+	Morebits.wikitext.page = function (text) {
 		this.text = text;
 	};
 	Morebits.wikitext.page.prototype = {
@@ -4773,7 +4773,7 @@
 	 * line, allowable values are: `status` (blue), `info` (green), `warn` (red),
 	 * or `error` (bold red).
 	 */
-	Morebits.status = function Status(text, stat, type) {
+	Morebits.status = function (text, stat, type) {
 		this.textRaw = text;
 		this.text = Morebits.createHtml(text);
 		this.type = type || 'status';
@@ -4978,7 +4978,7 @@
 	 */
 	Morebits.checkboxShiftClickSupport = (jQuerySelector, jQueryContext) => {
 		let lastCheckbox = null;
-		function clickHandler(event) {
+		const clickHandler = function (event) {
 			const thisCb = this;
 			if (event.shiftKey && lastCheckbox !== null) {
 				const cbs = $(jQuerySelector, jQueryContext); // can't cache them, obviously, if we want to support resorting
@@ -5020,7 +5020,7 @@
 			}
 			lastCheckbox = thisCb;
 			return true;
-		}
+		};
 		$(jQuerySelector, jQueryContext).on('click', clickHandler);
 	};
 	/* **************** Morebits.batchOperation **************** */
@@ -5311,7 +5311,7 @@
 	 * @param {number} width
 	 * @param {number} height - The maximum allowable height for the content area.
 	 */
-	Morebits.simpleWindow = function SimpleWindow(width, height) {
+	Morebits.simpleWindow = function (width, height) {
 		const content = document.createElement('div');
 		this.content = content;
 		content.className = 'morebits-dialog-content';
