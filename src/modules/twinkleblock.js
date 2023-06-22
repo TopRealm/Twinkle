@@ -2288,10 +2288,7 @@ $(function TwinkleBlock() {
 				tagtext += '}}';
 				tags.push(tagtext);
 			});
-			let text = tags.join('\n');
-			if (params.category) {
-				text += `\n[[Category:${params.category.trim()}的維基用戶分身]]`;
-			}
+			const text = tags.join('\n');
 			pageobj.setPageText(text);
 			pageobj.setEditSummary(wgULS('标记被永久封禁的用户页', '標記被永久封鎖的使用者頁面'));
 			pageobj.setChangeTags(Twinkle.changeTags);
