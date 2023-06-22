@@ -857,7 +857,7 @@
 	 * @param {HTMLElement} node - The HTML element beside which a tooltip is to be generated.
 	 * @param {Object} data - Tooltip-related configuration data.
 	 */
-	Morebits.quickForm.element.generateTooltip = function (node, data) {
+	Morebits.quickForm.element.generateTooltip = (node, data) => {
 		const tooltipButton = node.appendChild(document.createElement('span'));
 		tooltipButton.className = 'morebits-tooltipButton';
 		tooltipButton.title = data.tooltip; // Provides the content for jQuery UI
@@ -928,7 +928,7 @@
 	 * @param {string} fieldName - The name or id of the fields.
 	 * @returns {HTMLElement[]} - Array of matching form elements.
 	 */
-	Morebits.quickForm.getElements = function (form, fieldName) {
+	Morebits.quickForm.getElements = (form, fieldName) => {
 		const $form = $(form);
 		fieldName = $.escapeSelector(fieldName); // sanitize input
 		let $elements = $form.find(`[name="${fieldName}"]`);
