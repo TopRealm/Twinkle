@@ -856,7 +856,7 @@ $(function TwinkleFluff() {
 			const $edit = $(xml).find('edit');
 			if ($(xml).find('captcha').length > 0) {
 				apiobj.statelem.error(
-					window.wgULS('不能回退，因维基服务器要求您输入验证码。', '不能回退，因維基伺服器要求您輸入驗證碼。')
+					window.wgULS('不能回退，因服务器要求您输入验证码。', '不能回退，因伺服器要求您輸入驗證碼。')
 				);
 			} else if ($edit.attr('nochange') === '') {
 				apiobj.statelem.error(
