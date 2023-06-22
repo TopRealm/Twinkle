@@ -807,32 +807,7 @@ $(function TwinkleBlock() {
 							},
 						],
 					},
-					{
-						label: `{{Locked global account}}：${wgULS('全域锁定', '全域鎖定')}`,
-						value: 'Locked global account',
-						subgroup: [
-							{
-								type: 'checkbox',
-								list: [
-									{
-										name: 'lockBlocked',
-										value: 'lockBlocked',
-										label: wgULS('亦被本地封禁', '亦被本地封鎖'),
-									},
-								],
-							},
-						],
-					},
 				],
-			});
-			field_tag_options.append({
-				type: 'input',
-				name: 'category',
-				label: `Category:……的維基用戶分身${wgULS('（主账户用户名）', '（主帳號使用者名稱）')}`,
-				tooltip: wgULS(
-					'您通常应该使用{{Sockpuppet}}的主账户参数来产生分类，只有单独使用{{Locked global account}}才需填写此项。',
-					'您通常應該使用{{Sockpuppet}}的主帳號參數來產生分類，只有單獨使用{{Locked global account}}才需填寫此項。'
-				),
 			});
 		}
 		if (unblockBox) {
@@ -1225,10 +1200,7 @@ $(function TwinkleBlock() {
 			autoblock: true,
 			nocreate: true,
 			reason: wgULS('不断加入垃圾链接', '不斷加入垃圾連結'),
-			summary: wgULS(
-				'封禁通知：利用求闻百科散发垃圾链接',
-				'封鎖通知：利用求聞百科散發垃圾連結'
-			),
+			summary: wgULS('封禁通知：利用求闻百科散发垃圾链接', '封鎖通知：利用求聞百科散發垃圾連結'),
 		},
 		'uw-soablock': {
 			autoblock: true,
@@ -1404,10 +1376,7 @@ $(function TwinkleBlock() {
 				'确认为[[QW:SOCK|傀儡]]或真人傀儡 - 根据用户贡献确定',
 				'確認為[[QW:SOCK|傀儡]]或真人傀儡 - 根據使用者貢獻確定'
 			),
-			summary: wgULS(
-				'封禁通知：确认为[[QW:SOCK|傀儡]]或真人傀儡',
-				'封鎖通知：確認為[[QW:SOCK|傀儡]]或真人傀儡'
-			),
+			summary: wgULS('封禁通知：确认为[[QW:SOCK|傀儡]]或真人傀儡', '封鎖通知：確認為[[QW:SOCK|傀儡]]或真人傀儡'),
 			templateName: 'uw-blockindef',
 		},
 		'sock-cu-reg': {
@@ -1420,10 +1389,7 @@ $(function TwinkleBlock() {
 				'确认为[[QW:SOCK|傀儡]]或真人傀儡 - 用户查核确认',
 				'確認為[[QW:SOCK|傀儡]]或真人傀儡 - 使用者查核確認'
 			),
-			summary: wgULS(
-				'封禁通知：确认为[[QW:SOCK|傀儡]]或真人傀儡',
-				'封鎖通知：確認為[[QW:SOCK|傀儡]]或真人傀儡'
-			),
+			summary: wgULS('封禁通知：确认为[[QW:SOCK|傀儡]]或真人傀儡', '封鎖通知：確認為[[QW:SOCK|傀儡]]或真人傀儡'),
 			templateName: 'uw-blockindef',
 		},
 		// Begin partial block templates, accessed in Twinkle.block.blockGroupsPartial
@@ -2032,37 +1998,34 @@ $(function TwinkleBlock() {
 			if (params.tag.length === 0) {
 				return alert(wgULS('请至少选择一个用户页标记！', '請至少選擇一個使用者頁面標記！'));
 			}
-			if (checkIncompatible(
-				['Blocked user', 'Sockpuppet'],
-				wgULS(
-					'{{Sockpuppet}}已涵盖{{Blocked user}}的功能。',
-					'{{Sockpuppet}}已涵蓋{{Blocked user}}的功能。'
+			if (
+				checkIncompatible(
+					['Blocked user', 'Sockpuppet'],
+					wgULS(
+						'{{Sockpuppet}}已涵盖{{Blocked user}}的功能。',
+						'{{Sockpuppet}}已涵蓋{{Blocked user}}的功能。'
+					)
 				)
-			)) {
+			) {
 				return;
 			}
-			if (checkIncompatible(
-				['Blocked user', 'Sockpuppeteer'],
-				wgULS(
-					'{{Sockpuppeteer}}已涵盖{{Blocked user}}的功能。',
-					'{{Sockpuppeteer}}已涵蓋{{Blocked user}}的功能。'
+			if (
+				checkIncompatible(
+					['Blocked user', 'Sockpuppeteer'],
+					wgULS(
+						'{{Sockpuppeteer}}已涵盖{{Blocked user}}的功能。',
+						'{{Sockpuppeteer}}已涵蓋{{Blocked user}}的功能。'
+					)
 				)
-			)) {
+			) {
 				return;
 			}
-			if (checkIncompatible(
-				['Blocked user', 'Locked global account'],
-				wgULS(
-					'请使用{{Locked global account}}的“亦被本地封禁”选项。',
-					'請使用{{Locked global account}}的「亦被本地封鎖」選項。'
+			if (
+				checkIncompatible(
+					['Sockpuppet', 'Sockpuppeteer'],
+					wgULS('请从主账户和分身账户中选择一个。', '請從主帳號和分身帳號中選擇一個。')
 				)
-			)) {
-				return;
-			}
-			if (checkIncompatible(
-				['Sockpuppet', 'Sockpuppeteer'],
-				wgULS('请从主账户和分身账户中选择一个。', '請從主帳號和分身帳號中選擇一個。')
-			)) {
+			) {
 				return;
 			}
 			if (params.tag.includes('Sockpuppet') && params.sppUsername.trim() === '') {
@@ -2088,12 +2051,14 @@ $(function TwinkleBlock() {
 								'沒有選擇頁面或命名空間，也沒有停用電子郵件或禁止建立帳號；請選擇至少一個選項以應用部分封鎖！'
 							)
 						);
-					} else if (!confirm(
-						wgULS(
-							'您将要进行封禁，但没有阻止任何页面或命名空间的编辑，确定要继续？',
-							'您將要進行封鎖，但沒有阻止任何頁面或命名空間的編輯，確定要繼續？'
+					} else if (
+						!confirm(
+							wgULS(
+								'您将要进行封禁，但没有阻止任何页面或命名空间的编辑，确定要继续？',
+								'您將要進行封鎖，但沒有阻止任何頁面或命名空間的編輯，確定要繼續？'
+							)
 						)
-					)) {
+					) {
 						return;
 					}
 				}
@@ -2192,7 +2157,9 @@ $(function TwinkleBlock() {
 						// no duration, action=unblock, just show timestamp
 						logExpiry = `於${new Morebits.date(logevents.timestamp).calendar()}`;
 					}
-					message += `由${logevents.user}${wgULS('以“', '以「')}${logevents.comment}${wgULS('”', '」')}${blockActionText[logevents.action]}${logExpiry}${wgULS('，你想要以你的设置变更封禁吗？', '，你想要以你的設定變更封鎖嗎？')}`;
+					message += `由${logevents.user}${wgULS('以“', '以「')}${logevents.comment}${wgULS('”', '」')}${
+						blockActionText[logevents.action]
+					}${logExpiry}${wgULS('，你想要以你的设置变更封禁吗？', '，你想要以你的設定變更封鎖嗎？')}`;
 					if (!confirm(message)) {
 						Morebits.status.info(wgULS('执行封禁', '執行封鎖'), wgULS('用户取消操作', '使用者取消操作'));
 						return;
@@ -2227,11 +2194,13 @@ $(function TwinkleBlock() {
 					}
 					if (groupsToBeRemoved.length > 0) {
 						const rightStatusElement = new Morebits.status(wgULS('移除权限', '移除權限'));
-						if (confirm(
-							wgULS('该用户有以下权限：', '該使用者有以下權限：') +
-							groupsToBeRemoved.join('、') +
-							wgULS('，您是否想要同时移除这些权限？', '，您是否想要同時移除這些權限？')
-						)) {
+						if (
+							confirm(
+								wgULS('该用户有以下权限：', '該使用者有以下權限：') +
+									groupsToBeRemoved.join('、') +
+									wgULS('，您是否想要同时移除这些权限？', '，您是否想要同時移除這些權限？')
+							)
+						) {
 							const revokeOptions = {
 								action: 'userrights',
 								user: blockoptions.user,
@@ -2312,11 +2281,6 @@ $(function TwinkleBlock() {
 							tagtext += `\n| evidence = ${params.spmEvidence.trim()}`;
 						}
 						tagtext += '\n';
-						break;
-					case 'Locked global account':
-						if (params.lockBlocked) {
-							tagtext += '|blocked=yes';
-						}
 						break;
 					default:
 						return alert(wgULS('未知的用户页模板！', '未知的使用者頁面模板！'));
