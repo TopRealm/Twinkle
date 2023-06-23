@@ -115,7 +115,11 @@ $(function TwinkleUnlink() {
 		unlinker.setPageList(pages);
 		const params = {
 			reason: input.reason,
+<<<<<<< HEAD
 			unlinker,
+=======
+			unlinker: unlinker,
+>>>>>>> 558dac9 (fix: renovate unlink.js)
 		};
 		unlinker.run((pageName) => {
 			const qiuwen_page = new Morebits.wiki.page(pageName, `在页面“${pageName}”中取消链入`);
