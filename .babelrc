@@ -3,13 +3,16 @@
 		[
 			"@babel/preset-env",
 			{
-				"corejs": "3",
+				"corejs": {
+					"version": 3,
+					"proposals": true
+				},
 				"modules": false,
 				"useBuiltIns": "entry"
 			}
 		]
 	],
-	"plugins": ["array-includes"],
+	"plugins": ["array-includes", "transform-object-hasown"],
 	"targets": "chrome > 31 and Edge > 12 and Firefox > 39 and Safari > 9 and ie 11",
 	"ignore": ["scripts/", "dist/", "src/lib/", "*.json"]
 }
