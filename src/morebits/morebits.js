@@ -3582,7 +3582,7 @@
 				}：${ctx.editSummary}`;
 			}
 			ctx.pageLoaded = true;
-			// alert("Generate edit conflict now");  // for testing edit conflict recovery logic
+			// mw.notify("Generate edit conflict now", {type: 'warn'});  // for testing edit conflict recovery logic
 			ctx.onLoadSuccess(this); // invoke callback
 		};
 		// helper function to parse the page name returned from the API

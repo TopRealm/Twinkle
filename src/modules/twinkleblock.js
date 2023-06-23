@@ -356,7 +356,8 @@ $(function TwinkleBlock() {
 		if (e.target.value === 'unblock') {
 			if (!Twinkle.block.currentBlockInfo) {
 				$unblock.prop('checked', false);
-				return alert(wgULS('用户没有被封禁', '使用者沒有被封鎖'));
+				mw.notify(wgULS('用户没有被封禁', '使用者沒有被封鎖'), {type: 'warn'});
+				return;
 			}
 			$block.prop('checked', false);
 			blockBox = false;
@@ -1990,13 +1991,14 @@ $(function TwinkleBlock() {
 					'}}、{{'
 				)}}}。`;
 				message += extra || '';
-				alert(message);
+				mw.notify(message, {type: 'warn'});
 				return true;
 			}
 		};
 		if (toTag) {
 			if (params.tag.length === 0) {
-				return alert(wgULS('请至少选择一个用户页标记！', '請至少選擇一個使用者頁面標記！'));
+				mw.notify(wgULS('请至少选择一个用户页标记！', '請至少選擇一個使用者頁面標記！'), {type: 'warn'});
+				return;
 			}
 			if (
 				checkIncompatible(
@@ -2029,7 +2031,10 @@ $(function TwinkleBlock() {
 				return;
 			}
 			if (params.tag.includes('Sockpuppet') && params.sppUsername.trim() === '') {
-				return alert(wgULS('请提供傀儡账户的主账户用户名！', '請提供傀儡帳號的主帳號使用者名稱！'));
+				mw.notify(wgULS('请提供傀儡账户的主账户用户名！', '請提供傀儡帳號的主帳號使用者名稱！'), {
+					type: 'warn',
+				});
+				return;
 			}
 		}
 		if (toBlock) {
@@ -2064,12 +2069,15 @@ $(function TwinkleBlock() {
 				}
 			}
 			if (!blockoptions.expiry) {
-				return alert(wgULS('请提供过期时间！', '請提供過期時間！'));
+				mw.notify(wgULS('请提供过期时间！', '請提供過期時間！'), {type: 'warn'});
+				return;
 			} else if (Morebits.string.isInfinity(blockoptions.expiry) && !Twinkle.block.isRegistered) {
-				return alert(wgULS('禁止无限期封禁IP地址！', '禁止無限期封鎖IP位址！'));
+				mw.notify(wgULS('禁止无限期封禁IP地址！', '禁止無限期封鎖IP位址！'), {type: 'warn'});
+				return;
 			}
 			if (!blockoptions.reason) {
-				return alert(wgULS('请提供封禁理由！', '請提供封鎖理由！'));
+				mw.notify(wgULS('请提供封禁理由！', '請提供封鎖理由！'), {type: 'warn'});
+				return;
 			}
 			Morebits.simpleWindow.setButtonsEnabled(false);
 			Morebits.status.init(e.target);
@@ -2235,7 +2243,8 @@ $(function TwinkleBlock() {
 		}
 		if (toUnblock) {
 			if (!unblockoptions.reason) {
-				return alert(wgULS('请提供解除封禁理由！', '請提供解除封鎖理由！'));
+				mw.notify(wgULS('请提供解除封禁理由！', '請提供解除封鎖理由！'), {type: 'warn'});
+				return;
 			}
 			Morebits.simpleWindow.setButtonsEnabled(false);
 			Morebits.status.init(e.target);
@@ -2251,7 +2260,8 @@ $(function TwinkleBlock() {
 			unblockMbApi.post();
 		}
 		if (!toBlock && !toWarn && !toTag && !toProtect && !toUnblock) {
-			return alert(wgULS('请给Twinkle点事做！', '請給Twinkle點事做！'));
+			mw.notify(wgULS('请给Twinkle点事做！', '請給Twinkle點事做！'), {type: 'warn'});
+			return;
 		}
 	};
 	Twinkle.block.callback.taguserpage = (pageobj) => {
@@ -2283,7 +2293,8 @@ $(function TwinkleBlock() {
 						tagtext += '\n';
 						break;
 					default:
-						return alert(wgULS('未知的用户页模板！', '未知的使用者頁面模板！'));
+						mw.notify(wgULS('未知的用户页模板！', '未知的使用者頁面模板！'), {type: 'warn'});
+						return;
 				}
 				tagtext += '}}';
 				tags.push(tagtext);

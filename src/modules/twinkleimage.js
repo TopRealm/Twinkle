@@ -215,7 +215,7 @@ $(function TwinkleImage() {
 		if (csdcrit === 'f4') {
 			const f4_type = event.target['type.f4_type'].value;
 			if (!f4_type) {
-				alert(wgULS('CSD F4：请选择适用类型。', 'CSD F4：請選擇適用類別。'));
+				mw.notify(wgULS('CSD F4：请选择适用类型。', 'CSD F4：請選擇適用類別。'), {type: 'warn'});
 				return false;
 			}
 			params.f4_type = f4_type;
