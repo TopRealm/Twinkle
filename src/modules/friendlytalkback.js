@@ -290,7 +290,7 @@ $(function FriendlyTalkback() {
 	};
 	Twinkle.talkback.noticeboards = {
 		affp: {
-			label: `WP:AF/FP（${wgULS('过滤器处理/报告', '過濾器處理/報告')}）`,
+			label: `QW:AF/FP（${wgULS('过滤器处理/报告', '過濾器處理/報告')}）`,
 			title: wgULS('过滤器错误报告有新回应', '過濾器錯誤報告有新回應'),
 			content: `${wgULS(
 				'您的[[Qiuwen:过滤器处理/报告|过滤器错误报告]]已有回应，请前往查看。',
