@@ -447,14 +447,12 @@
 			if (optionsText === '' || optionsText === ' ') {
 				return;
 			}
-
 			// Twinkle options are basically a JSON object with some comments. Strip those:
 			const optionsText_nowiki = optionsText.replace(/^\s+|^\n$|\/(\*|\/)\s+?<\/?nowiki>\s+?(\*\/)?\n?/g, '');
 			const optionsText_nocomment = optionsText_nowiki.replace(
 				/^(?:\/\/[^\n]*\n)*\n*|(?:\/\/[^\n]*(?:\n|$))*$/g,
 				''
 			);
-
 			// First version of options had some boilerplate code to make it eval-able -- strip that too. This part may become obsolete down the line.
 			const optionsText_nowindow = optionsText_nocomment.replace(/^window.Twinkle.prefs = |;\n*$/g, '');
 			try {

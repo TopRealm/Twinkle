@@ -1227,13 +1227,11 @@
 					repeat = '0:';
 					extra = address === '::' ? '0' : ''; // for the address '::'
 					pad = 9; // 7+2 (due to '::')
-
 					// If the '::' is at the end...
 				} else if (abbrevPos === addressEnd - 1) {
 					repeat = ':0';
 					extra = '';
 					pad = 9; // 7+2 (due to '::')
-
 					// If the '::' is in the middle...
 				} else {
 					repeat = ':0';
@@ -2064,8 +2062,8 @@
 	// Allow native Date.prototype methods to be used on Morebits.date objects
 	Object.getOwnPropertyNames(Date.prototype).forEach((func) => {
 		if (!['add', 'getDayName', 'getMonthName'].includes(func)) {
-			Morebits.date.prototype[func] = function () {
-				return this._d[func].apply(this._d, Array.prototype.slice.call(arguments));
+			Morebits.date.prototype[func] = function (...args) {
+				return this._d[func](...Array.prototype.slice.call(args));
 			};
 		}
 	});
@@ -5274,28 +5272,28 @@
 			this.taskDependencyMap.forEach((deps, task) => {
 				const dependencyPromisesArray = deps.map((dep) => self.deferreds.get(dep));
 				$.when.apply(self.context, dependencyPromisesArray).then(
-					function () {
-						const result = task.apply(self.context, arguments);
+					function (...args) {
+						const result = task.apply(self.context, args);
 						if (result === undefined) {
 							// maybe the function threw, or it didn't return anything
 							mw.log.error('Morebits.taskManager: task returned undefined');
-							self.deferreds.get(task).reject.apply(self.context, arguments);
+							self.deferreds.get(task).reject.apply(self.context, args);
 							self.failureCallbackMap.get(task).apply(self.context, []);
 						}
 						result.then(
-							function () {
-								self.deferreds.get(task).resolve.apply(self.context, arguments);
+							function (...args) {
+								self.deferreds.get(task).resolve.apply(self.context, args);
 							},
-							function () {
+							function (...args) {
 								// task failed
-								self.deferreds.get(task).reject.apply(self.context, arguments);
-								self.failureCallbackMap.get(task).apply(self.context, arguments);
+								self.deferreds.get(task).reject.apply(self.context, args);
+								self.failureCallbackMap.get(task).apply(self.context, args);
 							}
 						);
 					},
-					function () {
+					function (...args) {
 						// one or more of the dependencies failed
-						self.failureCallbackMap.get(task).apply(self.context, arguments);
+						self.failureCallbackMap.get(task).apply(self.context, args);
 					}
 				);
 			});
