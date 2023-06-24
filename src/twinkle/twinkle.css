@@ -45,12 +45,12 @@ a.twinkle-close-button-disabled {
 	font-weight: bold;
 }
 
-/* skin-specific js */
+/* Skin-specific JS */
 #twinkle-config-headerbox.config-userskin-box {
 	width: 60%;
 }
 
-/* H:TW/PREF */
+/* [[H:TW/PREF]] */
 #twinkle-config-content input[type='checkbox'] {
 	margin-right: 2px;
 }
