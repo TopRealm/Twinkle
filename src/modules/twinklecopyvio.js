@@ -12,7 +12,7 @@ $(function TwinkleCopyvio() {
 		// * special pages
 		// * non-existent pages
 		// * non-local files, whether there is a local page or not (unneeded local pages of non-local files are eligible for CSD F2)
-		// * file pages without actual files (these are eligible for CSD G8)
+		// * file pages without actual files (these are eligible for CSD G5)
 		if (
 			mw.config.get('wgNamespaceNumber') < 0 ||
 			!mw.config.get('wgArticleId') ||
