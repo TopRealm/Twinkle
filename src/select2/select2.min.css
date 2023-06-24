@@ -81,7 +81,7 @@
 	box-sizing: border-box;
 	border: 1px solid #aaa;
 	border-radius: 4px;
-	background-color: white;
+	background-color: #fff;
 }
 
 .select2-results {
@@ -240,7 +240,7 @@
 .select2-container--default .select2-selection--multiple {
 	border: 1px solid #aaa;
 	border-radius: 4px;
-	background-color: white;
+	background-color: #fff;
 	cursor: text;
 }
 
@@ -537,7 +537,7 @@
 .select2-container--classic .select2-selection--multiple {
 	border: 1px solid #aaa;
 	border-radius: 4px;
-	background-color: white;
+	background-color: #fff;
 	cursor: text;
 	outline: 0;
 }
