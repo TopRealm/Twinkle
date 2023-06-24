@@ -1,4 +1,0 @@
-* Twinkle[ResourceLoader|peers=Twinkle-pagestyles|dependencies=ext.gadget.morebits,ext.gadget.select2,mediawiki.api,mediawiki.language|rights=autoconfirmed|type=general]|Twinkle.js|Twinkle.css|twinklearv.js|twinklewarn.js|twinkleblock.js|friendlywelcome.js|friendlyshared.js|friendlytalkback.js|twinklespeedy.js|twinkleprod.js|twinklexfd.js|twinkleimage.js|twinkleprotect.js|friendlytag.js|twinklediff.js|twinkleunlink.js|twinklefluff.js|twinkledeprod.js|twinklebatchdelete.js|twinklebatchprotect.js|twinklebatchundelete.js|twinkleconfig.js
-* Twinkle-pagestyles[type=styles|hidden|skins=vector,vector-2022]|Twinkle-pagestyles.css
-* morebits[ResourceLoader|hidden|dependencies=jquery.ui,mediawiki.Title,mediawiki.user,mediawiki.util]|morebits.css|morebits.js
-* select2[ResourceLoader|hidden]|select2.min.css|select2.min.js
