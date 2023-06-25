@@ -2455,7 +2455,7 @@ $(function TwinkleBlock() {
 						// 1 => Talk, 2 => User, etc.
 						const namespaceNames = params.namespacerestrictions.map((id) => menuFormattedNamespaces[id]);
 						text += `${
-							wgULS('[[Qiuwen:命名空间|命名空间]]（', '[[Qiuwen:命名空間|命名空間]]（') +
+							wgULS('[[Help:命名空间|命名空间]]（', '[[Help:命名空間|命名空間]]（') +
 							makeSentence(namespaceNames)
 						}）`;
 					}
