@@ -880,8 +880,7 @@
 	 */
 	Morebits.quickForm.getInputData = (form) => {
 		const result = {};
-		for (let i = 0; i < form.elements.length; i++) {
-			const field = form.elements[i];
+		for (const field of form.elements) {
 			if (field.disabled || !field.name || !field.type || field.type === 'submit' || field.type === 'button') {
 				continue;
 			}
@@ -918,6 +917,7 @@
 					break;
 			}
 		}
+
 		return result;
 	};
 	/**
