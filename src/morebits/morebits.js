@@ -5325,7 +5325,7 @@
 			// the 20 pixels represents adjustment for the extra height of the jQuery dialog "chrome", compared
 			// to that of the old SimpleWindow
 			height: height + 20,
-			close: function (event) {
+			close: (event) => {
 				// dialogs and their content can be destroyed once closed
 				$(event.target).dialog('destroy').remove();
 			},
