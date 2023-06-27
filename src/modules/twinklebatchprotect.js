@@ -210,7 +210,7 @@ $(function TwinkleBatchProtect() {
 						label: title + (metadata.length > 0 ? ` (${metadata.join('; ')})` : ''),
 						value: title,
 						checked: true,
-						style: editProt ? 'color: red' : '',
+						style: editProt ? 'color: #f00' : '',
 					});
 				}
 				form.append({
@@ -260,7 +260,7 @@ $(function TwinkleBatchProtect() {
 		Morebits.wiki.actionCompleted.notice = '批量保护完成';
 		const form = target;
 		const numProtected = $(Morebits.quickForm.getElements(form, '个页面')).filter(
-			(_index, {checked, nextElementSibling}) => checked && nextElementSibling.style.color === 'red'
+			(_index, {checked, nextElementSibling}) => checked && nextElementSibling.style.color === '#f00'
 		).length;
 		if (
 			numProtected > 0 &&

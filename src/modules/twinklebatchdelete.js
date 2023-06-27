@@ -189,7 +189,7 @@ $(function TwinkleBatchDelete() {
 						label: title + (metadata.length > 0 ? `（${metadata.join('、')}）` : ''),
 						value: title,
 						checked: true,
-						style: editProt ? 'color: red' : '',
+						style: editProt ? 'color: #f00' : '',
 					};
 				}
 				const form_ = apiobj.params.form;
@@ -418,7 +418,7 @@ $(function TwinkleBatchDelete() {
 									label: title + (metadata.length > 0 ? ` (${metadata.join('; ')})` : ''),
 									value: title,
 									checked: true,
-									style: editProt ? 'color: red' : '',
+									style: editProt ? 'color: #f00' : '',
 								});
 							}
 							if (subpageList.length > 0) {
@@ -479,7 +479,7 @@ $(function TwinkleBatchDelete() {
 		Morebits.wiki.actionCompleted.notice = '批量删除已完成';
 		const form = target;
 		const numProtected = $(Morebits.quickForm.getElements(form, 'pages')).filter(
-			(_index, {checked, nextElementSibling}) => checked && nextElementSibling.style.color === 'red'
+			(_index, {checked, nextElementSibling}) => checked && nextElementSibling.style.color === '#f00'
 		).length;
 		if (
 			numProtected > 0 &&

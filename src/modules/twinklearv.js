@@ -59,7 +59,7 @@ $(function TwinkleARV() {
 		form.append({
 			type: 'div',
 			label: '',
-			style: 'color: red',
+			style: 'color: #f00',
 			id: 'twinkle-arv-blockwarning',
 		});
 		form.append({
@@ -96,7 +96,7 @@ $(function TwinkleARV() {
 				// Start and end differ, range blocked
 				message += block.rangestart === block.rangeend ? '封禁。' : '段封禁。';
 				if (block.partial) {
-					$('#twinkle-arv-blockwarning').css('color', 'black'); // Less severe
+					$('#twinkle-arv-blockwarning').css('color', '#000'); // Less severe
 				}
 				$('#twinkle-arv-blockwarning').text(message);
 			}

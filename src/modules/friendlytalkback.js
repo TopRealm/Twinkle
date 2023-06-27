@@ -146,7 +146,7 @@ $(function FriendlyTalkback() {
 				work_area.append({
 					type: 'div',
 					label: '',
-					style: 'color: red',
+					style: 'color: #f00',
 					id: 'twinkle-talkback-optout-message',
 				});
 				work_area.append({
@@ -164,7 +164,7 @@ $(function FriendlyTalkback() {
 				work_area.append({
 					type: 'div',
 					label: '',
-					style: 'color: red',
+					style: 'color: #f00',
 					id: 'twinkle-talkback-optout-message',
 				});
 				work_area.append({
@@ -213,7 +213,7 @@ $(function FriendlyTalkback() {
 				work_area.append({
 					type: 'div',
 					label: '',
-					style: 'color: red',
+					style: 'color: #f00',
 					id: 'twinkle-talkback-optout-message',
 				});
 				work_area.append({

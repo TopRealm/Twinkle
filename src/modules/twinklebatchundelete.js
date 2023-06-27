@@ -80,7 +80,7 @@ $(function TwinkleBatchUndelete() {
 								: ''),
 						value: title,
 						checked: true,
-						style: isProtected ? 'color: red' : '',
+						style: isProtected ? 'color: #f00' : '',
 					});
 				});
 				params.form.append({type: 'header', label: '待恢复页面'});

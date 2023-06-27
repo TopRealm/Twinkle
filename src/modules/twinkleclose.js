@@ -587,7 +587,7 @@ $(function TwinkleClose() {
 		},
 		disableLink: (pageobj) => {
 			const params = pageobj.getCallbackParameters();
-			$(`strong a[href=#${params.section}] span`).css('color', 'grey');
+			$(`strong a[href=#${params.section}] span`).css('color', '#808080');
 		},
 	};
 	Twinkle.addInitCallback(Twinkle.close, 'close');

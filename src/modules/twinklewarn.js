@@ -162,7 +162,7 @@ $(function TwinkleWarn() {
 		form.append({
 			type: 'div',
 			label: '',
-			style: 'color: red',
+			style: 'color: #f00',
 			id: 'twinkle-warn-warning-messages',
 		});
 		const more = form.append({
@@ -1228,7 +1228,7 @@ $(function TwinkleWarn() {
 							// Supersedes the typical $autolevelMessage added in autolevelParseWikitext
 							const $noTalkPageNode = $('<strong>')
 								.attr('id', 'twinkle-warn-autolevel-message')
-								.css('color', 'red')
+								.css('color', '#f00')
 								.text(
 									'无法加载用户讨论页，这可能是因为它是跨命名空间重定向，自动选择警告级别将不会运作。'
 								);
@@ -1317,7 +1317,7 @@ $(function TwinkleWarn() {
 		if (value === 'uw-username') {
 			$redWarning = $('<div>')
 				.attr('id', 'tw-warn-red-notice')
-				.css('color', 'red')
+				.css('color', '#f00')
 				.text(
 					'{{uw-username}}<b>不应</b>被用于<b>明显</b>违反用户名方针的用户。明显的违反方针应被报告给UAA。{{uw-username}}应只被用在边界情况下需要与用户讨论时。'
 				);
@@ -1489,7 +1489,7 @@ $(function TwinkleWarn() {
 									$('input[value=final]').prop('checked', true); // Vandalism after final
 								});
 							const statusNode = $('<div>')
-								.css('color', 'red')
+								.css('color', '#f00')
 								.text(
 									`${relevantUserName}最后收到了一个层级4警告（${latest.type}），所以将其报告给管理人员会比较好；`
 								);

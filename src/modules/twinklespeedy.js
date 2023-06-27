@@ -532,7 +532,7 @@ $(function TwinkleSpeedy() {
 				message += `${delCount}次`;
 				// 3+ seems problematic
 				if (delCount >= 3) {
-					$('#prior-deletion-count').css('color', 'red');
+					$('#prior-deletion-count').css('color', '#ff0000');
 				}
 				// Provide a link to page logs (CSD templates have one for sysops)
 				const link = Morebits.htmlNode('a', '（日志）');
@@ -555,8 +555,8 @@ $(function TwinkleSpeedy() {
 		const hasSubmitButton = Twinkle.speedy.mode.hasSubmitButton(mode);
 		const openSubgroupHandler = (event) => {
 			$(event.target.form).find('input').prop('disabled', true);
-			$(event.target.form).children().css('color', 'gray');
-			$(event.target).parent().css('color', 'black').find('input').prop('disabled', false);
+			$(event.target.form).children().css('color', '#808080');
+			$(event.target).parent().css('color', '#000').find('input').prop('disabled', false);
 			$(event.target).parent().find('input:text')[0].focus();
 			event.stopPropagation();
 		};

@@ -71,9 +71,9 @@ $(function TwinkleFluff() {
 		},
 		buildLink: (color, text) => {
 			const link = document.createElement('a');
-			link.appendChild(Twinkle.fluff.linkBuilder.spanTag('Black', '['));
+			link.appendChild(Twinkle.fluff.linkBuilder.spanTag('#000', '['));
 			link.appendChild(Twinkle.fluff.linkBuilder.spanTag(color, text));
-			link.appendChild(Twinkle.fluff.linkBuilder.spanTag('Black', ']'));
+			link.appendChild(Twinkle.fluff.linkBuilder.spanTag('#000', ']'));
 			link.href = '#';
 			return link;
 		},
@@ -330,7 +330,7 @@ $(function TwinkleFluff() {
 			.children()
 			.each((_ix, node) => {
 				node.innerHTML = node.textContent; // Feels like cheating
-				$(node).css('font-weight', 'normal').css('color', 'darkgray');
+				$(node).css('font-weight', 'normal').css('color', '#a9a9a9');
 			});
 	};
 	Twinkle.fluff.revert = (type, vandal, rev, page) => {

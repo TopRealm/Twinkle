@@ -1076,7 +1076,7 @@ $(function TwinkleConfig() {
 				let cell = document.createElement('td');
 				cell.setAttribute('colspan', '3');
 				const heading = document.createElement('h4');
-				heading.style.borderBottom = '1px solid gray';
+				heading.style.borderBottom = '1px solid #808080';
 				heading.style.marginTop = '0.2em';
 				heading.id = section.module;
 				heading.appendChild(document.createTextNode(section.title));
@@ -1265,7 +1265,7 @@ $(function TwinkleConfig() {
 					// add help tip
 					cell = document.createElement('td');
 					cell.style.fontSize = '90%';
-					cell.style.color = 'gray';
+					cell.style.color = '#808080';
 					if (pref.helptip) {
 						// convert mentions of templates in the helptip to clickable links
 						cell.innerHTML = pref.helptip
