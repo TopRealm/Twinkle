@@ -8,11 +8,19 @@
 					"proposals": true
 				},
 				"modules": false,
+				// https://github.com/wikimedia/mediawiki/blob/master/resources/src/startup/startup.js#L15
+				"targets": {
+					"chrome": "58",
+					"edge": "79",
+					"opera": "50",
+					"firefox": "58",
+					"safari": "11.1",
+					"android": "5.0"
+				},
 				"useBuiltIns": "entry"
 			}
 		]
 	],
 	"plugins": ["array-includes", "transform-object-hasown"],
-	"targets": "chrome > 31 and Edge > 12 and Firefox > 39 and Safari > 9 and ie 11",
 	"ignore": ["scripts/", "dist/", "src/lib/", "*.json"]
 }
