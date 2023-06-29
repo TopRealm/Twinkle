@@ -3586,7 +3586,7 @@
 			ctx.onLoadSuccess(this); // invoke callback
 		};
 		// helper function to parse the page name returned from the API
-		const fnCheckPageName = function (response, onFailure) {
+		const fnCheckPageName = function ({pages, redirects}, onFailure) {
 			if (!onFailure) {
 				onFailure = emptyFunction;
 			}
@@ -3902,8 +3902,8 @@
 		 * @param {string} response - The response document from the API call.
 		 * @returns {boolean}
 		 */
-		const fnProcessChecks = function (action, onFailure, response) {
-			const missing = response.pages[0].missing;
+		const fnProcessChecks = function (action, onFailure, {pages, tokens}) {
+			const missing = pages[0].missing;
 			// No undelete as an existing page could have deleted revisions
 			const actionMissing = missing && ['delete', 'move'].includes(action);
 			const protectMissing = action === 'protect' && missing && (ctx.protectEdit || ctx.protectMove);
@@ -3924,13 +3924,9 @@
 			// extract protection info
 			let editprot;
 			if (action === 'undelete') {
-				editprot = response.pages[0].protection
-					.filter((pr) => pr.type === 'create' && pr.level === 'sysop')
-					.pop();
+				editprot = pages[0].protection.filter(({type, level}) => type === 'create' && level === 'sysop').pop();
 			} else if (action === 'delete' || action === 'move') {
-				editprot = response.pages[0].protection
-					.filter((pr) => pr.type === 'edit' && pr.level === 'sysop')
-					.pop();
+				editprot = pages[0].protection.filter(({type, level}) => type === 'edit' && level === 'sysop').pop();
 			}
 			if (
 				editprot &&
@@ -4976,7 +4972,7 @@
 	 */
 	Morebits.checkboxShiftClickSupport = (jQuerySelector, jQueryContext) => {
 		let lastCheckbox = null;
-		const clickHandler = function (event) {
+		const clickHandler = function ({shiftKey}) {
 			const thisCb = this;
 			if (event.shiftKey && lastCheckbox !== null) {
 				const cbs = $(jQuerySelector, jQueryContext); // can't cache them, obviously, if we want to support resorting
