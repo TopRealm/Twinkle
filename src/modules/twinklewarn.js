@@ -988,14 +988,6 @@ $(function TwinkleWarn() {
 				label: '翻译条目未标注原作者',
 				summary: '提醒：翻译条目未标注原作者',
 			},
-			'uw-uaa': {
-				label: '向需要管理员注意的用户名报告的用户名称并不违反方针',
-				summary: '提醒：向需要管理员注意的用户名报告的用户名称并不违反方针',
-			},
-			'uw-warn': {
-				label: '警告破坏用户',
-				summary: '提醒：警告破坏用户',
-			},
 			'uw-mosiw': {
 				label: '不要使用跨语言链接',
 				summary: '提醒：不要使用跨语言链接',
@@ -1047,17 +1039,9 @@ $(function TwinkleWarn() {
 				label: '长期的破坏',
 				summary: '警告：长期的破坏',
 			},
-			'uw-npov-tvd': {
-				label: '在剧集条目中加入奸角等非中立描述',
-				summary: '警告：在剧集条目中加入奸角等非中立描述',
-			},
 			'uw-pinfo': {
 				label: '张贴他人隐私',
 				summary: '警告：张贴他人隐私',
-			},
-			'uw-upv': {
-				label: '破坏他人用户页',
-				summary: '警告：破坏他人用户页',
 			},
 			'uw-selfinventedname': {
 				label: '不适当地自创新名词、新译名',
@@ -1066,11 +1050,6 @@ $(function TwinkleWarn() {
 			'uw-substub': {
 				label: '创建小小作品',
 				summary: '警告：创建小小作品',
-			},
-			'uw-username': {
-				label: '使用不恰当的用户名',
-				summary: '警告：使用不恰当的用户名',
-				suppressArticleInSummary: true,
 			},
 			'uw-wrongsummary': {
 				label: '在编辑摘要制造不适当的内容',
