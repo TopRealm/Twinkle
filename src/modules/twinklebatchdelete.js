@@ -81,8 +81,8 @@ $(function TwinkleBatchDelete() {
 										},
 										{
 											label: wgULS(
-												'取消所有已删页面的链入（仅处理条目及Portal命名空间）',
-												'取消所有已刪頁面的連入（僅處理條目及Portal命名空間）'
+												'取消所有已删页面的链入（仅处理条目命名空间）',
+												'取消所有已刪頁面的連入（僅處理條目命名空間）'
 											),
 											name: 'unlink_subpages',
 											value: 'unlink_subpages',
@@ -94,7 +94,7 @@ $(function TwinkleBatchDelete() {
 					},
 				},
 				{
-					label: wgULS('取消链入（仅处理条目及Portal命名空间）', '取消連入（僅處理條目及Portal命名空間）'),
+					label: wgULS('取消链入（仅处理条目命名空间）', '取消連入（僅處理條目命名空間）'),
 					name: 'unlink_page',
 					value: 'unlink',
 					checked: false,
@@ -616,7 +616,7 @@ $(function TwinkleBatchDelete() {
 					action: 'query',
 					list: 'backlinks',
 					blfilterredir: 'nonredirects',
-					blnamespace: [0, 100],
+					blnamespace: [0],
 					bltitle: params.page,
 					bllimit: 'max', // 500 is max for normal users, 5000 for bots and sysops
 				};
