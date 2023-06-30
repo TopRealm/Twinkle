@@ -855,6 +855,7 @@
 	 * @memberof Morebits.quickForm.element
 	 * @requires jquery.ui
 	 * @param {HTMLElement} node - The HTML element beside which a tooltip is to be generated.
+	 * @param {string} tooltip
 	 * @param {Object} data - Tooltip-related configuration data.
 	 */
 	Morebits.quickForm.element.generateTooltip = (node, data) => {
