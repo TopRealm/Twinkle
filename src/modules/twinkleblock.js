@@ -371,11 +371,19 @@ $(function TwinkleBlock() {
 		}
 		$partial.prop('disabled', !blockBox && !templateBox);
 		// Add current block parameters as default preset
-		const prior = {label: wgULS('当前封禁', '目前封鎖')};
+		const prior = {
+			label: wgULS('当前封禁', '目前封鎖'),
+		};
 		if (blockedUserName === relevantUserName) {
 			Twinkle.block.blockPresetsInfo.prior = Twinkle.block.currentBlockInfo;
 			// value not a valid template selection, chosen below by setting templateName
-			prior.list = [{label: wgULS('当前封禁设置', '目前封鎖設定'), value: 'prior', selected: true}];
+			prior.list = [
+				{
+					label: wgULS('当前封禁设置', '目前封鎖設定'),
+					value: 'prior',
+					selected: true,
+				},
+			];
 			// Arrays of objects are annoying to check
 			if (!blockGroup.some((bg) => bg.label === prior.label)) {
 				blockGroup.push(prior);
@@ -388,15 +396,11 @@ $(function TwinkleBlock() {
 					? 'uw-pblockindef'
 					: 'uw-pblock';
 			} else {
-				if (!Twinkle.block.isRegistered) {
-					Twinkle.block.blockPresetsInfo.prior.templateName = 'uw-ablock';
-				} else {
-					Twinkle.block.blockPresetsInfo.prior.templateName = Morebits.string.isInfinity(
-						Twinkle.block.currentBlockInfo.expiry
-					)
-						? 'uw-blockindef'
-						: 'uw-block';
-				}
+				Twinkle.block.blockPresetsInfo.prior.templateName = Morebits.string.isInfinity(
+					Twinkle.block.currentBlockInfo.expiry
+				)
+					? 'uw-blockindef'
+					: 'uw-block';
 			}
 		} else {
 			// But first remove any prior prior
@@ -432,22 +436,71 @@ $(function TwinkleBlock() {
 				label: wgULS('过期时间：', '過期時間：'),
 				event: Twinkle.block.callback.change_expiry,
 				list: [
-					{label: wgULS('自定义', '自訂'), value: 'custom', selected: true},
-					{label: wgULS('无限期', '無限期'), value: 'infinity'},
-					{label: wgULS('3小时', '3小時'), value: '3 hours'},
-					{label: wgULS('12小时', '12小時'), value: '12 hours'},
-					{label: '1天', value: '1 day'},
-					{label: wgULS('31小时', '31小時'), value: '31 hours'},
-					{label: '2天', value: '2 days'},
-					{label: '3天', value: '3 days'},
-					{label: wgULS('1周', '1週'), value: '1 week'},
-					{label: wgULS('2周', '2週'), value: '2 weeks'},
-					{label: wgULS('1个月', '1個月'), value: '1 month'},
-					{label: wgULS('3个月', '3個月'), value: '3 months'},
-					{label: wgULS('6个月', '6個月'), value: '6 months'},
-					{label: '1年', value: '1 year'},
-					{label: '2年', value: '2 years'},
-					{label: '3年', value: '3 years'},
+					{
+						label: wgULS('自定义', '自訂'),
+						value: 'custom',
+						selected: true,
+					},
+					{
+						label: wgULS('无限期', '無限期'),
+						value: 'infinity',
+					},
+					{
+						label: wgULS('3小时', '3小時'),
+						value: '3 hours',
+					},
+					{
+						label: wgULS('12小时', '12小時'),
+						value: '12 hours',
+					},
+					{
+						label: '1天',
+						value: '1 day',
+					},
+					{
+						label: wgULS('31小时', '31小時'),
+						value: '31 hours',
+					},
+					{
+						label: '2天',
+						value: '2 days',
+					},
+					{
+						label: '3天',
+						value: '3 days',
+					},
+					{
+						label: wgULS('1周', '1週'),
+						value: '1 week',
+					},
+					{
+						label: wgULS('2周', '2週'),
+						value: '2 weeks',
+					},
+					{
+						label: wgULS('1个月', '1個月'),
+						value: '1 month',
+					},
+					{
+						label: wgULS('3个月', '3個月'),
+						value: '3 months',
+					},
+					{
+						label: wgULS('6个月', '6個月'),
+						value: '6 months',
+					},
+					{
+						label: '1年',
+						value: '1 year',
+					},
+					{
+						label: '2年',
+						value: '2 years',
+					},
+					{
+						label: '3年',
+						value: '3 years',
+					},
 				],
 			});
 			field_block_options.append({
@@ -1109,22 +1162,12 @@ $(function TwinkleBlock() {
 			reason: wgULS('违反[[QW:3RR|回退不过三原则]]', '違反[[QW:3RR|回退不過三原則]]'),
 			summary: wgULS('封禁通知：违反[[QW:3RR|回退不过三原则]]', '封鎖通知：違反[[QW:3RR|回退不過三原則]]'),
 		},
-		'uw-ablock': {
-			autoblock: true,
-			expiry: '1 day',
-			forAnonOnly: true,
-			nocreate: true,
-			pageParam: true,
-			reasonParam: true,
-			summary: wgULS('封禁通知', '封鎖通知'),
-			suppressArticleInSummary: true,
-		},
 		'uw-adblock': {
 			autoblock: true,
 			nocreate: true,
 			pageParam: true,
-			reason: wgULS('[[QW:NOT#AD|散发广告/宣传]]', '[[QW:NOT#AD|散發廣告/宣傳]]'),
-			summary: wgULS('封禁通知：散发[[QW:NOT#AD|散发广告/宣传]]', '封鎖通知：散發[[QW:NOT#AD|散發廣告/宣傳]]'),
+			reason: wgULS('[[QW:NOT#AD|散发广告或宣传]]', '[[QW:NOT#AD|散發廣告或宣傳]]'),
+			summary: wgULS('封禁通知：散发[[QW:NOT#AD|散发广告或宣传]]', '封鎖通知：散發[[QW:NOT#AD|散發廣告或宣傳]]'),
 			templateName: 'uw-block',
 		},
 		'uw-block': {
@@ -1193,8 +1236,8 @@ $(function TwinkleBlock() {
 			autoblock: true,
 			expiry: '1 day',
 			nocreate: true,
-			reason: wgULS('无礼的行为、[[QW:NPA|攻击别人]]', '無禮的行為、[[QW:NPA|攻擊別人]]'),
-			summary: wgULS('封禁通知：无礼的行为、[[QW:NPA|人身攻击]]', '封鎖通知：無禮的行為、[[QW:NPA|人身攻擊]]'),
+			reason: wgULS('行为无礼或[[QW:NPA|攻击别人]]', '行為無禮或[[QW:NPA|攻擊別人]]'),
+			summary: wgULS('封禁通知：行为无礼或[[QW:NPA|人身攻击]]', '封鎖通知：行為無禮或[[QW:NPA|人身攻擊]]'),
 			templateName: 'uw-block',
 		},
 		'uw-sblock': {
@@ -1209,8 +1252,8 @@ $(function TwinkleBlock() {
 			forRegisteredOnly: true,
 			nocreate: true,
 			pageParam: true,
-			reason: wgULS('[[QW:NOT#AD|散发广告/宣传]]', '[[QW:NOT#AD|散發廣告/宣傳]]'),
-			summary: wgULS('封禁通知：仅[[QW:NOT#AD|散发广告/宣传]]', '封鎖通知：僅[[QW:NOT#AD|散發廣告/宣傳]]'),
+			reason: wgULS('[[QW:NOT#AD|散发广告或宣传]]', '[[QW:NOT#AD|散發廣告或宣傳]]'),
+			summary: wgULS('封禁通知：仅[[QW:NOT#AD|散发广告或宣传]]', '封鎖通知：僅[[QW:NOT#AD|散發廣告或宣傳]]'),
 			templateName: 'uw-block',
 		},
 		'uw-sockblock': {
@@ -1225,7 +1268,7 @@ $(function TwinkleBlock() {
 		'uw-softerblock': {
 			expiry: 'infinity',
 			forRegisteredOnly: true,
-			reason: `{{uw-softerblock}}<!-- ${wgULS('宣传性用户名、软封禁', '宣傳性使用者名稱、軟封鎖')} -->`,
+			reason: `{{uw-softerblock}}<!-- ${wgULS('宣传性用户名（软封禁）', '宣傳性使用者名稱（軟封鎖）')} -->`,
 			summary: wgULS(
 				'封禁通知：您的[[QW:U|用户名]]暗示您的账户代表一个团体、组织或网站',
 				'封鎖通知：您的[[QW:U|使用者名稱]]暗示您的帳號代表一個團體、組織或網站'
@@ -1236,7 +1279,7 @@ $(function TwinkleBlock() {
 			expiry: 'infinity',
 			forRegisteredOnly: true,
 			nocreate: true,
-			reason: `{{uw-spamublock}}<!-- ${wgULS('宣传性用户名、宣传性编辑', '宣傳性使用者名稱、宣傳性編輯')} -->`,
+			reason: `{{uw-spamublock}}<!-- ${wgULS('宣传性用户名或宣传性编辑', '宣傳性使用者名稱、宣傳性編輯')} -->`,
 			summary: wgULS(
 				'封禁通知：仅[[QW:NOT#AD|广告宣传]]，同时您的用户名违反[[QW:U|用户名方针]]',
 				'封鎖通知：僅[[QW:NOT#AD|廣告宣傳]]，同時您的使用者名稱違反[[QW:U|使用者名稱方針]]'
@@ -1245,7 +1288,7 @@ $(function TwinkleBlock() {
 		'uw-ublock': {
 			expiry: 'infinity',
 			forRegisteredOnly: true,
-			reason: `{{uw-ublock}}<!-- ${wgULS('不当用户名、软封禁', '不當使用者名稱、軟封鎖')} -->`,
+			reason: `{{uw-ublock}}<!-- ${wgULS('不当用户名（软封禁）', '不當使用者名稱（軟封鎖）')} -->`,
 			summary: wgULS(
 				'封禁通知：您的用户名违反[[QW:U|用户名方针]]',
 				'封鎖通知：您的使用者名稱違反[[QW:U|使用者名稱方針]]'
@@ -1255,8 +1298,8 @@ $(function TwinkleBlock() {
 			expiry: 'infinity',
 			forRegisteredOnly: true,
 			reason: `{{uw-ublock-double}}<!-- ${wgULS(
-				'用户名与其他用户相似、软封禁',
-				'使用者名稱與其他使用者相似、軟封鎖'
+				'用户名与其他用户相似（软封禁）',
+				'使用者名稱與其他使用者相似（軟封鎖）'
 			)} -->`,
 			summary: wgULS(
 				'封禁通知：您的[[QW:U|用户名]]与其他求闻百科用户过于相似',
@@ -1279,8 +1322,8 @@ $(function TwinkleBlock() {
 			expiry: 'infinity',
 			forRegisteredOnly: true,
 			reason: `{{uw-ublock-wellknown}}<!-- ${wgULS(
-				'用户名与知名人物相似、软封禁',
-				'使用者名稱與知名人物相似、軟封鎖'
+				'用户名与知名人物相似（软封禁）',
+				'使用者名稱與知名人物相似（軟封鎖）'
 			)} -->`,
 			summary: wgULS(
 				'封禁通知：您的[[QW:U|用户名]]与知名人物过于相似',
@@ -1293,8 +1336,8 @@ $(function TwinkleBlock() {
 			forRegisteredOnly: true,
 			nocreate: true,
 			reason: `{{uw-uhblock-double}}<!-- ${wgULS(
-				'用户名试图冒充其他用户、硬封禁',
-				'使用者名稱試圖冒充其他使用者、硬封鎖'
+				'用户名试图冒充其他用户（硬封禁）',
+				'使用者名稱試圖冒充其他使用者（硬封鎖）'
 			)} -->`,
 			summary: wgULS(
 				'封禁通知：您的[[QW:U|用户名]]试图冒充其他求闻百科用户',
@@ -1436,9 +1479,6 @@ $(function TwinkleBlock() {
 			} else {
 				settings.expiry = settings.expiry || '1 day';
 			}
-			if (!Twinkle.block.isRegistered && ['uw-block', 'uw-blockindef'].includes(settings.templateName)) {
-				settings.templateName = 'uw-ablock';
-			}
 			Twinkle.block.blockPresetsInfo[preset] = settings;
 		});
 	};
@@ -1447,207 +1487,145 @@ $(function TwinkleBlock() {
 	//   value: <string, the key of a preset in blockPresetsInfo>
 	Twinkle.block.blockGroups = [
 		{
-			meta: true,
-			label: '封禁模板',
+			label: wgULS('常见封禁理由', '常見封鎖理由'),
 			list: [
 				{
-					label: '一般封禁',
+					label: wgULS('通用封禁（自定义理由）', '通用封鎖（自訂理由）'),
 					value: 'uw-block',
 				},
 				{
-					label: '永久封禁',
-					value: 'uw-blockindef',
-				},
-			],
-		},
-		{
-			label: '违反基本规则',
-			list: [
-				{
-					label: '违反“[[Qiuwen:求闻百科不是什么|求闻百科不是什么]]”方针：持续散布广告或其他宣传性内容',
-					value: 'uw-block',
-				},
-				{
-					label: '违反“[[Qiuwen:求闻百科不是什么|求闻百科不是什么]]”方针：持续散布其他不应发布于求闻百科的内容',
-					value: 'uw-block',
-				},
-				{
-					label: '违反“[[Qiuwen:中国价值观基础上的客观观点|中国价值观基础上的客观观点]]”方针：持续散布违反该方针的内容',
-					value: 'uw-block',
-				},
-				{
-					label: '违反[[Qiuwen:著作权方针|著作权]]方针：持续散布侵犯他人著作权的内容',
-					value: 'uw-block',
-				},
-				{
-					label: '违反[[Qiuwen:文明|文明]]方针：持续对其他社区参与者做出不文明的举动',
-					value: 'uw-block',
-				},
-				{
-					label: '明显违反中国法律、法规，影响网站合规性',
-					value: 'uw-block',
-				},
-			],
-		},
-		{
-			label: '违反其他内容方针',
-			list: [
-				{
-					label: '违反“[[Qiuwen:求闻百科不是什么|求闻百科不是什么]]”方针、“[[Qiuwen:非原创研究|非原创研究]]方针：持续在求闻百科散布原创研究或原创观念',
-					value: 'uw-block',
-				},
-				{
-					label: '违反“[[Qiuwen:中国价值观基础上的客观观点|中国价值观基础上的客观观点]]”方针、涉政内容规范（试行）：持续发布不符合中国法律、法规和求闻百科社区规范的涉政内容',
-					value: 'uw-block',
-				},
-				{
-					label: '违反“[[Qiuwen:可供查证方针|可供查证方针]]”方针：持续在求闻百科散布无法得到查证的条目',
-					value: 'uw-block',
-				},
-				{
-					label: '违反[[Qiuwen:生者传记方针|生者传记]]方针：散布有关在世人物的无来源或争议内容',
-					value: 'uw-block',
-				},
-				{
-					label: '违反[[Qiuwen:生者传记方针|生者传记]]方针：散布有关英雄烈士的无来源或争议内容',
-					value: 'uw-block',
-				},
-			],
-		},
-		{
-			label: '违反其他行为方针',
-			list: [
-				{
-					label: '违反“[[Qiuwen:不要打编辑战|不要打编辑战]]”方针：违背“[[QW:3RR|回退不过三]]”原则',
-					value: 'uw-block',
-				},
-				{
-					label: '违反“[[Qiuwen:不要打编辑战|不要打编辑战]]”方针：参与编辑战',
-					value: 'uw-block',
-				},
-				{
-					label: '违反[[Qiuwen:反骚扰方针|反骚扰]]方针：持续的骚扰行为',
-					value: 'uw-block',
-				},
-				{
-					label: '违反[[Qiuwen:反破坏方针|反破坏]]方针：持续的破坏行为',
-					value: 'uw-block',
-				},
-				{
-					label: '违反“[[Qiuwen:不要制造恶作剧|不要制造恶作剧]]”方针：持续在求闻百科发布恶作剧',
-					value: 'uw-block',
-				},
-				{
-					label: '违反“[[Qiuwen:不要打制度擦边球|不要打制度擦边球]]”方针：故意歪曲求闻百科原则',
-					value: 'uw-block',
-				},
-				{
-					label: '违反“[[Qiuwen:不要打制度擦边球|不要打制度擦边球]]”方针：扰乱、阻碍社区共识形成',
-					value: 'uw-block',
-				},
-				{
-					label: '违反[[Qiuwen:反骚扰方针|反骚扰]]方针、“[[Qiuwen:不要打制度擦边球|不要打制度擦边球]]”方针：跟踪他人编辑',
-					value: 'uw-block',
-				},
-				{
-					label: '违反[[Qiuwen:用户协议|求闻百科用户协议]]、“[[Qiuwen:不要打制度擦边球|不要打制度擦边球]]”方针：欺骗网站系统，滥用系统功能',
-					value: 'uw-block',
-				},
-				{
-					label: '违反[[Qiuwen:用户协议|求闻百科用户协议]]、[[Qiuwen:有偿编辑方针|有偿编辑]]方针：用户以收受他人钱财、受雇于他人或代表他人利益为前提参与求闻百科，但拒绝申报其利益相关，扰乱社区秩序',
-					value: 'uw-block',
-				},
-				{
-					label: '违反[[Qiuwen:用户页方针|用户页]]方针：滥用用户页，屡劝不止',
-					value: 'uw-block',
-				},
-				{
-					label: '违反[[Qiuwen:用户框方针|用户框]]方针：创建违反法律法规及本站方针的用户框，屡劝不止',
-					value: 'uw-block',
-				},
-				{
-					label: '违反“[[Qiuwen:一人一号|一人一号]]”方针：不当使用多重账号',
-					value: 'uw-block',
-				},
-				{
-					label: '违反“[[Qiuwen:一人一号|一人一号]]”方针：不当使用多重账号（用户查核确认）',
-					value: 'uw-block',
-				},
-				{
-					label: '违反“[[Qiuwen:一人一号|一人一号]]”方针：不当使用多重账号（根据用户贡献确定）',
+					label: wgULS('通用封禁（自定义理由） - 无限期', '通用封鎖（自訂理由） - 無限期'),
 					value: 'uw-blockindef',
 				},
 				{
-					label: '违反[[Qiuwen:签名|签名]]方针：仿冒他人签名',
-					value: 'uw-block',
+					label: wgULS('破坏', '破壞'),
+					value: 'uw-vblock',
+					selected: true,
 				},
 				{
-					label: '违反[[Qiuwen:签名|签名]]方针：签名格式违反求闻百科方针',
-					value: 'uw-block',
+					label: wgULS('纯粹破坏', '純粹破壞'),
+					value: 'uw-voablock',
 				},
 				{
-					label: '违反[[Qiuwen:讨论页规范|讨论页规范]]：窜改他人留言',
-					value: 'uw-block',
-				},
-			],
-		},
-		{
-			label: '用户名封禁',
-			list: [
-				{
-					label: '',
-					value: 'uw-ublock|误导',
-					forRegisteredOnly: true,
+					label: wgULS('不断加入垃圾链接', '不斷加入垃圾連結'),
+					value: 'uw-sblock',
 				},
 				{
-					label: '',
-					value: 'uw-ublock|宣传',
-					forRegisteredOnly: true,
+					label: wgULS('散发广告或宣传', '散發廣告或宣傳'),
+					value: 'uw-adblock',
 				},
 				{
-					label: '',
-					value: 'uw-ublock|攻击|或侮辱性',
-					forRegisteredOnly: true,
+					label: wgULS('仅散发广告或宣传', '僅散發廣告或宣傳'),
+					value: 'uw-soablock',
 				},
 				{
-					label: '',
-					value: 'uw-ublock|混淆',
-					forRegisteredOnly: true,
-				},
-			],
-		},
-		{
-			label: '其他原因',
-			list: [
-				{
-					label: 'IP段封禁',
-					value: 'uw-block',
-					forAnonOnly: true,
+					label: wgULS('违反回退不过三原则', '違反回退不過三原則'),
+					value: 'uw-3block',
 				},
 				{
-					label: '用户查核封禁：账户封禁',
-					value: 'checkuserblock-account',
-					forRegisteredOnly: true,
+					label: wgULS('无礼的行为或人身攻击', '無禮的行為或人身攻擊'),
+					value: 'uw-pablock',
 				},
 				{
-					label: '用户查核封禁：IP段封禁',
-					value: 'checkuserblock',
-					forAnonOnly: true,
+					label: wgULS('骚扰用户', '騷擾使用者'),
+					value: 'uw-hblock',
 				},
 				{
-					label: '机器人出错',
+					label: wgULS('为了阐释观点而扰乱求闻百科', '為了闡釋觀點而擾亂求聞百科'),
+					value: 'point-block',
+				},
+				{
+					label: wgULS('打制度擦边球', '打制度擦邊球'),
+					value: 'game-block',
+				},
+				{
+					label: wgULS(
+						'确认为傀儡或真人傀儡 - 根据用户贡献确定',
+						'確認為傀儡或真人傀儡 - 根據使用者貢獻確定'
+					),
+					value: 'sock-contribs-reg',
+				},
+				{
+					label: wgULS('确认为傀儡或真人傀儡 - 用户查核确认', '確認為傀儡或真人傀儡 - 使用者查核確認'),
+					value: 'sock-cu-reg',
+				},
+				{
+					label: wgULS('滥用多个账户', '濫用多個帳號'),
+					value: 'uw-sockblock',
+				},
+				{
+					label: wgULS('屡次增加没有可靠来源的资料', '屢次增加沒有可靠來源的資料'),
+					value: 'uw-ucblock',
+				},
+				{
+					label: wgULS('在条目中增加无意义文字', '在條目中增加無意義文字'),
+					value: 'uw-npblock',
+				},
+				{
+					label: wgULS('无故删除内容', '無故刪除內容'),
+					value: 'uw-dblock',
+				},
+				{
+					label: wgULS('多次加入侵犯著作权的内容', '多次加入侵犯著作權的內容'),
+					value: 'uw-copyrightblock',
+				},
+				{
+					label: wgULS('机器人发生故障并必须紧急停止', '機器人發生故障並必須緊急停止'),
 					value: 'Bot block message',
-					forRegisteredOnly: true,
 				},
 				{
-					label: '求闻百科运营者行动',
-					value: 'uw-block',
-					forRegisteredOnly: true,
+					label: wgULS('禁止编辑讨论页', '禁止編輯討論頁'),
+					value: 'uw-blocknotalk',
+					meta: true,
+				},
+			],
+		},
+		{
+			custom: true,
+			label: wgULS('自定义封禁理由', '自訂封鎖理由'),
+		},
+		{
+			label: wgULS('用户名封禁', '使用者名稱封鎖'),
+			list: [
+				{
+					label: wgULS('宣传性用户名或宣传性编辑', '宣傳性使用者名稱、宣傳性編輯'),
+					value: 'uw-spamublock',
 				},
 				{
-					label: '求闻百科裁决委员会决议',
-					value: 'uw-block',
-					forRegisteredOnly: true,
+					label: wgULS('宣传性用户名（软封禁）', '宣傳性使用者名稱（軟封鎖）'),
+					value: 'uw-softerblock',
+				},
+				{
+					label: wgULS('用户名与其他用户相似（软封禁）', '使用者名稱與其他使用者相似（軟封鎖）'),
+					value: 'uw-ublock-double',
+				},
+				{
+					label: wgULS('不当用户名（软封禁）', '不當使用者名稱（軟封鎖）'),
+					value: 'uw-ublock',
+				},
+				{
+					label: wgULS('用户名试图冒充其他用户（硬封禁）', '使用者名稱試圖冒充其他使用者（硬封鎖）'),
+					value: 'uw-uhblock-double',
+				},
+				{
+					label: wgULS('用户名与知名人物相似（软封禁）', '使用者名稱與知名人物相似（軟封鎖）'),
+					value: 'uw-ublock-wellknown',
+				},
+				{
+					label: wgULS('误导性用户名', '誤導性使用者名稱'),
+					value: 'uw-ublock|误导',
+				},
+				{
+					label: wgULS('宣传性用户名', '宣傳性使用者名稱'),
+					value: 'uw-ublock|宣传',
+				},
+				{
+					label: wgULS('攻击性用户名', '攻擊性使用者名稱'),
+					value: 'uw-ublock|攻击|或侮辱性',
+				},
+				{
+					label: wgULS('混淆性用户名', '混淆性使用者名稱'),
+					value: 'uw-ublock|混淆',
 				},
 			],
 		},
@@ -2040,22 +2018,26 @@ $(function TwinkleBlock() {
 		if (toBlock) {
 			if (blockoptions.partial) {
 				if (blockoptions.disabletalk && !blockoptions.namespacerestrictions.includes('3')) {
-					return alert(
+					mw.notify(
 						wgULS(
 							'部分封禁无法阻止编辑自己的讨论页，除非也封禁了User talk命名空间！',
 							'部分封鎖無法阻止編輯自己的討論頁，除非也封鎖了User talk命名空間！'
-						)
+						),
+						{type: 'warn'}
 					);
+					return;
 				}
 				if (!blockoptions.namespacerestrictions && !blockoptions.pagerestrictions) {
 					if (!blockoptions.noemail && !blockoptions.nocreate) {
 						// Blank entries technically allowed
-						return alert(
+						mw.notify(
 							wgULS(
 								'没有选择页面或命名空间，也没有停用电子邮件或禁止创建账户；请选择至少一个选项以应用部分封禁！',
 								'沒有選擇頁面或命名空間，也沒有停用電子郵件或禁止建立帳號；請選擇至少一個選項以應用部分封鎖！'
-							)
+							),
+							{type: 'warn'}
 						);
+						return;
 					} else if (
 						!confirm(
 							wgULS(
@@ -2177,6 +2159,7 @@ $(function TwinkleBlock() {
 				const groupsCanBeRemoved = [
 					'autoreviewer',
 					'confirmed',
+					'rnrsverify-exempt',
 					'massmessage-sender',
 					'patroller',
 					'templateeditor',
@@ -2195,7 +2178,7 @@ $(function TwinkleBlock() {
 						Twinkle.block.callback.issue_template(templateoptions);
 					}
 					if (toClosevip) {
-						const vipPage = new Morebits.wiki.page('Qiuwen:当前的破坏', '关闭请求');
+						const vipPage = new Morebits.wiki.page('Qiuwen:当前的破坏', wgULS('关闭请求', '關閉請求'));
 						vipPage.setFollowRedirect(true);
 						vipPage.setCallbackParameters(blockoptions);
 						vipPage.load(Twinkle.block.callback.closeRequest);
