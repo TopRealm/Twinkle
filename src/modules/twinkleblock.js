@@ -1629,36 +1629,6 @@ $(function TwinkleBlock() {
 				},
 			],
 		},
-		{
-			label: '其他模板',
-			list: [
-				{
-					label: 'range block',
-					value: 'range block',
-					forAnonOnly: true,
-				},
-				{
-					label: 'school block',
-					value: 'school block',
-					forAnonOnly: true,
-				},
-				{
-					label: 'blocked proxy',
-					value: 'blocked proxy',
-					forAnonOnly: true,
-				},
-				{
-					label: 'CheckUser block',
-					value: 'CheckUser block',
-					forAnonOnly: true,
-				},
-				{
-					label: 'checkuserblock-account',
-					value: 'checkuserblock-account',
-					forRegisteredOnly: true,
-				},
-			],
-		},
 	];
 	Twinkle.block.blockGroupsPartial = [
 		{
