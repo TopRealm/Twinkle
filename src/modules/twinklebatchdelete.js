@@ -306,7 +306,7 @@ $(function TwinkleBatchDelete() {
 				'G9: 孤立页面，比如没有主页面的讨论页、指向空页面的重定向等',
 				'G9: 孤立頁面，比如沒有主頁面的討論頁、指向空頁面的重新導向等'
 			),
-			value: wgULS('[[QW:CSD#G9|G9]]: 孤立页面', '[[QW:CSD#G9|G9]]: 孤立頁面'),
+			value: wgULS('[[QW:CSD#G9|G9]]：孤立页面', '[[QW:CSD#G9|G9]]：孤立頁面'),
 		},
 		{
 			label: wgULS(
@@ -323,22 +323,22 @@ $(function TwinkleBatchDelete() {
 			value: wgULS('[[QW:CSD#F4|F4]]：可被替代的合理使用文件', '[[QW:CSD#F4|F4]]：可被替代的合理使用檔案'),
 		},
 		{
-			label: wgULS('O1: 用户请求删除自己的用户页或其子页面', 'O1: 使用者請求刪除自己的使用者頁面或其子頁面'),
+			label: wgULS('O1：用户请求删除自己的用户页或其子页面', 'O1：使用者請求刪除自己的使用者頁面或其子頁面'),
 			value: wgULS(
-				'[[QW:CSD#O1|O1]]: 用户请求删除自己的[[Help:用户页|用户页]]或其子页面。',
-				'[[QW:CSD#O1|O1]]: 使用者請求刪除自己的[[Help:用户页|使用者頁面]]或其子頁面。'
+				'[[QW:CSD#O1|O1]]：用户请求删除自己的[[Help:用户页|用户页]]或其子页面。',
+				'[[QW:CSD#O1|O1]]：使用者請求刪除自己的[[Help:用户页|使用者頁面]]或其子頁面。'
 			),
 		},
 		{
-			label: wgULS('O2: 空的分类（没有条目也没有子分类）', 'O2: 空的分類（沒有條目也沒有子分類）'),
+			label: wgULS('O2：空的分类（没有条目也没有子分类）', 'O2：空的分類（沒有條目也沒有子分類）'),
 			value: wgULS(
-				'[[QW:CSD#O2|O2]]: 空的分类（没有条目也没有子分类）。',
-				'[[QW:CSD#O2|O2]]: 空的分類（沒有條目也沒有子分類）。'
+				'[[QW:CSD#O2|O2]]：空的分类（没有条目也没有子分类）。',
+				'[[QW:CSD#O2|O2]]：空的分類（沒有條目也沒有子分類）。'
 			),
 		},
 		{
-			label: wgULS('O3: 废弃草稿', 'O3: 廢棄草稿'),
-			value: wgULS('[[QW:CSD#O3|O3]]: 废弃草稿。', '[[QW:CSD#O3|O3]]: 廢棄草稿。'),
+			label: wgULS('O3：废弃草稿', 'O3：廢棄草稿'),
+			value: wgULS('[[QW:CSD#O3|O3]]：废弃草稿。', '[[QW:CSD#O3|O3]]：廢棄草稿。'),
 		},
 	];
 	Twinkle.batchdelete.callback.change_common_reason = ({target}) => {
@@ -698,7 +698,7 @@ $(function TwinkleBatchDelete() {
 			redirectDeleter.run((pageName) => {
 				const qiuwen_page = new Morebits.wiki.page(pageName, wgULS('正在删除 ', '正在刪除 ') + pageName);
 				qiuwen_page.setEditSummary(
-					`[[QW:CSD#G9|G9]]: ${wgULS('指向已删页面“', '指向已刪頁面「')}${params.page}${wgULS(
+					`[[QW:CSD#G9|G9]]：${wgULS('指向已删页面“', '指向已刪頁面「')}${params.page}${wgULS(
 						'”的重定向',
 						'」的重新導向'
 					)}`
@@ -719,7 +719,7 @@ $(function TwinkleBatchDelete() {
 				wgULS('正在删除页面 ', '正在刪除頁面 ') + params.page + wgULS(' 的讨论页', ' 的討論頁')
 			);
 			page.setEditSummary(
-				`[[QW:CSD#G9|G9]]: ${wgULS('已删页面“', '已刪頁面「')}${params.page}${wgULS(
+				`[[QW:CSD#G9|G9]]：${wgULS('已删页面“', '已刪頁面「')}${params.page}${wgULS(
 					'”的[[H:讨论页|讨论页]]',
 					'」的[[H:討論頁|討論頁]]'
 				)}`
