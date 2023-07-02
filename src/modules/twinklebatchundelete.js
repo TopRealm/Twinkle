@@ -20,8 +20,8 @@ $(function TwinkleBatchUndelete() {
 		const Window = new Morebits.simpleWindow(600, 400);
 		Window.setScriptName('Twinkle');
 		Window.setTitle('批量恢复');
-		Window.addFooterLink('帮助文档', 'H:TW/DOC#批量恢复');
-		Window.addFooterLink('问题反馈', 'HT:TW');
+		Window.addFooterLink(wgULS('帮助文档', '幫助文檔'), 'H:TW/DOC#批量恢复');
+		Window.addFooterLink(wgULS('问题反馈', '問題反饋'), 'HT:TW');
 		const form = new Morebits.quickForm(Twinkle.batchundelete.callback.evaluate);
 		form.append({
 			type: 'checkbox',

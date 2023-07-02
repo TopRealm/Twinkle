@@ -42,9 +42,9 @@ $(function FriendlyTag() {
 		const Window = new Morebits.simpleWindow(630, Twinkle.tag.modeEn === 'article' ? 500 : 400);
 		Window.setScriptName('Twinkle');
 		// anyone got a good policy/guideline/info page/instructional page link?
-		Window.addFooterLink('参数设置', 'H:TW/PREF#tag');
-		Window.addFooterLink('帮助文档', 'H:TW/DOC#tag');
-		Window.addFooterLink('问题反馈', 'HT:TW');
+		Window.addFooterLink(wgULS('参数设置', '參數設置'), 'H:TW/PREF#tag');
+		Window.addFooterLink(wgULS('帮助文档', '幫助文檔'), 'H:TW/DOC#tag');
+		Window.addFooterLink(wgULS('问题反馈', '問題反饋'), 'HT:TW');
 		const form = new Morebits.quickForm(Twinkle.tag.callback.evaluate);
 		form.append({
 			type: 'input',

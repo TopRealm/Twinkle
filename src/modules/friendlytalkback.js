@@ -22,9 +22,9 @@ $(function FriendlyTalkback() {
 		const Window = new Morebits.simpleWindow(600, 350);
 		Window.setTitle('通知');
 		Window.setScriptName('Twinkle');
-		Window.addFooterLink('参数设置', 'H:TW/PREF#talkback');
-		Window.addFooterLink('帮助文档', 'H:TW/DOC#talkback');
-		Window.addFooterLink('问题反馈', 'HT:TW');
+		Window.addFooterLink(wgULS('参数设置', '參數設置'), 'H:TW/PREF#talkback');
+		Window.addFooterLink(wgULS('帮助文档', '幫助文檔'), 'H:TW/DOC#talkback');
+		Window.addFooterLink(wgULS('问题反馈', '問題反饋'), 'HT:TW');
 		const form = new Morebits.quickForm(Twinkle.talkback.evaluate);
 		form.append({
 			type: 'radio',

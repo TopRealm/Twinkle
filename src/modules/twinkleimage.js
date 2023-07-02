@@ -24,9 +24,9 @@ $(function TwinkleImage() {
 		Window.setTitle('文件快速删除');
 		Window.setScriptName('Twinkle');
 		Window.addFooterLink('快速删除方针', 'QW:CSD');
-		Window.addFooterLink('参数设置', 'H:TW/PREF#图权');
-		Window.addFooterLink('帮助文档', 'H:TW/DOC#图权');
-		Window.addFooterLink('问题反馈', 'HT:TW');
+		Window.addFooterLink(wgULS('参数设置', '參數設置'), 'H:TW/PREF#图权');
+		Window.addFooterLink(wgULS('帮助文档', '幫助文檔'), 'H:TW/DOC#图权');
+		Window.addFooterLink(wgULS('问题反馈', '問題反饋'), 'HT:TW');
 		const form = new Morebits.quickForm(Twinkle.image.callback.evaluate);
 		form.append({
 			type: 'checkbox',

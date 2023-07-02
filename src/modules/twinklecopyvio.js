@@ -35,9 +35,9 @@ $(function TwinkleCopyvio() {
 		Window.setTitle('提报侵权页面');
 		Window.setScriptName('Twinkle');
 		Window.addFooterLink('常见错误', 'Qiuwen:管理员错误自查表/侵权处理');
-		Window.addFooterLink('参数设置', 'H:TW/PREF#侵权');
-		Window.addFooterLink('帮助文档', 'H:TW/DOC#侵权');
-		Window.addFooterLink('问题反馈', 'HT:TW');
+		Window.addFooterLink(wgULS('参数设置', '參數設置'), 'H:TW/PREF#侵权');
+		Window.addFooterLink(wgULS('帮助文档', '幫助文檔'), 'H:TW/DOC#侵权');
+		Window.addFooterLink(wgULS('问题反馈', '問題反饋'), 'HT:TW');
 		const form = new Morebits.quickForm(Twinkle.copyvio.callback.evaluate);
 		form.append({
 			type: 'textarea',

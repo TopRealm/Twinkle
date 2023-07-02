@@ -21,9 +21,9 @@ $(function TwinkleStub() {
 		const Window = new Morebits.simpleWindow(630, Twinkle.stub.mode === 'article' ? 450 : 400);
 		Window.setScriptName('Twinkle');
 		Window.addFooterLink('小作品说明', 'Qiuwen:小作品');
-		Window.addFooterLink('参数设置', 'H:TW/PREF#小作品');
-		Window.addFooterLink('帮助文档', 'H:TW/DOC#小作品');
-		Window.addFooterLink('问题反馈', 'HT:TW');
+		Window.addFooterLink(wgULS('参数设置', '參數設置'), 'H:TW/PREF#小作品');
+		Window.addFooterLink(wgULS('帮助文档', '幫助文檔'), 'H:TW/DOC#小作品');
+		Window.addFooterLink(wgULS('问题反馈', '問題反饋'), 'HT:TW');
 		const form = new Morebits.quickForm(Twinkle.stub.callback.evaluate);
 		if (document.querySelectorAll('.patrollink').length > 0) {
 			form.append({

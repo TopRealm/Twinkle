@@ -25,7 +25,7 @@ $(function TwinkleProtect() {
 		Window.addFooterLink('保护方针', 'QW:PROT');
 		Window.addFooterLink('保护设置', 'H:TW/PREF#保护');
 		Window.addFooterLink('Twinkle帮助', 'H:TW/DOC#保护');
-		Window.addFooterLink('问题反馈', 'HT:TW');
+		Window.addFooterLink(wgULS('问题反馈', '問題反饋'), 'HT:TW');
 		const form = new Morebits.quickForm(Twinkle.protect.callback.evaluate);
 		const actionfield = form.append({
 			type: 'field',

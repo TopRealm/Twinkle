@@ -21,9 +21,9 @@ $(function TwinkleUnlink() {
 		const Window = new Morebits.simpleWindow(600, 440);
 		Window.setTitle(`取消页面链入${fileSpace ? '及文件使用' : ''}`);
 		Window.setScriptName('Twinkle');
-		Window.addFooterLink('参数设置', 'H:TW/PREF#消链');
-		Window.addFooterLink('帮助文档', 'H:TW/DOC#销链');
-		Window.addFooterLink('问题反馈', 'HT:TW');
+		Window.addFooterLink(wgULS('参数设置', '參數設置'), 'H:TW/PREF#消链');
+		Window.addFooterLink(wgULS('帮助文档', '幫助文檔'), 'H:TW/DOC#销链');
+		Window.addFooterLink(wgULS('问题反馈', '問題反饋'), 'HT:TW');
 		const form = new Morebits.quickForm(Twinkle.unlink.callback.evaluate);
 		// prepend some documentation: files are commented out, while any
 		// display text is preserved for links (otherwise the link itself is used)

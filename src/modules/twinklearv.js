@@ -31,9 +31,9 @@ $(function TwinkleARV() {
 		Window.addFooterLink('AIV指引', 'QW:GAIV');
 		Window.addFooterLink('UAA指引', 'QW:UAAI');
 		Window.addFooterLink('SPI指引', 'Qiuwen:傀儡调查');
-		Window.addFooterLink('参数设置', 'H:TW/PREF#arv');
-		Window.addFooterLink('帮助文档', 'H:TW/DOC#arv');
-		Window.addFooterLink('问题反馈', 'HT:TW');
+		Window.addFooterLink(wgULS('参数设置', '參數設置'), 'H:TW/PREF#arv');
+		Window.addFooterLink(wgULS('帮助文档', '幫助文檔'), 'H:TW/DOC#arv');
+		Window.addFooterLink(wgULS('问题反馈', '問題反饋'), 'HT:TW');
 		const form = new Morebits.quickForm(Twinkle.arv.callback.evaluate);
 		const categories = form.append({
 			type: 'select',
