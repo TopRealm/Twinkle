@@ -516,7 +516,7 @@
 			);
 		}
 		// Hide the lingering space if the TW menu is empty
-		const isVector = mw.config.get('skin') === 'vector' || mw.config.get('skin') === 'vector-2022';
+		const isVector = ['vector', 'vector-2022'].includes(mw.config.get('skin'));
 		if (isVector && Twinkle.getPref('portletType') === 'menu' && $('#p-twinkle').length === 0) {
 			$('#p-cactions').css('margin-right', 'initial');
 		}
