@@ -1501,13 +1501,13 @@ $(function FriendlyTag() {
 				$.each(tags, addTag);
 				// Insert tag after short description or any hatnotes,
 				// as well as deletion/protection-related templates
-				const wikipage = new Morebits.wikitext.page(pageText);
+				const qiuwen_page = new Morebits.wikitext.page(pageText);
 				const templatesAfter =
 					// Protection templates
 					// CSD
 					// AfD
 					`${Twinkle.hatnoteRegex}pp|pp-.*?|(?:Delete|Db-reason|D|Deletebecause|Db|速删|速刪|Speedy|SD|快删|快刪|CSD)|[rsaiftcmv]fd|vfd-(?:b|q|s|source|v|wikt)|(?:移动到维基|移動到維基)(?:教科书|教科書|语录|語錄|文库|文庫|导游|導遊|词典|詞典)`;
-				pageText = wikipage.insertAfterTemplates(tagText, templatesAfter).getText();
+				pageText = qiuwen_page.insertAfterTemplates(tagText, templatesAfter).getText();
 				removeTags();
 			};
 			// Separate tags into groupable ones (`groupableTags`) and non-groupable ones (`tags`)

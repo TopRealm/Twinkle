@@ -1278,8 +1278,8 @@ $(function TwinkleSpeedy() {
 					text = code;
 				} else {
 					// Insert tag after short description or any hatnotes
-					const wikipage = new Morebits.wikitext.page(text);
-					text = wikipage.insertAfterTemplates(`${code}\n`, Twinkle.hatnoteRegex).getText();
+					const qiuwen_page = new Morebits.wikitext.page(text);
+					text = qiuwen_page.insertAfterTemplates(`${code}\n`, Twinkle.hatnoteRegex).getText();
 				}
 				pageobj.setPageText(text);
 				pageobj.setEditSummary(editsummary);

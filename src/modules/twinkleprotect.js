@@ -1209,8 +1209,8 @@ $(function TwinkleProtect() {
 						tag = `{{${tag}}}\n`;
 					}
 					// Insert tag after short description or any hatnotes
-					const wikipage = new Morebits.wikitext.page(text);
-					text = wikipage.insertAfterTemplates(tag, Twinkle.hatnoteRegex).getText();
+					const qiuwen_page = new Morebits.wikitext.page(text);
+					text = qiuwen_page.insertAfterTemplates(tag, Twinkle.hatnoteRegex).getText();
 				}
 				summary = `加入{{${params.tag}}}`;
 			}

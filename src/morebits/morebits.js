@@ -5269,7 +5269,7 @@
 			this.taskDependencyMap.forEach((deps, task) => {
 				const dependencyPromisesArray = deps.map((dep) => self.deferreds.get(dep));
 				$.when.apply(self.context, dependencyPromisesArray).then(
-					function (...args) {
+					(...args) => {
 						const result = task.apply(self.context, args);
 						if (result === undefined) {
 							// maybe the function threw, or it didn't return anything
@@ -5278,17 +5278,17 @@
 							self.failureCallbackMap.get(task).apply(self.context, []);
 						}
 						result.then(
-							function (...args) {
+							(...args) => {
 								self.deferreds.get(task).resolve.apply(self.context, args);
 							},
-							function (...args) {
+							(...args) => {
 								// task failed
 								self.deferreds.get(task).reject.apply(self.context, args);
 								self.failureCallbackMap.get(task).apply(self.context, args);
 							}
 						);
 					},
-					function (...args) {
+					(...args) => {
 						// one or more of the dependencies failed
 						self.failureCallbackMap.get(task).apply(self.context, args);
 					}

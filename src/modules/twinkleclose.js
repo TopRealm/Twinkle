@@ -523,8 +523,8 @@ $(function TwinkleClose() {
 			if (params.code === 'mergeapproved') {
 				const tag = `{{subst:Merge approved/auto|discuss=${mw.config.get('wgPageName')}#${params.title}}}\n`;
 				// Insert tag after short description or any hatnotes
-				const wikipage = new Morebits.wikitext.page(newtext);
-				newtext = wikipage.insertAfterTemplates(tag, Twinkle.hatnoteRegex).getText();
+				const qiuwen_page = new Morebits.wikitext.page(newtext);
+				newtext = qiuwen_page.insertAfterTemplates(tag, Twinkle.hatnoteRegex).getText();
 			}
 			if (newtext === text) {
 				statelem.warn('未找到存废讨论模板，可能已被移除');
