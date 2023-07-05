@@ -147,7 +147,7 @@ $(function TwinkleBatchUndelete() {
 			};
 			const qiuwen_page = new Morebits.wiki.page(pageName, `反删除页面${pageName}`);
 			qiuwen_page.setCallbackParameters(params);
-			qiuwen_page.setEditSummary(`${reason} (批量)`);
+			qiuwen_page.setEditSummary(`${reason}（批量）`);
 			qiuwen_page.setChangeTags(Twinkle.changeTags);
 			qiuwen_page.suppressProtectWarning();
 			qiuwen_page.setMaxRetries(3); // temporary increase from 2 to make batchundelete more likely to succeed

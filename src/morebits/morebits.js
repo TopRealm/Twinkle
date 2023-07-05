@@ -855,7 +855,6 @@
 	 * @memberof Morebits.quickForm.element
 	 * @requires jquery.ui
 	 * @param {HTMLElement} node - The HTML element beside which a tooltip is to be generated.
-	 * @param {string} tooltip
 	 * @param {Object} data - Tooltip-related configuration data.
 	 */
 	Morebits.quickForm.element.generateTooltip = (node, data) => {
@@ -3584,7 +3583,7 @@
 			if (!onFailure) {
 				onFailure = emptyFunction;
 			}
-			const page = response.pages && response.pages[0];
+			const page = pages && pages[0];
 			if (page) {
 				// check for invalid titles
 				if (page.invalid) {
@@ -3594,7 +3593,7 @@
 				}
 				// retrieve actual title of the page after normalization and redirects
 				const resolvedName = page.title;
-				if (response.redirects) {
+				if (redirects) {
 					// check for cross-namespace redirect:
 					const origNs = new mw.Title(ctx.pageName).namespace;
 					const newNs = new mw.Title(resolvedName).namespace;
@@ -3686,10 +3685,7 @@
 			// which as of 1.34.0-wmf.23 (Sept 2019) should only encompass captcha messages
 			if (response.edit.captcha) {
 				ctx.statusElement.error(
-					wgULS(
-						'不能保存页面，因服务器要求您输入验证码。',
-						'不能儲存頁面，因伺服器要求您輸入驗證碼。'
-					)
+					wgULS('不能保存页面，因服务器要求您输入验证码。', '不能儲存頁面，因伺服器要求您輸入驗證碼。')
 				);
 			} else {
 				ctx.statusElement.error(wgULS('保存页面时由API得到未知错误', '儲存頁面時由API得到未知錯誤'));
@@ -3947,7 +3943,7 @@
 				onFailure(this);
 				return false;
 			}
-			if (!response.tokens.csrftoken) {
+			if (!tokens.csrftoken) {
 				ctx.statusElement.error(wgULS('无法获取令牌。', '無法取得權杖。'));
 				onFailure(this);
 				return false;
@@ -4962,7 +4958,7 @@
 		let lastCheckbox = null;
 		const clickHandler = function ({shiftKey}) {
 			const thisCb = this;
-			if (event.shiftKey && lastCheckbox !== null) {
+			if (shiftKey && lastCheckbox !== null) {
 				const cbs = $(jQuerySelector, jQueryContext); // can't cache them, obviously, if we want to support resorting
 				let index = -1;
 				let lastIndex = -1;

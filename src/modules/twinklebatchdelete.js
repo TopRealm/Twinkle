@@ -576,7 +576,7 @@ $(function TwinkleBatchDelete() {
 				);
 				qiuwen_page.setCallbackParameters(params);
 				if (delete_page) {
-					qiuwen_page.setEditSummary(`${reason} (批量)`);
+					qiuwen_page.setEditSummary(`${reason}（批量）`);
 					qiuwen_page.setChangeTags(Twinkle.changeTags);
 					qiuwen_page.suppressProtectWarning();
 					qiuwen_page.deletePage(Twinkle.batchdelete.callbacks.doExtras, pageDeleter.workerFailure);
@@ -606,7 +606,7 @@ $(function TwinkleBatchDelete() {
 							wgULS('正在删除子页面 ', '正在刪除子頁面 ') + pageName
 						);
 						qiuwen_page.setCallbackParameters(params);
-						qiuwen_page.setEditSummary(`${reason} (批量)`);
+						qiuwen_page.setEditSummary(`${reason}（批量）`);
 						qiuwen_page.setChangeTags(Twinkle.changeTags);
 						qiuwen_page.suppressProtectWarning();
 						qiuwen_page.deletePage(Twinkle.batchdelete.callbacks.doExtras, pageDeleter.workerFailure);
