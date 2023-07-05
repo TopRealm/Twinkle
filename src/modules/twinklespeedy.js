@@ -511,7 +511,6 @@ $(function TwinkleSpeedy() {
 	Twinkle.speedy.callback.priorDeletionCount = () => {
 		const query = {
 			action: 'query',
-			format: 'json',
 			list: 'logevents',
 			letype: 'delete',
 			leaction: 'delete/delete',

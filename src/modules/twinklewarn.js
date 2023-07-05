@@ -253,7 +253,6 @@ $(function TwinkleWarn() {
 		}
 		if (mw.util.isIPAddress(relevantUserName)) {
 			query = {
-				format: 'json',
 				action: 'query',
 				list: 'usercontribs',
 				uclimit: 1,

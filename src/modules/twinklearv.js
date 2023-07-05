@@ -84,7 +84,6 @@ $(function TwinkleARV() {
 			action: 'query',
 			list: 'blocks',
 			bkprop: 'range|flags',
-			format: 'json',
 		};
 		query.bkusers = uid;
 		new Morebits.wiki.api('检查用户的封禁状态', query, (apiobj) => {
@@ -563,7 +562,6 @@ $(function TwinkleARV() {
 							action: 'compare',
 							fromrev: oldid,
 							prop: 'ids|title',
-							format: 'json',
 						};
 						if (diffNum) {
 							query.torev = diff;
@@ -575,7 +573,6 @@ $(function TwinkleARV() {
 							action: 'query',
 							prop: 'revisions',
 							rvprop: 'ids|timestamp|comment',
-							format: 'json',
 							indexpageids: true,
 						};
 						if (diff && oldid) {
@@ -661,7 +658,6 @@ $(function TwinkleARV() {
 			.get({
 				action: 'query',
 				prop: 'revisions',
-				format: 'json',
 				rvprop: 'sha1|ids|timestamp|comment',
 				rvlimit: 100,
 				// intentionally limited

@@ -68,7 +68,6 @@ $(function TwinkleUnlink() {
 			// 500 is max for normal users, 5000 for bots and sysops
 			blnamespace: Twinkle.getPref('unlinkNamespaces'),
 			rawcontinue: true,
-			format: 'json',
 		};
 		if (fileSpace) {
 			query.list += '|imageusage';

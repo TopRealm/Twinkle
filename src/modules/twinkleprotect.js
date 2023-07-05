@@ -107,7 +107,6 @@ $(function TwinkleProtect() {
 	Twinkle.protect.fetchProtectionLevel = () => {
 		const api = new mw.Api();
 		const protectDeferred = api.get({
-			format: 'json',
 			indexpageids: true,
 			action: 'query',
 			list: 'logevents',

@@ -2373,7 +2373,6 @@
 			titles: title,
 			rvslots: '*',
 			rvprop: 'content',
-			format: 'json',
 			smaxage: '86400', // cache for 1 day
 			maxage: '86400', // cache for 1 day
 		};
@@ -2420,7 +2419,6 @@
 			action: 'query',
 			meta: 'tokens',
 			type: 'csrf',
-			format: 'json',
 		});
 		return tokenApi.post().then((apiobj) => apiobj.response.query.tokens.csrftoken);
 	};
@@ -2596,7 +2594,6 @@
 				meta: 'tokens',
 				type: 'csrf',
 				titles: ctx.pageName,
-				format: 'json',
 				// don't need rvlimit=1 because we don't need rvstartid here and only one actual rev is returned by default
 			};
 			if (ctx.editMode === 'all') {
@@ -2694,7 +2691,6 @@
 				summary: ctx.editSummary,
 				token: canUseMwUserToken ? mw.user.tokens.get('csrfToken') : ctx.csrfToken,
 				watchlist: ctx.watchlistOption,
-				format: 'json',
 			};
 			if (ctx.changeTags) {
 				query.tags = ctx.changeTags;
@@ -3223,7 +3219,6 @@
 				rvlimit: 1,
 				rvprop: 'user|timestamp',
 				rvdir: 'newer',
-				format: 'json',
 			};
 			// Only the wikitext content model can reliably handle
 			// rvsection, others return an error when paired with the
@@ -3325,7 +3320,6 @@
 					rcprop: 'patrolled',
 					rctitle: ctx.pageName,
 					rclimit: 1,
-					format: 'json',
 				};
 				ctx.patrolApi = new Morebits.wiki.api(wgULS('获取令牌…', '取得權杖…'), patrolQuery, fnProcessPatrol);
 				ctx.patrolApi.setParent(this);
@@ -3494,7 +3488,6 @@
 				titles: ctx.pageName,
 				prop: 'info',
 				inprop: 'watched',
-				format: 'json',
 			};
 			// Protection not checked for flagged-revs or non-sysop moves
 			if (action !== 'move' || Morebits.userIsSysop) {
@@ -3984,7 +3977,6 @@
 				token: token,
 				reason: ctx.editSummary,
 				watchlist: ctx.watchlistOption,
-				format: 'json',
 			};
 			if (ctx.changeTags) {
 				query.tags = ctx.changeTags;
@@ -4014,7 +4006,6 @@
 		const fnProcessPatrol = function () {
 			const query = {
 				action: 'patrol',
-				format: 'json',
 			};
 			// Didn't need to load the page
 			if (ctx.rcid) {
@@ -4067,7 +4058,6 @@
 				token: token,
 				reason: ctx.editSummary,
 				watchlist: ctx.watchlistOption,
-				format: 'json',
 			};
 			if (ctx.changeTags) {
 				query.tags = ctx.changeTags;
@@ -4130,7 +4120,6 @@
 				token: token,
 				reason: ctx.editSummary,
 				watchlist: ctx.watchlistOption,
-				format: 'json',
 			};
 			if (ctx.changeTags) {
 				query.tags = ctx.changeTags;
@@ -4274,7 +4263,6 @@
 				expiry: expirys.join('|'),
 				reason: ctx.editSummary,
 				watchlist: ctx.watchlistOption,
-				format: 'json',
 			};
 			// Only shows up in logs, not page history
 			if (ctx.changeTags) {
@@ -4349,7 +4337,6 @@
 				disablelimitreport: true,
 				disableeditsection: true,
 				uselang: mw.config.get('wgUserLanguage'), // Use wgUserLanguage for preview
-				format: 'json',
 			};
 			if (sectionTitle) {
 				query.section = 'new';

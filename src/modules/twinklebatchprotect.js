@@ -143,7 +143,6 @@ $(function TwinkleBatchProtect() {
 			prop: 'revisions|info|imageinfo',
 			rvprop: 'size|user',
 			inprop: 'protection',
-			format: 'json',
 		};
 		if (mw.config.get('wgNamespaceNumber') === 14) {
 			// categories
@@ -287,7 +286,6 @@ $(function TwinkleBatchProtect() {
 			const query = {
 				action: 'query',
 				titles: pageName,
-				format: 'json',
 			};
 			const qiuwen_api = new Morebits.wiki.api(
 				`正在检查页面“${pageName}”是否存在`,

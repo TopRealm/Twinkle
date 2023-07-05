@@ -253,7 +253,6 @@ $(function TwinkleBlock() {
 	};
 	Twinkle.block.fetchUserInfo = (fn) => {
 		const query = {
-			format: 'json',
 			action: 'query',
 			list: 'blocks|users|logevents',
 			letype: 'block',
@@ -907,7 +906,6 @@ $(function TwinkleBlock() {
 						}
 						return {
 							action: 'query',
-							format: 'json',
 							list: 'allpages',
 							apfrom: title.title,
 							apnamespace: title.namespace,
@@ -2064,7 +2062,6 @@ $(function TwinkleBlock() {
 			  same block is still active (same status, no confirmation).
 			*/
 			const query = {
-				format: 'json',
 				action: 'query',
 				list: 'blocks|logevents',
 				letype: 'block',
