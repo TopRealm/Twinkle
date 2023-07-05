@@ -15,19 +15,19 @@ $(function TwinkleDiff() {
 				diff: 'cur',
 				oldid: 'prev',
 			}),
-			'最后',
+			wgULS('最后', '最後'),
 			'tw-lastdiff',
-			'显示最后一次差异'
+			wgULS('显示最后修改', '顯示最後修改')
 		);
 		// Show additional tabs only on diff pages
-		if (mw.util.getParamValue('diff')) {
+		if (mw.config.get('wgDiffNewId')) {
 			Twinkle.addPortletLink(
 				() => {
 					Twinkle.diff.evaluate(false);
 				},
 				'上异',
 				'tw-since',
-				'显示与上一修订版本间的差异'
+				wgULS('显示与上一修订版本间的差异', '顯示與上一修訂版本間的差異')
 			);
 			Twinkle.addPortletLink(
 				() => {
@@ -35,17 +35,16 @@ $(function TwinkleDiff() {
 				},
 				'自异',
 				'tw-sincemine',
-				'显示与我做出的修订版本的差异'
+				wgULS('显示与我做出的修订版本的差异', '顯示與我做出的修訂版本的差異')
 			);
-			const oldid = /oldid=(.+)/.exec($('#mw-diff-ntitle1').find('strong a').first().attr('href'))[1];
 			Twinkle.addPortletLink(
 				mw.util.getUrl(mw.config.get('wgPageName'), {
 					diff: 'cur',
-					oldid,
+					oldid: mw.config.get('wgDiffNewId'),
 				}),
-				'当前',
+				wgULS('当前', '目前'),
 				'tw-curdiff',
-				'显示与当前版本间的差异'
+				wgULS('显示与当前版本间的差异', '顯示與目前版本間的差異')
 			);
 		}
 	};
@@ -54,7 +53,7 @@ $(function TwinkleDiff() {
 		if (me) {
 			user = mw.config.get('wgUserName');
 		} else {
-			const node = document.querySelector('#mw-diff-ntitle2');
+			const node = document.getElementById('mw-diff-ntitle2');
 			if (!node) {
 				// nothing to do?
 				return;
@@ -68,14 +67,16 @@ $(function TwinkleDiff() {
 			rvlimit: 1,
 			rvprop: ['ids', 'user'],
 			rvstartid: mw.config.get('wgCurRevisionId') - 1,
-			// i.e. not the current one
 			rvuser: user,
-			format: 'json',
 		};
-		Morebits.status.init(document.querySelector('#mw-content-text'));
-		const qiuwen_api = new Morebits.wiki.api('抓取最初贡献者信息', query, Twinkle.diff.callbacks.main);
+		Morebits.status.init(document.getElementById('mw-content-text'));
+		const qiuwen_api = new Morebits.wiki.api(
+			wgULS('抓取最初贡献者信息', '抓取最初貢獻者資訊'),
+			query,
+			Twinkle.diff.callbacks.main
+		);
 		qiuwen_api.params = {
-			user,
+			user: user,
 		};
 		qiuwen_api.post();
 	};
@@ -84,7 +85,11 @@ $(function TwinkleDiff() {
 			const rev = response.query.pages[0].revisions;
 			const revid = rev && rev[0].revid;
 			if (!revid) {
-				statelem.error(`未找到合适的早期版本，或 ${params.user} 是唯一贡献者。取消。`);
+				statelem.error(
+					wgULS('未找到合适的早期版本，或 ', '未找到合適的早期版本，或 ') +
+						params.user +
+						wgULS(' 是唯一贡献者。取消。', ' 是唯一貢獻者。取消。')
+				);
 				return;
 			}
 			window.location = mw.util.getUrl(mw.config.get('wgPageName'), {
