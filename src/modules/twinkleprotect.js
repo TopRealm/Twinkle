@@ -1068,7 +1068,7 @@ $(function TwinkleProtect() {
 						Twinkle.protect.callbacks.taggingPageInitial(tagparams);
 					}
 					if (closeparams && closeparams.type) {
-						const rppPage = new Morebits.wiki.page('Wikipedia:请求保护页面', wgULS('关闭请求', '關閉請求'));
+						const rppPage = new Morebits.wiki.page('Qiuwen_talk:页面保护请求', wgULS('关闭请求', '關閉請求'));
 						rppPage.setFollowRedirect(true);
 						rppPage.setCallbackParameters(closeparams);
 						rppPage.load(Twinkle.protect.callbacks.closeRequest);
@@ -1411,7 +1411,7 @@ $(function TwinkleProtect() {
 			text = text.replace(reg, `$1\n${newtag}\n`);
 			if (text.length === originalTextLength) {
 				const linknode = document.createElement('a');
-				linknode.setAttribute('href', mw.util.getUrl('Wikipedia:Twinkle/修复RFPP'));
+				linknode.setAttribute('href', mw.util.getUrl('Help:Twinkle/修复RFPP'));
 				linknode.appendChild(document.createTextNode(wgULS('如何修复RFPP', '如何修復RFPP')));
 				statusElement.error([
 					wgULS(
