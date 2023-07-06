@@ -549,20 +549,20 @@
 							subgroup.className = 'quickformSubgroup';
 							subnode.subgroup = subgroup;
 							subnode.shown = false;
-							event = ({target}) => {
-								if (target.checked) {
-									target.parentNode.appendChild(target.subgroup);
-									if (target.type === 'radio') {
-										const name = target.name;
-										if (target.form.names[name] !== undefined) {
-											target.form.names[name].parentNode.removeChild(
-												target.form.names[name].subgroup
+							event = (e) => {
+								if (e.target.checked) {
+									e.target.parentNode.appendChild(e.target.subgroup);
+									if (e.target.type === 'radio') {
+										const name = e.target.name;
+										if (e.target.form.names[name] !== undefined) {
+											e.target.form.names[name].parentNode.removeChild(
+												e.target.form.names[name].subgroup
 											);
 										}
-										target.form.names[name] = target;
+										e.target.form.names[name] = e.target;
 									}
 								} else {
-									target.parentNode.removeChild(target.subgroup);
+									e.target.parentNode.removeChild(e.target.subgroup);
 								}
 							};
 							subnode.addEventListener('change', event, true);
@@ -570,15 +570,15 @@
 								subnode.parentNode.appendChild(subgroup);
 							}
 						} else if (data.type === 'radio') {
-							event = ({target}) => {
-								if (target.checked) {
-									const name = target.name;
-									if (target.form.names[name] !== undefined) {
-										target.form.names[name].parentNode.removeChild(
-											target.form.names[name].subgroup
+							event = (e) => {
+								if (e.target.checked) {
+									const name = e.target.name;
+									if (e.target.form.names[name] !== undefined) {
+										e.target.form.names[name].parentNode.removeChild(
+											e.target.form.names[name].subgroup
 										);
 									}
-									delete target.form.names[name];
+									delete e.target.form.names[name];
 								}
 							};
 							subnode.addEventListener('change', event, true);
@@ -824,7 +824,7 @@
 				childContainer = subnode;
 				break;
 			default:
-				throw new TypeError(`Morebits.quickForm: unknown element type ${data.type.toString()}`);
+				throw new TypeError('Morebits.quickForm: unknown element type ' + data.type.toString());
 		}
 		if (!childContainer) {
 			childContainer = node;
@@ -855,13 +855,12 @@
 	 * @memberof Morebits.quickForm.element
 	 * @requires jquery.ui
 	 * @param {HTMLElement} node - The HTML element beside which a tooltip is to be generated.
-	 * @param {string} tooltip
 	 * @param {Object} data - Tooltip-related configuration data.
 	 */
-	Morebits.quickForm.element.generateTooltip = (node, {tooltip}) => {
+	Morebits.quickForm.element.generateTooltip = (node, data) => {
 		const tooltipButton = node.appendChild(document.createElement('span'));
 		tooltipButton.className = 'morebits-tooltipButton';
-		tooltipButton.title = tooltip; // Provides the content for jQuery UI
+		tooltipButton.title = data.tooltip; // Provides the content for jQuery UI
 		tooltipButton.appendChild(document.createTextNode('?'));
 		$(tooltipButton).tooltip({
 			position: {my: 'left top', at: 'center bottom', collision: 'flipfit'},
@@ -879,9 +878,9 @@
 	 * @param {HTMLFormElement} form
 	 * @returns {Object} With field names as keys, input data as values.
 	 */
-	Morebits.quickForm.getInputData = ({elements}) => {
+	Morebits.quickForm.getInputData = (form) => {
 		const result = {};
-		for (const field of elements) {
+		for (const field of form.elements) {
 			if (field.disabled || !field.name || !field.type || field.type === 'submit' || field.type === 'button') {
 				continue;
 			}
@@ -1597,21 +1596,21 @@
 			},
 		},
 		/** Underline matched part of options. */
-		highlightSearchMatches: ({loading, text}) => {
+		highlightSearchMatches: (data) => {
 			const searchTerm = Morebits.select2SearchQuery;
-			if (!searchTerm || loading) {
-				return text;
+			if (!searchTerm || data.loading) {
+				return data.text;
 			}
-			const idx = text.toUpperCase().indexOf(searchTerm.toUpperCase());
+			const idx = data.text.toUpperCase().indexOf(searchTerm.toUpperCase());
 			if (idx < 0) {
-				return text;
+				return data.text;
 			}
 			return $('<span>').append(
-				text.slice(0, idx),
+				data.text.slice(0, idx),
 				$('<span>')
 					.css('text-decoration', 'underline')
-					.text(text.slice(idx, idx + searchTerm.length)),
-				text.slice(idx + searchTerm.length)
+					.text(data.text.slice(idx, idx + searchTerm.length)),
+				data.text.slice(idx + searchTerm.length)
 			);
 		},
 		/** Intercept query as it is happening, for use in highlightSearchMatches. */
@@ -1952,7 +1951,8 @@
 			if (!formatstr) {
 				return udate.toISOString();
 			}
-			const pad = (num, len = 2) => {
+			const pad = (num, len) => {
+				len = len || 2; // Up to length of 00 + 1
 				return `00${num}`.toString().slice(0 - len);
 			};
 			const h24 = udate.getHours();
@@ -2419,7 +2419,7 @@
 			meta: 'tokens',
 			type: 'csrf',
 		});
-		return tokenApi.post().then(({response}) => response.query.tokens.csrftoken);
+		return tokenApi.post().then((apiobj) => apiobj.response.query.tokens.csrftoken);
 	};
 	/* **************** Morebits.wiki.page **************** */
 	/**
@@ -3413,7 +3413,7 @@
 			ctx.protectApi.setParent(this);
 			ctx.protectApi.post();
 		};
-		/**
+		/*
 		 * Private member functions
 		 * These are not exposed outside
 		 */
@@ -3430,7 +3430,8 @@
 		 * "edit" or "delete". In practice, only "edit" or "notedit" matters.
 		 * @returns {boolean}
 		 */
-		const fnCanUseMwUserToken = (action = 'edit') => {
+		const fnCanUseMwUserToken = (action) => {
+			action = typeof action !== 'undefined' ? action : 'edit'; // IE doesn't support default parameters
 			// If a watchlist expiry is set, we must always load the page
 			// to avoid overwriting indefinite protection.  Of course, not
 			// needed if setting indefinite watching!
@@ -3535,7 +3536,7 @@
 			// extract protection info, to alert admins when they are about to edit a protected page
 			// Includes cascading protection
 			if (Morebits.userIsSysop) {
-				const editProt = page.protection.filter(({type, level}) => type === 'edit' && level === 'sysop').pop();
+				const editProt = page.protection.filter((pr) => pr.type === 'edit' && pr.level === 'sysop').pop();
 				if (editProt) {
 					ctx.fullyProtected = editProt.expiry;
 				} else {
@@ -4205,7 +4206,7 @@
 			}
 			// Default to pre-existing cascading protection if unchanged (similar to above)
 			if (ctx.protectCascade === null) {
-				ctx.protectCascade = !!prs.filter(({cascade}) => cascade).length;
+				ctx.protectCascade = !!prs.filter((pr) => pr.cascade).length;
 			}
 			// Warn if cascading protection being applied with an invalid protection level,
 			// which for edit protection will cause cascading to be silently stripped
@@ -4379,7 +4380,8 @@
 	 * @param {number} [start=0] - Index noting where in the text the template begins.
 	 * @returns {Object} `{name: templateName, parameters: {key: value}}`.
 	 */
-	Morebits.wikitext.parseTemplate = (text, start = 0) => {
+	Morebits.wikitext.parseTemplate = (text, start) => {
+		start = start || 0;
 		const level = []; // Track of how deep we are ({{, {{{, or [[)
 		let count = -1; // Number of parameters found
 		let unnamed = 0; // Keep track of what number an unnamed parameter should receive
@@ -5303,9 +5305,9 @@
 			// the 20 pixels represents adjustment for the extra height of the jQuery dialog "chrome", compared
 			// to that of the old SimpleWindow
 			height: height + 20,
-			close: ({target}) => {
+			close: (event) => {
 				// dialogs and their content can be destroyed once closed
-				$(target).dialog('destroy').remove();
+				$(event.target).dialog('destroy').remove();
 			},
 			resizeStart: function () {
 				this.scrollbox = $(this).find('.morebits-scrollbox')[0];

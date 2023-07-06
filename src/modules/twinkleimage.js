@@ -265,7 +265,7 @@ $(function TwinkleImage() {
 			// Adding discussion
 			if (params.type !== 'orphaned fair use') {
 				const qiuwen_page = new Morebits.wiki.page(
-					'Qiuwen talk:存废讨论/文件快速删除提报',
+					'Qiuwen_talk:存废讨论/文件快速删除提报',
 					wgULS('加入快速删除记录项', '加入快速刪除記錄項')
 				);
 				qiuwen_page.setFollowRedirect(true);

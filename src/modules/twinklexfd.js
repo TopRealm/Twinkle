@@ -258,26 +258,31 @@ $(function TwinkleXFD() {
 		form.notify.disabled = false;
 	};
 	Twinkle.xfd.callback.change_afd_category = ({target}) => {
-		if (target.value === 'merge') {
-			target.form.mergeinto.parentElement.removeAttribute('hidden');
-			target.form.fwdcsdreason.parentElement.setAttribute('hidden', '');
-			target.form.mergeinto.previousElementSibling.innerHTML = wgULS('合并到：', '合併到：');
-		} else if (target.value === 'fwdcsd') {
-			target.form.mergeinto.parentElement.removeAttribute('hidden');
-			target.form.fwdcsdreason.parentElement.removeAttribute('hidden');
-			target.form.mergeinto.previousElementSibling.innerHTML = '提交人：';
-			target.form.xfdreason.value = decodeURIComponent($('#delete-reason').text()).replace(/\+/g, ' ');
-		} else if (target.value === 'fame') {
-			target.form.mergeinto.parentElement.setAttribute('hidden', '');
-			target.form.fwdcsdreason.parentElement.setAttribute('hidden', '');
-			target.form.xfdreason.value = Twinkle.getPref('afdFameDefaultReason');
-		} else if (target.value === 'substub') {
-			target.form.mergeinto.parentElement.setAttribute('hidden', '');
-			target.form.fwdcsdreason.parentElement.setAttribute('hidden', '');
-			target.form.xfdreason.value = Twinkle.getPref('afdSubstubDefaultReason');
-		} else {
-			target.form.mergeinto.parentElement.setAttribute('hidden', '');
-			target.form.fwdcsdreason.parentElement.setAttribute('hidden', '');
+		switch (target.value) {
+			case 'merge':
+				target.form.mergeinto.parentNode.removeAttribute('hidden');
+				target.form.fwdcsdreason.parentNode.setAttribute('hidden', '');
+				target.form.mergeinto.previousElementSibling.innerHTML = wgULS('合并到：', '合併到：');
+				break;
+			case 'fwdcsd':
+				target.form.mergeinto.parentNode.removeAttribute('hidden');
+				target.form.fwdcsdreason.parentNode.removeAttribute('hidden');
+				target.form.mergeinto.previousElementSibling.innerHTML = '提交人：';
+				target.form.xfdreason.value = decodeURIComponent($('#delete-reason').text()).replace(/\+/g, ' ');
+				break;
+			case 'fame':
+				target.form.mergeinto.parentNode.setAttribute('hidden', '');
+				target.form.fwdcsdreason.parentNode.setAttribute('hidden', '');
+				target.form.xfdreason.value = Twinkle.getPref('afdFameDefaultReason');
+				break;
+			case 'substub':
+				target.form.mergeinto.parentNode.setAttribute('hidden', '');
+				target.form.fwdcsdreason.parentNode.setAttribute('hidden', '');
+				target.form.xfdreason.value = Twinkle.getPref('afdSubstubDefaultReason');
+				break;
+			default:
+				target.form.mergeinto.parentNode.setAttribute('hidden', '');
+				target.form.fwdcsdreason.parentNode.setAttribute('hidden', '');
 		}
 		if (Twinkle.getPref('afdDefaultCategory') === 'same') {
 			localStorage.Twinkle_afdCategory = target.value;
@@ -703,7 +708,7 @@ $(function TwinkleXFD() {
 		const date = new Morebits.date(); // XXX: avoid use of client clock, still used by TfD, FfD and CfD
 		switch (params.category) {
 			case 'afd': // AFD
-				params.logpage = `Qiuwen talk:存废讨论/记录/${date.format('YYYY/MM/DD', 'utc')}`;
+				params.logpage = `Qiuwen_talk:存废讨论/记录/${date.format('YYYY/MM/DD', 'utc')}`;
 				params.lognomination =
 					Twinkle.getPref('logXfdNominations') &&
 					!Twinkle.getPref('noLogOnXfdNomination').includes(params.xfdcat);
@@ -725,7 +730,7 @@ $(function TwinkleXFD() {
 				break;
 			case 'ffd': {
 				// FFD
-				params.logpage = `Qiuwen talk:存废讨论/记录/${date.format('YYYY/MM/DD', 'utc')}`;
+				params.logpage = `Qiuwen_talk:存废讨论/记录/${date.format('YYYY/MM/DD', 'utc')}`;
 				params.lognomination =
 					Twinkle.getPref('logXfdNominations') && !Twinkle.getPref('noLogOnXfdNomination').includes('ffd');
 				Morebits.wiki.addCheckpoint();

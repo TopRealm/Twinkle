@@ -221,8 +221,8 @@ $(function FriendlyTalkback() {
 					name: 'page',
 					label: wgULS('完整页面名', '完整頁面名'),
 					tooltip: wgULS(
-						'正在进行讨论的页面名称。例如“Qiuwen talk:首页”。',
-						'正在進行討論的頁面名稱。例如「Qiuwen talk:首頁」。'
+						'正在进行讨论的页面名称。例如“Qiuwen_talk:首页”。',
+						'正在進行討論的頁面名稱。例如「Qiuwen_talk:首頁」。'
 					),
 					value: prev_page,
 					required: true,
@@ -252,8 +252,8 @@ $(function FriendlyTalkback() {
 					name: 'page',
 					label: wgULS('完整页面名', '完整頁面名'),
 					tooltip: wgULS(
-						'您留下消息的完整页面名，例如“Qiuwen talk:首页”。',
-						'您留下訊息的完整頁面名，例如「Qiuwen talk:首頁」。'
+						'您留下消息的完整页面名，例如“Qiuwen_talk:首页”。',
+						'您留下訊息的完整頁面名，例如「Qiuwen_talk:首頁」。'
 					),
 					value: prev_page,
 					required: true,
@@ -307,20 +307,20 @@ $(function FriendlyTalkback() {
 			label: 'Spam-blacklist',
 			title: wgULS('垃圾链接黑名单请求有新回应', '垃圾連結黑名單請求有新回應'),
 			content: `${wgULS(
-				'您的[[Qiuwen talk:茶馆/其他|垃圾链接黑名单请求]]已有回应，请前往查看。',
-				'您的[[Qiuwen talk:茶馆/其他|垃圾連結黑名單請求]]已有回應，請前往查看。'
+				'您的[[Qiuwen_talk:茶馆/其他|垃圾链接黑名单请求]]已有回应，请前往查看。',
+				'您的[[Qiuwen_talk:茶馆/其他|垃圾連結黑名單請求]]已有回應，請前往查看。'
 			)}--~~~~`,
-			editSummary: wgULS('有关[[Qiuwen talk:茶馆/其他]]的通知', '有關[[Qiuwen talk:茶馆/其他]]的通知'),
+			editSummary: wgULS('有关[[Qiuwen_talk:茶馆/其他]]的通知', '有關[[Qiuwen_talk:茶馆/其他]]的通知'),
 		},
 		/* shl is replaced by Teahouse */
 		shl: {
 			label: 'Spam-whitelist',
 			title: wgULS('垃圾链接白名单请求有新回应', '垃圾連結白名單請求有新回應'),
 			content: `${wgULS(
-				'您的[[Qiuwen talk:茶馆/其他|垃圾链接白名单请求]]已有回应，请前往查看。',
-				'您的[[Qiuwen talk:茶馆/其他|垃圾連結白名單請求]]已有回應，請前往查看。'
+				'您的[[Qiuwen_talk:茶馆/其他|垃圾链接白名单请求]]已有回应，请前往查看。',
+				'您的[[Qiuwen_talk:茶馆/其他|垃圾連結白名單請求]]已有回應，請前往查看。'
 			)}--~~~~`,
-			editSummary: wgULS('有关[[Qiuwen talk:茶馆/其他]]的通知', '有關[[Qiuwen talk:茶馆/其他]]的通知'),
+			editSummary: wgULS('有关[[Qiuwen_talk:茶馆/其他]]的通知', '有關[[Qiuwen_talk:茶馆/其他]]的通知'),
 		},
 	};
 	Twinkle.talkback.evaluate = ({target}) => {
