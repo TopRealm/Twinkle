@@ -163,7 +163,7 @@ $(function TwinkleCopyvio() {
 	Twinkle.copyvio.callback.evaluate = ({target}) => {
 		const params = Morebits.quickForm.getInputData(target);
 		if (!params.source.trim()) {
-			alert(wgULS('请指定侵权来源', '請指定侵權來源'));
+			mw.notify(wgULS('请指定侵权来源', '請指定侵權來源'), {type: 'warn'});
 			return;
 		}
 		Morebits.simpleWindow.setButtonsEnabled(false);

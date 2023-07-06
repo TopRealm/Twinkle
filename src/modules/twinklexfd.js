@@ -36,8 +36,8 @@ $(function TwinkleXFD() {
 			Morebits.status.printUserText(
 				Twinkle.xfd.currentRationale,
 				wgULS(
-					'您的理由已在下方提供，如果您想重新提交，请将其复制到一新窗口中：',
-					'您的理由已在下方提供，如果您想重新提交，請將其複製到一新視窗中：'
+					'您的理由已在下方提供，若您想重新提交，请将其复制到一新窗口中：',
+					'您的理由已在下方提供，若您想重新提交，請將其複製到一新視窗中：'
 				)
 			);
 			// only need to print the rationale once
@@ -124,8 +124,8 @@ $(function TwinkleXFD() {
 				label: wgULS('提删理由：', '提刪理由：'),
 				value: oldreason,
 				tooltip: wgULS(
-					'您可以使用wikitext，Twinkle将自动为您加入签名。如果您使用批量提删功能，存废讨论页只会使用第一次提交的理由，但之后您仍需提供以用于删除通告模板的参数。',
-					'您可以使用wikitext，Twinkle將自動為您加入簽名。如果您使用批次提刪功能，存廢討論頁只會使用第一次提交的理由，但之後您仍需提供以用於刪除通告模板的參數。'
+					'您可以使用wikitext，Twinkle将自动为您加入签名。若您使用批量提删功能，存废讨论页只会使用第一次提交的理由，但之后您仍需提供以用于删除通告模板的参数。',
+					'您可以使用wikitext，Twinkle將自動為您加入簽名。若您使用批次提刪功能，存廢討論頁只會使用第一次提交的理由，但之後您仍需提供以用於刪除通告模板的參數。'
 				),
 				placeholder: wgULS(
 					'此值亦显示于页面的删除通告模板内，故务必提供此值，避免使用“同上”等用语。',
@@ -622,10 +622,10 @@ $(function TwinkleXFD() {
 				wgULS('记录对[[', '記錄對[[') + Morebits.pageNameNorm + wgULS(']]的存废讨论提名', ']]的存廢討論提名');
 			const usl = new Morebits.userspaceLogger(Twinkle.getPref('xfdLogPageName'));
 			usl.initialText = wgULS(
-				`这是该用户使用[[H:TW|Twinkle]]的提删模块做出的[[QW:XFD|存废讨论]]提名列表。\n\n如果您不再想保留此日志，请在[[${Twinkle.getPref(
+				`这是该用户使用[[H:TW|Twinkle]]的提删模块做出的[[QW:XFD|存废讨论]]提名列表。\n\n若您不再想保留此日志，请在[[${Twinkle.getPref(
 					'configPage'
 				)}|参数设置]]中关掉，并使用[[QW:CSD#O1|CSD O1]]提交快速删除。`,
-				`這是該使用者使用[[H:TW|Twinkle]]的提刪模塊做出的[[QW:XFD|存廢討論]]提名列表。\n\n如果您不再想保留此日誌，請在[[${Twinkle.getPref(
+				`這是該使用者使用[[H:TW|Twinkle]]的提刪模塊做出的[[QW:XFD|存廢討論]]提名列表。\n\n若您不再想保留此日誌，請在[[${Twinkle.getPref(
 					'configPage'
 				)}|偏好設定]]中關掉，並使用[[QW:CSD#O1|CSD O1]]提交快速刪除。`
 			);
@@ -688,7 +688,7 @@ $(function TwinkleXFD() {
 	Twinkle.xfd.callback.evaluate = ({target}) => {
 		const params = Morebits.quickForm.getInputData(target);
 		if (params.xfdcat === 'merge' && params.mergeinto.trim() === '') {
-			alert(wgULS('请提供合并目标！', '請提供合併目標！'));
+			mw.notify(wgULS('请提供合并目标！', '請提供合併目標！'), {type: 'warn'});
 			return;
 		}
 		Morebits.simpleWindow.setButtonsEnabled(false);

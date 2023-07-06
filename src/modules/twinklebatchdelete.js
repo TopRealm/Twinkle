@@ -542,7 +542,7 @@ $(function TwinkleBatchDelete() {
 		const unlink_page = form.unlink_page.checked;
 		const unlink_file = form.unlink_file.checked;
 		if (!reason) {
-			alert(wgULS('您需要给出一个理由', '您需要給出一個理由'));
+			mw.notify(wgULS('您需要给出一个理由', '您需要給出一個理由'), {type: 'warn'});
 			return;
 		}
 		Morebits.simpleWindow.setButtonsEnabled(false);

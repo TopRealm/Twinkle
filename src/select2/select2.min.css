@@ -415,7 +415,7 @@
 
 .select2-container--default .select2-results__option--highlighted[aria-selected] {
 	background-color: #5897fb;
-	color: white;
+	color: #fff;
 }
 
 .select2-container--default .select2-results__group {
@@ -638,7 +638,7 @@
 }
 
 .select2-container--classic .select2-results__option[aria-disabled='true'] {
-	color: grey;
+	color: #808080;
 }
 
 .select2-container--classic .select2-results__option--highlighted[aria-selected] {
