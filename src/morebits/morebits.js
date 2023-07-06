@@ -2328,7 +2328,7 @@
 		},
 		returnError: function (callerAjaxParameters) {
 			if (this.errorCode === 'badtoken' && !this.badtokenRetry) {
-				this.statelem.warn(wgULS('无效令牌，获取新的令牌并重试…', '無效權杖，取得新的權杖並重試…'));
+				this.statelem.warn(wgULS('无效令牌，获取新的令牌并重试……', '無效權杖，取得新的權杖並重試……'));
 				this.badtokenRetry = true;
 				// Get a new CSRF token and retry. If the original action needs a different
 				// type of action than CSRF, we do one pointless retry before bailing out
@@ -2612,7 +2612,7 @@
 				ctx.loadQuery.inprop += '|protection';
 			}
 			ctx.loadApi = new Morebits.wiki.api(
-				wgULS('抓取页面…', '抓取頁面…'),
+				wgULS('抓取页面……', '抓取頁面……'),
 				ctx.loadQuery,
 				fnLoadSuccess,
 				ctx.statusElement,
@@ -2761,7 +2761,7 @@
 				query.redirect = true;
 			}
 			ctx.saveApi = new Morebits.wiki.api(
-				wgULS('保存页面…', '儲存頁面…'),
+				wgULS('保存页面……', '儲存頁面……'),
 				query,
 				fnSaveSuccess,
 				ctx.statusElement,
@@ -3280,7 +3280,7 @@
 			} else {
 				const query = fnNeedTokenInfoQuery('move');
 				ctx.moveApi = new Morebits.wiki.api(
-					wgULS('获取令牌…', '取得權杖…'),
+					wgULS('获取令牌……', '取得權杖……'),
 					query,
 					fnProcessMove,
 					ctx.statusElement,
@@ -3320,7 +3320,7 @@
 					rctitle: ctx.pageName,
 					rclimit: 1,
 				};
-				ctx.patrolApi = new Morebits.wiki.api(wgULS('获取令牌…', '取得權杖…'), patrolQuery, fnProcessPatrol);
+				ctx.patrolApi = new Morebits.wiki.api(wgULS('获取令牌……', '取得權杖……'), patrolQuery, fnProcessPatrol);
 				ctx.patrolApi.setParent(this);
 				ctx.patrolApi.post();
 			}
@@ -3343,7 +3343,7 @@
 			} else {
 				const query = fnNeedTokenInfoQuery('delete');
 				ctx.deleteApi = new Morebits.wiki.api(
-					wgULS('获取令牌…', '取得權杖…'),
+					wgULS('获取令牌……', '取得權杖……'),
 					query,
 					fnProcessDelete,
 					ctx.statusElement,
@@ -3370,7 +3370,7 @@
 			} else {
 				const query = fnNeedTokenInfoQuery('undelete');
 				ctx.undeleteApi = new Morebits.wiki.api(
-					wgULS('获取令牌…', '取得權杖…'),
+					wgULS('获取令牌……', '取得權杖……'),
 					query,
 					fnProcessUndelete,
 					ctx.statusElement,
@@ -3404,7 +3404,7 @@
 			// protection levels from the server
 			const query = fnNeedTokenInfoQuery('protect');
 			ctx.protectApi = new Morebits.wiki.api(
-				wgULS('获取令牌…', '取得權杖…'),
+				wgULS('获取令牌……', '取得權杖……'),
 				query,
 				fnProcessProtect,
 				ctx.statusElement,
@@ -3721,7 +3721,7 @@
 				// check for network or server error
 			} else if ((errorCode === null || errorCode === undefined) && ctx.retries++ < ctx.maxRetries) {
 				// the error might be transient, so try again
-				ctx.statusElement.info(wgULS('保存失败，在2秒后重试…', '儲存失敗，在2秒後重試…'));
+				ctx.statusElement.info(wgULS('保存失败，在2秒后重试……', '儲存失敗，在2秒後重試……'));
 				--Morebits.wiki.numberOfActionsLeft; // allow for normal completion if retry succeeds
 				// wait for sometime for client to regain connectivity
 				sleep(2000).then(() => {
@@ -3989,7 +3989,7 @@
 				query.noredirect = 'true';
 			}
 			ctx.moveProcessApi = new Morebits.wiki.api(
-				wgULS('移动页面…', '移動頁面…'),
+				wgULS('移动页面……', '移動頁面……'),
 				query,
 				ctx.onMoveSuccess,
 				ctx.statusElement,
@@ -4027,7 +4027,7 @@
 				query.tags = ctx.changeTags;
 			}
 			const patrolStat = new Morebits.status(wgULS('标记页面为已巡查', '標記頁面為已巡查'));
-			ctx.patrolProcessApi = new Morebits.wiki.api(wgULS('巡查页面…', '巡查頁面…'), query, null, patrolStat);
+			ctx.patrolProcessApi = new Morebits.wiki.api(wgULS('巡查页面……', '巡查頁面……'), query, null, patrolStat);
 			ctx.patrolProcessApi.setParent(this);
 			ctx.patrolProcessApi.post();
 		};
@@ -4061,7 +4061,7 @@
 				query.watchlistexpiry = ctx.watchlistExpiry;
 			}
 			ctx.deleteProcessApi = new Morebits.wiki.api(
-				wgULS('删除页面…', '刪除頁面…'),
+				wgULS('删除页面……', '刪除頁面……'),
 				query,
 				ctx.onDeleteSuccess,
 				ctx.statusElement,
@@ -4123,7 +4123,7 @@
 				query.watchlistexpiry = ctx.watchlistExpiry;
 			}
 			ctx.undeleteProcessApi = new Morebits.wiki.api(
-				wgULS('还原页面…', '還原頁面…'),
+				wgULS('还原页面……', '還原頁面……'),
 				query,
 				ctx.onUndeleteSuccess,
 				ctx.statusElement,
@@ -4270,7 +4270,7 @@
 				query.cascade = 'true';
 			}
 			ctx.protectProcessApi = new Morebits.wiki.api(
-				wgULS('保护页面…', '保護頁面…'),
+				wgULS('保护页面……', '保護頁面……'),
 				query,
 				ctx.onProtectSuccess,
 				ctx.statusElement,
@@ -4338,7 +4338,7 @@
 				query.sectiontitle = sectionTitle;
 			}
 			const renderApi = new Morebits.wiki.api(
-				wgULS('加载中…', '載入中…'),
+				wgULS('加载中……', '載入中……'),
 				query,
 				fnRenderSuccess,
 				new Morebits.status(wgULS('预览', '預覽'))

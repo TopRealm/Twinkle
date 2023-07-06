@@ -60,7 +60,7 @@ $(function TwinkleBatchUndelete() {
 		};
 		const statelem = new Morebits.status(wgULS('抓取页面列表', '抓取頁面列表'));
 		const qiuwen_api = new Morebits.wiki.api(
-			wgULS('加载中…', '載入中…'),
+			wgULS('加载中……', '載入中……'),
 			query,
 			({responseXML, params}) => {
 				const xml = responseXML;

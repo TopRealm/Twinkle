@@ -112,7 +112,7 @@ $(function TwinkleUnlink() {
 		const root = document.createElement('div');
 		root.style.padding = '15px'; // just so it doesn't look broken
 		Morebits.status.init(root);
-		qiuwen_api.statelem.status(wgULS('加载中…', '載入中…'));
+		qiuwen_api.statelem.status(wgULS('加载中……', '載入中……'));
 		Window.setContent(root);
 		Window.display();
 	};

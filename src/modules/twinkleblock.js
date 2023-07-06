@@ -716,7 +716,7 @@ $(function TwinkleBlock() {
 			field_template_options.append({
 				type: 'input',
 				name: 'block_reason',
-				label: wgULS('“由于…您已被封禁”', '「由於…您已被封鎖」'),
+				label: wgULS('“由于……您已被封禁”', '「由於……您已被封鎖」'),
 				tooltip: wgULS(
 					'可选的理由，用于替换默认理由。只在常规封禁模板中有效。',
 					'可選的理由，用於替換預設理由。只在常規封鎖模板中有效。'
