@@ -115,18 +115,18 @@ $(function TwinkleBlock() {
 				},
 			],
 		});
-		/*
-		  Add option for IPv6 ranges smaller than /64 to upgrade to the 64
-		  CIDR. This is one of the few places where we want
-		  wgRelevantUserName since this depends entirely on the original user.
-		  In theory, we shouldn't use Morebits.ip.get64 here since since we want
-		  to exclude functionally-equivalent /64s.  That'd be:
-		  // if (mw.util.isIPv6Address(mw.config.get('wgRelevantUserName'), true) &&
-		  // (mw.util.isIPv6Address(mw.config.get('wgRelevantUserName')) || parseInt(mw.config.get('wgRelevantUserName').replace(/^(.+?)\/?(\d{1,3})?$/, '$2'), 10) > 64)) {
-		  In practice, though, since functionally-equivalent ranges are
-		  (mis)treated as separate by MediaWiki's logging,
-		  using Morebits.ip.get64 provides a modicum of relief in thise case.
-		*/
+		/**
+		 * Add option for IPv6 ranges smaller than /64 to upgrade to the 64
+		 *  CIDR. This is one of the few places where we want
+		 * wgRelevantUserName since this depends entirely on the original user.
+		 * In theory, we shouldn't use Morebits.ip.get64 here since since we want
+		 * to exclude functionally-equivalent /64s.  That'd be:
+		 * // if (mw.util.isIPv6Address(mw.config.get('wgRelevantUserName'), true) &&
+		 * // (mw.util.isIPv6Address(mw.config.get('wgRelevantUserName')) || parseInt(mw.config.get('wgRelevantUserName').replace(/^(.+?)\/?(\d{1,3})?$/, '$2'), 10) > 64)) {
+		 * In practice, though, since functionally-equivalent ranges are
+		 * (mis)treated as separate by MediaWiki's logging,
+		 * using Morebits.ip.get64 provides a modicum of relief in thise case.
+		 */
 		const sixtyFour = Morebits.ip.get64(mw.config.get('wgRelevantUserName'));
 		if (sixtyFour && sixtyFour !== mw.config.get('wgRelevantUserName')) {
 			const block64field = form.append({
@@ -141,7 +141,7 @@ $(function TwinkleBlock() {
 					wgULS('直接封禁/64段', '直接封鎖/64段'),
 					'（',
 					$.parseHTML(
-						`<a target="_blank" href="${mw.util.getUrl(
+						`<a rel="noopener" target="_blank" href="${mw.util.getUrl(
 							`Special:Contributions/${sixtyFour}`
 						)}">${sixtyFour}</a>)`
 					)[0],
@@ -995,7 +995,7 @@ $(function TwinkleBlock() {
 					// Link to the full range
 					const $rangeblockloglink = $('<span>').append(
 						$(
-							`<a target="_blank" href="${mw.util.getUrl('Special:Log', {
+							`<a rel="noopener" target="_blank" href="${mw.util.getUrl('Special:Log', {
 								action: 'view',
 								page: blockedUserName,
 								type: 'block',
@@ -1040,7 +1040,7 @@ $(function TwinkleBlock() {
 			const blockloginfo = [];
 			const $blockloglink = $('<span>').append(
 				$(
-					`<a target="_blank" href="${mw.util.getUrl('Special:Log', {
+					`<a rel="noopener" target="_blank" href="${mw.util.getUrl('Special:Log', {
 						action: 'view',
 						page: relevantUserName,
 						type: 'block',
@@ -1079,7 +1079,7 @@ $(function TwinkleBlock() {
 			Twinkle.block.callback.change_template(e);
 		}
 	};
-	/*
+	/**
 	 * Keep alphabetized by key name, Twinkle.block.blockGroups establishes
 	 *    the order they will appear in the interface
 	 *
@@ -2037,30 +2037,30 @@ $(function TwinkleBlock() {
 			// boolean-flipped options
 			blockoptions.anononly = blockoptions.hardblock ? undefined : true;
 			blockoptions.allowusertalk = blockoptions.disabletalk ? undefined : true;
-			/*
-			  Check if block status changed while processing the form.
-			  There's a lot to consider here. list=blocks provides the
-			  current block status, but there are at least two issues with
-			  relying on it. First, the id doesn't update on a reblock,
-			  meaning the individual parameters need to be compared. This
-			  can be done roughly with JSON.stringify - we can thankfully
-			  rely on order from the server, although sorting would be
-			  fine if not - but falsey values are problematic and is
-			  non-ideal. More importantly, list=blocks won't indicate if a
-			  non-blocked user is blocked then unblocked. This should be
-			  exceedingy rare, but regardless, we thus need to check
-			  list=logevents, which has a nicely updating logid
-			  parameter. We can't rely just on that, though, since it
-			  doesn't account for blocks that have expired on their own.
-			  As such, we use both. Using some ternaries, the logid
-			  variables are false if there's no logevents, so if they
-			  aren't equal we defintely have a changed entry (send
-			  confirmation). If they are equal, then either the user was
-			  never blocked (the block statuses will be equal, no
-			  confirmation) or there's no new block, in which case either
-			  a block expired (different statuses, confirmation) or the
-			  same block is still active (same status, no confirmation).
-			*/
+			/**
+			 * Check if block status changed while processing the form.
+			 * There's a lot to consider here. list=blocks provides the
+			 * current block status, but there are at least two issues with
+			 * relying on it. First, the id doesn't update on a reblock,
+			 * meaning the individual parameters need to be compared. This
+			 * can be done roughly with JSON.stringify - we can thankfully
+			 * rely on order from the server, although sorting would be
+			 * fine if not - but falsey values are problematic and is
+			 * non-ideal. More importantly, list=blocks won't indicate if a
+			 * non-blocked user is blocked then unblocked. This should be
+			 * exceedingy rare, but regardless, we thus need to check
+			 * list=logevents, which has a nicely updating logid
+			 * parameter. We can't rely just on that, though, since it
+			 * doesn't account for blocks that have expired on their own.
+			 * As such, we use both. Using some ternaries, the logid
+			 * variables are false if there's no logevents, so if they
+			 * aren't equal we defintely have a changed entry (send
+			 * confirmation). If they are equal, then either the user was
+			 * never blocked (the block statuses will be equal, no
+			 * confirmation) or there's no new block, in which case either
+			 * a block expired (different statuses, confirmation) or the
+			 * same block is still active (same status, no confirmation).
+			 */
 			const query = {
 				action: 'query',
 				list: 'blocks|logevents',

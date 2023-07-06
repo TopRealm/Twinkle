@@ -3413,7 +3413,7 @@
 			ctx.protectApi.setParent(this);
 			ctx.protectApi.post();
 		};
-		/*
+		/**
 		 * Private member functions
 		 * These are not exposed outside
 		 */
