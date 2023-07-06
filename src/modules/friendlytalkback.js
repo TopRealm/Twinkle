@@ -120,9 +120,9 @@ $(function FriendlyTalkback() {
 	let prev_page = '';
 	let prev_section = '';
 	let prev_message = '';
-	Twinkle.talkback.changeTarget = (e) => {
-		const value = e.target.values;
-		const root = e.target.form;
+	Twinkle.talkback.changeTarget = ({target}) => {
+		const value = target.values;
+		const root = target.form;
 		const old_area = Morebits.quickForm.getElements(root, 'work_area')[0];
 		if (root.section) {
 			prev_section = root.section.value;
@@ -192,12 +192,12 @@ $(function FriendlyTalkback() {
 					name: 'noticeboard',
 					label: '通告板：',
 				});
-				$.each(Twinkle.talkback.noticeboards, (value, data) => {
+				$.each(Twinkle.talkback.noticeboards, (value, {label, defaultSelected}) => {
 					noticeboard.append({
 						type: 'option',
-						label: data.label,
+						label: label,
 						value: value,
-						selected: !!data.defaultSelected,
+						selected: !!defaultSelected,
 					});
 				});
 				work_area.append({
@@ -323,8 +323,8 @@ $(function FriendlyTalkback() {
 			editSummary: wgULS('有关[[Qiuwen talk:茶馆/其他]]的通知', '有關[[Qiuwen talk:茶馆/其他]]的通知'),
 		},
 	};
-	Twinkle.talkback.evaluate = (e) => {
-		const form = e.target;
+	Twinkle.talkback.evaluate = ({target}) => {
+		const form = target;
 		const tbtarget = form.getChecked('tbtarget')[0];
 		let page;
 		let message;

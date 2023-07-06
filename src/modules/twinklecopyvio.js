@@ -160,14 +160,14 @@ $(function TwinkleCopyvio() {
 			pageobj.append();
 		},
 	};
-	Twinkle.copyvio.callback.evaluate = (e) => {
-		const params = Morebits.quickForm.getInputData(e.target);
+	Twinkle.copyvio.callback.evaluate = ({target}) => {
+		const params = Morebits.quickForm.getInputData(target);
 		if (!params.source.trim()) {
 			alert(wgULS('请指定侵权来源', '請指定侵權來源'));
 			return;
 		}
 		Morebits.simpleWindow.setButtonsEnabled(false);
-		Morebits.status.init(e.target);
+		Morebits.status.init(target);
 		params.logpage = 'Qiuwen:侵权提报';
 		Morebits.wiki.addCheckpoint();
 		// Updating data for the action completed event

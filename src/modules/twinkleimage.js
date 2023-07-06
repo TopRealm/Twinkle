@@ -162,10 +162,10 @@ $(function TwinkleImage() {
 		evt.initEvent('change', true, true);
 		result.type[0].dispatchEvent(evt);
 	};
-	Twinkle.image.callback.evaluate = (event) => {
+	Twinkle.image.callback.evaluate = ({target}) => {
 		let type;
-		let notify = event.target.notify.checked;
-		const types = event.target.type;
+		let notify = target.notify.checked;
+		const types = target.type;
 		for (let i = 0; i < types.length; ++i) {
 			if (types[i].checked) {
 				type = types[i].values;
@@ -210,10 +210,10 @@ $(function TwinkleImage() {
 			lognomination: lognomination,
 		};
 		if (csdcrit === 'f1') {
-			params.f1_source = event.target['type.f1_source'].value;
+			params.f1_source = target['type.f1_source'].value;
 		}
 		if (csdcrit === 'f4') {
-			const f4_type = event.target['type.f4_type'].value;
+			const f4_type = target['type.f4_type'].value;
 			if (!f4_type) {
 				mw.notify(wgULS('CSD F4：请选择适用类型。', 'CSD F4：請選擇適用類別。'), {type: 'warn'});
 				return false;
@@ -221,7 +221,7 @@ $(function TwinkleImage() {
 			params.f4_type = f4_type;
 		}
 		Morebits.simpleWindow.setButtonsEnabled(false);
-		Morebits.status.init(event.target);
+		Morebits.status.init(target);
 		Morebits.wiki.actionCompleted.redirect = mw.config.get('wgPageName');
 		Morebits.wiki.actionCompleted.notice = wgULS('标记完成', '標記完成');
 		// Tagging image
