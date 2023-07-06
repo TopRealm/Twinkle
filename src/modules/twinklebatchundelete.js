@@ -14,7 +14,12 @@ $(function TwinkleBatchUndelete() {
 		) {
 			return;
 		}
-		Twinkle.addPortletLink(Twinkle.batchundelete.callback, '批复', 'tw-batch-undel', '反删除页面');
+		Twinkle.addPortletLink(
+			Twinkle.batchundelete.callback,
+			wgULS('批复', '批復'),
+			'tw-batch-undel',
+			wgULS('反删除页面', '反刪除頁面')
+		);
 	};
 	Twinkle.batchundelete.callback = () => {
 		const Window = new Morebits.simpleWindow(600, 400);
@@ -27,7 +32,7 @@ $(function TwinkleBatchUndelete() {
 			type: 'checkbox',
 			list: [
 				{
-					label: '若存在已删除的讨论页，也恢复',
+					label: wgULS('若存在已删除的讨论页，也恢复', '若存在已刪除的討論頁，也恢復'),
 					name: 'undel_talk',
 					value: 'undel_talk',
 					checked: true,
@@ -53,15 +58,15 @@ $(function TwinkleBatchUndelete() {
 			titles: mw.config.get('wgPageName'),
 			gpllimit: Twinkle.getPref('batchMax'),
 		};
-		const statelem = new Morebits.status('抓取页面列表');
+		const statelem = new Morebits.status(wgULS('抓取页面列表', '抓取頁面列表'));
 		const qiuwen_api = new Morebits.wiki.api(
-			'加载中……',
+			wgULS('加载中…', '載入中…'),
 			query,
 			({responseXML, params}) => {
 				const xml = responseXML;
 				const $pages = $(xml).find('page[missing]');
 				const list = [];
-				$pages.each((_index, page) => {
+				$pages.each((index, page) => {
 					const $page = $(page);
 					const title = $page.attr('title');
 					const $editprot = $page.find('pr[type="create"][level="sysop"]');
@@ -70,30 +75,30 @@ $(function TwinkleBatchUndelete() {
 						label:
 							title +
 							(isProtected
-								? `（${`全保护，${
+								? `（${wgULS('全保护，', '全保護，')}${
 										$editprot.attr('expiry') === 'infinity'
-											? '无限期'
-											: `${`${new Morebits.date($editprot.attr('expiry')).calendar(
+											? wgULS('无限期', '無限期')
+											: `${new Morebits.date($editprot.attr('expiry')).calendar(
 													'utc'
-											  )} (UTC)`}过期`
-								  }）`}`
+											  )} (UTC)${wgULS('过期', '過期')}`
+								  }）`
 								: ''),
 						value: title,
 						checked: true,
 						style: isProtected ? 'color: #f00' : '',
 					});
 				});
-				params.form.append({type: 'header', label: '待恢复页面'});
+				params.form.append({type: 'header', label: wgULS('待恢复页面', '待恢復頁面')});
 				params.form.append({
 					type: 'button',
-					label: '全选',
+					label: wgULS('全选', '全選'),
 					event: ({target}) => {
 						$(Morebits.quickForm.getElements(target.form, 'pages')).prop('checked', true);
 					},
 				});
 				params.form.append({
 					type: 'button',
-					label: '全不选',
+					label: wgULS('全不选', '全不選'),
 					event: ({target}) => {
 						$(Morebits.quickForm.getElements(target.form, 'pages')).prop('checked', false);
 					},
@@ -102,7 +107,7 @@ $(function TwinkleBatchUndelete() {
 					type: 'checkbox',
 					name: 'pages',
 					shiftClickSupport: true,
-					list,
+					list: list,
 				});
 				params.form.append({type: 'submit'});
 				const result = params.form.render();
@@ -110,15 +115,22 @@ $(function TwinkleBatchUndelete() {
 			},
 			statelem
 		);
-		qiuwen_api.params = {form, Window};
+		qiuwen_api.params = {form: form, Window: Window};
 		qiuwen_api.post();
 	};
 	Twinkle.batchundelete.callback.evaluate = ({target}) => {
-		Morebits.wiki.actionCompleted.notice = '反删除已完成';
+		Morebits.wiki.actionCompleted.notice = wgULS('反删除已完成', '反刪除已完成');
 		const numProtected = $(Morebits.quickForm.getElements(target, 'pages')).filter(
-			(_index, {checked, nextElementSibling}) => checked && nextElementSibling.style.color === 'red'
+			(index, {checked, nextElementSibling}) => checked && nextElementSibling.style.color === 'red'
 		).length;
-		if (numProtected > 0 && !confirm(`您正要反删除 ${numProtected} 个全保护页面，您确定吗？`)) {
+		if (
+			numProtected > 0 &&
+			!confirm(
+				wgULS('您正要反删除 ', '您正要反刪除 ') +
+					numProtected +
+					wgULS(' 个全保护页面，您确定吗？', ' 個全保護頁面，您確定嗎？')
+			)
+		) {
 			return;
 		}
 		const pages = target.getChecked('pages');
@@ -131,23 +143,26 @@ $(function TwinkleBatchUndelete() {
 		Morebits.simpleWindow.setButtonsEnabled(false);
 		Morebits.status.init(target);
 		if (!pages) {
-			Morebits.status.error('错误', '没什么要反删除的，取消操作');
+			Morebits.status.error(
+				wgULS('错误', '錯誤'),
+				wgULS('没什么要反删除的，取消操作', '沒什麼要反刪除的，取消操作')
+			);
 			return;
 		}
-		const pageUndeleter = new Morebits.batchOperation('反删除页面');
+		const pageUndeleter = new Morebits.batchOperation(wgULS('反删除页面', '反刪除頁面'));
 		pageUndeleter.setOption('chunkSize', Twinkle.getPref('batchChunks'));
 		pageUndeleter.setOption('preserveIndividualStatusLines', true);
 		pageUndeleter.setPageList(pages);
 		pageUndeleter.run((pageName) => {
 			const params = {
 				page: pageName,
-				undel_talk,
-				reason,
-				pageUndeleter,
+				undel_talk: undel_talk,
+				reason: reason,
+				pageUndeleter: pageUndeleter,
 			};
-			const qiuwen_page = new Morebits.wiki.page(pageName, `反删除页面${pageName}`);
+			const qiuwen_page = new Morebits.wiki.page(pageName, wgULS('反删除页面', '反刪除頁面') + pageName);
 			qiuwen_page.setCallbackParameters(params);
-			qiuwen_page.setEditSummary(`${reason}（批量）`);
+			qiuwen_page.setEditSummary(`${reason} (批量)`);
 			qiuwen_page.setChangeTags(Twinkle.changeTags);
 			qiuwen_page.suppressProtectWarning();
 			qiuwen_page.setMaxRetries(3); // temporary increase from 2 to make batchundelete more likely to succeed
@@ -177,7 +192,7 @@ $(function TwinkleBatchUndelete() {
 						titles: talkpagename,
 					};
 					qiuwen_api = new Morebits.wiki.api(
-						'检查讨论页的已删版本',
+						wgULS('检查讨论页的已删版本', '檢查討論頁的已刪版本'),
 						query,
 						Twinkle.batchundelete.callbacks.undeleteTalk
 					);
@@ -195,8 +210,15 @@ $(function TwinkleBatchUndelete() {
 				// page exists or has no deleted revisions; forget about it
 				return;
 			}
-			const page = new Morebits.wiki.page(params.talkPage, `正在反删除${params.page}的讨论页`);
-			page.setEditSummary(`反删除“${params.page}”的[[Qiuwen:讨论页|讨论页]]`);
+			const page = new Morebits.wiki.page(
+				params.talkPage,
+				wgULS('正在反删除', '正在反刪除') + params.page + wgULS('的讨论页', '的討論頁')
+			);
+			page.setEditSummary(
+				wgULS('反删除“', '反刪除「') +
+					params.page +
+					wgULS('”的[[Qiuwen:讨论页|讨论页]]', '」的[[Qiuwen:討論頁|討論頁]]')
+			);
 			page.setChangeTags(Twinkle.changeTags);
 			page.undeletePage();
 		},
