@@ -1068,7 +1068,10 @@ $(function TwinkleProtect() {
 						Twinkle.protect.callbacks.taggingPageInitial(tagparams);
 					}
 					if (closeparams && closeparams.type) {
-						const rppPage = new Morebits.wiki.page('Qiuwen_talk:页面保护请求', wgULS('关闭请求', '關閉請求'));
+						const rppPage = new Morebits.wiki.page(
+							'Qiuwen_talk:页面保护请求',
+							wgULS('关闭请求', '關閉請求')
+						);
 						rppPage.setFollowRedirect(true);
 						rppPage.setCallbackParameters(closeparams);
 						rppPage.load(Twinkle.protect.callbacks.closeRequest);

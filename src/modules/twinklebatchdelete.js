@@ -786,8 +786,8 @@ $(function TwinkleBatchDelete() {
 				text = pageobj.getPageText();
 			}
 			const old_text = text;
-			const wikiPage = new Morebits.wikitext.page(text);
-			text = wikiPage.removeLink(params.page).getText();
+			const qiuwen_page = new Morebits.wikitext.page(text);
+			text = qiuwen_page.removeLink(params.page).getText();
 			Twinkle.batchdelete.unlinkCache[params.title] = text;
 			if (text === old_text) {
 				// Nothing to do, return
@@ -844,8 +844,8 @@ $(function TwinkleBatchDelete() {
 				text = pageobj.getPageText();
 			}
 			const old_text = text;
-			const wikiPage = new Morebits.wikitext.page(text);
-			text = wikiPage.commentOutImage(image, wgULS('因文件已删，故注解', '因檔案已刪，故註解')).getText();
+			const qiuwen_page = new Morebits.wikitext.page(text);
+			text = qiuwen_page.commentOutImage(image, wgULS('因文件已删，故注解', '因檔案已刪，故註解')).getText();
 			Twinkle.batchdelete.unlinkCache[params.title] = text;
 			if (text === old_text) {
 				pageobj

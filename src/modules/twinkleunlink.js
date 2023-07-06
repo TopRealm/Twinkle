@@ -323,13 +323,13 @@ $(function TwinkleUnlink() {
 		unlinkBacklinks: (pageobj) => {
 			let oldtext = pageobj.getPageText();
 			const params = pageobj.getCallbackParameters();
-			const wikiPage = new Morebits.wikitext.page(oldtext);
+			const qiuwen_page = new Morebits.wikitext.page(oldtext);
 			let summaryText = '';
 			let warningString = false;
 			let text;
 			// remove image usages
 			if (params.doImageusage) {
-				text = wikiPage.commentOutImage(mw.config.get('wgTitle'), wgULS('注释', '注釋')).getText();
+				text = qiuwen_page.commentOutImage(mw.config.get('wgTitle'), wgULS('注释', '注釋')).getText();
 				// did we actually make any changes?
 				if (text === oldtext) {
 					warningString = wgULS('文件使用', '檔案使用');
@@ -340,7 +340,7 @@ $(function TwinkleUnlink() {
 			}
 			// remove backlinks
 			if (params.doBacklinks) {
-				text = wikiPage.removeLink(Morebits.pageNameNorm).getText();
+				text = qiuwen_page.removeLink(Morebits.pageNameNorm).getText();
 				// did we actually make any changes?
 				if (text === oldtext) {
 					warningString = warningString
