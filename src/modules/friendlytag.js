@@ -1580,7 +1580,7 @@ $(function FriendlyTag() {
 							))
 					) {
 						const qiuwen_page = new Morebits.wiki.page(
-							'Wikipedia:关注度/提报',
+							'Qiuwen_talk:存废讨论/关注度提报',
 							wgULS('加入关注度记录项', '加入關注度記錄項')
 						);
 						qiuwen_page.setFollowRedirect(true);
@@ -2012,4 +2012,4 @@ $(function FriendlyTag() {
 		qiuwen_page.load(Twinkle.tag.callbacks[Twinkle.tag.modeEn]);
 	};
 	Twinkle.addInitCallback(Twinkle.tag, 'tag');
-})(jQuery);
+});
