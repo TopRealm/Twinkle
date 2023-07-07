@@ -27,7 +27,10 @@
 	 * If name is not given, module is loaded unconditionally.
 	 */
 	Twinkle.addInitCallback = (func, name) => {
-		Twinkle.initCallbacks.push({func, name});
+		Twinkle.initCallbacks.push({
+			func: func,
+			name: name,
+		});
 	};
 	Twinkle.defaultConfig = {};
 	/**
@@ -43,6 +46,7 @@
 		userTalkPageMode: 'tab',
 		dialogLargeFont: false,
 		disabledModules: Morebits.userIsSysop ? [] : ['block'],
+		// default to disable block for non-sysop, if enable manually, they can only use it to tag userpage
 		disabledSysopModules: [],
 		// ARV
 		spiWatchReport: 'yes',
@@ -97,6 +101,9 @@
 			'r2',
 			'f1',
 			'f2',
+			'f3',
+			'f4',
+			'f5',
 			'o1',
 			'o2',
 			'o3',
@@ -119,6 +126,9 @@
 			'r2',
 			'f1',
 			'f2',
+			'f3',
+			'f4',
+			'f5',
 			'o1',
 			'o2',
 			'o3',
@@ -303,7 +313,7 @@
 				} else {
 					outerNavClass += ' vector-menu-tabs';
 				}
-				innerDivClass = 'vector-menu-content';
+				innerDivClass = 'vector-menu-content vector-dropdown-content';
 				break;
 			case 'gongbi':
 				outerNavClass = 'mw-portlet';
@@ -344,13 +354,15 @@
 		heading.id = `${id}-label`;
 		const ul = document.createElement('ul');
 		if (skin === 'vector' || skin === 'vector-2022') {
+			heading.setAttribute('for', `${id}-dropdown-checkbox`);
 			ul.className = 'vector-menu-content-list';
-			heading.className = 'vector-menu-heading';
+			heading.className = 'vector-menu-heading vector-dropdown-label';
 			// add invisible checkbox to keep menu open when clicked
 			// similar to the p-cactions ("More") menu
 			if (outerNavClass.includes('vector-menu-dropdown')) {
 				const chkbox = document.createElement('input');
-				chkbox.className = 'vector-menu-checkbox';
+				chkbox.id = `${id}-dropdown-checkbox`;
+				chkbox.className = 'vector-menu-checkbox vector-dropdown-checkbox';
 				chkbox.setAttribute('type', 'checkbox');
 				chkbox.setAttribute('aria-labelledby', `${id}-label`);
 				outerNav.appendChild(chkbox);
@@ -440,7 +452,9 @@
 		dataType: 'text',
 	})
 		.fail(() => {
-			mw.notify(wgULS('未能加载您的Twinkle参数设置', '未能載入您的Twinkle偏好設定'), {type: 'error'});
+			mw.notify(wgULS('未能加载您的Twinkle参数设置', '未能載入您的Twinkle偏好設定'), {
+				type: 'error',
+			});
 		})
 		.done((optionsText) => {
 			// Quick pass if user has no options
@@ -506,8 +520,8 @@
 			}
 		};
 		// Initialise modules that were saved in initCallbacks array
-		Twinkle.initCallbacks.forEach(({func, name}) => {
-			Twinkle.addInitCallback(func, name);
+		Twinkle.initCallbacks.forEach((module) => {
+			Twinkle.addInitCallback(module.func, module.name);
 		});
 		// Increases text size in Twinkle dialogs, if so configured
 		if (Twinkle.getPref('dialogLargeFont')) {
@@ -524,7 +538,7 @@
 	/** Twinkle-specific utility functions shared by multiple modules */
 	// Used in batch, unlink, and deprod to sort pages by namespace, as
 	// json formatversion=2 sorts by pageid instead (#1251)
-	Twinkle.sortByNamespace = ({ns1, title1}, {ns2, title2}) => ns1 - ns2 || (title1 > title2 ? 1 : -1);
+	Twinkle.sortByNamespace = (first, second) => first.ns - second.ns || (first.title > second.title ? 1 : -1);
 	// Used in unlink listings to link the page title
 	Twinkle.generateBatchPageLinks = (checkbox) => {
 		const $checkbox = $(checkbox);

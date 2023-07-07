@@ -3,6 +3,7 @@
 /**
  * Explicitly set width of TW menu so that we can use a hidden peer gadget
  * to add space where the TW menu would go before it loads.
+ * See twinkle-pagestyles.css
  */
 .skin-vector .vector-menu-dropdown #p-twinkle {
 	width: 3.24em;
@@ -17,6 +18,16 @@
 	font-size: 0.8em;
 	font-weight: normal;
 	letter-spacing: 0.05em;
+}
+
+/**
+ * In skin vector-2022, open the TW menu when mouse hovers over it.
+ * Credit to [[enwiki:User:Nardog]] for this fix.
+ */
+#p-twinkle:hover > .vector-menu-content {
+	height: auto;
+	opacity: 1;
+	visibility: visible;
 }
 
 /* twinkleclose.js */

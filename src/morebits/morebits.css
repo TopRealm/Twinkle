@@ -7,7 +7,6 @@
  *
  * The morebits library is maintained by the maintainers of Twinkle.
  * For queries, suggestions, help, etc., head to [[H:TW]].
- * The latest development source is available at [https://git.qiuwen.wiki/InterfaceAdmin/Twinkle/src/branch/master/morebits.css].
  */
 
 /* Morebits.status */
@@ -64,8 +63,8 @@ form.quickform select {
 
 form.quickform input[type='checkbox'],
 form.quickform input[type='radio'] {
-	width: 13px;
-	height: 13px;
+	width: 1em;
+	height: 1em;
 	padding: 0;
 	margin-top: 2px;
 	margin-right: 2px;
@@ -74,8 +73,7 @@ form.quickform input[type='radio'] {
 }
 
 form.quickform div {
-	font-size: 97.5%;
-	line-height: 1.285em;
+	line-height: 18px;
 }
 
 form.quickform h5 {
@@ -100,6 +98,8 @@ form.quickform textarea {
 form.quickform input:disabled + label {
 	color: #808080;
 }
+
+/* no italic for quickformDescription */
 
 form.quickform .quickformSubgroup {
 	margin-bottom: 0.5em;
@@ -157,6 +157,13 @@ div.morebits-previewbox *:not(img) {
 
 div.morebits-previewbox .mw-editsection {
 	display: none;
+}
+
+div.morebits-usertext {
+	padding: 5px;
+	border: 1px solid #a2a9b1;
+	background-color: #f8f9fa;
+	font-size: 95%;
 }
 
 /* Morebits.simpleWindow */
@@ -245,4 +252,30 @@ body .ui-dialog.morebits-dialog .morebits-dialog-footerlinks a {
 
 .ui-icon-inline {
 	display: inline-block;
+}
+
+/* For styling message/warning boxes. Cannot use MediaWiki ombox class because it will be deprecated soon. */
+table.morebits-ombox {
+	box-sizing: border-box;
+	border: 1px solid #a2a9b1;
+	margin: 4px 10%;
+	background: #f8f9fa;
+	border-collapse: collapse;
+}
+
+table.morebits-ombox-content {
+	border: 1px solid #f28500;
+}
+
+td.morebits-mbox-image {
+	padding: 2px 0 2px 0.9em;
+	border: 0;
+	text-align: center;
+}
+
+th.morebits-mbox-text,
+td.morebits-mbox-text {
+	width: 100%;
+	padding: 0.25em 0.9em;
+	border: 0;
 }
