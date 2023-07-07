@@ -1052,7 +1052,6 @@
 				// delete talk page
 				if (
 					params.deleteTalkPage &&
-					params.normalized !== 'f7' &&
 					params.normalized !== 'o1' &&
 					!document.getElementById('ca-talk').classList.contains('new')
 				) {
@@ -1062,7 +1061,7 @@
 						}:${mw.config.get('wgTitle')}`,
 						wgULS('删除讨论页', '刪除討論頁')
 					);
-					talkpage.setEditSummary(`[[QW:CSD#G9|G9]]: 孤立页面: 已删除页面“${Morebits.pageNameNorm}”的讨论页`);
+					talkpage.setEditSummary(`[[QW:CSD#G9|G9]]: 孤立页面：已删除页面“${Morebits.pageNameNorm}”的讨论页`);
 					talkpage.setChangeTags(Twinkle.changeTags);
 					talkpage.deletePage();
 					// this is ugly, but because of the architecture of wiki.api, it is needed
@@ -1118,7 +1117,7 @@
 					Morebits.status.info($bigtext[0], $link[0]);
 				}
 				// promote Unlink tool
-				if (mw.config.get('wgNamespaceNumber') === 6 && params.normalized !== 'f7') {
+				if (mw.config.get('wgNamespaceNumber') === 6) {
 					$link = $('<a>')
 						.attr('href', '#')
 						.text(wgULS('单击这里前往取消链入工具', '點擊這裡前往取消連入工具'))
@@ -1138,7 +1137,7 @@
 						})
 						.text(wgULS('取消对已删除文件的使用', '取消對已刪除檔案的使用'));
 					Morebits.status.info($bigtext[0], $link[0]);
-				} else if (params.normalized !== 'f7') {
+				} else {
 					$link = $('<a>')
 						.attr('href', '#')
 						.text(wgULS('单击这里前往取消链入工具', '點擊這裡前往取消連入工具'))
@@ -1250,7 +1249,7 @@
 				$snapshot.each((key, value) => {
 					const title = $(value).attr('title');
 					const page = new Morebits.wiki.page(title, `${wgULS('删除重定向 "', '刪除重新導向 "') + title}"`);
-					page.setEditSummary(`[[QW:CSD#G9|G9]]: 孤立页面: 重定向到已删除页面“${Morebits.pageNameNorm}”`);
+					page.setEditSummary(`[[QW:CSD#G9|G9]]: 孤立页面：重定向到已删除页面“${Morebits.pageNameNorm}”`);
 					page.setChangeTags(Twinkle.changeTags);
 					page.deletePage(onsuccess);
 				});
