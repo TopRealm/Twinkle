@@ -1,5 +1,5 @@
-src/select2/
-scripts/
 dist/
-*.md
+scripts/
+src/select2/
 pnpm-lock.yaml
+*.md
