@@ -506,19 +506,32 @@ $(function TwinkleClose() {
 			const pagetitle = mw.Title.newFromText(params.title);
 			if (pagetitle.getNamespaceId() % 2 === 0) {
 				const talkpagetitle = new mw.Title(pagetitle.getMainText(), pagetitle.getNamespaceId() + 1);
-				const talkpage = new Morebits.wiki.page(talkpagetitle.toString(), '标记讨论页');
-				const vfdkept = `{{Old vfd multi|${mw.config.get('wgPageName').split('/').slice(2).join('/')}|${params.messageData.label}}}\n`;
+				const talkpage = new Morebits.wiki.page(talkpagetitle.toString(), wgULS('标记讨论页', '標記討論頁'));
+				const vfdkept = `{{Old vfd multi|${mw.config.get('wgPageName').split('/').slice(2).join('/')}|${
+					params.messageData.label
+				}}}\n`;
 				talkpage.setPrependText(vfdkept);
-				talkpage.setEditSummary(`[[${mw.config.get('wgPageName')}#${params.title}]]：${params.messageData.label}`);
+				talkpage.setEditSummary(
+					`[[${mw.config.get('wgPageName')}#${params.title}]]：${params.messageData.label}`
+				);
 				talkpage.setChangeTags(Twinkle.changeTags);
 				talkpage.setCreateOption('recreate');
 				talkpage.prepend();
 			}
-			let newtext = text.replace(/<noinclude>\s*{{([acfimr-tv]fd)(\|(?:{{[^{}]*}}|[^{}])*)?}}\s*<\/noinclude>\s*/gi, '');
+			let newtext = text.replace(
+				/<noinclude>\s*{{([acfimr-tv]fd)(\|(?:{{[^{}]*}}|[^{}])*)?}}\s*<\/noinclude>\s*/gi,
+				''
+			);
 			newtext = newtext.replace(/{{([acfimr-tv]fd)(\|(?:{{[^{}]*}}|[^{}])*)?}}\s*/gi, '');
 			if (params.code !== 'tk') {
-				newtext = newtext.replace(/{{(notability|fame|mair|知名度|重要性|显著性|顯著性|知名度不足|人物重要性|重要性不足|notable|关注度|关注度不足|關注度|關注度不足|重要|重要度)(\|(?:{{[^{}]*}}|[^{}])*)?}}\n*/gi, '');
-				newtext = newtext.replace(/{{(substub|小小作品|cod|小小條目|小小条目)(\|(?:{{[^{}]*}}|[^{}])*)?}}\n*/gi, '');
+				newtext = newtext.replace(
+					/{{(notability|fame|mair|知名度|重要性|显著性|顯著性|知名度不足|人物重要性|重要性不足|notable|关注度|关注度不足|關注度|關注度不足|重要|重要度)(\|(?:{{[^{}]*}}|[^{}])*)?}}\n*/gi,
+					''
+				);
+				newtext = newtext.replace(
+					/{{(substub|小小作品|cod|小小條目|小小条目)(\|(?:{{[^{}]*}}|[^{}])*)?}}\n*/gi,
+					''
+				);
 			}
 			if (params.code === 'mergeapproved') {
 				const tag = `{{subst:Merge approved/auto|discuss=${mw.config.get('wgPageName')}#${params.title}}}\n`;
