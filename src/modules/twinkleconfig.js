@@ -603,20 +603,6 @@
 					setValues: Twinkle.config.commonSets.csdCriteriaNotification,
 					setDisplayOrder: Twinkle.config.commonSets.csdCriteriaNotificationDisplayOrder,
 				},
-				// TwinkleConfig.welcomeUserOnSpeedyDeletionNotification (array of strings)
-				// On what types of speedy deletion notifications shall the user be welcomed
-				// with a "firstarticle" notice if his talk page has not yet been created.
-				{
-					name: 'welcomeUserOnSpeedyDeletionNotification',
-					label: wgULS('在使用以下理由时欢迎页面创建者', '在使用以下理由時歡迎頁面建立者'),
-					helptip: wgULS(
-						'欢迎模板仅在用户被通知时加入，使用的模板是{{firstarticle}}。',
-						'歡迎模板僅在使用者被通知時加入，使用的模板是{{firstarticle}}。'
-					),
-					type: 'set',
-					setValues: Twinkle.config.commonSets.csdCriteriaNotification,
-					setDisplayOrder: Twinkle.config.commonSets.csdCriteriaNotificationDisplayOrder,
-				},
 				// TwinkleConfig.promptForSpeedyDeletionSummary (array of strings)
 				{
 					name: 'promptForSpeedyDeletionSummary',
@@ -932,74 +918,6 @@
 					type: 'customList',
 					customListValueTitle: wgULS('模板名（不含大括号）', '模板名（不含大括號）'),
 					customListLabelTitle: wgULS('显示的文字（和编辑摘要）', '顯示的文字（和編輯摘要）'),
-				},
-			],
-		},
-		{
-			title: wgULS('欢迎用户', '歡迎使用者'),
-			module: 'welcome',
-			preferences: [
-				{
-					name: 'topWelcomes',
-					label: wgULS('将欢迎放在用户讨论页的最上方', '將歡迎放在使用者討論頁的最上方'),
-					type: 'boolean',
-				},
-				{
-					name: 'watchWelcomes',
-					label: wgULS('在欢迎时将用户讨论页加入监视列表', '在歡迎時將使用者討論頁加入監視清單'),
-					helptip: wgULS(
-						'您将可以关注新手如何与他人协作，并能够适时地提供帮助。',
-						'您將可以關注新手如何與他人協作，並能夠適時地提供幫助。'
-					),
-					type: 'enum',
-					enumValues: Twinkle.config.watchlistEnums,
-				},
-				/*
-				{
-					name: 'insertUsername',
-					label: wgULS('Add your username to the template (where applicable)'),
-					helptip: "Some welcome templates have an opening sentence like \"Hi, I'm &lt;username&gt;. Welcome\" etc. If you turn off this option, these templates will not display your username in that way.",
-					type: 'boolean'
-				},
-				*/
-				{
-					name: 'quickWelcomeMode',
-					label: wgULS('在差异页面单击“欢迎”链接时将会', '在差異頁面點擊「歡迎」連結時將會'),
-					helptip: wgULS(
-						'如果您选择自动欢迎，将会使用下方指定的模板。',
-						'如果您選擇自動歡迎，將會使用下方指定的模板。'
-					),
-					type: 'enum',
-					enumValues: {auto: wgULS('自动欢迎', '自動歡迎'), norm: wgULS('要求您选择模板', '要求您選擇模板')},
-				},
-				{
-					name: 'quickWelcomeTemplate',
-					label: wgULS('自动欢迎时所使用的模板', '自動歡迎時所使用的模板'),
-					helptip: wgULS(
-						'输入欢迎模板的名称，不包含大括号，将会加入给定的条目链接。',
-						'輸入歡迎模板的名稱，不包含大括號，將會加入給定的條目連結。'
-					),
-					type: 'string',
-				},
-				{
-					name: 'customWelcomeList',
-					label: wgULS('自定义欢迎模板', '自訂歡迎模板'),
-					helptip: wgULS(
-						'您可以加入其他欢迎模板，或是欢迎模板的用户子页面（以User:开头）。别忘了这些模板会在用户讨论页上替换引用。',
-						'您可以加入其他歡迎模板，或是歡迎模板的使用者子頁面（以User:開頭）。別忘了這些模板會在使用者討論頁上替換引用。'
-					),
-					type: 'customList',
-					customListValueTitle: wgULS('模板名（不含大括号）', '模板名（不含大括號）'),
-					customListLabelTitle: wgULS('显示的文字', '顯示的文字'),
-				},
-				{
-					name: 'customWelcomeSignature',
-					label: wgULS('在自定义模板中自动签名', '在自訂模板中自動簽名'),
-					helptip: wgULS(
-						'如果您的自动欢迎模板包含内置签名，请关闭此项。',
-						'如果您的自動歡迎模板包含內建簽名，請關閉此項。'
-					),
-					type: 'boolean',
 				},
 			],
 		},

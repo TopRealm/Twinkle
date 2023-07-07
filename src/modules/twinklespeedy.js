@@ -761,7 +761,7 @@
 			label: 'G2：没有实际内容的页面',
 			value: 'g2',
 			tooltip:
-				'仅包括无意义字符串而没有实际内容的页面。由用户本人创建的用户页、用户讨论页，及专为测试提供的沙盒，不适用此准则。若遇此类用户讨论页，任何人可将其替换为{{subst:welcome}}。',
+				'仅包括无意义字符串而没有实际内容的页面。由用户本人创建的用户页、用户讨论页，及专为测试提供的沙盒，不适用此准则。',
 		},
 		{
 			label: 'G3：纯粹破坏',
@@ -1430,9 +1430,9 @@
 									);
 									let notifytext;
 									notifytext = `\n{{subst:db-notice|target=${Morebits.pageNameNorm}`;
-									notifytext += `${params.welcomeuser ? '' : '|nowelcome=yes'}}}--~~~~`;
+									notifytext += `|nowelcome=yes'}}--~~~~`;
 									let editsummary = '通知：';
-									if (!params.normalizeds.includes('g12')) {
+									if (!params.normalizeds.includes('g3')) {
 										// no article name in summary for G10 deletions
 										editsummary += `页面[[${Morebits.pageNameNorm}]]`;
 									} else {
