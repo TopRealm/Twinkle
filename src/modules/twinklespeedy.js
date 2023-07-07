@@ -1,5 +1,5 @@
 /* Twinkle.js - twinklespeedy.js */
-$(function TwinkleSpeedy() {
+(($) => {
 	/**
 	 * twinklespeedy.js: CSD module
 	 * Mode of invocation: Tab ("CSD")
@@ -79,7 +79,7 @@ $(function TwinkleSpeedy() {
 		dialog.setScriptName('Twinkle');
 		dialog.addFooterLink(wgULS('快速删除方针', '快速刪除方針'), 'QW:CSD');
 		dialog.addFooterLink(wgULS('速删设置', '速刪設定'), 'H:TW/PREF#speedy');
-		dialog.addFooterLink(wgULS('Twinkle帮助', 'Twinkle說明'), 'QW:TW/DOC#speedy');
+		dialog.addFooterLink(wgULS('Twinkle帮助', 'Twinkle說明'), 'H:TW/DOC#speedy');
 		const form = new Morebits.quickForm(
 			callbackfunc,
 			Twinkle.getPref('speedySelectionStyle') === 'radioClick' ? 'change' : null
@@ -92,7 +92,7 @@ $(function TwinkleSpeedy() {
 						label: wgULS('只标记，不删除', '只標記，不刪除'),
 						value: 'tag_only',
 						name: 'tag_only',
-						tooltip: wgULS('如果您只想标记此页面而不是将其删除', '如果您只想標記此頁面而不是將其刪除'),
+						tooltip: wgULS('若您只想标记此页面而不是将其删除', '若您只想標記此頁面而不是將其刪除'),
 						checked: !(Twinkle.speedy.hasCSD || Twinkle.getPref('deleteSysopDefaultToDelete')),
 						event: (event) => {
 							const cForm = event.target.form;
@@ -215,8 +215,8 @@ $(function TwinkleSpeedy() {
 					value: 'notify',
 					name: 'notify',
 					tooltip: wgULS(
-						'一个通知模板将会被加入创建者的讨论页，如果您启用了该理据的通知。',
-						'一個通知模板將會被加入建立者的討論頁，如果您啟用了該理據的通知。'
+						'一个通知模板将会被加入创建者的讨论页，若您启用了该理据的通知。',
+						'一個通知模板將會被加入建立者的討論頁，若您啟用了該理據的通知。'
 					),
 					checked:
 						!Morebits.userIsSysop ||
@@ -527,6 +527,7 @@ $(function TwinkleSpeedy() {
 	Twinkle.speedy.callback.priorDeletionCount = () => {
 		const query = {
 			action: 'query',
+			format: 'json',
 			list: 'logevents',
 			letype: 'delete',
 			leaction: 'delete/delete',
@@ -1093,7 +1094,6 @@ $(function TwinkleSpeedy() {
 				}
 				// prompt for protect on G7
 				let $link;
-
 				let $bigtext;
 				if (params.normalized === 'g7') {
 					$link = $('<a>')
@@ -1312,11 +1312,9 @@ $(function TwinkleSpeedy() {
 					statelem.error(wgULS('页面已被提交至存废讨论。', '頁面已被提交至存廢討論。'));
 					return;
 				}
-
 				// given the params, builds the template and also adds the user talk page parameters to the params that were passed in
 				// returns => [<string> wikitext, <object> utparams]
 				const buildData = Twinkle.speedy.callbacks.getTemplateCodeAndParams(params);
-
 				let code = buildData[0];
 				params.utparams = buildData[1];
 				const thispage = new Morebits.wiki.page(mw.config.get('wgPageName'));
@@ -1370,8 +1368,8 @@ $(function TwinkleSpeedy() {
 					text = code;
 				} else {
 					// Insert tag after short description or any hatnotes
-					const wikipage = new Morebits.wikitext.page(text);
-					text = wikipage.insertAfterTemplates(`${code}\n`, Twinkle.hatnoteRegex).getText();
+					const qiuwen_page = new Morebits.wikitext.page(text);
+					text = qiuwen_page.insertAfterTemplates(`${code}\n`, Twinkle.hatnoteRegex).getText();
 				}
 				pageobj.setPageText(text);
 				pageobj.setEditSummary(editsummary);
@@ -1430,7 +1428,6 @@ $(function TwinkleSpeedy() {
 										talkPageName,
 										`${wgULS('通知页面创建者（', '通知頁面建立者（') + initialContrib}）`
 									);
-
 									let notifytext;
 									notifytext = `\n{{subst:db-notice|target=${Morebits.pageNameNorm}`;
 									notifytext += `${params.welcomeuser ? '' : '|nowelcome=yes'}}}--~~~~`;
@@ -1469,7 +1466,7 @@ $(function TwinkleSpeedy() {
 			//   for DI: params.fromDI = true, params.templatename, params.normalized  (note: normalized is a string)
 			addToLog: (params, initialContrib) => {
 				const usl = new Morebits.userspaceLogger(Twinkle.getPref('speedyLogPageName'));
-				usl.initialText = `这是该用户使用[[QW:TW|Twinkle]]的速删模块做出的[[QW:CSD|快速删除]]提名列表。\n\n如果您不再想保留此日志，请在[[${Twinkle.getPref(
+				usl.initialText = `这是该用户使用[[H:TW|Twinkle]]的速删模块做出的[[QW:CSD|快速删除]]提名列表。\n\n若您不再想保留此日志，请在[[${Twinkle.getPref(
 					'configPage'
 				)}|参数设置]]中关掉，并使用[[QW:CSD#O1|CSD O1]]提交快速删除。${
 					Morebits.userIsSysop ? '\n\n此日志并不记录用Twinkle直接执行的删除。' : ''
@@ -1721,4 +1718,4 @@ $(function TwinkleSpeedy() {
 		qiuwen_page.load(Twinkle.speedy.callbacks.user.main);
 	};
 	Twinkle.addInitCallback(Twinkle.speedy, 'speedy');
-});
+})(jQuery);

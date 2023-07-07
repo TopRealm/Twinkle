@@ -1,5 +1,5 @@
 /* Twinkle.js - twinkleclose.js */
-$(function TwinkleClose() {
+(($) => {
 	/**
 	 * twinkleclose.js: XFD closing module
 	 * Mode of invocation: Links after section heading
@@ -7,8 +7,10 @@ $(function TwinkleClose() {
 	 * Config directives in: TwinkleConfig
 	 */
 	Twinkle.close = () => {
-		if (Twinkle.getPref('XfdClose') === 'hide' ||
-			!/^Qiuwen([_ ]talk)?:存废讨论\/记录(?:\/\d+){3}$/.test(mw.config.get('wgPageName'))) {
+		if (
+			Twinkle.getPref('XfdClose') === 'hide' ||
+			!/^Qiuwen([_ ]talk)?:存废讨论\/记录\/\d+\/\d+\/\d+$/.test(mw.config.get('wgPageName'))
+		) {
 			return;
 		}
 		mw.hook('wikipage.content').add((item) => {
@@ -18,24 +20,27 @@ $(function TwinkleClose() {
 		});
 	};
 	Twinkle.close.addLinks = () => {
-		const spanTag = (color, content) => {
-			const span = document.createElement('span');
-			span.style.color = color;
-			span.appendChild(document.createTextNode(content));
-			return span;
-		};
-		$('h1:has(.mw-headline),h2:has(.mw-headline),h3:has(.mw-headline),h4:has(.mw-headline),h5:has(.mw-headline),h6:has(.mw-headline)', '#bodyContent').each((index, { dataset }) => {
-			dataset.section = index + 1;
+		let prevH2Section = -1;
+		$(
+			'h1:has(.mw-headline),h2:has(.mw-headline),h3:has(.mw-headline),h4:has(.mw-headline),h5:has(.mw-headline),h6:has(.mw-headline)',
+			'#bodyContent'
+		).each((index, current) => {
+			current.setAttribute('data-section', index + 1);
+			if (current.nodeName === 'H2') {
+				prevH2Section = index + 1;
+			} else {
+				current.setAttribute('data-parent-section', prevH2Section);
+			}
 		});
 		const selector = ':has(.mw-headline a:only-of-type):not(:has(+ div.NavFrame))';
-		const titles = $('#bodyContent').find(`h2${selector}:not(:has(+ p + h3)), h3${selector}`); // really needs to work on
-		const delNode = document.createElement('strong');
-		const delLink = document.createElement('a');
-		delLink.appendChild(spanTag('Black', '['));
-		delLink.appendChild(spanTag('Red', '关闭讨论'));
-		delLink.appendChild(spanTag('Black', ']'));
-		delNode.appendChild(delLink);
-		titles.each((_key, current) => {
+		let titles; // really needs to work on
+		if ($('.ext-discussiontools-init-section').length > 0) {
+			// Handle discussion tools
+			titles = $('#bodyContent').find(`.mw-heading2${selector}:not(:has(+ p + h3)) > h2, h3${selector}`);
+		} else {
+			titles = $('#bodyContent').find(`h2${selector}:not(:has(+ p + h3)), h3${selector}`);
+		}
+		titles.each((key, current) => {
 			const headlinehref = $(current).find('.mw-headline a').attr('href');
 			if (headlinehref === undefined) {
 				return;
@@ -55,153 +60,160 @@ $(function TwinkleClose() {
 			title = decodeURIComponent(title);
 			title = title.replace(/_/g, ' '); // Normalize for using in interface and summary
 			const pagenotexist = $(current).find('.mw-headline a').hasClass('new');
-			const section = current.dataset.section;
-			const node = current.querySelectorAll('.mw-headline')[0];
-			node.appendChild(document.createTextNode(' '));
-			const tmpNode = delNode.cloneNode(true);
-			tmpNode.firstChild.href = `#${section}`;
-			$(tmpNode.firstChild).on('click', () => {
-				Twinkle.close.callback(title, section, pagenotexist);
+			const section = current.getAttribute('data-section');
+			const parentSection = current.getAttribute('data-parent-section') || -1;
+			const node = current.getElementsByClassName('mw-editsection')[0];
+			const delDivider = document.createElement('span');
+			delDivider.appendChild(document.createTextNode(' | '));
+			node.insertBefore(delDivider, node.childNodes[1]);
+			const delLink = document.createElement('a');
+			delLink.className = 'twinkle-close-button';
+			delLink.href = '#';
+			delLink.setAttribute('data-section', section);
+			delLink.innerText = wgULS('关闭讨论', '關閉討論');
+			$(delLink).on('click', () => {
+				Twinkle.close.callback(title, section, parentSection, pagenotexist);
 				return false;
 			});
-			node.appendChild(tmpNode);
+			node.insertBefore(delLink, node.childNodes[1]);
 		});
 	};
 	// Keep this synchronized with {{delh}}
-	Twinkle.close.codes = {
-		Invalid: {
-			ir: {
-				label: '请求无效',
-				action: 'keep',
-			},
-			rep: {
-				label: '重复提出，无效',
-				action: 'keep',
-			},
-			ne: {
-				label: '目标页面或档案不存在，无效',
-				action: 'keep',
-			},
-			nq: {
-				label: '提删者未取得提删资格，无效',
-				action: 'keep',
-			},
-		},
-		Keep: {
-			k: {
-				label: '保留',
-				action: 'keep',
-				adminonly: true,
-			},
-			sk: {
-				label: '快速保留',
-				action: 'keep',
-			},
-			tk: {
-				label: '暂时保留',
-				action: 'keep',
-			},
-			rr: {
-				label: '请求理由消失',
-				action: 'keep',
-				selected: Twinkle.getPref('XfdClose') === 'nonadminonly',
-			},
-			dan: {
-				label: '删后重建',
-				action: 'keep',
-				adminonly: true,
+	Twinkle.close.codes = [
+		{
+			key: wgULS('请求无效', '請求無效'),
+			value: {
+				ir: {
+					label: wgULS('请求无效', '請求無效'),
+					action: 'keep',
+				},
+				rep: {
+					label: wgULS('重复提出，无效', '重複提出，無效'),
+					action: 'keep',
+				},
+				ne: {
+					label: wgULS('目标页面或文件不存在，无效', '目標頁面或檔案不存在，無效'),
+					action: 'keep',
+				},
+				nq: {
+					label: wgULS('提删者未获取提删资格，无效', '提刪者未取得提刪資格，無效'),
+					action: 'keep',
+				},
 			},
 		},
-		Delete: {
-			d: {
-				label: '删除',
-				action: 'del',
-				adminonly: true,
-				selected: Twinkle.getPref('XfdClose') === 'all',
-			},
-			ic: {
-				label: '图像因侵权被删',
-				action: 'del',
-				adminonly: true,
-			},
-		},
-		Speedy: {
-			sd: {
-				label: '快速删除',
-				action: 'del',
-			},
-			lssd: {
-				label: '无来源或版权资讯，快速删除',
-				action: 'del',
-			},
-			svg: {
-				label: '已改用SVG图形，快速删除',
-				action: 'del',
-			},
-			drep: {
-				label: '多次被删除，条目锁定',
-				action: 'del',
-				adminonly: true,
+		{
+			key: '保留',
+			value: {
+				k: {
+					label: '保留',
+					action: 'keep',
+					adminonly: true,
+				},
+				sk: {
+					label: '快速保留',
+					action: 'keep',
+				},
+				tk: {
+					label: wgULS('暂时保留，改挂维护模板（关注度等）', '暫時保留，改掛維護模板（關注度等）'),
+					value: wgULS('暂时保留', '暫時保留'),
+					action: 'keep',
+				},
+				rr: {
+					label: wgULS('请求理由消失', '請求理由消失'),
+					action: 'keep',
+					selected: Twinkle.getPref('XfdClose') === 'nonadminonly',
+				},
+				dan: {
+					label: wgULS('删后重建', '刪後重建'),
+					action: 'keep',
+					adminonly: true,
+				},
 			},
 		},
-		/* Transfer: {
-			twc: {
-				label: '转移至求闻共享资源',
-				action: 'noop',
-				adminonly: true
-			},
-			two: {
-				label: '转移至其他计划',
-				action: 'noop',
-				adminonly: true
-			}
-		}, */
-		OtherMethod: {
-			c: {
-				label: '转交侵权',
-				action: 'noop',
-			},
-			m2pfd: {
-				label: '转送存废讨论',
-				action: 'noop',
-			},
-			r: {
-				label: '重定向',
-				action: 'keep',
-				adminonly: true,
-			},
-			cr: {
-				label: '分类重定向',
-				action: 'keep',
-				adminonly: true,
-			},
-			m: {
-				label: '移动',
-				action: 'keep',
-				adminonly: true,
-			},
-			merge: {
-				label: '并入',
-				action: 'keep',
-				adminonly: true,
-			},
-			mergeapproved: {
-				label: '允许并入',
-				action: 'keep',
-				adminonly: true,
-			},
-			nc: {
-				label: '无共识',
-				action: 'keep',
+		{
+			key: wgULS('删除', '刪除'),
+			value: {
+				d: {
+					label: wgULS('删除', '刪除'),
+					action: 'del',
+					adminonly: true,
+					selected: Twinkle.getPref('XfdClose') === 'all',
+				},
+				ic: {
+					label: wgULS('图像因侵权被删', '圖像因侵權被刪'),
+					action: 'del',
+					adminonly: true,
+				},
 			},
 		},
-	};
-	Twinkle.close.callback = (title, section, noop) => {
+		{
+			key: wgULS('快速删除', '快速刪除'),
+			value: {
+				sd: {
+					label: wgULS('快速删除', '快速刪除'),
+					action: 'del',
+				},
+				lssd: {
+					label: wgULS('无来源或著作权信息，快速删除', '無來源或版權資訊，快速刪除'),
+					action: 'del',
+				},
+				svg: {
+					label: wgULS('已改用SVG图形，快速删除', '已改用SVG圖形，快速刪除'),
+					action: 'del',
+				},
+				drep: {
+					label: wgULS('多次被删除，条目锁定', '多次被刪除，條目鎖定'),
+					action: 'del',
+					adminonly: true,
+				},
+			},
+		},
+		{
+			key: wgULS('其他处理方法', '其他處理方法'),
+			value: {
+				c: {
+					label: wgULS('转交侵权', '轉交侵權'),
+					action: 'noop',
+				},
+				r: {
+					label: '重定向',
+					action: 'keep',
+					adminonly: true,
+				},
+				cr: {
+					label: wgULS('分类重定向', '分類重定向'),
+					action: 'keep',
+					adminonly: true,
+				},
+				m: {
+					label: wgULS('移动', '移動'),
+					action: 'keep',
+					adminonly: true,
+				},
+				merge: {
+					label: wgULS('并入', '併入'),
+					action: 'keep',
+					adminonly: true,
+				},
+				mergeapproved: {
+					label: wgULS('允许并入', '允許併入'),
+					action: 'keep',
+					adminonly: true,
+				},
+				nc: {
+					label: wgULS('无共识暂时保留', '無共識暫時保留'),
+					value: wgULS('无共识', '無共識'),
+					action: 'keep',
+				},
+			},
+		},
+	];
+	Twinkle.close.callback = (title, section, parentSection, noop) => {
 		const Window = new Morebits.simpleWindow(410, 200);
 		Window.setTitle(`关闭存废讨论 \u00B7 ${title}`);
 		Window.setScriptName('Twinkle');
-		Window.addFooterLink('存废讨论设置', 'H:TW/PREF#关闭存废讨论');
-		Window.addFooterLink('Twinkle帮助', 'H:TW/DOC#关闭存废讨论');
+		Window.addFooterLink(wgULS('存废讨论设置', '存廢討論設定'), 'H:TW/PREF#close');
+		Window.addFooterLink(wgULS('Twinkle帮助', 'Twinkle說明'), 'H:TW/DOC#close');
 		const form = new Morebits.quickForm(Twinkle.close.callback.evaluate);
 		form.append({
 			type: 'select',
@@ -266,17 +278,16 @@ $(function TwinkleClose() {
 				},
 			],
 		});
-		form.append({
-			type: 'submit',
-		});
+		form.append({type: 'submit'});
 		const result = form.render();
 		Window.setContent(result);
 		Window.display();
 		const sub_group = result.querySelectorAll('select')[0]; // hack
 		const resultData = {
-			title,
-			section: Number.parseInt(section),
-			noop,
+			title: title,
+			section: parseInt(section),
+			parentSection: parseInt(parentSection),
+			noop: noop,
 		};
 		$(result).data('resultData', resultData);
 		// worker function to create the combo box entries
@@ -288,32 +299,34 @@ $(function TwinkleClose() {
 					label: `${key}：${itemProperties.label}`,
 					value: key,
 					selected: itemProperties.selected,
-					disabled: Twinkle.getPref('XfdClose') !== 'all' && itemProperties.adminonly,
+					disabled:
+						(Twinkle.getPref('XfdClose') !== 'all' && itemProperties.adminonly) || itemProperties.disabled,
+					hidden: itemProperties.hidden,
 				});
 				const elemRendered = container.appendChild(elem.render());
 				$(elemRendered).data('messageData', itemProperties);
 			});
 		};
-		$.each(Twinkle.close.codes, (groupLabel, groupContents) => {
+		Twinkle.close.codes.forEach((group) => {
 			let optgroup = new Morebits.quickForm.element({
 				type: 'optgroup',
-				label: groupLabel,
+				label: group.key,
 			});
 			optgroup = optgroup.render();
 			sub_group.appendChild(optgroup);
 			// create the options
-			createEntries(groupContents, optgroup);
+			createEntries(group.value, optgroup);
 		});
-		const event = document.createEvent('Event');
-		event.initEvent('change', true, true);
-		result.sub_group.dispatchEvent(event);
+		const evt = document.createEvent('Event');
+		evt.initEvent('change', true, true);
+		result.sub_group.dispatchEvent(evt);
 	};
-	Twinkle.close.callback.change_operation = ({ target }) => {
-		const noop = target.checked;
-		const code = target.form.sub_group.value;
-		const messageData = $(target.form.sub_group).find(`option[value="${code}"]`).data('messageData');
-		const talkpage = target.form.talkpage;
-		const redirects = target.form.redirects;
+	Twinkle.close.callback.change_operation = (e) => {
+		const noop = e.target.checked;
+		const code = e.target.form.sub_group.value;
+		const messageData = $(e.target.form.sub_group).find(`option[value="${code}"]`).data('messageData');
+		const talkpage = e.target.form.talkpage;
+		const redirects = e.target.form.redirects;
 		if (noop || messageData.action === 'keep') {
 			if (talkpage) {
 				talkpage.checked = false;
@@ -330,12 +343,12 @@ $(function TwinkleClose() {
 			redirects.disabled = false;
 		}
 	};
-	Twinkle.close.callback.change_code = ({ target }) => {
-		const resultData = $(target.form).data('resultData');
-		const messageData = $(target).find(`option[value="${target.value}"]`).data('messageData');
-		const noop = target.form.noop;
-		const talkpage = target.form.talkpage;
-		const redirects = target.form.redirects;
+	Twinkle.close.callback.change_code = (e) => {
+		const resultData = $(e.target.form).data('resultData');
+		const messageData = $(e.target).find(`option[value="${e.target.value}"]`).data('messageData');
+		const noop = e.target.form.noop;
+		const talkpage = e.target.form.talkpage;
+		const redirects = e.target.form.redirects;
 		if (resultData.noop || messageData.action === 'noop') {
 			noop.checked = true;
 			noop.disabled = true;
@@ -363,32 +376,33 @@ $(function TwinkleClose() {
 				redirects.checked = true;
 				redirects.disabled = false;
 			}
-			if (target.value === 'sd') {
-				target.form.sdreason.parentNode.removeAttribute('hidden');
+			if (e.target.value === 'sd') {
+				e.target.form.sdreason.parentElement.removeAttribute('hidden');
 			} else {
-				target.form.sdreason.parentNode.setAttribute('hidden', '');
+				e.target.form.sdreason.parentElement.setAttribute('hidden', '');
 			}
 		}
 	};
-	Twinkle.close.callback.evaluate = ({ target }) => {
-		const code = target.sub_group.value;
-		const resultData = $(target).data('resultData');
-		const messageData = $(target.sub_group).find(`option[value="${code}"]`).data('messageData');
-		const noop = target.noop.checked;
-		const talkpage = target.talkpage && target.talkpage.checked;
-		const redirects = target.redirects.checked;
+	Twinkle.close.callback.evaluate = (e) => {
+		const code = e.target.sub_group.value;
+		const resultData = $(e.target).data('resultData');
+		const messageData = $(e.target.sub_group).find(`option[value="${code}"]`).data('messageData');
+		const noop = e.target.noop.checked;
+		const talkpage = e.target.talkpage && e.target.talkpage.checked;
+		const redirects = e.target.redirects.checked;
 		const params = {
 			title: resultData.title,
-			code,
-			remark: target.remark.value,
-			sdreason: target.sdreason.value,
+			code: code,
+			remark: e.target.remark.value,
+			sdreason: e.target.sdreason.value,
 			section: resultData.section,
-			messageData,
-			talkpage,
-			redirects,
+			parentSection: resultData.parentSection,
+			messageData: messageData,
+			talkpage: talkpage,
+			redirects: redirects,
 		};
 		Morebits.simpleWindow.setButtonsEnabled(false);
-		Morebits.status.init(target);
+		Morebits.status.init(e.target);
 		Morebits.wiki.actionCompleted.notice = '操作完成';
 		if (noop || messageData.action === 'noop') {
 			Twinkle.close.callbacks.talkend(params);
@@ -464,34 +478,51 @@ $(function TwinkleClose() {
 			}
 			Morebits.wiki.removeCheckpoint();
 		},
-		deleteRedirectsMain: ({ responseXML, params }) => {
-			const xml = responseXML;
+		deleteRedirectsMain: (apiobj) => {
+			const xml = apiobj.responseXML;
 			const pages = $(xml)
 				.find('rd')
-				.map((_index, element) => $(element).attr('title'))
+				.map(function () {
+					return $(this).attr('title');
+				})
 				.get();
-			if (pages.length === 0) {
+			if (!pages.length) {
 				return;
 			}
-			const redirectDeleter = new Morebits.batchOperation(`正在删除到 ${params.title} 的重定向`);
+			const redirectDeleter = new Morebits.batchOperation(
+				wgULS('正在删除到 ', '正在刪除到 ') + apiobj.params.title + wgULS(' 的重定向', ' 的重新導向')
+			);
 			redirectDeleter.setOption('chunkSize', Twinkle.getPref('batchdeleteChunks'));
 			redirectDeleter.setPageList(pages);
 			redirectDeleter.run((pageName) => {
-				const qiuwen_page = new Morebits.wiki.page(pageName, `正在删除 ${pageName}`);
-				qiuwen_page.setEditSummary(`[[QW:CSD#G5|G5]]: 指向已删页面“${params.title}”的重定向`);
+				const qiuwen_page = new Morebits.wiki.page(pageName, wgULS('正在删除 ', '正在刪除 ') + pageName);
+				qiuwen_page.setEditSummary(
+					`[[QW:CSD#G5|G5]]：${wgULS('指向已删页面“', '指向已刪頁面「')}${apiobj.params.title}${wgULS(
+						'”的重定向',
+						'」的重新導向'
+					)}`
+				);
 				qiuwen_page.setChangeTags(Twinkle.changeTags);
 				qiuwen_page.deletePage(redirectDeleter.workerSuccess, redirectDeleter.workerFailure);
 			});
 		},
-		deleteTalk: ({ responseXML, params }) => {
-			const xml = responseXML;
+		deleteTalk: (apiobj) => {
+			const xml = apiobj.responseXML;
 			const exists = $(xml).find('page:not([missing])').length > 0;
 			if (!exists) {
 				// no talk page; forget about it
 				return;
 			}
-			const page = new Morebits.wiki.page(params.talkPage, `正在删除页面 ${params.title} 的讨论页`);
-			page.setEditSummary(`[[QW:CSD#G5|G5]]: 已删页面“${params.title}”的[[Qiuwen:讨论页|讨论页]]`);
+			const page = new Morebits.wiki.page(
+				apiobj.params.talkPage,
+				wgULS('正在删除页面 ', '正在刪除頁面 ') + apiobj.params.title + wgULS(' 的讨论页', ' 的討論頁')
+			);
+			page.setEditSummary(
+				`[[QW:CSD#G5|G5]]：${wgULS('已删页面“', '已刪頁面「')}${apiobj.params.title}${wgULS(
+					'”的[[Help:讨论页|讨论页]]',
+					'」的[[Help:討論頁|討論頁]]'
+				)}`
+			);
 			page.setChangeTags(Twinkle.changeTags);
 			page.deletePage();
 		},
@@ -507,29 +538,30 @@ $(function TwinkleClose() {
 			if (pagetitle.getNamespaceId() % 2 === 0) {
 				const talkpagetitle = new mw.Title(pagetitle.getMainText(), pagetitle.getNamespaceId() + 1);
 				const talkpage = new Morebits.wiki.page(talkpagetitle.toString(), wgULS('标记讨论页', '標記討論頁'));
-				const vfdkept = `{{Old vfd multi|${mw.config.get('wgPageName').split('/').slice(2).join('/')}|${
-					params.messageData.label
-				}}}\n`;
+				const reason = params.messageData.value || params.messageData.label;
+				const vfdkept = `{{Old vfd multi|${mw.config
+					.get('wgPageName')
+					.split('/')
+					.slice(2)
+					.join('/')}|${reason}}}\n`;
 				talkpage.setPrependText(vfdkept);
-				talkpage.setEditSummary(
-					`[[${mw.config.get('wgPageName')}#${params.title}]]：${params.messageData.label}`
-				);
+				talkpage.setEditSummary(`[[${mw.config.get('wgPageName')}#${params.title}]]：${reason}`);
 				talkpage.setChangeTags(Twinkle.changeTags);
 				talkpage.setCreateOption('recreate');
 				talkpage.prepend();
 			}
 			let newtext = text.replace(
-				/<noinclude>\s*{{([acfimr-tv]fd)(\|(?:{{[^{}]*}}|[^{}])*)?}}\s*<\/noinclude>\s*/gi,
+				/<noinclude>\s*\{\{([rsaiftcmv]fd)(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*<\/noinclude>\s*/gi,
 				''
 			);
-			newtext = newtext.replace(/{{([acfimr-tv]fd)(\|(?:{{[^{}]*}}|[^{}])*)?}}\s*/gi, '');
+			newtext = newtext.replace(/\{\{([rsaiftcmv]fd)(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/gi, '');
 			if (params.code !== 'tk') {
 				newtext = newtext.replace(
-					/{{(notability|fame|mair|知名度|重要性|显著性|顯著性|知名度不足|人物重要性|重要性不足|notable|关注度|关注度不足|關注度|關注度不足|重要|重要度)(\|(?:{{[^{}]*}}|[^{}])*)?}}\n*/gi,
+					/\{\{(notability|fame|mair|知名度|重要性|显著性|顯著性|知名度不足|人物重要性|重要性不足|notable|关注度|关注度不足|關注度|關注度不足|重要|重要度)(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\n*/gi,
 					''
 				);
 				newtext = newtext.replace(
-					/{{(substub|小小作品|cod|小小條目|小小条目)(\|(?:{{[^{}]*}}|[^{}])*)?}}\n*/gi,
+					/\{\{(substub|小小作品|cod|小小條目|小小条目)(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\n*/gi,
 					''
 				);
 			}
@@ -575,9 +607,15 @@ $(function TwinkleClose() {
 			text = text.replace('\n<section end=backlog />', '');
 			const bar = text.split('\n----\n');
 			const split = bar[0].split('\n');
-			text = `${split[0]}\n{{delh|${params.code}}}\n${split.slice(1).join('\n')}`;
-			text += `\n<hr>\n: ${params.messageData.label}`;
-			text += params.remark ? `：${Morebits.string.appendPunctuation(params.remark)}` : '。';
+			text = `${split[0]}\n{{delh|${params.code}}}\n`;
+			text += split.slice(1).join('\n');
+			const reason = params.messageData.value || params.messageData.label;
+			text += `\n<hr>\n: ${reason}`;
+			if (params.remark) {
+				text += `：${Morebits.string.appendPunctuation(params.remark)}`;
+			} else {
+				text += '。';
+			}
 			if (!Morebits.userIsSysop) {
 				text += '{{subst:NAC}}';
 			}
@@ -593,15 +631,15 @@ $(function TwinkleClose() {
 				text += '\n<section begin=backlog />';
 			}
 			pageobj.setPageText(text);
-			pageobj.setEditSummary(`/* ${params.title} */ ${params.messageData.label}`);
+			pageobj.setEditSummary(`/* ${params.title} */ ${reason}`);
 			pageobj.setChangeTags(Twinkle.changeTags);
 			pageobj.setCreateOption('nocreate');
 			pageobj.save(Twinkle.close.callbacks.disableLink);
 		},
 		disableLink: (pageobj) => {
 			const params = pageobj.getCallbackParameters();
-			$(`strong a[href=#${params.section}] span`).css('color', '#808080');
+			$(`a.twinkle-close-button[data-section=${params.section}]`).addClass('twinkle-close-button-disabled');
 		},
 	};
 	Twinkle.addInitCallback(Twinkle.close, 'close');
-});
+})(jQuery);

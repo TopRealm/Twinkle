@@ -1,5 +1,6 @@
 /* Twinkle.js - twinkleimage.js */
-$(function TwinkleImage() {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+(($) => {
 	/**
 	 * twinkleimage.js: Image CSD module
 	 * Mode of invocation: Tab ("DI")
@@ -21,12 +22,11 @@ $(function TwinkleImage() {
 	};
 	Twinkle.image.callback = () => {
 		const Window = new Morebits.simpleWindow(600, 330);
-		Window.setTitle('文件快速删除');
+		Window.setTitle(wgULS('文件快速删除候选', '檔案快速刪除候選'));
 		Window.setScriptName('Twinkle');
-		Window.addFooterLink('快速删除方针', 'QW:CSD');
-		Window.addFooterLink(wgULS('参数设置', '參數設置'), 'H:TW/PREF#图权');
-		Window.addFooterLink(wgULS('帮助文档', '幫助文檔'), 'H:TW/DOC#图权');
-		Window.addFooterLink(wgULS('问题反馈', '問題反饋'), 'HT:TW');
+		Window.addFooterLink(wgULS('快速删除方针', '快速刪除方針'), 'QW:CSD');
+		Window.addFooterLink(wgULS('图权设置', '圖權設定'), 'H:TW/PREF#image');
+		Window.addFooterLink(wgULS('Twinkle帮助', 'Twinkle說明'), 'H:TW/DOC#image');
 		const form = new Morebits.quickForm(Twinkle.image.callback.evaluate);
 		form.append({
 			type: 'checkbox',
@@ -162,10 +162,10 @@ $(function TwinkleImage() {
 		evt.initEvent('change', true, true);
 		result.type[0].dispatchEvent(evt);
 	};
-	Twinkle.image.callback.evaluate = ({target}) => {
+	Twinkle.image.callback.evaluate = (event) => {
 		let type;
-		let notify = target.notify.checked;
-		const types = target.type;
+		let notify = event.target.notify.checked;
+		const types = event.target.type;
 		for (let i = 0; i < types.length; ++i) {
 			if (types[i].checked) {
 				type = types[i].values;
@@ -210,10 +210,10 @@ $(function TwinkleImage() {
 			lognomination: lognomination,
 		};
 		if (csdcrit === 'f1') {
-			params.f1_source = target['type.f1_source'].value;
+			params.f1_source = event.target['type.f1_source'].value;
 		}
 		if (csdcrit === 'f4') {
-			const f4_type = target['type.f4_type'].value;
+			const f4_type = event.target['type.f4_type'].value;
 			if (!f4_type) {
 				mw.notify(wgULS('CSD F4：请选择适用类型。', 'CSD F4：請選擇適用類別。'), {type: 'warn'});
 				return false;
@@ -221,7 +221,7 @@ $(function TwinkleImage() {
 			params.f4_type = f4_type;
 		}
 		Morebits.simpleWindow.setButtonsEnabled(false);
-		Morebits.status.init(target);
+		Morebits.status.init(event.target);
 		Morebits.wiki.actionCompleted.redirect = mw.config.get('wgPageName');
 		Morebits.wiki.actionCompleted.notice = wgULS('标记完成', '標記完成');
 		// Tagging image
@@ -257,7 +257,7 @@ $(function TwinkleImage() {
 		taggingImage: (pageobj) => {
 			let text = pageobj.getPageText();
 			const params = pageobj.getCallbackParameters();
-			// remove "move to Share" tag - deletion-tagged files cannot be moved to Share
+			// remove tag - deletion-tagged files cannot be moved
 			text = text.replace(
 				/\{\{(mtc|(copy |move )?to ?(share|commons)|move to (qiuwen share|wikimedia commons)|copy to (qiuwen share|wikimedia commons))[^}]*\}\}/gi,
 				''
@@ -346,6 +346,7 @@ $(function TwinkleImage() {
 		},
 		imageList: (pageobj) => {
 			const text = pageobj.getPageText();
+			// const params = pageobj.getCallbackParameters();
 			pageobj.setPageText(`${text}\n* [[:${Morebits.pageNameNorm}]]--~~~~`);
 			pageobj.setEditSummary(`加入[[${Morebits.pageNameNorm}]]`);
 			pageobj.setChangeTags(Twinkle.changeTags);
@@ -354,4 +355,4 @@ $(function TwinkleImage() {
 		},
 	};
 	Twinkle.addInitCallback(Twinkle.image, 'image');
-});
+})(jQuery);

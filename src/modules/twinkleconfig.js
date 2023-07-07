@@ -1,5 +1,5 @@
 /* Twinkle.js - twinkleconfig.js */
-$(function TwinkleConfig() {
+(($) => {
 	/**
 	 * twinkleconfig.js: Preferences module
 	 * Mode of invocation: Adds configuration form to Help:Twinkle/参数设置,
@@ -428,7 +428,6 @@ $(function TwinkleConfig() {
 					label: wgULS('在这些类型的回退后打开用户讨论页', '在這些類別的回退後打開使用者討論頁'),
 					type: 'set',
 					setValues: {
-						agf: '善意回退',
 						norm: wgULS('常规回退', '常規回退'),
 						vand: wgULS('破坏回退', '破壞回退'),
 					},
@@ -465,7 +464,6 @@ $(function TwinkleConfig() {
 					label: wgULS('将这些类型的回退标记为小修改', '將這些類別的回退標記為小修改'),
 					type: 'set',
 					setValues: {
-						agf: '善意回退',
 						norm: wgULS('常规回退', '常規回退'),
 						vand: wgULS('破坏回退', '破壞回退'),
 						torev: wgULS('“恢复此版本”', '「恢復此版本」'),
@@ -478,7 +476,6 @@ $(function TwinkleConfig() {
 					label: wgULS('把这些类型的回退加入到监视列表', '把這些類別的回退加入到監視清單'),
 					type: 'set',
 					setValues: {
-						agf: '善意回退',
 						norm: wgULS('常规回退', '常規回退'),
 						vand: wgULS('破坏回退', '破壞回退'),
 						torev: wgULS('“恢复此版本”', '「恢復此版本」'),
@@ -709,7 +706,7 @@ $(function TwinkleConfig() {
 					setDisplayOrder: Twinkle.config.commonSets.csdAndDICriteriaDisplayOrder,
 				},
 				{
-					name: 'enlargeG11Input',
+					name: 'enlargeG7Input',
 					label: wgULS('扩大CSD G11的按钮', '擴大CSD G11的按鈕'),
 					helptip: wgULS('扩为默认的两倍大。', '擴為預設的兩倍大。'),
 					type: 'boolean',
@@ -1454,7 +1451,7 @@ $(function TwinkleConfig() {
 							break;
 						}
 						default:
-							alert(`twinkleconfig: 未知类型的属性 ${pref.name}`);
+							mw.notify(`twinkleconfig: 未知类型的属性 ${pref.name}`, {type: 'warn'});
 							break;
 					}
 					row.appendChild(cell);
@@ -1794,7 +1791,7 @@ $(function TwinkleConfig() {
 				$(document.getElementById(pref.name)).data('value', Twinkle.defaultConfig[pref.name]);
 				break;
 			default:
-				alert(`twinkleconfig: unknown data type for preference ${pref.name}`);
+				mw.notify(`twinkleconfig: unknown data type for preference ${pref.name}`, {type: 'warn'});
 				break;
 		}
 	};
@@ -1908,7 +1905,7 @@ $(function TwinkleConfig() {
 								userValue = $(form[pref.name]).data('value');
 								break;
 							default:
-								alert(`twinkleconfig: 未知数据类型，属性 ${pref.name}`);
+								mw.notify(`twinkleconfig: 未知数据类型，属性 ${pref.name}`, {type: 'warn'});
 								break;
 						}
 					} else if (Twinkle.prefs) {
@@ -1957,4 +1954,4 @@ $(function TwinkleConfig() {
 		Morebits.status.root.appendChild(noticeclear);
 	};
 	Twinkle.addInitCallback(Twinkle.config.init);
-});
+})(jQuery);

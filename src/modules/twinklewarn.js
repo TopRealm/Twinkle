@@ -1,5 +1,5 @@
 /* Twinkle.js - twinklewarn.js */
-$(function TwinkleWarn() {
+(($) => {
 	/**
 	 * twinklewarn.js: Warn module
 	 * Mode of invocation: Tab ("Warn")
@@ -1706,4 +1706,4 @@ $(function TwinkleWarn() {
 		qiuwen_page.load(Twinkle.warn.callbacks.main);
 	};
 	Twinkle.addInitCallback(Twinkle.warn, 'warn');
-});
+})(jQuery);

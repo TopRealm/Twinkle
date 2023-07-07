@@ -1,5 +1,5 @@
 /* Twinkle.js - twinkleunlink.js */
-$(function TwinkleUnlink() {
+(($) => {
 	/**
 	 * twinkleunlink.js: Unlink module
 	 * Mode of invocation: Tab ("Unlink")
@@ -24,11 +24,10 @@ $(function TwinkleUnlink() {
 	Twinkle.unlink.callback = (presetReason) => {
 		const fileSpace = mw.config.get('wgNamespaceNumber') === 6;
 		const Window = new Morebits.simpleWindow(600, 440);
-		Window.setTitle(`取消页面链入${fileSpace ? '及文件使用' : ''}`);
+		Window.setTitle(wgULS('取消链入', '取消連入') + (fileSpace ? wgULS('和文件使用', '和檔案使用') : ''));
 		Window.setScriptName('Twinkle');
-		Window.addFooterLink(wgULS('参数设置', '參數設置'), 'H:TW/PREF#消链');
-		Window.addFooterLink(wgULS('帮助文档', '幫助文檔'), 'H:TW/DOC#销链');
-		Window.addFooterLink(wgULS('问题反馈', '問題反饋'), 'HT:TW');
+		Window.addFooterLink(wgULS('链入设置', '連入設定'), 'H:TW/PREF#unlink');
+		Window.addFooterLink(wgULS('Twinkle帮助', 'Twinkle說明'), 'H:TW/DOC#unlink');
 		const form = new Morebits.quickForm(Twinkle.unlink.callback.evaluate);
 		// prepend some documentation: files are commented out, while any
 		// display text is preserved for links (otherwise the link itself is used)
@@ -44,9 +43,9 @@ $(function TwinkleUnlink() {
 		} else {
 			linkPlainAfter = Morebits.htmlNode('code', Morebits.pageNameNorm);
 		}
-		[linkTextBefore, linkTextAfter, linkPlainBefore, linkPlainAfter].forEach(({style}) => {
-			style.fontFamily = 'monospace';
-			style.fontStyle = 'normal';
+		[linkTextBefore, linkTextAfter, linkPlainBefore, linkPlainAfter].forEach((node) => {
+			node.style.fontFamily = 'monospace';
+			node.style.fontStyle = 'normal';
 		});
 		form.append({
 			type: 'div',
@@ -89,6 +88,7 @@ $(function TwinkleUnlink() {
 			// 500 is max for normal users, 5000 for bots and sysops
 			blnamespace: Twinkle.getPref('unlinkNamespaces'),
 			rawcontinue: true,
+			format: 'json',
 		};
 		if (fileSpace) {
 			query.list += '|imageusage';
@@ -116,8 +116,8 @@ $(function TwinkleUnlink() {
 		Window.setContent(root);
 		Window.display();
 	};
-	Twinkle.unlink.callback.evaluate = ({target}) => {
-		const form = target;
+	Twinkle.unlink.callback.evaluate = (event) => {
+		const form = event.target;
 		const input = Morebits.quickForm.getInputData(form);
 		if (!input.reason) {
 			mw.notify(wgULS('您必须指定取消链入的理由。', '您必須指定取消連入的理由。'), {type: 'warn'});
@@ -220,15 +220,15 @@ $(function TwinkleUnlink() {
 						apiobj.params.form.append({
 							type: 'button',
 							label: wgULS('全选', '全選'),
-							event: ({target}) => {
-								$(Morebits.quickForm.getElements(target.form, 'imageusage')).prop('checked', true);
+							event: (e) => {
+								$(Morebits.quickForm.getElements(e.target.form, 'imageusage')).prop('checked', true);
 							},
 						});
 						apiobj.params.form.append({
 							type: 'button',
 							label: wgULS('全不选', '全不選'),
-							event: ({target}) => {
-								$(Morebits.quickForm.getElements(target.form, 'imageusage')).prop('checked', false);
+							event: (e) => {
+								$(Morebits.quickForm.getElements(e.target.form, 'imageusage')).prop('checked', false);
 							},
 						});
 						apiobj.params.form.append({
@@ -281,15 +281,15 @@ $(function TwinkleUnlink() {
 					apiobj.params.form.append({
 						type: 'button',
 						label: wgULS('全选', '全選'),
-						event: ({target}) => {
-							$(Morebits.quickForm.getElements(target.form, 'backlinks')).prop('checked', true);
+						event: (e) => {
+							$(Morebits.quickForm.getElements(e.target.form, 'backlinks')).prop('checked', true);
 						},
 					});
 					apiobj.params.form.append({
 						type: 'button',
 						label: wgULS('全不选', '全不選'),
-						event: ({target}) => {
-							$(Morebits.quickForm.getElements(target.form, 'backlinks')).prop('checked', false);
+						event: (e) => {
+							$(Morebits.quickForm.getElements(e.target.form, 'backlinks')).prop('checked', false);
 						},
 					});
 					apiobj.params.form.append({
@@ -312,12 +312,8 @@ $(function TwinkleUnlink() {
 				}
 				const result = apiobj.params.form.render();
 				apiobj.params.Window.setContent(result);
-				for (const link of Morebits.quickForm.getElements(result, 'backlinks')) {
-					Twinkle.generateBatchPageLinks(link);
-				}
-				for (const link of Morebits.quickForm.getElements(result, 'imageusage')) {
-					Twinkle.generateBatchPageLinks(link);
-				}
+				Morebits.quickForm.getElements(result, 'backlinks').forEach(Twinkle.generateBatchPageLinks);
+				Morebits.quickForm.getElements(result, 'imageusage').forEach(Twinkle.generateBatchPageLinks);
 			},
 		},
 		unlinkBacklinks: (pageobj) => {
@@ -367,4 +363,4 @@ $(function TwinkleUnlink() {
 		},
 	};
 	Twinkle.addInitCallback(Twinkle.unlink, 'unlink');
-});
+})(jQuery);

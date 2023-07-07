@@ -1,5 +1,5 @@
 /* Twinkle.js - friendlytalkback.js */
-$(function FriendlyTalkback() {
+(($) => {
 	/**
 	 * friendlytalkback.js: Talkback module
 	 * Mode of invocation: Tab ("TB")
@@ -7,10 +7,10 @@ $(function FriendlyTalkback() {
 	 * Config directives in: FriendlyConfig
 	 */
 	Twinkle.talkback = () => {
-		if (!mw.config.exists('wgRelevantUserName')) {
+		if (!mw.config.get('wgRelevantUserName')) {
 			return;
 		}
-		Twinkle.addPortletLink(Twinkle.talkback.callback, '通知', 'friendly-talkback', wgULS('回复通告', '回覆通告'));
+		Twinkle.addPortletLink(Twinkle.talkback.callback, '通告', 'friendly-talkback', wgULS('回复通告', '回覆通告'));
 	};
 	Twinkle.talkback.callback = () => {
 		if (
@@ -20,11 +20,11 @@ $(function FriendlyTalkback() {
 			return;
 		}
 		const Window = new Morebits.simpleWindow(600, 350);
-		Window.setTitle('通知');
+		Window.setTitle(wgULS('回复通告', '回覆通告'));
 		Window.setScriptName('Twinkle');
-		Window.addFooterLink(wgULS('参数设置', '參數設置'), 'H:TW/PREF#talkback');
-		Window.addFooterLink(wgULS('帮助文档', '幫助文檔'), 'H:TW/DOC#talkback');
-		Window.addFooterLink(wgULS('问题反馈', '問題反饋'), 'HT:TW');
+		Window.addFooterLink(wgULS('关于{{talkback}}', '關於{{talkback}}'), 'Template:Talkback');
+		Window.addFooterLink(wgULS('通告设置', '通告設定'), 'H:TW/PREF#talkback');
+		Window.addFooterLink(wgULS('Twinkle帮助', 'Twinkle說明'), 'H:TW/DOC#talkback');
 		const form = new Morebits.quickForm(Twinkle.talkback.evaluate);
 		form.append({
 			type: 'radio',
@@ -120,9 +120,9 @@ $(function FriendlyTalkback() {
 	let prev_page = '';
 	let prev_section = '';
 	let prev_message = '';
-	Twinkle.talkback.changeTarget = ({target}) => {
-		const value = target.values;
-		const root = target.form;
+	Twinkle.talkback.changeTarget = (e) => {
+		const value = e.target.values;
+		const root = e.target.form;
 		const old_area = Morebits.quickForm.getElements(root, 'work_area')[0];
 		if (root.section) {
 			prev_section = root.section.value;
@@ -192,12 +192,12 @@ $(function FriendlyTalkback() {
 					name: 'noticeboard',
 					label: '通告板：',
 				});
-				$.each(Twinkle.talkback.noticeboards, (value, {label, defaultSelected}) => {
+				$.each(Twinkle.talkback.noticeboards, (value, data) => {
 					noticeboard.append({
 						type: 'option',
-						label: label,
+						label: data.label,
 						value: value,
-						selected: !!defaultSelected,
+						selected: !!data.defaultSelected,
 					});
 				});
 				work_area.append({
@@ -221,8 +221,8 @@ $(function FriendlyTalkback() {
 					name: 'page',
 					label: wgULS('完整页面名', '完整頁面名'),
 					tooltip: wgULS(
-						'正在进行讨论的页面名称。例如“Qiuwen_talk:首页”。',
-						'正在進行討論的頁面名稱。例如「Qiuwen_talk:首頁」。'
+						'您留下消息的完整页面名，例如“Qiuwen_talk:首页”。',
+						'您留下訊息的完整頁面名，例如「Qiuwen_talk:首頁」。'
 					),
 					value: prev_page,
 					required: true,
@@ -293,38 +293,42 @@ $(function FriendlyTalkback() {
 			label: `QW:AF/FP（${wgULS('过滤器处理/报告', '過濾器處理/報告')}）`,
 			title: wgULS('过滤器错误报告有新回应', '過濾器錯誤報告有新回應'),
 			content: `${wgULS(
-				'您的[[Qiuwen:过滤器处理/报告|过滤器错误报告]]已有回应，请前往查看。',
-				'您的[[Qiuwen:过滤器处理/报告|過濾器錯誤報告]]已有回應，請前往查看。'
+				'您的[[Qiuwen_talk:过滤器处理/报告|过滤器错误报告]]已有回应，请前往查看。',
+				'您的[[Qiuwen_talk:过滤器处理/报告|過濾器錯誤報告]]已有回應，請前往查看。'
 			)}--~~~~`,
 			editSummary: wgULS(
-				'有关[[Qiuwen:过滤器处理/报告|过滤器错误报告]]的通知',
-				'有關[[Qiuwen:过滤器处理/报告|過濾器錯誤報告]]的通知'
+				'有关[[Qiuwen_talk:过滤器处理/报告|过滤器错误报告]]的通知',
+				'有關[[Qiuwen_talk:过滤器处理/报告|過濾器錯誤報告]]的通知'
 			),
 			defaultSelected: true,
 		},
-		/* sbl is replaced by Teahouse */
 		sbl: {
 			label: 'Spam-blacklist',
 			title: wgULS('垃圾链接黑名单请求有新回应', '垃圾連結黑名單請求有新回應'),
 			content: `${wgULS(
-				'您的[[Qiuwen_talk:茶馆/其他|垃圾链接黑名单请求]]已有回应，请前往查看。',
-				'您的[[Qiuwen_talk:茶馆/其他|垃圾連結黑名單請求]]已有回應，請前往查看。'
+				'您的[[Qiuwen_talk:管理员告示板|垃圾链接黑名单请求]]已有回应，请前往查看。',
+				'您的[[Qiuwen_talk:管理员告示板|垃圾連結黑名單請求]]已有回應，請前往查看。'
 			)}--~~~~`,
-			editSummary: wgULS('有关[[Qiuwen_talk:茶馆/其他]]的通知', '有關[[Qiuwen_talk:茶馆/其他]]的通知'),
+			editSummary: wgULS(
+				'有关[[Qiuwen_talk:管理员告示板|垃圾链接黑名单请求]]的通知',
+				'有關[[Qiuwen_talk:管理员告示板|垃圾連結黑名單請求]]的通知'
+			),
 		},
-		/* shl is replaced by Teahouse */
 		shl: {
 			label: 'Spam-whitelist',
 			title: wgULS('垃圾链接白名单请求有新回应', '垃圾連結白名單請求有新回應'),
 			content: `${wgULS(
-				'您的[[Qiuwen_talk:茶馆/其他|垃圾链接白名单请求]]已有回应，请前往查看。',
-				'您的[[Qiuwen_talk:茶馆/其他|垃圾連結白名單請求]]已有回應，請前往查看。'
+				'您的[[Qiuwen_talk:管理员告示板|垃圾链接白名单请求]]已有回应，请前往查看。',
+				'您的[[Qiuwen_talk:管理员告示板|垃圾連結白名單請求]]已有回應，請前往查看。'
 			)}--~~~~`,
-			editSummary: wgULS('有关[[Qiuwen_talk:茶馆/其他]]的通知', '有關[[Qiuwen_talk:茶馆/其他]]的通知'),
+			editSummary: wgULS(
+				'有关[[Qiuwen_talk:管理员告示板|垃圾链接白名单请求]]的通知',
+				'有關[[Qiuwen_talk:管理员告示板|垃圾連結白名單請求]]的通知'
+			),
 		},
 	};
-	Twinkle.talkback.evaluate = ({target}) => {
-		const form = target;
+	Twinkle.talkback.evaluate = (e) => {
+		const form = e.target;
 		const tbtarget = form.getChecked('tbtarget')[0];
 		let page;
 		let message;
@@ -432,4 +436,4 @@ $(function FriendlyTalkback() {
 		return [text, title, content];
 	};
 	Twinkle.addInitCallback(Twinkle.talkback, 'talkback');
-});
+})(jQuery);

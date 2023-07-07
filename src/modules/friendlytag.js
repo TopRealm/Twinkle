@@ -1,5 +1,5 @@
 /* Twinkle.js - friendlytag.js */
-$(function FriendlyTag() {
+(($) => {
 	/**
 	 * friendlytag.js: Tag module
 	 * Mode of invocation: Tab ("Tag")
@@ -56,9 +56,8 @@ $(function FriendlyTag() {
 	Twinkle.tag.callback = () => {
 		const Window = new Morebits.simpleWindow(630, Twinkle.tag.modeEn === 'article' ? 500 : 400);
 		Window.setScriptName('Twinkle');
-		Window.addFooterLink(wgULS('参数设置', '參數設置'), 'H:TW/PREF#tag');
-		Window.addFooterLink(wgULS('帮助文档', '幫助文檔'), 'H:TW/DOC#tag');
-		Window.addFooterLink(wgULS('问题反馈', '問題反饋'), 'HT:TW');
+		Window.addFooterLink(wgULS('标记设置', '標記設定'), 'H:TW/PREF#tag');
+		Window.addFooterLink(wgULS('Twinkle帮助', 'Twinkle說明'), 'H:TW/DOC#tag');
 		const form = new Morebits.quickForm(Twinkle.tag.callback.evaluate);
 		form.append({
 			type: 'input',
@@ -174,8 +173,8 @@ $(function FriendlyTag() {
 							value: 'group',
 							name: 'group',
 							tooltip: wgULS(
-								'如果加入{{multiple issues}}支持的三个以上的模板，所有支持的模板都会被合并入{{multiple issues}}模板中。',
-								'如果加入{{multiple issues}}支援的三個以上的模板，所有支援的模板都會被合併入{{multiple issues}}模板中。'
+								'若加入{{multiple issues}}支持的三个以上的模板，所有支持的模板都会被合并入{{multiple issues}}模板中。',
+								'若加入{{multiple issues}}支援的三個以上的模板，所有支援的模板都會被合併入{{multiple issues}}模板中。'
 							),
 							checked: Twinkle.getPref('groupByDefault'),
 						},
@@ -186,8 +185,8 @@ $(function FriendlyTag() {
 					label: '理由：',
 					name: 'reason',
 					tooltip: wgULS(
-						'附加于编辑摘要的可选理由，例如指出条目内容的哪些部分有问题或移除模板的理由，但如果理由很长则应该发表在讨论页。',
-						'附加於編輯摘要的可選理由，例如指出條目內容的哪些部分有問題或移除模板的理由，但如果理由很長則應該發表在討論頁。'
+						'附加于编辑摘要的可选理由，例如指出条目内容的哪些部分有问题或移除模板的理由，但若理由很长则应该发表在讨论页。',
+						'附加於編輯摘要的可選理由，例如指出條目內容的哪些部分有問題或移除模板的理由，但若理由很長則應該發表在討論頁。'
 					),
 					size: '80',
 				});
@@ -439,26 +438,62 @@ $(function FriendlyTag() {
 						name: 'notability',
 						type: 'select',
 						list: [
-							{label: `{{Notability}}：${wgULS('通用的关注度指引', '通用的關注度指引')}`, value: 'none'},
-							{label: `{{Notability|Astro}}：${wgULS('天体', '天體')}`, value: 'Astro'},
+							{
+								label: `{{Notability}}：${wgULS('通用的关注度指引', '通用的關注度指引')}`,
+								value: 'none',
+							},
+							{
+								label: `{{Notability|Astro}}：${wgULS('天体', '天體')}`,
+								value: 'Astro',
+							},
 							{
 								label: `{{Notability|Biographies}}：${wgULS('人物传记', '人物傳記')}`,
 								value: 'Biographies',
 							},
-							{label: `{{Notability|Book}}：${wgULS('书籍', '書籍')}`, value: 'Book'},
-							{label: `{{Notability|Cyclone}}：${wgULS('气旋', '氣旋')}`, value: 'Cyclone'},
-							{label: `{{Notability|Fiction}}：${wgULS('虚构事物', '虛構事物')}`, value: 'Fiction'},
-							{label: `{{Notability|Geographic}}：${wgULS('地理特征', '地理特徵')}`, value: 'Geographic'},
-							{label: `{{Notability|Geometry}}：${wgULS('几何图形', '幾何圖形')}`, value: 'Geometry'},
+							{
+								label: `{{Notability|Book}}：${wgULS('书籍', '書籍')}`,
+								value: 'Book',
+							},
+							{
+								label: `{{Notability|Cyclone}}：${wgULS('气旋', '氣旋')}`,
+								value: 'Cyclone',
+							},
+							{
+								label: `{{Notability|Fiction}}：${wgULS('虚构事物', '虛構事物')}`,
+								value: 'Fiction',
+							},
+							{
+								label: `{{Notability|Geographic}}：${wgULS('地理特征', '地理特徵')}`,
+								value: 'Geographic',
+							},
+							{
+								label: `{{Notability|Geometry}}：${wgULS('几何图形', '幾何圖形')}`,
+								value: 'Geometry',
+							},
 							{
 								label: `{{Notability|Invention}}：${wgULS('发明、研究', '發明、研究')}`,
 								value: 'Invention',
 							},
-							{label: `{{Notability|Music}}：${wgULS('音乐', '音樂')}`, value: 'Music'},
-							{label: `{{Notability|Numbers}}：${wgULS('数字', '數字')}`, value: 'Numbers'},
-							{label: `{{Notability|Organizations}}：${wgULS('组织', '組織')}`, value: 'Organizations'},
-							{label: `{{Notability|Property}}：${wgULS('性质表', '性質表')}`, value: 'Property'},
-							{label: '{{Notability|Traffic}}：' + '交通', value: 'Traffic'},
+							{
+								label: `{{Notability|Music}}：${wgULS('音乐', '音樂')}`,
+								value: 'Music',
+							},
+							{
+								label: `{{Notability|Numbers}}：${wgULS('数字', '數字')}`,
+								value: 'Numbers',
+							},
+							{
+								label: `{{Notability|Organizations}}：${wgULS('组织', '組織')}`,
+								value: 'Organizations',
+							},
+							{
+								label: `{{Notability|Property}}：${wgULS('性质表', '性質表')}`,
+								value: 'Property',
+							},
+							{
+								label: '{{Notability|Traffic}}：' + '交通',
+								value: 'Traffic',
+							},
 							{
 								label: `{{Notability|Web}}：${wgULS('网站、网络内容', '網站、網路內容')}（非正式指引）`,
 								value: 'Web',
@@ -763,7 +798,7 @@ $(function FriendlyTag() {
 							tag: 'Notability',
 							description: wgULS('可能不符合通用关注度指引', '可能不符合通用關注度指引'),
 							excludeMI: true,
-						}, // has a subgroup with subcategories
+						},
 						{
 							tag: 'Notability Unreferenced',
 							description: wgULS(
@@ -813,8 +848,8 @@ $(function FriendlyTag() {
 						{
 							tag: 'Expand language',
 							description: wgULS('可以根据其他语言版本扩展', '可以根據其他語言版本擴充'),
-						}, // these three have a subgroup with several options
-						{tag: 'Missing information', description: '缺少必要的信息'}, // these three have a subgroup with several options
+						},
+						{tag: 'Missing information', description: '缺少必要的信息'},
 						{tag: 'Substub', description: wgULS('过于短小', '過於短小'), excludeMI: true},
 						{tag: 'Unencyclopedic', description: wgULS('可能不适合写入百科全书', '可能不適合寫入百科全書')},
 					],
@@ -839,7 +874,7 @@ $(function FriendlyTag() {
 				{
 					key: wgULS('时间性', '時間性'),
 					value: [
-						{tag: 'Current', description: wgULS('记述新闻动态', '記述新聞動態'), excludeMI: true}, // Works but not intended for use in MI
+						{tag: 'Current', description: wgULS('记述新闻动态', '記述新聞動態'), excludeMI: true},
 						{tag: 'Update', description: wgULS('当前条目或章节需要更新', '當前條目或章節需要更新')},
 					],
 				},
@@ -1169,7 +1204,10 @@ $(function FriendlyTag() {
 		{
 			key: wgULS('清理标签', '清理標籤'),
 			value: [
-				{label: `{{Watermark}}：${wgULS('图像包含了水印', '圖像包含了浮水印')}`, value: 'Watermark'},
+				{
+					label: `{{Watermark}}：${wgULS('图像包含了水印', '圖像包含了浮水印')}`,
+					value: 'Watermark',
+				},
 				{
 					label: `{{Rename media}}：${wgULS(
 						'文件应该根据文件名称指引被重命名',
@@ -1713,8 +1751,8 @@ $(function FriendlyTag() {
 			}
 		},
 		notabilityList: (pageobj) => {
-			// var text = pageobj.getPageText();
-			// var params = pageobj.getCallbackParameters();
+			// const text = pageobj.getPageText();
+			// const params = pageobj.getCallbackParameters();
 			pageobj.setAppendText(`\n{{subst:Fameitem|title=${Morebits.pageNameNorm}}}`);
 			pageobj.setEditSummary(`加入[[${Morebits.pageNameNorm}]]`);
 			pageobj.setChangeTags(Twinkle.changeTags);
@@ -1930,8 +1968,8 @@ $(function FriendlyTag() {
 						checkIncompatible(
 							['Merge', 'Merge from', 'Merge to'],
 							wgULS(
-								'如果需要多次合并，请使用{{Merge}}并用管道符分隔条目名（但在这种情形中Twinkle不能自动标记其他条目）。',
-								'如果需要多次合併，請使用{{Merge}}並用管道符分隔條目名（但在這種情形中Twinkle不能自動標記其他條目）。'
+								'若需要多次合并，请使用{{Merge}}并用管道符分隔条目名（但在这种情形中Twinkle不能自动标记其他条目）。',
+								'若需要多次合併，請使用{{Merge}}並用管道符分隔條目名（但在這種情形中Twinkle不能自動標記其他條目）。'
 							)
 						)
 					) {
@@ -2012,4 +2050,4 @@ $(function FriendlyTag() {
 		qiuwen_page.load(Twinkle.tag.callbacks[Twinkle.tag.modeEn]);
 	};
 	Twinkle.addInitCallback(Twinkle.tag, 'tag');
-});
+})(jQuery);

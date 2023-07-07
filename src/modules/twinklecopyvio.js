@@ -1,5 +1,6 @@
 /* Twinkle.js - twinklecopyvio.js */
-$(function TwinkleCopyvio() {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+(($) => {
 	/**
 	 * twinklecopyvio.js: Copyvio module
 	 * Mode of invocation:	Tab ("Copyvio")
@@ -12,7 +13,7 @@ $(function TwinkleCopyvio() {
 		// * special pages
 		// * non-existent pages
 		// * non-local files, whether there is a local page or not (unneeded local pages of non-local files are eligible for CSD F2)
-		// * file pages without actual files (these are eligible for CSD G5)
+		// * file pages without actual files (these are eligible for CSD G8)
 		if (
 			mw.config.get('wgNamespaceNumber') < 0 ||
 			!mw.config.get('wgArticleId') ||
@@ -32,12 +33,10 @@ $(function TwinkleCopyvio() {
 	};
 	Twinkle.copyvio.callback = () => {
 		const Window = new Morebits.simpleWindow(600, 350);
-		Window.setTitle('提报侵权页面');
+		Window.setTitle(wgULS('提报侵权页面', '提報侵權頁面'));
 		Window.setScriptName('Twinkle');
-		Window.addFooterLink('常见错误', 'Qiuwen:管理员错误自查表/侵权处理');
-		Window.addFooterLink(wgULS('参数设置', '參數設置'), 'H:TW/PREF#侵权');
-		Window.addFooterLink(wgULS('帮助文档', '幫助文檔'), 'H:TW/DOC#侵权');
-		Window.addFooterLink(wgULS('问题反馈', '問題反饋'), 'HT:TW');
+		Window.addFooterLink(wgULS('侵权设置', '侵權設定'), 'H:TW/PREF#copyvio');
+		Window.addFooterLink(wgULS('Twinkle帮助', 'Twinkle說明'), 'H:TW/DOC#copyvio');
 		const form = new Morebits.quickForm(Twinkle.copyvio.callback.evaluate);
 		form.append({
 			type: 'textarea',
@@ -48,6 +47,26 @@ $(function TwinkleCopyvio() {
 			type: 'checkbox',
 			list: [
 				{
+					label: wgULS(
+						'CSD G4: 曾经根据侵权审核删除后又重新创建的内容',
+						'CSD G4: 曾經根據侵權審核刪除後又重新建立的內容'
+					),
+					value: 'g4',
+					name: 'g4',
+					tooltip: wgULS('同时以G4准则提报快速删除', '同時以G4準則提報快速刪除'),
+					subgroup: [
+						{
+							name: 'g4_pagename',
+							type: 'input',
+							label: wgULS('前次删除的页面名称', '前次刪除的頁面名稱'),
+							tooltip: wgULS(
+								'选填，若前次删除的页面名称不同，请提供',
+								'選填，若前次刪除的頁面名稱不同，請提供'
+							),
+						},
+					],
+				},
+				{
 					label: wgULS('通知页面创建者', '通知頁面建立者'),
 					value: 'notify',
 					name: 'notify',
@@ -56,9 +75,7 @@ $(function TwinkleCopyvio() {
 				},
 			],
 		});
-		form.append({
-			type: 'submit',
-		});
+		form.append({type: 'submit'});
 		const result = form.render();
 		Window.setContent(result);
 		Window.display();
@@ -67,17 +84,17 @@ $(function TwinkleCopyvio() {
 		tryTagging: (pageobj) => {
 			// 先尝试标记页面，若发现已经标记则停止提报
 			const text = pageobj.getPageText();
-			if (text.includes('{{Copyvio|')) {
-				Morebits.status.error(
-					wgULS('错误', '錯誤'),
-					wgULS('页面已经标记侵权，请人工确认是否已经提报。', '頁面已經標記侵權，請人工確認是否已經提報。')
-				);
-			} else {
+			if (!text.includes('{{Copyvio|')) {
 				Twinkle.copyvio.callbacks.taggingArticle(pageobj);
 				// Contributor specific edits
 				const qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'));
 				qiuwen_page.setCallbackParameters(pageobj.getCallbackParameters());
 				qiuwen_page.lookupCreation(Twinkle.copyvio.callbacks.main);
+			} else {
+				Morebits.status.error(
+					wgULS('错误', '錯誤'),
+					wgULS('页面已经标记侵权，请人工确认是否已经提报。', '頁面已經標記侵權，請人工確認是否已經提報。')
+				);
 			}
 		},
 		main: (pageobj) => {
@@ -119,7 +136,7 @@ $(function TwinkleCopyvio() {
 				.replace(/^\s*([^*])/gm, '* $1')
 				.replace(/^\* $/m, '')}|OldRevision=${revisionId}}}`;
 			const text = pageobj.getPageText();
-			const oldcsd = text.match(/{{\s*(db(-\w*)?|d|delete)\s*(\|(?:{{[^{}]*}}|[^{}])*)?}}/i);
+			const oldcsd = text.match(/\{\{\s*(db(-\w*)?|d|delete)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}/i);
 			if (
 				oldcsd &&
 				confirm(
@@ -130,6 +147,17 @@ $(function TwinkleCopyvio() {
 				)
 			) {
 				tag = `${oldcsd[0]}\n${tag}`;
+			}
+			if (params.g4) {
+				let speedyTag = '{{delete';
+				speedyTag += '|g4';
+				if (params.g4_pagename) {
+					speedyTag += `|${params.g4_pagename}|c1=[[Special:Undelete/${params.g4_pagename}]]`;
+				} else {
+					speedyTag += `|c1=[[Special:Undelete/${mw.config.get('wgPageName')}]]`;
+				}
+				speedyTag += '}}';
+				tag = `${speedyTag}\n${tag}`;
 			}
 			pageobj.setPageText(tag);
 			pageobj.setEditSummary(wgULS('本页面疑似侵犯著作权', '本頁面疑似侵犯版權'));
@@ -149,7 +177,7 @@ $(function TwinkleCopyvio() {
 				`^===+\\s*${date.getUTCMonth() + 1}月${date.getUTCDate()}日\\s*===+`,
 				'mg'
 			);
-			if (!dateHeaderRegex.test(text)) {
+			if (!dateHeaderRegex.exec(text)) {
 				output = `\n\n===${date.getUTCMonth() + 1}月${date.getUTCDate()}日===`;
 			}
 			output += `\n{{subst:CopyvioVFDRecord|${mw.config.get('wgPageName')}}}`;
@@ -160,14 +188,14 @@ $(function TwinkleCopyvio() {
 			pageobj.append();
 		},
 	};
-	Twinkle.copyvio.callback.evaluate = ({target}) => {
-		const params = Morebits.quickForm.getInputData(target);
+	Twinkle.copyvio.callback.evaluate = (e) => {
+		const params = Morebits.quickForm.getInputData(e.target);
 		if (!params.source.trim()) {
 			mw.notify(wgULS('请指定侵权来源', '請指定侵權來源'), {type: 'warn'});
 			return;
 		}
 		Morebits.simpleWindow.setButtonsEnabled(false);
-		Morebits.status.init(target);
+		Morebits.status.init(e.target);
 		params.logpage = 'Qiuwen:侵权提报';
 		Morebits.wiki.addCheckpoint();
 		// Updating data for the action completed event
@@ -186,4 +214,4 @@ $(function TwinkleCopyvio() {
 		Morebits.wiki.removeCheckpoint();
 	};
 	Twinkle.addInitCallback(Twinkle.copyvio, 'copyvio');
-});
+})(jQuery);

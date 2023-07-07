@@ -3774,8 +3774,8 @@
 							wgULS('编辑被防滥用过滤器规则“', '編輯被防濫用過濾器規則「') +
 								errorData.abusefilter.description +
 								wgULS(
-									'”阻止。如果您认为您的该次编辑是有意义的，请至 Wikipedia:防滥用过滤器/错误报告 提报。',
-									'」阻止。如果您認為您的該次編輯是有意義的，請至 Wikipedia:防濫用過濾器/錯誤報告 提報。'
+									'”阻止。若您认为您的该次编辑是有意义的，请至 Wikipedia:防滥用过滤器/错误报告 提报。',
+									'」阻止。若您認為您的該次編輯是有意義的，請至 Wikipedia:防濫用過濾器/錯誤報告 提報。'
 								)
 						);
 						break;
@@ -3784,8 +3784,8 @@
 							wgULS('编辑被防滥用过滤器规则“', '編輯被防濫用過濾器規則「'),
 							errorData.abusefilter.description,
 							wgULS(
-								'”警告，如果您仍希望做出该编辑，请尝试重新提交，根据过滤器的设置您可能可以作出此编辑。',
-								'」警告，如果您仍希望做出該編輯，請嘗試重新提交，根據過濾器的設定您可能可以作出此編輯。'
+								'”警告，若您仍希望做出该编辑，请尝试重新提交，根据过滤器的设置您可能可以作出此编辑。',
+								'」警告，若您仍希望做出該編輯，請嘗試重新提交，根據過濾器的設定您可能可以作出此編輯。'
 							),
 						]);
 						// We should provide the user with a way to automatically retry the action if they so choose -
@@ -4361,7 +4361,7 @@
 			const statusspan = document.createElement('span');
 			previewbox.appendChild(statusspan);
 			Morebits.status.init(statusspan);
-			// 如果页面不是wikitext（例如用户js/css、Flow等），那么找一个wikitext页面来预览。
+			// 若页面不是wikitext（例如JS、CSS等），那么找一个wikitext页面来预览。
 			let pageName = mw.config.get('wgPageName');
 			if (mw.config.get('wgPageContentModel') !== 'wikitext') {
 				pageName = `Draft:${pageName}`;

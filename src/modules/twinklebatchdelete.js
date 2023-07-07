@@ -1,5 +1,5 @@
 /* Twinkle.js - twinklebatchdelete.js */
-$(function TwinkleBatchDelete() {
+(($) => {
 	/**
 	 * twinklebatchdelete.js: Batch delete module (sysops only)
 	 * Mode of invocation: Tab ("D-batch")
@@ -26,10 +26,9 @@ $(function TwinkleBatchDelete() {
 	Twinkle.batchdelete.callback = () => {
 		subpagesLoaded = false;
 		const Window = new Morebits.simpleWindow(600, 400);
-		Window.setTitle('批量删除');
+		Window.setTitle(wgULS('批量删除', '批次刪除'));
 		Window.setScriptName('Twinkle');
-		Window.addFooterLink(wgULS('帮助文档', '幫助文檔'), 'H:TW/DOC#批量删除');
-		Window.addFooterLink(wgULS('问题反馈', '問題反饋'), 'HT:TW');
+		Window.addFooterLink(wgULS('Twinkle帮助', 'Twinkle說明'), 'H:TW/DOC#batchdelete');
 		const form = new Morebits.quickForm(Twinkle.batchdelete.callback.evaluate);
 		form.append({
 			type: 'checkbox',
@@ -111,14 +110,15 @@ $(function TwinkleBatchDelete() {
 			type: 'select',
 			name: 'common_reason',
 			label: '常用理由：',
+			style: 'width: 85%;',
 			list: Twinkle.batchdelete.deletereasonlist,
 			event: Twinkle.batchdelete.callback.change_common_reason,
 		});
 		form.append({
-			type: 'input',
 			name: 'reason',
+			type: 'input',
 			label: '理由：',
-			size: 60,
+			size: 75,
 		});
 		const query = {
 			action: 'query',
@@ -173,10 +173,10 @@ $(function TwinkleBatchDelete() {
 		Twinkle.batchdelete.pages = {};
 		const statelem = new Morebits.status(wgULS('抓取页面列表', '抓取頁面列表'));
 		const qiuwen_api = new Morebits.wiki.api(
-			wgULS('加载中……', '載入中……'),
+			wgULS('加载中…', '載入中…'),
 			query,
-			({responseXML, params}) => {
-				const xml = responseXML;
+			(apiobj) => {
+				const xml = apiobj.responseXML;
 				const $pages = $(xml).find('page').filter(':not([missing])'); // :not([imagerepository="shared"])
 				$pages.each((index, page) => {
 					const $page = $(page);
@@ -213,7 +213,7 @@ $(function TwinkleBatchDelete() {
 						style: isProtected ? 'color:red' : '',
 					};
 				});
-				const form = params.form;
+				const form = apiobj.params.form;
 				form.append({type: 'header', label: wgULS('待删除页面', '待刪除頁面')});
 				form.append({
 					type: 'button',
@@ -248,31 +248,28 @@ $(function TwinkleBatchDelete() {
 				});
 				form.append({type: 'submit'});
 				const result = form.render();
-				params.Window.setContent(result);
+				apiobj.params.Window.setContent(result);
 				Morebits.quickForm.getElements(result, 'pages').forEach(generateArrowLinks);
 			},
 			statelem
 		);
-		qiuwen_api.params = {
-			form: form,
-			Window: Window,
-		};
+		qiuwen_api.params = {form: form, Window: Window};
 		qiuwen_api.post();
 	};
-	const generateArrowLinks = ({value, nextElementSibling}) => {
+	const generateArrowLinks = (checkbox) => {
 		const link = Morebits.htmlNode('a', ' >');
 		link.setAttribute('class', 'tw-dbatch-page-link');
-		link.setAttribute('href', mw.util.getUrl(value));
+		link.setAttribute('href', mw.util.getUrl(checkbox.value));
 		link.setAttribute('target', '_blank');
-		nextElementSibling.append(link);
+		checkbox.nextElementSibling.append(link);
 	};
 	Twinkle.batchdelete.generateNewPageList = (form) => {
 		// Update the list of checked pages in Twinkle.batchdelete.pages object
 		const elements = form.elements.pages;
 		if (elements instanceof NodeList) {
 			// if there are multiple pages
-			for (const element of elements) {
-				Twinkle.batchdelete.pages[element.value].checked = element.checked;
+			for (let i = 0; i < elements.length; ++i) {
+				Twinkle.batchdelete.pages[elements[i].value].checked = elements[i].checked;
 			}
 		} else if (elements instanceof HTMLInputElement) {
 			// if there is just one page
@@ -358,17 +355,17 @@ $(function TwinkleBatchDelete() {
 			value: wgULS('[[QW:CSD#O3|O3]]：废弃草稿。', '[[QW:CSD#O3|O3]]：廢棄草稿。'),
 		},
 	];
-	Twinkle.batchdelete.callback.change_common_reason = ({target}) => {
-		if (target.form.reason.value !== '') {
-			target.form.reason.value = Morebits.string.appendPunctuation(target.form.reason.value);
+	Twinkle.batchdelete.callback.change_common_reason = (e) => {
+		if (e.target.form.reason.value !== '') {
+			e.target.form.reason.value = Morebits.string.appendPunctuation(e.target.form.reason.value);
 		}
-		target.form.reason.value += target.value;
-		target.value = '';
+		e.target.form.reason.value += e.target.value;
+		e.target.value = '';
 	};
-	Twinkle.batchdelete.callback.toggleSubpages = ({target}) => {
-		const form = target.form;
+	Twinkle.batchdelete.callback.toggleSubpages = (e) => {
+		const form = e.target.form;
 		let newPageList;
-		if (target.checked) {
+		if (e.target.checked) {
 			form.delete_subpage_redirects.checked = form.delete_redirects.checked;
 			form.delete_subpage_talks.checked = form.delete_talk.checked;
 			form.unlink_subpages.checked = form.unlink_page.checked;
@@ -389,9 +386,9 @@ $(function TwinkleBatchDelete() {
 			}
 			// Proceed with API calls to get list of subpages
 			const loadingText = `<strong id="dbatch-subpage-loading">${wgULS('加载中...', '載入中...')}</strong>`;
-			$(target).after(loadingText);
+			$(e.target).after(loadingText);
 			const pages = $(form.pages)
-				.map((i, {value}) => value)
+				.map((i, el) => el.value)
 				.get();
 			const subpageLister = new Morebits.batchOperation();
 			subpageLister.setOption('chunkSize', Twinkle.getPref('batchChunks'));
@@ -417,8 +414,8 @@ $(function TwinkleBatchDelete() {
 							gaplimit: 'max',
 							pageNameFull: pageName, // Not used by API, but added for access in onSuccess()
 						},
-						({responseXML, query}) => {
-							const xml = responseXML;
+						(apiobj) => {
+							const xml = apiobj.responseXML;
 							const $pages = $(xml).find('page');
 							const subpageList = [];
 							$pages.each((index, page) => {
@@ -459,7 +456,7 @@ $(function TwinkleBatchDelete() {
 								});
 							});
 							if (subpageList.length) {
-								const pageName = query.pageNameFull;
+								const pageName = apiobj.query.pageNameFull;
 								Twinkle.batchdelete.pages[pageName].subgroup = {
 									type: 'checkbox',
 									name: 'subpages',
@@ -488,7 +485,7 @@ $(function TwinkleBatchDelete() {
 					$('#dbatch-subpage-loading').remove();
 				}
 			);
-		} else if (!target.checked) {
+		} else if (!e.target.checked) {
 			$.each(Twinkle.batchdelete.pages, (i, el) => {
 				if (el.subgroup) {
 					// Remove subgroup after saving its contents in subgroup_
@@ -503,11 +500,11 @@ $(function TwinkleBatchDelete() {
 			Morebits.quickForm.getElements(newPageList, 'pages').forEach(generateArrowLinks);
 		}
 	};
-	Twinkle.batchdelete.callback.evaluate = ({target}) => {
+	Twinkle.batchdelete.callback.evaluate = (event) => {
 		Morebits.wiki.actionCompleted.notice = wgULS('批量删除已完成', '批次刪除已完成');
-		const form = target;
+		const form = event.target;
 		const numProtected = $(Morebits.quickForm.getElements(form, 'pages')).filter(
-			(index, {checked, nextElementSibling}) => checked && nextElementSibling.style.color === 'red'
+			(index, element) => element.checked && element.nextElementSibling.style.color === 'red'
 		).length;
 		if (
 			numProtected > 0 &&
@@ -696,8 +693,8 @@ $(function TwinkleBatchDelete() {
 				}
 			}
 		},
-		deleteRedirectsMain: ({responseXML, params}) => {
-			const xml = responseXML;
+		deleteRedirectsMain: (apiobj) => {
+			const xml = apiobj.responseXML;
 			const pages = $(xml)
 				.find('rd')
 				.map(function () {
@@ -708,14 +705,14 @@ $(function TwinkleBatchDelete() {
 				return;
 			}
 			const redirectDeleter = new Morebits.batchOperation(
-				wgULS('正在删除到 ', '正在刪除到 ') + params.page + wgULS(' 的重定向', ' 的重新導向')
+				wgULS('正在删除到 ', '正在刪除到 ') + apiobj.params.page + wgULS(' 的重定向', ' 的重新導向')
 			);
 			redirectDeleter.setOption('chunkSize', Twinkle.getPref('batchChunks'));
 			redirectDeleter.setPageList(pages);
 			redirectDeleter.run((pageName) => {
 				const qiuwen_page = new Morebits.wiki.page(pageName, wgULS('正在删除 ', '正在刪除 ') + pageName);
 				qiuwen_page.setEditSummary(
-					`[[QW:CSD#G9|G9]]：${wgULS('指向已删页面“', '指向已刪頁面「')}${params.page}${wgULS(
+					`[[QW:CSD#G9|G9]]: ${wgULS('指向已删页面“', '指向已刪頁面「')}${apiobj.params.page}${wgULS(
 						'”的重定向',
 						'」的重新導向'
 					)}`
@@ -724,21 +721,21 @@ $(function TwinkleBatchDelete() {
 				qiuwen_page.deletePage(redirectDeleter.workerSuccess, redirectDeleter.workerFailure);
 			});
 		},
-		deleteTalk: ({responseXML, params}) => {
-			const xml = responseXML;
+		deleteTalk: (apiobj) => {
+			const xml = apiobj.responseXML;
 			const exists = $(xml).find('page:not([missing])').length > 0;
 			if (!exists) {
 				// no talk page; forget about it
 				return;
 			}
 			const page = new Morebits.wiki.page(
-				params.talkPage,
-				wgULS('正在删除页面 ', '正在刪除頁面 ') + params.page + wgULS(' 的讨论页', ' 的討論頁')
+				apiobj.params.talkPage,
+				wgULS('正在删除页面 ', '正在刪除頁面 ') + apiobj.params.page + wgULS(' 的讨论页', ' 的討論頁')
 			);
 			page.setEditSummary(
-				`[[QW:CSD#G9|G9]]：${wgULS('已删页面“', '已刪頁面「')}${params.page}${wgULS(
-					'”的[[H:讨论页|讨论页]]',
-					'」的[[H:討論頁|討論頁]]'
+				`[[QW:CSD#G9|G9]]: ${wgULS('已删页面“', '已刪頁面「')}${apiobj.params.page}${wgULS(
+					'”的[[Help:讨论页|讨论页]]',
+					'」的[[Help:討論頁|討論頁]]'
 				)}`
 			);
 			page.setChangeTags(Twinkle.changeTags);
@@ -868,4 +865,4 @@ $(function TwinkleBatchDelete() {
 		},
 	};
 	Twinkle.addInitCallback(Twinkle.batchdelete, 'batchdelete');
-});
+})(jQuery);

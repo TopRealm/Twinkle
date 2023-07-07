@@ -61,7 +61,7 @@
 		openTalkPageOnAutoRevert: false,
 		rollbackInPlace: false,
 		markRevertedPagesAsMinor: ['vand'],
-		watchRevertedPages: ['agf', 'norm', 'vand', 'torev'],
+		watchRevertedPages: ['norm', 'vand', 'torev'],
 		watchRevertedExpiry: 'yes',
 		offerReasonOnNormalRevert: true,
 		confirmOnFluff: false,

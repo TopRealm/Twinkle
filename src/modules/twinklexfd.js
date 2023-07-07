@@ -1,5 +1,5 @@
 /* Twinkle.js - twinkleblock.js */
-$(function TwinkleXFD() {
+(($) => {
 	/**
 	 * twinklexfd.js: XFD module
 	 * Mode of invocation: Tab ("XFD")
@@ -46,11 +46,10 @@ $(function TwinkleXFD() {
 	};
 	Twinkle.xfd.callback = () => {
 		const Window = new Morebits.simpleWindow(600, 350);
-		Window.setTitle('提交存废讨论');
+		Window.setTitle(wgULS('提交存废讨论', '提交存廢討論'));
 		Window.setScriptName('Twinkle');
-		Window.addFooterLink('关于存废讨论', 'QW:XFD');
-		Window.addFooterLink('提删设置', 'H:TW/PREF#提删');
-		Window.addFooterLink('Twinkle帮助', 'H:TW/DOC#提删');
+		Window.addFooterLink(wgULS('提删设置', '提刪設定'), 'H:TW/PREF#xfd');
+		Window.addFooterLink(wgULS('Twinkle帮助', 'Twinkle說明'), 'H:TW/DOC#xfd');
 		const form = new Morebits.quickForm(Twinkle.xfd.callback.evaluate);
 		const categories = form.append({
 			type: 'select',
@@ -68,7 +67,6 @@ $(function TwinkleXFD() {
 			type: 'option',
 			label: wgULS('文件存废讨论', '檔案存廢討論'),
 			selected: mw.config.get('wgNamespaceNumber') === 6,
-			// File namespace
 			value: 'ffd',
 		});
 		form.append({
@@ -97,10 +95,10 @@ $(function TwinkleXFD() {
 		evt.initEvent('change', true, true);
 		result.category.dispatchEvent(evt);
 	};
-	Twinkle.xfd.callback.change_category = ({target}) => {
-		const value = target.value;
-		const form = target.form;
-		const old_area = Morebits.quickForm.getElements(target.form, 'work_area')[0];
+	Twinkle.xfd.callback.change_category = (e) => {
+		const value = e.target.value;
+		const form = e.target.form;
+		const old_area = Morebits.quickForm.getElements(e.target.form, 'work_area')[0];
 		let work_area = null;
 		const oldreasontextbox = form.getElementsByTagName('textarea')[0];
 		let oldreason = oldreasontextbox ? oldreasontextbox.value : '';
@@ -257,41 +255,35 @@ $(function TwinkleXFD() {
 		form.notify.checked = true;
 		form.notify.disabled = false;
 	};
-	Twinkle.xfd.callback.change_afd_category = ({target}) => {
-		switch (target.value) {
-			case 'merge':
-				target.form.mergeinto.parentNode.removeAttribute('hidden');
-				target.form.fwdcsdreason.parentNode.setAttribute('hidden', '');
-				target.form.mergeinto.previousElementSibling.innerHTML = wgULS('合并到：', '合併到：');
-				break;
-			case 'fwdcsd':
-				target.form.mergeinto.parentNode.removeAttribute('hidden');
-				target.form.fwdcsdreason.parentNode.removeAttribute('hidden');
-				target.form.mergeinto.previousElementSibling.innerHTML = '提交人：';
-				target.form.xfdreason.value = decodeURIComponent($('#delete-reason').text()).replace(/\+/g, ' ');
-				break;
-			case 'fame':
-				target.form.mergeinto.parentNode.setAttribute('hidden', '');
-				target.form.fwdcsdreason.parentNode.setAttribute('hidden', '');
-				target.form.xfdreason.value = Twinkle.getPref('afdFameDefaultReason');
-				break;
-			case 'substub':
-				target.form.mergeinto.parentNode.setAttribute('hidden', '');
-				target.form.fwdcsdreason.parentNode.setAttribute('hidden', '');
-				target.form.xfdreason.value = Twinkle.getPref('afdSubstubDefaultReason');
-				break;
-			default:
-				target.form.mergeinto.parentNode.setAttribute('hidden', '');
-				target.form.fwdcsdreason.parentNode.setAttribute('hidden', '');
+	Twinkle.xfd.callback.change_afd_category = (e) => {
+		if (e.target.value === 'merge') {
+			e.target.form.mergeinto.parentElement.removeAttribute('hidden');
+			e.target.form.fwdcsdreason.parentElement.setAttribute('hidden', '');
+			e.target.form.mergeinto.previousElementSibling.innerHTML = wgULS('合并到：', '合併到：');
+		} else if (e.target.value === 'fwdcsd') {
+			e.target.form.mergeinto.parentElement.removeAttribute('hidden');
+			e.target.form.fwdcsdreason.parentElement.removeAttribute('hidden');
+			e.target.form.mergeinto.previousElementSibling.innerHTML = '提交人：';
+			e.target.form.xfdreason.value = decodeURIComponent($('#delete-reason').text()).replace(/\+/g, ' ');
+		} else if (e.target.value === 'fame') {
+			e.target.form.mergeinto.parentElement.setAttribute('hidden', '');
+			e.target.form.fwdcsdreason.parentElement.setAttribute('hidden', '');
+			e.target.form.xfdreason.value = Twinkle.getPref('afdFameDefaultReason');
+		} else if (e.target.value === 'substub') {
+			e.target.form.mergeinto.parentElement.setAttribute('hidden', '');
+			e.target.form.fwdcsdreason.parentElement.setAttribute('hidden', '');
+			e.target.form.xfdreason.value = Twinkle.getPref('afdSubstubDefaultReason');
+		} else {
+			e.target.form.mergeinto.parentElement.setAttribute('hidden', '');
+			e.target.form.fwdcsdreason.parentElement.setAttribute('hidden', '');
 		}
 		if (Twinkle.getPref('afdDefaultCategory') === 'same') {
-			localStorage.Twinkle_afdCategory = target.value;
+			localStorage.Twinkle_afdCategory = e.target.value;
 		}
 	};
 	Twinkle.xfd.callbacks = {
 		afd: {
 			main: (tagging_page) => {
-				// this is coming in from lookupCreation...!
 				const params = tagging_page.getCallbackParameters();
 				Twinkle.xfd.callbacks.afd.taggingArticle(tagging_page);
 				// Adding discussion
@@ -354,7 +346,7 @@ $(function TwinkleXFD() {
 				}
 				// Then, test if there are speedy deletion-related templates on the article.
 				const textNoSd = text.replace(
-					/{{\s*(db(-\w*)?|d|delete|(?:hang|hold)[ -]?on)\s*(\|(?:{{[^{}]*}}|[^{}])*)?}}\s*/gi,
+					/\{\{\s*(db(-\w*)?|d|delete|(?:hang|hold)[- ]?on)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/gi,
 					''
 				);
 				if (
@@ -364,7 +356,7 @@ $(function TwinkleXFD() {
 					text = textNoSd;
 				}
 				const textNoNotMandarin = text.replace(
-					/{{\s*(notmandarin|notchinese|非中文|非現代漢語|非现代汉语|非現代標準漢語|非现代标准汉语)\s*(\|(?:{{[^{}]*}}|[^{}])*)?}}\s*/gi,
+					/\{\{\s*(NotMandarin|Notchinese|非中文|非現代漢語|非现代汉语|非現代標準漢語|非现代标准汉语)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/gi,
 					''
 				);
 				if (
@@ -446,7 +438,7 @@ $(function TwinkleXFD() {
 									substub: '<u>长度过短</u>条目',
 									batch: '页面',
 								}[type]
-							}的求闻编者及時間：<br id="no-new-title" />~~~~`;
+							}的求闻编者及时间：<br id="no-new-title">~~~~`;
 							pageobj.setAppendText(appendText);
 						}
 						break;
@@ -470,7 +462,7 @@ $(function TwinkleXFD() {
 				} else {
 					pageobj.save();
 				}
-				Twinkle.xfd.currentRationale = null; // any errors from now on do not need to print the rationale, as it is safely saved on-wiki
+				Twinkle.xfd.currentRationale = null;
 			},
 			lookupCreation: (target_page) => {
 				target_page.getStatusElement().info('完成');
@@ -493,7 +485,7 @@ $(function TwinkleXFD() {
 					return;
 				}
 				const text = tagging_page.getPageText();
-				const xfd = /(?:{{([acfimr-tv]fd|md1|proposed deletion)[^{}]*?}})/i.exec(text);
+				const xfd = /(?:\{\{([rsaiftcmv]fd|md1|proposed deletion)[^{}]*?\}\})/i.exec(text);
 				if (
 					xfd &&
 					!confirm(
@@ -505,7 +497,7 @@ $(function TwinkleXFD() {
 					statelem.error(wgULS('页面已被提交至存废讨论。', '頁面已被提交至存廢討論。'));
 					return;
 				}
-				const copyvio = /(?:{{\s*(copyvio)[^{}]*?}})/i.exec(text);
+				const copyvio = /(?:\{\{\s*(copyvio)[^{}]*?\}\})/i.exec(text);
 				if (copyvio) {
 					statelem.error(wgULS('页面中已有著作权验证模板。', '頁面中已有著作權驗證模板。'));
 					return;
@@ -572,7 +564,7 @@ $(function TwinkleXFD() {
 				pageobj.save();
 			},
 			todaysList: (pageobj) => {
-				// let text = pageobj.getPageText();
+				// const text = pageobj.getPageText();
 				const params = pageobj.getCallbackParameters();
 				pageobj.setAppendText(
 					`\n{{subst:IfdItem|Filename=${mw.config.get('wgTitle')}|Uploader=${
@@ -607,7 +599,7 @@ $(function TwinkleXFD() {
 					return;
 				}
 				const text = tagging_page.getPageText();
-				const xfd = /(?:{{([acfimr-tv]fd|md1|proposed deletion)[^{}]*?}})/i.exec(text);
+				const xfd = /(?:\{\{([rsaiftcmv]fd|md1|proposed deletion)[^{}]*?\}\})/i.exec(text);
 				if (
 					xfd &&
 					!confirm(
@@ -622,7 +614,7 @@ $(function TwinkleXFD() {
 				Twinkle.xfd.callbacks.ffd.main(tagging_page);
 			},
 		},
-		addToLog: ({xfdcat, mergeinto, xfdreason, fwdcsdreason}, initialContrib) => {
+		addToLog: (params, initialContrib) => {
 			const editsummary =
 				wgULS('记录对[[', '記錄對[[') + Morebits.pageNameNorm + wgULS(']]的存废讨论提名', ']]的存廢討論提名');
 			const usl = new Morebits.userspaceLogger(Twinkle.getPref('xfdLogPageName'));
@@ -635,7 +627,7 @@ $(function TwinkleXFD() {
 				)}|偏好設定]]中關掉，並使用[[QW:CSD#O1|CSD O1]]提交快速刪除。`
 			);
 			let xfdCatName;
-			switch (xfdcat) {
+			switch (params.xfdcat) {
 				case 'delete':
 					xfdCatName = wgULS('删除', '刪除');
 					break;
@@ -658,7 +650,7 @@ $(function TwinkleXFD() {
 					xfdCatName = wgULS('文件存废讨论', '檔案存廢討論');
 					break;
 			}
-			// If a logged file is deleted but exists on Qiuwen Share, the wikilink will be blue, so provide a link to the log
+			// If a logged file is deleted but exists on remote repo, the wikilink will be blue, so provide a link to the log
 			let appendText = `# [[:${Morebits.pageNameNorm}]]`;
 			if (mw.config.get('wgNamespaceNumber') === 6) {
 				appendText += `（[{{fullurl:Special:Log|page=${mw.util.wikiUrlencode(
@@ -666,20 +658,20 @@ $(function TwinkleXFD() {
 				)}}} ${wgULS('日志', '日誌')}]）`;
 			}
 			appendText += `：${xfdCatName}`;
-			if (xfdcat === 'merge') {
-				appendText += `[[:${mergeinto}]]`;
+			if (params.xfdcat === 'merge') {
+				appendText += `[[:${params.mergeinto}]]`;
 			}
 			appendText += '。';
-			if (xfdreason) {
+			if (params.xfdreason) {
 				appendText += `'''${
-					xfdcat === 'fwdcsd' ? wgULS('原删除理据', '原刪除理據') : wgULS('理据', '理據')
-				}'''：${Morebits.string.formatReasonForLog(xfdreason)}`;
+					params.xfdcat === 'fwdcsd' ? wgULS('原删除理据', '原刪除理據') : wgULS('理据', '理據')
+				}'''：${Morebits.string.formatReasonForLog(params.xfdreason)}`;
 				appendText = Morebits.string.appendPunctuation(appendText);
 			}
-			if (fwdcsdreason) {
+			if (params.fwdcsdreason) {
 				appendText += `'''${
-					xfdcat === 'fwdcsd' ? wgULS('转交理据', '轉交理據') : wgULS('理据', '理據')
-				}'''：${Morebits.string.formatReasonForLog(fwdcsdreason)}`;
+					params.xfdcat === 'fwdcsd' ? wgULS('转交理据', '轉交理據') : wgULS('理据', '理據')
+				}'''：${Morebits.string.formatReasonForLog(params.fwdcsdreason)}`;
 				appendText = Morebits.string.appendPunctuation(appendText);
 			}
 			if (initialContrib) {
@@ -690,14 +682,14 @@ $(function TwinkleXFD() {
 			usl.log(appendText, editsummary);
 		},
 	};
-	Twinkle.xfd.callback.evaluate = ({target}) => {
-		const params = Morebits.quickForm.getInputData(target);
+	Twinkle.xfd.callback.evaluate = (e) => {
+		const params = Morebits.quickForm.getInputData(e.target);
 		if (params.xfdcat === 'merge' && params.mergeinto.trim() === '') {
 			mw.notify(wgULS('请提供合并目标！', '請提供合併目標！'), {type: 'warn'});
 			return;
 		}
 		Morebits.simpleWindow.setButtonsEnabled(false);
-		Morebits.status.init(target);
+		Morebits.status.init(e.target);
 		Twinkle.xfd.currentRationale = params.xfdreason;
 		Morebits.status.onError(Twinkle.xfd.printRationale);
 		if (!params.category) {
@@ -754,4 +746,4 @@ $(function TwinkleXFD() {
 		}
 	};
 	Twinkle.addInitCallback(Twinkle.xfd, 'xfd');
-});
+})(jQuery);

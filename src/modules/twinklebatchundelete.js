@@ -1,5 +1,5 @@
 /* Twinkle.js - twinklebatchundelete.js */
-$(function TwinkleBatchUndelete() {
+(($) => {
 	/**
 	 * twinklebatchundelete.js: Batch undelete module
 	 * Mode of invocation: Tab ("Und-batch")
@@ -24,9 +24,8 @@ $(function TwinkleBatchUndelete() {
 	Twinkle.batchundelete.callback = () => {
 		const Window = new Morebits.simpleWindow(600, 400);
 		Window.setScriptName('Twinkle');
-		Window.setTitle('批量恢复');
-		Window.addFooterLink(wgULS('帮助文档', '幫助文檔'), 'H:TW/DOC#批量恢复');
-		Window.addFooterLink(wgULS('问题反馈', '問題反饋'), 'HT:TW');
+		Window.setTitle(wgULS('批量反删除', '批次反刪除'));
+		Window.addFooterLink(wgULS('Twinkle帮助', 'Twinkle說明'), 'H:TW/DOC#batchundelete');
 		const form = new Morebits.quickForm(Twinkle.batchundelete.callback.evaluate);
 		form.append({
 			type: 'checkbox',
@@ -60,10 +59,10 @@ $(function TwinkleBatchUndelete() {
 		};
 		const statelem = new Morebits.status(wgULS('抓取页面列表', '抓取頁面列表'));
 		const qiuwen_api = new Morebits.wiki.api(
-			wgULS('加载中……', '載入中……'),
+			wgULS('加载中…', '載入中…'),
 			query,
-			({responseXML, params}) => {
-				const xml = responseXML;
+			(apiobj) => {
+				const xml = apiobj.responseXML;
 				const $pages = $(xml).find('page[missing]');
 				const list = [];
 				$pages.each((index, page) => {
@@ -85,43 +84,43 @@ $(function TwinkleBatchUndelete() {
 								: ''),
 						value: title,
 						checked: true,
-						style: isProtected ? 'color: #f00' : '',
+						style: isProtected ? 'color:red' : '',
 					});
 				});
-				params.form.append({type: 'header', label: wgULS('待恢复页面', '待恢復頁面')});
-				params.form.append({
+				apiobj.params.form.append({type: 'header', label: wgULS('待恢复页面', '待恢復頁面')});
+				apiobj.params.form.append({
 					type: 'button',
 					label: wgULS('全选', '全選'),
-					event: ({target}) => {
-						$(Morebits.quickForm.getElements(target.form, 'pages')).prop('checked', true);
+					event: (e) => {
+						$(Morebits.quickForm.getElements(e.target.form, 'pages')).prop('checked', true);
 					},
 				});
-				params.form.append({
+				apiobj.params.form.append({
 					type: 'button',
 					label: wgULS('全不选', '全不選'),
-					event: ({target}) => {
-						$(Morebits.quickForm.getElements(target.form, 'pages')).prop('checked', false);
+					event: (e) => {
+						$(Morebits.quickForm.getElements(e.target.form, 'pages')).prop('checked', false);
 					},
 				});
-				params.form.append({
+				apiobj.params.form.append({
 					type: 'checkbox',
 					name: 'pages',
 					shiftClickSupport: true,
 					list: list,
 				});
-				params.form.append({type: 'submit'});
-				const result = params.form.render();
-				params.Window.setContent(result);
+				apiobj.params.form.append({type: 'submit'});
+				const result = apiobj.params.form.render();
+				apiobj.params.Window.setContent(result);
 			},
 			statelem
 		);
 		qiuwen_api.params = {form: form, Window: Window};
 		qiuwen_api.post();
 	};
-	Twinkle.batchundelete.callback.evaluate = ({target}) => {
+	Twinkle.batchundelete.callback.evaluate = (event) => {
 		Morebits.wiki.actionCompleted.notice = wgULS('反删除已完成', '反刪除已完成');
-		const numProtected = $(Morebits.quickForm.getElements(target, 'pages')).filter(
-			(index, {checked, nextElementSibling}) => checked && nextElementSibling.style.color === 'red'
+		const numProtected = $(Morebits.quickForm.getElements(event.target, 'pages')).filter(
+			(index, element) => element.checked && element.nextElementSibling.style.color === 'red'
 		).length;
 		if (
 			numProtected > 0 &&
@@ -133,15 +132,15 @@ $(function TwinkleBatchUndelete() {
 		) {
 			return;
 		}
-		const pages = target.getChecked('pages');
-		const reason = target.reason.value;
-		const undel_talk = target.reason.value;
+		const pages = event.target.getChecked('pages');
+		const reason = event.target.reason.value;
+		const undel_talk = event.target.reason.value;
 		if (!reason) {
 			mw.notify('您需要指定理由。', {type: 'warn'});
 			return;
 		}
 		Morebits.simpleWindow.setButtonsEnabled(false);
-		Morebits.status.init(target);
+		Morebits.status.init(event.target);
 		if (!pages) {
 			Morebits.status.error(
 				wgULS('错误', '錯誤'),
@@ -202,8 +201,8 @@ $(function TwinkleBatchUndelete() {
 				}
 			}
 		},
-		undeleteTalk: ({responseXML, params}) => {
-			const xml = responseXML;
+		undeleteTalk: (apiobj) => {
+			const xml = apiobj.responseXML;
 			const exists = $(xml).find('page:not([missing])').length > 0;
 			const delrevs = $(xml).find('rev').attr('revid');
 			if (exists || !delrevs) {
@@ -211,17 +210,17 @@ $(function TwinkleBatchUndelete() {
 				return;
 			}
 			const page = new Morebits.wiki.page(
-				params.talkPage,
-				wgULS('正在反删除', '正在反刪除') + params.page + wgULS('的讨论页', '的討論頁')
+				apiobj.params.talkPage,
+				wgULS('正在反删除', '正在反刪除') + apiobj.params.page + wgULS('的讨论页', '的討論頁')
 			);
 			page.setEditSummary(
 				wgULS('反删除“', '反刪除「') +
-					params.page +
-					wgULS('”的[[Qiuwen:讨论页|讨论页]]', '」的[[Qiuwen:討論頁|討論頁]]')
+					apiobj.params.page +
+					wgULS('”的[[Help:讨论页|讨论页]]', '」的[[Help:討論頁|討論頁]]')
 			);
 			page.setChangeTags(Twinkle.changeTags);
 			page.undeletePage();
 		},
 	};
 	Twinkle.addInitCallback(Twinkle.batchundelete, 'batchundelete');
-});
+})(jQuery);

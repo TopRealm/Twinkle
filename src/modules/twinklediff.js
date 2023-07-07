@@ -1,5 +1,5 @@
 /* Twinkle.js - twinklediff.js */
-$(function TwinkleDiff() {
+(($) => {
 	/**
 	 * twinklediff.js: Diff module
 	 * Mode of invocation: Tab on non-diff pages ("Last");
@@ -25,7 +25,7 @@ $(function TwinkleDiff() {
 				() => {
 					Twinkle.diff.evaluate(false);
 				},
-				'上异',
+				'自上',
 				'tw-since',
 				wgULS('显示与上一修订版本间的差异', '顯示與上一修訂版本間的差異')
 			);
@@ -33,7 +33,7 @@ $(function TwinkleDiff() {
 				() => {
 					Twinkle.diff.evaluate(true);
 				},
-				'自异',
+				'自我',
 				'tw-sincemine',
 				wgULS('显示与我做出的修订版本的差异', '顯示與我做出的修訂版本的差異')
 			);
@@ -81,13 +81,13 @@ $(function TwinkleDiff() {
 		qiuwen_api.post();
 	};
 	Twinkle.diff.callbacks = {
-		main: ({response, statelem, params}) => {
-			const rev = response.query.pages[0].revisions;
-			const revid = rev && rev[0].revid;
+		main: (self) => {
+			const xmlDoc = self.responseXML;
+			const revid = $(xmlDoc).find('rev').attr('revid');
 			if (!revid) {
-				statelem.error(
+				self.statelem.error(
 					wgULS('未找到合适的早期版本，或 ', '未找到合適的早期版本，或 ') +
-						params.user +
+						self.params.user +
 						wgULS(' 是唯一贡献者。取消。', ' 是唯一貢獻者。取消。')
 				);
 				return;
@@ -99,4 +99,4 @@ $(function TwinkleDiff() {
 		},
 	};
 	Twinkle.addInitCallback(Twinkle.diff, 'diff');
-});
+})(jQuery);
