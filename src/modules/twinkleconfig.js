@@ -396,8 +396,8 @@
 					name: 'watchProtectedPages',
 					label: wgULS('保护时加入到监视列表', '保護時加入到監視清單'),
 					helptip: wgULS(
-						'如果在保护后也标记页面，则使用标记页面的参数设置。',
-						'如果在保護後也標記頁面，則使用標記頁面的偏好設定。'
+						'若在保护后也标记页面，则使用标记页面的参数设置。',
+						'若在保護後也標記頁面，則使用標記頁面的偏好設定。'
 					),
 					adminOnly: true,
 					type: 'enum',
@@ -642,8 +642,8 @@
 					name: 'deleteSysopDefaultToDelete',
 					label: wgULS('默认为直接删除而不是标记', '預設為直接刪除而不是標記'),
 					helptip: wgULS(
-						'如果已放置快速删除标记，则永远默认为删除模式。',
-						'如果已放置快速刪除標記，則永遠預設為刪除模式。'
+						'若已放置快速删除标记，则永远默认为删除模式。',
+						'若已放置快速刪除標記，則永遠預設為刪除模式。'
 					),
 					adminOnly: true,
 					type: 'boolean',
@@ -661,8 +661,8 @@
 					name: 'speedyWindowHeight',
 					label: wgULS('快速删除对话框高度（像素）', '快速刪除對話方塊高度（像素）'),
 					helptip: wgULS(
-						'如果您有一台很大的显示器，您可以将此调高。',
-						'如果您有一台很大的顯示器，您可以將此調高。'
+						'若您有一台很大的显示器，您可以将此调高。',
+						'若您有一台很大的顯示器，您可以將此調高。'
 					),
 					type: 'integer',
 				},
@@ -812,7 +812,6 @@
 				{
 					name: 'insertTalkbackSignature',
 					label: wgULS('通告时加入签名', '通告時加入簽名'),
-					helptip: wgULS('Flow页除外。', 'Flow頁除外。'),
 					type: 'boolean',
 				},
 				{
@@ -894,10 +893,6 @@
 				{
 					name: 'watchWarnings',
 					label: wgULS('警告时加入用户讨论页到监视列表', '警告時加入使用者討論頁到監視清單'),
-					helptip: wgULS(
-						'注意：如果对方使用Flow，对应讨论串总会加到监视列表中。',
-						'注意：如果對方使用Flow，對應討論串總會加到監視清單中。'
-					),
 					type: 'enum',
 					enumValues: Twinkle.config.watchlistEnums,
 				},
@@ -1474,7 +1469,7 @@
 				// place "Looking for Twinkle options?" notice
 				box.setAttribute('class', 'config-userskin-box');
 				box.appendChild(
-					document.createTextNode(wgULS('如果您想配置您的Twinkle，请使用', '如果您想配置您的Twinkle，請使用'))
+					document.createTextNode(wgULS('若您想配置您的Twinkle，请使用', '若您想配置您的Twinkle，請使用'))
 				);
 				link = document.createElement('a');
 				link.setAttribute('href', mw.util.getUrl(Twinkle.getPref('configPage')));

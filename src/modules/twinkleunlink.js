@@ -85,7 +85,6 @@
 			list: 'backlinks',
 			bltitle: mw.config.get('wgPageName'),
 			bllimit: 'max',
-			// 500 is max for normal users, 5000 for bots and sysops
 			blnamespace: Twinkle.getPref('unlinkNamespaces'),
 			rawcontinue: true,
 			format: 'json',

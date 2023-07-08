@@ -252,7 +252,7 @@
 	 * @param {event} event - Function to execute when form is submitted.
 	 * @param {string} [eventType=submit] - Type of the event.
 	 */
-	Morebits.quickForm = function QuickForm(event, eventType) {
+	Morebits.quickForm = function (event, eventType) {
 		this.root = new Morebits.quickForm.element({
 			type: 'form',
 			event: event,
@@ -265,7 +265,7 @@
 	 * @memberof Morebits.quickForm
 	 * @returns {HTMLElement}
 	 */
-	Morebits.quickForm.prototype.render = function QuickFormRender() {
+	Morebits.quickForm.prototype.render = function () {
 		const ret = this.root.render();
 		ret.names = {};
 		return ret;
@@ -278,7 +278,7 @@
 	 * a quickform element is constructed.
 	 * @returns {Morebits.quickForm.element} - Same as what is passed to the function.
 	 */
-	Morebits.quickForm.prototype.append = function QuickFormAppend(data) {
+	Morebits.quickForm.prototype.append = function (data) {
 		return this.root.append(data);
 	};
 	/**
@@ -338,7 +338,7 @@
 	 *     required: true
 	 * });
 	 */
-	Morebits.quickForm.element = function QuickFormElement(data) {
+	Morebits.quickForm.element = function (data) {
 		this.data = data;
 		this.childs = [];
 	};
@@ -355,7 +355,7 @@
 	 * create the quickForm element.
 	 * @returns {Morebits.quickForm.element} The same element passed in.
 	 */
-	Morebits.quickForm.element.prototype.append = function QuickFormElementAppend(data) {
+	Morebits.quickForm.element.prototype.append = function (data) {
 		let child;
 		if (data instanceof Morebits.quickForm.element) {
 			child = data;
@@ -372,7 +372,7 @@
 	 * @memberof Morebits.quickForm.element
 	 * @returns {HTMLElement}
 	 */
-	Morebits.quickForm.element.prototype.render = function QuickFormElementRender(internal_subgroup_id) {
+	Morebits.quickForm.element.prototype.render = function (internal_subgroup_id) {
 		const currentNode = this.compute(this.data, internal_subgroup_id);
 		for (let i = 0; i < this.childs.length; ++i) {
 			// do not pass internal_subgroup_id to recursive calls
@@ -381,7 +381,7 @@
 		return currentNode[0];
 	};
 	/** @memberof Morebits.quickForm.element */
-	Morebits.quickForm.element.prototype.compute = function QuickFormElementCompute(data, in_id) {
+	Morebits.quickForm.element.prototype.compute = function (data, in_id) {
 		let node;
 		let childContainer = null;
 		let label;
@@ -697,7 +697,7 @@
 				moreButton.counter = 0;
 				break;
 			}
-			case '_dyninput_element': {
+			case '_dyninput_element':
 				// Private, similar to normal input
 				node = document.createElement('div');
 				if (data.label) {
@@ -742,7 +742,6 @@
 					removeButton.morebutton = data.morebutton;
 				}
 				break;
-			}
 			case 'hidden':
 				node = document.createElement('input');
 				node.setAttribute('type', 'hidden');
@@ -1665,7 +1664,7 @@
 	 * u.content = u.content.replace(/world/g, 'earth');
 	 * u.rebind(); // gives 'Hello earth <!-- world --> earth'
 	 */
-	Morebits.unbinder = function Unbinder(string) {
+	Morebits.unbinder = function (string) {
 		if (typeof string !== 'string') {
 			throw new Error('not a string');
 		}
@@ -1708,10 +1707,14 @@
 			}
 			return content;
 		},
-		prefix: null, // %UNIQ::0.5955981644938324::
-		postfix: null, // ::UNIQ%
-		content: null, // string
-		counter: null, // 0++
+		prefix: null,
+		// %UNIQ::0.5955981644938324::
+		postfix: null,
+		// ::UNIQ%
+		content: null,
+		// string
+		counter: null,
+		// 0++
 		history: null, // {}
 	};
 	/** @memberof Morebits.unbinder */
@@ -1821,6 +1824,7 @@
 		hours: 'Hours',
 		days: 'Date',
 		weeks: 'Week',
+		// Not a function but handled in `add` through cunning use of multiplication
 		months: 'Month',
 		years: 'FullYear',
 	};
@@ -2078,6 +2082,7 @@
 	};
 	// Allow native Date.prototype methods to be used on Morebits.date objects
 	Object.getOwnPropertyNames(Date.prototype).forEach((func) => {
+		// Exclude methods that collide with PageTriage's Date.js external, which clobbers native Date
 		if (!['add', 'getDayName', 'getMonthName'].includes(func)) {
 			Morebits.date.prototype[func] = function (...args) {
 				return this._d[func](...Array.prototype.slice.call(args));
@@ -2098,7 +2103,7 @@
 	 * @memberof Morebits.wiki
 	 * @returns {boolean}
 	 */
-	Morebits.wiki.isPageRedirect = function wikipediaIsPageRedirect() {
+	Morebits.wiki.isPageRedirect = () => {
 		console.warn('NOTE: Morebits.wiki.isPageRedirect has been deprecated, use Morebits.isPageRedirect instead.');
 		return Morebits.isPageRedirect();
 	};
@@ -2244,14 +2249,21 @@
 		onSuccess: null,
 		onError: null,
 		parent: window,
+		// use global context if there is no parent object
 		query: null,
 		response: null,
 		responseXML: null,
+		// use `response` instead; retained for backwards compatibility
 		statelem: null,
+		// this non-standard name kept for backwards compatibility
 		statusText: null,
+		// result received from the API, normally "success" or "error"
 		errorCode: null,
+		// short text error code, if any, as documented in the MediaWiki API
 		errorText: null,
+		// full error description, if any
 		badtokenRetry: false,
+		// set to true if this on a retry attempted after a badtoken error
 		/**
 		 * Keep track of parent object for callbacks.
 		 *
@@ -2389,7 +2401,9 @@
 			titles: title,
 			rvslots: '*',
 			rvprop: 'content',
+			format: 'json',
 			smaxage: '86400',
+			// cache for 1 day
 			maxage: '86400', // cache for 1 day
 		};
 		return new Morebits.wiki.api('', query).post().then((apiobj) => {
@@ -2409,7 +2423,7 @@
 	 * for original announcement.
 	 *
 	 * @memberof Morebits.wiki.api
-	 * @param {string} [ua=morebits.js] - User agent.  The default
+	 * @param {string} [ua=Qiuwen/1.1 (morebits.js)] - User agent.  The default
 	 * value of `morebits.js` will be appended to any provided
 	 * value.
 	 */
@@ -2436,6 +2450,7 @@
 			action: 'query',
 			meta: 'tokens',
 			type: 'csrf',
+			format: 'json',
 		});
 		return tokenApi.post().then((apiobj) => apiobj.response.query.tokens.csrftoken);
 	};
@@ -2506,13 +2521,17 @@
 			editSummary: null,
 			changeTags: null,
 			testActions: null,
+			// array if any valid actions
 			callbackParameters: null,
 			statusElement: status instanceof Morebits.status ? status : new Morebits.status(status),
 			// - edit
 			pageText: null,
 			editMode: 'all',
+			// save() replaces entire contents of the page by default
 			appendText: null,
+			// can't reuse pageText for this because pageText is needed to follow a redirect
 			prependText: null,
+			// can't reuse pageText for this because pageText is needed to follow a redirect
 			newSectionText: null,
 			newSectionTitle: null,
 			createOption: null,
@@ -2607,10 +2626,12 @@
 				prop: 'info|revisions',
 				inprop: 'watched',
 				intestactions: 'edit',
+				// can be expanded
 				curtimestamp: '',
 				meta: 'tokens',
 				type: 'csrf',
 				titles: ctx.pageName,
+				format: 'json',
 				// don't need rvlimit=1 because we don't need rvstartid here and only one actual rev is returned by default
 			};
 			if (ctx.editMode === 'all') {
@@ -2708,6 +2729,7 @@
 				summary: ctx.editSummary,
 				token: canUseMwUserToken ? mw.user.tokens.get('csrfToken') : ctx.csrfToken,
 				watchlist: ctx.watchlistOption,
+				format: 'json',
 			};
 			if (ctx.changeTags) {
 				query.tags = ctx.changeTags;
@@ -3247,6 +3269,7 @@
 				rvlimit: 1,
 				rvprop: 'user|timestamp',
 				rvdir: 'newer',
+				format: 'json',
 			};
 			// Only the wikitext content model can reliably handle
 			// rvsection, others return an error when paired with the
@@ -3343,11 +3366,14 @@
 					prop: 'info',
 					meta: 'tokens',
 					type: 'patrol',
+					// as long as we're querying, might as well get a token
 					list: 'recentchanges',
+					// check if the page is unpatrolled
 					titles: ctx.pageName,
 					rcprop: 'patrolled',
 					rctitle: ctx.pageName,
 					rclimit: 1,
+					format: 'json',
 				};
 				ctx.patrolApi = new Morebits.wiki.api(wgULS('获取令牌……', '取得權杖……'), patrolQuery, fnProcessPatrol);
 				ctx.patrolApi.setParent(this);
@@ -3452,8 +3478,8 @@
 		 * more info (e.g. protection or watchlist expiry).
 		 *
 		 * Currently used for `append`, `prepend`, `newSection`, `move`,
-		 * `deletePage`, and `undeletePage`. Not used for
-		 * `protect` since it always needs to request protection status.
+		 * `deletePage`, and `undeletePage`. Not used for `protect`
+		 * since it always needs to request protection status.
 		 *
 		 * @param {string} [action=edit] - The action being undertaken, e.g.
 		 * "edit" or "delete". In practice, only "edit" or "notedit" matters.
@@ -3516,6 +3542,7 @@
 				titles: ctx.pageName,
 				prop: 'info',
 				inprop: 'watched',
+				format: 'json',
 			};
 			// Protection not checked for non-sysop moves
 			if (action !== 'move' || Morebits.userIsSysop) {
@@ -4007,6 +4034,7 @@
 				token: token,
 				reason: ctx.editSummary,
 				watchlist: ctx.watchlistOption,
+				format: 'json',
 			};
 			if (ctx.changeTags) {
 				query.tags = ctx.changeTags;
@@ -4036,6 +4064,7 @@
 		const fnProcessPatrol = function () {
 			const query = {
 				action: 'patrol',
+				format: 'json',
 			};
 			// Didn't need to load the page
 			if (ctx.rcid) {
@@ -4088,6 +4117,7 @@
 				token: token,
 				reason: ctx.editSummary,
 				watchlist: ctx.watchlistOption,
+				format: 'json',
 			};
 			if (ctx.changeTags) {
 				query.tags = ctx.changeTags;
@@ -4150,6 +4180,7 @@
 				token: token,
 				reason: ctx.editSummary,
 				watchlist: ctx.watchlistOption,
+				format: 'json',
 			};
 			if (ctx.changeTags) {
 				query.tags = ctx.changeTags;
@@ -4302,8 +4333,9 @@
 				expiry: expirys.join('|'),
 				reason: ctx.editSummary,
 				watchlist: ctx.watchlistOption,
+				format: 'json',
 			};
-			// Only shows up in logs, not page history [[phab:T259983]]
+			// Only shows up in logs, not page history
 			if (ctx.changeTags) {
 				query.tags = ctx.changeTags;
 			}
@@ -4370,12 +4402,15 @@
 				action: 'parse',
 				prop: ['text', 'modules'],
 				pst: true,
+				// PST = pre-save transform; this makes substitution work properly
 				preview: true,
 				text: wikitext,
 				title: pageTitle || pageName,
 				disablelimitreport: true,
 				disableeditsection: true,
 				uselang: mw.config.get('wgUserLanguage'),
+				// Use wgUserLanguage for preview
+				format: 'json',
 			};
 			if (sectionTitle) {
 				query.section = 'new';
@@ -4528,7 +4563,7 @@
 	 * @memberof Morebits.wikitext
 	 * @param {string} text - Wikitext to be manipulated.
 	 */
-	Morebits.wikitext.page = function mediawikiPage(text) {
+	Morebits.wikitext.page = function (text) {
 		this.text = text;
 	};
 	Morebits.wikitext.page.prototype = {
@@ -4794,7 +4829,7 @@
 	 * line, allowable values are: `status` (blue), `info` (green), `warn` (red),
 	 * or `error` (bold red).
 	 */
-	Morebits.status = function Status(text, stat, type) {
+	Morebits.status = function (text, stat, type) {
 		this.textRaw = text;
 		this.text = Morebits.createHtml(text);
 		this.type = type || 'status';
@@ -5093,7 +5128,9 @@
 			// internal counters, etc.
 			statusElement: new Morebits.status(currentAction || wgULS('执行批量操作', '執行批次操作')),
 			worker: null,
+			// function that executes for each item in pageList
 			postFinish: null,
+			// function that executes when the whole batch has been processed
 			countStarted: 0,
 			countFinished: 0,
 			countFinishedSuccess: 0,
@@ -5332,7 +5369,7 @@
 	 * @param {number} width
 	 * @param {number} height - The maximum allowable height for the content area.
 	 */
-	Morebits.simpleWindow = function SimpleWindow(width, height) {
+	Morebits.simpleWindow = function (width, height) {
 		const content = document.createElement('div');
 		this.content = content;
 		content.className = 'morebits-dialog-content';
@@ -5350,7 +5387,7 @@
 			// the 20 pixels represents adjustment for the extra height of the jQuery dialog "chrome", compared
 			// to that of the old SimpleWindow
 			height: height + 20,
-			close: (event) => {
+			close: function (event) {
 				// dialogs and their content can be destroyed once closed
 				$(event.target).dialog('destroy').remove();
 			},
