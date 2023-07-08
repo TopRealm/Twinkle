@@ -1517,7 +1517,7 @@
 					if (form['csd.reason_1']) {
 						const dbrationale = form['csd.reason_1'].value;
 						if (!dbrationale || !dbrationale.trim()) {
-							alert(wgULS('自定义理由：请指定理由。', '自訂理由：請指定理由。'));
+							mw.notify(wgULS('自定义理由：请指定理由。', '自訂理由：請指定理由。'), {type: 'warn'});
 							parameters = null;
 							return false;
 						}
@@ -1606,7 +1606,7 @@
 	Twinkle.speedy.resolveCsdValues = (e) => {
 		const values = (e.target.form ? e.target.form : e.target).getChecked('csd');
 		if (values.length === 0) {
-			alert(wgULS('请选择一个理据！', '請選擇一個理據！'));
+			mw.notify(wgULS('请选择一个理据！', '請選擇一個理據！'), {type: 'warn'});
 			return null;
 		}
 		return values;

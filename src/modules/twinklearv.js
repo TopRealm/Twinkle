@@ -495,7 +495,7 @@
 			try {
 				page = new mw.Title(title);
 			} catch (error) {
-				alert(
+				mw.notify(
 					`${
 						wgULS('“', '「') +
 						title +
@@ -504,12 +504,13 @@
 							'」不是一個有效的頁面名稱，如要使用差異連結請放在「評論」'
 						) +
 						(revid ? wgULS('，或正确输入“修订版本”', '，或正確輸入「修訂版本」') : '')
-					}。`
+					}。`,
+					{type: 'warn'}
 				);
 				return false;
 			}
 			if (page.namespace === -1) {
-				alert(
+				mw.notify(
 					`${
 						wgULS('“', '「') +
 						title +
@@ -518,7 +519,8 @@
 							'」屬於特殊頁面，如要使用差異連結請放在「評論」'
 						) +
 						(revid ? wgULS('，或正确输入“修订版本”', '，或正確輸入「修訂版本」') : '')
-					}。`
+					}。`,
+					{type: 'warn'}
 				);
 				return false;
 			}

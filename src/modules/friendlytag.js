@@ -843,18 +843,6 @@
 					],
 				},
 				{
-					key: wgULS('内容', '內容'),
-					value: [
-						{
-							tag: 'Expand language',
-							description: wgULS('可以根据其他语言版本扩展', '可以根據其他語言版本擴充'),
-						},
-						{tag: 'Missing information', description: '缺少必要的信息'},
-						{tag: 'Substub', description: wgULS('过于短小', '過於短小'), excludeMI: true},
-						{tag: 'Unencyclopedic', description: wgULS('可能不适合写入百科全书', '可能不適合寫入百科全書')},
-					],
-				},
-				{
 					key: wgULS('信息和细节', '資訊和細節'),
 					value: [
 						{
@@ -1486,24 +1474,6 @@
 					currentTag += `{{${tagName}`;
 					// fill in other parameters, based on the tag
 					switch (tagName) {
-						case 'Expand language':
-							currentTag += `|1=${params.expandLanguage}`;
-							if (params.highQualityArticle) {
-								currentTag += '|status=yes';
-							}
-							if (params.expandLanguage2) {
-								currentTag += `|2=${params.expandLanguage2}`;
-								if (params.highQualityArticle2) {
-									currentTag += '|status2=yes';
-								}
-							}
-							if (params.expandLanguage3) {
-								currentTag += `|3=${params.expandLanguage3}`;
-								if (params.highQualityArticle3) {
-									currentTag += '|status3=yes';
-								}
-							}
-							break;
 						case 'Expert needed':
 							currentTag += `|subject=${params.expert}`;
 							if (params.expert2) {
@@ -1938,7 +1908,7 @@
 					'}}、{{'
 				)}}}。`;
 				message += extra || '';
-				alert(message);
+				mw.notify(message, {type: 'warn'});
 				return true;
 			}
 		};
@@ -1947,7 +1917,7 @@
 		const checkParameter = (tag, parameter, description) => {
 			description = description || '理由';
 			if (params.tags.includes(tag) && params[parameter].trim() === '') {
-				alert(`${wgULS('您必须指定', '您必須指定')}{{${tag}}}的${description}。`);
+				mw.notify(`${wgULS('您必须指定', '您必須指定')}{{${tag}}}的${description}。`, {type: 'warn'});
 				return true;
 			}
 		};
@@ -1976,26 +1946,25 @@
 						return;
 					}
 					if (!params.mergeTarget) {
-						alert(
+						mw.notify(
 							wgULS(
 								'请指定使用于merge模板中的另一个页面标题。',
 								'請指定使用於merge模板中的另一個頁面標題。'
-							)
+							),
+							{type: 'warn'}
 						);
 						return;
 					}
 					if ((params.mergeTagOther || params.mergeReason) && params.mergeTarget.includes('|')) {
-						alert(
+						mw.notify(
 							wgULS(
 								'当前还不支持在一次合并中标记多个条目，与开启关于多个条目的讨论。请不要勾选“标记其他条目”并清空“理由”框后再提交。',
 								'目前還不支援在一次合併中標記多個條目，與開啟關於多個條目的討論。請不要勾選「標記其他條目」並清空「理由」框後再提交。'
-							)
+							),
+							{type: 'warn'}
 						);
 						return;
 					}
-				}
-				if (checkParameter('Expand language', 'expandLanguage', wgULS('语言代码', '語言代碼'))) {
-					return;
 				}
 				if (checkParameter('Missing information', 'missingInformation', wgULS('缺少的内容', '缺少的內容'))) {
 					return;
@@ -2023,13 +1992,13 @@
 			case 'redirect':
 				break;
 			default:
-				alert(`Twinkle.tag：未知模式 ${Twinkle.tag.mode}`);
+				mw.notify(`Twinkle.tag：未知模式 ${Twinkle.tag.mode}`, {type: 'warn'});
 				break;
 		}
 		// File/redirect: return if no tags selected
 		// Article: return if no tag is selected and no already present tag is deselected
 		if (params.tags.length === 0 && (Twinkle.tag.modeEn !== 'article' || params.tagsToRemove.length === 0)) {
-			alert(wgULS('必须选择至少一个标记！', '必須選擇至少一個標記！'));
+			mw.notify(wgULS('必须选择至少一个标记！', '必須選擇至少一個標記！'), {type: 'warn'});
 			return;
 		}
 		Morebits.simpleWindow.setButtonsEnabled(false);

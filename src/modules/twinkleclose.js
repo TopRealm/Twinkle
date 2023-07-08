@@ -418,7 +418,7 @@
 					break;
 				}
 				default:
-					mw.notify(`关闭存废讨论：未定义 ${code}`, { type: 'warn' });
+					mw.notify(`关闭存废讨论：未定义 ${code}`, {type: 'warn'});
 			}
 		}
 	};
@@ -458,7 +458,11 @@
 					prop: 'redirects',
 					rdlimit: 'max', // 500 is max for normal users, 5000 for bots and sysops
 				};
-				qiuwen_api = new Morebits.wiki.api('正在获取重定向', query, Twinkle.close.callbacks.deleteRedirectsMain);
+				qiuwen_api = new Morebits.wiki.api(
+					'正在获取重定向',
+					query,
+					Twinkle.close.callbacks.deleteRedirectsMain
+				);
 				qiuwen_api.params = params;
 				qiuwen_api.post();
 			}
@@ -470,7 +474,11 @@
 						action: 'query',
 						titles: pageTitle.toText(),
 					};
-					qiuwen_api = new Morebits.wiki.api('正在检查讨论页面是否存在', query, Twinkle.close.callbacks.deleteTalk);
+					qiuwen_api = new Morebits.wiki.api(
+						'正在检查讨论页面是否存在',
+						query,
+						Twinkle.close.callbacks.deleteTalk
+					);
 					qiuwen_api.params = params;
 					qiuwen_api.params.talkPage = pageTitle.toText();
 					qiuwen_api.post();
