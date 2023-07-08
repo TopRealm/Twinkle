@@ -49,7 +49,7 @@
 		});
 		form.append({
 			type: 'div',
-			style: 'margin-bottom: 0.5em',
+			style: 'margin-bottom: 0.5em; font-style: normal',
 			label: [
 				`${
 					wgULS(
@@ -85,6 +85,7 @@
 			list: 'backlinks',
 			bltitle: mw.config.get('wgPageName'),
 			bllimit: 'max',
+			// 500 is max for normal users, 5000 for bots and sysops
 			blnamespace: Twinkle.getPref('unlinkNamespaces'),
 			rawcontinue: true,
 			format: 'json',
@@ -122,9 +123,9 @@
 			mw.notify(wgULS('您必须指定取消链入的理由。', '您必須指定取消連入的理由。'), {type: 'warn'});
 			return;
 		}
-		input.backlinks = input.backlinks || [];
-		input.imageusage = input.imageusage || [];
-		const pages = Morebits.array.uniq(input.backlinks.concat(input.imageusage));
+		input.backlinks || (input.backlinks = []);
+		input.imageusage || (input.imageusage = []);
+		const pages = Morebits.array.uniq([...input.backlinks, ...input.imageusage]);
 		if (!pages.length) {
 			mw.notify(wgULS('您必须至少选择一个要取消链入的页面。', '您必須至少選擇一個要取消連入的頁面。'), {
 				type: 'warn',
@@ -194,7 +195,7 @@
 							label: wgULS('文件使用', '檔案使用'),
 						});
 						namespaces = [];
-						$.each(Twinkle.getPref('unlinkNamespaces'), (k, v) => {
+						$.each(Twinkle.getPref('unlinkNamespaces'), (_k, v) => {
 							namespaces.push(
 								v === '0' ? wgULS('（条目）', '（條目）') : mw.config.get('wgFormattedNamespaces')[v]
 							);
@@ -255,7 +256,7 @@
 						label: wgULS('链入', '連入'),
 					});
 					namespaces = [];
-					$.each(Twinkle.getPref('unlinkNamespaces'), (k, v) => {
+					$.each(Twinkle.getPref('unlinkNamespaces'), (_k, v) => {
 						namespaces.push(
 							v === '0' ? wgULS('（条目）', '（條目）') : mw.config.get('wgFormattedNamespaces')[v]
 						);
@@ -311,8 +312,12 @@
 				}
 				const result = apiobj.params.form.render();
 				apiobj.params.Window.setContent(result);
-				Morebits.quickForm.getElements(result, 'backlinks').forEach(Twinkle.generateBatchPageLinks);
-				Morebits.quickForm.getElements(result, 'imageusage').forEach(Twinkle.generateBatchPageLinks);
+				for (const link of Morebits.quickForm.getElements(result, 'backlinks')) {
+					Twinkle.generateBatchPageLinks(link);
+				}
+				for (const link of Morebits.quickForm.getElements(result, 'imageusage')) {
+					Twinkle.generateBatchPageLinks(link);
+				}
 			},
 		},
 		unlinkBacklinks: (pageobj) => {
