@@ -631,22 +631,22 @@
 					subnode.setAttribute('type', 'text');
 				} else {
 					subnode.setAttribute('type', 'number');
-					['min', 'max', 'step', 'list'].forEach((att) => {
+					for (const att of ['min', 'max', 'step', 'list']) {
 						if (data[att]) {
 							subnode.setAttribute(att, data[att]);
 						}
-					});
+					}
 				}
-				['value', 'size', 'placeholder', 'maxlength'].forEach((att) => {
+				for (const att of ['value', 'size', 'placeholder', 'maxlength']) {
 					if (data[att]) {
 						subnode.setAttribute(att, data[att]);
 					}
-				});
-				['disabled', 'required', 'readonly'].forEach((att) => {
+				}
+				for (const att of ['disabled', 'required', 'readonly']) {
 					if (data[att]) {
 						subnode.setAttribute(att, att);
 					}
-				});
+				}
 				if (data.event) {
 					subnode.addEventListener('keyup', data.event, false);
 				}
@@ -4249,7 +4249,7 @@
 			let editprot;
 			let moveprot;
 			let createprot;
-			prs.forEach((pr) => {
+			for (const pr of prs) {
 				// Filter out protection from cascading
 				if (pr.type === 'edit' && !pr.source) {
 					editprot = pr;
@@ -4258,7 +4258,7 @@
 				} else if (pr.type === 'create') {
 					createprot = pr;
 				}
-			});
+			}
 			// Fall back to current levels if not explicitly set
 			if (!ctx.protectEdit && editprot) {
 				ctx.protectEdit = {

@@ -43,10 +43,10 @@
 		} else {
 			linkPlainAfter = Morebits.htmlNode('code', Morebits.pageNameNorm);
 		}
-		[linkTextBefore, linkTextAfter, linkPlainBefore, linkPlainAfter].forEach((node) => {
+		for (const node of [linkTextBefore, linkTextAfter, linkPlainBefore, linkPlainAfter]) {
 			node.style.fontFamily = 'monospace';
 			node.style.fontStyle = 'normal';
-		});
+		}
 		form.append({
 			type: 'div',
 			style: 'margin-bottom: 0.5em; font-style: normal',

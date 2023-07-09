@@ -222,7 +222,7 @@
 					}
 				}
 				// oldid
-				histList.forEach((rev) => {
+				for (const rev of histList) {
 					// From restoreThisRevision, non-transferable
 					// If the text has been revdel'd, it gets wrapped in a span with .history-deleted,
 					// and href will be undefined (and thus oldid is NaN)
@@ -231,7 +231,7 @@
 					if (!isNaN(oldid)) {
 						rev.appendChild(Twinkle.fluff.linkBuilder.restoreThisRevisionLink(oldid, true));
 					}
-				});
+				}
 			}
 		},
 		diff: () => {
