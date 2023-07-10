@@ -218,11 +218,14 @@
 			Twinkle.defaultConfig.portletNext = 'p-search';
 			break;
 		case 'gongbi':
-			Twinkle.defaultConfig.portletArea = '#page-tools .sidebar-inner';
+			Twinkle.defaultConfig.portletArea =
+				$('#page-tools .sidebar-inner').length > 0
+					? '#page-tools .sidebar-inner'
+					: '#page-more  .sidebar-inner';
 			Twinkle.defaultConfig.portletId = 'p-twinkle';
 			Twinkle.defaultConfig.portletName = 'Twinkle';
 			Twinkle.defaultConfig.portletType = null;
-			Twinkle.defaultConfig.portletNext = 'p-userpagetools';
+			Twinkle.defaultConfig.portletNext = $('#page-tools .sidebar-inner').length > 0 ? 'page-more' : null;
 			break;
 		case 'citizen':
 			Twinkle.defaultConfig.portletArea = '#page-actions-more__card';
