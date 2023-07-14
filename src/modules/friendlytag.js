@@ -1914,8 +1914,7 @@
 		};
 		// Given a tag, ensure an associate parameter is present
 		// Maybe just sock this away in each function???
-		const checkParameter = (tag, parameter, description) => {
-			description = description || '理由';
+		const checkParameter = (tag, parameter, description = '理由') => {
 			if (params.tags.includes(tag) && params[parameter].trim() === '') {
 				mw.notify(`${wgULS('您必须指定', '您必須指定')}{{${tag}}}的${description}。`, {type: 'warn'});
 				return true;
