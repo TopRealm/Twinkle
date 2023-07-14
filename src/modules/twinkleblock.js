@@ -1116,14 +1116,6 @@
 	 *   To disable, set 'hardblock' and 'disabletalk', respectively
 	 */
 	Twinkle.block.blockPresetsInfo = {
-		anonblock: {
-			expiry: '1 week',
-			forAnonOnly: true,
-			nocreate: true,
-			nonstandard: true,
-			reason: '{{anonblock}}',
-			sig: '~~~~',
-		},
 		'blocked proxy': {
 			expiry: '2 years',
 			forAnonOnly: true,
@@ -1133,12 +1125,12 @@
 			reason: '{{blocked proxy}}',
 			sig: null,
 		},
-		'CheckUser block': {
+		checkuserblock: {
 			expiry: '1 week',
 			forAnonOnly: true,
 			nocreate: true,
 			nonstandard: true,
-			reason: '{{CheckUser block}}',
+			reason: '{{checkuserblock}}',
 			sig: '~~~~',
 		},
 		'checkuserblock-account': {
@@ -1226,7 +1218,7 @@
 			summary: wgULS('封禁通知：[[QW:骚扰|骚扰]]其他用户', '封鎖通知：[[QW:騷擾|騷擾]]其他使用者'),
 			templateName: 'uw-block',
 		},
-		'uw-npblock': {
+		'uw-vblock|np': {
 			autoblock: true,
 			nocreate: true,
 			pageParam: true,
@@ -1237,7 +1229,7 @@
 			),
 			templateName: 'uw-block',
 		},
-		'uw-pablock': {
+		'uw-attackblock': {
 			autoblock: true,
 			expiry: '1 day',
 			nocreate: true,
@@ -1245,7 +1237,7 @@
 			summary: wgULS('封禁通知：行为无礼或[[QW:NPA|人身攻击]]', '封鎖通知：行為無禮或[[QW:NPA|人身攻擊]]'),
 			templateName: 'uw-block',
 		},
-		'uw-sblock': {
+		'uw-vblock|spam': {
 			autoblock: true,
 			nocreate: true,
 			reason: wgULS('不断加入垃圾链接', '不斷加入垃圾連結'),
@@ -1270,25 +1262,20 @@
 			summary: wgULS('封禁通知：滥用[[QW:SOCK|多个账户]]', '封鎖通知：濫用[[QW:SOCK|多個帳號]]'),
 			templateName: 'uw-block',
 		},
-		'uw-softerblock': {
-			expiry: 'infinity',
-			forRegisteredOnly: true,
-			reason: `{{uw-softerblock}}<!-- ${wgULS('宣传性用户名（软封禁）', '宣傳性使用者名稱（軟封鎖）')} -->`,
-			summary: wgULS(
-				'封禁通知：您的[[QW:U|用户名]]暗示您的账户代表一个团体、组织或网站',
-				'封鎖通知：您的[[QW:U|使用者名稱]]暗示您的帳號代表一個團體、組織或網站'
-			),
-		},
-		'uw-spamublock': {
+		'uw-socialmediablock': {
 			autoblock: true,
-			expiry: 'infinity',
+			expiry: '1 week',
 			forRegisteredOnly: true,
 			nocreate: true,
-			reason: `{{uw-spamublock}}<!-- ${wgULS('宣传性用户名或宣传性编辑', '宣傳性使用者名稱、宣傳性編輯')} -->`,
-			summary: wgULS(
-				'封禁通知：仅[[QW:NOT#AD|广告宣传]]，同时您的用户名违反[[QW:U|用户名方针]]',
-				'封鎖通知：僅[[QW:NOT#AD|廣告宣傳]]，同時您的使用者名稱違反[[QW:U|使用者名稱方針]]'
+			reason: wgULS(
+				'[[QW:NOT#MYSPACE|将求闻百科用作博客或社交网站]]',
+				'[[QW:NOT#MYSPACE|將求聞百科用作部落格或社交網站]]'
 			),
+			summary: wgULS(
+				'封禁通知：[[QW:NOT#MYSPACE|将求闻百科用作博客或社交网站]]',
+				'封鎖通知：[[QW:NOT#MYSPACE|將求聞百科用作部落格或社交網站]]'
+			),
+			templateName: 'uw-block',
 		},
 		'uw-ublock': {
 			expiry: 'infinity',
@@ -1299,10 +1286,21 @@
 				'封鎖通知：您的使用者名稱違反[[QW:U|使用者名稱方針]]'
 			),
 		},
-		'uw-ublock-double': {
+		'uw-ublock-spam': {
+			autoblock: true,
 			expiry: 'infinity',
 			forRegisteredOnly: true,
-			reason: `{{uw-ublock-double}}<!-- ${wgULS(
+			nocreate: true,
+			reason: `{{uw-ublock-spam}}<!-- ${wgULS('宣传性用户名或宣传性编辑', '宣傳性使用者名稱、宣傳性編輯')} -->`,
+			summary: wgULS(
+				'封禁通知：仅[[QW:NOT#AD|广告宣传]]，同时您的用户名违反[[QW:U|用户名方针]]',
+				'封鎖通知：僅[[QW:NOT#AD|廣告宣傳]]，同時您的使用者名稱違反[[QW:U|使用者名稱方針]]'
+			),
+		},
+		'uw-ublock-suggestive': {
+			expiry: 'infinity',
+			forRegisteredOnly: true,
+			reason: `{{uw-ublock-suggestive}}<!-- ${wgULS(
 				'用户名与其他用户相似（软封禁）',
 				'使用者名稱與其他使用者相似（軟封鎖）'
 			)} -->`,
@@ -1311,7 +1309,7 @@
 				'封鎖通知：您的[[QW:U|使用者名稱]]與其他求聞百科使用者過於相似'
 			),
 		},
-		'uw-ucblock': {
+		'uw-vblock|uc': {
 			autoblock: true,
 			expiry: '1 day',
 			nocreate: true,
@@ -1323,52 +1321,6 @@
 			),
 			templateName: 'uw-block',
 		},
-		'uw-ublock-wellknown': {
-			expiry: 'infinity',
-			forRegisteredOnly: true,
-			reason: `{{uw-ublock-wellknown}}<!-- ${wgULS(
-				'用户名与知名人物相似（软封禁）',
-				'使用者名稱與知名人物相似（軟封鎖）'
-			)} -->`,
-			summary: wgULS(
-				'封禁通知：您的[[QW:U|用户名]]与知名人物过于相似',
-				'封鎖通知：您的[[QW:U|使用者名稱]]與知名人物過於相似'
-			),
-		},
-		'uw-uhblock-double': {
-			autoblock: true,
-			expiry: 'infinity',
-			forRegisteredOnly: true,
-			nocreate: true,
-			reason: `{{uw-uhblock-double}}<!-- ${wgULS(
-				'用户名试图冒充其他用户（硬封禁）',
-				'使用者名稱試圖冒充其他使用者（硬封鎖）'
-			)} -->`,
-			summary: wgULS(
-				'封禁通知：您的[[QW:U|用户名]]试图冒充其他求闻百科用户',
-				'封鎖通知：您的[[QW:U|使用者名稱]]試圖冒充其他求聞百科使用者'
-			),
-		},
-		'uw-ublock|误导': {
-			expiry: 'infinity',
-			reason: wgULS('{{uw-ublock|误导}}', '{{uw-ublock|誤導}}'),
-			summary: wgULS('封禁通知：误导性用户名', '封鎖通知：誤導性使用者名稱'),
-		},
-		'uw-ublock|宣传': {
-			expiry: 'infinity',
-			reason: wgULS('{{uw-ublock|宣传}}', '{{uw-ublock|宣傳}}'),
-			summary: wgULS('封禁通知：宣传性用户名', '封鎖通知：宣傳性使用者名稱'),
-		},
-		'uw-ublock|攻击|或侮辱性': {
-			expiry: 'infinity',
-			reason: wgULS('{{uw-ublock|攻击|或侮辱性}}', '{{uw-ublock|攻擊|或侮辱性}}'),
-			summary: wgULS('封禁通知：攻击或侮辱性用户名', '封鎖通知：攻擊或侮辱性使用者名稱'),
-		},
-		'uw-ublock|混淆': {
-			expiry: 'infinity',
-			reason: '{{uw-ublock|混淆}}',
-			summary: wgULS('封禁通知：令人混淆的用户名', '封鎖通知：令人混淆的使用者名稱'),
-		},
 		'uw-vblock': {
 			autoblock: true,
 			expiry: '1 day',
@@ -1377,7 +1329,7 @@
 			reason: wgULS('[[QW:VAN|破坏]]', '[[QW:VAN|破壞]]'),
 			summary: wgULS('封禁通知：[[QW:VAN|破坏]]', '封鎖通知：[[QW:VAN|破壞]]'),
 		},
-		'uw-voablock': {
+		'uw-vblock|voa': {
 			autoblock: true,
 			expiry: 'infinity',
 			forRegisteredOnly: true,
@@ -1387,6 +1339,64 @@
 			summary: wgULS('封禁通知：您的账户仅用于[[QW:VAN|破坏]]', '封鎖通知：您的帳號僅用於[[QW:VAN|破壞]]'),
 			templateName: 'uw-blockindef',
 		},
+		'uw-ublock-suggestive|相似': {
+			expiry: 'infinity',
+			forRegisteredOnly: true,
+			reason: `{{uw-ublock-suggestive}}<!-- ${wgULS(
+				'用户名与其他用户相似（软封禁）',
+				'使用者名稱與其他使用者的相似（軟封鎖）'
+			)} -->`,
+			summary: wgULS(
+				'封禁通知：您的[[QW:U|用户名]]与其他用户过于相似',
+				'封鎖通知：您的[[QW:U|使用者名稱]]與其他使用者過於相似'
+			),
+		},
+		'uw-ublock-suggestive|知名人物': {
+			expiry: 'infinity',
+			forRegisteredOnly: true,
+			reason: `{{uw-ublock-suggestive}}<!-- ${wgULS(
+				'用户名与知名人物相似（软封禁）',
+				'使用者名稱與知名人物相似（軟封鎖）'
+			)} -->`,
+			summary: wgULS(
+				'封禁通知：您的[[QW:U|用户名]]与知名人物过于相似',
+				'封鎖通知：您的[[QW:U|使用者名稱]]與知名人物過於相似'
+			),
+		},
+		'uw-ublock-suggestive|冒充': {
+			autoblock: true,
+			expiry: 'infinity',
+			forRegisteredOnly: true,
+			nocreate: true,
+			reason: `{{uw-ublock-suggestive}}<!-- ${wgULS(
+				'用户名试图冒充其他用户（硬封禁）',
+				'使用者名稱試圖冒充其他使用者（硬封鎖）'
+			)} -->`,
+			summary: wgULS(
+				'封禁通知：您的[[QW:U|用户名]]试图冒充其他求闻百科用户',
+				'封鎖通知：您的[[QW:U|使用者名稱]]試圖冒充其他求聞百科使用者'
+			),
+		},
+		'uw-ublock-suggestive|混淆': {
+			expiry: 'infinity',
+			reason: '{{uw-ublock-suggestive|混淆}}',
+			summary: wgULS('封禁通知：令人混淆的用户名', '封鎖通知：令人混淆的使用者名稱'),
+		},
+		'uw-ublock-suggestive|误导': {
+			expiry: 'infinity',
+			reason: wgULS('{{uw-ublock-suggestive|误导}}', '{{uw-ublock|誤導}}'),
+			summary: wgULS('封禁通知：误导性用户名', '封鎖通知：誤導性使用者名稱'),
+		},
+		'uw-ublock-spam|宣传': {
+			expiry: 'infinity',
+			reason: wgULS('{{uw-ublock-spam|宣传}}', '{{uw-ublock|宣傳}}'),
+			summary: wgULS('封禁通知：宣传性用户名', '封鎖通知：宣傳性使用者名稱'),
+		},
+		'uw-ublock|攻击|或侮辱性': {
+			expiry: 'infinity',
+			reason: wgULS('{{uw-ublock|攻击|或侮辱性}}', '{{uw-ublock|攻擊|或侮辱性}}'),
+			summary: wgULS('封禁通知：攻击或侮辱性用户名', '封鎖通知：攻擊或侮辱性使用者名稱'),
+		},
 		'Bot block message': {
 			expiry: 'infinity',
 			forRegisteredOnly: true,
@@ -1394,7 +1404,7 @@
 			summary: wgULS('封禁通知：机器人故障', '封鎖通知：機器人故障'),
 			sig: '~~~~',
 		},
-		'point-block': {
+		'uw-block|point': {
 			autoblock: true,
 			expiry: '1 day',
 			nocreate: true,
@@ -1406,7 +1416,7 @@
 			),
 			templateName: 'uw-block',
 		},
-		'game-block': {
+		'uw-block|game': {
 			autoblock: true,
 			expiry: '1 day',
 			nocreate: true,
@@ -1415,7 +1425,7 @@
 			summary: wgULS('封禁通知：[[QW:GAME|打制度擦边球]]', '封鎖通知：[[QW:GAME|打制度擦邊球]]'),
 			templateName: 'uw-block',
 		},
-		'sock-contribs-reg': {
+		'uw-sockblock|contribs': {
 			autoblock: true,
 			expiry: 'infinity',
 			forRegisteredOnly: true,
@@ -1428,7 +1438,7 @@
 			summary: wgULS('封禁通知：确认为[[QW:SOCK|傀儡]]或真人傀儡', '封鎖通知：確認為[[QW:SOCK|傀儡]]或真人傀儡'),
 			templateName: 'uw-blockindef',
 		},
-		'sock-cu-reg': {
+		'uw-sockblock|cu': {
 			autoblock: true,
 			expiry: 'infinity',
 			forRegisteredOnly: true,
@@ -1511,11 +1521,11 @@
 				},
 				{
 					label: wgULS('纯粹破坏', '純粹破壞'),
-					value: 'uw-voablock',
+					value: 'uw-vblock|voa',
 				},
 				{
 					label: wgULS('不断加入垃圾链接', '不斷加入垃圾連結'),
-					value: 'uw-sblock',
+					value: 'uw-vblock|spam',
 				},
 				{
 					label: wgULS('散发广告或宣传', '散發廣告或宣傳'),
@@ -1531,7 +1541,7 @@
 				},
 				{
 					label: wgULS('无礼的行为或人身攻击', '無禮的行為或人身攻擊'),
-					value: 'uw-pablock',
+					value: 'uw-attackblock',
 				},
 				{
 					label: wgULS('骚扰用户', '騷擾使用者'),
@@ -1539,34 +1549,34 @@
 				},
 				{
 					label: wgULS('为了阐释观点而扰乱求闻百科', '為了闡釋觀點而擾亂求聞百科'),
-					value: 'point-block',
+					value: 'uw-block|point',
 				},
 				{
 					label: wgULS('打制度擦边球', '打制度擦邊球'),
-					value: 'game-block',
-				},
-				{
-					label: wgULS(
-						'确认为傀儡或真人傀儡 - 根据用户贡献确定',
-						'確認為傀儡或真人傀儡 - 根據使用者貢獻確定'
-					),
-					value: 'sock-contribs-reg',
-				},
-				{
-					label: wgULS('确认为傀儡或真人傀儡 - 用户查核确认', '確認為傀儡或真人傀儡 - 使用者查核確認'),
-					value: 'sock-cu-reg',
+					value: 'uw-block|game',
 				},
 				{
 					label: wgULS('滥用多个账户', '濫用多個帳號'),
 					value: 'uw-sockblock',
 				},
 				{
+					label: wgULS(
+						'确认为傀儡或真人傀儡 - 根据用户贡献确定',
+						'確認為傀儡或真人傀儡 - 根據使用者貢獻確定'
+					),
+					value: 'uw-sockblock|contribs',
+				},
+				{
+					label: wgULS('确认为傀儡或真人傀儡 - 用户查核确认', '確認為傀儡或真人傀儡 - 使用者查核確認'),
+					value: 'uw-sockblock|cu',
+				},
+				{
 					label: wgULS('屡次增加没有可靠来源的资料', '屢次增加沒有可靠來源的資料'),
-					value: 'uw-ucblock',
+					value: 'uw-vblock|uc',
 				},
 				{
 					label: wgULS('在条目中增加无意义文字', '在條目中增加無意義文字'),
-					value: 'uw-npblock',
+					value: 'uw-vblock|np',
 				},
 				{
 					label: wgULS('无故删除内容', '無故刪除內容'),
@@ -1595,44 +1605,40 @@
 			label: wgULS('用户名封禁', '使用者名稱封鎖'),
 			list: [
 				{
-					label: wgULS('宣传性用户名或宣传性编辑', '宣傳性使用者名稱、宣傳性編輯'),
-					value: 'uw-spamublock',
-				},
-				{
-					label: wgULS('宣传性用户名（软封禁）', '宣傳性使用者名稱（軟封鎖）'),
-					value: 'uw-softerblock',
-				},
-				{
-					label: wgULS('用户名与其他用户相似（软封禁）', '使用者名稱與其他使用者相似（軟封鎖）'),
-					value: 'uw-ublock-double',
-				},
-				{
 					label: wgULS('不当用户名（软封禁）', '不當使用者名稱（軟封鎖）'),
 					value: 'uw-ublock',
 				},
 				{
+					label: wgULS('宣传性用户名（软封禁）', '宣傳性使用者名稱（軟封鎖）'),
+					value: 'uw-ublock-spam',
+				},
+				{
+					label: wgULS('用户名与其他用户相似（软封禁）', '使用者名稱與其他使用者相似（軟封鎖）'),
+					value: 'uw-ublock-suggestive|相似',
+				},
+				{
 					label: wgULS('用户名试图冒充其他用户（硬封禁）', '使用者名稱試圖冒充其他使用者（硬封鎖）'),
-					value: 'uw-uhblock-double',
+					value: 'uw-ublock-suggestive|冒充',
 				},
 				{
 					label: wgULS('用户名与知名人物相似（软封禁）', '使用者名稱與知名人物相似（軟封鎖）'),
-					value: 'uw-ublock-wellknown',
+					value: 'uw-ublock-suggestive|知名人物',
+				},
+				{
+					label: wgULS('混淆性用户名', '混淆性使用者名稱'),
+					value: 'uw-ublock-suggestive|混淆',
 				},
 				{
 					label: wgULS('误导性用户名', '誤導性使用者名稱'),
-					value: 'uw-ublock|误导',
+					value: 'uw-ublock-suggestive|误导',
 				},
 				{
 					label: wgULS('宣传性用户名', '宣傳性使用者名稱'),
-					value: 'uw-ublock|宣传',
+					value: 'uw-ublock-spam|宣传',
 				},
 				{
 					label: wgULS('攻击性用户名', '攻擊性使用者名稱'),
 					value: 'uw-ublock|攻击|或侮辱性',
-				},
-				{
-					label: wgULS('混淆性用户名', '混淆性使用者名稱'),
-					value: 'uw-ublock|混淆',
 				},
 			],
 		},
@@ -1660,8 +1666,8 @@
 					forAnonOnly: true,
 				},
 				{
-					label: 'CheckUser block',
-					value: 'CheckUser block',
+					label: 'checkuserblock',
+					value: 'checkuserblock',
 					forAnonOnly: true,
 				},
 				{
