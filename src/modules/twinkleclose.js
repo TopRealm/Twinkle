@@ -9,7 +9,7 @@
 	Twinkle.close = () => {
 		if (
 			Twinkle.getPref('XfdClose') === 'hide' ||
-			!/^Qiuwen([_ ]talk)?:存废讨论\/记录\/\d+\/\d+\/\d+$/.test(mw.config.get('wgPageName'))
+			!/^Qiuwen([_ ]talk)?:存废讨论\/记录(?:\/\d+){3}$/.test(mw.config.get('wgPageName'))
 		) {
 			return;
 		}
@@ -20,27 +20,27 @@
 		});
 	};
 	Twinkle.close.addLinks = () => {
-		let prevH2Section = -1;
+		const spanTag = (color, content) => {
+			const span = document.createElement('span');
+			span.style.color = color;
+			span.appendChild(document.createTextNode(content));
+			return span;
+		};
 		$(
 			'h1:has(.mw-headline),h2:has(.mw-headline),h3:has(.mw-headline),h4:has(.mw-headline),h5:has(.mw-headline),h6:has(.mw-headline)',
 			'#bodyContent'
-		).each((index, current) => {
-			current.setAttribute('data-section', index + 1);
-			if (current.nodeName === 'H2') {
-				prevH2Section = index + 1;
-			} else {
-				current.setAttribute('data-parent-section', prevH2Section);
-			}
+		).each((index, element) => {
+			element.dataset.section = index + 1;
 		});
 		const selector = ':has(.mw-headline a:only-of-type):not(:has(+ div.NavFrame))';
-		let titles; // really needs to work on
-		if ($('.ext-discussiontools-init-section').length > 0) {
-			// Handle discussion tools
-			titles = $('#bodyContent').find(`.mw-heading2${selector}:not(:has(+ p + h3)) > h2, h3${selector}`);
-		} else {
-			titles = $('#bodyContent').find(`h2${selector}:not(:has(+ p + h3)), h3${selector}`);
-		}
-		titles.each((key, current) => {
+		const titles = $('#bodyContent').find(`h2${selector}:not(:has(+ p + h3)), h3${selector}`); // really needs to work on
+		const delNode = document.createElement('strong');
+		const delLink = document.createElement('a');
+		delLink.appendChild(spanTag('Black', '['));
+		delLink.appendChild(spanTag('Red', wgULS('关闭讨论', '關閉討論')));
+		delLink.appendChild(spanTag('Black', ']'));
+		delNode.appendChild(delLink);
+		titles.each((_key, current) => {
 			const headlinehref = $(current).find('.mw-headline a').attr('href');
 			if (headlinehref === undefined) {
 				return;
@@ -60,22 +60,16 @@
 			title = decodeURIComponent(title);
 			title = title.replace(/_/g, ' '); // Normalize for using in interface and summary
 			const pagenotexist = $(current).find('.mw-headline a').hasClass('new');
-			const section = current.getAttribute('data-section');
-			const parentSection = current.getAttribute('data-parent-section') || -1;
-			const node = current.getElementsByClassName('mw-editsection')[0];
-			const delDivider = document.createElement('span');
-			delDivider.appendChild(document.createTextNode(' | '));
-			node.insertBefore(delDivider, node.childNodes[1]);
-			const delLink = document.createElement('a');
-			delLink.className = 'twinkle-close-button';
-			delLink.href = '#';
-			delLink.setAttribute('data-section', section);
-			delLink.innerText = wgULS('关闭讨论', '關閉討論');
-			$(delLink).on('click', () => {
-				Twinkle.close.callback(title, section, parentSection, pagenotexist);
+			const section = current.dataset.section;
+			const node = current.querySelectorAll('.mw-headline')[0];
+			node.appendChild(document.createTextNode(' '));
+			const tmpNode = delNode.cloneNode(true);
+			tmpNode.firstChild.href = `#${section}`;
+			$(tmpNode.firstChild).on('click', () => {
+				Twinkle.close.callback(title, section, pagenotexist);
 				return false;
 			});
-			node.insertBefore(delLink, node.childNodes[1]);
+			node.appendChild(tmpNode);
 		});
 	};
 	// Keep this synchronized with {{delh}}
@@ -208,12 +202,12 @@
 			},
 		},
 	];
-	Twinkle.close.callback = (title, section, parentSection, noop) => {
+	Twinkle.close.callback = (title, section, noop) => {
 		const Window = new Morebits.simpleWindow(410, 200);
 		Window.setTitle(`关闭存废讨论 \u00B7 ${title}`);
 		Window.setScriptName('Twinkle');
-		Window.addFooterLink(wgULS('存废讨论设置', '存廢討論設定'), 'H:TW/PREF#close');
-		Window.addFooterLink(wgULS('Twinkle帮助', 'Twinkle說明'), 'H:TW/DOC#close');
+		Window.addFooterLink('存废讨论设置', 'H:TW/PREF#关闭存废讨论');
+		Window.addFooterLink('Twinkle帮助', 'H:TW/DOC#关闭存废讨论');
 		const form = new Morebits.quickForm(Twinkle.close.callback.evaluate);
 		form.append({
 			type: 'select',
@@ -278,7 +272,9 @@
 				},
 			],
 		});
-		form.append({type: 'submit'});
+		form.append({
+			type: 'submit',
+		});
 		const result = form.render();
 		Window.setContent(result);
 		Window.display();
@@ -286,7 +282,6 @@
 		const resultData = {
 			title: title,
 			section: parseInt(section),
-			parentSection: parseInt(parentSection),
 			noop: noop,
 		};
 		$(result).data('resultData', resultData);
@@ -301,7 +296,6 @@
 					selected: itemProperties.selected,
 					disabled:
 						(Twinkle.getPref('XfdClose') !== 'all' && itemProperties.adminonly) || itemProperties.disabled,
-					hidden: itemProperties.hidden,
 				});
 				const elemRendered = container.appendChild(elem.render());
 				$(elemRendered).data('messageData', itemProperties);
@@ -317,9 +311,9 @@
 			// create the options
 			createEntries(group.value, optgroup);
 		});
-		const evt = document.createEvent('Event');
-		evt.initEvent('change', true, true);
-		result.sub_group.dispatchEvent(evt);
+		const event = document.createEvent('Event');
+		event.initEvent('change', true, true);
+		result.sub_group.dispatchEvent(event);
 	};
 	Twinkle.close.callback.change_operation = (e) => {
 		const noop = e.target.checked;
@@ -466,7 +460,7 @@
 				qiuwen_api.params = params;
 				qiuwen_api.post();
 			}
-			if (params.talkpage) {
+			if (params.talkPage) {
 				const pageTitle = mw.Title.newFromText(params.title);
 				if (pageTitle && pageTitle.namespace % 2 === 0 && pageTitle.namespace !== 2) {
 					pageTitle.namespace++; // now pageTitle is the talk page title!
@@ -480,7 +474,7 @@
 						Twinkle.close.callbacks.deleteTalk
 					);
 					qiuwen_api.params = params;
-					qiuwen_api.params.talkPage = pageTitle.toText();
+					qiuwen_api.apiobj.params.talkPage = pageTitle.toText();
 					qiuwen_api.post();
 				}
 			}
@@ -490,11 +484,9 @@
 			const xml = apiobj.responseXML;
 			const pages = $(xml)
 				.find('rd')
-				.map(function () {
-					return $(this).attr('title');
-				})
+				.map((_index, element) => $(element).attr('title'))
 				.get();
-			if (!pages.length) {
+			if (pages.length === 0) {
 				return;
 			}
 			const redirectDeleter = new Morebits.batchOperation(
@@ -565,11 +557,11 @@
 			newtext = newtext.replace(/\{\{([rsaiftcmv]fd)(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/gi, '');
 			if (params.code !== 'tk') {
 				newtext = newtext.replace(
-					/\{\{(notability|fame|mair|知名度|重要性|显著性|顯著性|知名度不足|人物重要性|重要性不足|notable|关注度|关注度不足|關注度|關注度不足|重要|重要度)(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\n*/gi,
+					/{{(notability|fame|mair|知名度|重要性|显著性|顯著性|知名度不足|人物重要性|重要性不足|notable|关注度|关注度不足|關注度|關注度不足|重要|重要度)(\|(?:{{[^{}]*}}|[^{}])*)?}}\n*/gi,
 					''
 				);
 				newtext = newtext.replace(
-					/\{\{(substub|小小作品|cod|小小條目|小小条目)(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\n*/gi,
+					/{{(substub|小小作品|cod|小小條目|小小条目)(\|(?:{{[^{}]*}}|[^{}])*)?}}\n*/gi,
 					''
 				);
 			}
@@ -646,8 +638,8 @@
 		},
 		disableLink: (pageobj) => {
 			const params = pageobj.getCallbackParameters();
-			$(`a.twinkle-close-button[data-section=${params.section}]`).addClass('twinkle-close-button-disabled');
+			$(`strong a[href=#${params.section}] span`).css('color', '#808080');
 		},
 	};
 	Twinkle.addInitCallback(Twinkle.close, 'close');
-})(jQuery);
+})($);
