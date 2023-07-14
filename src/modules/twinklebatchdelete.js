@@ -697,9 +697,7 @@
 			const xml = apiobj.responseXML;
 			const pages = $(xml)
 				.find('rd')
-				.map(function () {
-					return $(this).attr('title');
-				})
+				.map((_index, element) => $(element).attr('title'))
 				.get();
 			if (!pages.length) {
 				return;
@@ -745,9 +743,7 @@
 			const xml = apiobj.responseXML;
 			const pages = $(xml)
 				.find('bl')
-				.map(function () {
-					return $(this).attr('title');
-				})
+				.map((_index, element) => $(element).attr('title'))
 				.get();
 			if (!pages.length) {
 				return;
@@ -802,9 +798,7 @@
 			const xml = apiobj.responseXML;
 			const pages = $(xml)
 				.find('iu')
-				.map(function () {
-					return $(this).attr('title');
-				})
+				.map((_index, element) => $(element).attr('title'))
 				.get();
 			if (!pages.length) {
 				return;
