@@ -67,6 +67,7 @@
 		$(previewlink).on('click', () => {
 			Twinkle.talkback.preview(result); // |result| is defined below
 		});
+
 		previewlink.style.cursor = 'pointer';
 		previewlink.textContent = wgULS('预览', '預覽');
 		form.append({
@@ -396,6 +397,7 @@
 		const noticetext = Twinkle.talkback.getNoticeWikitext(tbtarget, page, section, message)[0];
 		form.previewer.beginRender(noticetext, `User_talk:${mw.config.get('wgRelevantUserName')}`); // Force wikitext/correct username
 	};
+
 	Twinkle.talkback.getNoticeWikitext = (tbtarget, page, section, message) => {
 		let text;
 		let title;

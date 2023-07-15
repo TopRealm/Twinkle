@@ -25,7 +25,9 @@
 	};
 	Twinkle.arv.callback = (uid, isIP) => {
 		if (uid === mw.config.get('wgUserName')) {
-			mw.notify(wgULS('你不想报告你自己，对吧？', '你不想報告你自己，對吧？'), {type: 'warn'});
+			mw.notify(wgULS('你不想报告你自己，对吧？', '你不想報告你自己，對吧？'), {
+				type: 'warn',
+			});
 			return;
 		}
 		const Window = new Morebits.simpleWindow(600, 500);
@@ -110,6 +112,7 @@
 				if (block.partial) {
 					$('#twinkle-arv-blockwarning').css('color', 'black'); // Less severe
 				}
+
 				$('#twinkle-arv-blockwarning').text(message);
 			}
 		}).post();
@@ -118,7 +121,12 @@
 		evt.initEvent('change', true, true);
 		result.category.dispatchEvent(evt);
 	};
-	Twinkle.arv.lta_list = [{value: '', label: wgULS('请选择', '請選擇')}];
+	Twinkle.arv.lta_list = [
+		{
+			value: '',
+			label: wgULS('请选择', '請選擇'),
+		},
+	];
 	Twinkle.arv.callback.pick_lta = (e) => {
 		e.target.form.sockmaster.value = e.target.value;
 		Twinkle.arv.callback.spi_notice(e.target.form, e.target.value);
@@ -250,8 +258,16 @@
 					name: 'reason',
 					label: wgULS('评论：', '評論：'),
 				});
-				work_area.append({type: 'div', id: 'arvpreview', label: [previewlink]});
-				work_area.append({type: 'div', id: 'twinklearv-previewbox', style: 'display: none'});
+				work_area.append({
+					type: 'div',
+					id: 'arvpreview',
+					label: [previewlink],
+				});
+				work_area.append({
+					type: 'div',
+					id: 'twinklearv-previewbox',
+					style: 'display: none',
+				});
 				work_area = work_area.render();
 				old_area.parentNode.replaceChild(work_area, old_area);
 				break;
@@ -275,8 +291,16 @@
 					name: 'reason',
 					label: wgULS('评论：', '評論：'),
 				});
-				work_area.append({type: 'div', id: 'arvpreview', label: [previewlink]});
-				work_area.append({type: 'div', id: 'twinklearv-previewbox', style: 'display: none'});
+				work_area.append({
+					type: 'div',
+					id: 'arvpreview',
+					label: [previewlink],
+				});
+				work_area.append({
+					type: 'div',
+					id: 'twinklearv-previewbox',
+					style: 'display: none',
+				});
 				work_area = work_area.render();
 				old_area.parentNode.replaceChild(work_area, old_area);
 				break;
@@ -303,7 +327,7 @@
 							value: wgULS('误导性', '誤導性'),
 							tooltip: wgULS(
 								'误导性用户名隐含着与贡献者相关或误导他人的事情。例如︰不实观点、暗示账户拥有特定权限或暗示该账户并非由一人拥有而是由一个组群、一个项目或一个集体运作。',
-								'誤導性使用者名稱隱含著與貢獻者相關或誤導他人的事情。例如︰不實觀點、暗示帳戶擁有特定權限或暗示該帳戶並非由一人擁有而是由一個群組、一個計畫或一個集體運作。'
+								'誤導性使用者名稱隱含著與貢獻者相關或誤導他人的事情。例如︰不實觀點、暗示賬號擁有特定權限或暗示該賬號並非由一人擁有而是由一個群組、一個計畫或一個集體運作。'
 							),
 						},
 						{
@@ -318,8 +342,8 @@
 							label: wgULS('暗示并非由一人拥有', '暗示並非由一人擁有'),
 							value: 'shared',
 							tooltip: wgULS(
-								'每个维基账户只可以代表个人（容许一些例外情况），所有与他人分享账户的行为（包括分享账户密码）均被禁止。',
-								'每個維基帳戶只可以代表個人（容許一些例外情況），所有與他人分享帳戶的行為（包括分享帳戶密碼）均被禁止。'
+								'每个账户只可以代表个人（容许一些例外情况），所有与他人分享账户的行为（包括分享账户密码）均被禁止。',
+								'每個賬號只可以代表個人（容許一些例外情況），所有與他人分享賬號的行為（包括分享賬號密碼）均被禁止。'
 							),
 						},
 						{
@@ -363,8 +387,16 @@
 					name: 'reason',
 					label: wgULS('评论：', '評論：'),
 				});
-				work_area.append({type: 'div', id: 'arvpreview', label: [previewlink]});
-				work_area.append({type: 'div', id: 'twinklearv-previewbox', style: 'display: none'});
+				work_area.append({
+					type: 'div',
+					id: 'arvpreview',
+					label: [previewlink],
+				});
+				work_area.append({
+					type: 'div',
+					id: 'twinklearv-previewbox',
+					style: 'display: none',
+				});
 				work_area = work_area.render();
 				old_area.parentNode.replaceChild(work_area, old_area);
 				break;
@@ -398,7 +430,11 @@
 					value: root.uid.value,
 					event: Twinkle.arv.callback.sockmaster_changed,
 				});
-				work_area.append({type: 'div', id: 'twinklearv-spinoticebox', style: 'display: none'});
+				work_area.append({
+					type: 'div',
+					id: 'twinklearv-spinoticebox',
+					style: 'display: none',
+				});
 				work_area.append({
 					type: 'dyninput',
 					name: 'sockpuppet',
@@ -430,8 +466,16 @@
 						},
 					],
 				});
-				work_area.append({type: 'div', id: 'arvpreview', label: [previewlink]});
-				work_area.append({type: 'div', id: 'twinklearv-previewbox', style: 'display: none'});
+				work_area.append({
+					type: 'div',
+					id: 'arvpreview',
+					label: [previewlink],
+				});
+				work_area.append({
+					type: 'div',
+					id: 'twinklearv-previewbox',
+					style: 'display: none',
+				});
 				work_area.append({
 					type: 'div',
 					label: [
@@ -488,7 +532,9 @@
 		const uid = input.uid;
 		const checkTitle = (title, revid) => {
 			if (/https?:\/\//.test(title)) {
-				mw.notify(wgULS('页面名称不能使用网址。', '頁面名稱不能使用網址。'), {type: 'warn'});
+				mw.notify(wgULS('页面名称不能使用网址。', '頁面名稱不能使用網址。'), {
+					type: 'warn',
+				});
 				return false;
 			}
 			let page;
@@ -505,7 +551,9 @@
 						) +
 						(revid ? wgULS('，或正确输入“修订版本”', '，或正確輸入「修訂版本」') : '')
 					}。`,
-					{type: 'warn'}
+					{
+						type: 'warn',
+					}
 				);
 				return false;
 			}
@@ -520,7 +568,9 @@
 						) +
 						(revid ? wgULS('，或正确输入“修订版本”', '，或正確輸入「修訂版本」') : '')
 					}。`,
-					{type: 'warn'}
+					{
+						type: 'warn',
+					}
 				);
 				return false;
 			}
@@ -533,7 +583,9 @@
 			/* falls through */
 			default: {
 				if (!input.arvtype.length && input.reason === '') {
-					mw.notify(wgULS('您必须指定理由', '您必須指定理由'), {type: 'warn'});
+					mw.notify(wgULS('您必须指定理由', '您必須指定理由'), {
+						type: 'warn',
+					});
 					return;
 				}
 				reason += `=== ${input.hidename ? wgULS('已隐藏用户名', '已隱藏使用者名稱') : uid} ===\n`;
@@ -591,7 +643,9 @@
 			// Report 3RR
 			case 'ewip': {
 				if (input.reason === '') {
-					mw.notify(wgULS('您必须指定理由', '您必須指定理由'), {type: 'warn'});
+					mw.notify(wgULS('您必须指定理由', '您必須指定理由'), {
+						type: 'warn',
+					});
 					return;
 				}
 				reason += `=== ${uid} ===\n`;
@@ -667,14 +721,18 @@
 			// QW:SPI
 			case 'spi': {
 				if (!input.reason) {
-					mw.notify(wgULS('请输入证据。', '請輸入證據。'), {type: 'warn'});
+					mw.notify(wgULS('请输入证据。', '請輸入證據。'), {
+						type: 'warn',
+					});
 					return;
 				}
 				const sockpuppets = Morebits.array.uniq(
 					$.map($('input:text[name=sockpuppet]', form), (o) => $(o).val().trim() || null)
 				);
 				if (!sockpuppets[0]) {
-					mw.notify(wgULS('您没有指定任何傀儡。', '您沒有指定任何傀儡。'), {type: 'warn'});
+					mw.notify(wgULS('您没有指定任何傀儡。', '您沒有指定任何傀儡。'), {
+						type: 'warn',
+					});
 					return;
 				}
 				comment += '{{subst:SPI report|';

@@ -87,7 +87,10 @@
 						style: isProtected ? 'color:red' : '',
 					});
 				});
-				apiobj.params.form.append({type: 'header', label: wgULS('待恢复页面', '待恢復頁面')});
+				apiobj.params.form.append({
+					type: 'header',
+					label: wgULS('待恢复页面', '待恢復頁面'),
+				});
 				apiobj.params.form.append({
 					type: 'button',
 					label: wgULS('全选', '全選'),
@@ -108,13 +111,18 @@
 					shiftClickSupport: true,
 					list: list,
 				});
-				apiobj.params.form.append({type: 'submit'});
+				apiobj.params.form.append({
+					type: 'submit',
+				});
 				const result = apiobj.params.form.render();
 				apiobj.params.Window.setContent(result);
 			},
 			statelem
 		);
-		qiuwen_api.params = {form: form, Window: Window};
+		qiuwen_api.params = {
+			form: form,
+			Window: Window,
+		};
 		qiuwen_api.post();
 	};
 	Twinkle.batchundelete.callback.evaluate = (event) => {
@@ -136,7 +144,9 @@
 		const reason = event.target.reason.value;
 		const undel_talk = event.target.reason.value;
 		if (!reason) {
-			mw.notify('您需要指定理由。', {type: 'warn'});
+			mw.notify('您需要指定理由。', {
+				type: 'warn',
+			});
 			return;
 		}
 		Morebits.simpleWindow.setButtonsEnabled(false);

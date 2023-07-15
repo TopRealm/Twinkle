@@ -204,19 +204,37 @@
 							};
 						});
 					}
-					form.append({type: 'header', label: group.key});
-					form.append({type: 'checkbox', name: 'tags', list: group.value});
+					form.append({
+						type: 'header',
+						label: group.key,
+					});
+					form.append({
+						type: 'checkbox',
+						name: 'tags',
+						list: group.value,
+					});
 				});
 				if (Twinkle.getPref('customFileTagList').length) {
-					form.append({type: 'header', label: wgULS('自定义模板', '自訂模板')});
-					form.append({type: 'checkbox', name: 'tags', list: Twinkle.getPref('customFileTagList')});
+					form.append({
+						type: 'header',
+						label: wgULS('自定义模板', '自訂模板'),
+					});
+					form.append({
+						type: 'checkbox',
+						name: 'tags',
+						list: Twinkle.getPref('customFileTagList'),
+					});
 				}
 				break;
 			case 'redirect': {
 				Window.setTitle(wgULS('重定向标记', '重新導向標記'));
 				const i = 1;
 				Twinkle.tag.redirectList.forEach((group) => {
-					form.append({type: 'header', id: `tagHeader${i}`, label: group.key});
+					form.append({
+						type: 'header',
+						id: `tagHeader${i}`,
+						label: group.key,
+					});
 					form.append({
 						type: 'checkbox',
 						name: 'tags',
@@ -228,13 +246,22 @@
 					});
 				});
 				if (Twinkle.getPref('customRedirectTagList').length) {
-					form.append({type: 'header', label: wgULS('自定义模板', '自訂模板')});
-					form.append({type: 'checkbox', name: 'tags', list: Twinkle.getPref('customRedirectTagList')});
+					form.append({
+						type: 'header',
+						label: wgULS('自定义模板', '自訂模板'),
+					});
+					form.append({
+						type: 'checkbox',
+						name: 'tags',
+						list: Twinkle.getPref('customRedirectTagList'),
+					});
 				}
 				break;
 			}
 			default:
-				mw.notify(`Twinkle.tag：未知模式 ${Twinkle.tag.mode}`, {type: 'warn'});
+				mw.notify(`Twinkle.tag：未知模式 ${Twinkle.tag.mode}`, {
+					type: 'warn',
+				});
 				break;
 		}
 		if (document.getElementsByClassName('patrollink').length) {
@@ -250,7 +277,10 @@
 				],
 			});
 		}
-		form.append({type: 'submit', className: 'tw-tag-submit'});
+		form.append({
+			type: 'submit',
+			className: 'tw-tag-submit',
+		});
 		const result = form.render();
 		Window.setContent(result);
 		Window.display();
@@ -296,6 +326,7 @@
 									});
 								return true; // continue
 							}
+
 							const tag = e.classList[0].slice('box-'.length).replace(/_/g, ' ');
 							Twinkle.tag.alreadyPresentTags.push(tag);
 						}
@@ -335,10 +366,15 @@
 		const form = e.target.form;
 		const sortorder = e.target.value;
 		Twinkle.tag.checkedTags = form.getChecked('tags');
-		const container = new Morebits.quickForm.element({type: 'fragment'});
+		const container = new Morebits.quickForm.element({
+			type: 'fragment',
+		});
 		// function to generate a checkbox, with appropriate subgroup if needed
 		const makeCheckbox = (tag, description) => {
-			const checkbox = {value: tag, label: `{{${tag}}}: ${description}`};
+			const checkbox = {
+				value: tag,
+				label: `{{${tag}}}: ${description}`,
+			};
 			if (Twinkle.tag.checkedTags.includes(tag)) {
 				checkbox.checked = true;
 			}
@@ -387,6 +423,7 @@
 							break;
 						// no default
 					}
+
 					checkbox.subgroup = [
 						{
 							name: 'mergeTarget',
@@ -557,8 +594,15 @@
 			return checkbox;
 		};
 		const makeCheckboxesForAlreadyPresentTags = () => {
-			container.append({type: 'header', id: 'tagHeader0', label: wgULS('已放置的维护标记', '已放置的維護標記')});
-			const subdiv = container.append({type: 'div', id: 'tagSubdiv0'});
+			container.append({
+				type: 'header',
+				id: 'tagHeader0',
+				label: wgULS('已放置的维护标记', '已放置的維護標記'),
+			});
+			const subdiv = container.append({
+				type: 'div',
+				id: 'tagSubdiv0',
+			});
 			const checkboxes = [];
 			const unCheckedTags = e.target.form.getUnchecked('existingTags');
 			Twinkle.tag.alreadyPresentTags.forEach((tag) => {
@@ -601,13 +645,23 @@
 			let i = 1;
 			// go through each category and sub-category and append lists of checkboxes
 			Twinkle.tag.article.tagList.forEach((group) => {
-				container.append({type: 'header', id: `tagHeader${i}`, label: group.key});
-				const subdiv = container.append({type: 'div', id: `tagSubdiv${i++}`});
+				container.append({
+					type: 'header',
+					id: `tagHeader${i}`,
+					label: group.key,
+				});
+				const subdiv = container.append({
+					type: 'div',
+					id: `tagSubdiv${i++}`,
+				});
 				if (group.value[0].tag) {
 					doCategoryCheckboxes(subdiv, group.value);
 				} else {
 					group.value.forEach((subgroup) => {
-						subdiv.append({type: 'div', label: [Morebits.htmlNode('b', subgroup.key)]});
+						subdiv.append({
+							type: 'div',
+							label: [Morebits.htmlNode('b', subgroup.key)],
+						});
 						doCategoryCheckboxes(subdiv, subgroup.value);
 					});
 				}
@@ -616,7 +670,11 @@
 			// alphabetical sort order
 			if (Twinkle.tag.alreadyPresentTags.length > 0) {
 				makeCheckboxesForAlreadyPresentTags();
-				container.append({type: 'header', id: 'tagHeader1', label: wgULS('可用的维护标记', '可用的維護標記')});
+				container.append({
+					type: 'header',
+					id: 'tagHeader1',
+					label: wgULS('可用的维护标记', '可用的維護標記'),
+				});
 			}
 			// Avoid repeatedly resorting
 			Twinkle.tag.article.alphabeticalList =
@@ -635,7 +693,10 @@
 		}
 		// append any custom tags
 		if (Twinkle.getPref('customTagList').length) {
-			container.append({type: 'header', label: wgULS('自定义模板', '自訂模板')});
+			container.append({
+				type: 'header',
+				label: wgULS('自定义模板', '自訂模板'),
+			});
 			container.append({
 				type: 'checkbox',
 				name: 'tags',
@@ -654,9 +715,15 @@
 		form.quickfilter.value = ''; // clear search, because the search results are not preserved over mode change
 		form.quickfilter.focus();
 		// style adjustments
-		$workarea.find('h5').css({'font-size': '110%'});
-		$workarea.find('h5:not(:first-child)').css({'margin-top': '1em'});
-		$workarea.find('div').filter(':has(span.quickformDescription)').css({'margin-top': '0.4em'});
+		$workarea.find('h5').css({
+			'font-size': '110%',
+		});
+		$workarea.find('h5:not(:first-child)').css({
+			'margin-top': '1em',
+		});
+		$workarea.find('div').filter(':has(span.quickformDescription)').css({
+			'margin-top': '0.4em',
+		});
 		Morebits.quickForm.getElements(form, 'existingTags').forEach(generateLinks);
 		Morebits.quickForm.getElements(form, 'tags').forEach(generateLinks);
 		// tally tags added/removed, update statusNode text
@@ -762,12 +829,18 @@
 				{
 					key: wgULS('结构和导言', '結構和導言'),
 					value: [
-						{tag: 'Lead too long', description: wgULS('导言部分也许过于冗长', '導言部分也許過於冗長')},
+						{
+							tag: 'Lead too long',
+							description: wgULS('导言部分也许过于冗长', '導言部分也許過於冗長'),
+						},
 						{
 							tag: 'Lead too short',
 							description: wgULS('导言部分也许不足以概括其内容', '導言部分也許不足以概括其內容'),
 						},
-						{tag: 'Very long', description: wgULS('可能过于冗长', '可能過於冗長')},
+						{
+							tag: 'Very long',
+							description: wgULS('可能过于冗长', '可能過於冗長'),
+						},
 					],
 				},
 				{
@@ -811,9 +884,18 @@
 				{
 					key: wgULS('写作风格', '寫作風格'),
 					value: [
-						{tag: 'Advert', description: wgULS('类似广告或宣传性内容', '類似廣告或宣傳性內容')},
-						{tag: 'Fanpov', description: wgULS('类似爱好者网页', '類似愛好者網頁')},
-						{tag: 'How-to', description: wgULS('包含指南或教学内容', '包含指南或教學內容')},
+						{
+							tag: 'Advert',
+							description: wgULS('类似广告或宣传性内容', '類似廣告或宣傳性內容'),
+						},
+						{
+							tag: 'Fanpov',
+							description: wgULS('类似爱好者网页', '類似愛好者網頁'),
+						},
+						{
+							tag: 'How-to',
+							description: wgULS('包含指南或教学内容', '包含指南或教學內容'),
+						},
 						{
 							tag: 'Inappropriate person',
 							description: wgULS('使用不适当的第一人称和第二人称', '使用不適當的第一人稱和第二人稱'),
@@ -832,7 +914,10 @@
 								'使用了日期或時間列表式記述，需要改寫為連貫的敘述性文字'
 							),
 						},
-						{tag: 'Review', description: wgULS('阅读起来类似评论，需要清理', '閱讀起來類似評論，需要清理')},
+						{
+							tag: 'Review',
+							description: wgULS('阅读起来类似评论，需要清理', '閱讀起來類似評論，需要清理'),
+						},
 						{
 							tag: 'Tone',
 							description: wgULS(
@@ -852,7 +937,10 @@
 								'需要精通或熟悉本主題的專業人士（專家）參與及協助編輯'
 							),
 						},
-						{tag: 'Overly detailed', description: wgULS('包含太多过度细节内容', '包含太多過度細節內容')},
+						{
+							tag: 'Overly detailed',
+							description: wgULS('包含太多过度细节内容', '包含太多過度細節內容'),
+						},
 						{
 							tag: 'Trivia',
 							description: wgULS('应避免有陈列杂项、琐碎资料的部分', '應避免有陳列雜項、瑣碎資料的部分'),
@@ -862,8 +950,15 @@
 				{
 					key: wgULS('时间性', '時間性'),
 					value: [
-						{tag: 'Current', description: wgULS('记述新闻动态', '記述新聞動態'), excludeMI: true},
-						{tag: 'Update', description: wgULS('当前条目或章节需要更新', '當前條目或章節需要更新')},
+						{
+							tag: 'Current',
+							description: wgULS('记述新闻动态', '記述新聞動態'),
+							excludeMI: true,
+						},
+						{
+							tag: 'Update',
+							description: wgULS('当前条目或章节需要更新', '當前條目或章節需要更新'),
+						},
 					],
 				},
 				{
@@ -883,12 +978,18 @@
 								'主要貢獻者與本條目所宣揚的內容可能存在利益衝突'
 							),
 						},
-						{tag: 'Disputed', description: wgULS('内容疑欠准确，有待查证', '內容疑欠準確，有待查證')},
+						{
+							tag: 'Disputed',
+							description: wgULS('内容疑欠准确，有待查证', '內容疑欠準確，有待查證'),
+						},
 						{
 							tag: 'Globalize',
 							description: wgULS('仅具有一部分地区的信息或观点', '僅具有一部分地區的資訊或觀點'),
 						},
-						{tag: 'Hoax', description: wgULS('真实性被质疑', '真實性被質疑')},
+						{
+							tag: 'Hoax',
+							description: wgULS('真实性被质疑', '真實性被質疑'),
+						},
 						{
 							tag: 'POV',
 							description: wgULS(
@@ -896,7 +997,10 @@
 								'中立性有爭議。內容、語調可能帶有明顯的個人觀點或地方色彩'
 							),
 						},
-						{tag: 'Self-contradictory', description: wgULS('内容自相矛盾', '內容自相矛盾')},
+						{
+							tag: 'Self-contradictory',
+							description: wgULS('内容自相矛盾', '內容自相矛盾'),
+						},
 						{
 							tag: 'Weasel',
 							description: wgULS(
@@ -953,9 +1057,18 @@
 							tag: 'Original research',
 							description: wgULS('可能包含原创研究或未查证内容', '可能包含原創研究或未查證內容'),
 						},
-						{tag: 'Primarysources', description: wgULS('依赖第一手来源', '依賴第一手來源')},
-						{tag: 'Refimprove', description: wgULS('需要补充更多来源', '需要補充更多來源')},
-						{tag: 'Unreferenced', description: wgULS('没有列出任何参考或来源', '沒有列出任何參考或來源')},
+						{
+							tag: 'Primarysources',
+							description: wgULS('依赖第一手来源', '依賴第一手來源'),
+						},
+						{
+							tag: 'Refimprove',
+							description: wgULS('需要补充更多来源', '需要補充更多來源'),
+						},
+						{
+							tag: 'Unreferenced',
+							description: wgULS('没有列出任何参考或来源', '沒有列出任何參考或來源'),
+						},
 					],
 				},
 			],
@@ -971,7 +1084,10 @@
 							description: wgULS('包含过多不是现代标准汉语的内容', '包含過多不是現代標準漢語的內容'),
 							excludeMI: true,
 						},
-						{tag: 'Rough translation', description: wgULS('翻译品质不佳', '翻譯品質不佳')},
+						{
+							tag: 'Rough translation',
+							description: wgULS('翻译品质不佳', '翻譯品質不佳'),
+						},
 					],
 				},
 				{
@@ -984,7 +1100,10 @@
 								'需要加上內部連結以構築百科全書的連結網絡'
 							),
 						},
-						{tag: 'Orphan', description: wgULS('没有或只有很少链入页面', '沒有或只有很少連入頁面')},
+						{
+							tag: 'Orphan',
+							description: wgULS('没有或只有很少链入页面', '沒有或只有很少連入頁面'),
+						},
 						{
 							tag: 'Overlinked',
 							description: wgULS(
@@ -1003,7 +1122,12 @@
 				},
 				{
 					key: wgULS('参考技术', '參考技術'),
-					value: [{tag: 'Citation style', description: wgULS('引用需要进行清理', '引用需要進行清理')}],
+					value: [
+						{
+							tag: 'Citation style',
+							description: wgULS('引用需要进行清理', '引用需要進行清理'),
+						},
+					],
 				},
 				{
 					key: wgULS('分类', '分類'),
@@ -1013,7 +1137,11 @@
 							description: wgULS('需要更多页面分类', '需要更多頁面分類'),
 							excludeMI: true,
 						},
-						{tag: 'Uncategorized', description: wgULS('缺少页面分类', '缺少頁面分類'), excludeMI: true},
+						{
+							tag: 'Uncategorized',
+							description: wgULS('缺少页面分类', '缺少頁面分類'),
+							excludeMI: true,
+						},
 					],
 				},
 			],
@@ -1023,11 +1151,19 @@
 			value: [
 				{
 					tag: 'Merge from',
-					description: wgULS('建议将页面并入本页面', '建議將頁面併入本頁面'),
+					description: wgULS('建议将页面并入此页面', '建議將頁面併入此頁面'),
 					excludeMI: true,
 				},
-				{tag: 'Merge to', description: wgULS('建议将此页面并入页面', '建議將此頁面併入頁面'), excludeMI: true},
-				{tag: 'Merge', description: wgULS('建议此页面与页面合并', '建議此頁面與頁面合併'), excludeMI: true},
+				{
+					tag: 'Merge to',
+					description: wgULS('建议将此页面并入页面', '建議將此頁面併入頁面'),
+					excludeMI: true,
+				},
+				{
+					tag: 'Merge',
+					description: wgULS('建议此页面与页面合并', '建議此頁面與頁面合併'),
+					excludeMI: true,
+				},
 				{
 					tag: 'Requested move',
 					description: wgULS('建议将此页面移动到新名称', '建議將此頁面移動到新名稱'),
@@ -1066,7 +1202,10 @@
 						'缺乏關注度的子主題向有關注度的母主題的重定向'
 					),
 				},
-				{tag: '模板重定向', description: wgULS('指向模板的重定向页面', '指向模板的重定向頁面')},
+				{
+					tag: '模板重定向',
+					description: wgULS('指向模板的重定向页面', '指向模板的重定向頁面'),
+				},
 				{
 					tag: wgULS('别名重定向', '別名重定向'),
 					description: wgULS('标题的其他名称、笔名、绰号、同义字等', '標題的其他名稱、筆名、綽號、同義字等'),
@@ -1075,7 +1214,10 @@
 					tag: wgULS('译名重定向', '譯名重定向'),
 					description: wgULS('人物、作品等各项事物的其他翻译名称', '人物、作品等各項事物的其他翻譯名稱'),
 				},
-				{tag: wgULS('缩写重定向', '縮寫重定向'), description: wgULS('标题缩写', '標題縮寫')},
+				{
+					tag: wgULS('缩写重定向', '縮寫重定向'),
+					description: wgULS('标题缩写', '標題縮寫'),
+				},
 				{
 					tag: wgULS('拼写重定向', '拼寫重定向'),
 					description: wgULS('标题的其他不同拼写', '標題的其他不同拼寫'),
@@ -1088,7 +1230,10 @@
 					tag: wgULS('旧名重定向', '舊名重定向'),
 					description: wgULS('将事物早前的名称引导至更改后的主题', '將事物早前的名稱引導至更改後的主題'),
 				},
-				{tag: '全名重定向', description: wgULS('标题的完整或更完整名称', '標題的完整或更完整名稱')},
+				{
+					tag: '全名重定向',
+					description: wgULS('标题的完整或更完整名称', '標題的完整或更完整名稱'),
+				},
 				{
 					tag: '短名重定向',
 					description: wgULS(
@@ -1096,9 +1241,18 @@
 						'完整標題名稱或人物全名的部分、不完整的名稱或簡稱'
 					),
 				},
-				{tag: '姓氏重定向', description: '人物姓氏'},
-				{tag: '名字重定向', description: '人物人名'},
-				{tag: '本名重定向', description: '人物本名'},
+				{
+					tag: '姓氏重定向',
+					description: '人物姓氏',
+				},
+				{
+					tag: '名字重定向',
+					description: '人物人名',
+				},
+				{
+					tag: '本名重定向',
+					description: '人物本名',
+				},
 				{
 					tag: '非中文重定向',
 					description: wgULS('非中文标题', '非中文標題'),
@@ -1112,7 +1266,10 @@
 						},
 					],
 				},
-				{tag: '日文重定向', description: wgULS('日语名称', '日語名稱')},
+				{
+					tag: '日文重定向',
+					description: wgULS('日语名称', '日語名稱'),
+				},
 			],
 		},
 		{
@@ -1126,12 +1283,18 @@
 					tag: wgULS('章节重定向', '章節重定向'),
 					description: wgULS('导向至较高密度组织的页面', '導向至較高密度組織的頁面'),
 				},
-				{tag: '列表重定向', description: wgULS('导向至低密度的列表', '導向至低密度的列表')},
+				{
+					tag: '列表重定向',
+					description: wgULS('导向至低密度的列表', '導向至低密度的列表'),
+				},
 				{
 					tag: '可能性重定向',
 					description: wgULS('导向至当前提供内容更为详尽的目标页面', '導向至當前提供內容更為詳盡的目標頁面'),
 				},
-				{tag: wgULS('关联字重定向', '關聯字重定向'), description: wgULS('标题名称关联字', '標題名稱關聯字')},
+				{
+					tag: wgULS('关联字重定向', '關聯字重定向'),
+					description: wgULS('标题名称关联字', '標題名稱關聯字'),
+				},
 				{
 					tag: wgULS('条目请求重定向', '條目請求重定向'),
 					description: wgULS('需要独立条目的页面', '需要獨立條目的頁面'),
@@ -1166,12 +1329,30 @@
 						'將詞組/詞組/成語指向切題的條目及恰當章節'
 					),
 				},
-				{tag: wgULS('消歧义页重定向', '消歧義頁重定向'), description: wgULS('指向消歧义页', '指向消歧義頁')},
-				{tag: '域名重定向', description: wgULS('域名', '網域名稱')},
-				{tag: '年代重定向', description: wgULS('于年份条目导向至年代条目', '於年份條目導向至年代條目')},
-				{tag: wgULS('用户框模板重定向', '用戶框模板重定向'), description: wgULS('用户框模板', '用戶框模板')},
-				{tag: '重定向模板用重定向', description: wgULS('导向至重定向模板', '導向至重定向模板')},
-				{tag: 'EXIF重定向', description: wgULS('JPEG图像文件包含EXIF信息', 'JPEG圖檔包含EXIF資訊')},
+				{
+					tag: wgULS('消歧义页重定向', '消歧義頁重定向'),
+					description: wgULS('指向消歧义页', '指向消歧義頁'),
+				},
+				{
+					tag: '域名重定向',
+					description: wgULS('域名', '網域名稱'),
+				},
+				{
+					tag: '年代重定向',
+					description: wgULS('于年份条目导向至年代条目', '於年份條目導向至年代條目'),
+				},
+				{
+					tag: wgULS('用户框模板重定向', '用戶框模板重定向'),
+					description: wgULS('用户框模板', '用戶框模板'),
+				},
+				{
+					tag: '重定向模板用重定向',
+					description: wgULS('导向至重定向模板', '導向至重定向模板'),
+				},
+				{
+					tag: 'EXIF重定向',
+					description: wgULS('JPEG图像文件包含EXIF信息', 'JPEG圖檔包含EXIF資訊'),
+				},
 			],
 		},
 	];
@@ -1436,6 +1617,7 @@
 											return false; // break out of $.each
 										}
 									});
+
 								if (!removed) {
 									Morebits.status.warn(
 										wgULS('信息', '資訊'),
@@ -1702,6 +1884,7 @@
 											return false; // break out of $.each
 										}
 									});
+
 								if (!found) {
 									Morebits.status.warn(
 										wgULS('信息', '資訊'),
@@ -1870,8 +2053,10 @@
 							currentTag += `|human=${mw.config.get('wgUserName')}`;
 							break;
 						default:
-							break; // don't care
+							break;
+						// don't care
 					}
+
 					currentTag = `{{${currentTag}}}\n`;
 					tagtext += currentTag;
 					summary += `{{${tag}}}、`;
@@ -1908,7 +2093,9 @@
 					'}}、{{'
 				)}}}。`;
 				message += extra || '';
-				mw.notify(message, {type: 'warn'});
+				mw.notify(message, {
+					type: 'warn',
+				});
 				return true;
 			}
 		};
@@ -1916,7 +2103,9 @@
 		// Maybe just sock this away in each function???
 		const checkParameter = (tag, parameter, description = '理由') => {
 			if (params.tags.includes(tag) && params[parameter].trim() === '') {
-				mw.notify(`${wgULS('您必须指定', '您必須指定')}{{${tag}}}的${description}。`, {type: 'warn'});
+				mw.notify(`${wgULS('您必须指定', '您必須指定')}{{${tag}}}的${description}。`, {
+					type: 'warn',
+				});
 				return true;
 			}
 		};
@@ -1950,7 +2139,9 @@
 								'请指定使用于merge模板中的另一个页面标题。',
 								'請指定使用於merge模板中的另一個頁面標題。'
 							),
-							{type: 'warn'}
+							{
+								type: 'warn',
+							}
 						);
 						return;
 					}
@@ -1960,7 +2151,9 @@
 								'当前还不支持在一次合并中标记多个条目，与开启关于多个条目的讨论。请不要勾选“标记其他条目”并清空“理由”框后再提交。',
 								'目前還不支援在一次合併中標記多個條目，與開啟關於多個條目的討論。請不要勾選「標記其他條目」並清空「理由」框後再提交。'
 							),
-							{type: 'warn'}
+							{
+								type: 'warn',
+							}
 						);
 						return;
 					}
@@ -1991,13 +2184,17 @@
 			case 'redirect':
 				break;
 			default:
-				mw.notify(`Twinkle.tag：未知模式 ${Twinkle.tag.mode}`, {type: 'warn'});
+				mw.notify(`Twinkle.tag：未知模式 ${Twinkle.tag.mode}`, {
+					type: 'warn',
+				});
 				break;
 		}
 		// File/redirect: return if no tags selected
 		// Article: return if no tag is selected and no already present tag is deselected
 		if (params.tags.length === 0 && (Twinkle.tag.modeEn !== 'article' || params.tagsToRemove.length === 0)) {
-			mw.notify(wgULS('必须选择至少一个标记！', '必須選擇至少一個標記！'), {type: 'warn'});
+			mw.notify(wgULS('必须选择至少一个标记！', '必須選擇至少一個標記！'), {
+				type: 'warn',
+			});
 			return;
 		}
 		Morebits.simpleWindow.setButtonsEnabled(false);

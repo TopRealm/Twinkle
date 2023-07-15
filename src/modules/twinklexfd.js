@@ -86,7 +86,9 @@
 			label: '工作区',
 			name: 'work_area',
 		});
-		form.append({type: 'submit'});
+		form.append({
+			type: 'submit',
+		});
 		const result = form.render();
 		Window.setContent(result);
 		Window.display();
@@ -132,6 +134,7 @@
 			});
 			// TODO possible future "preview" link here
 		};
+
 		switch (value) {
 			case 'afd': {
 				work_area = new Morebits.quickForm.element({
@@ -413,7 +416,7 @@
 					case 'batch': {
 						const commentText = `<!-- Twinkle: User:${mw.config.get(
 							'wgUserName'
-						)} 的 ${type} 提删插入点，请勿变更或移除此行，除非不再于本页面提删 -->`;
+						)} 的 ${type} 提删插入点，请勿变更或移除此行，除非不再于此页面提删 -->`;
 						let newText = `===[[:${Morebits.pageNameNorm}]]===`;
 						if (type === 'fame') {
 							newText += `\n{{Findsources|${Morebits.pageNameNorm}}}`;
@@ -579,6 +582,7 @@
 					Twinkle.xfd.currentRationale = null; // any errors from now on do not need to print the rationale, as it is safely saved on-wiki
 				});
 			},
+
 			lookupCreation: (target_page) => {
 				target_page.getStatusElement().info('完成');
 				const params = target_page.getCallbackParameters();
@@ -685,7 +689,9 @@
 	Twinkle.xfd.callback.evaluate = (e) => {
 		const params = Morebits.quickForm.getInputData(e.target);
 		if (params.xfdcat === 'merge' && params.mergeinto.trim() === '') {
-			mw.notify(wgULS('请提供合并目标！', '請提供合併目標！'), {type: 'warn'});
+			mw.notify(wgULS('请提供合并目标！', '請提供合併目標！'), {
+				type: 'warn',
+			});
 			return;
 		}
 		Morebits.simpleWindow.setButtonsEnabled(false);
@@ -699,7 +705,8 @@
 		let target_page;
 		const date = new Morebits.date(); // XXX: avoid use of client clock, still used by TfD, FfD and CfD
 		switch (params.category) {
-			case 'afd': // AFD
+			case 'afd':
+				// AFD
 				params.logpage = `Qiuwen_talk:存废讨论/记录/${date.format('YYYY/MM/DD', 'utc')}`;
 				params.lognomination =
 					Twinkle.getPref('logXfdNominations') &&
@@ -717,6 +724,7 @@
 				if (mw.config.get('wgPageContentModel') === 'wikitext') {
 					target_page.setLookupNonRedirectCreator(true); // Look for author of first non-redirect revision
 				}
+
 				target_page.lookupCreation(Twinkle.xfd.callbacks.afd.lookupCreation);
 				Morebits.wiki.removeCheckpoint();
 				break;
@@ -741,7 +749,9 @@
 				break;
 			}
 			default:
-				mw.notify('twinklexfd：未定义的类别', {type: 'warn'});
+				mw.notify('twinklexfd：未定义的类别', {
+					type: 'warn',
+				});
 				break;
 		}
 	};

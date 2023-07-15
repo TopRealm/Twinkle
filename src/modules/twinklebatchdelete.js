@@ -214,7 +214,10 @@
 					};
 				});
 				const form = apiobj.params.form;
-				form.append({type: 'header', label: wgULS('待删除页面', '待刪除頁面')});
+				form.append({
+					type: 'header',
+					label: wgULS('待删除页面', '待刪除頁面'),
+				});
 				form.append({
 					type: 'button',
 					label: wgULS('全选', '全選'),
@@ -239,6 +242,7 @@
 							});
 					},
 				});
+
 				form.append({
 					type: 'checkbox',
 					name: 'pages',
@@ -246,14 +250,19 @@
 					shiftClickSupport: true,
 					list: $.map(Twinkle.batchdelete.pages, (e) => e),
 				});
-				form.append({type: 'submit'});
+				form.append({
+					type: 'submit',
+				});
 				const result = form.render();
 				apiobj.params.Window.setContent(result);
 				Morebits.quickForm.getElements(result, 'pages').forEach(generateArrowLinks);
 			},
 			statelem
 		);
-		qiuwen_api.params = {form: form, Window: Window};
+		qiuwen_api.params = {
+			form: form,
+			Window: Window,
+		};
 		qiuwen_api.post();
 	};
 	const generateArrowLinks = (checkbox) => {
@@ -539,7 +548,9 @@
 		const unlink_page = form.unlink_page.checked;
 		const unlink_file = form.unlink_file.checked;
 		if (!reason) {
-			mw.notify(wgULS('您需要给出一个理由', '您需要給出一個理由'), {type: 'warn'});
+			mw.notify(wgULS('您需要给出一个理由', '您需要給出一個理由'), {
+				type: 'warn',
+			});
 			return;
 		}
 		Morebits.simpleWindow.setButtonsEnabled(false);
@@ -634,6 +645,7 @@
 					bltitle: params.page,
 					bllimit: 'max', // 500 is max for normal users, 5000 for bots and sysops
 				};
+
 				qiuwen_api = new Morebits.wiki.api(
 					wgULS('正在获取链入', '正在取得連入'),
 					query,
@@ -649,6 +661,7 @@
 					iutitle: params.page,
 					iulimit: 'max', // 500 is max for normal users, 5000 for bots and sysops
 				};
+
 				qiuwen_api = new Morebits.wiki.api(
 					wgULS('正在获取文件链入', '正在取得檔案連入'),
 					query,
@@ -665,6 +678,7 @@
 						prop: 'redirects',
 						rdlimit: 'max', // 500 is max for normal users, 5000 for bots and sysops
 					};
+
 					qiuwen_api = new Morebits.wiki.api(
 						wgULS('正在获取重定向', '正在取得重新導向'),
 						query,

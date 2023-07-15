@@ -412,7 +412,9 @@
 					break;
 				}
 				default:
-					mw.notify(`关闭存废讨论：未定义 ${code}`, {type: 'warn'});
+					mw.notify(`关闭存废讨论：未定义 ${code}`, {
+						type: 'warn',
+					});
 			}
 		}
 	};
@@ -452,6 +454,7 @@
 					prop: 'redirects',
 					rdlimit: 'max', // 500 is max for normal users, 5000 for bots and sysops
 				};
+
 				qiuwen_api = new Morebits.wiki.api(
 					'正在获取重定向',
 					query,

@@ -38,14 +38,22 @@
 	Twinkle.speedy.hasCSD = !!$('#delete-reason').length;
 	// The speedy criteria list can be in one of several modes
 	Twinkle.speedy.mode = {
-		sysopSingleSubmit: 1, // radio buttons, no subgroups, submit when "Submit" button is clicked
-		sysopRadioClick: 2, // radio buttons, no subgroups, submit when a radio button is clicked
-		sysopMultipleSubmit: 3, // check boxes, subgroups, "Submit" button already present
-		sysopMultipleRadioClick: 4, // check boxes, subgroups, need to add a "Submit" button
-		userMultipleSubmit: 5, // check boxes, subgroups, "Submit" button already pressent
-		userMultipleRadioClick: 6, // check boxes, subgroups, need to add a "Submit" button
-		userSingleSubmit: 7, // radio buttons, subgroups, submit when "Submit" button is clicked
-		userSingleRadioClick: 8, // radio buttons, subgroups, submit when a radio button is clicked
+		sysopSingleSubmit: 1,
+		// radio buttons, no subgroups, submit when "Submit" button is clicked
+		sysopRadioClick: 2,
+		// radio buttons, no subgroups, submit when a radio button is clicked
+		sysopMultipleSubmit: 3,
+		// check boxes, subgroups, "Submit" button already present
+		sysopMultipleRadioClick: 4,
+		// check boxes, subgroups, need to add a "Submit" button
+		userMultipleSubmit: 5,
+		// check boxes, subgroups, "Submit" button already pressent
+		userMultipleRadioClick: 6,
+		// check boxes, subgroups, need to add a "Submit" button
+		userSingleSubmit: 7,
+		// radio buttons, subgroups, submit when "Submit" button is clicked
+		userSingleRadioClick: 8,
+		// radio buttons, subgroups, submit when a radio button is clicked
 		// are we in "delete page" mode?
 		// (sysops can access both "delete page" [sysop] and "tag page only" [user] modes)
 		isSysop: (mode) =>
@@ -273,6 +281,7 @@
 				className: 'tw-speedy-submit',
 			}); // Renamed in modeChanged
 		}
+
 		const result = form.render();
 		dialog.setContent(result);
 		dialog.display();
@@ -409,7 +418,8 @@
 					});
 				}
 				break;
-			case 14: // category
+			case 14:
+				// category
 				work_area.append({
 					type: 'header',
 					label: wgULS('分类', '分類'),
@@ -538,6 +548,7 @@
 			lelimit: 5,
 			// A little bit goes a long way
 		};
+
 		new Morebits.wiki.api(wgULS('检查之前的删除', '檢查之前的刪除'), query, (apiobj) => {
 			const response = apiobj.getResponse();
 			const delCount = response.query.logevents.length;
@@ -778,7 +789,7 @@
 				{
 					name: 'g4_pagename',
 					type: 'input',
-					label: '已删版本页面名：',
+					label: '已删版此页面名：',
 					size: 60,
 				},
 			],
@@ -1082,6 +1093,7 @@
 						prop: 'redirects',
 						rdlimit: 5000, // 500 is max for normal users, 5000 for bots and sysops
 					};
+
 					const qiuwen_api = new Morebits.wiki.api(
 						wgULS('获取重定向列表…', '取得重新導向列表…'),
 						query,
@@ -1517,7 +1529,9 @@
 					if (form['csd.reason_1']) {
 						const dbrationale = form['csd.reason_1'].value;
 						if (!dbrationale || !dbrationale.trim()) {
-							mw.notify(wgULS('自定义理由：请指定理由。', '自訂理由：請指定理由。'), {type: 'warn'});
+							mw.notify(wgULS('自定义理由：请指定理由。', '自訂理由：請指定理由。'), {
+								type: 'warn',
+							});
 							parameters = null;
 							return false;
 						}
@@ -1541,7 +1555,9 @@
 					if (form['csd.g4_pagename']) {
 						const pagename = form['csd.g4_pagename'].value;
 						if (!pagename || !pagename.trim()) {
-							mw.notify(wgULS('CSD G4：请提供页面名称。', 'CSD G4：請提供頁面名稱。'), {type: 'warn'});
+							mw.notify(wgULS('CSD G4：请提供页面名称。', 'CSD G4：請提供頁面名稱。'), {
+								type: 'warn',
+							});
 							parameters = null;
 							return false;
 						}
@@ -1568,7 +1584,9 @@
 					if (form['csd.r1_type']) {
 						const redirtype = form['csd.r1_type'].value;
 						if (!redirtype) {
-							mw.notify(wgULS('CSD R1：请选择适用类型。', 'CSD R1：請選擇適用類別。'), {type: 'warn'});
+							mw.notify(wgULS('CSD R1：请选择适用类型。', 'CSD R1：請選擇適用類別。'), {
+								type: 'warn',
+							});
 							parameters = null;
 							return false;
 						}
@@ -1579,7 +1597,9 @@
 					if (form['csd.r2_type']) {
 						const redirtype = form['csd.r2_type'].value;
 						if (!redirtype) {
-							mw.notify(wgULS('CSD R2：请选择适用类型。', 'CSD R2：請選擇適用類別。'), {type: 'warn'});
+							mw.notify(wgULS('CSD R2：请选择适用类型。', 'CSD R2：請選擇適用類別。'), {
+								type: 'warn',
+							});
 							parameters = null;
 							return false;
 						}
@@ -1606,7 +1626,9 @@
 	Twinkle.speedy.resolveCsdValues = (e) => {
 		const values = (e.target.form ? e.target.form : e.target).getChecked('csd');
 		if (values.length === 0) {
-			mw.notify(wgULS('请选择一个理据！', '請選擇一個理據！'), {type: 'warn'});
+			mw.notify(wgULS('请选择一个理据！', '請選擇一個理據！'), {
+				type: 'warn',
+			});
 			return null;
 		}
 		return values;
@@ -1677,6 +1699,7 @@
 				return false; // break
 			}
 		});
+
 		let notifyuser = false;
 		if (form.notify.checked) {
 			$.each(normalizeds, (index, norm) => {
@@ -1686,6 +1709,7 @@
 				}
 			});
 		}
+
 		let csdlog = false;
 		if (Twinkle.getPref('logSpeedyNominations')) {
 			$.each(normalizeds, (index, norm) => {
@@ -1695,6 +1719,7 @@
 				}
 			});
 		}
+
 		const params = {
 			values: values,
 			normalizeds: normalizeds,

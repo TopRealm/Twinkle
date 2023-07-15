@@ -11,8 +11,8 @@
 	 * Twinklefluff revert and antivandalism utility
 	 */
 	Twinkle.fluff = () => {
-		// Only proceed if the user can actually edit the page in question
-		// (see #632 for contribs issue).  wgIsProbablyEditable should take
+		// Only proceed if the user can actually edit the page in question.
+		// wgIsProbablyEditable should take
 		// care of namespace/contentModel restrictions as well as explicit
 		// protections; it won't take care of cascading or TitleBlacklist.
 		if (mw.config.get('wgIsProbablyEditable')) {
@@ -261,7 +261,10 @@
 				oldTitle.insertBefore(revertToRevision, oldTitle.firstChild);
 				if (Twinkle.getPref('customRevertSummary').length > 0) {
 					revertToRevision.appendChild(document.createTextNode(' || '));
-					const revertsummary = new Morebits.quickForm.element({type: 'select', name: 'revertsummary'});
+					const revertsummary = new Morebits.quickForm.element({
+						type: 'select',
+						name: 'revertsummary',
+					});
 					revertsummary.append({
 						type: 'option',
 						label: wgULS('选择回退理由', '選擇回退理由'),
@@ -344,6 +347,7 @@
 				title: `回退${page}`,
 				tag: `twinklefluff_${rev}`, // Shouldn't be necessary given disableLink
 			});
+
 			Morebits.status.init(notifyStatus);
 		} else {
 			Morebits.status.init(document.getElementById('mw-content-text'));
@@ -399,7 +403,10 @@
 			query,
 			Twinkle.fluff.callbacks.toRevision
 		);
-		qiuwen_api.params = {rev: oldrev, summary: summary};
+		qiuwen_api.params = {
+			rev: oldrev,
+			summary: summary,
+		};
 		qiuwen_api.post();
 	};
 	Twinkle.fluff.callbacks = {
@@ -551,8 +558,7 @@
 							return;
 					}
 				} else if (
-					params.type === 'vand' &&
-					// Okay to test on user since it will either fail or sysop will correctly access it
+					params.type === 'vand' && // Okay to test on user since it will either fail or sysop will correctly access it
 					// Besides, none of the trusted bots are going to be revdel'd
 					Twinkle.fluff.trustedBots.includes(top.getAttribute('user')) &&
 					revs.length > 1 &&

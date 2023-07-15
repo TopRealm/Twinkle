@@ -415,6 +415,7 @@
 					label.appendChild(Morebits.createHtml(data.label));
 					// No margin
 				}
+
 				const select = node.appendChild(document.createElement('select'));
 				if (data.event) {
 					select.addEventListener('change', data.event, false);
@@ -618,6 +619,7 @@
 					label.setAttribute('for', data.id || id);
 					// No margin
 				}
+
 				subnode = node.appendChild(document.createElement('input'));
 				// Add value and placeholder attrs
 				if (data.value) {
@@ -706,6 +708,7 @@
 					label.setAttribute('for', id);
 					// No margin
 				}
+
 				subnode = node.appendChild(document.createElement('input'));
 				if (data.value) {
 					subnode.setAttribute('value', data.value);
@@ -1252,6 +1255,7 @@
 					extra = ':';
 					pad = 8; // 6+2 (due to '::')
 				}
+
 				let replacement = repeat;
 				pad -= address.split(':').length - 1;
 				for (let i = 1; i < pad; i++) {
@@ -1564,6 +1568,7 @@
 				// pretty impossible to do anything :)
 				return [arr]; // we return an array consisting of this array.
 			}
+
 			const numChunks = Math.ceil(arr.length / size);
 			const result = new Array(numChunks);
 			for (let i = 0; i < numChunks; i++) {
@@ -1960,6 +1965,7 @@
 			if (!this.isValid()) {
 				return 'Invalid date'; // Put the truth out, preferable to "NaNNaNNan NaN:NaN" or whatever
 			}
+
 			let udate = this;
 			// create a new date object that will contain the date to display as system time
 			if (zone === 'utc') {
@@ -2406,6 +2412,7 @@
 			// cache for 1 day
 			maxage: '86400', // cache for 1 day
 		};
+
 		return new Morebits.wiki.api('', query).post().then((apiobj) => {
 			apiobj.getStatusElement().unlink();
 			const response = apiobj.getResponse();
@@ -2634,6 +2641,7 @@
 				format: 'json',
 				// don't need rvlimit=1 because we don't need rvstartid here and only one actual rev is returned by default
 			};
+
 			if (ctx.editMode === 'all') {
 				ctx.loadQuery.rvprop = 'content|timestamp'; // get the page content at the same time, if needed
 			} else if (ctx.editMode === 'revert') {
@@ -2644,6 +2652,7 @@
 			if (ctx.followRedirect) {
 				ctx.loadQuery.redirects = ''; // follow all redirects
 			}
+
 			if (typeof ctx.pageSection === 'number') {
 				ctx.loadQuery.rvsection = ctx.pageSection;
 			}
@@ -2784,6 +2793,7 @@
 					if (ctx.lastEditTime) {
 						query.basetimestamp = ctx.lastEditTime; // check that page hasn't been edited since it was loaded
 					}
+
 					query.starttimestamp = ctx.loadTime; // check that page hasn't been deleted since it was loaded (don't recreate bad stuff)
 					break;
 				default:
@@ -2792,6 +2802,7 @@
 					if (ctx.lastEditTime) {
 						query.basetimestamp = ctx.lastEditTime; // check that page hasn't been edited since it was loaded
 					}
+
 					query.starttimestamp = ctx.loadTime; // check that page hasn't been deleted since it was loaded (don't recreate bad stuff)
 					break;
 			}
@@ -3283,6 +3294,7 @@
 			if (ctx.followRedirect) {
 				query.redirects = ''; // follow all redirects
 			}
+
 			ctx.lookupCreationApi = new Morebits.wiki.api(
 				wgULS('抓取页面创建者信息', '抓取頁面建立者資訊'),
 				query,
@@ -3322,6 +3334,7 @@
 			if (!fnPreflightChecks.call(this, 'move', ctx.onMoveFailure)) {
 				return; // abort
 			}
+
 			if (!ctx.moveDestination) {
 				ctx.statusElement.error('Internal error: destination page name was not set before move!');
 				ctx.onMoveFailure(this);
@@ -3393,6 +3406,7 @@
 			if (!fnPreflightChecks.call(this, 'delete', ctx.onDeleteFailure)) {
 				return; // abort
 			}
+
 			if (fnCanUseMwUserToken('delete')) {
 				fnProcessDelete.call(this, this);
 			} else {
@@ -3420,6 +3434,7 @@
 			if (!fnPreflightChecks.call(this, 'undelete', ctx.onUndeleteFailure)) {
 				return; // abort
 			}
+
 			if (fnCanUseMwUserToken('undelete')) {
 				fnProcessUndelete.call(this, this);
 			} else {
@@ -3447,6 +3462,7 @@
 			if (!fnPreflightChecks.call(this, 'protect', ctx.onProtectFailure)) {
 				return; // abort
 			}
+
 			if (!ctx.protectEdit && !ctx.protectMove && !ctx.protectCreate) {
 				ctx.statusElement.error(
 					'Internal error: you must set edit and/or move and/or create protection before calling protect()!'
@@ -3499,6 +3515,7 @@
 				if (!ctx.followCrossNsRedirect) {
 					return false; // must load the page to check for cross namespace redirects
 				}
+
 				if (action !== 'edit' || ctx.editMode === 'all' || ctx.editMode === 'revert') {
 					return false;
 				}
@@ -3551,6 +3568,7 @@
 			if (ctx.followRedirect && action !== 'undelete') {
 				query.redirects = ''; // follow all redirects
 			}
+
 			return query;
 		};
 		// callback from loadSuccess() for append(), prepend(), and newSection() threads
@@ -3563,6 +3581,7 @@
 			if (!fnCheckPageName(response, ctx.onLoadFailure)) {
 				return; // abort
 			}
+
 			const page = response.pages[0];
 			let rev;
 			ctx.pageExists = !page.missing;
@@ -3575,6 +3594,7 @@
 				ctx.pageText = ''; // allow for concatenation, etc.
 				ctx.pageID = 0; // nonexistent in response, matches wgArticleId
 			}
+
 			ctx.csrfToken = response.tokens.csrftoken;
 			if (!ctx.csrfToken) {
 				ctx.statusElement.error(wgULS('未能获取编辑令牌。', '未能取得編輯權杖。'));
@@ -3678,6 +3698,7 @@
 				++Morebits.wiki.numberOfActionsLeft;
 				return false; // abort
 			}
+
 			return true; // all OK
 		};
 		/**
@@ -3735,6 +3756,7 @@
 				if (ctx.onSaveSuccess) {
 					ctx.onSaveSuccess(this); // invoke callback
 				}
+
 				return;
 			}
 			// errors here are only generated by extensions which hook APIEditBeforeSave within MediaWiki,
@@ -3760,6 +3782,7 @@
 					action: 'purge',
 					titles: ctx.pageName, // redirects are already resolved
 				};
+
 				const purgeApi = new Morebits.wiki.api(
 					wgULS('检测到编辑冲突，正在更新服务器缓存', '檢測到編輯衝突，正在更新伺服器快取'),
 					purgeQuery,
@@ -3837,6 +3860,7 @@
 				}
 			}
 		};
+
 		const isTextRedirect = (text) => {
 			if (!text) {
 				// no text - content empty or inaccessible (revdelled or suppressed)
@@ -3849,6 +3873,7 @@
 			if (!fnCheckPageName(response, ctx.onLookupCreationFailure)) {
 				return; // abort
 			}
+
 			const rev = response.pages[0].revisions && response.pages[0].revisions[0];
 			if (!rev) {
 				ctx.statusElement.error(
@@ -4011,6 +4036,7 @@
 			}
 			return true; // all OK
 		};
+
 		const fnProcessMove = function () {
 			let pageTitle;
 			let token;
@@ -4022,6 +4048,7 @@
 				if (!fnProcessChecks('move', ctx.onMoveFailure, response)) {
 					return; // abort
 				}
+
 				token = response.tokens.csrftoken;
 				const page = response.pages[0];
 				pageTitle = page.title;
@@ -4106,6 +4133,7 @@
 				if (!fnProcessChecks('delete', ctx.onDeleteFailure, response)) {
 					return; // abort
 				}
+
 				token = response.tokens.csrftoken;
 				const page = response.pages[0];
 				pageTitle = page.title;
@@ -4158,6 +4186,7 @@
 				}
 			}
 		};
+
 		const fnProcessUndelete = function () {
 			let pageTitle;
 			let token;
@@ -4169,6 +4198,7 @@
 				if (!fnProcessChecks('undelete', ctx.onUndeleteFailure, response)) {
 					return; // abort
 				}
+
 				token = response.tokens.csrftoken;
 				const page = response.pages[0];
 				pageTitle = page.title;
@@ -4235,11 +4265,13 @@
 				}
 			}
 		};
+
 		const fnProcessProtect = function () {
 			const response = ctx.protectApi.getResponse().query;
 			if (!fnProcessChecks('protect', ctx.onProtectFailure, response)) {
 				return; // abort
 			}
+
 			const token = response.tokens.csrftoken;
 			const page = response.pages[0];
 			const pageTitle = page.title;
@@ -4924,6 +4956,7 @@
 			this.target = this.node.appendChild(document.createElement('span'));
 			this.target.appendChild(document.createTextNode('')); // dummy node
 		},
+
 		/** Complete the html, for the second part of the status message. */
 		render: function () {
 			this.node.className = `morebits_status_${this.type}`;
@@ -5592,6 +5625,7 @@
 					.find('.morebits-dialog-buttons')[0]
 					.setAttribute('data-empty', 'data-empty'); // used by CSS
 			}
+
 			return this;
 		},
 		/**

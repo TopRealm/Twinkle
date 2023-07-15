@@ -199,6 +199,7 @@
 		$(previewlink).on('click', () => {
 			Twinkle.warn.callbacks.preview(result); // |result| is defined below
 		});
+
 		previewlink.style.cursor = 'pointer';
 		previewlink.textContent = wgULS('预览', '預覽');
 		more.append({
@@ -603,22 +604,22 @@
 					},
 					'uw-advert': {
 						level1: {
-							label: wgULS('利用维基百科来发布广告或推广', '利用維基百科來發布廣告或推廣'),
-							summary: wgULS('提醒：利用维基百科来发布广告或推广', '提醒：利用維基百科來發布廣告或推廣'),
+							label: wgULS('利用求闻百科来发布广告或推广', '利用求聞百科來發布廣告或推廣'),
+							summary: wgULS('提醒：利用求闻百科来发布广告或推广', '提醒：利用求聞百科來發布廣告或推廣'),
 						},
 						level2: {
-							label: wgULS('利用维基百科来发布广告或推广', '利用維基百科來發布廣告或推廣'),
-							summary: wgULS('注意：利用维基百科来发布广告或推广', '注意：利用維基百科來發布廣告或推廣'),
+							label: wgULS('利用求闻百科来发布广告或推广', '利用求聞百科來發布廣告或推廣'),
+							summary: wgULS('注意：利用求闻百科来发布广告或推广', '注意：利用求聞百科來發布廣告或推廣'),
 						},
 						level3: {
-							label: wgULS('利用维基百科来发布广告或推广', '利用維基百科來發布廣告或推廣'),
-							summary: wgULS('警告：利用维基百科来发布广告或推广', '警告：利用維基百科來發布廣告或推廣'),
+							label: wgULS('利用求闻百科来发布广告或推广', '利用求聞百科來發布廣告或推廣'),
+							summary: wgULS('警告：利用求闻百科来发布广告或推广', '警告：利用求聞百科來發布廣告或推廣'),
 						},
 						level4: {
-							label: wgULS('利用维基百科来发布广告或推广', '利用維基百科來發布廣告或推廣'),
+							label: wgULS('利用求闻百科来发布广告或推广', '利用求聞百科來發布廣告或推廣'),
 							summary: wgULS(
-								'最后警告：利用维基百科来发布广告或推广',
-								'最後警告：利用維基百科來發布廣告或推廣'
+								'最后警告：利用求闻百科来发布广告或推广',
+								'最後警告：利用求聞百科來發布廣告或推廣'
 							),
 						},
 					},
@@ -1453,7 +1454,9 @@
 				break;
 			}
 			default:
-				mw.notify(wgULS('twinklewarn：未知的警告组', 'twinklewarn：未知的警告組'), {type: 'warn'});
+				mw.notify(wgULS('twinklewarn：未知的警告组', 'twinklewarn：未知的警告組'), {
+					type: 'warn',
+				});
 				break;
 		}
 		// Trigger subcategory change, add select menu, etc.
@@ -1576,6 +1579,7 @@
 			);
 			form.previewer.beginRender(templatetext, `User_talk:${relevantUserName}`); // Force wikitext/correct username
 		},
+
 		// Just a pass-through unless the autolevel option was selected
 		preview: (form) => {
 			if (form.main_group.value === 'autolevel') {
@@ -1625,7 +1629,10 @@
 			const history_re =
 				/<!--\s?Template:([uU]w-.*?)\s?-->.*?(\d{4})年(\d{1,2})月(\d{1,2})日 \([日一二三四五六]\) (\d{1,2}):(\d{1,2}) \((UTC|CST)\)/g;
 			const history = {};
-			const latest = {date: new Morebits.date(0), type: ''};
+			const latest = {
+				date: new Morebits.date(0),
+				type: '',
+			};
 			let current;
 			while ((current = history_re.exec(wikitext)) !== null) {
 				const template = current[1];
@@ -1678,6 +1685,7 @@
 					level = 1; // singlenotice or not found
 				}
 			}
+
 			const $autolevelMessage = $('<div>').attr('id', 'twinkle-warn-autolevel-message');
 			if (isNaN(level)) {
 				// No prior warnings found, this is the first
@@ -1691,7 +1699,9 @@
 				if (statelem) {
 					statelem.error(message);
 				} else {
-					mw.notify(message, {type: 'warn'});
+					mw.notify(message, {
+						type: 'warn',
+					});
 				}
 				return;
 			} else {
@@ -1710,13 +1720,14 @@
 								.attr('href', '#')
 								.text(wgULS('单击此处打开告状工具', '點擊此處打開告狀工具'))
 								.css('font-weight', 'bold')
-								.on('click', function () {
+								.on('click', () => {
 									Morebits.wiki.actionCompleted.redirect = null;
 									Twinkle.warn.dialog.close();
 									Twinkle.arv.callback(relevantUserName);
 									$('input[name=page]').val(params.article); // Target page
 									$('input[value=final]').prop('checked', true); // Vandalism after final
 								});
+
 							const statusNode = $('<div>')
 								.css('color', '#f00')
 								.text(
@@ -1945,12 +1956,16 @@
 		const params = Morebits.quickForm.getInputData(e.target);
 		// Check that a reason was filled in if uw-username was selected
 		if (params.sub_group === 'uw-username' && !params.article) {
-			mw.notify(wgULS('必须给{{uw-username}}提供理由。', '必須給{{uw-username}}提供理由。'), {type: 'warn'});
+			mw.notify(wgULS('必须给{{uw-username}}提供理由。', '必須給{{uw-username}}提供理由。'), {
+				type: 'warn',
+			});
 			return;
 		}
 		if (params.article) {
 			if (/https?:\/\//.test(params.article)) {
-				mw.notify(wgULS('“页面链接”不能使用网址。', '「頁面連結」不能使用網址。'), {type: 'warn'});
+				mw.notify(wgULS('“页面链接”不能使用网址。', '「頁面連結」不能使用網址。'), {
+					type: 'warn',
+				});
 				return;
 			}
 			try {
@@ -1972,14 +1987,16 @@
 		// The autolevel option will already know by now if a user talk page
 		// is a cross-namespace redirect (via !!Twinkle.warn.talkpageObj), so
 		// technically we could alert an error here, but the user will have
-		// already ignored the bold red error above.  Moreover, they probably
+		// already ignored the bold red error above. Moreover, they probably
 		// *don't* want to actually issue a warning, so the error handling
 		// after the form is submitted is probably preferable
 		// Find the selected <option> element so we can fetch the data structure
 		const $selectedEl = $(e.target.sub_group).find(`option[value="${$(e.target.sub_group).val()}"]`);
 		params.messageData = $selectedEl.data('messageData');
 		if (typeof params.messageData === 'undefined') {
-			mw.notify(wgULS('请选择警告模板。', '請選擇警告模板。'), {type: 'warn'});
+			mw.notify(wgULS('请选择警告模板。', '請選擇警告模板。'), {
+				type: 'warn',
+			});
 			return;
 		}
 		Morebits.simpleWindow.setButtonsEnabled(false);

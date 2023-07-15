@@ -102,7 +102,11 @@
 						label: wgULS('适用类型：', '適用類別：'),
 						style: 'width: 85%;',
 						list: [
-							{type: 'option', label: wgULS('请选择', '請選擇'), value: ''},
+							{
+								type: 'option',
+								label: wgULS('请选择', '請選擇'),
+								value: '',
+							},
 							{
 								type: 'option',
 								label: wgULS(
@@ -153,7 +157,9 @@
 				},
 			],
 		});
-		form.append({type: 'submit'});
+		form.append({
+			type: 'submit',
+		});
 		const result = form.render();
 		Window.setContent(result);
 		Window.display();
@@ -215,7 +221,9 @@
 		if (csdcrit === 'f4') {
 			const f4_type = event.target['type.f4_type'].value;
 			if (!f4_type) {
-				mw.notify(wgULS('CSD F4：请选择适用类型。', 'CSD F4：請選擇適用類別。'), {type: 'warn'});
+				mw.notify(wgULS('CSD F4：请选择适用类型。', 'CSD F4：請選擇適用類別。'), {
+					type: 'warn',
+				});
 				return false;
 			}
 			params.f4_type = f4_type;

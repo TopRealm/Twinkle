@@ -219,9 +219,7 @@
 			break;
 		case 'gongbi':
 			Twinkle.defaultConfig.portletArea =
-				$('#page-tools .sidebar-inner').length > 0
-					? '#page-tools .sidebar-inner'
-					: '#page-more  .sidebar-inner';
+				$('#page-tools .sidebar-inner').length > 0 ? '#page-tools .sidebar-inner' : '#page-more .sidebar-inner';
 			Twinkle.defaultConfig.portletId = 'p-twinkle';
 			Twinkle.defaultConfig.portletName = 'Twinkle';
 			Twinkle.defaultConfig.portletType = null;
@@ -260,11 +258,11 @@
 	 *
 	 * Available navigation areas depend on the skin used.
 	 * Vector:
-	 *  For each option, the outer nav class contains "vector-menu", the inner div class is "vector-menu-content", and the ul is "vector-menu-content-list"
-	 *  "mw-panel", outer nav class contains "vector-menu-portal". Existing portlets/elements: "p-logo", "p-navigation", "p-interaction", "p-tb", "p-coll-print_export"
-	 *  "left-navigation", outer nav class contains "vector-menu-tabs" or "vector-menu-dropdown". Existing portlets: "p-namespaces", "p-variants" (menu)
-	 *  "right-navigation", outer nav class contains "vector-menu-tabs" or "vector-menu-dropdown". Existing portlets: "p-views", "p-cactions" (menu), "p-search"
-	 *  Special layout of p-personal portlet (part of "head") through specialized styles.
+	 * - For each option, the outer nav class contains "vector-menu", the inner div class is "vector-menu-content", and the ul is "vector-menu-content-list"
+	 * - "mw-panel", outer nav class contains "vector-menu-portal". Existing portlets/elements: "p-logo", "p-navigation", "p-interaction", "p-tb", "p-coll-print_export"
+	 * - "left-navigation", outer nav class contains "vector-menu-tabs" or "vector-menu-dropdown". Existing portlets: "p-namespaces", "p-variants" (menu)
+	 * - "right-navigation", outer nav class contains "vector-menu-tabs" or "vector-menu-dropdown". Existing portlets: "p-views", "p-cactions" (menu), "p-search"
+	 * - Special layout of p-personal portlet (part of "head") through specialized styles.
 	 *
 	 * @param {string} navigation -- id of the target navigation area (skin dependant, on vector either of "left-navigation", "right-navigation", or "mw-panel")
 	 * @param {string} id -- id of the portlet menu to create, preferably start with "p-".
@@ -405,7 +403,7 @@
 	 * **************** Twinkle.addPortletLink() ****************
 	 * Builds a portlet menu if it doesn't exist yet, and add the portlet link.
 	 *
-	 * @param {string|Function} task  -- Either a URL for the portlet link or a function to execute.
+	 * @param {string|Function} task -- Either a URL for the portlet link or a function to execute.
 	 * @param {string} text
 	 * @param {string} id
 	 * @param {string} tooltip
@@ -483,7 +481,9 @@
 					Twinkle.prefs.optionsVersion ||= 1;
 				}
 			} catch {
-				mw.notify(wgULS('未能解析您的Twinkle参数设置', '未能解析您的Twinkle偏好設定'), {type: 'error'});
+				mw.notify(wgULS('未能解析您的Twinkle参数设置', '未能解析您的Twinkle偏好設定'), {
+					type: 'error',
+				});
 			}
 		})
 		.always(() => {

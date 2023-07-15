@@ -75,7 +75,9 @@
 				},
 			],
 		});
-		form.append({type: 'submit'});
+		form.append({
+			type: 'submit',
+		});
 		const result = form.render();
 		Window.setContent(result);
 		Window.display();
@@ -160,7 +162,7 @@
 				tag = `${speedyTag}\n${tag}`;
 			}
 			pageobj.setPageText(tag);
-			pageobj.setEditSummary(wgULS('本页面疑似侵犯著作权', '本頁面疑似侵犯版權'));
+			pageobj.setEditSummary(wgULS('此页面疑似侵犯著作权', '此頁面疑似侵犯版權'));
 			pageobj.setChangeTags(Twinkle.changeTags);
 			pageobj.setWatchlist(Twinkle.getPref('copyvioWatchPage'));
 			// pageobj.setCreateOption('recreate');
@@ -191,7 +193,9 @@
 	Twinkle.copyvio.callback.evaluate = (e) => {
 		const params = Morebits.quickForm.getInputData(e.target);
 		if (!params.source.trim()) {
-			mw.notify(wgULS('请指定侵权来源', '請指定侵權來源'), {type: 'warn'});
+			mw.notify(wgULS('请指定侵权来源', '請指定侵權來源'), {
+				type: 'warn',
+			});
 			return;
 		}
 		Morebits.simpleWindow.setButtonsEnabled(false);

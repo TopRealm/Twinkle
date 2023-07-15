@@ -86,7 +86,9 @@
 				});
 				break;
 			default:
-				mw.notify(`Twinkle.stub：未知模式 ${Twinkle.stub.mode}`, {type: 'warn'});
+				mw.notify(`Twinkle.stub：未知模式 ${Twinkle.stub.mode}`, {
+					type: 'warn',
+				});
 				break;
 		}
 		form.append({
@@ -125,7 +127,10 @@
 		};
 		// append any custom tags
 		if (Twinkle.getPref('customStubList').length) {
-			container.append({type: 'header', label: wgULS('自定义模板', '自訂模板')});
+			container.append({
+				type: 'header',
+				label: wgULS('自定义模板', '自訂模板'),
+			});
 			const customcheckboxes = [];
 			$.each(Twinkle.getPref('customStubList'), (_, item) => {
 				customcheckboxes.push(makeCheckbox(item.value, item.label));
@@ -168,7 +173,10 @@
 					doCategoryCheckboxes(subdiv, content);
 				} else {
 					$.each(content, (subtitle, subcontent) => {
-						subdiv.append({type: 'div', label: [Morebits.htmlNode('b', subtitle)]});
+						subdiv.append({
+							type: 'div',
+							label: [Morebits.htmlNode('b', subtitle)],
+						});
 						doCategoryCheckboxes(subdiv, subcontent);
 					});
 				}
@@ -189,9 +197,15 @@
 		const rendered = container.render();
 		$workarea.empty().append(rendered);
 		// style adjustments
-		$workarea.find('h5').css({'font-size': '110%'});
-		$workarea.find('h5:not(:first-child)').css({'margin-top': '1em'});
-		$workarea.find('div').filter(':has(span.quickformDescription)').css({'margin-top': '0.4em'});
+		$workarea.find('h5').css({
+			'font-size': '110%',
+		});
+		$workarea.find('h5:not(:first-child)').css({
+			'margin-top': '1em',
+		});
+		$workarea.find('div').filter(':has(span.quickformDescription)').css({
+			'margin-top': '0.4em',
+		});
 		// add a link to each template's description page
 		$.each(Morebits.quickForm.getElements(e.target.form, 'articleTags'), (index, checkbox) => {
 			const $checkbox = $(checkbox);
@@ -344,11 +358,15 @@
 				params.group = false;
 				break;
 			default:
-				mw.notify(`Twinkle.stub：未知模式 ${Twinkle.stub.mode}`, {type: 'warn'});
+				mw.notify(`Twinkle.stub：未知模式 ${Twinkle.stub.mode}`, {
+					type: 'warn',
+				});
 				break;
 		}
 		if (!params.tags.length) {
-			mw.notify('必须选择至少一个标记！', {type: 'warn'});
+			mw.notify('必须选择至少一个标记！', {
+				type: 'warn',
+			});
 			return;
 		}
 		Morebits.simpleWindow.setButtonsEnabled(false);
@@ -378,7 +396,9 @@
 				qiuwen_page.load(Twinkle.stub.callbacks.file);
 				break;
 			default:
-				mw.notify(`Twinkle.stub：未知模式 ${Twinkle.stub.mode}`, {type: 'warn'});
+				mw.notify(`Twinkle.stub：未知模式 ${Twinkle.stub.mode}`, {
+					type: 'warn',
+				});
 				break;
 		}
 	};

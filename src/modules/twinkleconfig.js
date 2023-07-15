@@ -737,7 +737,10 @@
 					name: 'tagArticleSortOrder',
 					label: wgULS('条目标记的默认查看方式', '條目標記的預設檢視方式'),
 					type: 'enum',
-					enumValues: {cat: wgULS('按类型', '按類別'), alpha: '按字母'},
+					enumValues: {
+						cat: wgULS('按类型', '按類別'),
+						alpha: '按字母',
+					},
 				},
 				{
 					name: 'customTagList',
@@ -788,7 +791,10 @@
 					name: 'stubArticleSortOrder',
 					label: wgULS('条目小作品的默认查看方式', '條目小作品的預設檢視方式'),
 					type: 'enum',
-					enumValues: {cat: wgULS('按类型', '按類別'), alpha: '按字母'},
+					enumValues: {
+						cat: wgULS('按类型', '按類別'),
+						alpha: '按字母',
+					},
 				},
 				{
 					name: 'customStubList',
@@ -997,7 +1003,10 @@
 						'若選擇「相同於上次選擇」將使用localStorage來記憶。'
 					),
 					type: 'enum',
-					enumValues: {'delete': wgULS('删除', '刪除'), same: wgULS('相同于上次选择', '相同於上次選擇')},
+					enumValues: {
+						'delete': wgULS('删除', '刪除'),
+						same: wgULS('相同于上次选择', '相同於上次選擇'),
+					},
 				},
 				{
 					name: 'afdFameDefaultReason',
@@ -1197,6 +1206,7 @@
 					if (pref.adminOnly && !Morebits.userIsSysop) {
 						return true; // i.e. "continue" in this context
 					}
+
 					row = document.createElement('tr');
 					row.style.marginBottom = '0.2em';
 					// create odd row banding
@@ -1245,6 +1255,7 @@
 								input.setAttribute('type', 'number');
 								input.setAttribute('step', '1'); // integers only
 							}
+
 							if (gotPref) {
 								input.setAttribute('value', gotPref);
 							}
@@ -1364,7 +1375,9 @@
 							break;
 						}
 						default:
-							mw.notify(`twinkleconfig: 未知类型的属性 ${pref.name}`, {type: 'warn'});
+							mw.notify(`twinkleconfig: 未知类型的属性 ${pref.name}`, {
+								type: 'warn',
+							});
 							break;
 					}
 					row.appendChild(cell);
@@ -1648,7 +1661,9 @@
 			.find('input[type="text"]')
 			.each((inputkey, input) => {
 				if ($(input).hasClass('twinkle-config-customlist-value')) {
-					current = {value: input.value};
+					current = {
+						value: input.value,
+					};
 				} else {
 					current.label = input.value;
 					// exclude totally empty rows
@@ -1667,21 +1682,26 @@
 			if (section.hidden || (section.adminOnly && !Morebits.userIsSysop)) {
 				return true; // continue: skip impossibilities
 			}
+
 			let foundit = false;
 			$(section.preferences).each((prefkey, pref) => {
 				if (pref.name !== wantedpref) {
 					return true; // continue
 				}
+
 				Twinkle.config.resetPref(pref);
 				foundit = true;
 				return false; // break
 			});
+
 			if (foundit) {
 				return false; // break
 			}
 		});
+
 		return false; // stop link from scrolling page
 	};
+
 	Twinkle.config.resetPref = (pref) => {
 		switch (pref.type) {
 			case 'boolean':
@@ -1704,7 +1724,9 @@
 				$(document.getElementById(pref.name)).data('value', Twinkle.defaultConfig[pref.name]);
 				break;
 			default:
-				mw.notify(`twinkleconfig: unknown data type for preference ${pref.name}`, {type: 'warn'});
+				mw.notify(`twinkleconfig: unknown data type for preference ${pref.name}`, {
+					type: 'warn',
+				});
 				break;
 		}
 	};
@@ -1714,6 +1736,7 @@
 			if (section.hidden || (section.adminOnly && !Morebits.userIsSysop)) {
 				return true; // continue: skip impossibilities
 			}
+
 			$(section.preferences).each((prefkey, pref) => {
 				if (!pref.adminOnly || Morebits.userIsSysop) {
 					Twinkle.config.resetPref(pref);
@@ -1723,6 +1746,7 @@
 		});
 		return false; // stop link from scrolling page
 	};
+
 	Twinkle.config.save = (e) => {
 		Morebits.status.init(document.getElementById('twinkle-config-content'));
 		const userjs = `${mw.config.get('wgFormattedNamespaces')[mw.config.get('wgNamespaceIds').user]}:${mw.config.get(
@@ -1737,7 +1761,9 @@
 		const form = pageobj.getCallbackParameters();
 		// this is the object which gets serialized into JSON; only
 		// preferences that this script knows about are kept
-		const newConfig = {optionsVersion: 2.1};
+		const newConfig = {
+			optionsVersion: 2.1,
+		};
 		// a comparison function is needed later on
 		// it is just enough for our purposes (i.e. comparing strings, numbers, booleans,
 		// arrays of strings, and arrays of { value, label })
@@ -1776,14 +1802,16 @@
 				if (!pref.adminOnly || Morebits.userIsSysop) {
 					if (!section.hidden) {
 						switch (pref.type) {
-							case 'boolean': // read from the checkbox
+							case 'boolean':
+								// read from the checkbox
 								userValue = form[pref.name].checked;
 								break;
 							case 'string': // read from the input box or combo box
 							case 'enum':
 								userValue = form[pref.name].value;
 								break;
-							case 'integer': // read from the input box
+							case 'integer':
+								// read from the input box
 								userValue = parseInt(form[pref.name].value, 10);
 								if (isNaN(userValue)) {
 									Morebits.status.warn(
@@ -1796,7 +1824,8 @@
 									userValue = null;
 								}
 								break;
-							case 'set': // read from the set of check boxes
+							case 'set':
+								// read from the set of check boxes
 								userValue = [];
 								if (pref.setDisplayOrder) {
 									// read only those keys specified in the display order
@@ -1814,11 +1843,14 @@
 									});
 								}
 								break;
-							case 'customList': // read from the jQuery data stored on the button object
+							case 'customList':
+								// read from the jQuery data stored on the button object
 								userValue = $(form[pref.name]).data('value');
 								break;
 							default:
-								mw.notify(`twinkleconfig: 未知数据类型，属性 ${pref.name}`, {type: 'warn'});
+								mw.notify(`twinkleconfig: 未知数据类型，属性 ${pref.name}`, {
+									type: 'warn',
+								});
 								break;
 						}
 					} else if (Twinkle.prefs) {

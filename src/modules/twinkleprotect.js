@@ -68,10 +68,24 @@
 				},
 			],
 		});
-		form.append({type: 'field', label: wgULS('默认', '預設'), name: 'field_preset'});
-		form.append({type: 'field', label: '1', name: 'field1'});
-		form.append({type: 'field', label: '2', name: 'field2'});
-		form.append({type: 'submit'});
+		form.append({
+			type: 'field',
+			label: wgULS('默认', '預設'),
+			name: 'field_preset',
+		});
+		form.append({
+			type: 'field',
+			label: '1',
+			name: 'field1',
+		});
+		form.append({
+			type: 'field',
+			label: '2',
+			name: 'field2',
+		});
+		form.append({
+			type: 'submit',
+		});
 		const result = form.render();
 		Window.setContent(result);
 		Window.display();
@@ -211,8 +225,16 @@
 					label: wgULS('保护选项', '保護選項'),
 					name: 'field2',
 				});
-				field2.append({type: 'div', name: 'currentprot', label: ' '}); // holds the current protection level, as filled out by the async callback
-				field2.append({type: 'div', name: 'hasprotectlog', label: ' '});
+				field2.append({
+					type: 'div',
+					name: 'currentprot',
+					label: ' ',
+				}); // holds the current protection level, as filled out by the async callback
+				field2.append({
+					type: 'div',
+					name: 'hasprotectlog',
+					label: ' ',
+				});
 				// for existing pages
 				if (mw.config.get('wgArticleId')) {
 					field2.append({
@@ -249,6 +271,7 @@
 							$('input[name=small]', $(e.target).closest('form'))[0].checked =
 								e.target.selectedIndex >= 4; // 1 month
 						},
+
 						// default expiry selection (2 days) is conditionally set in Twinkle.protect.callback.changePreset
 						list: Twinkle.protect.protectionLengths,
 					});
@@ -342,8 +365,16 @@
 					label: wgULS('标记选项', '標記選項'),
 					name: 'field1',
 				});
-				field1.append({type: 'div', name: 'currentprot', label: ' '}); // holds the current protection level, as filled out by the async callback
-				field1.append({type: 'div', name: 'hasprotectlog', label: ' '});
+				field1.append({
+					type: 'div',
+					name: 'currentprot',
+					label: ' ',
+				}); // holds the current protection level, as filled out by the async callback
+				field1.append({
+					type: 'div',
+					name: 'hasprotectlog',
+					label: ' ',
+				});
 				field1.append({
 					type: 'select',
 					name: 'tagtype',
@@ -396,17 +427,39 @@
 						? Twinkle.protect.protectionTypes
 						: Twinkle.protect.protectionTypesCreate,
 				});
-				field1 = new Morebits.quickForm.element({type: 'field', label: wgULS('选项', '選項'), name: 'field1'});
-				field1.append({type: 'div', name: 'currentprot', label: ' '}); // holds the current protection level, as filled out by the async callback
-				field1.append({type: 'div', name: 'hasprotectlog', label: ' '});
+				field1 = new Morebits.quickForm.element({
+					type: 'field',
+					label: wgULS('选项', '選項'),
+					name: 'field1',
+				});
+				field1.append({
+					type: 'div',
+					name: 'currentprot',
+					label: ' ',
+				}); // holds the current protection level, as filled out by the async callback
+				field1.append({
+					type: 'div',
+					name: 'hasprotectlog',
+					label: ' ',
+				});
 				field1.append({
 					type: 'select',
 					name: 'expiry',
 					label: wgULS('时长：', '時長：'),
 					list: [
-						{label: '', selected: true, value: ''},
-						{label: wgULS('临时', '臨時'), value: 'temporary'},
-						{label: '永久', value: 'infinity'},
+						{
+							label: '',
+							selected: true,
+							value: '',
+						},
+						{
+							label: wgULS('临时', '臨時'),
+							value: 'temporary',
+						},
+						{
+							label: '永久',
+							value: 'infinity',
+						},
 					],
 				});
 				field1.append({
@@ -416,7 +469,9 @@
 				});
 				break;
 			default:
-				mw.notify(wgULS('这玩意儿被海豚吃掉了！', '這玩意兒被海豚吃掉了！'), {type: 'warn'});
+				mw.notify(wgULS('这玩意儿被海豚吃掉了！', '這玩意兒被海豚吃掉了！'), {
+					type: 'warn',
+				});
 				break;
 		}
 		let oldfield;
@@ -444,10 +499,10 @@
 			evt.initEvent('change', true, true);
 			e.target.form.category.dispatchEvent(evt);
 			// reduce vertical height of dialog
-			$(e.target.form)
-				.find('fieldset[name="field2"] select')
-				.parent()
-				.css({display: 'inline-block', marginRight: '0.5em'});
+			$(e.target.form).find('fieldset[name="field2"] select').parent().css({
+				display: 'inline-block',
+				marginRight: '0.5em',
+			});
 		}
 		// re-add protection level and log info, if it's available
 		Twinkle.protect.callback.showLogAndCurrentProtectInfo();
@@ -692,7 +747,10 @@
 		...Twinkle.protect.protectionTypesCreateOnly,
 	];
 	Twinkle.protect.protectionTypesCreate = [
-		{label: '解除保护', value: 'unprotect'},
+		{
+			label: '解除保护',
+			value: 'unprotect',
+		},
 		...Twinkle.protect.protectionTypesCreateOnly,
 	];
 	// NOTICE: keep this synched with [[MediaWiki:Protect-dropdown]]
@@ -888,27 +946,41 @@
 			if (mw.config.get('wgArticleId')) {
 				if (item.edit) {
 					form.editmodify.checked = true;
-					Twinkle.protect.formevents.editmodify({target: form.editmodify});
+					Twinkle.protect.formevents.editmodify({
+						target: form.editmodify,
+					});
 					form.editlevel.value = item.edit;
-					Twinkle.protect.formevents.editlevel({target: form.editlevel});
+					Twinkle.protect.formevents.editlevel({
+						target: form.editlevel,
+					});
 				} else {
 					form.editmodify.checked = false;
-					Twinkle.protect.formevents.editmodify({target: form.editmodify});
+					Twinkle.protect.formevents.editmodify({
+						target: form.editmodify,
+					});
 				}
 				if (item.move) {
 					form.movemodify.checked = true;
-					Twinkle.protect.formevents.movemodify({target: form.movemodify});
+					Twinkle.protect.formevents.movemodify({
+						target: form.movemodify,
+					});
 					form.movelevel.value = item.move;
-					Twinkle.protect.formevents.movelevel({target: form.movelevel});
+					Twinkle.protect.formevents.movelevel({
+						target: form.movelevel,
+					});
 				} else {
 					form.movemodify.checked = false;
-					Twinkle.protect.formevents.movemodify({target: form.movemodify});
+					Twinkle.protect.formevents.movemodify({
+						target: form.movemodify,
+					});
 				}
 				form.editexpiry.value = form.moveexpiry.value = item.expiry || '1 week';
 			} else {
 				if (item.create) {
 					form.createlevel.value = item.create;
-					Twinkle.protect.formevents.createlevel({target: form.createlevel});
+					Twinkle.protect.formevents.createlevel({
+						target: form.createlevel,
+					});
 					form.createexpiry.value = item.createexpiry || '1 week';
 				}
 				form.createexpiry.value = item.expiry || '1 week';
@@ -926,7 +998,9 @@
 				} else {
 					form.tagtype.value = item.template ? item.template : form.category.value;
 				}
-				Twinkle.protect.formevents.tagtype({target: form.tagtype});
+				Twinkle.protect.formevents.tagtype({
+					target: form.tagtype,
+				});
 				if (/template/.test(form.category.value)) {
 					form.noinclude.checked = true;
 				} else if (mw.config.get('wgNamespaceNumber') !== 10) {
@@ -1053,7 +1127,9 @@
 							if (input.movelevel) {
 								thispage.setMoveProtection(input.movelevel, input.moveexpiry);
 							} else {
-								mw.notify(wgULS('您需要选择保护层级！', '您需要選擇保護層級！'), {type: 'warn'});
+								mw.notify(wgULS('您需要选择保护层级！', '您需要選擇保護層級！'), {
+									type: 'warn',
+								});
 								return;
 							}
 						}
@@ -1071,7 +1147,9 @@
 								'您必须输入保护理由，这将被记录在保护日志中。',
 								'您必須輸入保護理由，這將被記錄在保護日誌中。'
 							),
-							{type: 'warn'}
+							{
+								type: 'warn',
+							}
 						);
 						return;
 					}
@@ -1091,7 +1169,9 @@
 							'请告诉Twinkle要做什么！\n若您只是想标记该页，请选择上面的“用保护模板标记此页”选项。',
 							'請告訴Twinkle要做什麼！\n若您只是想標記該頁，請選擇上面的「用保護模板標記此頁」選項。'
 						),
-						{type: 'warn'}
+						{
+							type: 'warn',
+						}
 					);
 				}
 				break;
@@ -1160,7 +1240,8 @@
 						typereason = wgULS('持续破坏', '持續破壞');
 						break;
 					case 'pp-template':
-					case 'pp-semi-template': // removed for now
+					case 'pp-semi-template':
+						// removed for now
 						typereason = wgULS('高风险模板', '高風險模板');
 						break;
 					case 'pp-create-userpage':
@@ -1220,7 +1301,9 @@
 				break;
 			}
 			default:
-				mw.notify('twinkleprotect: 未知操作类型', {type: 'warn'});
+				mw.notify('twinkleprotect: 未知操作类型', {
+					type: 'warn',
+				});
 				break;
 		}
 	};

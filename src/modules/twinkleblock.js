@@ -165,12 +165,35 @@
 				],
 			});
 		}
-		form.append({type: 'field', label: wgULS('默认', '預設'), name: 'field_preset'});
-		form.append({type: 'field', label: wgULS('模板选项', '模板選項'), name: 'field_template_options'});
-		form.append({type: 'field', label: wgULS('封禁选项', '封鎖選項'), name: 'field_block_options'});
-		form.append({type: 'field', label: wgULS('标记用户页', '標記使用者頁面'), name: 'field_tag_options'});
-		form.append({type: 'field', label: wgULS('解除封禁选项', '解除封鎖選項'), name: 'field_unblock_options'});
-		form.append({type: 'submit', label: '提交'});
+		form.append({
+			type: 'field',
+			label: wgULS('默认', '預設'),
+			name: 'field_preset',
+		});
+		form.append({
+			type: 'field',
+			label: wgULS('模板选项', '模板選項'),
+			name: 'field_template_options',
+		});
+		form.append({
+			type: 'field',
+			label: wgULS('封禁选项', '封鎖選項'),
+			name: 'field_block_options',
+		});
+		form.append({
+			type: 'field',
+			label: wgULS('标记用户页', '標記使用者頁面'),
+			name: 'field_tag_options',
+		});
+		form.append({
+			type: 'field',
+			label: wgULS('解除封禁选项', '解除封鎖選項'),
+			name: 'field_unblock_options',
+		});
+		form.append({
+			type: 'submit',
+			label: '提交',
+		});
 		const result = form.render();
 		Window.setContent(result);
 		Window.display();
@@ -356,7 +379,9 @@
 		if (e.target.value === 'unblock') {
 			if (!Twinkle.block.currentBlockInfo) {
 				$unblock.prop('checked', false);
-				mw.notify(wgULS('用户没有被封禁', '使用者沒有被封鎖'), {type: 'warn'});
+				mw.notify(wgULS('用户没有被封禁', '使用者沒有被封鎖'), {
+					type: 'warn',
+				});
 				return;
 			}
 			$block.prop('checked', false);
@@ -432,8 +457,16 @@
 				label: wgULS('封禁选项', '封鎖選項'),
 				name: 'field_block_options',
 			});
-			field_block_options.append({type: 'div', name: 'currentblock', label: ' '});
-			field_block_options.append({type: 'div', name: 'hasblocklog', label: ' '});
+			field_block_options.append({
+				type: 'div',
+				name: 'currentblock',
+				label: ' ',
+			});
+			field_block_options.append({
+				type: 'div',
+				name: 'hasblocklog',
+				label: ' ',
+			});
 			field_block_options.append({
 				type: 'select',
 				name: 'expiry_preset',
@@ -538,7 +571,11 @@
 				$.each(menuFormattedNamespaces, (number, name) => {
 					// Ignore -1: Special; -2: Media; and 2300-2303: Gadget (talk) and Gadget definition (talk)
 					if (number >= 0 && number < 830) {
-						ns.append({type: 'option', label: name, value: number});
+						ns.append({
+							type: 'option',
+							label: name,
+							value: number,
+						});
 					}
 				});
 			}
@@ -671,7 +708,11 @@
 			});
 			// Yet-another-logevents-doesn't-handle-ranges-well
 			if (blockedUserName === relevantUserName) {
-				field_block_options.append({type: 'hidden', name: 'reblock', value: '1'});
+				field_block_options.append({
+					type: 'hidden',
+					name: 'reblock',
+					value: '1',
+				});
 			}
 		}
 		if (templateBox) {
@@ -782,9 +823,19 @@
 			$previewlink.off('click').on('click', () => {
 				Twinkle.block.callback.preview($form[0]);
 			});
-			$previewlink.css({cursor: 'pointer'});
-			field_template_options.append({type: 'div', id: 'blockpreview', label: [$previewlink[0]]});
-			field_template_options.append({type: 'div', id: 'twinkleblock-previewbox', style: 'display: none'});
+			$previewlink.css({
+				cursor: 'pointer',
+			});
+			field_template_options.append({
+				type: 'div',
+				id: 'blockpreview',
+				label: [$previewlink[0]],
+			});
+			field_template_options.append({
+				type: 'div',
+				id: 'twinkleblock-previewbox',
+				style: 'display: none',
+			});
 		}
 		if (tagBox) {
 			field_tag_options = new Morebits.quickForm.element({
@@ -1943,6 +1994,7 @@
 		const templateText = Twinkle.block.callback.getBlockNoticeWikitext(params);
 		form.previewer.beginRender(templateText, `User_talk:${relevantUserName}/Wikitext`); // Force wikitext/correct username
 	};
+
 	Twinkle.block.callback.evaluate = (e) => {
 		const params = Morebits.quickForm.getInputData(e.target);
 		const $form = $(e.target);
@@ -1990,13 +2042,17 @@
 					'}}、{{'
 				)}}}。`;
 				message += extra || '';
-				mw.notify(message, {type: 'warn'});
+				mw.notify(message, {
+					type: 'warn',
+				});
 				return true;
 			}
 		};
 		if (toTag) {
 			if (params.tag.length === 0) {
-				mw.notify(wgULS('请至少选择一个用户页标记！', '請至少選擇一個使用者頁面標記！'), {type: 'warn'});
+				mw.notify(wgULS('请至少选择一个用户页标记！', '請至少選擇一個使用者頁面標記！'), {
+					type: 'warn',
+				});
 				return;
 			}
 			if (
@@ -2044,7 +2100,9 @@
 							'部分封禁无法阻止编辑自己的讨论页，除非也封禁了User talk命名空间！',
 							'部分封鎖無法阻止編輯自己的討論頁，除非也封鎖了User talk命名空間！'
 						),
-						{type: 'warn'}
+						{
+							type: 'warn',
+						}
 					);
 					return;
 				}
@@ -2056,7 +2114,9 @@
 								'没有选择页面或命名空间，也没有停用电子邮件或禁止创建账户；请选择至少一个选项以应用部分封禁！',
 								'沒有選擇頁面或命名空間，也沒有停用電子郵件或禁止建立帳號；請選擇至少一個選項以應用部分封鎖！'
 							),
-							{type: 'warn'}
+							{
+								type: 'warn',
+							}
 						);
 						return;
 					} else if (
@@ -2072,14 +2132,20 @@
 				}
 			}
 			if (!blockoptions.expiry) {
-				mw.notify(wgULS('请提供过期时间！', '請提供過期時間！'), {type: 'warn'});
+				mw.notify(wgULS('请提供过期时间！', '請提供過期時間！'), {
+					type: 'warn',
+				});
 				return;
 			} else if (Morebits.string.isInfinity(blockoptions.expiry) && !Twinkle.block.isRegistered) {
-				mw.notify(wgULS('禁止无限期封禁IP地址！', '禁止無限期封鎖IP位址！'), {type: 'warn'});
+				mw.notify(wgULS('禁止无限期封禁IP地址！', '禁止無限期封鎖IP位址！'), {
+					type: 'warn',
+				});
 				return;
 			}
 			if (!blockoptions.reason) {
-				mw.notify(wgULS('请提供封禁理由！', '請提供封鎖理由！'), {type: 'warn'});
+				mw.notify(wgULS('请提供封禁理由！', '請提供封鎖理由！'), {
+					type: 'warn',
+				});
 				return;
 			}
 			Morebits.simpleWindow.setButtonsEnabled(false);
@@ -2177,6 +2243,7 @@
 					}
 					blockoptions.reblock = 1; // Writing over a block will fail otherwise
 				}
+
 				const groupsCanBeRemoved = [
 					'autoreviewer',
 					'confirmed',
@@ -2250,7 +2317,9 @@
 		}
 		if (toUnblock) {
 			if (!unblockoptions.reason) {
-				mw.notify(wgULS('请提供解除封禁理由！', '請提供解除封鎖理由！'), {type: 'warn'});
+				mw.notify(wgULS('请提供解除封禁理由！', '請提供解除封鎖理由！'), {
+					type: 'warn',
+				});
 				return;
 			}
 			Morebits.simpleWindow.setButtonsEnabled(false);
@@ -2267,7 +2336,9 @@
 			unblockMbApi.post();
 		}
 		if (!toBlock && !toWarn && !toTag && !toProtect && !toUnblock) {
-			mw.notify(wgULS('请给Twinkle点事做！', '請給Twinkle點事做！'), {type: 'warn'});
+			mw.notify(wgULS('请给Twinkle点事做！', '請給Twinkle點事做！'), {
+				type: 'warn',
+			});
 			return;
 		}
 	};
@@ -2300,7 +2371,9 @@
 						tagtext += '\n';
 						break;
 					default:
-						mw.notify(wgULS('未知的用户页模板！', '未知的使用者頁面模板！'), {type: 'warn'});
+						mw.notify(wgULS('未知的用户页模板！', '未知的使用者頁面模板！'), {
+							type: 'warn',
+						});
 						return;
 				}
 				tagtext += '}}';
@@ -2433,6 +2506,7 @@
 					text += `|time=${Morebits.string.formatTime(params.expiry)}`; // formatTime
 				}
 			}
+
 			if (!Twinkle.block.isRegistered && !params.hardblock) {
 				text += '|anon=yes';
 			}

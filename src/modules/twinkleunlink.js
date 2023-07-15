@@ -120,7 +120,9 @@
 		const form = event.target;
 		const input = Morebits.quickForm.getInputData(form);
 		if (!input.reason) {
-			mw.notify(wgULS('您必须指定取消链入的理由。', '您必須指定取消連入的理由。'), {type: 'warn'});
+			mw.notify(wgULS('您必须指定取消链入的理由。', '您必須指定取消連入的理由。'), {
+				type: 'warn',
+			});
 			return;
 		}
 		input.backlinks || (input.backlinks = []);
