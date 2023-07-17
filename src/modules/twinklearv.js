@@ -214,7 +214,7 @@
 					name: 'arvtype',
 					list: [
 						{
-							label: wgULS('已发出最后（层级4或4im）警告', '已發出最後（層級4或4im）警告'),
+							label: wgULS('已发出最后警告', '已發出最後警告'),
 							value: 'final',
 						},
 						{
