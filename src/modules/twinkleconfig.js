@@ -861,17 +861,17 @@
 					label: wgULS('默认警告级别', '預設警告級別'),
 					type: 'enum',
 					enumValues: {
-						1: '1：提醒',
-						2: '2：注意',
-						3: '3：警告',
-						4: wgULS('4：最后警告', '4：最後警告'),
-						5: '4im：唯一警告',
-						6: wgULS('单层级提醒', '單層級提醒'),
-						7: wgULS('单层级警告', '單層級警告'),
+						1: '1：注意',
+						2: '2：警告',
+						3: wgULS('单层级提醒', '單層級提醒'),
+						4: wgULS('单层级警告', '單層級警告'),
+						5: wgULS('自定义提醒或警告', '自訂提醒或警告'),
+						6: '所有警告模板',
+						7: wgULS('自动选择层级（1-4）', '自動選擇層級（1-4）'),
 						// 8 was used for block templates before #260
-						9: wgULS('自定义警告', '自訂警告'),
-						10: '所有警告模板',
-						11: wgULS('自动选择层级（1-4）', '自動選擇層級（1-4）'),
+						// 9 was deprecated
+						// 10 was deprecated
+						// 11 was deprecated
 					},
 				},
 				// TwinkleConfig.combinedSingletMenus (boolean)
