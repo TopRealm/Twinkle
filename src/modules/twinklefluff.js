@@ -113,7 +113,6 @@
 			vandNode.appendChild(vandLink);
 			normNode.appendChild(normLink);
 			const separator = inline ? ' ' : ' || ';
-			revNode.appendChild(document.createTextNode(separator));
 			revNode.appendChild(normNode);
 			revNode.appendChild(document.createTextNode(separator));
 			revNode.appendChild(vandNode);
