@@ -1146,7 +1146,6 @@
 	 *   disabletalk: <disable user from editing their own talk page while blocked>
 	 *   expiry: <string - expiry timestamp, can include relative times like "5 months", "2 weeks" etc>
 	 *   forAnonOnly: <show block option in the interface only if the relevant user is an IP>
-	 *   forRegisteredOnly: <show block option in the interface only if the relevant user is registered>
 	 *   label: <string - label for the option of the dropdown in the interface (keep brief)>
 	 *   noemail: prevent the user from sending email through Special:Emailuser
 	 *   pageParam: <set if the associated block template accepts a page parameter>
@@ -1187,7 +1186,6 @@
 		'checkuserblock-account': {
 			autoblock: true,
 			expiry: 'infinity',
-			forRegisteredOnly: true,
 			nocreate: true,
 			nonstandard: true,
 			reason: '{{checkuserblock-account}}',
@@ -1221,7 +1219,6 @@
 		'uw-block': {
 			autoblock: true,
 			expiry: '1 day',
-			forRegisteredOnly: true,
 			nocreate: true,
 			pageParam: true,
 			reasonParam: true,
@@ -1231,7 +1228,6 @@
 		'uw-blockindef': {
 			autoblock: true,
 			expiry: 'infinity',
-			forRegisteredOnly: true,
 			nocreate: true,
 			pageParam: true,
 			reasonParam: true,
@@ -1297,7 +1293,6 @@
 		'uw-soablock': {
 			autoblock: true,
 			expiry: 'infinity',
-			forRegisteredOnly: true,
 			nocreate: true,
 			pageParam: true,
 			reason: wgULS('[[QW:NOT#AD|散发广告或宣传]]', '[[QW:NOT#AD|散發廣告或宣傳]]'),
@@ -1307,7 +1302,6 @@
 		'uw-sockblock': {
 			autoblock: true,
 			expiry: '1 week',
-			forRegisteredOnly: true,
 			nocreate: true,
 			reason: wgULS('滥用[[QW:SOCK|多个账户]]', '濫用[[QW:SOCK|多個帳號]]'),
 			summary: wgULS('封禁通知：滥用[[QW:SOCK|多个账户]]', '封鎖通知：濫用[[QW:SOCK|多個帳號]]'),
@@ -1316,7 +1310,6 @@
 		'uw-socialmediablock': {
 			autoblock: true,
 			expiry: '1 week',
-			forRegisteredOnly: true,
 			nocreate: true,
 			reason: wgULS(
 				'[[QW:NOT#MYSPACE|将求闻百科用作博客或社交网站]]',
@@ -1330,7 +1323,6 @@
 		},
 		'uw-ublock': {
 			expiry: 'infinity',
-			forRegisteredOnly: true,
 			reason: `{{uw-ublock}}<!-- ${wgULS('不当用户名（软封禁）', '不當使用者名稱（軟封鎖）')} -->`,
 			summary: wgULS(
 				'封禁通知：您的用户名违反[[QW:U|用户名方针]]',
@@ -1340,7 +1332,6 @@
 		'uw-ublock-spam': {
 			autoblock: true,
 			expiry: 'infinity',
-			forRegisteredOnly: true,
 			nocreate: true,
 			reason: `{{uw-ublock-spam}}<!-- ${wgULS('宣传性用户名或宣传性编辑', '宣傳性使用者名稱、宣傳性編輯')} -->`,
 			summary: wgULS(
@@ -1350,7 +1341,6 @@
 		},
 		'uw-ublock-suggestive': {
 			expiry: 'infinity',
-			forRegisteredOnly: true,
 			reason: `{{uw-ublock-suggestive}}<!-- ${wgULS(
 				'用户名与其他用户相似（软封禁）',
 				'使用者名稱與其他使用者相似（軟封鎖）'
@@ -1383,7 +1373,6 @@
 		'uw-vblock|voa': {
 			autoblock: true,
 			expiry: 'infinity',
-			forRegisteredOnly: true,
 			nocreate: true,
 			pageParam: true,
 			reason: wgULS('纯粹破坏', '純粹破壞'),
@@ -1392,7 +1381,6 @@
 		},
 		'uw-ublock-suggestive|相似': {
 			expiry: 'infinity',
-			forRegisteredOnly: true,
 			reason: `{{uw-ublock-suggestive}}<!-- ${wgULS(
 				'用户名与其他用户相似（软封禁）',
 				'使用者名稱與其他使用者的相似（軟封鎖）'
@@ -1404,7 +1392,6 @@
 		},
 		'uw-ublock-suggestive|知名人物': {
 			expiry: 'infinity',
-			forRegisteredOnly: true,
 			reason: `{{uw-ublock-suggestive}}<!-- ${wgULS(
 				'用户名与知名人物相似（软封禁）',
 				'使用者名稱與知名人物相似（軟封鎖）'
@@ -1417,7 +1404,6 @@
 		'uw-ublock-suggestive|冒充': {
 			autoblock: true,
 			expiry: 'infinity',
-			forRegisteredOnly: true,
 			nocreate: true,
 			reason: `{{uw-ublock-suggestive}}<!-- ${wgULS(
 				'用户名试图冒充其他用户（硬封禁）',
@@ -1450,7 +1436,6 @@
 		},
 		'Bot block message': {
 			expiry: 'infinity',
-			forRegisteredOnly: true,
 			reason: wgULS('机器人故障', '機器人故障'),
 			summary: wgULS('封禁通知：机器人故障', '封鎖通知：機器人故障'),
 			sig: '~~~~',
@@ -1479,7 +1464,6 @@
 		'uw-sockblock|contribs': {
 			autoblock: true,
 			expiry: 'infinity',
-			forRegisteredOnly: true,
 			nocreate: true,
 			reasonParam: true,
 			reason: wgULS(
@@ -1492,7 +1476,6 @@
 		'uw-sockblock|cu': {
 			autoblock: true,
 			expiry: 'infinity',
-			forRegisteredOnly: true,
 			nocreate: true,
 			reasonParam: true,
 			reason: wgULS(
@@ -1724,7 +1707,6 @@
 				{
 					label: 'checkuserblock-account',
 					value: 'checkuserblock-account',
-					forRegisteredOnly: true,
 				},
 			],
 		},
@@ -1779,9 +1761,7 @@
 				}
 				const blockSettings = Twinkle.block.blockPresetsInfo[blockPreset.value];
 				let registrationRestrict;
-				if (blockSettings.forRegisteredOnly) {
-					registrationRestrict = Twinkle.block.isRegistered;
-				} else if (blockSettings.forAnonOnly) {
+				if (blockSettings.forAnonOnly) {
 					registrationRestrict = !Twinkle.block.isRegistered;
 				} else {
 					registrationRestrict = true;
@@ -1994,7 +1974,6 @@
 		const templateText = Twinkle.block.callback.getBlockNoticeWikitext(params);
 		form.previewer.beginRender(templateText, `User_talk:${relevantUserName}/Wikitext`); // Force wikitext/correct username
 	};
-
 	Twinkle.block.callback.evaluate = (e) => {
 		const params = Morebits.quickForm.getInputData(e.target);
 		const $form = $(e.target);
@@ -2243,7 +2222,6 @@
 					}
 					blockoptions.reblock = 1; // Writing over a block will fail otherwise
 				}
-
 				const groupsCanBeRemoved = [
 					'autoreviewer',
 					'confirmed',
@@ -2506,7 +2484,6 @@
 					text += `|time=${Morebits.string.formatTime(params.expiry)}`; // formatTime
 				}
 			}
-
 			if (!Twinkle.block.isRegistered && !params.hardblock) {
 				text += '|anon=yes';
 			}
