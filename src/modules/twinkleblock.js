@@ -1,10 +1,5 @@
 /* Twinkle.js - twinkleblock.js */
 (($) => {
-	/**
-	 * twinkleblock.js: Block module
-	 * Mode of invocation: Tab ("Block")
-	 * Active on: Any page with relevant user name (userspace, contribs, etc.)
-	 */
 	const api = new mw.Api();
 	let relevantUserName;
 	let blockedUserName;
@@ -15,6 +10,11 @@
 		reblock: wgULS('重新封禁', '重新封鎖'),
 		unblock: wgULS('解除封禁', '解除封鎖'),
 	};
+	/**
+	 * twinkleblock.js: Block module
+	 * Mode of invocation: Tab ("Block")
+	 * Active on: Any page with relevant user name (userspace, contribs, etc.)
+	 */
 	Twinkle.block = () => {
 		relevantUserName = mw.config.get('wgRelevantUserName');
 		// should show on Contributions or Block pages, anywhere there's a relevant user
@@ -49,7 +49,7 @@
 		// need to be verbose about who we're blocking
 		Window.setTitle(wgULS('封禁或向', '封鎖或向') + relevantUserName + wgULS('发出封禁模板', '發出封鎖模板'));
 		Window.setScriptName('Twinkle');
-		Window.addFooterLink(wgULS('封禁方针', '封鎖方針'), 'WP:BLOCK');
+		Window.addFooterLink(wgULS('封禁方针', '封鎖方針'), 'QW:BLOCK');
 		Window.addFooterLink(wgULS('封禁设置', '封鎖設定'), 'H:TW/PREF#block');
 		Window.addFooterLink(wgULS('Twinkle帮助', 'Twinkle說明'), 'H:TW/DOC#block');
 		const form = new Morebits.quickForm(Twinkle.block.callback.evaluate);
@@ -117,7 +117,7 @@
 		});
 		/**
 		 * Add option for IPv6 ranges smaller than /64 to upgrade to the 64
-		 *  CIDR. This is one of the few places where we want
+		 * CIDR. This is one of the few places where we want
 		 * wgRelevantUserName since this depends entirely on the original user.
 		 * In theory, we shouldn't use Morebits.ip.get64 here since since we want
 		 * to exclude functionally-equivalent /64s.  That'd be:
@@ -1146,6 +1146,7 @@
 	 *   disabletalk: <disable user from editing their own talk page while blocked>
 	 *   expiry: <string - expiry timestamp, can include relative times like "5 months", "2 weeks" etc>
 	 *   forAnonOnly: <show block option in the interface only if the relevant user is an IP>
+	 *   forRegisteredOnly: <show block option in the interface only if the relevant user is registered>
 	 *   label: <string - label for the option of the dropdown in the interface (keep brief)>
 	 *   noemail: prevent the user from sending email through Special:Emailuser
 	 *   pageParam: <set if the associated block template accepts a page parameter>
@@ -1165,336 +1166,7 @@
 	 * WARNING: 'anononly' and 'allowusertalk' are enabled by default.
 	 *   To disable, set 'hardblock' and 'disabletalk', respectively
 	 */
-	Twinkle.block.blockPresetsInfo = {
-		'blocked proxy': {
-			expiry: '2 years',
-			forAnonOnly: true,
-			nocreate: true,
-			nonstandard: true,
-			hardblock: true,
-			reason: '{{blocked proxy}}',
-			sig: null,
-		},
-		checkuserblock: {
-			expiry: '1 week',
-			forAnonOnly: true,
-			nocreate: true,
-			nonstandard: true,
-			reason: '{{checkuserblock}}',
-			sig: '~~~~',
-		},
-		'checkuserblock-account': {
-			autoblock: true,
-			expiry: 'infinity',
-			nocreate: true,
-			nonstandard: true,
-			reason: '{{checkuserblock-account}}',
-			sig: '~~~~',
-		},
-		'school block': {
-			expiry: '1 week',
-			forAnonOnly: true,
-			nocreate: true,
-			nonstandard: true,
-			reason: '{{school block}}',
-			sig: '~~~~',
-		},
-		// uw-prefixed
-		'uw-3block': {
-			autoblock: true,
-			expiry: '1 day',
-			nocreate: true,
-			pageParam: true,
-			reason: wgULS('违反[[QW:3RR|回退不过三原则]]', '違反[[QW:3RR|回退不過三原則]]'),
-			summary: wgULS('封禁通知：违反[[QW:3RR|回退不过三原则]]', '封鎖通知：違反[[QW:3RR|回退不過三原則]]'),
-		},
-		'uw-adblock': {
-			autoblock: true,
-			nocreate: true,
-			pageParam: true,
-			reason: wgULS('[[QW:NOT#AD|散发广告或宣传]]', '[[QW:NOT#AD|散發廣告或宣傳]]'),
-			summary: wgULS('封禁通知：散发[[QW:NOT#AD|散发广告或宣传]]', '封鎖通知：散發[[QW:NOT#AD|散發廣告或宣傳]]'),
-			templateName: 'uw-block',
-		},
-		'uw-block': {
-			autoblock: true,
-			expiry: '1 day',
-			nocreate: true,
-			pageParam: true,
-			reasonParam: true,
-			summary: wgULS('封禁通知', '封鎖通知'),
-			suppressArticleInSummary: true,
-		},
-		'uw-blockindef': {
-			autoblock: true,
-			expiry: 'infinity',
-			nocreate: true,
-			pageParam: true,
-			reasonParam: true,
-			summary: wgULS('封禁通知', '封鎖通知'),
-			suppressArticleInSummary: true,
-		},
-		'uw-blocknotalk': {
-			disabletalk: true,
-			pageParam: true,
-			reasonParam: true,
-			summary: wgULS('封禁通知：禁止编辑讨论页', '封鎖通知：禁止編輯討論頁'),
-			suppressArticleInSummary: true,
-		},
-		'uw-copyrightblock': {
-			autoblock: true,
-			expiry: 'infinity',
-			nocreate: true,
-			pageParam: true,
-			reason: wgULS('多次加入[[QW:COPYVIO|侵犯著作权]]的内容', '多次加入[[QW:COPYVIO|侵犯著作權]]的內容'),
-			summary: wgULS('封禁通知：持续[[QW:COPYVIO|侵犯著作权]]', '封鎖通知：持續[[QW:COPYVIO|侵犯著作權]]'),
-			templateName: 'uw-blockindef',
-		},
-		'uw-dblock': {
-			autoblock: true,
-			nocreate: true,
-			reason: wgULS('持续无故删除内容', '持續無故刪除內容'),
-			pageParam: true,
-			summary: wgULS('封禁通知：持续[[QW:VAN|删除内容]]', '封鎖通知：持續[[QW:VAN|刪除內容]]'),
-		},
-		'uw-hblock': {
-			autoblock: true,
-			nocreate: true,
-			pageParam: true,
-			reason: wgULS('[[QW:骚扰|骚扰用户]]', '[[QW:騷擾|騷擾使用者]]'),
-			summary: wgULS('封禁通知：[[QW:骚扰|骚扰]]其他用户', '封鎖通知：[[QW:騷擾|騷擾]]其他使用者'),
-			templateName: 'uw-block',
-		},
-		'uw-vblock|np': {
-			autoblock: true,
-			nocreate: true,
-			pageParam: true,
-			reason: wgULS('[[QW:VAN|在条目中增加无意义文字]]', '[[QW:VAN|在條目中增加無意義文字]]'),
-			summary: wgULS(
-				'封禁通知：[[QW:VAN|在条目中增加无意义文字]]',
-				'封鎖通知：[[QW:VAN|在條目中增加無意義文字]]'
-			),
-			templateName: 'uw-block',
-		},
-		'uw-attackblock': {
-			autoblock: true,
-			expiry: '1 day',
-			nocreate: true,
-			reason: wgULS('行为无礼或[[QW:NPA|攻击别人]]', '行為無禮或[[QW:NPA|攻擊別人]]'),
-			summary: wgULS('封禁通知：行为无礼或[[QW:NPA|人身攻击]]', '封鎖通知：行為無禮或[[QW:NPA|人身攻擊]]'),
-			templateName: 'uw-block',
-		},
-		'uw-vblock|spam': {
-			autoblock: true,
-			nocreate: true,
-			reason: wgULS('不断加入垃圾链接', '不斷加入垃圾連結'),
-			summary: wgULS('封禁通知：利用求闻百科散发垃圾链接', '封鎖通知：利用求聞百科散發垃圾連結'),
-		},
-		'uw-soablock': {
-			autoblock: true,
-			expiry: 'infinity',
-			nocreate: true,
-			pageParam: true,
-			reason: wgULS('[[QW:NOT#AD|散发广告或宣传]]', '[[QW:NOT#AD|散發廣告或宣傳]]'),
-			summary: wgULS('封禁通知：仅[[QW:NOT#AD|散发广告或宣传]]', '封鎖通知：僅[[QW:NOT#AD|散發廣告或宣傳]]'),
-			templateName: 'uw-block',
-		},
-		'uw-sockblock': {
-			autoblock: true,
-			expiry: '1 week',
-			nocreate: true,
-			reason: wgULS('滥用[[QW:SOCK|多个账户]]', '濫用[[QW:SOCK|多個帳號]]'),
-			summary: wgULS('封禁通知：滥用[[QW:SOCK|多个账户]]', '封鎖通知：濫用[[QW:SOCK|多個帳號]]'),
-			templateName: 'uw-block',
-		},
-		'uw-socialmediablock': {
-			autoblock: true,
-			expiry: '1 week',
-			nocreate: true,
-			reason: wgULS(
-				'[[QW:NOT#MYSPACE|将求闻百科用作博客或社交网站]]',
-				'[[QW:NOT#MYSPACE|將求聞百科用作部落格或社交網站]]'
-			),
-			summary: wgULS(
-				'封禁通知：[[QW:NOT#MYSPACE|将求闻百科用作博客或社交网站]]',
-				'封鎖通知：[[QW:NOT#MYSPACE|將求聞百科用作部落格或社交網站]]'
-			),
-			templateName: 'uw-block',
-		},
-		'uw-ublock': {
-			expiry: 'infinity',
-			reason: `{{uw-ublock}}<!-- ${wgULS('不当用户名（软封禁）', '不當使用者名稱（軟封鎖）')} -->`,
-			summary: wgULS(
-				'封禁通知：您的用户名违反[[QW:U|用户名方针]]',
-				'封鎖通知：您的使用者名稱違反[[QW:U|使用者名稱方針]]'
-			),
-		},
-		'uw-ublock-spam': {
-			autoblock: true,
-			expiry: 'infinity',
-			nocreate: true,
-			reason: `{{uw-ublock-spam}}<!-- ${wgULS('宣传性用户名或宣传性编辑', '宣傳性使用者名稱、宣傳性編輯')} -->`,
-			summary: wgULS(
-				'封禁通知：仅[[QW:NOT#AD|广告宣传]]，同时您的用户名违反[[QW:U|用户名方针]]',
-				'封鎖通知：僅[[QW:NOT#AD|廣告宣傳]]，同時您的使用者名稱違反[[QW:U|使用者名稱方針]]'
-			),
-		},
-		'uw-ublock-suggestive': {
-			expiry: 'infinity',
-			reason: `{{uw-ublock-suggestive}}<!-- ${wgULS(
-				'用户名与其他用户相似（软封禁）',
-				'使用者名稱與其他使用者相似（軟封鎖）'
-			)} -->`,
-			summary: wgULS(
-				'封禁通知：您的[[QW:U|用户名]]与其他求闻百科用户过于相似',
-				'封鎖通知：您的[[QW:U|使用者名稱]]與其他求聞百科使用者過於相似'
-			),
-		},
-		'uw-vblock|uc': {
-			autoblock: true,
-			expiry: '1 day',
-			nocreate: true,
-			pageParam: true,
-			reason: wgULS('屡次增加没有[[QW:RS|可靠来源]]的资料', '屢次增加沒有[[QW:RS|可靠來源]]的資料'),
-			summary: wgULS(
-				'封禁通知：屡次增加没有[[QW:RS|可靠来源]]的资料',
-				'封鎖通知：屢次增加沒有[[QW:RS|可靠來源]]的資料'
-			),
-			templateName: 'uw-block',
-		},
-		'uw-vblock': {
-			autoblock: true,
-			expiry: '1 day',
-			nocreate: true,
-			pageParam: true,
-			reason: wgULS('[[QW:VAN|破坏]]', '[[QW:VAN|破壞]]'),
-			summary: wgULS('封禁通知：[[QW:VAN|破坏]]', '封鎖通知：[[QW:VAN|破壞]]'),
-		},
-		'uw-vblock|voa': {
-			autoblock: true,
-			expiry: 'infinity',
-			nocreate: true,
-			pageParam: true,
-			reason: wgULS('纯粹破坏', '純粹破壞'),
-			summary: wgULS('封禁通知：您的账户仅用于[[QW:VAN|破坏]]', '封鎖通知：您的帳號僅用於[[QW:VAN|破壞]]'),
-			templateName: 'uw-blockindef',
-		},
-		'uw-ublock-suggestive|相似': {
-			expiry: 'infinity',
-			reason: `{{uw-ublock-suggestive}}<!-- ${wgULS(
-				'用户名与其他用户相似（软封禁）',
-				'使用者名稱與其他使用者的相似（軟封鎖）'
-			)} -->`,
-			summary: wgULS(
-				'封禁通知：您的[[QW:U|用户名]]与其他用户过于相似',
-				'封鎖通知：您的[[QW:U|使用者名稱]]與其他使用者過於相似'
-			),
-		},
-		'uw-ublock-suggestive|知名人物': {
-			expiry: 'infinity',
-			reason: `{{uw-ublock-suggestive}}<!-- ${wgULS(
-				'用户名与知名人物相似（软封禁）',
-				'使用者名稱與知名人物相似（軟封鎖）'
-			)} -->`,
-			summary: wgULS(
-				'封禁通知：您的[[QW:U|用户名]]与知名人物过于相似',
-				'封鎖通知：您的[[QW:U|使用者名稱]]與知名人物過於相似'
-			),
-		},
-		'uw-ublock-suggestive|冒充': {
-			autoblock: true,
-			expiry: 'infinity',
-			nocreate: true,
-			reason: `{{uw-ublock-suggestive}}<!-- ${wgULS(
-				'用户名试图冒充其他用户（硬封禁）',
-				'使用者名稱試圖冒充其他使用者（硬封鎖）'
-			)} -->`,
-			summary: wgULS(
-				'封禁通知：您的[[QW:U|用户名]]试图冒充其他求闻百科用户',
-				'封鎖通知：您的[[QW:U|使用者名稱]]試圖冒充其他求聞百科使用者'
-			),
-		},
-		'uw-ublock-suggestive|混淆': {
-			expiry: 'infinity',
-			reason: '{{uw-ublock-suggestive|混淆}}',
-			summary: wgULS('封禁通知：令人混淆的用户名', '封鎖通知：令人混淆的使用者名稱'),
-		},
-		'uw-ublock-suggestive|误导': {
-			expiry: 'infinity',
-			reason: wgULS('{{uw-ublock-suggestive|误导}}', '{{uw-ublock|誤導}}'),
-			summary: wgULS('封禁通知：误导性用户名', '封鎖通知：誤導性使用者名稱'),
-		},
-		'uw-ublock-spam|宣传': {
-			expiry: 'infinity',
-			reason: wgULS('{{uw-ublock-spam|宣传}}', '{{uw-ublock|宣傳}}'),
-			summary: wgULS('封禁通知：宣传性用户名', '封鎖通知：宣傳性使用者名稱'),
-		},
-		'uw-ublock|攻击|或侮辱性': {
-			expiry: 'infinity',
-			reason: wgULS('{{uw-ublock|攻击|或侮辱性}}', '{{uw-ublock|攻擊|或侮辱性}}'),
-			summary: wgULS('封禁通知：攻击或侮辱性用户名', '封鎖通知：攻擊或侮辱性使用者名稱'),
-		},
-		'Bot block message': {
-			expiry: 'infinity',
-			reason: wgULS('机器人故障', '機器人故障'),
-			summary: wgULS('封禁通知：机器人故障', '封鎖通知：機器人故障'),
-			sig: '~~~~',
-		},
-		'uw-block|point': {
-			autoblock: true,
-			expiry: '1 day',
-			nocreate: true,
-			reasonParam: true,
-			reason: wgULS('[[QW:POINT|为了阐释观点而扰乱求闻百科]]', '[[QW:POINT|為了闡釋觀點而擾亂求聞百科]]'),
-			summary: wgULS(
-				'封禁通知：[[QW:POINT|为了阐释观点而扰乱求闻百科]]',
-				'封鎖通知：[[QW:POINT|為了闡釋觀點而擾亂求聞百科]]'
-			),
-			templateName: 'uw-block',
-		},
-		'uw-block|game': {
-			autoblock: true,
-			expiry: '1 day',
-			nocreate: true,
-			reasonParam: true,
-			reason: wgULS('[[QW:GAME|打制度擦边球]]', '[[QW:GAME|打制度擦邊球]]'),
-			summary: wgULS('封禁通知：[[QW:GAME|打制度擦边球]]', '封鎖通知：[[QW:GAME|打制度擦邊球]]'),
-			templateName: 'uw-block',
-		},
-		'uw-sockblock|contribs': {
-			autoblock: true,
-			expiry: 'infinity',
-			nocreate: true,
-			reasonParam: true,
-			reason: wgULS(
-				'确认为[[QW:SOCK|傀儡]]或真人傀儡 - 根据用户贡献确定',
-				'確認為[[QW:SOCK|傀儡]]或真人傀儡 - 根據使用者貢獻確定'
-			),
-			summary: wgULS('封禁通知：确认为[[QW:SOCK|傀儡]]或真人傀儡', '封鎖通知：確認為[[QW:SOCK|傀儡]]或真人傀儡'),
-			templateName: 'uw-blockindef',
-		},
-		'uw-sockblock|cu': {
-			autoblock: true,
-			expiry: 'infinity',
-			nocreate: true,
-			reasonParam: true,
-			reason: wgULS(
-				'确认为[[QW:SOCK|傀儡]]或真人傀儡 - 用户查核确认',
-				'確認為[[QW:SOCK|傀儡]]或真人傀儡 - 使用者查核確認'
-			),
-			summary: wgULS('封禁通知：确认为[[QW:SOCK|傀儡]]或真人傀儡', '封鎖通知：確認為[[QW:SOCK|傀儡]]或真人傀儡'),
-			templateName: 'uw-blockindef',
-		},
-		// Begin partial block templates, accessed in Twinkle.block.blockGroupsPartial
-		'uw-pblock': {
-			autoblock: true,
-			expiry: '1 day',
-			nocreate: false,
-			pageParam: false,
-			reasonParam: true,
-			summary: wgULS('封禁通知：您已被禁止编辑求闻百科的部分区域', '封鎖通知：您已被禁止編輯求聞百科的部分區域'),
-		},
-	};
+	Twinkle.block.blockPresetsInfo = {};
 	Twinkle.block.transformBlockPresets = () => {
 		// Merge custom reason
 		$.each(Twinkle.getPref('customBlockReasonList'), (_, item) => {
@@ -1536,181 +1208,7 @@
 	//   label: <string, the description that will be visible in the dropdown>
 	//   value: <string, the key of a preset in blockPresetsInfo>
 	//   meta: <boolean, show in templates only>
-	Twinkle.block.blockGroups = [
-		{
-			label: wgULS('常见封禁理由', '常見封鎖理由'),
-			list: [
-				{
-					label: wgULS('通用封禁（自定义理由）', '通用封鎖（自訂理由）'),
-					value: 'uw-block',
-				},
-				{
-					label: wgULS('通用封禁（自定义理由） - 无限期', '通用封鎖（自訂理由） - 無限期'),
-					value: 'uw-blockindef',
-				},
-				{
-					label: wgULS('破坏', '破壞'),
-					value: 'uw-vblock',
-					selected: true,
-				},
-				{
-					label: wgULS('纯粹破坏', '純粹破壞'),
-					value: 'uw-vblock|voa',
-				},
-				{
-					label: wgULS('不断加入垃圾链接', '不斷加入垃圾連結'),
-					value: 'uw-vblock|spam',
-				},
-				{
-					label: wgULS('散发广告或宣传', '散發廣告或宣傳'),
-					value: 'uw-adblock',
-				},
-				{
-					label: wgULS('仅散发广告或宣传', '僅散發廣告或宣傳'),
-					value: 'uw-soablock',
-				},
-				{
-					label: wgULS('违反回退不过三原则', '違反回退不過三原則'),
-					value: 'uw-3block',
-				},
-				{
-					label: wgULS('无礼的行为或人身攻击', '無禮的行為或人身攻擊'),
-					value: 'uw-attackblock',
-				},
-				{
-					label: wgULS('骚扰用户', '騷擾使用者'),
-					value: 'uw-hblock',
-				},
-				{
-					label: wgULS('为了阐释观点而扰乱求闻百科', '為了闡釋觀點而擾亂求聞百科'),
-					value: 'uw-block|point',
-				},
-				{
-					label: wgULS('打制度擦边球', '打制度擦邊球'),
-					value: 'uw-block|game',
-				},
-				{
-					label: wgULS('滥用多个账户', '濫用多個帳號'),
-					value: 'uw-sockblock',
-				},
-				{
-					label: wgULS(
-						'确认为傀儡或真人傀儡 - 根据用户贡献确定',
-						'確認為傀儡或真人傀儡 - 根據使用者貢獻確定'
-					),
-					value: 'uw-sockblock|contribs',
-				},
-				{
-					label: wgULS('确认为傀儡或真人傀儡 - 用户查核确认', '確認為傀儡或真人傀儡 - 使用者查核確認'),
-					value: 'uw-sockblock|cu',
-				},
-				{
-					label: wgULS('屡次增加没有可靠来源的资料', '屢次增加沒有可靠來源的資料'),
-					value: 'uw-vblock|uc',
-				},
-				{
-					label: wgULS('在条目中增加无意义文字', '在條目中增加無意義文字'),
-					value: 'uw-vblock|np',
-				},
-				{
-					label: wgULS('无故删除内容', '無故刪除內容'),
-					value: 'uw-dblock',
-				},
-				{
-					label: wgULS('多次加入侵犯著作权的内容', '多次加入侵犯著作權的內容'),
-					value: 'uw-copyrightblock',
-				},
-				{
-					label: wgULS('机器人发生故障并必须紧急停止', '機器人發生故障並必須緊急停止'),
-					value: 'Bot block message',
-				},
-				{
-					label: wgULS('禁止编辑讨论页', '禁止編輯討論頁'),
-					value: 'uw-blocknotalk',
-					meta: true,
-				},
-			],
-		},
-		{
-			custom: true,
-			label: wgULS('自定义封禁理由', '自訂封鎖理由'),
-		},
-		{
-			label: wgULS('用户名封禁', '使用者名稱封鎖'),
-			list: [
-				{
-					label: wgULS('不当用户名（软封禁）', '不當使用者名稱（軟封鎖）'),
-					value: 'uw-ublock',
-				},
-				{
-					label: wgULS('宣传性用户名（软封禁）', '宣傳性使用者名稱（軟封鎖）'),
-					value: 'uw-ublock-spam',
-				},
-				{
-					label: wgULS('用户名与其他用户相似（软封禁）', '使用者名稱與其他使用者相似（軟封鎖）'),
-					value: 'uw-ublock-suggestive|相似',
-				},
-				{
-					label: wgULS('用户名试图冒充其他用户（硬封禁）', '使用者名稱試圖冒充其他使用者（硬封鎖）'),
-					value: 'uw-ublock-suggestive|冒充',
-				},
-				{
-					label: wgULS('用户名与知名人物相似（软封禁）', '使用者名稱與知名人物相似（軟封鎖）'),
-					value: 'uw-ublock-suggestive|知名人物',
-				},
-				{
-					label: wgULS('混淆性用户名', '混淆性使用者名稱'),
-					value: 'uw-ublock-suggestive|混淆',
-				},
-				{
-					label: wgULS('误导性用户名', '誤導性使用者名稱'),
-					value: 'uw-ublock-suggestive|误导',
-				},
-				{
-					label: wgULS('宣传性用户名', '宣傳性使用者名稱'),
-					value: 'uw-ublock-spam|宣传',
-				},
-				{
-					label: wgULS('攻击性用户名', '攻擊性使用者名稱'),
-					value: 'uw-ublock|攻击|或侮辱性',
-				},
-			],
-		},
-		{
-			label: '其他模板',
-			list: [
-				{
-					label: 'anonblock',
-					value: 'anonblock',
-					forAnonOnly: true,
-				},
-				{
-					label: 'range block',
-					value: 'range block',
-					forAnonOnly: true,
-				},
-				{
-					label: 'school block',
-					value: 'school block',
-					forAnonOnly: true,
-				},
-				{
-					label: 'blocked proxy',
-					value: 'blocked proxy',
-					forAnonOnly: true,
-				},
-				{
-					label: 'checkuserblock',
-					value: 'checkuserblock',
-					forAnonOnly: true,
-				},
-				{
-					label: 'checkuserblock-account',
-					value: 'checkuserblock-account',
-				},
-			],
-		},
-	];
+	Twinkle.block.blockGroups = [];
 	Twinkle.block.blockGroupsPartial = [
 		{
 			label: wgULS('常见部分封禁理由', '常見部分封鎖理由'),
@@ -1761,7 +1259,9 @@
 				}
 				const blockSettings = Twinkle.block.blockPresetsInfo[blockPreset.value];
 				let registrationRestrict;
-				if (blockSettings.forAnonOnly) {
+				if (blockSettings.forRegisteredOnly) {
+					registrationRestrict = Twinkle.block.isRegistered;
+				} else if (blockSettings.forAnonOnly) {
 					registrationRestrict = !Twinkle.block.isRegistered;
 				} else {
 					registrationRestrict = true;

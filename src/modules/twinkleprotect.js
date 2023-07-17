@@ -56,7 +56,7 @@
 					label: wgULS('请求保护页面', '請求保護頁面'),
 					value: 'request',
 					tooltip:
-						wgULS('若您想在WP:RFPP请求保护此页', '若您想在WP:RFPP請求保護此頁') +
+						wgULS('若您想在QW:RFPP请求保护此页', '若您想在QW:RFPP請求保護此頁') +
 						(Morebits.userIsSysop ? '而不是自行完成。' : '。'),
 					checked: !Morebits.userIsSysop,
 				},
