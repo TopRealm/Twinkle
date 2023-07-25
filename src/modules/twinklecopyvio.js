@@ -176,11 +176,11 @@
 			let output = '';
 			const date = new Date();
 			const dateHeaderRegex = new RegExp(
-				`^===+\\s*${date.getUTCMonth() + 1}月${date.getUTCDate()}日\\s*===+`,
+				`^==+\\s*${date.getUTCMonth() + 1}月${date.getUTCDate()}日\\s*==+`,
 				'mg'
 			);
 			if (!dateHeaderRegex.exec(text)) {
-				output = `\n\n===${date.getUTCMonth() + 1}月${date.getUTCDate()}日===`;
+				output = `\n\n==${date.getUTCMonth() + 1}月${date.getUTCDate()}日==`;
 			}
 			output += `\n{{subst:CopyvioVFDRecord|${mw.config.get('wgPageName')}}}`;
 			pageobj.setAppendText(output);
