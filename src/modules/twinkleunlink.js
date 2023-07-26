@@ -24,7 +24,9 @@
 	Twinkle.unlink.callback = (presetReason) => {
 		const fileSpace = mw.config.get('wgNamespaceNumber') === 6;
 		const Window = new Morebits.simpleWindow(600, 440);
-		Window.setTitle(wgULS('取消链入', '取消連入') + (fileSpace ? wgULS('和文件使用', '和檔案使用') : ''));
+		Window.setTitle(
+			wgULS('取消链入', '取消連入') + (fileSpace ? wgULS('和模板、文件使用', '和模板、檔案使用') : '')
+		);
 		Window.setScriptName('Twinkle');
 		Window.addFooterLink(wgULS('链入设置', '連入設定'), 'H:TW/PREF#unlink');
 		Window.addFooterLink(wgULS('Twinkle帮助', 'Twinkle說明'), 'H:TW/DOC#unlink');
@@ -37,13 +39,14 @@
 		);
 		const linkTextAfter = Morebits.htmlNode('code', wgULS('链接文字', '連結文字'));
 		const linkPlainBefore = Morebits.htmlNode('code', `[[${Morebits.pageNameNorm}]]`);
+		const linkTemplateBefore = Morebits.htmlNode('code', `{{${Morebits.pageNameNorm}}}`);
 		let linkPlainAfter;
 		if (fileSpace) {
 			linkPlainAfter = Morebits.htmlNode('code', `<!-- [[${Morebits.pageNameNorm}]] -->`);
 		} else {
 			linkPlainAfter = Morebits.htmlNode('code', Morebits.pageNameNorm);
 		}
-		for (const node of [linkTextBefore, linkTextAfter, linkPlainBefore, linkPlainAfter]) {
+		for (const node of [linkTextBefore, linkTextAfter, linkPlainBefore, linkPlainAfter, linkTemplateBefore]) {
 			node.style.fontFamily = 'monospace';
 			node.style.fontStyle = 'normal';
 		}
@@ -70,6 +73,9 @@
 				linkPlainBefore,
 				wgULS('将会变成', '將會變成'),
 				linkPlainAfter,
+				'，',
+				linkTemplateBefore,
+				wgULS('将会被移除', '將會被移除'),
 				wgULS('。请小心使用。', '。請小心使用。'),
 			],
 		});
@@ -343,6 +349,7 @@
 			// remove backlinks
 			if (params.doBacklinks) {
 				text = qiuwen_page.removeLink(Morebits.pageNameNorm).getText();
+				text = qiuwen_page.removeTemplate(Morebits.pageNameNorm).getText();
 				// did we actually make any changes?
 				if (text === oldtext) {
 					warningString = warningString
