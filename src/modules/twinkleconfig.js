@@ -867,7 +867,7 @@
 						4: wgULS('单层级警告', '單層級警告'),
 						5: wgULS('自定义提醒或警告', '自訂提醒或警告'),
 						6: '所有警告模板',
-						7: wgULS('自动选择层级（1-4）', '自動選擇層級（1-4）'),
+						7: wgULS('自动选择层级', '自動選擇層級'),
 						// 8 was used for block templates before #260
 						// 9 was deprecated
 						// 10 was deprecated
@@ -883,15 +883,6 @@
 						'当启用此选项时，无论默认警告级别选择单层级通知或单层级警告皆属于此项。',
 						'當啟用此選項時，無論預設警告級別選擇單層級通知或單層級警告皆屬於此項。'
 					),
-					type: 'boolean',
-				},
-				// TwinkleConfig.showSharedIPNotice may take arguments:
-				// true: to show shared ip notice if an IP address
-				// false: to not print the notice
-				{
-					name: 'showSharedIPNotice',
-					label: wgULS('在IP讨论页上显示附加信息', '在IP討論頁上顯示附加資訊'),
-					helptip: '使用的模板是{{SharedIPAdvice}}。',
 					type: 'boolean',
 				},
 				// TwinkleConfig.watchWarnings (string)
