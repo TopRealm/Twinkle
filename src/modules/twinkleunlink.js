@@ -39,7 +39,7 @@
 		);
 		const linkTextAfter = Morebits.htmlNode('code', wgULS('链接文字', '連結文字'));
 		const linkPlainBefore = Morebits.htmlNode('code', `[[${Morebits.pageNameNorm}]]`);
-		const linkTemplateBefore = Morebits.htmlNode('code', `{{${Morebits.pageNameNorm}}}`);
+		const linkTemplateBefore = Morebits.htmlNode('code', `{{${mw.config.get('wgTitle')}}}`);
 		let linkPlainAfter;
 		if (fileSpace) {
 			linkPlainAfter = Morebits.htmlNode('code', `<!-- [[${Morebits.pageNameNorm}]] -->`);
@@ -349,7 +349,7 @@
 			// remove backlinks
 			if (params.doBacklinks) {
 				text = qiuwen_page.removeLink(Morebits.pageNameNorm).getText();
-				text = qiuwen_page.removeTemplate(Morebits.pageNameNorm).getText();
+				text = qiuwen_page.removeTemplate(mw.config.get('wgTitle')).getText();
 				// did we actually make any changes?
 				if (text === oldtext) {
 					warningString = warningString
