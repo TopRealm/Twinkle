@@ -145,7 +145,7 @@
 		noLogOnSpeedyNomination: ['o1'],
 		enlargeG7Input: false,
 		// Unlink
-		unlinkNamespaces: ['0', '10', '118'],
+		unlinkNamespaces: ['0', '6', '10', '118'],
 		// Warn
 		defaultWarningGroup: '1',
 		combinedSingletMenus: false,
