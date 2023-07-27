@@ -896,8 +896,7 @@
 	 */
 	Morebits.quickForm.getInputData = (form) => {
 		const result = {};
-		for (let i = 0; i < form.elements.length; i++) {
-			const field = form.elements[i];
+		for (const field of form.elements) {
 			if (field.disabled || !field.name || !field.type || field.type === 'submit' || field.type === 'button') {
 				continue;
 			}
@@ -1723,13 +1722,11 @@
 		history: null, // {}
 	};
 	/** @memberof Morebits.unbinder */
-	Morebits.unbinder.getCallback = (self) => {
-		return (match) => {
-			const current = self.prefix + self.counter + self.postfix;
-			self.history[current] = match;
-			++self.counter;
-			return current;
-		};
+	Morebits.unbinder.getCallback = (self) => (match) => {
+		const current = self.prefix + self.counter + self.postfix;
+		self.history[current] = match;
+		++self.counter;
+		return current;
 	};
 	/* **************** Morebits.date **************** */
 	/**
@@ -5420,7 +5417,7 @@
 			// the 20 pixels represents adjustment for the extra height of the jQuery dialog "chrome", compared
 			// to that of the old SimpleWindow
 			height: height + 20,
-			close: function (event) {
+			close: (event) => {
 				// dialogs and their content can be destroyed once closed
 				$(event.target).dialog('destroy').remove();
 			},

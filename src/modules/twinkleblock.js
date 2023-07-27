@@ -1275,7 +1275,7 @@
 		'uw-ublock': {
 			expiry: 'infinity',
 			forRegisteredOnly: true,
-			reason: '{{uw-ublock}}<!-- ' + wgULS('不当用户名、软封禁', '不當使用者名稱') + ' -->',
+			reason: `{{uw-ublock}}<!-- ${wgULS('不当用户名、软封禁', '不當使用者名稱')} -->`,
 			summary: wgULS(
 				'封禁通知：您的用户名违反[[QW:U|用户名方针]]',
 				'封鎖通知：您的使用者名稱違反[[QW:U|使用者名稱方針]]'
@@ -1286,7 +1286,7 @@
 			expiry: 'infinity',
 			forRegisteredOnly: true,
 			nocreate: true,
-			reason: '{{uw-ublock-illegal}}<!-- ' + wgULS('不合规的用户名', '不合規的使用者名稱') + ' -->',
+			reason: `{{uw-ublock-illegal}}<!-- ${wgULS('不合规的用户名', '不合規的使用者名稱')} -->`,
 			summary: wgULS(
 				'封禁通知：您的用户名违反[[QW:U|用户名方针]]',
 				'封鎖通知：您的使用者名稱違反[[QW:U|使用者名稱方針]]'
@@ -1297,7 +1297,7 @@
 			expiry: 'infinity',
 			forRegisteredOnly: true,
 			nocreate: true,
-			reason: '{{uw-ublock-suggestive}}<!-- ' + wgULS('误导、混淆性用户名', '誤導、混淆性使用者名稱') + ' -->',
+			reason: `{{uw-ublock-suggestive}}<!-- ${wgULS('误导、混淆性用户名', '誤導、混淆性使用者名稱')} -->`,
 			summary: wgULS(
 				'封禁通知：您的用户名违反[[QW:U|用户名方针]]',
 				'封鎖通知：您的使用者名稱違反[[QW:U|使用者名稱方針]]'
@@ -1308,8 +1308,7 @@
 			expiry: 'infinity',
 			forRegisteredOnly: true,
 			nocreate: true,
-			reason:
-				'{{uw-ublock-spam}}<!-- ' + wgULS('宣传性用户名或宣传性编辑', '宣傳性使用者名稱或宣傳性編輯') + ' -->',
+			reason: `{{uw-ublock-spam}}<!-- ${wgULS('宣传性用户名或宣传性编辑', '宣傳性使用者名稱或宣傳性編輯')} -->`,
 			summary: wgULS(
 				'封禁通知：您的用户名违反[[QW:U|用户名方针]]',
 				'封鎖通知：您的使用者名稱違反[[QW:U|使用者名稱方針]]'
@@ -1438,7 +1437,7 @@
 			forRegisteredOnly: true,
 			nocreate: true,
 			reasonParam: true,
-			reason: '{{uw-ublock}}<!-- ' + wgULS('攻击性用户名', '攻擊性使用者名稱') + ' -->',
+			reason: `{{uw-ublock}}<!-- ${wgULS('攻击性用户名', '攻擊性使用者名稱')} -->`,
 			summary: wgULS('封禁通知：攻击性用户名', '封鎖通知：攻擊性使用者名稱'),
 			templateName: 'uw-block',
 		},
@@ -1447,7 +1446,7 @@
 			expiry: 'infinity',
 			forRegisteredOnly: true,
 			reasonParam: true,
-			reason: '{{uw-ublock-suggestive}}<!-- ' + wgULS('误导性用户名', '誤導性使用者名稱') + ' -->',
+			reason: `{{uw-ublock-suggestive}}<!-- ${wgULS('误导性用户名', '誤導性使用者名稱')} -->`,
 			summary: wgULS('封禁通知：误导性用户名', '封鎖通知：誤導性使用者名稱'),
 			templateName: 'uw-block',
 		},
@@ -1456,7 +1455,7 @@
 			expiry: 'infinity',
 			forRegisteredOnly: true,
 			reasonParam: true,
-			reason: '{{uw-ublock-suggestive}}<!-- ' + wgULS('混淆性用户名', '混淆性使用者名稱') + ' -->',
+			reason: `{{uw-ublock-suggestive}}<!-- ${wgULS('混淆性用户名', '混淆性使用者名稱')} -->`,
 			summary: wgULS('封禁通知：混淆性用户名', '封鎖通知：混淆性使用者名稱'),
 			templateName: 'uw-block',
 		},
