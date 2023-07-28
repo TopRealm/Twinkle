@@ -416,7 +416,7 @@
 					case 'batch': {
 						const commentText = `<!-- Twinkle: User:${mw.config.get(
 							'wgUserName'
-						)} 的 ${type} 提删插入点，请勿变更或移除此行，除非不再于此页面提删 -->`;
+						)} 的 ${type} 提删插入点，请勿更改或移除此行，除非不再于此页面提删 -->`;
 						let newText = `===[[:${Morebits.pageNameNorm}]]===`;
 						if (type === 'fame') {
 							newText += `\n{{Findsources|${Morebits.pageNameNorm}}}`;

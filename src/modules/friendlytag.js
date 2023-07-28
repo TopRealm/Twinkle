@@ -340,7 +340,8 @@
 				}
 			}
 			// Add status text node after Submit button
-			const statusNode = document.createElement('small');
+			const statusNode = document.createElement('span');
+			statusNode.style.fontSize = '90%';
 			statusNode.id = 'tw-tag-status';
 			Twinkle.tag.status = {
 				// initial state; defined like this because these need to be available for reference

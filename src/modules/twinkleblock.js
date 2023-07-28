@@ -1075,7 +1075,7 @@
 			}
 			let infoStr = wgULS('此表单将', '此表單將');
 			if (sameUser) {
-				infoStr += wgULS('变更封禁', '變更封鎖');
+				infoStr += wgULS('更改封禁', '變更封鎖');
 				if (Twinkle.block.currentBlockInfo.partial === undefined && partialBox) {
 					infoStr += wgULS('为部分封禁', '為部分封鎖');
 				} else if (Twinkle.block.currentBlockInfo.partial === '' && !partialBox) {
@@ -2101,7 +2101,7 @@
 					}
 					message += `由${logevents.user}${wgULS('以“', '以「')}${logevents.comment}${wgULS('”', '」')}${
 						blockActionText[logevents.action]
-					}${logExpiry}${wgULS('，你想要以你的设置变更封禁吗？', '，你想要以你的設定變更封鎖嗎？')}`;
+					}${logExpiry}${wgULS('，你想要以你的设置更改封禁吗？', '，你想要以你的設定變更封鎖嗎？')}`;
 					if (!confirm(message)) {
 						Morebits.status.info(wgULS('执行封禁', '執行封鎖'), wgULS('用户取消操作', '使用者取消操作'));
 						return;

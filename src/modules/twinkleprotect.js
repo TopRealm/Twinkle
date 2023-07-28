@@ -1445,9 +1445,9 @@
 					break;
 			}
 			words += params.typename;
-			newtag += `* <small>${wgULS('当前保护状态', '目前保護狀態')}：{{protection status|${
+			newtag += `* <span style="font-size: 90%">${wgULS('当前保护状态', '目前保護狀態')}：{{protection status|${
 				/=/.test(Morebits.pageNameNorm) ? '1=' : ''
-			}${Morebits.pageNameNorm}}}</small>\n`;
+			}${Morebits.pageNameNorm}}}</span>\n`;
 			newtag += `${
 				wgULS('请求', '請求') +
 				Morebits.string.toUpperCaseFirstChar(words) +

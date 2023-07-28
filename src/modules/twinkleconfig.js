@@ -1202,7 +1202,7 @@
 					row.style.marginBottom = '0.2em';
 					// create odd row banding
 					if (rowcount++ % 2 === 0) {
-						row.style.backgroundColor = 'rgba(128, 128, 128, 0.1)';
+						row.style.backgroundColor = 'rgb(128 128 128/.1)';
 					}
 					cell = document.createElement('td');
 					let label;
