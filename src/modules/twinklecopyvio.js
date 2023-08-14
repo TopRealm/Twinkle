@@ -200,7 +200,7 @@
 		}
 		Morebits.simpleWindow.setButtonsEnabled(false);
 		Morebits.status.init(e.target);
-		params.logpage = 'Qiuwen:侵权提报';
+		params.logpage = 'Qiuwen_talk:侵权提报';
 		Morebits.wiki.addCheckpoint();
 		// Updating data for the action completed event
 		Morebits.wiki.actionCompleted.redirect = mw.config.get('wgPageName');
