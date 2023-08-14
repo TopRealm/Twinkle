@@ -455,6 +455,7 @@
 		.fail(() => {
 			mw.notify(wgULS('未能加载您的Twinkle参数设置', '未能載入您的Twinkle偏好設定'), {
 				type: 'error',
+				tag: 'twinkle',
 			});
 		})
 		.done((optionsText) => {
@@ -483,6 +484,7 @@
 			} catch {
 				mw.notify(wgULS('未能解析您的Twinkle参数设置', '未能解析您的Twinkle偏好設定'), {
 					type: 'error',
+					tag: 'twinkle',
 				});
 			}
 		})

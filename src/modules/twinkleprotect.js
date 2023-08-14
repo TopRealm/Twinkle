@@ -471,6 +471,7 @@
 			default:
 				mw.notify(wgULS('这玩意儿被海豚吃掉了！', '這玩意兒被海豚吃掉了！'), {
 					type: 'warn',
+					tag: 'twinkleprotect',
 				});
 				break;
 		}
@@ -1129,6 +1130,7 @@
 							} else {
 								mw.notify(wgULS('您需要选择保护层级！', '您需要選擇保護層級！'), {
 									type: 'warn',
+									tag: 'twinkleprotect',
 								});
 								return;
 							}
@@ -1149,6 +1151,7 @@
 							),
 							{
 								type: 'warn',
+								tag: 'twinkleprotect',
 							}
 						);
 						return;
@@ -1171,6 +1174,7 @@
 						),
 						{
 							type: 'warn',
+							tag: 'twinkleprotect',
 						}
 					);
 				}
@@ -1303,6 +1307,7 @@
 			default:
 				mw.notify('twinkleprotect: 未知操作类型', {
 					type: 'warn',
+					tag: 'twinkleprotect',
 				});
 				break;
 		}

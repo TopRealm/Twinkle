@@ -550,6 +550,7 @@
 		if (!reason) {
 			mw.notify(wgULS('您需要给出一个理由', '您需要給出一個理由'), {
 				type: 'warn',
+				tag: 'twinklebatchdelete',
 			});
 			return;
 		}

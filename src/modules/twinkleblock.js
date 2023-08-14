@@ -381,6 +381,7 @@
 				$unblock.prop('checked', false);
 				mw.notify(wgULS('用户没有被封禁', '使用者沒有被封鎖'), {
 					type: 'warn',
+					tag: 'twinkleblock',
 				});
 				return;
 			}
@@ -1909,6 +1910,7 @@
 				message += extra || '';
 				mw.notify(message, {
 					type: 'warn',
+					tag: 'twinkleblock',
 				});
 				return true;
 			}
@@ -1917,6 +1919,7 @@
 			if (params.tag.length === 0) {
 				mw.notify(wgULS('请至少选择一个用户页标记！', '請至少選擇一個使用者頁面標記！'), {
 					type: 'warn',
+					tag: 'twinkleblock',
 				});
 				return;
 			}
@@ -1953,6 +1956,7 @@
 			if (params.tag.includes('Sockpuppet') && params.sppUsername.trim() === '') {
 				mw.notify(wgULS('请提供傀儡账户的主账户用户名！', '請提供傀儡帳號的主帳號使用者名稱！'), {
 					type: 'warn',
+					tag: 'twinkleblock',
 				});
 				return;
 			}
@@ -1967,6 +1971,7 @@
 						),
 						{
 							type: 'warn',
+							tag: 'twinkleblock',
 						}
 					);
 					return;
@@ -1981,6 +1986,7 @@
 							),
 							{
 								type: 'warn',
+								tag: 'twinkleblock',
 							}
 						);
 						return;
@@ -1999,17 +2005,20 @@
 			if (!blockoptions.expiry) {
 				mw.notify(wgULS('请提供过期时间！', '請提供過期時間！'), {
 					type: 'warn',
+					tag: 'twinkleblock',
 				});
 				return;
 			} else if (Morebits.string.isInfinity(blockoptions.expiry) && !Twinkle.block.isRegistered) {
 				mw.notify(wgULS('禁止无限期封禁IP地址！', '禁止無限期封鎖IP位址！'), {
 					type: 'warn',
+					tag: 'twinkleblock',
 				});
 				return;
 			}
 			if (!blockoptions.reason) {
 				mw.notify(wgULS('请提供封禁理由！', '請提供封鎖理由！'), {
 					type: 'warn',
+					tag: 'twinkleblock',
 				});
 				return;
 			}
@@ -2183,6 +2192,7 @@
 			if (!unblockoptions.reason) {
 				mw.notify(wgULS('请提供解除封禁理由！', '請提供解除封鎖理由！'), {
 					type: 'warn',
+					tag: 'twinkleblock',
 				});
 				return;
 			}
@@ -2202,6 +2212,7 @@
 		if (!toBlock && !toWarn && !toTag && !toProtect && !toUnblock) {
 			mw.notify(wgULS('请给Twinkle点事做！', '請給Twinkle點事做！'), {
 				type: 'warn',
+				tag: 'twinkleblock',
 			});
 			return;
 		}
@@ -2237,6 +2248,7 @@
 					default:
 						mw.notify(wgULS('未知的用户页模板！', '未知的使用者頁面模板！'), {
 							type: 'warn',
+							tag: 'twinkleblock',
 						});
 						return;
 				}

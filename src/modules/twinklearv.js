@@ -27,6 +27,7 @@
 		if (uid === mw.config.get('wgUserName')) {
 			mw.notify(wgULS('你不想报告你自己，对吧？', '你不想報告你自己，對吧？'), {
 				type: 'warn',
+				tag: 'twinklearv',
 			});
 			return;
 		}
@@ -534,6 +535,7 @@
 			if (/https?:\/\//.test(title)) {
 				mw.notify(wgULS('页面名称不能使用网址。', '頁面名稱不能使用網址。'), {
 					type: 'warn',
+					tag: 'twinklearv',
 				});
 				return false;
 			}
@@ -553,6 +555,7 @@
 					}。`,
 					{
 						type: 'warn',
+						tag: 'twinklearv',
 					}
 				);
 				return false;
@@ -570,6 +573,7 @@
 					}。`,
 					{
 						type: 'warn',
+						tag: 'twinklearv',
 					}
 				);
 				return false;
@@ -585,6 +589,7 @@
 				if (!input.arvtype.length && input.reason === '') {
 					mw.notify(wgULS('您必须指定理由', '您必須指定理由'), {
 						type: 'warn',
+						tag: 'twinklearv',
 					});
 					return;
 				}
@@ -645,6 +650,7 @@
 				if (input.reason === '') {
 					mw.notify(wgULS('您必须指定理由', '您必須指定理由'), {
 						type: 'warn',
+						tag: 'twinklearv',
 					});
 					return;
 				}
@@ -723,6 +729,7 @@
 				if (!input.reason) {
 					mw.notify(wgULS('请输入证据。', '請輸入證據。'), {
 						type: 'warn',
+						tag: 'twinklearv',
 					});
 					return;
 				}
@@ -732,6 +739,7 @@
 				if (!sockpuppets[0]) {
 					mw.notify(wgULS('您没有指定任何傀儡。', '您沒有指定任何傀儡。'), {
 						type: 'warn',
+						tag: 'twinklearv',
 					});
 					return;
 				}

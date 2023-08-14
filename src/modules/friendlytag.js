@@ -261,6 +261,7 @@
 			default:
 				mw.notify(`Twinkle.tag：未知模式 ${Twinkle.tag.mode}`, {
 					type: 'warn',
+					tag: 'friendlytag',
 				});
 				break;
 		}
@@ -2096,6 +2097,7 @@
 				message += extra || '';
 				mw.notify(message, {
 					type: 'warn',
+					tag: 'friendlytag',
 				});
 				return true;
 			}
@@ -2106,6 +2108,7 @@
 			if (params.tags.includes(tag) && params[parameter].trim() === '') {
 				mw.notify(`${wgULS('您必须指定', '您必須指定')}{{${tag}}}的${description}。`, {
 					type: 'warn',
+					tag: 'friendlytag',
 				});
 				return true;
 			}
@@ -2142,6 +2145,7 @@
 							),
 							{
 								type: 'warn',
+								tag: 'friendlytag',
 							}
 						);
 						return;
@@ -2154,6 +2158,7 @@
 							),
 							{
 								type: 'warn',
+								tag: 'friendlytag',
 							}
 						);
 						return;
@@ -2187,6 +2192,7 @@
 			default:
 				mw.notify(`Twinkle.tag：未知模式 ${Twinkle.tag.mode}`, {
 					type: 'warn',
+					tag: 'friendlytag',
 				});
 				break;
 		}
@@ -2195,6 +2201,7 @@
 		if (params.tags.length === 0 && (Twinkle.tag.modeEn !== 'article' || params.tagsToRemove.length === 0)) {
 			mw.notify(wgULS('必须选择至少一个标记！', '必須選擇至少一個標記！'), {
 				type: 'warn',
+				tag: 'friendlytag',
 			});
 			return;
 		}

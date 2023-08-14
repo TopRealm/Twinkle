@@ -88,6 +88,7 @@
 			default:
 				mw.notify(`Twinkle.stub：未知模式 ${Twinkle.stub.mode}`, {
 					type: 'warn',
+					tag: 'twinklestub',
 				});
 				break;
 		}
@@ -360,12 +361,14 @@
 			default:
 				mw.notify(`Twinkle.stub：未知模式 ${Twinkle.stub.mode}`, {
 					type: 'warn',
+					tag: 'twinklestub',
 				});
 				break;
 		}
 		if (!params.tags.length) {
 			mw.notify('必须选择至少一个标记！', {
 				type: 'warn',
+				tag: 'twinklestub',
 			});
 			return;
 		}
@@ -398,6 +401,7 @@
 			default:
 				mw.notify(`Twinkle.stub：未知模式 ${Twinkle.stub.mode}`, {
 					type: 'warn',
+					tag: 'twinklestub',
 				});
 				break;
 		}

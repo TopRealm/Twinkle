@@ -880,6 +880,7 @@
 			default:
 				mw.notify(wgULS('twinklewarn：未知的警告组', 'twinklewarn：未知的警告組'), {
 					type: 'warn',
+					tag: 'twinklewarn',
 				});
 				break;
 		}
@@ -1093,6 +1094,7 @@
 				} else {
 					mw.notify(message, {
 						type: 'warn',
+						tag: 'twinklewarn',
 					});
 				}
 				return;
@@ -1339,6 +1341,7 @@
 			if (/https?:\/\//.test(params.article)) {
 				mw.notify(wgULS('“页面链接”不能使用网址。', '「頁面連結」不能使用網址。'), {
 					type: 'warn',
+					tag: 'warn',
 				});
 				return;
 			}
@@ -1370,6 +1373,7 @@
 		if (typeof params.messageData === 'undefined') {
 			mw.notify(wgULS('请选择警告模板。', '請選擇警告模板。'), {
 				type: 'warn',
+				tag: 'warn',
 			});
 			return;
 		}

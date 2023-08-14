@@ -146,6 +146,7 @@
 		if (!reason) {
 			mw.notify('您需要指定理由。', {
 				type: 'warn',
+				tag: 'twinklebatchundelete',
 			});
 			return;
 		}

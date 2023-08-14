@@ -1531,6 +1531,7 @@
 						if (!dbrationale || !dbrationale.trim()) {
 							mw.notify(wgULS('自定义理由：请指定理由。', '自訂理由：請指定理由。'), {
 								type: 'warn',
+								tag: 'twinklespeedy',
 							});
 							parameters = null;
 							return false;
@@ -1544,6 +1545,7 @@
 						if (!otherpage || !otherpage.trim()) {
 							mw.notify(wgULS('CSD A2：请提供现有条目的名称。', 'CSD A2：請提供現有條目的名稱。'), {
 								type: 'warn',
+								tag: 'twinklespeedy',
 							});
 							parameters = null;
 							return false;
@@ -1557,6 +1559,7 @@
 						if (!pagename || !pagename.trim()) {
 							mw.notify(wgULS('CSD G4：请提供页面名称。', 'CSD G4：請提供頁面名稱。'), {
 								type: 'warn',
+								tag: 'twinklespeedy',
 							});
 							parameters = null;
 							return false;
@@ -1570,6 +1573,7 @@
 						if (!redimage || !redimage.trim()) {
 							mw.notify(wgULS('CSD F2：请提供另一文件的名称。', 'CSD F2：請提供另一檔案的名稱。'), {
 								type: 'warn',
+								tag: 'twinklespeedy',
 							});
 							parameters = null;
 							return false;
@@ -1586,6 +1590,7 @@
 						if (!redirtype) {
 							mw.notify(wgULS('CSD R1：请选择适用类型。', 'CSD R1：請選擇適用類別。'), {
 								type: 'warn',
+								tag: 'twinklespeedy',
 							});
 							parameters = null;
 							return false;
@@ -1599,6 +1604,7 @@
 						if (!redirtype) {
 							mw.notify(wgULS('CSD R2：请选择适用类型。', 'CSD R2：請選擇適用類別。'), {
 								type: 'warn',
+								tag: 'twinklespeedy',
 							});
 							parameters = null;
 							return false;
@@ -1628,6 +1634,7 @@
 		if (values.length === 0) {
 			mw.notify(wgULS('请选择一个理据！', '請選擇一個理據！'), {
 				type: 'warn',
+				tag: 'twinklespeedy',
 			});
 			return null;
 		}

@@ -195,6 +195,7 @@
 		if (!params.source.trim()) {
 			mw.notify(wgULS('请指定侵权来源', '請指定侵權來源'), {
 				type: 'warn',
+				tag: 'twinklecopyvio',
 			});
 			return;
 		}

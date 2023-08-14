@@ -223,6 +223,7 @@
 			if (!f4_type) {
 				mw.notify(wgULS('CSD F4：请选择适用类型。', 'CSD F4：請選擇適用類別。'), {
 					type: 'warn',
+					tag: 'twinkleimage',
 				});
 				return false;
 			}

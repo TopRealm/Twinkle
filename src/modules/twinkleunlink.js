@@ -128,6 +128,7 @@
 		if (!input.reason) {
 			mw.notify(wgULS('您必须指定取消链入的理由。', '您必須指定取消連入的理由。'), {
 				type: 'warn',
+				tag: 'twinkleunlink',
 			});
 			return;
 		}
@@ -137,6 +138,7 @@
 		if (!pages.length) {
 			mw.notify(wgULS('您必须至少选择一个要取消链入的页面。', '您必須至少選擇一個要取消連入的頁面。'), {
 				type: 'warn',
+				tag: 'twinkleunlink',
 			});
 			return;
 		}

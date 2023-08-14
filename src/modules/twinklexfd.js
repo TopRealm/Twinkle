@@ -691,6 +691,7 @@
 		if (params.xfdcat === 'merge' && params.mergeinto.trim() === '') {
 			mw.notify(wgULS('请提供合并目标！', '請提供合併目標！'), {
 				type: 'warn',
+				tag: 'twinklexfd',
 			});
 			return;
 		}
@@ -751,6 +752,7 @@
 			default:
 				mw.notify('twinklexfd：未定义的类别', {
 					type: 'warn',
+					tag: 'twinklexfd',
 				});
 				break;
 		}
