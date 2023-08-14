@@ -35,7 +35,7 @@
 	"explorer.fileNesting.enabled": true,
 	"explorer.fileNesting.expand": false,
 	"explorer.fileNesting.patterns": {
-		"package.json": ".babel*, .editorConfig, .eslint*, .git*, .hintrc, .mailmap, pnpm-lock.yaml, .prettier*, .stylelint*, commitlinterrc.json, jsconfig.json, tsconfig.json",
+		"package.json": ".babel*, .editorConfig, .eslint*, .git*, .mailmap, pnpm-lock.yaml, .prettier*, .stylelint*, commitlinterrc.json, tsconfig.json",
 		"readme*": "*.md"
 	}
 }
