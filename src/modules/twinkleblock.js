@@ -138,14 +138,7 @@
 				type: 'div',
 				style: 'margin-bottom: 0.5em',
 				label: [
-					wgULS('直接封禁/64段', '直接封鎖/64段'),
-					'（',
-					$.parseHTML(
-						`<a rel="noopener" target="_blank" href="${mw.util.getUrl(
-							`Special:Contributions/${sixtyFour}`
-						)}">${sixtyFour}</a>)`
-					)[0],
-					wgULS('）有益无害。', '）有益無害。'),
+					wgULS('直接封禁/64段有益无害。', '直接封鎖/64段有益無害。'),
 				],
 			});
 			block64field.append({

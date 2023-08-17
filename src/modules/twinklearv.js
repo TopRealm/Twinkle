@@ -775,7 +775,7 @@
 				if (reason === undefined) {
 					return;
 				}
-				summary = `${wgULS('报告', '報告')}[[Special:Contributions/${uid}|${uid}]]`;
+				summary = `${wgULS('报告', '報告')}[[Special:Contribs/${uid}|${uid}]]`;
 				if (input.hidename) {
 					summary = wgULS('报告一名用户', '報告一名使用者');
 				}
@@ -825,7 +825,7 @@
 				if (reason === undefined) {
 					return;
 				}
-				summary = `${wgULS('报告', '報告')}[[Special:Contributions/${uid}|${uid}]]`;
+				summary = `${wgULS('报告', '報告')}[[Special:Contribs/${uid}|${uid}]]`;
 				Morebits.simpleWindow.setButtonsEnabled(false);
 				Morebits.status.init(form);
 				Morebits.wiki.actionCompleted.redirect = 'Qiuwen_talk:管理员告示板';
