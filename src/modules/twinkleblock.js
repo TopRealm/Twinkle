@@ -137,9 +137,7 @@
 			block64field.append({
 				type: 'div',
 				style: 'margin-bottom: 0.5em',
-				label: [
-					wgULS('直接封禁/64段有益无害。', '直接封鎖/64段有益無害。'),
-				],
+				label: [wgULS('直接封禁/64段有益无害。', '直接封鎖/64段有益無害。')],
 			});
 			block64field.append({
 				type: 'checkbox',
