@@ -63,6 +63,7 @@
 			type: 'option',
 			label: wgULS('傀儡调查（QW:SPI）', '傀儡調查（QW:SPI）'),
 			value: 'spi',
+			disabled: mw.util.isIPAddress(uid),
 		});
 		form.append({
 			type: 'div',
@@ -128,19 +129,8 @@
 			label: wgULS('请选择', '請選擇'),
 		},
 	];
-	Twinkle.arv.callback.pick_lta = (e) => {
-		e.target.form.sockmaster.value = e.target.value;
-		Twinkle.arv.callback.spi_notice(e.target.form, e.target.value);
-		Twinkle.arv.callback.set_sockmaster(e.target.value);
-		e.target.value = '';
-	};
 	Twinkle.arv.callback.sockmaster_changed = (e) => {
-		Twinkle.arv.callback.spi_notice(e.target.form, e.target.value);
 		Twinkle.arv.callback.set_sockmaster(e.target.value);
-	};
-	Twinkle.arv.callback.spi_notice = (form, sockmaster) => {
-		const previewText = `{{#ifexist:Qiuwen_talk:傀儡调查/案件/${sockmaster}|{{#ifexist:Qiuwen_talk:傀儡调查/案件通告/${sockmaster}  |<div class="extendedconfirmed-show sysop-show">{{Memo|1={{Qiuwen_talk:傀儡调查/案件通告/${sockmaster}}}|2=notice}}</div>  |無案件通告}}|您將建立新的提報頁面，若您希望提報過往曾被提報過的使用者，請檢查您的輸入是否正確。}}`;
-		form.spinoticepreviewer.beginRender(previewText, `Qiuwen_talk:傀儡调查/案件/${sockmaster}`);
 	};
 	Twinkle.arv.callback.set_sockmaster = (sockmaster) => {
 		$('code.tw-arv-sockmaster').text(`{{subst:Socksuspectnotice|1=${sockmaster}}}`);
@@ -408,26 +398,9 @@
 					name: 'work_area',
 				});
 				work_area.append({
-					type: 'select',
-					name: 'common_lta',
-					label: '持續出沒的破壞者：',
-					style: 'width: 420px;',
-					list: Twinkle.arv.lta_list,
-					event: Twinkle.arv.callback.pick_lta,
-				});
-				work_area.append({
 					type: 'input',
 					name: 'sockmaster',
-					label: $('<a>')
-						.attr({
-							href: mw.util.getUrl('Special:PrefixIndex/Qiuwen_talk:傀儡调查/案件/'),
-							target: '_blank',
-						})
-						.text('Qiuwen_talk:傀儡调查/案件/')[0],
-					tooltip: wgULS(
-						'主账户的用户名（不含User:前缀），这被用于创建傀儡调查子页面的标题，可在 Qiuwen_talk:傀儡调查/案件 的子页面搜索先前的调查。',
-						'主帳號的使用者名稱（不含User:字首），這被用於建立傀儡調查子頁面的標題，可在 Qiuwen_talk:傀儡调查/案件 的子頁面搜尋先前的調查。'
-					),
+					tooltip: wgULS('主账户的用户名（不含User:前缀）', '主帳號的使用者名稱（不含User:字首）'),
 					value: root.uid.value,
 					event: Twinkle.arv.callback.sockmaster_changed,
 				});
@@ -494,7 +467,6 @@
 				root.spinoticepreviewer = new Morebits.wiki.preview(
 					$(work_area).find('#twinklearv-spinoticebox').last()[0]
 				);
-				Twinkle.arv.callback.spi_notice(root, root.uid.value);
 				Twinkle.arv.callback.set_sockmaster(root.uid.value);
 				break;
 		}
@@ -518,7 +490,7 @@
 				title = 'Qiuwen_talk:管理员告示板';
 				break;
 			case 'spi':
-				title = `Qiuwen_talk:傀儡调查/案件/${input.sockmaster}`;
+				title = 'Qiuwen_talk:管理员告示板';
 				break;
 			default:
 				title = mw.config.get('wgPageName');
@@ -593,7 +565,7 @@
 					});
 					return;
 				}
-				reason += `=== ${input.hidename ? wgULS('已隐藏用户名', '已隱藏使用者名稱') : uid} ===\n`;
+				reason += `== ${input.hidename ? wgULS('已隐藏用户名', '已隱藏使用者名稱') : uid} ==\n`;
 				reason += `* '''{{vandal|${/=/.test(uid) ? '1=' : ''}${uid}`;
 				if (input.hidename) {
 					reason += '|hidename=1';
@@ -654,7 +626,7 @@
 					});
 					return;
 				}
-				reason += `=== ${uid} ===\n`;
+				reason += `== 编辑战举报（${uid}） ==\n`;
 				reason += `* '''{{vandal|${/=/.test(uid) ? '1=' : ''}${uid}}}'''\n`;
 				const pages = $.map($('input:text[name=page]', form), (o) => $(o).val() || null);
 				for (let i = 0; i < pages.length; i++) {
@@ -721,7 +693,10 @@
 				comment = Morebits.string.appendPunctuation(comment);
 				comment += '--~~~~';
 				comment = comment.replace(/\r?\n/g, '\n*:'); // indent newlines
-				reason = comment;
+				reason = `== 不当用户名报告（${
+					input.hidename ? wgULS('已隐藏用户名', '已隱藏使用者名稱') : uid
+				}） ==\n`;
+				reason += comment;
 				break;
 			}
 			// QW:SPI
@@ -914,7 +889,7 @@
 				reason = Twinkle.arv.callback.getReportWikitext(form);
 				Morebits.simpleWindow.setButtonsEnabled(false);
 				Morebits.status.init(form);
-				const reportpage = `Qiuwen_talk:傀儡调查/案件/${input.sockmaster}`;
+				const reportpage = `Qiuwen_talk:管理员告示板`;
 				Morebits.wiki.actionCompleted.redirect = reportpage;
 				Morebits.wiki.actionCompleted.notice = wgULS('报告完成', '報告完成');
 				const spiPage = new Morebits.wiki.page(reportpage, wgULS('抓取讨论页面', '抓取討論頁面'));
