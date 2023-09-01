@@ -14,7 +14,7 @@ import mwclient
 DEPLOY_TARGETS = [
 	# twinkle
 	{
-		"file": 'distTS/twinkle/twinkle.js',
+		"file": 'distTS/src/twinkle/twinkle.js',
 		"target": 'MediaWiki:Gadget-Twinkle.js',
 		"license": 'src/licenseHeader'
 	},
@@ -30,103 +30,103 @@ DEPLOY_TARGETS = [
 	},
 	# modules
 	{
-		"file": 'distTS/modules/friendlytag.js',
+		"file": 'distTS/src/modules/friendlytag.js',
 		"target": 'MediaWiki:Gadget-friendlytag.js',
 		"license": 'src/licenseHeader'
 	},
 	{
-		"file": 'distTS/modules/friendlytalkback.js',
+		"file": 'distTS/src/modules/friendlytalkback.js',
 		"target": 'MediaWiki:Gadget-friendlytalkback.js',
 		"license": 'src/licenseHeader'
 	},
 	{
-		"file": 'distTS/modules/twinklearv.js',
+		"file": 'distTS/src/modules/twinklearv.js',
 		"target": 'MediaWiki:Gadget-twinklearv.js',
 		"license": 'src/licenseHeader'
 	},
 	{
-		"file": 'distTS/modules/twinklebatchprotect.js',
+		"file": 'distTS/src/modules/twinklebatchprotect.js',
 		"target": 'MediaWiki:Gadget-twinklebatchprotect.js',
 		"license": 'src/licenseHeader'
 	},
 	{
-		"file": 'distTS/modules/twinklebatchdelete.js',
+		"file": 'distTS/src/modules/twinklebatchdelete.js',
 		"target": 'MediaWiki:Gadget-twinklebatchdelete.js',
 		"license": 'src/licenseHeader'
 	},
 	{
-		"file": 'distTS/modules/twinklebatchundelete.js',
+		"file": 'distTS/src/modules/twinklebatchundelete.js',
 		"target": 'MediaWiki:Gadget-twinklebatchundelete.js',
 		"license": 'src/licenseHeader'
 	},
 	{
-		"file": 'distTS/modules/twinkleblock.js',
+		"file": 'distTS/src/modules/twinkleblock.js',
 		"target": 'MediaWiki:Gadget-twinkleblock.js',
 		"license": 'src/licenseHeader'
 	},
 	{
-		"file": 'distTS/modules/twinkleclose.js',
+		"file": 'distTS/src/modules/twinkleclose.js',
 		"target": 'MediaWiki:Gadget-twinkleclose.js',
 		"license": 'src/licenseHeader'
 	},
 	{
-		"file": 'distTS/modules/twinkleconfig.js',
+		"file": 'distTS/src/modules/twinkleconfig.js',
 		"target": 'MediaWiki:Gadget-twinkleconfig.js',
 		"license": 'src/licenseHeader'
 	},
 	{
-		"file": 'distTS/modules/twinklecopyvio.js',
+		"file": 'distTS/src/modules/twinklecopyvio.js',
 		"target": 'MediaWiki:Gadget-twinklecopyvio.js',
 		"license": 'src/licenseHeader'
 	},
 	{
-		"file": 'distTS/modules/twinklediff.js',
+		"file": 'distTS/src/modules/twinklediff.js',
 		"target": 'MediaWiki:Gadget-twinklediff.js',
 		"license": 'src/licenseHeader'
 	},
 	{
-		"file": 'distTS/modules/twinklefluff.js',
+		"file": 'distTS/src/modules/twinklefluff.js',
 		"target": 'MediaWiki:Gadget-twinklefluff.js',
 		"license": 'src/licenseHeader'
 	},
 	{
-		"file": 'distTS/modules/twinkleimage.js',
+		"file": 'distTS/src/modules/twinkleimage.js',
 		"target": 'MediaWiki:Gadget-twinkleimage.js',
 		"license": 'src/licenseHeader'
 	},
 	{
-		"file": 'distTS/modules/twinkleprotect.js',
+		"file": 'distTS/src/modules/twinkleprotect.js',
 		"target": 'MediaWiki:Gadget-twinkleprotect.js',
 		"license": 'src/licenseHeader'
 	},
 	{
-		"file": 'distTS/modules/twinklespeedy.js',
+		"file": 'distTS/src/modules/twinklespeedy.js',
 		"target": 'MediaWiki:Gadget-twinklespeedy.js',
 		"license": 'src/licenseHeader'
 	},
 	{
-		"file": 'distTS/modules/twinklestub.js',
+		"file": 'distTS/src/modules/twinklestub.js',
 		"target": 'MediaWiki:Gadget-twinklestub.js',
 		"license": 'src/licenseHeader'
 	},
 	{
-		"file": 'distTS/modules/twinkleunlink.js',
+		"file": 'distTS/src/modules/twinkleunlink.js',
 		"target": 'MediaWiki:Gadget-twinkleunlink.js',
 		"license": 'src/licenseHeader'
 	},
 	{
-		"file": 'distTS/modules/twinklewarn.js',
+		"file": 'distTS/src/modules/twinklewarn.js',
 		"target": 'MediaWiki:Gadget-twinklewarn.js',
 		"license": 'src/licenseHeader'
 	},
 	{
-		"file": 'distTS/modules/twinklexfd.js',
+		"file": 'distTS/src/modules/twinklexfd.js',
 		"target": 'MediaWiki:Gadget-twinklexfd.js',
 		"license": 'src/licenseHeader'
 	},
 	# Morebits
 	{
-		"file": 'distTS/morebits/morebits.js',
+		"file": 'distTS/src/morebits/morebits.js',
 		"target": 'MediaWiki:Gadget-morebits.js',
 		"license": 'src/licenseHeader'
 	},
@@ -160,7 +160,11 @@ def last_commit_info(file_name: str) -> tuple:
 
     Returns:
         tuple: (获取的完整SHA-1哈希值, 留言)
-    """    
+    """
+    # 若传入的文件位于distTS中，则定位其编译前的原始路径
+    if file_name[:7] == "distTS/":
+        file_name = file_name[7:]
+
     cmd = f"git log --pretty=format:\"%H %s\" -1 -- {file_name}"
     ans = sp.run(cmd, stdout=sp.PIPE, shell=True).stdout.decode("utf-8").strip()
     commit_hash = ans.split(" ", 1)[0]
@@ -180,7 +184,7 @@ def sync_file(site: mwclient.Site, page_name: str, text_new: str, file_name=None
         page_name (str): 目标MediaWiki页面名称
         text_new (str): 用于比对的新内容
         file_name (str, optional): 文件名，用于调用last_commit_hash函数获取commit记录。默认值为None，即不在编辑摘要中记录commit哈希
-    """    
+    """
     page = site.pages[page_name]
     text_old = page.text()
     # MediaWiki会自动删除上传文本末尾的空白字符
@@ -188,7 +192,7 @@ def sync_file(site: mwclient.Site, page_name: str, text_new: str, file_name=None
         summary = "Git更新："
         if file_name is not None:
             commit_hash, commit_msg = last_commit_info(file_name)
-            summary += f"([https://github.com/TopRealm/InterfaceCodes/commit/{commit_hash} {commit_hash[:7]}]) {commit_msg}"
+            summary += f"([https://github.com/TopRealm/Twinkle/commit/{commit_hash} {commit_hash[:7]}]) {commit_msg}"
         page.edit(text_new, summary)
         print(page_name, "\t", "changed")
     else:
@@ -207,5 +211,5 @@ for deploy_item in DEPLOY_TARGETS:
 
     with open(deploy_item["file"], "r", encoding="utf-8") as pfile:
         page_text += pfile.read().rstrip()
-    
+
     sync_file(site, deploy_item["target"], page_text, deploy_item["file"])
