@@ -15,7 +15,7 @@
 	Twinkle.talkback.callback = () => {
 		if (
 			mw.config.get('wgRelevantUserName') === mw.config.get('wgUserName') &&
-			!confirm(wgULS('您寂寞到了要自己回复自己的程度么？', '您寂寞到了要自己回覆自己的程度麼？'))
+			!confirm(wgULS('虽然但是，你真的要回复你自己吗？', '雖然但是，你真的要回覆你自己嗎？'))
 		) {
 			return;
 		}
@@ -99,12 +99,12 @@
 			elquery: 'userjs.invalid/noTalkback',
 			ellimit: '1',
 		};
-		const qiuwen_api = new Morebits.wiki.api(
+		const ysarxiv_api = new Morebits.wiki.api(
 			wgULS('抓取退出通告信息', '抓取退出通告資訊'),
 			query,
 			Twinkle.talkback.callback.optoutStatus
 		);
-		qiuwen_api.post();
+		ysarxiv_api.post();
 	};
 	Twinkle.talkback.optout = '';
 	Twinkle.talkback.callback.optoutStatus = (apiobj) => {
@@ -222,8 +222,8 @@
 					name: 'page',
 					label: wgULS('完整页面名', '完整頁面名'),
 					tooltip: wgULS(
-						'您留下消息的完整页面名，例如“Qiuwen_talk:首页”。',
-						'您留下訊息的完整頁面名，例如「Qiuwen_talk:首頁」。'
+						'您留下消息的完整页面名，例如“LIB_talk:首页”。',
+						'您留下訊息的完整頁面名，例如「LIB_talk:首頁」。'
 					),
 					value: prev_page,
 					required: true,
@@ -253,8 +253,8 @@
 					name: 'page',
 					label: wgULS('完整页面名', '完整頁面名'),
 					tooltip: wgULS(
-						'您留下消息的完整页面名，例如“Qiuwen_talk:首页”。',
-						'您留下訊息的完整頁面名，例如「Qiuwen_talk:首頁」。'
+						'您留下消息的完整页面名，例如“LIB_talk:首页”。',
+						'您留下訊息的完整頁面名，例如「LIB_talk:首頁」。'
 					),
 					value: prev_page,
 					required: true,
@@ -291,41 +291,17 @@
 	};
 	Twinkle.talkback.noticeboards = {
 		affp: {
-			label: `QW:AF/FP（${wgULS('过滤器处理/报告', '過濾器處理/報告')}）`,
+			label: `LIB:AF/FP（${wgULS('过滤器处理/报告', '過濾器處理/報告')}）`,
 			title: wgULS('过滤器错误报告有新回应', '過濾器錯誤報告有新回應'),
 			content: `${wgULS(
-				'您的[[Qiuwen_talk:过滤器处理/报告|过滤器错误报告]]已有回应，请前往查看。',
-				'您的[[Qiuwen_talk:过滤器处理/报告|過濾器錯誤報告]]已有回應，請前往查看。'
+				'您的[[LIB_talk:过滤器处理/报告|过滤器错误报告]]已有回应，请前往查看。',
+				'您的[[LIB_talk:过滤器处理/报告|過濾器錯誤報告]]已有回應，請前往查看。'
 			)}--~~~~`,
 			editSummary: wgULS(
-				'有关[[Qiuwen_talk:过滤器处理/报告|过滤器错误报告]]的通知',
-				'有關[[Qiuwen_talk:过滤器处理/报告|過濾器錯誤報告]]的通知'
+				'有关[[LIB_talk:过滤器处理/报告|过滤器错误报告]]的通知',
+				'有關[[LIB_talk:过滤器处理/报告|過濾器錯誤報告]]的通知'
 			),
 			defaultSelected: true,
-		},
-		sbl: {
-			label: 'Spam-blacklist',
-			title: wgULS('垃圾链接黑名单请求有新回应', '垃圾連結黑名單請求有新回應'),
-			content: `${wgULS(
-				'您的[[Qiuwen_talk:管理员告示板|垃圾链接黑名单请求]]已有回应，请前往查看。',
-				'您的[[Qiuwen_talk:管理员告示板|垃圾連結黑名單請求]]已有回應，請前往查看。'
-			)}--~~~~`,
-			editSummary: wgULS(
-				'有关[[Qiuwen_talk:管理员告示板|垃圾链接黑名单请求]]的通知',
-				'有關[[Qiuwen_talk:管理员告示板|垃圾連結黑名單請求]]的通知'
-			),
-		},
-		shl: {
-			label: 'Spam-whitelist',
-			title: wgULS('垃圾链接白名单请求有新回应', '垃圾連結白名單請求有新回應'),
-			content: `${wgULS(
-				'您的[[Qiuwen_talk:管理员告示板|垃圾链接白名单请求]]已有回应，请前往查看。',
-				'您的[[Qiuwen_talk:管理员告示板|垃圾連結白名單請求]]已有回應，請前往查看。'
-			)}--~~~~`,
-			editSummary: wgULS(
-				'有关[[Qiuwen_talk:管理员告示板|垃圾链接白名单请求]]的通知',
-				'有關[[Qiuwen_talk:管理员告示板|垃圾連結白名單請求]]的通知'
-			),
 		},
 	};
 	Twinkle.talkback.evaluate = (e) => {

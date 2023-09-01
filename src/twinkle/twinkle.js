@@ -163,7 +163,7 @@
 		markXfdPagesAsPatrolled: true,
 		FwdCsdToXfd: Morebits.userIsSysop,
 		afdDefaultCategory: 'delete',
-		afdFameDefaultReason: '没有足够的可靠来源证明此条目符合[[Qiuwen:收录标准|收录标准]]',
+		afdFameDefaultReason: '没有足够的可靠来源证明此条目符合[[LIB:收录标准|收录标准]]',
 		afdSubstubDefaultReason: '过期小小作品',
 		XfdClose: Morebits.userIsSysop ? 'all' : 'hide',
 		// Copyvio
@@ -178,7 +178,7 @@
 		batchChunks: 50,
 		configPage: 'Help:Twinkle/参数设置',
 		projectNamespaceName: mw.config.get('wgFormattedNamespaces')[4],
-		sandboxPage: 'Qiuwen:沙盒',
+		sandboxPage: 'LIB:沙盒',
 		// Deprecated options, as a fallback for add-on scripts/modules
 		summaryAd: '（[[H:TW|Twinkle]]）',
 		deletionSummaryAd: '（[[H:TW|Twinkle]]）',

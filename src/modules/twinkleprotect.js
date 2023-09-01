@@ -25,7 +25,7 @@
 				: wgULS('请求保护页面', '請求保護頁面')
 		);
 		Window.setScriptName('Twinkle');
-		Window.addFooterLink(wgULS('保护方针', '保護方針'), 'QW:PROT');
+		Window.addFooterLink(wgULS('保护条例', '保護條例'), 'QW:PROT');
 		Window.addFooterLink(wgULS('保护设置', '保護設定'), 'H:TW/PREF#protect');
 		Window.addFooterLink(wgULS('Twinkle帮助', 'Twinkle說明'), 'H:TW/DOC#protect');
 		const form = new Morebits.quickForm(Twinkle.protect.callback.evaluate);
@@ -677,7 +677,7 @@
 					value: 'pp-semi-vandalism',
 				},
 				{
-					label: wgULS('违反生者传记方针（半）', '違反生者傳記方針（半）'),
+					label: wgULS('违反生者传记条例（半）', '違反生者傳記條例（半）'),
 					value: 'pp-semi-blp',
 				},
 				{
@@ -791,7 +791,7 @@
 		},
 		'pp-semi-blp': {
 			edit: 'autoconfirmed',
-			reason: wgULS('新用户违反生者传记方针', '新使用者違反生者傳記方針'),
+			reason: wgULS('新用户违反生者传记条例', '新使用者違反生者傳記條例'),
 		},
 		'pp-semi-usertalk': {
 			edit: 'autoconfirmed',
@@ -1109,7 +1109,7 @@
 					}
 					if (closeparams && closeparams.type) {
 						const rppPage = new Morebits.wiki.page(
-							'Qiuwen_talk:页面保护请求',
+							'LIB_talk:页面保护请求',
 							wgULS('关闭请求', '關閉請求')
 						);
 						rppPage.setFollowRedirect(true);
@@ -1258,7 +1258,7 @@
 						typereason = wgULS('傀儡破坏', '傀儡破壞');
 						break;
 					case 'pp-semi-blp':
-						typereason = wgULS('违反生者传记方针', '違反生者傳記方針');
+						typereason = wgULS('违反生者传记条例', '違反生者傳記條例');
 						break;
 					case 'pp-move-dispute':
 						typereason = wgULS('争议、移动战', '爭議、移動戰');
@@ -1294,7 +1294,7 @@
 				};
 				Morebits.simpleWindow.setButtonsEnabled(false);
 				Morebits.status.init(form);
-				const rppName = 'Qiuwen_talk:页面保护请求';
+				const rppName = 'LIB_talk:页面保护请求';
 				// Updating data for the action completed event
 				Morebits.wiki.actionCompleted.redirect = rppName;
 				Morebits.wiki.actionCompleted.notice = wgULS('提名完成，重定向到讨论页', '提名完成，重新導向到討論頁');
@@ -1384,8 +1384,8 @@
 						tag = `{{${tag}}}\n`;
 					}
 					// Insert tag after short description or any hatnotes
-					const qiuwen_page = new Morebits.wikitext.page(text);
-					text = qiuwen_page.insertAfterTemplates(tag, Twinkle.hatnoteRegex).getText();
+					const ysarxiv_page = new Morebits.wikitext.page(text);
+					text = ysarxiv_page.insertAfterTemplates(tag, Twinkle.hatnoteRegex).getText();
 				}
 				summary = `加入{{${params.tag}}}`;
 			}

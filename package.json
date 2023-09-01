@@ -1,10 +1,10 @@
 {
 	"title": "Twinkle",
-	"name": "qiuwen-twinkle",
+	"name": "ysarxiv-twinkle",
 	"private": true,
 	"repository": {
 		"type": "git",
-		"url": "https://git.qiuwen.wiki/InterfaceAdmin/Twinkle"
+		"url": "https://github.com/TopRealm/Twinkle"
 	},
 	"scripts": {
 		"deploy": "pnpm babel && node scripts/deploy.mjs",
@@ -20,7 +20,7 @@
 		"updatebrowserslist": "pnpx update-browserslist-db@latest"
 	},
 	"keywords": [
-		"Qiuwen",
+		"Ysarxiv",
 		"MediaWiki"
 	],
 	"devDependencies": {

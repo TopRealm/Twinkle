@@ -472,74 +472,6 @@
 						tooltip: wgULS('必填，显示为“缺少有关……的信息。”', '必填，顯示為「缺少有關……的資訊。」'),
 					};
 					break;
-				case 'Notability':
-					checkbox.subgroup = {
-						name: 'notability',
-						type: 'select',
-						list: [
-							{
-								label: `{{Notability}}：${wgULS('通用的关注度指引', '通用的關注度指引')}`,
-								value: 'none',
-							},
-							{
-								label: `{{Notability|Astro}}：${wgULS('天体', '天體')}`,
-								value: 'Astro',
-							},
-							{
-								label: `{{Notability|Biographies}}：${wgULS('人物传记', '人物傳記')}`,
-								value: 'Biographies',
-							},
-							{
-								label: `{{Notability|Book}}：${wgULS('书籍', '書籍')}`,
-								value: 'Book',
-							},
-							{
-								label: `{{Notability|Cyclone}}：${wgULS('气旋', '氣旋')}`,
-								value: 'Cyclone',
-							},
-							{
-								label: `{{Notability|Fiction}}：${wgULS('虚构事物', '虛構事物')}`,
-								value: 'Fiction',
-							},
-							{
-								label: `{{Notability|Geographic}}：${wgULS('地理特征', '地理特徵')}`,
-								value: 'Geographic',
-							},
-							{
-								label: `{{Notability|Geometry}}：${wgULS('几何图形', '幾何圖形')}`,
-								value: 'Geometry',
-							},
-							{
-								label: `{{Notability|Invention}}：${wgULS('发明、研究', '發明、研究')}`,
-								value: 'Invention',
-							},
-							{
-								label: `{{Notability|Music}}：${wgULS('音乐', '音樂')}`,
-								value: 'Music',
-							},
-							{
-								label: `{{Notability|Numbers}}：${wgULS('数字', '數字')}`,
-								value: 'Numbers',
-							},
-							{
-								label: `{{Notability|Organizations}}：${wgULS('组织', '組織')}`,
-								value: 'Organizations',
-							},
-							{
-								label: `{{Notability|Property}}：${wgULS('性质表', '性質表')}`,
-								value: 'Property',
-							},
-							{
-								label: '{{Notability|Traffic}}：' + '交通',
-								value: 'Traffic',
-							},
-							{
-								label: `{{Notability|Web}}：${wgULS('网站、网络内容', '網站、網路內容')}（非正式指引）`,
-								value: 'Web',
-							},
-						],
-					};
-					break;
 				case 'Requested move':
 					checkbox.subgroup = [
 						{
@@ -778,15 +710,15 @@
 						{
 							tag: 'Cleanup',
 							description: wgULS(
-								'可能需要进行清理，以符合求闻百科的质量标准',
-								'可能需要進行清理，以符合求聞百科的質量標準'
+								'可能需要进行清理，以符合有兽档案馆的质量标准',
+								'可能需要進行清理，以符合有獸檔案館的質量標準'
 							),
 						},
 						{
 							tag: 'Cleanup rewrite',
 							description: wgULS(
-								'不符合求闻百科的质量标准，需要完全重写',
-								'不符合求聞百科的質量標準，需要完全重寫'
+								'不符合有兽档案馆的质量标准，需要完全重写',
+								'不符合有獸檔案館的質量標準，需要完全重寫'
 							),
 						},
 						{
@@ -815,8 +747,8 @@
 						{
 							tag: 'External links',
 							description: wgULS(
-								'使用外部链接的方式可能不符合求闻百科的方针',
-								'使用外部連結的方式可能不符合求聞百科的方針'
+								'使用外部链接的方式可能不符合有兽档案馆的条例',
+								'使用外部連結的方式可能不符合有獸檔案館的條例'
 							),
 						},
 						{
@@ -866,23 +798,6 @@
 		{
 			key: wgULS('常规条目问题', '常規條目問題'),
 			value: [
-				{
-					key: '重要性和知名度',
-					value: [
-						{
-							tag: 'Notability',
-							description: wgULS('可能不符合通用关注度指引', '可能不符合通用關注度指引'),
-							excludeMI: true,
-						},
-						{
-							tag: 'Notability Unreferenced',
-							description: wgULS(
-								'可能具备关注度，但需要来源加以彰显',
-								'可能具備關注度，但需要來源加以彰顯'
-							),
-						},
-					],
-				},
 				{
 					key: wgULS('写作风格', '寫作風格'),
 					value: [
@@ -1018,8 +933,8 @@
 						{
 							tag: 'BLPdispute',
 							description: wgULS(
-								'可能违反了求闻百科关于生者传记的方针',
-								'可能違反了求聞百科關於生者傳記的方針'
+								'可能违反了有兽档案馆关于生者传记的条例',
+								'可能違反了有獸檔案館關於生者傳記的條例'
 							),
 						},
 						{
@@ -1198,13 +1113,6 @@
 					description: wgULS('引导简体至繁体，或繁体至简体', '引導簡體至繁體，或繁體至簡體'),
 				},
 				{
-					tag: wgULS('关注度重定向', '關注度重定向'),
-					description: wgULS(
-						'缺乏关注度的子主题向有关注度的母主题的重定向',
-						'缺乏關注度的子主題向有關注度的母主題的重定向'
-					),
-				},
-				{
 					tag: '模板重定向',
 					description: wgULS('指向模板的重定向页面', '指向模板的重定向頁面'),
 				},
@@ -1317,7 +1225,7 @@
 				},
 				{
 					tag: wgULS('快捷方式重定向', '捷徑重定向'),
-					description: wgULS('求闻百科快捷方式', '求聞百科快捷方式'),
+					description: wgULS('有兽档案馆快捷方式', '有獸檔案館快捷方式'),
 				},
 			],
 		},
@@ -1700,11 +1608,6 @@
 						case 'Missing information':
 							currentTag += `|1=${params.missingInformation}`;
 							break;
-						case 'Notability':
-							if (params.notability !== 'none') {
-								currentTag += `|3=${params.notability}`;
-							}
-							break;
 						case 'Requested move':
 							if (params.moveTarget) {
 								// normalize the move target for now and later
@@ -1747,13 +1650,13 @@
 				$.each(tags, addTag);
 				// Insert tag after short description or any hatnotes,
 				// as well as deletion/protection-related templates
-				const qiuwen_page = new Morebits.wikitext.page(pageText);
+				const ysarxiv_page = new Morebits.wikitext.page(pageText);
 				const templatesAfter =
 					// Protection templates
 					// CSD
 					// AfD
 					`${Twinkle.hatnoteRegex}pp|pp-.*?|(?:Delete|Db-reason|D|Deletebecause|Db|速删|速刪|Speedy|SD|快删|快刪|CSD)|[rsaiftcmv]fd|vfd-(?:b|q|s|source|v|wikt)|(?:移动到维基|移動到維基)(?:教科书|教科書|语录|語錄|文库|文庫|导游|導遊|词典|詞典)`;
-				pageText = qiuwen_page.insertAfterTemplates(tagText, templatesAfter).getText();
+				pageText = ysarxiv_page.insertAfterTemplates(tagText, templatesAfter).getText();
 				removeTags();
 			};
 			// Separate tags into groupable ones (`groupableTags`) and non-groupable ones (`tags`)
@@ -1761,24 +1664,6 @@
 				tagRe = new RegExp(`\\{\\{${tag}(\\||\\}\\})`, 'im');
 				// regex check for preexistence of tag can be skipped if in canRemove mode
 				if (Twinkle.tag.canRemove || !tagRe.exec(pageText)) {
-					if (
-						tag === 'Notability' &&
-						(mw.config.get('wgNamespaceNumber') === 0 ||
-							confirm(
-								wgULS(
-									'该页面不是条目，您仍要提报到关注度提报吗？',
-									'該頁面不是條目，您仍要提報到關注度提報嗎？'
-								)
-							))
-					) {
-						const qiuwen_page = new Morebits.wiki.page(
-							'Qiuwen_talk:存废讨论/关注度提报',
-							wgULS('加入关注度记录项', '加入關注度記錄項')
-						);
-						qiuwen_page.setFollowRedirect(true);
-						qiuwen_page.setCallbackParameters(params);
-						qiuwen_page.load(Twinkle.tag.callbacks.notabilityList);
-					}
 					// condition Twinkle.tag.article.tags[tag] to ensure that its not a custom tag
 					// Custom tags are assumed non-groupable, since we don't know whether MI template supports them
 					if (Twinkle.tag.article.flatObject[tag] && !Twinkle.tag.article.flatObject[tag].excludeMI) {
@@ -1905,15 +1790,6 @@
 				addUngroupedTags();
 			}
 		},
-		notabilityList: (pageobj) => {
-			// const text = pageobj.getPageText();
-			// const params = pageobj.getCallbackParameters();
-			pageobj.setAppendText(`\n{{subst:Fameitem|title=${Morebits.pageNameNorm}}}`);
-			pageobj.setEditSummary(`加入[[${Morebits.pageNameNorm}]]`);
-			pageobj.setChangeTags(Twinkle.changeTags);
-			pageobj.setCreateOption('recreate');
-			pageobj.append();
-		},
 		redirect: (pageobj) => {
 			const params = pageobj.getCallbackParameters();
 			let pageText = pageobj.getPageText();
@@ -2007,9 +1883,9 @@
 				let currentTag;
 				$.each(params.tags, (k, tag) => {
 					// when other commons-related tags are placed, remove "move to Share" tag
-					if (['Keep local', 'Now Qiuwen Share', 'Do not move to Qiuwen Share'].includes(tag)) {
+					if (['Keep local', 'Now Ysarxiv Share', 'Do not move to Ysarxiv Share'].includes(tag)) {
 						text = text.replace(
-							/{{(mtc|(copy |move )?to ?share|move to qiuwen share|copy to qiuwen share)[^}]*}}/gi,
+							/{{(mtc|(copy |move )?to ?share|move to ysarxiv share|copy to ysarxiv share)[^}]*}}/gi,
 							''
 						);
 					}
@@ -2215,12 +2091,12 @@
 		if (Twinkle.tag.modeEn === 'redirect') {
 			Morebits.wiki.actionCompleted.followRedirect = false;
 		}
-		const qiuwen_page = new Morebits.wiki.page(
+		const ysarxiv_page = new Morebits.wiki.page(
 			Morebits.pageNameNorm,
 			wgULS('正在标记', '正在標記') + Twinkle.tag.mode
 		);
-		qiuwen_page.setCallbackParameters(params);
-		qiuwen_page.load(Twinkle.tag.callbacks[Twinkle.tag.modeEn]);
+		ysarxiv_page.setCallbackParameters(params);
+		ysarxiv_page.load(Twinkle.tag.callbacks[Twinkle.tag.modeEn]);
 	};
 	Twinkle.addInitCallback(Twinkle.tag, 'tag');
 })(jQuery);

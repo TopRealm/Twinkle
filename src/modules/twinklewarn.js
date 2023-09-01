@@ -422,12 +422,12 @@
 					},
 					'uw-advert': {
 						level1: {
-							label: wgULS('利用求闻百科来发布广告或推广', '利用求聞百科來發布廣告或推廣'),
-							summary: wgULS('注意：利用求闻百科来发布广告或推广', '注意：利用求聞百科來發布廣告或推廣'),
+							label: wgULS('利用有兽档案馆来发布广告或推广', '利用有獸檔案館來發布廣告或推廣'),
+							summary: wgULS('注意：利用有兽档案馆来发布广告或推广', '注意：利用有獸檔案館來發布廣告或推廣'),
 						},
 						level2: {
-							label: wgULS('利用求闻百科来发布广告或推广', '利用求聞百科來發布廣告或推廣'),
-							summary: wgULS('警告：利用求闻百科来发布广告或推广', '警告：利用求聞百科來發布廣告或推廣'),
+							label: wgULS('利用有兽档案馆来发布广告或推广', '利用有獸檔案館來發布廣告或推廣'),
+							summary: wgULS('警告：利用有兽档案馆来发布广告或推广', '警告：利用有獸檔案館來發布廣告或推廣'),
 						},
 					},
 				},
@@ -495,7 +495,7 @@
 				},
 			},
 			{
-				category: wgULS('非能接受且违反方针的单方面行为或操作', '非能接受且違反方針的單方面行為或操作'),
+				category: wgULS('非能接受且违反条例的单方面行为或操作', '非能接受且違反條例的單方面行為或操作'),
 				list: {
 					'uw-afd': {
 						level1: {
@@ -605,12 +605,12 @@
 					},
 					'uw-socialmedia': {
 						level1: {
-							label: wgULS('将求闻百科当作社交媒体使用', '將求聞百科當作社交媒體使用'),
-							summary: wgULS('注意：将求闻百科当作社交媒体使用', '注意：將求聞百科當作社交媒體使用'),
+							label: wgULS('将有兽档案馆当作社交媒体使用', '將有獸檔案館當作社交媒體使用'),
+							summary: wgULS('注意：将有兽档案馆当作社交媒体使用', '注意：將有獸檔案館當作社交媒體使用'),
 						},
 						level2: {
-							label: wgULS('将求闻百科当作社交媒体使用', '將求聞百科當作社交媒體使用'),
-							summary: wgULS('警告：将求闻百科当作社交媒体使用', '警告：將求聞百科當作社交媒體使用'),
+							label: wgULS('将有兽档案馆当作社交媒体使用', '將有獸檔案館當作社交媒體使用'),
+							summary: wgULS('警告：将有兽档案馆当作社交媒体使用', '警告：將有獸檔案館當作社交媒體使用'),
 						},
 					},
 				},
@@ -1381,10 +1381,10 @@
 		Morebits.status.init(e.target);
 		Morebits.wiki.actionCompleted.redirect = userTalkPage;
 		Morebits.wiki.actionCompleted.notice = wgULS('警告完成，将在几秒后刷新', '警告完成，將在幾秒後重新整理');
-		const qiuwen_page = new Morebits.wiki.page(userTalkPage, wgULS('用户讨论页修改', '使用者討論頁修改'));
-		qiuwen_page.setCallbackParameters(params);
-		qiuwen_page.setFollowRedirect(true, false);
-		qiuwen_page.load(Twinkle.warn.callbacks.main);
+		const ysarxiv_page = new Morebits.wiki.page(userTalkPage, wgULS('用户讨论页修改', '使用者討論頁修改'));
+		ysarxiv_page.setCallbackParameters(params);
+		ysarxiv_page.setFollowRedirect(true, false);
+		ysarxiv_page.load(Twinkle.warn.callbacks.main);
 	};
 	Twinkle.addInitCallback(Twinkle.warn, 'warn');
 })(jQuery);

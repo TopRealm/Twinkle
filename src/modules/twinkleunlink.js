@@ -3,7 +3,7 @@
 	/**
 	 * twinkleunlink.js: Unlink module
 	 * Mode of invocation: Tab ("Unlink")
-	 * Active on: Non-special pages, except Qiuwen:沙盒
+	 * Active on: Non-special pages, except LIB:沙盒
 	 */
 	Twinkle.unlink = () => {
 		if (
@@ -104,21 +104,21 @@
 		} else {
 			query.blfilterredir = 'nonredirects';
 		}
-		const qiuwen_api = new Morebits.wiki.api(
+		const ysarxiv_api = new Morebits.wiki.api(
 			wgULS('抓取链入', '抓取連入'),
 			query,
 			Twinkle.unlink.callbacks.display.backlinks
 		);
-		qiuwen_api.params = {
+		ysarxiv_api.params = {
 			form: form,
 			Window: Window,
 			image: fileSpace,
 		};
-		qiuwen_api.post();
+		ysarxiv_api.post();
 		const root = document.createElement('div');
 		root.style.padding = '15px'; // just so it doesn't look broken
 		Morebits.status.init(root);
-		qiuwen_api.statelem.status(wgULS('加载中……', '載入中……'));
+		ysarxiv_api.statelem.status(wgULS('加载中……', '載入中……'));
 		Window.setContent(root);
 		Window.display();
 	};
@@ -158,12 +158,12 @@
 			unlinker: unlinker,
 		};
 		unlinker.run((pageName) => {
-			const qiuwen_page = new Morebits.wiki.page(
+			const ysarxiv_page = new Morebits.wiki.page(
 				pageName,
 				wgULS('在页面“', '在頁面「') + pageName + wgULS('”中取消链入', '」中取消連入')
 			);
-			qiuwen_page.setBotEdit(true); // unlink considered a floody operation
-			qiuwen_page.setCallbackParameters(
+			ysarxiv_page.setBotEdit(true); // unlink considered a floody operation
+			ysarxiv_page.setCallbackParameters(
 				$.extend(
 					{
 						doBacklinks: input.backlinks.includes(pageName),
@@ -172,7 +172,7 @@
 					params
 				)
 			);
-			qiuwen_page.load(Twinkle.unlink.callbacks.unlinkBacklinks);
+			ysarxiv_page.load(Twinkle.unlink.callbacks.unlinkBacklinks);
 		});
 	};
 	Twinkle.unlink.callbacks = {
@@ -333,13 +333,13 @@
 		unlinkBacklinks: (pageobj) => {
 			let oldtext = pageobj.getPageText();
 			const params = pageobj.getCallbackParameters();
-			const qiuwen_page = new Morebits.wikitext.page(oldtext);
+			const ysarxiv_page = new Morebits.wikitext.page(oldtext);
 			let summaryText = '';
 			let warningString = false;
 			let text;
 			// remove image usages
 			if (params.doImageusage) {
-				text = qiuwen_page.commentOutImage(mw.config.get('wgTitle'), wgULS('注释', '注釋')).getText();
+				text = ysarxiv_page.commentOutImage(mw.config.get('wgTitle'), wgULS('注释', '注釋')).getText();
 				// did we actually make any changes?
 				if (text === oldtext) {
 					warningString = wgULS('文件使用', '檔案使用');
@@ -350,8 +350,8 @@
 			}
 			// remove backlinks
 			if (params.doBacklinks) {
-				text = qiuwen_page.removeLink(Morebits.pageNameNorm).getText();
-				text = qiuwen_page.removeTemplate(mw.config.get('wgTitle')).getText();
+				text = ysarxiv_page.removeLink(Morebits.pageNameNorm).getText();
+				text = ysarxiv_page.removeTemplate(mw.config.get('wgTitle')).getText();
 				// did we actually make any changes?
 				if (text === oldtext) {
 					warningString = warningString

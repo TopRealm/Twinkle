@@ -24,7 +24,7 @@
 		const Window = new Morebits.simpleWindow(600, 330);
 		Window.setTitle(wgULS('文件快速删除候选', '檔案快速刪除候選'));
 		Window.setScriptName('Twinkle');
-		Window.addFooterLink(wgULS('快速删除方针', '快速刪除方針'), 'QW:CSD');
+		Window.addFooterLink(wgULS('快速删除条例', '快速刪除條例'), 'QW:CSD');
 		Window.addFooterLink(wgULS('图权设置', '圖權設定'), 'H:TW/PREF#image');
 		Window.addFooterLink(wgULS('Twinkle帮助', 'Twinkle說明'), 'H:TW/DOC#image');
 		const form = new Morebits.quickForm(Twinkle.image.callback.evaluate);
@@ -151,8 +151,8 @@
 					),
 					value: 'no fair use rationale',
 					tooltip: wgULS(
-						'不适用于有争议但完整的合理使用依据。若非自由著作权文件只有部分条目的使用依据，但同时被使用于未提供合理使用依据的条目，则本方针也不适用。',
-						'不適用於有爭議但完整的合理使用依據。若非自由著作權檔案只有部分條目的使用依據，但同時被使用於未提供合理使用依據的條目，則本方針也不適用。'
+						'不适用于有争议但完整的合理使用依据。若非自由著作权文件只有部分条目的使用依据，但同时被使用于未提供合理使用依据的条目，则本条例也不适用。',
+						'不適用於有爭議但完整的合理使用依據。若非自由著作權檔案只有部分條目的使用依據，但同時被使用於未提供合理使用依據的條目，則本條例也不適用。'
 					),
 				},
 			],
@@ -234,12 +234,12 @@
 		Morebits.wiki.actionCompleted.redirect = mw.config.get('wgPageName');
 		Morebits.wiki.actionCompleted.notice = wgULS('标记完成', '標記完成');
 		// Tagging image
-		const qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'), wgULS('加入删除标记', '加入刪除標記'));
-		qiuwen_page.setCallbackParameters(params);
-		qiuwen_page.load(Twinkle.image.callbacks.taggingImage);
+		const ysarxiv_page = new Morebits.wiki.page(mw.config.get('wgPageName'), wgULS('加入删除标记', '加入刪除標記'));
+		ysarxiv_page.setCallbackParameters(params);
+		ysarxiv_page.load(Twinkle.image.callbacks.taggingImage);
 		// Notifying uploader
 		if (notify) {
-			qiuwen_page.lookupCreation(Twinkle.image.callbacks.userNotification);
+			ysarxiv_page.lookupCreation(Twinkle.image.callbacks.userNotification);
 		} else {
 			// add to CSD log if desired
 			if (lognomination) {
@@ -268,18 +268,18 @@
 			const params = pageobj.getCallbackParameters();
 			// remove tag - deletion-tagged files cannot be moved
 			text = text.replace(
-				/\{\{(mtc|(copy |move )?to ?(share|commons)|move to (qiuwen share|wikimedia commons)|copy to (qiuwen share|wikimedia commons))[^}]*\}\}/gi,
+				/\{\{(mtc|(copy |move )?to ?(share|commons)|move to (ysarxiv share|wikimedia commons)|copy to (ysarxiv share|wikimedia commons))[^}]*\}\}/gi,
 				''
 			);
 			// Adding discussion
 			if (params.type !== 'orphaned fair use') {
-				const qiuwen_page = new Morebits.wiki.page(
-					'Qiuwen_talk:存废讨论/文件快速删除提报',
+				const ysarxiv_page = new Morebits.wiki.page(
+					'LIB_talk:存废讨论/文件快速删除提报',
 					wgULS('加入快速删除记录项', '加入快速刪除記錄項')
 				);
-				qiuwen_page.setFollowRedirect(true);
-				qiuwen_page.setCallbackParameters(params);
-				qiuwen_page.load(Twinkle.image.callbacks.imageList);
+				ysarxiv_page.setFollowRedirect(true);
+				ysarxiv_page.setCallbackParameters(params);
+				ysarxiv_page.load(Twinkle.image.callbacks.imageList);
 			}
 			let tag = '';
 			switch (params.type) {

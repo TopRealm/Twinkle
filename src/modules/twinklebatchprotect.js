@@ -21,7 +21,7 @@
 		const Window = new Morebits.simpleWindow(600, 400);
 		Window.setTitle('批保');
 		Window.setScriptName('Twinkle');
-		Window.addFooterLink('保护方针', 'QW:PROT');
+		Window.addFooterLink('保护条例', 'LIB:PROT');
 		Window.addFooterLink(wgULS('帮助文档', '幫助文檔'), 'H:TW/DOC#保护');
 		Window.addFooterLink(wgULS('问题反馈', '問題反饋'), 'HT:TW');
 		const form = new Morebits.quickForm(Twinkle.batchprotect.callback.evaluate);
@@ -168,7 +168,7 @@
 		Morebits.status.init(statusdiv);
 		Window.display();
 		const statelem = new Morebits.status('抓取页面列表');
-		const qiuwen_api = new Morebits.wiki.api(
+		const ysarxiv_api = new Morebits.wiki.api(
 			'加载中……',
 			query,
 			(apiobj) => {
@@ -254,7 +254,7 @@
 			},
 			statelem
 		);
-		qiuwen_api.post();
+		ysarxiv_api.post();
 	};
 	Twinkle.batchprotect.currentProtectCounter = 0;
 	Twinkle.batchprotect.currentprotector = 0;
@@ -294,21 +294,21 @@
 				titles: pageName,
 				format: 'json',
 			};
-			const qiuwen_api = new Morebits.wiki.api(
+			const ysarxiv_api = new Morebits.wiki.api(
 				`正在检查页面“${pageName}”是否存在`,
 				query,
 				Twinkle.batchprotect.callbacks.main,
 				null,
 				batchOperation.workerFailure
 			);
-			qiuwen_api.params = $.extend(
+			ysarxiv_api.params = $.extend(
 				{
 					page: pageName,
 					batchOperation,
 				},
 				input
 			);
-			qiuwen_api.post();
+			ysarxiv_api.post();
 		});
 	};
 	Twinkle.batchprotect.callbacks = {

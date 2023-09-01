@@ -172,7 +172,6 @@
 			'delete': wgULS('删除', '刪除'),
 			merge: wgULS('合并', '合併'),
 			fwdcsd: wgULS('转交自快速删除候选', '轉交自快速刪除候選'),
-			fame: wgULS('批量关注度提删', '批次關注度提刪'),
 			substub: wgULS('批量小小作品提删', '批次小小作品提刪'),
 			batch: wgULS('批量其他提删', '批次其他提刪'),
 		},
@@ -182,8 +181,8 @@
 			1: 'Talk',
 			2: 'User',
 			3: 'User talk',
-			4: 'Qiuwen',
-			5: 'Qiuwen talk',
+			4: 'LIB',
+			5: 'LIB talk',
 			6: 'File',
 			7: 'File talk',
 			8: 'MediaWiki',
@@ -981,8 +980,8 @@
 					name: 'FwdCsdToXfd',
 					label: wgULS('提删类型增加转交自快速删除候选', '提刪類別增加轉交自快速刪除候選'),
 					helptip: wgULS(
-						'请确保您充分了解[[Qiuwen:快速删除方针]]才开启此功能。',
-						'請確保您充分了解[[Qiuwen:快速刪除方針]]才開啟此功能。'
+						'请确保您充分了解[[LIB:快速删除条例]]才开启此功能。',
+						'請確保您充分了解[[LIB:快速刪除條例]]才開啟此功能。'
 					),
 					type: 'boolean',
 				},
@@ -1000,12 +999,6 @@
 					},
 				},
 				{
-					name: 'afdFameDefaultReason',
-					label: wgULS('默认关注度提删理由', '預設關注度提刪理由'),
-					helptip: wgULS('用于批量提删。', '用於批次提刪。'),
-					type: 'string',
-				},
-				{
 					name: 'afdSubstubDefaultReason',
 					label: wgULS('默认小小作品提删理由', '預設小小作品提刪理由'),
 					helptip: wgULS('用于批量提删。', '用於批次提刪。'),
@@ -1021,8 +1014,8 @@
 					name: 'XfdClose',
 					label: wgULS('在存废讨论显示关闭讨论按钮', '在存廢討論顯示關閉討論按鈕'),
 					helptip: wgULS(
-						'请确保您充分了解[[Qiuwen:删除方针]]才开启此功能。',
-						'請確保您充分了解[[Qiuwen:刪除方針]]才開啟此功能。'
+						'请确保您充分了解[[LIB:删除条例]]才开启此功能。',
+						'請確保您充分了解[[LIB:刪除條例]]才開啟此功能。'
 					),
 					type: 'enum',
 					enumValues: {
@@ -1745,9 +1738,9 @@
 		const userjs = `${mw.config.get('wgFormattedNamespaces')[mw.config.get('wgNamespaceIds').user]}:${mw.config.get(
 			'wgUserName'
 		)}/twinkleoptions.js`;
-		const qiuwen_page = new Morebits.wiki.page(userjs, wgULS('保存参数设置到 ', '儲存偏好設定到 ') + userjs);
-		qiuwen_page.setCallbackParameters(e.target);
-		qiuwen_page.load(Twinkle.config.writePrefs);
+		const ysarxiv_page = new Morebits.wiki.page(userjs, wgULS('保存参数设置到 ', '儲存偏好設定到 ') + userjs);
+		ysarxiv_page.setCallbackParameters(e.target);
+		ysarxiv_page.load(Twinkle.config.writePrefs);
 		return false;
 	};
 	Twinkle.config.writePrefs = (pageobj) => {
@@ -1885,8 +1878,8 @@
 			'您的Twinkle参数设置已被保存。',
 			'您的Twinkle偏好設定已被儲存。'
 		)}</b></p><p>${wgULS('要看到这些更改，您可能需要', '要看到這些更改，您可能需要')}<a href="${mw.util.getUrl(
-			'QW:BYPASS'
-		)}" title="QW:BYPASS"><b>${wgULS('绕过浏览器缓存', '繞過瀏覽器快取')}</b></a>。</p>`;
+			'LIB:BYPASS'
+		)}" title="LIB:BYPASS"><b>${wgULS('绕过浏览器缓存', '繞過瀏覽器快取')}</b></a>。</p>`;
 		Morebits.status.root.appendChild(noticebox);
 		const noticeclear = document.createElement('br');
 		noticeclear.style.clear = 'both';

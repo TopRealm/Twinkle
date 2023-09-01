@@ -70,15 +70,15 @@
 			rvuser: user,
 		};
 		Morebits.status.init(document.getElementById('mw-content-text'));
-		const qiuwen_api = new Morebits.wiki.api(
+		const ysarxiv_api = new Morebits.wiki.api(
 			wgULS('抓取最初贡献者信息', '抓取最初貢獻者資訊'),
 			query,
 			Twinkle.diff.callbacks.main
 		);
-		qiuwen_api.params = {
+		ysarxiv_api.params = {
 			user: user,
 		};
-		qiuwen_api.post();
+		ysarxiv_api.post();
 	};
 	Twinkle.diff.callbacks = {
 		main: (self) => {
