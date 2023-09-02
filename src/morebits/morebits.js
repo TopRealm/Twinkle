@@ -27,7 +27,7 @@
  * All the stuff here works on all browsers for which MediaWiki provides JavaScript support.
  *
  * This library is maintained by the maintainers of Twinkle.
- * For queries, suggestions, help, etc., head to [Help:Twinkle](https://www.qiuwenbaike.cn/wiki/H:TW).
+ * For queries, suggestions, help, etc., head to [Help:Twinkle](https://wiki.zorua.top/wiki/H:TW).
  * The latest development source is available at {@link https://github.com/wikimedia-gadgets/twinkle/blob/master/morebits.js|GitHub}.
  *
  * @namespace Morebits
@@ -87,7 +87,7 @@
 	 * @type {boolean}
 	 */
 	Morebits.userIsSysop =
-		Morebits.userIsInGroup('sysop') || Morebits.userIsInGroup('steward') || Morebits.userIsInGroup('qiuwen');
+		Morebits.userIsInGroup('sysop') || Morebits.userIsInGroup('bureaucrat');
 	/**
 	 * Deprecated as of February 2021, use {@link Morebits.ip.sanitizeIPv6}.
 	 *
@@ -2417,7 +2417,7 @@
 			return JSON.parse(wikitext);
 		});
 	};
-	let morebitsWikiApiUserAgent = 'Qiuwen/1.1 (morebits.js)';
+	let morebitsWikiApiUserAgent = 'Ysarxiv/1.1 (morebits.js)';
 	/**
 	 * Set the custom user agent header, which is used for server-side logging.
 	 * Note that doing so will set the useragent for every `Morebits.wiki.api`
@@ -2427,12 +2427,12 @@
 	 * for original announcement.
 	 *
 	 * @memberof Morebits.wiki.api
-	 * @param {string} [ua=Qiuwen/1.1 (morebits.js)] - User agent.  The default
+	 * @param {string} [ua=Ysarxiv/1.1 (morebits.js)] - User agent.  The default
 	 * value of `morebits.js` will be appended to any provided
 	 * value.
 	 */
 	Morebits.wiki.api.setApiUserAgent = (ua) => {
-		morebitsWikiApiUserAgent = `Qiuwen/1.1 (morebits.js${ua ? `; ${ua}` : ''})`;
+		morebitsWikiApiUserAgent = `Ysarxiv/1.1 (morebits.js${ua ? `; ${ua}` : ''})`;
 	};
 	/**
 	 * Change/revision tag applied to Morebits actions when no other tags are specified.

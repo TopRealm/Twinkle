@@ -49,7 +49,7 @@
 		// need to be verbose about who we're blocking
 		Window.setTitle(wgULS('封禁或向', '封鎖或向') + relevantUserName + wgULS('发出封禁模板', '發出封鎖模板'));
 		Window.setScriptName('Twinkle');
-		Window.addFooterLink(wgULS('封禁方针', '封鎖方針'), 'QW:BLOCK');
+		Window.addFooterLink(wgULS('封禁条例', '封鎖條例'), 'LIB:BLOCK');
 		Window.addFooterLink(wgULS('封禁设置', '封鎖設定'), 'H:TW/PREF#block');
 		Window.addFooterLink(wgULS('Twinkle帮助', 'Twinkle說明'), 'H:TW/DOC#block');
 		const form = new Morebits.quickForm(Twinkle.block.callback.evaluate);
@@ -1192,24 +1192,24 @@
 			expiry: '1 day',
 			nocreate: true,
 			pageParam: true,
-			reason: wgULS('违反[[QW:3RR|回退不过三原则]]', '違反[[QW:3RR|回退不過三原則]]'),
-			summary: wgULS('封禁通知：违反[[QW:3RR|回退不过三原则]]', '封鎖通知：違反[[QW:3RR|回退不過三原則]]'),
+			reason: wgULS('违反[[LIB:3RR|回退不过三原则]]', '違反[[LIB:3RR|回退不過三原則]]'),
+			summary: wgULS('封禁通知：违反[[LIB:3RR|回退不过三原则]]', '封鎖通知：違反[[LIB:3RR|回退不過三原則]]'),
 		},
 		'uw-adblock': {
 			autoblock: true,
 			nocreate: true,
 			pageParam: true,
-			reason: wgULS('散发[[QW:SOAP|散发广告或宣传]]', '散發[[QW:SOAP|散發廣告或宣傳]]'),
-			summary: wgULS('封禁通知：散发[[QW:SOAP|散发广告或宣传]]', '封鎖通知：散發[[QW:SOAP|散發廣告或宣傳]]'),
+			reason: wgULS('散发[[LIB:SOAP|散发广告或宣传]]', '散發[[LIB:SOAP|散發廣告或宣傳]]'),
+			summary: wgULS('封禁通知：散发[[LIB:SOAP|散发广告或宣传]]', '封鎖通知：散發[[LIB:SOAP|散發廣告或宣傳]]'),
 		},
 		'uw-attackblock': {
 			autoblock: true,
 			expiry: '1 day',
 			nocreate: true,
-			reason: wgULS('[[QW:CIV|行为无礼]]或[[QW:NPA|人身攻击]]', '[[QW:CIV|行為無禮]]或[[QW:NPA|人身攻擊]]'),
+			reason: wgULS('[[LIB:CIV|行为无礼]]或[[LIB:NPA|人身攻击]]', '[[LIB:CIV|行為無禮]]或[[LIB:NPA|人身攻擊]]'),
 			summary: wgULS(
-				'封禁通知：[[QW:CIV|行为无礼]]或[[QW:NPA|人身攻击]]',
-				'封鎖通知：[[QW:CIV|行為無禮]]或[[QW:NPA|人身攻擊]]'
+				'封禁通知：[[LIB:CIV|行为无礼]]或[[LIB:NPA|人身攻击]]',
+				'封鎖通知：[[LIB:CIV|行為無禮]]或[[LIB:NPA|人身攻擊]]'
 			),
 		},
 		'uw-copyrightblock': {
@@ -1217,31 +1217,31 @@
 			expiry: 'infinity',
 			nocreate: true,
 			pageParam: true,
-			reason: wgULS('持续[[QW:COPYVIO|侵犯著作权]]', '持續[[QW:COPYVIO|侵犯著作權]]'),
-			summary: wgULS('封禁通知：持续[[QW:COPYVIO|侵犯著作权]]', '封鎖通知：持續[[QW:COPYVIO|侵犯著作權]]'),
+			reason: wgULS('持续[[LIB:COPYVIO|侵犯著作权]]', '持續[[LIB:COPYVIO|侵犯著作權]]'),
+			summary: wgULS('封禁通知：持续[[LIB:COPYVIO|侵犯著作权]]', '封鎖通知：持續[[LIB:COPYVIO|侵犯著作權]]'),
 			templateName: 'uw-blockindef',
 		},
 		'uw-dblock': {
 			autoblock: true,
 			nocreate: true,
 			pageParam: true,
-			reason: wgULS('持续[[QW:VAN|删除内容]]', '持續[[QW:VAN|刪除內容]]'),
-			summary: wgULS('封禁通知：持续[[QW:VAN|删除内容]]', '封鎖通知：持續[[QW:VAN|刪除內容]]'),
+			reason: wgULS('持续[[LIB:VAN|删除内容]]', '持續[[LIB:VAN|刪除內容]]'),
+			summary: wgULS('封禁通知：持续[[LIB:VAN|删除内容]]', '封鎖通知：持續[[LIB:VAN|刪除內容]]'),
 		},
 		'uw-hblock': {
 			autoblock: true,
 			nocreate: true,
 			pageParam: true,
-			reason: wgULS('[[QW:骚扰|骚扰]]其他用户', '[[QW:騷擾|騷擾]]其他使用者'),
-			summary: wgULS('封禁通知：[[QW:骚扰|骚扰]]其他用户', '封鎖通知：[[QW:騷擾|騷擾]]其他使用者'),
+			reason: wgULS('[[LIB:骚扰|骚扰]]其他用户', '[[LIB:騷擾|騷擾]]其他使用者'),
+			summary: wgULS('封禁通知：[[LIB:骚扰|骚扰]]其他用户', '封鎖通知：[[LIB:騷擾|騷擾]]其他使用者'),
 		},
 		'uw-vblock': {
 			autoblock: true,
 			expiry: '1 day',
 			nocreate: true,
 			pageParam: true,
-			reason: wgULS('[[QW:VAN|破坏]]', '[[QW:VAN|破壞]]'),
-			summary: wgULS('封禁通知：[[QW:VAN|破坏]]', '封鎖通知：[[QW:VAN|破壞]]'),
+			reason: wgULS('[[LIB:VAN|破坏]]', '[[LIB:VAN|破壞]]'),
+			summary: wgULS('封禁通知：[[LIB:VAN|破坏]]', '封鎖通知：[[LIB:VAN|破壞]]'),
 		},
 		'uw-illegalblock': {
 			autoblock: true,
@@ -1259,8 +1259,8 @@
 			expiry: '1 week',
 			forRegisteredOnly: true,
 			nocreate: true,
-			reason: wgULS('滥用[[QW:SOCK|多个账户]]', '濫用[[QW:SOCK|多個帳號]]'),
-			summary: wgULS('封禁通知：滥用[[QW:SOCK|多个账户]]', '封鎖通知：濫用[[QW:SOCK|多個帳號]]'),
+			reason: wgULS('滥用[[LIB:SOCK|多个账户]]', '濫用[[LIB:SOCK|多個帳號]]'),
+			summary: wgULS('封禁通知：滥用[[LIB:SOCK|多个账户]]', '封鎖通知：濫用[[LIB:SOCK|多個帳號]]'),
 			templateName: 'uw-block',
 		},
 		// uw-u-prefixed
@@ -1269,8 +1269,8 @@
 			forRegisteredOnly: true,
 			reason: `{{uw-ublock}}<!-- ${wgULS('不当用户名、软封禁', '不當使用者名稱')} -->`,
 			summary: wgULS(
-				'封禁通知：您的用户名违反[[QW:U|用户名方针]]',
-				'封鎖通知：您的使用者名稱違反[[QW:U|使用者名稱方針]]'
+				'封禁通知：您的用户名违反[[LIB:U|用户名条例]]',
+				'封鎖通知：您的使用者名稱違反[[LIB:U|使用者名稱條例]]'
 			),
 		},
 		'uw-ublock-illegal': {
@@ -1280,8 +1280,8 @@
 			nocreate: true,
 			reason: `{{uw-ublock-illegal}}<!-- ${wgULS('不合规的用户名', '不合規的使用者名稱')} -->`,
 			summary: wgULS(
-				'封禁通知：您的用户名违反[[QW:U|用户名方针]]',
-				'封鎖通知：您的使用者名稱違反[[QW:U|使用者名稱方針]]'
+				'封禁通知：您的用户名违反[[LIB:U|用户名条例]]',
+				'封鎖通知：您的使用者名稱違反[[LIB:U|使用者名稱條例]]'
 			),
 		},
 		'uw-ublock-suggestive': {
@@ -1291,8 +1291,8 @@
 			nocreate: true,
 			reason: `{{uw-ublock-suggestive}}<!-- ${wgULS('误导、混淆性用户名', '誤導、混淆性使用者名稱')} -->`,
 			summary: wgULS(
-				'封禁通知：您的用户名违反[[QW:U|用户名方针]]',
-				'封鎖通知：您的使用者名稱違反[[QW:U|使用者名稱方針]]'
+				'封禁通知：您的用户名违反[[LIB:U|用户名条例]]',
+				'封鎖通知：您的使用者名稱違反[[LIB:U|使用者名稱條例]]'
 			),
 		},
 		'uw-ublock-spam': {
@@ -1302,8 +1302,8 @@
 			nocreate: true,
 			reason: `{{uw-ublock-spam}}<!-- ${wgULS('宣传性用户名或宣传性编辑', '宣傳性使用者名稱或宣傳性編輯')} -->`,
 			summary: wgULS(
-				'封禁通知：您的用户名违反[[QW:U|用户名方针]]',
-				'封鎖通知：您的使用者名稱違反[[QW:U|使用者名稱方針]]'
+				'封禁通知：您的用户名违反[[LIB:U|用户名条例]]',
+				'封鎖通知：您的使用者名稱違反[[LIB:U|使用者名稱條例]]'
 			),
 		},
 		// other block templates
@@ -1362,8 +1362,8 @@
 			expiry: '1 day',
 			nocreate: true,
 			pageParam: true,
-			reason: wgULS('违反生者传记方针', '違反生者傳記方針'),
-			summary: wgULS('封禁通知：违反生者传记方针', '封鎖通知：違反生者傳記方針'),
+			reason: wgULS('违反生者传记条例', '違反生者傳記條例'),
+			summary: wgULS('封禁通知：违反生者传记条例', '封鎖通知：違反生者傳記條例'),
 			templateName: 'uw-vblock',
 		},
 		ucblock: {
@@ -1371,10 +1371,10 @@
 			expiry: '1 day',
 			nocreate: true,
 			pageParam: true,
-			reason: wgULS('屡次增加没有[[QW:RS|可靠来源]]的资料', '屢次增加沒有[[QW:RS|可靠來源]]的資料'),
+			reason: wgULS('屡次增加没有[[LIB:RS|可靠来源]]的资料', '屢次增加沒有[[LIB:RS|可靠來源]]的資料'),
 			summary: wgULS(
-				'封禁通知：屡次增加没有[[QW:RS|可靠来源]]的资料',
-				'封鎖通知：屢次增加沒有[[QW:RS|可靠來源]]的資料'
+				'封禁通知：屡次增加没有[[LIB:RS|可靠来源]]的资料',
+				'封鎖通知：屢次增加沒有[[LIB:RS|可靠來源]]的資料'
 			),
 			templateName: 'uw-block',
 		},
@@ -1404,10 +1404,10 @@
 			nocreate: true,
 			reasonParam: true,
 			reason: wgULS(
-				'确认为[[QW:SOCK|傀儡]]或真人傀儡 - 根据用户贡献确定',
-				'確認為[[QW:SOCK|傀儡]]或真人傀儡 - 根據使用者貢獻確定'
+				'确认为[[LIB:SOCK|傀儡]]或真人傀儡 - 根据用户贡献确定',
+				'確認為[[LIB:SOCK|傀儡]]或真人傀儡 - 根據使用者貢獻確定'
 			),
-			summary: wgULS('封禁通知：确认为[[QW:SOCK|傀儡]]或真人傀儡', '封鎖通知：確認為[[QW:SOCK|傀儡]]或真人傀儡'),
+			summary: wgULS('封禁通知：确认为[[LIB:SOCK|傀儡]]或真人傀儡', '封鎖通知：確認為[[LIB:SOCK|傀儡]]或真人傀儡'),
 			templateName: 'uw-blockindef',
 		},
 		'sock-cu': {
@@ -1417,10 +1417,10 @@
 			nocreate: true,
 			reasonParam: true,
 			reason: wgULS(
-				'确认为[[QW:SOCK|傀儡]]或真人傀儡 - 用户查核确认',
-				'確認為[[QW:SOCK|傀儡]]或真人傀儡 - 使用者查核確認'
+				'确认为[[LIB:SOCK|傀儡]]或真人傀儡 - 用户查核确认',
+				'確認為[[LIB:SOCK|傀儡]]或真人傀儡 - 使用者查核確認'
 			),
-			summary: wgULS('封禁通知：确认为[[QW:SOCK|傀儡]]或真人傀儡', '封鎖通知：確認為[[QW:SOCK|傀儡]]或真人傀儡'),
+			summary: wgULS('封禁通知：确认为[[LIB:SOCK|傀儡]]或真人傀儡', '封鎖通知：確認為[[LIB:SOCK|傀儡]]或真人傀儡'),
 			templateName: 'uw-blockindef',
 		},
 		'attack-username': {
@@ -1458,7 +1458,7 @@
 			nocreate: false,
 			pageParam: false,
 			reasonParam: true,
-			summary: wgULS('封禁通知：您已被禁止编辑求闻百科的部分区域', '封鎖通知：您已被禁止編輯求聞百科的部分區域'),
+			summary: wgULS('封禁通知：您已被禁止编辑有兽档案馆的部分区域', '封鎖通知：您已被禁止編輯有獸檔案館的部分區域'),
 		},
 		'uw-pblockindef': {
 			autoblock: true,
@@ -1467,8 +1467,8 @@
 			pageParam: false,
 			reasonParam: true,
 			summary: wgULS(
-				'封禁通知：您已被永久禁止编辑求闻百科的部分区域',
-				'封鎖通知：您已被永久禁止編輯求聞百科的部分區域'
+				'封禁通知：您已被永久禁止编辑有兽档案馆的部分区域',
+				'封鎖通知：您已被永久禁止編輯有獸檔案館的部分區域'
 			),
 		},
 	};
@@ -1536,7 +1536,7 @@
 				},
 				{label: wgULS('滥用多个账户', '濫用多個帳號'), value: 'uw-sockblock'},
 				// other block reasons
-				{label: wgULS('违反生者传记方针', '違反生者傳記方針'), value: 'bioblock'},
+				{label: wgULS('违反生者传记条例', '違反生者傳記條例'), value: 'bioblock'},
 				{label: wgULS('屡次增加没有可靠来源的资料', '屢次增加沒有可靠來源的資料'), value: 'ucblock'},
 				{label: wgULS('在条目中增加无意义文字', '在條目中增加無意義文字'), value: 'npblock'},
 				{label: wgULS('持续打制度擦边球', '持續打制度擦邊球'), value: 'point-block'},
@@ -1564,7 +1564,7 @@
 		{
 			label: wgULS('用户名封禁', '使用者名稱封鎖'),
 			list: [
-				{label: wgULS('违反用户名方针', '違反使用者名稱方針'), value: 'uw-ublock'},
+				{label: wgULS('违反用户名条例', '違反使用者名稱條例'), value: 'uw-ublock'},
 				{label: wgULS('不合规的用户名', '不合規的使用者名稱'), value: 'uw-ublock-illegal'},
 				{label: wgULS('宣传性用户名', '宣傳性使用者名稱'), value: 'uw-ublock-spam'},
 				{label: wgULS('攻击性用户名', '攻擊性使用者名稱'), value: 'attack-username'},
@@ -2131,7 +2131,7 @@
 					}
 					if (toClosevip) {
 						const vipPage = new Morebits.wiki.page(
-							'Qiuwen_talk:报告当前破坏',
+							'LIB_talk:报告当前破坏',
 							wgULS('关闭请求', '關閉請求')
 						);
 						vipPage.setFollowRedirect(true);
@@ -2175,9 +2175,9 @@
 			Morebits.simpleWindow.setButtonsEnabled(false);
 			Morebits.status.init(e.target);
 			const userPage = `User:${mw.config.get('wgRelevantUserName')}`;
-			const qiuwen_page = new Morebits.wiki.page(userPage, wgULS('标记或保护用户页', '標記或保護使用者頁面'));
-			qiuwen_page.setCallbackParameters(params);
-			qiuwen_page.load(Twinkle.block.callback.taguserpage);
+			const ysarxiv_page = new Morebits.wiki.page(userPage, wgULS('标记或保护用户页', '標記或保護使用者頁面'));
+			ysarxiv_page.setCallbackParameters(params);
+			ysarxiv_page.load(Twinkle.block.callback.taguserpage);
 		}
 		if (toUnblock) {
 			if (!unblockoptions.reason) {
@@ -2299,9 +2299,9 @@
 			'完成，将在几秒后加载用户讨论页',
 			'完成，將在幾秒後載入使用者討論頁'
 		);
-		const qiuwen_page = new Morebits.wiki.page(userTalkPage, wgULS('用户讨论页修改', '使用者討論頁修改'));
-		qiuwen_page.setCallbackParameters(params);
-		qiuwen_page.load(Twinkle.block.callback.main);
+		const ysarxiv_page = new Morebits.wiki.page(userTalkPage, wgULS('用户讨论页修改', '使用者討論頁修改'));
+		ysarxiv_page.setCallbackParameters(params);
+		ysarxiv_page.load(Twinkle.block.callback.main);
 	};
 	Twinkle.block.callback.closeRequest = (vipPage) => {
 		const params = vipPage.getCallbackParameters();

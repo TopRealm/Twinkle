@@ -10,7 +10,7 @@ Set up a bot password via [[Special:BotPasswords]]
 
 ```json
 {
- "apiUrl": "https://www.qiuwenbaike.cn/api.php",
+ "apiUrl": "https://wiki.zorua.top/api.php",
  "username": "",
  "password": ""
 }

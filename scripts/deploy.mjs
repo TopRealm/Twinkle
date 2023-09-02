@@ -52,7 +52,7 @@
  *  Usage:
  * --------------------------------------------------------------------------
  * Ensure the pre-deployment steps above are completed, unless you are only
- * deploying to the testwiki (www.qiuwen.wiki). Then, run this script:
+ * deploying to a testwiki. Then, run this script:
  * In the terminal, enter
  *   node deploy.js
  * and supply the requested details.
@@ -246,13 +246,13 @@ class Deploy {
 			}
 		}
 		if (args.testwiki) {
-			config.apiUrl = `https://www.qiuwenbaike.cn/api.php`;
+			config.apiUrl = `https://wiki.zorua.top/api.php`;
 		} else {
 			if (!config.apiUrl) {
 				if (Object.keys(config).length) {
 					log('yellow', 'Tip: you can avoid this prompt by setting the apiUrl as well in credentials.json');
 				}
-				const site = await input('> Enter sitename (eg. www.qiuwen.wiki)');
+				const site = await input('> Enter sitename (eg. wiki.zorua.top)');
 				config.apiUrl = `https://${site}/api.php`;
 			}
 		}

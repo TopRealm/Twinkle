@@ -194,12 +194,6 @@
 				}
 				afd_category.append({
 					type: 'option',
-					label: wgULS('批量关注度提删', '批次關注度提刪'),
-					value: 'fame',
-					selected: afd_cat === 'fame',
-				});
-				afd_category.append({
-					type: 'option',
 					label: wgULS('批量小小作品提删', '批次小小作品提刪'),
 					value: 'substub',
 					selected: afd_cat === 'substub',
@@ -385,8 +379,8 @@
 					pageobj.patrol();
 				}
 				// Insert tag after short description or any hatnotes
-				const qiuwen_page = new Morebits.wikitext.page(text);
-				text = qiuwen_page.insertAfterTemplates(tag, Twinkle.hatnoteRegex).getText();
+				const ysarxiv_page = new Morebits.wikitext.page(text);
+				text = ysarxiv_page.insertAfterTemplates(tag, Twinkle.hatnoteRegex).getText();
 				pageobj.setPageText(text);
 				pageobj.setEditSummary(
 					`${wgULS('页面存废讨论：[[', '頁面存廢討論：[[') + params.logpage}#${Morebits.pageNameNorm}]]`
@@ -513,13 +507,13 @@
 				const params = tagging_page.getCallbackParameters();
 				Twinkle.xfd.callbacks.ffd.taggingImage(tagging_page);
 				// Adding discussion
-				const qiuwen_page = new Morebits.wiki.page(
+				const ysarxiv_page = new Morebits.wiki.page(
 					params.logpage,
 					wgULS('加入讨论到当日列表', '加入討論到當日列表')
 				);
-				qiuwen_page.setFollowRedirect(true);
-				qiuwen_page.setCallbackParameters(params);
-				qiuwen_page.load(Twinkle.xfd.callbacks.ffd.todaysList);
+				ysarxiv_page.setFollowRedirect(true);
+				ysarxiv_page.setCallbackParameters(params);
+				ysarxiv_page.load(Twinkle.xfd.callbacks.ffd.todaysList);
 				// Notification to first contributor
 				if (params.notify) {
 					// Disallow warning yourself
@@ -641,9 +635,7 @@
 				case 'fwdcsd':
 					xfdCatName = wgULS('转交自快速删除候选', '轉交自快速刪除候選');
 					break;
-				case 'fame':
-					xfdCatName = wgULS('批量关注度提删', '批次關注度提刪');
-					break;
+
 				case 'substub':
 					xfdCatName = wgULS('批量小小作品提删', '批次小小作品提刪');
 					break;
@@ -708,7 +700,7 @@
 		switch (params.category) {
 			case 'afd':
 				// AFD
-				params.logpage = `Qiuwen_talk:存废讨论/记录/${date.format('YYYY/MM/DD', 'utc')}`;
+				params.logpage = `LIB_talk:存废讨论/记录/${date.format('YYYY/MM/DD', 'utc')}`;
 				params.lognomination =
 					Twinkle.getPref('logXfdNominations') &&
 					!Twinkle.getPref('noLogOnXfdNomination').includes(params.xfdcat);
@@ -731,7 +723,7 @@
 				break;
 			case 'ffd': {
 				// FFD
-				params.logpage = `Qiuwen_talk:存废讨论/记录/${date.format('YYYY/MM/DD', 'utc')}`;
+				params.logpage = `LIB_talk:存废讨论/记录/${date.format('YYYY/MM/DD', 'utc')}`;
 				params.lognomination =
 					Twinkle.getPref('logXfdNominations') && !Twinkle.getPref('noLogOnXfdNomination').includes('ffd');
 				Morebits.wiki.addCheckpoint();
@@ -739,13 +731,13 @@
 				Morebits.wiki.actionCompleted.redirect = params.logpage;
 				Morebits.wiki.actionCompleted.notice = wgULS('提名完成，重定向到讨论页', '提名完成，重新導向到討論頁');
 				// Lookup creation
-				const qiuwen_page = new Morebits.wiki.page(
+				const ysarxiv_page = new Morebits.wiki.page(
 					mw.config.get('wgPageName'),
 					wgULS('获取页面创建信息', '取得頁面建立資訊')
 				);
-				qiuwen_page.setCallbackParameters(params);
-				qiuwen_page.setLookupNonRedirectCreator(true); // Look for author of first non-redirect revision
-				qiuwen_page.lookupCreation(Twinkle.xfd.callbacks.ffd.lookupCreation);
+				ysarxiv_page.setCallbackParameters(params);
+				ysarxiv_page.setLookupNonRedirectCreator(true); // Look for author of first non-redirect revision
+				ysarxiv_page.lookupCreation(Twinkle.xfd.callbacks.ffd.lookupCreation);
 				Morebits.wiki.removeCheckpoint();
 				break;
 			}

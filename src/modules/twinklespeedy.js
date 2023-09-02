@@ -85,7 +85,7 @@
 		const dialog = Twinkle.speedy.dialog;
 		dialog.setTitle(wgULS('选择快速删除理由', '選擇快速刪除理由'));
 		dialog.setScriptName('Twinkle');
-		dialog.addFooterLink(wgULS('快速删除方针', '快速刪除方針'), 'QW:CSD');
+		dialog.addFooterLink(wgULS('快速删除条例', '快速刪除條例'), 'LIB:CSD');
 		dialog.addFooterLink(wgULS('速删设置', '速刪設定'), 'H:TW/PREF#speedy');
 		dialog.addFooterLink(wgULS('Twinkle帮助', 'Twinkle說明'), 'H:TW/DOC#speedy');
 		const form = new Morebits.quickForm(
@@ -523,7 +523,7 @@
 				$('<a>')
 					.attr({
 						target: '_blank',
-						href: mw.util.getUrl('QW:SPECIALSD'),
+						href: mw.util.getUrl('LIB:SPECIALSD'),
 					})
 					.text(wgULS('手动放置模板时的注意事项', '手動放置模板時的注意事項'))[0],
 				'。',
@@ -695,7 +695,7 @@
 	];
 	Twinkle.speedy.fileList = [
 		{
-			label: 'F1：明显不符合本站著作权方针的文件',
+			label: 'F1：明显不符合本站著作权条例的文件',
 			value: 'f1',
 			tooltip:
 				'包括以下情况：1.上传后3天内仍然来源不明、著作权不明的文件。2.上传者宣称拥有，而在其他来源找到的文件。3.文件宣称由某作者依据某自由著作权协议发布，但找不到该自由协议的声明。4.其他明显侵权的文件，可附加侵权理由。',
@@ -1072,7 +1072,7 @@
 						}:${mw.config.get('wgTitle')}`,
 						wgULS('删除讨论页', '刪除討論頁')
 					);
-					talkpage.setEditSummary(`[[QW:CSD#G9|G9]]: 孤立页面：已删除页面“${Morebits.pageNameNorm}”的讨论页`);
+					talkpage.setEditSummary(`[[LIB:CSD#G9|G9]]: 孤立页面：已删除页面“${Morebits.pageNameNorm}”的讨论页`);
 					talkpage.setChangeTags(Twinkle.changeTags);
 					talkpage.deletePage();
 					// this is ugly, but because of the architecture of wiki.api, it is needed
@@ -1094,14 +1094,14 @@
 						rdlimit: 5000, // 500 is max for normal users, 5000 for bots and sysops
 					};
 
-					const qiuwen_api = new Morebits.wiki.api(
+					const ysarxiv_api = new Morebits.wiki.api(
 						wgULS('获取重定向列表…', '取得重新導向列表…'),
 						query,
 						Twinkle.speedy.callbacks.sysop.deleteRedirectsMain,
 						new Morebits.status(wgULS('删除重定向', '刪除重新導向'))
 					);
-					qiuwen_api.params = params;
-					qiuwen_api.post();
+					ysarxiv_api.params = params;
+					ysarxiv_api.post();
 				}
 				// prompt for protect on G7
 				let $link;
@@ -1261,7 +1261,7 @@
 				$snapshot.each((key, value) => {
 					const title = $(value).attr('title');
 					const page = new Morebits.wiki.page(title, `${wgULS('删除重定向 "', '刪除重新導向 "') + title}"`);
-					page.setEditSummary(`[[QW:CSD#G9|G9]]: 孤立页面：重定向到已删除页面“${Morebits.pageNameNorm}”`);
+					page.setEditSummary(`[[LIB:CSD#G9|G9]]: 孤立页面：重定向到已删除页面“${Morebits.pageNameNorm}”`);
 					page.setChangeTags(Twinkle.changeTags);
 					page.deletePage(onsuccess);
 				});
@@ -1347,7 +1347,7 @@
 				if (mw.config.get('wgNamespaceNumber') === 6) {
 					// remove "move to Commons" tag - deletion-tagged files cannot be moved to Commons
 					text = text.replace(
-						/\{\{(mtc|(copy |move )?to ?(share|commons)|move to (qiuwen share|wikimedia commons)|copy to (qiuwen share|wikimedia commons))[^}]*\}\}/gi,
+						/\{\{(mtc|(copy |move )?to ?(share|commons)|move to (ysarxiv share|wikimedia commons)|copy to (ysarxiv share|wikimedia commons))[^}]*\}\}/gi,
 						''
 					);
 				}
@@ -1360,27 +1360,27 @@
 					editsummary = wgULS('请求快速删除（', '請求快速刪除（');
 					$.each(params.normalizeds, (index, norm) => {
 						if (norm !== 'db') {
-							editsummary += `[[QW:CSD#${norm.toUpperCase()}|CSD ${norm.toUpperCase()}]]、`;
+							editsummary += `[[LIB:CSD#${norm.toUpperCase()}|CSD ${norm.toUpperCase()}]]、`;
 						}
 					});
 					editsummary = editsummary.substr(0, editsummary.length - 1); // remove trailing comma
 					editsummary += '）';
 				} else if (params.normalizeds[0] === 'db') {
 					editsummary =
-						wgULS('请求[[QW:CSD|快速删除]]：', '請求[[QW:CSD|快速刪除]]：') + params.templateParams[0]['1'];
+						wgULS('请求[[LIB:CSD|快速删除]]：', '請求[[LIB:CSD|快速刪除]]：') + params.templateParams[0]['1'];
 				} else {
 					editsummary = `${wgULS(
 						'请求快速删除',
 						'請求快速刪除'
-					)}（[[QW:CSD#${params.normalizeds[0].toUpperCase()}|CSD ${params.normalizeds[0].toUpperCase()}]]）`;
+					)}（[[LIB:CSD#${params.normalizeds[0].toUpperCase()}|CSD ${params.normalizeds[0].toUpperCase()}]]）`;
 				}
 				// Blank attack pages
 				if (params.blank) {
 					text = code;
 				} else {
 					// Insert tag after short description or any hatnotes
-					const qiuwen_page = new Morebits.wikitext.page(text);
-					text = qiuwen_page.insertAfterTemplates(`${code}\n`, Twinkle.hatnoteRegex).getText();
+					const ysarxiv_page = new Morebits.wikitext.page(text);
+					text = ysarxiv_page.insertAfterTemplates(`${code}\n`, Twinkle.hatnoteRegex).getText();
 				}
 				pageobj.setPageText(text);
 				pageobj.setEditSummary(editsummary);
@@ -1477,28 +1477,28 @@
 			//   for DI: params.fromDI = true, params.templatename, params.normalized  (note: normalized is a string)
 			addToLog: (params, initialContrib) => {
 				const usl = new Morebits.userspaceLogger(Twinkle.getPref('speedyLogPageName'));
-				usl.initialText = `这是该用户使用[[H:TW|Twinkle]]的速删模块做出的[[QW:CSD|快速删除]]提名列表。\n\n若您不再想保留此日志，请在[[${Twinkle.getPref(
+				usl.initialText = `这是该用户使用[[H:TW|Twinkle]]的速删模块做出的[[LIB:CSD|快速删除]]提名列表。\n\n若您不再想保留此日志，请在[[${Twinkle.getPref(
 					'configPage'
-				)}|参数设置]]中关掉，并使用[[QW:CSD#O1|CSD O1]]提交快速删除。${
+				)}|参数设置]]中关掉，并使用[[LIB:CSD#O1|CSD O1]]提交快速删除。${
 					Morebits.userIsSysop ? '\n\n此日志并不记录用Twinkle直接执行的删除。' : ''
 				}`;
 				let appendText = `# [[:${Morebits.pageNameNorm}]]：`;
 				if (params.fromDI) {
-					appendText += `图版[[QW:CSD#${params.normalized.toUpperCase()}|CSD ${params.normalized.toUpperCase()}]]（{{tl|${
+					appendText += `图版[[LIB:CSD#${params.normalized.toUpperCase()}|CSD ${params.normalized.toUpperCase()}]]（{{tl|${
 						params.templatename
 					}}}）`;
 				} else {
 					if (params.normalizeds.length > 1) {
 						appendText += '多个理由（';
 						$.each(params.normalizeds, (index, norm) => {
-							appendText += `[[QW:CSD#${norm.toUpperCase()}|${norm.toUpperCase()}]]、`;
+							appendText += `[[LIB:CSD#${norm.toUpperCase()}|${norm.toUpperCase()}]]、`;
 						});
 						appendText = appendText.substr(0, appendText.length - 1); // remove trailing comma
 						appendText += '）';
 					} else if (params.normalizeds[0] === 'db') {
 						appendText += '自定义理由';
 					} else {
-						appendText += `[[QW:CSD#${params.normalizeds[0].toUpperCase()}|CSD ${params.normalizeds[0].toUpperCase()}]]`;
+						appendText += `[[LIB:CSD#${params.normalizeds[0].toUpperCase()}|CSD ${params.normalizeds[0].toUpperCase()}]]`;
 					}
 				}
 				if (params.requestsalt) {
@@ -1744,9 +1744,9 @@
 		Morebits.status.init(form);
 		Morebits.wiki.actionCompleted.redirect = mw.config.get('wgPageName');
 		Morebits.wiki.actionCompleted.notice = wgULS('标记完成', '標記完成');
-		const qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'), wgULS('标记页面', '標記頁面'));
-		qiuwen_page.setCallbackParameters(params);
-		qiuwen_page.load(Twinkle.speedy.callbacks.user.main);
+		const ysarxiv_page = new Morebits.wiki.page(mw.config.get('wgPageName'), wgULS('标记页面', '標記頁面'));
+		ysarxiv_page.setCallbackParameters(params);
+		ysarxiv_page.load(Twinkle.speedy.callbacks.user.main);
 	};
 	Twinkle.addInitCallback(Twinkle.speedy, 'speedy');
 })(jQuery);

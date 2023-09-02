@@ -371,13 +371,13 @@
 			meta: 'tokens',
 			type: 'csrf',
 		};
-		const qiuwen_api = new Morebits.wiki.api(
+		const ysarxiv_api = new Morebits.wiki.api(
 			wgULS('抓取较早修订版本信息', '抓取較早修訂版本資訊'),
 			query,
 			Twinkle.fluff.callbacks.main
 		);
-		qiuwen_api.params = params;
-		qiuwen_api.post();
+		ysarxiv_api.params = params;
+		ysarxiv_api.post();
 	};
 	Twinkle.fluff.revertToRevision = (oldrev) => {
 		let summary = '';
@@ -397,16 +397,16 @@
 			meta: 'tokens',
 			type: 'csrf',
 		};
-		const qiuwen_api = new Morebits.wiki.api(
+		const ysarxiv_api = new Morebits.wiki.api(
 			wgULS('抓取较早修订版本信息', '抓取較早修訂版本資訊'),
 			query,
 			Twinkle.fluff.callbacks.toRevision
 		);
-		qiuwen_api.params = {
+		ysarxiv_api.params = {
 			rev: oldrev,
 			summary: summary,
 		};
-		qiuwen_api.post();
+		ysarxiv_api.post();
 	};
 	Twinkle.fluff.callbacks = {
 		toRevision: (apiobj) => {
@@ -470,14 +470,14 @@
 			}
 			Morebits.wiki.actionCompleted.redirect = mw.config.get('wgPageName');
 			Morebits.wiki.actionCompleted.notice = '回退完成';
-			const qiuwen_api = new Morebits.wiki.api(
+			const ysarxiv_api = new Morebits.wiki.api(
 				wgULS('保存回退内容', '儲存回退內容'),
 				query,
 				Twinkle.fluff.callbacks.complete,
 				apiobj.statelem
 			);
-			qiuwen_api.params = apiobj.params;
-			qiuwen_api.post();
+			ysarxiv_api.params = apiobj.params;
+			ysarxiv_api.post();
 		},
 		main: (apiobj) => {
 			const xmlDoc = apiobj.responseXML;
@@ -798,14 +798,14 @@
 				Morebits.wiki.actionCompleted.redirect = params.pagename;
 			}
 			Morebits.wiki.actionCompleted.notice = '回退完成';
-			const qiuwen_api = new Morebits.wiki.api(
+			const ysarxiv_api = new Morebits.wiki.api(
 				wgULS('保存回退内容', '儲存回退內容'),
 				query,
 				Twinkle.fluff.callbacks.complete,
 				statelem
 			);
-			qiuwen_api.params = params;
-			qiuwen_api.post();
+			ysarxiv_api.params = params;
+			ysarxiv_api.post();
 		},
 		complete: (apiobj) => {
 			// TODO Most of this is copy-pasted from Morebits.wiki.page#fnSaveSuccess. Unify it

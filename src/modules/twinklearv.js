@@ -45,23 +45,23 @@
 		});
 		categories.append({
 			type: 'option',
-			label: wgULS('破坏（QW:VIP）', '破壞（QW:VIP）'),
+			label: wgULS('破坏（LIB:VIP）', '破壞（LIB:VIP）'),
 			value: 'aiv',
 		});
 		categories.append({
 			type: 'option',
-			label: wgULS('编辑争议（QW:EWIP）', '編輯爭議（QW:EWIP）'),
+			label: wgULS('编辑争议（LIB:EWIP）', '編輯爭議（LIB:EWIP）'),
 			value: 'ewip',
 		});
 		categories.append({
 			type: 'option',
-			label: wgULS('用户名（QW:UAA）', '使用者名稱（QW:UAA）'),
+			label: wgULS('用户名（LIB:UAA）', '使用者名稱（LIB:UAA）'),
 			value: 'username',
 			disabled: mw.util.isIPAddress(uid),
 		});
 		categories.append({
 			type: 'option',
-			label: wgULS('傀儡调查（QW:SPI）', '傀儡調查（QW:SPI）'),
+			label: wgULS('傀儡调查（LIB:SPI）', '傀儡調查（LIB:SPI）'),
 			value: 'spi',
 			disabled: mw.util.isIPAddress(uid),
 		});
@@ -305,8 +305,8 @@
 					type: 'header',
 					label: wgULS('不当用户名类型', '不當使用者名稱類別'),
 					tooltip: wgULS(
-						'求闻百科不允许使用带有误导性、宣传性、侮辱性或破坏性的用户名。此外，使用域名及邮箱地址的用户名亦被禁止。这些准则俱应应用至用户名及签名。在其他语言中不当的用户名或通过错拼、替代、暗示、拆字或任何间接方法达成的非妥当用户名同样视为违规。',
-						'求聞百科不允許使用帶有誤導性、宣傳性、侮辱性或破壞性的使用者名稱。此外，使用域名及電子信箱位址的使用者名稱亦被禁止。這些準則俱應應用至使用者名稱及簽名。在其他語言中不當的使用者名稱或通過錯拼、替代、暗示、拆字或任何間接方法達成的非妥當使用者名稱同樣視為違規。'
+						'有兽档案馆不允许使用带有误导性、宣传性、侮辱性或破坏性的用户名。此外，使用域名及邮箱地址的用户名亦被禁止。这些准则俱应应用至用户名及签名。在其他语言中不当的用户名或通过错拼、替代、暗示、拆字或任何间接方法达成的非妥当用户名同样视为违规。',
+						'有獸檔案館不允許使用帶有誤導性、宣傳性、侮辱性或破壞性的使用者名稱。此外，使用域名及電子信箱位址的使用者名稱亦被禁止。這些準則俱應應用至使用者名稱及簽名。在其他語言中不當的使用者名稱或通過錯拼、替代、暗示、拆字或任何間接方法達成的非妥當使用者名稱同樣視為違規。'
 					),
 				});
 				work_area.append({
@@ -325,8 +325,8 @@
 							label: wgULS('宣传性用户名', '宣傳性使用者名稱'),
 							value: wgULS('宣传性', '宣傳性'),
 							tooltip: wgULS(
-								'宣传性用户名会于求闻百科上起推销一个组群或一间公司的作用。',
-								'宣傳性使用者名稱會於求聞百科上起推銷一個群組或一間公司的作用。'
+								'宣传性用户名会于有兽档案馆上起推销一个组群或一间公司的作用。',
+								'宣傳性使用者名稱會於有獸檔案館上起推銷一個群組或一間公司的作用。'
 							),
 						},
 						{
@@ -349,8 +349,8 @@
 							label: wgULS('破坏性用户名', '破壞性使用者名稱'),
 							value: wgULS('破坏性', '破壞性'),
 							tooltip: wgULS(
-								'破坏性用户名包括人身攻击、伪冒他人或其他一切有着清晰可见的破坏求闻百科意图的用户名。',
-								'破壞性使用者名稱包括人身攻擊、偽冒他人或其他一切有著清晰可見的破壞求聞百科意圖的使用者名稱。'
+								'破坏性用户名包括人身攻击、伪冒他人或其他一切有着清晰可见的破坏有兽档案馆意图的用户名。',
+								'破壞性使用者名稱包括人身攻擊、偽冒他人或其他一切有著清晰可見的破壞有獸檔案館意圖的使用者名稱。'
 							),
 						},
 					],
@@ -481,16 +481,16 @@
 		let title;
 		switch (input.category) {
 			case 'vip':
-				title = 'Qiuwen_talk:报告当前破坏';
+				title = 'LIB_talk:报告当前破坏';
 				break;
 			case 'ewip':
-				title = 'Qiuwen_talk:管理员告示板';
+				title = 'LIB_talk:管理员告示板';
 				break;
 			case 'username':
-				title = 'Qiuwen_talk:管理员告示板';
+				title = 'LIB_talk:管理员告示板';
 				break;
 			case 'spi':
-				title = 'Qiuwen_talk:管理员告示板';
+				title = 'LIB_talk:管理员告示板';
 				break;
 			default:
 				title = mw.config.get('wgPageName');
@@ -699,7 +699,7 @@
 				reason += comment;
 				break;
 			}
-			// QW:SPI
+			// LIB:SPI
 			case 'spi': {
 				if (!input.reason) {
 					mw.notify(wgULS('请输入证据。', '請輸入證據。'), {
@@ -756,13 +756,13 @@
 				}
 				Morebits.simpleWindow.setButtonsEnabled(false);
 				Morebits.status.init(form);
-				Morebits.wiki.actionCompleted.redirect = 'Qiuwen_talk:报告当前破坏';
+				Morebits.wiki.actionCompleted.redirect = 'LIB_talk:报告当前破坏';
 				Morebits.wiki.actionCompleted.notice = wgULS('报告完成', '報告完成');
-				const aivPage = new Morebits.wiki.page('Qiuwen_talk:报告当前破坏', wgULS('处理VIP请求', '處理VIP請求'));
+				const aivPage = new Morebits.wiki.page('LIB_talk:报告当前破坏', wgULS('处理VIP请求', '處理VIP請求'));
 				aivPage.setFollowRedirect(true);
 				aivPage.load(() => {
 					const text = aivPage.getPageText();
-					const $aivLink = '<a rel="noopener" target="_blank" href="/wiki/QW:VIP">QW:VIP</a>';
+					const $aivLink = '<a rel="noopener" target="_blank" href="/wiki/LIB:VIP">LIB:VIP</a>';
 					// check if user has already been reported
 					if (
 						new RegExp(
@@ -803,16 +803,16 @@
 				summary = `${wgULS('报告', '報告')}[[Special:Contribs/${uid}|${uid}]]`;
 				Morebits.simpleWindow.setButtonsEnabled(false);
 				Morebits.status.init(form);
-				Morebits.wiki.actionCompleted.redirect = 'Qiuwen_talk:管理员告示板';
+				Morebits.wiki.actionCompleted.redirect = 'LIB_talk:管理员告示板';
 				Morebits.wiki.actionCompleted.notice = wgULS('报告完成', '報告完成');
 				const ewipPage = new Morebits.wiki.page(
-					'Qiuwen_talk:管理员告示板',
+					'LIB_talk:管理员告示板',
 					wgULS('处理EWIP请求', '處理EWIP請求')
 				);
 				ewipPage.setFollowRedirect(true);
 				ewipPage.load(() => {
 					const text = ewipPage.getPageText();
-					const $ewipLink = '<a rel="noopener" target="_blank" href="/wiki/QW:EWIP">QW:EWIP</a>';
+					const $ewipLink = '<a rel="noopener" target="_blank" href="/wiki/LIB:EWIP">LIB:EWIP</a>';
 					// check if user has already been reported
 					if (
 						new RegExp(
@@ -849,9 +849,9 @@
 				reason = Twinkle.arv.callback.getReportWikitext(form);
 				Morebits.simpleWindow.setButtonsEnabled(false);
 				Morebits.status.init(form);
-				Morebits.wiki.actionCompleted.redirect = 'Qiuwen_talk:管理员告示板';
+				Morebits.wiki.actionCompleted.redirect = 'LIB_talk:管理员告示板';
 				Morebits.wiki.actionCompleted.notice = wgULS('报告完成', '報告完成');
-				const uaaPage = new Morebits.wiki.page('Qiuwen_talk:管理员告示板', wgULS('处理UAA请求', '處理UAA請求'));
+				const uaaPage = new Morebits.wiki.page('LIB_talk:管理员告示板', wgULS('处理UAA请求', '處理UAA請求'));
 				uaaPage.setFollowRedirect(true);
 				uaaPage.load(() => {
 					const text = uaaPage.getPageText();
@@ -864,7 +864,7 @@
 						).test(text)
 					) {
 						uaaPage.getStatusElement().error(wgULS('用户已被列入。', '使用者已被列入。'));
-						const $uaaLink = '<a rel="noopener" target="_blank" href="/wiki/QW:UAA">QW:UAA</a>';
+						const $uaaLink = '<a rel="noopener" target="_blank" href="/wiki/LIB:UAA">LIB:UAA</a>';
 						Morebits.status.printUserText(
 							reason[1],
 							wgULS(
@@ -884,12 +884,12 @@
 				});
 				break;
 			}
-			// QW:SPI
+			// LIB:SPI
 			case 'spi': {
 				reason = Twinkle.arv.callback.getReportWikitext(form);
 				Morebits.simpleWindow.setButtonsEnabled(false);
 				Morebits.status.init(form);
-				const reportpage = `Qiuwen_talk:管理员告示板`;
+				const reportpage = `LIB_talk:管理员告示板`;
 				Morebits.wiki.actionCompleted.redirect = reportpage;
 				Morebits.wiki.actionCompleted.notice = wgULS('报告完成', '報告完成');
 				const spiPage = new Morebits.wiki.page(reportpage, wgULS('抓取讨论页面', '抓取討論頁面'));

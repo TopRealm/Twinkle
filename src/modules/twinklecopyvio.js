@@ -89,9 +89,9 @@
 			if (!text.includes('{{Copyvio|')) {
 				Twinkle.copyvio.callbacks.taggingArticle(pageobj);
 				// Contributor specific edits
-				const qiuwen_page = new Morebits.wiki.page(mw.config.get('wgPageName'));
-				qiuwen_page.setCallbackParameters(pageobj.getCallbackParameters());
-				qiuwen_page.lookupCreation(Twinkle.copyvio.callbacks.main);
+				const ysarxiv_page = new Morebits.wiki.page(mw.config.get('wgPageName'));
+				ysarxiv_page.setCallbackParameters(pageobj.getCallbackParameters());
+				ysarxiv_page.lookupCreation(Twinkle.copyvio.callbacks.main);
 			} else {
 				Morebits.status.error(
 					wgULS('错误', '錯誤'),
@@ -104,10 +104,10 @@
 			const params = pageobj.getCallbackParameters();
 			const initialContrib = pageobj.getCreator();
 			// Adding discussion
-			const qiuwen_page = new Morebits.wiki.page(params.logpage, wgULS('加入侵权记录项', '加入侵權記錄項'));
-			qiuwen_page.setFollowRedirect(true);
-			qiuwen_page.setCallbackParameters(params);
-			qiuwen_page.load(Twinkle.copyvio.callbacks.copyvioList);
+			const ysarxiv_page = new Morebits.wiki.page(params.logpage, wgULS('加入侵权记录项', '加入侵權記錄項'));
+			ysarxiv_page.setFollowRedirect(true);
+			ysarxiv_page.setCallbackParameters(params);
+			ysarxiv_page.load(Twinkle.copyvio.callbacks.copyvioList);
 			// Notification to first contributor
 			if (params.notify) {
 				const usertalkpage = new Morebits.wiki.page(
@@ -201,7 +201,7 @@
 		}
 		Morebits.simpleWindow.setButtonsEnabled(false);
 		Morebits.status.init(e.target);
-		params.logpage = 'Qiuwen_talk:侵权提报';
+		params.logpage = 'LIB_talk:侵权提报';
 		Morebits.wiki.addCheckpoint();
 		// Updating data for the action completed event
 		Morebits.wiki.actionCompleted.redirect = mw.config.get('wgPageName');
@@ -210,12 +210,12 @@
 			'提報完成，將在幾秒內重新整理頁面'
 		);
 		// Tagging file
-		const qiuwen_page = new Morebits.wiki.page(
+		const ysarxiv_page = new Morebits.wiki.page(
 			mw.config.get('wgPageName'),
 			wgULS('加入侵权模板到页面', '加入侵權模板到頁面')
 		);
-		qiuwen_page.setCallbackParameters(params);
-		qiuwen_page.load(Twinkle.copyvio.callbacks.tryTagging);
+		ysarxiv_page.setCallbackParameters(params);
+		ysarxiv_page.load(Twinkle.copyvio.callbacks.tryTagging);
 		Morebits.wiki.removeCheckpoint();
 	};
 	Twinkle.addInitCallback(Twinkle.copyvio, 'copyvio');

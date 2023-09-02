@@ -35,7 +35,7 @@
 	Twinkle.stub.callback = () => {
 		const Window = new Morebits.simpleWindow(630, Twinkle.stub.mode === 'article' ? 450 : 400);
 		Window.setScriptName('Twinkle');
-		Window.addFooterLink(wgULS('小作品說明', '小作品说明'), 'QW:小作品');
+		Window.addFooterLink(wgULS('小作品說明', '小作品说明'), 'LIB:小作品');
 		Window.addFooterLink(wgULS('小作品设置', '小作品設定'), 'H:TW/PREF#stub');
 		Window.addFooterLink(wgULS('Twinkle帮助', 'Twinkle說明'), 'H:TW/DOC#stub');
 		const form = new Morebits.quickForm(Twinkle.stub.callback.evaluate);
@@ -382,21 +382,21 @@
 		if (Twinkle.stub.mode === '重定向') {
 			Morebits.wiki.actionCompleted.followRedirect = false;
 		}
-		const qiuwen_page = new Morebits.wiki.page(
+		const ysarxiv_page = new Morebits.wiki.page(
 			mw.config.get('wgPageName'),
 			wgULS('正在标记', '正在標記') + Twinkle.stub.mode
 		);
-		qiuwen_page.setCallbackParameters(params);
+		ysarxiv_page.setCallbackParameters(params);
 		switch (Twinkle.stub.mode) {
 			case '條目':
 			case '条目':
 			/* falls through */
 			case '重定向':
-				qiuwen_page.load(Twinkle.stub.callbacks.main);
+				ysarxiv_page.load(Twinkle.stub.callbacks.main);
 				return;
 			case '文件':
 			case '檔案':
-				qiuwen_page.load(Twinkle.stub.callbacks.file);
+				ysarxiv_page.load(Twinkle.stub.callbacks.file);
 				break;
 			default:
 				mw.notify(`Twinkle.stub：未知模式 ${Twinkle.stub.mode}`, {

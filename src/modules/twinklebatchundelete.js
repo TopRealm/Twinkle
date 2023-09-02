@@ -58,7 +58,7 @@
 			gpllimit: Twinkle.getPref('batchMax'),
 		};
 		const statelem = new Morebits.status(wgULS('抓取页面列表', '抓取頁面列表'));
-		const qiuwen_api = new Morebits.wiki.api(
+		const ysarxiv_api = new Morebits.wiki.api(
 			wgULS('加载中…', '載入中…'),
 			query,
 			(apiobj) => {
@@ -119,11 +119,11 @@
 			},
 			statelem
 		);
-		qiuwen_api.params = {
+		ysarxiv_api.params = {
 			form: form,
 			Window: Window,
 		};
-		qiuwen_api.post();
+		ysarxiv_api.post();
 	};
 	Twinkle.batchundelete.callback.evaluate = (event) => {
 		Morebits.wiki.actionCompleted.notice = wgULS('反删除已完成', '反刪除已完成');
@@ -170,13 +170,13 @@
 				reason: reason,
 				pageUndeleter: pageUndeleter,
 			};
-			const qiuwen_page = new Morebits.wiki.page(pageName, wgULS('反删除页面', '反刪除頁面') + pageName);
-			qiuwen_page.setCallbackParameters(params);
-			qiuwen_page.setEditSummary(`${reason} (批量)`);
-			qiuwen_page.setChangeTags(Twinkle.changeTags);
-			qiuwen_page.suppressProtectWarning();
-			qiuwen_page.setMaxRetries(3); // temporary increase from 2 to make batchundelete more likely to succeed
-			qiuwen_page.undeletePage(Twinkle.batchundelete.callbacks.doExtras, pageUndeleter.workerFailure);
+			const ysarxiv_page = new Morebits.wiki.page(pageName, wgULS('反删除页面', '反刪除頁面') + pageName);
+			ysarxiv_page.setCallbackParameters(params);
+			ysarxiv_page.setEditSummary(`${reason} (批量)`);
+			ysarxiv_page.setChangeTags(Twinkle.changeTags);
+			ysarxiv_page.suppressProtectWarning();
+			ysarxiv_page.setMaxRetries(3); // temporary increase from 2 to make batchundelete more likely to succeed
+			ysarxiv_page.undeletePage(Twinkle.batchundelete.callbacks.doExtras, pageUndeleter.workerFailure);
 		});
 	};
 	Twinkle.batchundelete.callbacks = {
@@ -190,7 +190,7 @@
 			// succeeded by now
 			params.pageUndeleter.workerSuccess(thingWithParameters);
 			let query;
-			let qiuwen_api;
+			let ysarxiv_api;
 			if (params.undel_talk) {
 				const talkpagename = new mw.Title(params.page).getTalkPage().getPrefixedText();
 				if (talkpagename !== params.page) {
@@ -201,14 +201,14 @@
 						drvlimit: 1,
 						titles: talkpagename,
 					};
-					qiuwen_api = new Morebits.wiki.api(
+					ysarxiv_api = new Morebits.wiki.api(
 						wgULS('检查讨论页的已删版本', '檢查討論頁的已刪版本'),
 						query,
 						Twinkle.batchundelete.callbacks.undeleteTalk
 					);
-					qiuwen_api.params = params;
-					qiuwen_api.params.talkPage = talkpagename;
-					qiuwen_api.post();
+					ysarxiv_api.params = params;
+					ysarxiv_api.params.talkPage = talkpagename;
+					ysarxiv_api.post();
 				}
 			}
 		},

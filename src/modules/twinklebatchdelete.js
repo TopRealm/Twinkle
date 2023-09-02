@@ -172,7 +172,7 @@
 		Window.display();
 		Twinkle.batchdelete.pages = {};
 		const statelem = new Morebits.status(wgULS('抓取页面列表', '抓取頁面列表'));
-		const qiuwen_api = new Morebits.wiki.api(
+		const ysarxiv_api = new Morebits.wiki.api(
 			wgULS('加载中…', '載入中…'),
 			query,
 			(apiobj) => {
@@ -259,11 +259,11 @@
 			},
 			statelem
 		);
-		qiuwen_api.params = {
+		ysarxiv_api.params = {
 			form: form,
 			Window: Window,
 		};
-		qiuwen_api.post();
+		ysarxiv_api.post();
 	};
 	const generateArrowLinks = (checkbox) => {
 		const link = Morebits.htmlNode('a', ' >');
@@ -303,8 +303,8 @@
 				'G6：原作者提請刪除或清空頁面，且頁面原作者僅有一人'
 			),
 			value: wgULS(
-				'[[QW:CSD#G6|G6]]：原作者提请删除或清空页面，且页面原作者仅有一人',
-				'[[QW:CSD#G6|G6]]：原作者提請刪除或清空頁面，且頁面原作者僅有一人'
+				'[[LIB:CSD#G6|G6]]：原作者提请删除或清空页面，且页面原作者仅有一人',
+				'[[LIB:CSD#G6|G6]]：原作者提請刪除或清空頁面，且頁面原作者僅有一人'
 			),
 		},
 		{
@@ -312,13 +312,13 @@
 				'G9：孤立页面，比如没有主页面的讨论页、指向空页面的重定向等',
 				'G9：孤立頁面，比如沒有主頁面的討論頁、指向空頁面的重新導向等'
 			),
-			value: wgULS('[[QW:CSD#G9|G9]]：孤立页面', '[[QW:CSD#G9|G9]]：孤立頁面'),
+			value: wgULS('[[LIB:CSD#G9|G9]]：孤立页面', '[[LIB:CSD#G9|G9]]：孤立頁面'),
 		},
 		{
 			label: wgULS('R1：不能发挥实际作用的重定向。', 'R1：不能發揮實際作用的重定向。'),
 			value: wgULS(
-				'[[QW:CSD#R1|R1]]：不能发挥实际作用的重定向。',
-				'[[QW:CSD#R1|R1]]：不能發揮實際作用的重定向。'
+				'[[LIB:CSD#R1|R1]]：不能发挥实际作用的重定向。',
+				'[[LIB:CSD#R1|R1]]：不能發揮實際作用的重定向。'
 			),
 		},
 		{
@@ -327,13 +327,13 @@
 				'R2：名稱與導向目標代表事物不一致或不完全一致的重定向。'
 			),
 			value: wgULS(
-				'[[QW:CSD#R2|R2]]：名称与导向目标代表事物不一致或不完全一致的重定向。',
-				'[[QW:CSD#R2|R2]]：名稱與導向目標代表事物不一致或不完全一致的重定向。'
+				'[[LIB:CSD#R2|R2]]：名称与导向目标代表事物不一致或不完全一致的重定向。',
+				'[[LIB:CSD#R2|R2]]：名稱與導向目標代表事物不一致或不完全一致的重定向。'
 			),
 		},
 		{
 			label: wgULS('F4：可被替代的合理使用文件', 'F4：可被替代的合理使用檔案'),
-			value: wgULS('[[QW:CSD#F4|F4]]：可被替代的合理使用文件', '[[QW:CSD#F4|F4]]：可被替代的合理使用檔案'),
+			value: wgULS('[[LIB:CSD#F4|F4]]：可被替代的合理使用文件', '[[LIB:CSD#F4|F4]]：可被替代的合理使用檔案'),
 		},
 		{
 			label: wgULS(
@@ -341,27 +341,27 @@
 				'F5：沒有被條目使用的非自由版權檔案、沒有填寫任何合理使用依據的非自由版權檔案'
 			),
 			value: wgULS(
-				'[[QW:CSD#F5|F5]]：没有被条目使用的非自由著作权文件、没有填写任何合理使用依据的非自由著作权文件',
-				'[[QW:CSD#F5|F5]]：沒有被條目使用的非自由版權檔案、沒有填寫任何合理使用依據的非自由版權檔案'
+				'[[LIB:CSD#F5|F5]]：没有被条目使用的非自由著作权文件、没有填写任何合理使用依据的非自由著作权文件',
+				'[[LIB:CSD#F5|F5]]：沒有被條目使用的非自由版權檔案、沒有填寫任何合理使用依據的非自由版權檔案'
 			),
 		},
 		{
 			label: wgULS('O1：用户请求删除自己的用户页或其子页面', 'O1：使用者請求刪除自己的使用者頁面或其子頁面'),
 			value: wgULS(
-				'[[QW:CSD#O1|O1]]：用户请求删除自己的[[Help:用户页|用户页]]或其子页面。',
-				'[[QW:CSD#O1|O1]]：使用者請求刪除自己的[[Help:用户页|使用者頁面]]或其子頁面。'
+				'[[LIB:CSD#O1|O1]]：用户请求删除自己的[[Help:用户页|用户页]]或其子页面。',
+				'[[LIB:CSD#O1|O1]]：使用者請求刪除自己的[[Help:用户页|使用者頁面]]或其子頁面。'
 			),
 		},
 		{
 			label: wgULS('O2：空的分类（没有条目也没有子分类）', 'O2：空的分類（沒有條目也沒有子分類）'),
 			value: wgULS(
-				'[[QW:CSD#O2|O2]]：空的分类（没有条目也没有子分类）。',
-				'[[QW:CSD#O2|O2]]：空的分類（沒有條目也沒有子分類）。'
+				'[[LIB:CSD#O2|O2]]：空的分类（没有条目也没有子分类）。',
+				'[[LIB:CSD#O2|O2]]：空的分類（沒有條目也沒有子分類）。'
 			),
 		},
 		{
 			label: wgULS('O3：废弃草稿', 'O3：廢棄草稿'),
-			value: wgULS('[[QW:CSD#O3|O3]]：废弃草稿。', '[[QW:CSD#O3|O3]]：廢棄草稿。'),
+			value: wgULS('[[LIB:CSD#O3|O3]]：废弃草稿。', '[[LIB:CSD#O3|O3]]：廢棄草稿。'),
 		},
 	];
 	Twinkle.batchdelete.callback.change_common_reason = (e) => {
@@ -410,7 +410,7 @@
 						subpageLister.workerSuccess();
 						return;
 					}
-					const qiuwen_api = new Morebits.wiki.api(
+					const ysarxiv_api = new Morebits.wiki.api(
 						wgULS('正在获取 ', '正在取得 ') + pageName + wgULS(' 的子页面', ' 的子頁面'),
 						{
 							action: 'query',
@@ -481,7 +481,7 @@
 							subpageLister.workerFailure();
 						}
 					);
-					qiuwen_api.post();
+					ysarxiv_api.post();
 				},
 				() => {
 					// List 'em on the interface
@@ -579,18 +579,18 @@
 					reason: reason,
 					pageDeleter: pageDeleter,
 				};
-				const qiuwen_page = new Morebits.wiki.page(
+				const ysarxiv_page = new Morebits.wiki.page(
 					pageName,
 					wgULS('正在删除页面 ', '正在刪除頁面 ') + pageName
 				);
-				qiuwen_page.setCallbackParameters(params);
+				ysarxiv_page.setCallbackParameters(params);
 				if (delete_page) {
-					qiuwen_page.setEditSummary(`${reason}（批量）`);
-					qiuwen_page.setChangeTags(Twinkle.changeTags);
-					qiuwen_page.suppressProtectWarning();
-					qiuwen_page.deletePage(Twinkle.batchdelete.callbacks.doExtras, pageDeleter.workerFailure);
+					ysarxiv_page.setEditSummary(`${reason}（批量）`);
+					ysarxiv_page.setChangeTags(Twinkle.changeTags);
+					ysarxiv_page.suppressProtectWarning();
+					ysarxiv_page.deletePage(Twinkle.batchdelete.callbacks.doExtras, pageDeleter.workerFailure);
 				} else {
-					Twinkle.batchdelete.callbacks.doExtras(qiuwen_page);
+					Twinkle.batchdelete.callbacks.doExtras(ysarxiv_page);
 				}
 			},
 			() => {
@@ -610,15 +610,15 @@
 							reason: reason,
 							pageDeleter: subpageDeleter,
 						};
-						const qiuwen_page = new Morebits.wiki.page(
+						const ysarxiv_page = new Morebits.wiki.page(
 							pageName,
 							wgULS('正在删除子页面 ', '正在刪除子頁面 ') + pageName
 						);
-						qiuwen_page.setCallbackParameters(params);
-						qiuwen_page.setEditSummary(`${reason}（批量）`);
-						qiuwen_page.setChangeTags(Twinkle.changeTags);
-						qiuwen_page.suppressProtectWarning();
-						qiuwen_page.deletePage(Twinkle.batchdelete.callbacks.doExtras, pageDeleter.workerFailure);
+						ysarxiv_page.setCallbackParameters(params);
+						ysarxiv_page.setEditSummary(`${reason}（批量）`);
+						ysarxiv_page.setChangeTags(Twinkle.changeTags);
+						ysarxiv_page.suppressProtectWarning();
+						ysarxiv_page.deletePage(Twinkle.batchdelete.callbacks.doExtras, pageDeleter.workerFailure);
 					});
 				}
 			}
@@ -635,7 +635,7 @@
 			// succeeded by now
 			params.pageDeleter.workerSuccess(thingWithParameters);
 			let query;
-			let qiuwen_api;
+			let ysarxiv_api;
 			if (params.unlink_page) {
 				Twinkle.batchdelete.unlinkCache = {};
 				query = {
@@ -647,13 +647,13 @@
 					bllimit: 'max', // 500 is max for normal users, 5000 for bots and sysops
 				};
 
-				qiuwen_api = new Morebits.wiki.api(
+				ysarxiv_api = new Morebits.wiki.api(
 					wgULS('正在获取链入', '正在取得連入'),
 					query,
 					Twinkle.batchdelete.callbacks.unlinkBacklinksMain
 				);
-				qiuwen_api.params = params;
-				qiuwen_api.post();
+				ysarxiv_api.params = params;
+				ysarxiv_api.post();
 			}
 			if (params.unlink_file) {
 				query = {
@@ -663,13 +663,13 @@
 					iulimit: 'max', // 500 is max for normal users, 5000 for bots and sysops
 				};
 
-				qiuwen_api = new Morebits.wiki.api(
+				ysarxiv_api = new Morebits.wiki.api(
 					wgULS('正在获取文件链入', '正在取得檔案連入'),
 					query,
 					Twinkle.batchdelete.callbacks.unlinkImageInstancesMain
 				);
-				qiuwen_api.params = params;
-				qiuwen_api.post();
+				ysarxiv_api.params = params;
+				ysarxiv_api.post();
 			}
 			if (params.delete_page) {
 				if (params.delete_redirects) {
@@ -680,13 +680,13 @@
 						rdlimit: 'max', // 500 is max for normal users, 5000 for bots and sysops
 					};
 
-					qiuwen_api = new Morebits.wiki.api(
+					ysarxiv_api = new Morebits.wiki.api(
 						wgULS('正在获取重定向', '正在取得重新導向'),
 						query,
 						Twinkle.batchdelete.callbacks.deleteRedirectsMain
 					);
-					qiuwen_api.params = params;
-					qiuwen_api.post();
+					ysarxiv_api.params = params;
+					ysarxiv_api.post();
 				}
 				if (params.delete_talk) {
 					const pageTitle = mw.Title.newFromText(params.page);
@@ -696,14 +696,14 @@
 							action: 'query',
 							titles: pageTitle.toText(),
 						};
-						qiuwen_api = new Morebits.wiki.api(
+						ysarxiv_api = new Morebits.wiki.api(
 							wgULS('正在检查讨论页面是否存在', '正在檢查討論頁面是否存在'),
 							query,
 							Twinkle.batchdelete.callbacks.deleteTalk
 						);
-						qiuwen_api.params = params;
-						qiuwen_api.params.talkPage = pageTitle.toText();
-						qiuwen_api.post();
+						ysarxiv_api.params = params;
+						ysarxiv_api.params.talkPage = pageTitle.toText();
+						ysarxiv_api.post();
 					}
 				}
 			}
@@ -723,15 +723,15 @@
 			redirectDeleter.setOption('chunkSize', Twinkle.getPref('batchChunks'));
 			redirectDeleter.setPageList(pages);
 			redirectDeleter.run((pageName) => {
-				const qiuwen_page = new Morebits.wiki.page(pageName, wgULS('正在删除 ', '正在刪除 ') + pageName);
-				qiuwen_page.setEditSummary(
-					`[[QW:CSD#G9|G9]]: ${wgULS('指向已删页面“', '指向已刪頁面「')}${apiobj.params.page}${wgULS(
+				const ysarxiv_page = new Morebits.wiki.page(pageName, wgULS('正在删除 ', '正在刪除 ') + pageName);
+				ysarxiv_page.setEditSummary(
+					`[[LIB:CSD#G9|G9]]: ${wgULS('指向已删页面“', '指向已刪頁面「')}${apiobj.params.page}${wgULS(
 						'”的重定向',
 						'」的重新導向'
 					)}`
 				);
-				qiuwen_page.setChangeTags(Twinkle.changeTags);
-				qiuwen_page.deletePage(redirectDeleter.workerSuccess, redirectDeleter.workerFailure);
+				ysarxiv_page.setChangeTags(Twinkle.changeTags);
+				ysarxiv_page.deletePage(redirectDeleter.workerSuccess, redirectDeleter.workerFailure);
 			});
 		},
 		deleteTalk: (apiobj) => {
@@ -746,7 +746,7 @@
 				wgULS('正在删除页面 ', '正在刪除頁面 ') + apiobj.params.page + wgULS(' 的讨论页', ' 的討論頁')
 			);
 			page.setEditSummary(
-				`[[QW:CSD#G9|G9]]: ${wgULS('已删页面“', '已刪頁面「')}${apiobj.params.page}${wgULS(
+				`[[LIB:CSD#G9|G9]]: ${wgULS('已删页面“', '已刪頁面「')}${apiobj.params.page}${wgULS(
 					'”的[[Help:讨论页|讨论页]]',
 					'」的[[Help:討論頁|討論頁]]'
 				)}`
@@ -769,15 +769,15 @@
 			unlinker.setOption('chunkSize', Twinkle.getPref('batchChunks'));
 			unlinker.setPageList(pages);
 			unlinker.run((pageName) => {
-				const qiuwen_page = new Morebits.wiki.page(
+				const ysarxiv_page = new Morebits.wiki.page(
 					pageName,
 					`正在取消 ${pageName}${wgULS(' 上的链入', ' 上的連入')}`
 				);
 				const params = $.extend({}, apiobj.params);
 				params.title = pageName;
 				params.unlinker = unlinker;
-				qiuwen_page.setCallbackParameters(params);
-				qiuwen_page.load(Twinkle.batchdelete.callbacks.unlinkBacklinks);
+				ysarxiv_page.setCallbackParameters(params);
+				ysarxiv_page.load(Twinkle.batchdelete.callbacks.unlinkBacklinks);
 			});
 		},
 		unlinkBacklinks: (pageobj) => {
@@ -794,8 +794,8 @@
 				text = pageobj.getPageText();
 			}
 			const old_text = text;
-			const qiuwen_page = new Morebits.wikitext.page(text);
-			text = qiuwen_page.removeLink(params.page).getText();
+			const ysarxiv_page = new Morebits.wikitext.page(text);
+			text = ysarxiv_page.removeLink(params.page).getText();
 			Twinkle.batchdelete.unlinkCache[params.title] = text;
 			if (text === old_text) {
 				// Nothing to do, return
@@ -824,15 +824,15 @@
 			unlinker.setOption('chunkSize', Twinkle.getPref('batchChunks'));
 			unlinker.setPageList(pages);
 			unlinker.run((pageName) => {
-				const qiuwen_page = new Morebits.wiki.page(
+				const ysarxiv_page = new Morebits.wiki.page(
 					pageName,
 					`取消 ${pageName}${wgULS(' 的文件使用', ' 的檔案使用')}`
 				);
 				const params = $.extend({}, apiobj.params);
 				params.title = pageName;
 				params.unlinker = unlinker;
-				qiuwen_page.setCallbackParameters(params);
-				qiuwen_page.load(Twinkle.batchdelete.callbacks.unlinkImageInstances);
+				ysarxiv_page.setCallbackParameters(params);
+				ysarxiv_page.load(Twinkle.batchdelete.callbacks.unlinkImageInstances);
 			});
 		},
 		unlinkImageInstances: (pageobj) => {
@@ -850,8 +850,8 @@
 				text = pageobj.getPageText();
 			}
 			const old_text = text;
-			const qiuwen_page = new Morebits.wikitext.page(text);
-			text = qiuwen_page.commentOutImage(image, wgULS('因文件已删，故注解', '因檔案已刪，故註解')).getText();
+			const ysarxiv_page = new Morebits.wikitext.page(text);
+			text = ysarxiv_page.commentOutImage(image, wgULS('因文件已删，故注解', '因檔案已刪，故註解')).getText();
 			Twinkle.batchdelete.unlinkCache[params.title] = text;
 			if (text === old_text) {
 				pageobj
