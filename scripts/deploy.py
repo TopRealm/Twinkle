@@ -197,7 +197,10 @@ def sync_file(site: mwclient.Site, page_name: str, text_new: str, file_name=None
         if file_name is not None:
             commit_hash, commit_msg = last_commit_info(file_name)
             summary += f"([https://github.com/TopRealm/Twinkle/commit/{commit_hash} {commit_hash[:7]}]) {commit_msg}"
-        page.edit(text_new, summary)
+        # page.edit(text_new, summary)
+		with open(page_name[10:], "w", encoding="utf-8") as pfile:
+			pfile.write(text_new)
+			
         print(page_name, "\t", "changed")
     else:
         print(page_name, "\t", "not_changed")
@@ -205,7 +208,7 @@ def sync_file(site: mwclient.Site, page_name: str, text_new: str, file_name=None
 
 # 登录MediaWiki
 site = mwclient.Site("wiki.zorua.top", path="/")
-site.login("Github-bot", os.environ["MW_BOT_PASSWORD"])
+# site.login("Github-bot", os.environ["MW_BOT_PASSWORD"])
 
 
 # 同步仓库中的代码文件
