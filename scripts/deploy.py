@@ -10,6 +10,10 @@ import subprocess as sp
 import mwclient
 
 # 常量部分
+# 定义需在代码中额外插入的字符串
+FILE_HEADER = "/* <nowiki> */\n"
+FILE_FOOTER = "\n/* </nowiki> */"
+FILE_WARNING = "/**\n * +--------------------------------------------------------+\n * |         === WARNING: GLOBAL GADGET FILE ===            |\n * +--------------------------------------------------------+\n * |      All changes should be made in the repository,     |\n * |              otherwise they will be lost.              |\n * +--------------------------------------------------------+\n * |      Changes to this page may affect many users.       |\n * |  Please discuss changes at talk page before editing.   |\n * +--------------------------------------------------------+\n */\n"
 # 定义部署源文件、目标文件和授权协议
 DEPLOY_TARGETS = [
 	# twinkle
@@ -210,6 +214,7 @@ for deploy_item in DEPLOY_TARGETS:
         page_text = pfile.read()
 
     with open(deploy_item["file"], "r", encoding="utf-8") as pfile:
-        page_text += pfile.read().rstrip()
+        license_text = pfile.read()
+		page_text = license_text + FILE_WARNING + FILE_HEADER + page_text + FILE_FOOTER
 
     sync_file(site, deploy_item["target"], page_text, deploy_item["file"])
