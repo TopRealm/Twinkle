@@ -10,142 +10,146 @@ import subprocess as sp
 import mwclient
 
 # 常量部分
+# 定义需在代码中额外插入的字符串
+FILE_HEADER = "/* <nowiki> */\n"
+FILE_FOOTER = "\n/* </nowiki> */"
+FILE_WARNING = "/**\n * +--------------------------------------------------------+\n * |         === WARNING: GLOBAL GADGET FILE ===            |\n * +--------------------------------------------------------+\n * |      All changes should be made in the repository,     |\n * |              otherwise they will be lost.              |\n * +--------------------------------------------------------+\n * |      Changes to this page may affect many users.       |\n * |  Please discuss changes at talk page before editing.   |\n * +--------------------------------------------------------+\n */\n"
 # 定义部署源文件、目标文件和授权协议
 DEPLOY_TARGETS = [
-	# twinkle
-	{
-		"file": 'distTS/src/twinkle/twinkle.js',
-		"target": 'MediaWiki:Gadget-Twinkle.js',
-		"license": 'src/licenseHeader'
-	},
-	{
-		"file": 'src/twinkle/twinkle.css',
-		"target": 'MediaWiki:Gadget-Twinkle.css',
-		"license": 'src/licenseHeader'
-	},
-	{
-		"file": 'src/twinkle/twinkle-pagestyles.css',
-		"target": 'MediaWiki:Gadget-Twinkle-pagestyles.css',
-		"license": 'src/licenseHeader'
-	},
-	# modules
-	{
-		"file": 'distTS/src/modules/friendlytag.js',
-		"target": 'MediaWiki:Gadget-friendlytag.js',
-		"license": 'src/licenseHeader'
-	},
-	{
-		"file": 'distTS/src/modules/friendlytalkback.js',
-		"target": 'MediaWiki:Gadget-friendlytalkback.js',
-		"license": 'src/licenseHeader'
-	},
-	{
-		"file": 'distTS/src/modules/twinklearv.js',
-		"target": 'MediaWiki:Gadget-twinklearv.js',
-		"license": 'src/licenseHeader'
-	},
-	{
-		"file": 'distTS/src/modules/twinklebatchprotect.js',
-		"target": 'MediaWiki:Gadget-twinklebatchprotect.js',
-		"license": 'src/licenseHeader'
-	},
-	{
-		"file": 'distTS/src/modules/twinklebatchdelete.js',
-		"target": 'MediaWiki:Gadget-twinklebatchdelete.js',
-		"license": 'src/licenseHeader'
-	},
-	{
-		"file": 'distTS/src/modules/twinklebatchundelete.js',
-		"target": 'MediaWiki:Gadget-twinklebatchundelete.js',
-		"license": 'src/licenseHeader'
-	},
-	{
-		"file": 'distTS/src/modules/twinkleblock.js',
-		"target": 'MediaWiki:Gadget-twinkleblock.js',
-		"license": 'src/licenseHeader'
-	},
-	{
-		"file": 'distTS/src/modules/twinkleclose.js',
-		"target": 'MediaWiki:Gadget-twinkleclose.js',
-		"license": 'src/licenseHeader'
-	},
-	{
-		"file": 'distTS/src/modules/twinkleconfig.js',
-		"target": 'MediaWiki:Gadget-twinkleconfig.js',
-		"license": 'src/licenseHeader'
-	},
-	{
-		"file": 'distTS/src/modules/twinklecopyvio.js',
-		"target": 'MediaWiki:Gadget-twinklecopyvio.js',
-		"license": 'src/licenseHeader'
-	},
-	{
-		"file": 'distTS/src/modules/twinklediff.js',
-		"target": 'MediaWiki:Gadget-twinklediff.js',
-		"license": 'src/licenseHeader'
-	},
-	{
-		"file": 'distTS/src/modules/twinklefluff.js',
-		"target": 'MediaWiki:Gadget-twinklefluff.js',
-		"license": 'src/licenseHeader'
-	},
-	{
-		"file": 'distTS/src/modules/twinkleimage.js',
-		"target": 'MediaWiki:Gadget-twinkleimage.js',
-		"license": 'src/licenseHeader'
-	},
-	{
-		"file": 'distTS/src/modules/twinkleprotect.js',
-		"target": 'MediaWiki:Gadget-twinkleprotect.js',
-		"license": 'src/licenseHeader'
-	},
-	{
-		"file": 'distTS/src/modules/twinklespeedy.js',
-		"target": 'MediaWiki:Gadget-twinklespeedy.js',
-		"license": 'src/licenseHeader'
-	},
-	{
-		"file": 'distTS/src/modules/twinklestub.js',
-		"target": 'MediaWiki:Gadget-twinklestub.js',
-		"license": 'src/licenseHeader'
-	},
-	{
-		"file": 'distTS/src/modules/twinkleunlink.js',
-		"target": 'MediaWiki:Gadget-twinkleunlink.js',
-		"license": 'src/licenseHeader'
-	},
-	{
-		"file": 'distTS/src/modules/twinklewarn.js',
-		"target": 'MediaWiki:Gadget-twinklewarn.js',
-		"license": 'src/licenseHeader'
-	},
-	{
-		"file": 'distTS/src/modules/twinklexfd.js',
-		"target": 'MediaWiki:Gadget-twinklexfd.js',
-		"license": 'src/licenseHeader'
-	},
-	# Morebits
-	{
-		"file": 'distTS/src/morebits/morebits.js',
-		"target": 'MediaWiki:Gadget-morebits.js',
-		"license": 'src/licenseHeader'
-	},
-	{
-		"file": 'src/morebits/morebits.css',
-		"target": 'MediaWiki:Gadget-morebits.css',
-		"license": 'src/licenseHeader'
-	},
-	# Select2
-	{
-		"file": 'src/select2/select2.min.css',
-		"target": 'MediaWiki:Gadget-select2.min.css',
-		"license": 'src/select2/select2-licenseHeader'
-	},
-	{
-		"file": 'src/select2/select2.min.js',
-		"target": 'MediaWiki:Gadget-select2.min.js',
-		"license": 'src/select2/select2-licenseHeader'
-	}
+    # twinkle
+    {
+        "file": 'distTS/src/twinkle/twinkle.js',
+        "target": 'MediaWiki:Gadget-Twinkle.js',
+        "license": 'src/licenseHeader'
+    },
+    {
+        "file": 'src/twinkle/twinkle.css',
+        "target": 'MediaWiki:Gadget-Twinkle.css',
+        "license": 'src/licenseHeader'
+    },
+    {
+        "file": 'src/twinkle/twinkle-pagestyles.css',
+        "target": 'MediaWiki:Gadget-Twinkle-pagestyles.css',
+        "license": 'src/licenseHeader'
+    },
+    # modules
+    {
+        "file": 'distTS/src/modules/friendlytag.js',
+        "target": 'MediaWiki:Gadget-friendlytag.js',
+        "license": 'src/licenseHeader'
+    },
+    {
+        "file": 'distTS/src/modules/friendlytalkback.js',
+        "target": 'MediaWiki:Gadget-friendlytalkback.js',
+        "license": 'src/licenseHeader'
+    },
+    {
+        "file": 'distTS/src/modules/twinklearv.js',
+        "target": 'MediaWiki:Gadget-twinklearv.js',
+        "license": 'src/licenseHeader'
+    },
+    {
+        "file": 'distTS/src/modules/twinklebatchprotect.js',
+        "target": 'MediaWiki:Gadget-twinklebatchprotect.js',
+        "license": 'src/licenseHeader'
+    },
+    {
+        "file": 'distTS/src/modules/twinklebatchdelete.js',
+        "target": 'MediaWiki:Gadget-twinklebatchdelete.js',
+        "license": 'src/licenseHeader'
+    },
+    {
+        "file": 'distTS/src/modules/twinklebatchundelete.js',
+        "target": 'MediaWiki:Gadget-twinklebatchundelete.js',
+        "license": 'src/licenseHeader'
+    },
+    {
+        "file": 'distTS/src/modules/twinkleblock.js',
+        "target": 'MediaWiki:Gadget-twinkleblock.js',
+        "license": 'src/licenseHeader'
+    },
+    {
+        "file": 'distTS/src/modules/twinkleclose.js',
+        "target": 'MediaWiki:Gadget-twinkleclose.js',
+        "license": 'src/licenseHeader'
+    },
+    {
+        "file": 'distTS/src/modules/twinkleconfig.js',
+        "target": 'MediaWiki:Gadget-twinkleconfig.js',
+        "license": 'src/licenseHeader'
+    },
+    {
+        "file": 'distTS/src/modules/twinklecopyvio.js',
+        "target": 'MediaWiki:Gadget-twinklecopyvio.js',
+        "license": 'src/licenseHeader'
+    },
+    {
+        "file": 'distTS/src/modules/twinklediff.js',
+        "target": 'MediaWiki:Gadget-twinklediff.js',
+        "license": 'src/licenseHeader'
+    },
+    {
+        "file": 'distTS/src/modules/twinklefluff.js',
+        "target": 'MediaWiki:Gadget-twinklefluff.js',
+        "license": 'src/licenseHeader'
+    },
+    {
+        "file": 'distTS/src/modules/twinkleimage.js',
+        "target": 'MediaWiki:Gadget-twinkleimage.js',
+        "license": 'src/licenseHeader'
+    },
+    {
+        "file": 'distTS/src/modules/twinkleprotect.js',
+        "target": 'MediaWiki:Gadget-twinkleprotect.js',
+        "license": 'src/licenseHeader'
+    },
+    {
+        "file": 'distTS/src/modules/twinklespeedy.js',
+        "target": 'MediaWiki:Gadget-twinklespeedy.js',
+        "license": 'src/licenseHeader'
+    },
+    {
+        "file": 'distTS/src/modules/twinklestub.js',
+        "target": 'MediaWiki:Gadget-twinklestub.js',
+        "license": 'src/licenseHeader'
+    },
+    {
+        "file": 'distTS/src/modules/twinkleunlink.js',
+        "target": 'MediaWiki:Gadget-twinkleunlink.js',
+        "license": 'src/licenseHeader'
+    },
+    {
+        "file": 'distTS/src/modules/twinklewarn.js',
+        "target": 'MediaWiki:Gadget-twinklewarn.js',
+        "license": 'src/licenseHeader'
+    },
+    {
+        "file": 'distTS/src/modules/twinklexfd.js',
+        "target": 'MediaWiki:Gadget-twinklexfd.js',
+        "license": 'src/licenseHeader'
+    },
+    # Morebits
+    {
+        "file": 'distTS/src/morebits/morebits.js',
+        "target": 'MediaWiki:Gadget-morebits.js',
+        "license": 'src/licenseHeader'
+    },
+    {
+        "file": 'src/morebits/morebits.css',
+        "target": 'MediaWiki:Gadget-morebits.css',
+        "license": 'src/licenseHeader'
+    },
+    # Select2
+    {
+        "file": 'src/select2/select2.min.css',
+        "target": 'MediaWiki:Gadget-select2.min.css',
+        "license": 'src/select2/select2-licenseHeader'
+    },
+    {
+        "file": 'src/select2/select2.min.js',
+        "target": 'MediaWiki:Gadget-select2.min.js',
+        "license": 'src/select2/select2-licenseHeader'
+    }
 ]
 
 
@@ -206,10 +210,11 @@ site.login("Github-bot", os.environ["MW_BOT_PASSWORD"])
 
 # 同步仓库中的代码文件
 for deploy_item in DEPLOY_TARGETS:
-    with open(deploy_item["license"], "r", encoding="utf-8") as pfile:
+    with open(deploy_item["file"], "r", encoding="utf-8") as pfile:
         page_text = pfile.read()
 
-    with open(deploy_item["file"], "r", encoding="utf-8") as pfile:
-        page_text += pfile.read().rstrip()
+    with open(deploy_item["license"], "r", encoding="utf-8") as pfile:
+        license_text = pfile.read()
+        page_text = license_text + FILE_WARNING + FILE_HEADER + page_text + FILE_FOOTER
 
     sync_file(site, deploy_item["target"], page_text, deploy_item["file"])
