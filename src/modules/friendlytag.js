@@ -381,37 +381,6 @@
 				checkbox.checked = true;
 			}
 			switch (tag) {
-				case 'Expert needed':
-					checkbox.subgroup = [
-						{
-							name: 'expert',
-							type: 'input',
-							label: wgULS('哪个领域的专家（必填）：', '哪個領域的專家（必填）：'),
-							tooltip: wgULS(
-								'必填，可参考 Category:需要专业人士关注的页面 使用现存的分类。',
-								'必填，可參考 Category:需要專業人士關注的頁面 使用現存的分類。'
-							),
-						},
-						{
-							name: 'expert2',
-							type: 'input',
-							label: wgULS('哪个领域的专家：', '哪個領域的專家：'),
-							tooltip: wgULS(
-								'可选，可参考 Category:需要专业人士关注的页面 使用现存的分类。',
-								'可選，可參考 Category:需要專業人士關注的頁面 使用現存的分類。'
-							),
-						},
-						{
-							name: 'expert3',
-							type: 'input',
-							label: wgULS('哪个领域的专家：', '哪個領域的專家：'),
-							tooltip: wgULS(
-								'可选，可参考 Category:需要专业人士关注的页面 使用现存的分类。',
-								'可選，可參考 Category:需要專業人士關注的頁面 使用現存的分類。'
-							),
-						},
-					];
-					break;
 				case 'Merge':
 				case 'Merge from':
 				case 'Merge to': {
@@ -721,20 +690,6 @@
 								'不符合有獸檔案館的質量標準，需要完全重寫'
 							),
 						},
-						{
-							tag: 'Cleanup-jargon',
-							description: wgULS(
-								'包含过多行话或专业术语，可能需要简化或提出进一步解释',
-								'包含過多行話或專業術語，可能需要簡化或提出進一步解釋'
-							),
-						},
-						{
-							tag: 'Copy edit',
-							description: wgULS(
-								'需要编修，以确保文法、用词、语气、格式、标点等使用恰当',
-								'需要編修，以確保文法、用詞、語氣、格式、標點等使用恰當'
-							),
-						},
 					],
 				},
 				{
@@ -771,26 +726,6 @@
 							tag: 'Lead too short',
 							description: wgULS('导言部分也许不足以概括其内容', '導言部分也許不足以概括其內容'),
 						},
-						{
-							tag: 'Very long',
-							description: wgULS('可能过于冗长', '可能過於冗長'),
-						},
-					],
-				},
-				{
-					key: wgULS('虚构作品相关清理', '虛構作品相關清理'),
-					value: [
-						{
-							tag: 'In-universe',
-							description: wgULS(
-								'使用小说故事内的观点描述一个虚构事物',
-								'使用小說故事內的觀點描述一個虛構事物'
-							),
-						},
-						{
-							tag: 'Long plot',
-							description: wgULS('可能包含过于详细的剧情摘要', '可能包含過於詳細的劇情摘要'),
-						},
 					],
 				},
 			],
@@ -806,34 +741,8 @@
 							description: wgULS('类似广告或宣传性内容', '類似廣告或宣傳性內容'),
 						},
 						{
-							tag: 'Fanpov',
-							description: wgULS('类似爱好者网页', '類似愛好者網頁'),
-						},
-						{
-							tag: 'How-to',
-							description: wgULS('包含指南或教学内容', '包含指南或教學內容'),
-						},
-						{
 							tag: 'Inappropriate person',
 							description: wgULS('使用不适当的第一人称和第二人称', '使用不適當的第一人稱和第二人稱'),
-						},
-						{
-							tag: 'Newsrelease',
-							description: wgULS(
-								'阅读起来像是新闻稿及包含过度的宣传性语调',
-								'閱讀起來像是新聞稿及包含過度的宣傳性語調'
-							),
-						},
-						{
-							tag: 'Prose',
-							description: wgULS(
-								'使用了日期或时间列表式记述，需要改写为连贯的叙述性文字',
-								'使用了日期或時間列表式記述，需要改寫為連貫的敘述性文字'
-							),
-						},
-						{
-							tag: 'Review',
-							description: wgULS('阅读起来类似评论，需要清理', '閱讀起來類似評論，需要清理'),
 						},
 						{
 							tag: 'Tone',
@@ -850,13 +759,9 @@
 						{
 							tag: 'Expert needed',
 							description: wgULS(
-								'需要精通或熟悉本主题的专业人士（专家）参与及协助编辑',
-								'需要精通或熟悉本主題的專業人士（專家）參與及協助編輯'
+								'需要更了解本部分内容的编者参与及协助编辑',
+								'需要更了解本部分內容的編者參與及協助編輯'
 							),
-						},
-						{
-							tag: 'Overly detailed',
-							description: wgULS('包含太多过度细节内容', '包含太多過度細節內容'),
 						},
 						{
 							tag: 'Trivia',
@@ -882,26 +787,8 @@
 					key: wgULS('中立、偏见和事实准确性', '中立、偏見和事實準確性'),
 					value: [
 						{
-							tag: 'Autobiography',
-							description: wgULS(
-								'类似一篇自传，或内容主要由条目描述的当事人或组织撰写、编辑',
-								'類似一篇自傳，或內容主要由條目描述的當事人或組織撰寫、編輯'
-							),
-						},
-						{
-							tag: 'COI',
-							description: wgULS(
-								'主要贡献者与本条目所宣扬的内容可能存在利益冲突',
-								'主要貢獻者與本條目所宣揚的內容可能存在利益衝突'
-							),
-						},
-						{
 							tag: 'Disputed',
 							description: wgULS('内容疑欠准确，有待查证', '內容疑欠準確，有待查證'),
-						},
-						{
-							tag: 'Globalize',
-							description: wgULS('仅具有一部分地区的信息或观点', '僅具有一部分地區的資訊或觀點'),
 						},
 						{
 							tag: 'Hoax',
@@ -910,8 +797,8 @@
 						{
 							tag: 'POV',
 							description: wgULS(
-								'中立性有争议。内容、语调可能带有明显的个人观点或地方色彩',
-								'中立性有爭議。內容、語調可能帶有明顯的個人觀點或地方色彩'
+								'中立性有争议。内容、语调可能带有过度的个人观点',
+								'中立性有爭議。內容、語調可能帶有過度的個人觀點'
 							),
 						},
 						{
@@ -967,16 +854,8 @@
 							description: wgULS('因为没有内文引用而来源仍然不明', '因為沒有內文引用而來源仍然不明'),
 						},
 						{
-							tag: 'Onesource',
-							description: wgULS('极大或完全地依赖于某个单一的来源', '極大或完全地依賴於某個單一的來源'),
-						},
-						{
 							tag: 'Original research',
-							description: wgULS('可能包含原创研究或未查证内容', '可能包含原創研究或未查證內容'),
-						},
-						{
-							tag: 'Primarysources',
-							description: wgULS('依赖第一手来源', '依賴第一手來源'),
+							description: wgULS('可能包含未查证内容', '可能包含未查證內容'),
 						},
 						{
 							tag: 'Refimprove',
@@ -1000,10 +879,6 @@
 							tag: 'NotMandarin',
 							description: wgULS('包含过多不是现代标准汉语的内容', '包含過多不是現代標準漢語的內容'),
 							excludeMI: true,
-						},
-						{
-							tag: 'Rough translation',
-							description: wgULS('翻译品质不佳', '翻譯品質不佳'),
 						},
 					],
 				},
@@ -1185,10 +1060,6 @@
 		{
 			key: '偶用模板',
 			value: [
-				{
-					tag: '角色重定向',
-					description: wgULS('电视剧、电影、书籍等作品的角色', '電視劇、電影、書籍等作品的角色'),
-				},
 				{
 					tag: wgULS('章节重定向', '章節重定向'),
 					description: wgULS('导向至较高密度组织的页面', '導向至較高密度組織的頁面'),
