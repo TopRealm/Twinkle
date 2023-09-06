@@ -767,7 +767,7 @@
 			edit: 'templateeditor',
 			move: 'templateeditor',
 			expiry: 'infinity',
-			reason: wgULS('[[QW:HRT|高风险模板]]', '[[QW:HRT|高風險模板]]'),
+			reason: wgULS('[[LIB:HRT|高风险模板]]', '[[LIB:HRT|高風險模板]]'),
 			template: 'noop',
 		},
 		'pp-vandalism': {
@@ -797,7 +797,7 @@
 			// removed for now
 			edit: 'autoconfirmed',
 			expiry: 'infinity',
-			reason: wgULS('[[QW:HRT|高风险模板]]', '[[QW:HRT|高風險模板]]'),
+			reason: wgULS('[[LIB:HRT|高风险模板]]', '[[LIB:HRT|高風險模板]]'),
 			template: 'noop',
 		},
 		'pp-semi-sock': {
@@ -1468,8 +1468,8 @@
 				linknode.appendChild(document.createTextNode(wgULS('如何修复RFPP', '如何修復RFPP')));
 				statusElement.error([
 					wgULS(
-						'无法在QW:RFPP上找到相关定位点标记，要修复此问题，请参见',
-						'無法在QW:RFPP上找到相關定位點標記，要修復此問題，請參見'
+						'无法在LIB:RFPP上找到相关定位点标记，要修复此问题，请参见',
+						'無法在LIB:RFPP上找到相關定位點標記，要修復此問題，請參見'
 					),
 					linknode,
 					'。',
@@ -1518,12 +1518,12 @@
 			const sections = text.split(/(?=\n==\s*请求解除保护\s*==)/);
 			if (sections.length !== 2) {
 				const linknode2 = document.createElement('a');
-				linknode2.setAttribute('href', mw.util.getUrl('Wikipedia:Twinkle/修复RFPP'));
+				linknode2.setAttribute('href', mw.util.getUrl('Help:Twinkle/修复RFPP'));
 				linknode2.appendChild(document.createTextNode('如何修复RFPP'));
 				statusElement.error([
 					wgULS(
-						'无法在QW:RFPP上找到相关定位点标记，要修复此问题，请参见',
-						'無法在QW:RFPP上找到相關定位點標記，要修復此問題，請參見'
+						'无法在LIB:RFPP上找到相关定位点标记，要修复此问题，请参见',
+						'無法在LIB:RFPP上找到相關定位點標記，要修復此問題，請參見'
 					),
 					linknode2,
 					'。',
