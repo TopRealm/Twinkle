@@ -43,7 +43,7 @@ jobs:
           npm install -g typescript
       
       - name: Compile source
-        run: tsc --target 'es5' --alwaysStrict 'false'
+        run: tsc --target 'es5' --strict 'false'
 
       - name: Deploy codes
         run: |
