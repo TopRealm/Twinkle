@@ -24,7 +24,7 @@
 		const Window = new Morebits.simpleWindow(600, 330);
 		Window.setTitle(wgULS('文件快速删除候选', '檔案快速刪除候選'));
 		Window.setScriptName('Twinkle');
-		Window.addFooterLink(wgULS('快速删除条例', '快速刪除條例'), 'QW:CSD');
+		Window.addFooterLink(wgULS('快速删除条例', '快速刪除條例'), 'LIB:CSD');
 		Window.addFooterLink(wgULS('图权设置', '圖權設定'), 'H:TW/PREF#image');
 		Window.addFooterLink(wgULS('Twinkle帮助', 'Twinkle說明'), 'H:TW/DOC#image');
 		const form = new Morebits.quickForm(Twinkle.image.callback.evaluate);
@@ -312,7 +312,7 @@
 			}
 			pageobj.setPageText(tag + text);
 			let editSummary = wgULS('请求快速删除（', '請求快速刪除（');
-			editSummary += `[[QW:CSD#${params.normalized.toUpperCase()}|CSD ${params.normalized.toUpperCase()}]]`;
+			editSummary += `[[LIB:CSD#${params.normalized.toUpperCase()}|CSD ${params.normalized.toUpperCase()}]]`;
 			editSummary += '）';
 			pageobj.setEditSummary(editSummary);
 			pageobj.setChangeTags(Twinkle.changeTags);

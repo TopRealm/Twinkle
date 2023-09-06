@@ -617,12 +617,12 @@
 				wgULS('记录对[[', '記錄對[[') + Morebits.pageNameNorm + wgULS(']]的存废讨论提名', ']]的存廢討論提名');
 			const usl = new Morebits.userspaceLogger(Twinkle.getPref('xfdLogPageName'));
 			usl.initialText = wgULS(
-				`这是该用户使用[[H:TW|Twinkle]]的提删模块做出的[[QW:XFD|存废讨论]]提名列表。\n\n若您不再想保留此日志，请在[[${Twinkle.getPref(
+				`这是该用户使用[[H:TW|Twinkle]]的提删模块做出的[[LIB:XFD|存废讨论]]提名列表。\n\n若您不再想保留此日志，请在[[${Twinkle.getPref(
 					'configPage'
-				)}|参数设置]]中关掉，并使用[[QW:CSD#O1|CSD O1]]提交快速删除。`,
-				`這是該使用者使用[[H:TW|Twinkle]]的提刪模塊做出的[[QW:XFD|存廢討論]]提名列表。\n\n若您不再想保留此日誌，請在[[${Twinkle.getPref(
+				)}|参数设置]]中关掉，并使用[[LIB:CSD#O1|CSD O1]]提交快速删除。`,
+				`這是該使用者使用[[H:TW|Twinkle]]的提刪模塊做出的[[LIB:XFD|存廢討論]]提名列表。\n\n若您不再想保留此日誌，請在[[${Twinkle.getPref(
 					'configPage'
-				)}|偏好設定]]中關掉，並使用[[QW:CSD#O1|CSD O1]]提交快速刪除。`
+				)}|偏好設定]]中關掉，並使用[[LIB:CSD#O1|CSD O1]]提交快速刪除。`
 			);
 			let xfdCatName;
 			switch (params.xfdcat) {

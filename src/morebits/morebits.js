@@ -3643,7 +3643,7 @@
 					}
 				}
 				// set revert edit summary
-				ctx.editSummary = `[[QW:UNDO|撤销]]由 ${ctx.revertUser} 所做出的${wgULS('修订 ', '修訂 ')}${
+				ctx.editSummary = `[[LIB:UNDO|撤销]]由 ${ctx.revertUser} 所做出的${wgULS('修订 ', '修訂 ')}${
 					ctx.revertOldID
 				}：${ctx.editSummary}`;
 			}
