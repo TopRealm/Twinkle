@@ -25,7 +25,7 @@
 				: wgULS('请求保护页面', '請求保護頁面')
 		);
 		Window.setScriptName('Twinkle');
-		Window.addFooterLink(wgULS('保护条例', '保護條例'), 'QW:PROT');
+		Window.addFooterLink(wgULS('保护条例', '保護條例'), 'LIB:PROT');
 		Window.addFooterLink(wgULS('保护设置', '保護設定'), 'H:TW/PREF#protect');
 		Window.addFooterLink(wgULS('Twinkle帮助', 'Twinkle說明'), 'H:TW/DOC#protect');
 		const form = new Morebits.quickForm(Twinkle.protect.callback.evaluate);
@@ -56,7 +56,7 @@
 					label: wgULS('请求保护页面', '請求保護頁面'),
 					value: 'request',
 					tooltip:
-						wgULS('若您想在QW:RFPP请求保护此页', '若您想在QW:RFPP請求保護此頁') +
+						wgULS('若您想在LIB:RFPP请求保护此页', '若您想在LIB:RFPP請求保護此頁') +
 						(Morebits.userIsSysop ? '而不是自行完成。' : '。'),
 					checked: !Morebits.userIsSysop,
 				},
