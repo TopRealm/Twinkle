@@ -586,11 +586,7 @@
 			selected: true,
 		},
 		{
-			label: wgULS('仅允许资深用户', '僅允許資深用戶'),
-			value: 'revisionprotected',
-		},
-		{
-			label: wgULS('仅允许裁决委员', '僅允許裁決委員'),
+			label: wgULS('仅允许档案理事员', '僅允許檔案理事員'),
 			value: 'officialprotected',
 		},
 	];
