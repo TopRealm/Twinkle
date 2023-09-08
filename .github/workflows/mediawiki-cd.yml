@@ -3,9 +3,12 @@ name: MediaWiki CD
 on:
   workflow_dispatch:
   workflow_run:
-    workflows: ['MediaWiki CI']
-    branches: ['master']
-    types: ['completed']
+  push:
+    branches:
+      - master
+    paths:
+      - src/**/*.js
+      - src/**/*.css
 
 # Cancel previous runs
 concurrency:
@@ -41,7 +44,7 @@ jobs:
         run: |
           pnpm install
           npm install -g typescript
-      
+
       - name: Compile source
         run: tsc --target 'es5' --alwaysStrict 'false'
 
