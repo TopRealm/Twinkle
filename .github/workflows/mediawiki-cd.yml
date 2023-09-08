@@ -17,7 +17,6 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch'}}
     env:
       MW_BOT_PASSWORD: ${{ secrets.MW_BOT_PASSWORD }}
     steps:
