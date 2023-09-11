@@ -430,7 +430,7 @@
 					list: Twinkle.speedy.generateCsdList(Twinkle.speedy.categoryList, mode),
 				});
 				break;
-			case 118:
+			case 302:
 				// draft
 				work_area.append({
 					type: 'header',

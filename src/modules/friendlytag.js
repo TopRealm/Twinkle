@@ -33,7 +33,7 @@
 			);
 			// article/draft tagging
 		} else if (
-			([0, 118].includes(mw.config.get('wgNamespaceNumber')) && mw.config.get('wgCurRevisionId')) ||
+			([0, 302].includes(mw.config.get('wgNamespaceNumber')) && mw.config.get('wgCurRevisionId')) ||
 			Morebits.pageNameNorm === Twinkle.getPref('sandboxPage')
 		) {
 			Twinkle.tag.mode = wgULS('条目', '條目');

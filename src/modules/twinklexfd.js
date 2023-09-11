@@ -435,7 +435,7 @@
 									substub: '<u>长度过短</u>条目',
 									batch: '页面',
 								}[type]
-							}的求闻编者及时间：<br id="no-new-title">~~~~`;
+							}的有兽档案馆编者及时间：<br id="no-new-title">~~~~`;
 							pageobj.setAppendText(appendText);
 						}
 						break;
