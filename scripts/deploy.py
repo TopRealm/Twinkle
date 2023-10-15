@@ -204,7 +204,7 @@ def sync_file(site: mwclient.Site, page_name: str, text_new: str, file_name=None
 
 
 # 登录MediaWiki
-site = mwclient.Site("wiki.zorua.top", path="/")
+site = mwclient.Site("youshou.wiki", path="/")
 site.login("Github-bot", os.environ["MW_BOT_PASSWORD"])
 
 

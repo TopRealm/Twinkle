@@ -1,6 +1,6 @@
 # 关于本仓库
 
-本仓库为有兽档案馆站务维护工具Twinkle的源代码仓库，由[有兽档案馆技术团队](https://wiki.zorua.top)维护。
+本仓库为有兽档案馆站务维护工具Twinkle的源代码仓库，由[有兽档案馆技术团队](https://youshou.wiki)维护。
 
 本仓库上游分支为求闻百科自定义的Twinkle，以下为其原README.md内容。
 

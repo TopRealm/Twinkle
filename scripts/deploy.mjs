@@ -246,13 +246,13 @@ class Deploy {
 			}
 		}
 		if (args.testwiki) {
-			config.apiUrl = `https://wiki.zorua.top/api.php`;
+			config.apiUrl = `https://youshou.wiki/api.php`;
 		} else {
 			if (!config.apiUrl) {
 				if (Object.keys(config).length) {
 					log('yellow', 'Tip: you can avoid this prompt by setting the apiUrl as well in credentials.json');
 				}
-				const site = await input('> Enter sitename (eg. wiki.zorua.top)');
+				const site = await input('> Enter sitename (eg. youshou.wiki)');
 				config.apiUrl = `https://${site}/api.php`;
 			}
 		}
