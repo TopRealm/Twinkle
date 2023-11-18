@@ -39,7 +39,7 @@ jobs:
 
             - name: Check for script changes
               id: changed-javascript
-              uses: tj-actions/changed-files@v38
+              uses: tj-actions/changed-files@v40
               with:
                   since_last_remote_commit: 'true'
                   files: |
@@ -49,7 +49,7 @@ jobs:
 
             - name: Check for stylesheet changes
               id: changed-stylesheet
-              uses: tj-actions/changed-files@v38
+              uses: tj-actions/changed-files@v40
               with:
                   since_last_remote_commit: 'true'
                   files: |
